@@ -1,0 +1,47 @@
+准备下单数据：
+http://api.iwide.cn/index.php/iapi/soma/order/pay
+
+
+
+获取商品优惠信息：
+http://api.iwide.cn/index.php/iapi/soma/package/rule
+
+
+
+获取优惠券：
+http://api.iwide.cn/index.php/iapi/soma/package/coupons
+
+
+
+获取邮寄地址区域：
+http://api.iwide.cn/index.php/iapi/soma/express/tree
+
+
+
+保存邮寄地址区域：
+http://api.iwide.cn/index.php/iapi/soma/express/save
+
+
+
+下单：
+http://api.iwide.cn/index.php/iapi/soma/order/create
+
+
+//拉起微信支付
+front.iwide.cn/index.php/wxpay/soma_pay?id=a450089706&bType=&saler=34&order_id=1000012011
+
+
+成功：
+
+bType 为空：front.iwide.cn/index.php/soma/package/success?id=a450089706&order_id=1000012014&settlement=default&saler=34
+
+bType 不为空：
+邮寄：front.iwide.cn/index.php/soma/consumer/show_shipping_info?id=a450089706&order_id=1000012014
+赠送：//http://front.iwide.cn/index.php/soma/gift/package_pre_send?id=a450089706&order_id=1000012014
+
+wxpay_order_type = 2（邮费订单，成功跳转链接为邮寄详情）：
+front.iwide.cn/index.php/soma/consumer/my_shipping_list?id=a450089706
+
+
+失败/取消：
+front.iwide.cn/index.php/soma/package/fail?id=a450089706&order_id=1000012014&settlement=default&saler=34

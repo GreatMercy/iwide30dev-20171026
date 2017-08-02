@@ -1,0 +1,60 @@
+请求地址格式：
+test008.iwide.cn/index.php/iapi/v1/hotel/prices/price_codes
+发送数据格式(post,json)：
+如：{
+    "ts": 1495636743859,//请求时间
+    "send_data": {
+    }
+}
+status:
+1000, // 1000: 成功                                
+1001, // 1001：失败，前端用toast显示错误提示（不需要用户操作，自动消失）    
+1002, // 1002：失败，前端用alert显示错误提示（要点击确认）           
+1003, // 1003：未登录状态。                              
+1004, // 1004：未知错误。                              
+1005 //1005：公众号已停止服务     
+1006 //1006：无权限访问此接口  
+
+msg_type:
+'toast'//前端用toast显示msg（不需要用户操作，自动消失） 
+'alert'//前端用alert显示msg（要点击确认）    
+
+page_resource:页面资源，包括跳转链接links，分页数据：page，count，size                    
+返回格式：
+{
+    "status": 1000,
+    "msg": "",
+    "msg_type": "",
+    
+    "web_data": {
+        "page_resource": {
+            "links": {
+                "edit": "http://test008.iwide.cn/index.php/hotel/prices/edit"
+            }
+        },
+        "csrf_token": "csrf_token",
+        "csrf_value": "69917c09cbe5ee828d78870bbac11f92",
+        "hotel_id": "1",
+        "room_id": 0,
+        "type": "common",
+        "enum_des": {
+            "HOTEL_PRICE_CODE_STATUS": {
+                "1": "有效",
+                "2": "无效"
+            },
+            "HOTEL_PRICE_CODE_TYPE": {
+                "athour": "时租价",
+                "common": "普通",
+                "member": "会员价",
+                "protrol": "协议价",
+                "ticket": "门票类"
+            },
+            "HOTEL_PRICE_CODE_RELATED_CAL_WAY": {
+                "divide": "除以",
+                "multi": "乘",
+                "plus": "加",
+                "reduce": "减"
+            }
+        }
+    }
+}

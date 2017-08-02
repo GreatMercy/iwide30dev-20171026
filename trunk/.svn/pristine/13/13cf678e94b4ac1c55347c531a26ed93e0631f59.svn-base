@@ -1,0 +1,11 @@
+/* 价格的字体 */
+@font-face {
+  font-family: 'price-icon';
+  src: url('../fonts/iconfont.otf') format('truetype'),
+  url('../fonts/iconfont.woff') format('woff');
+}
+
+.price-icon {
+  font-family: price-icon !important;
+  letter-spacing: 2px;
+}

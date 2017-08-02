@@ -1,0 +1,96 @@
+<?php
+use App\libraries\Iapi\BaseConst;
+
+/**
+ * Class Index
+ * @author renshuai  <renshuai@mofly.cn>
+ *
+ */
+class Index extends MY_Front_Soma_Iapi
+{
+
+    /**
+     * @SWG\Get(
+     *     path="index/test",
+     *     produces={"application/json"},
+     *     @SWG\Parameter(
+     *         name="tags",
+     *         in="query",
+     *         description="Tags to filter by",
+     *         required=true,
+     *         type="array",
+     *         @SWG\Items(type="string"),
+     *         collectionFormat="multi"
+     *     ),
+     *     @SWG\Response(
+     *         response=200,
+     *         description="successful operation",
+     *         @SWG\Schema(ref="#/definitions/ApiResponse"),
+     *     ),
+     *     @SWG\Response(
+     *         response="400",
+     *         description="Invalid tag value",
+     *     ),
+     * )
+     */
+    public function get_test()
+    {
+        $this->out_put_msg(BaseConst::OPER_STATUS_SUCCESS, '', ['id' => $this->inter_id]);
+    }
+
+    /**
+     * @SWG\Get(
+     *   path="index/test2",
+     *   produces={"application/json"},
+     *   @SWG\Response(
+     *     response=200,
+     *     description="successful operation",
+     *     @SWG\Schema(
+     *       type="object",
+     *       @SWG\Property(
+     *          title="id",
+     *          property="id",
+     *          type="integer",
+     *          format="int32",
+     *       ),
+     *       @SWG\Property(
+     *          property="name",
+     *          type="string"
+     *       )
+     *     )
+     *   )
+     * )
+     */
+    public function test2()
+    {
+
+    }
+
+    /**
+     * @SWG\Get(path="index/test3",
+     *   produces={"application/json"},
+     *   @SWG\Response(
+     *     response=200,
+     *     description="successful operation",
+     *     @SWG\Schema(
+     *       type="array",
+     *       @SWG\Items(
+     *          type="object",
+     *          additionalProperties={
+     *              "property":"age",
+     *              "type":"integer",
+     *              "format":"int32"
+     *          }
+     *       )
+     *     )
+     *   )
+     * )
+     */
+    public function test3()
+    {
+
+    }
+
+
+
+}

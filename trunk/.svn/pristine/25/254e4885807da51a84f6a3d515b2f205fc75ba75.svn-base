@@ -1,0 +1,45 @@
+import * as apiConfig from './api'
+import ajax from '@/utils/http'
+/**
+ * 获取商品首页信息
+ * @param  {Object} data    请求参数
+ * @param  {Number} [data.page] 页数
+ * @param  {Number} [data.page_size=20] 每一页的个数
+ * @param  {Number} [data.show_ads_cat=2] 是否显示广告与分类 1显示 2不显示
+ * @param  {Number} [data.fcid] 分类ID
+ * @param  {Object} [config]  axios配置
+ * @param  {String} [version='v1'] API版本
+ * @return {Object}         首页信息
+ */
+const getPackageLists = (data, config, version = 'v1') => {
+  let url = apiConfig[version] && apiConfig[version].GET_PACKAGE_LISTS || apiConfig.v1.GET_PACKAGE_LISTS
+  return ajax.get(url, data, config)
+}
+/**
+ * 获取商品详情
+ * @param  {Object} data    请求参数
+ * @param  {String} data.pid 商品id
+ * @param  {Object} [config]  axios配置
+ * @param  {String} [version='v1'] api版本
+ * @return {Object}         返回商品详情
+ */
+const getPackageInfo = (data, config, version = 'v1') => {
+  let url = apiConfig[version] && apiConfig[version].GET_PACKAGE_INFO || apiConfig.v1.GET_PACKAGE_INFO
+  return ajax.get(url, data, config)
+}
+const getPackageRecommendation = (data, config, version = 'v1') => {
+  let url = apiConfig[version] && apiConfig[version].GET_PACKAGE_RECOMMENDATION || apiConfig.v1.GET_PACKAGE_RECOMMENDATION
+  return ajax.get(url, data, config)
+}
+/**
+ * [description]
+ * @param  {Object} data    请求参数
+ * @param  {Number} data.act_id 秒杀ID
+ * @param  {Object} [config]  axios配置
+ * @param  {String} [version='v1'] api版本
+ */
+const postKillsecNotice = (data, config, version = 'v1') => {
+  let url = apiConfig[version] && apiConfig[version].POST_KILLSEC_NOTICE || apiConfig.v1.POST_KILLSEC_NOTICE
+  return ajax.post(url, data, config)
+}
+export { getPackageLists, getPackageInfo, getPackageRecommendation, postKillsecNotice }

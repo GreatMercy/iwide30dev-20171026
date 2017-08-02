@@ -1,0 +1,57 @@
+套餐为自由选择时，跳转提交订单页时增加post参数：
+(json)package_info:
+{
+    商品id: {
+        "gid": 商品id,
+        "num": 购买数量
+    },
+    1: {
+        "gid": 1,
+        "num": 2
+    },
+    2: {
+        "gid": 2,
+        "num": 1
+    }
+}
+
+提交订单页会输出套餐数据：$packages_price(套餐总价)、$packages(套餐列表)
+$packages格式:
+Array
+(
+    [3] => Array
+        (
+            [goods_id] => 3
+            [nums] => 1 //购买数量
+            [price] => 100 //单价
+            [goods_name] => 花瓶咯
+            [total_price] => 100 //总价
+        )
+
+    [4] => Array
+        (
+            [goods_id] => 4
+            [nums] => 1
+            [price] => 10
+            [goods_name] => 花花
+            [total_price] => 10
+        )
+
+)
+
+有套餐时，提交订单时的数据里增加(包价和自由选择都要传)
+(json)package_info:
+{
+    商品id: {
+        "gid": 商品id,
+        "num": 购买数量
+    },
+    1: {
+        "gid": 1,
+        "num": 2
+    },
+    2: {
+        "gid": 2,
+        "num": 1
+    }
+}

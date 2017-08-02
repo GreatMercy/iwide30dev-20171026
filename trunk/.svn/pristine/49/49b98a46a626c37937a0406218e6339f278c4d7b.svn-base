@@ -1,0 +1,20 @@
+<template>
+  <div></div>
+</template>
+<script>
+  export default {
+    name: 'sendGift',
+    components: {},
+    beforeCreate () {
+    },
+    created () {
+    },
+    data () {
+      return {}
+    },
+    watch: {}
+  }
+</script>
+
+<style>
+</style>

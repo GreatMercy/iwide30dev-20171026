@@ -1,0 +1,32 @@
+.jfk-button {
+  display: inline-block;
+  text-align: center;
+  white-space: nowrap;
+  cursor: pointer;
+  box-sizing: border-box;
+  outline: none;
+  margin: 0;
+  line-height: px2rem(64);
+  font-size: 1em;
+  padding: 0;
+  border-width: 1px;
+  border-style: solid;
+  a&{
+    text-decoration: none;
+  }
+  &__text {
+    &-item {
+      font-size: 1em;
+    }
+    &--length-2 {
+      letter-spacing: 0.333em;
+    }
+  }
+  &--large{
+    height: px2rem(92);
+    line-height: px2rem(92)
+  }
+  &--auto {
+    width: 100%;
+  }
+}

@@ -1,0 +1,75 @@
+
+// text-align
+%tac {
+  text-align: center;
+}
+
+%tal {
+  text-align: left;
+}
+
+%tar {
+  text-align: right;
+}
+
+// display
+%dp-f {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+}
+
+%dp-b {
+  display: block;
+}
+
+// box-flex
+%bf-1 {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+}
+
+// position
+@each $key, $val in (r: relative, a: absolute, f: fixed, s: static) {
+  %pos#{$key} {
+    position: #{$val}
+  }
+}
+
+%pf {
+  position: fixed;
+}
+
+%pr {
+  position: relative;
+}
+
+%pa {
+  position: absolute;
+}
+
+// clear
+%clb {
+  &:before, &:after {
+    display: table;
+    content: '';
+  }
+  &:after {
+    clear: both;
+  }
+}
+
+// text-overflow
+%tofle {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-all;
+  white-space: nowrap;
+}
+
+// display
+@each $key, $val in (i: inline, ib: inline-block, n: none, b: block, f: flex, tb: table, tc: table-column, tr: table-row, it: initial) {
+  %d#{$key} {
+    display: $val
+  }
+}

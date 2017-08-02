@@ -1,0 +1,71 @@
+<!doctype html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="apple-mobile-web-app-capable" content="yes" >
+<meta name="apple-touch-fullscreen" content="yes">
+<meta name="format-detection" content="telephone=no,email=no">
+<meta name="ML-Config" content="fullscreen=yes,preventMove=no">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="viewport" content="width=320,user-scalable=0">
+<title>社群客琅琊榜</title>
+<script src="../scripts/jquery.js"></script>
+<script src="../scripts/ui_control.js"></script>
+<link rel="stylesheet" type="text/css" href="../styles/global.css">
+<link rel="stylesheet" type="text/css" href="../styles/group.css">
+</head>
+<style>
+.img{margin-right:5px; vertical-align:middle}
+._tmp{max-width:60%;}
+</style>
+<body>
+<div class="tabmenus webkitbox center bg_fff">
+	<div class="bg_main">日收益</div>
+	<div class="bg_E4E4E4">月收益</div>
+	<div class="bg_E4E4E4">总收益</div>
+</div>
+
+<div class="list_style_2" style="padding-top:36px">
+	<div class="justify webkitbox bg_main">
+        <div class="img"><div class="squareimg"><img src="../images/eg1.jpg" /></div></div>
+        <div class="_tmp">
+            <div class="txtclip">逗比淮</div>
+            <div>当日收益：￥555</div>
+            <div>酒店名</div>
+        </div>
+    	<div class="rank">第<tt>2</tt>名</div>
+    </div>
+	<div class="justify webkitbox">
+        <div class="img"><div class="squareimg"><img src="../images/eg1.jpg" /></div></div>
+        <div class="_tmp">
+            <div class="txtclip">逗比浩</div>
+            <div>当日收益：￥555</div>
+            <div>逗比训练基地逗比训练基地逗比训练基地</div>
+        </div>
+    	<div class="rank">第<tt>1</tt>名</div>
+    </div>
+	<div class="justify webkitbox">
+        <div class="img"><div class="squareimg"><img src="../images/eg1.jpg" /></div></div>
+        <div class="_tmp">
+            <div class="txtclip">逗比淮</div>
+            <div>当日收益：￥555</div>
+            <div>逗比训练基地</div>
+        </div>
+    	<div class="rank">第<tt>2</tt>名</div>
+    </div>
+	<div class="justify webkitbox">
+        <div class="img"><div class="squareimg"><img src="../images/eg1.jpg" /></div></div>
+        <div class="_tmp">
+            <div class="txtclip">逗比毅</div>
+            <div>当日收益：￥555</div>
+            <div>逗比训练基地</div>
+        </div>
+    	<div class="rank">第<tt>3</tt>名</div>
+    </div>
+</div>
+<div class="ui_none"><div>暂无排名</div></div> 
+
+</body>
+</html>

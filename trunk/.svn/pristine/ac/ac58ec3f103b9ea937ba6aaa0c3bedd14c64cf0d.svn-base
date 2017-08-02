@@ -1,0 +1,22 @@
+.jfk-pages__detail{
+  .hotel-staff {
+    background-color: #27282d;
+  }
+  .footer{
+    background-color: #fff;
+  }
+  .info {
+    .date-norm {
+      @mixin one-line vertical, calc(144 / 24)em {
+        background-color: #bfbfbf;
+        transform: scale(1, .5) rotate(15deg);
+        transform-origin: bottom;
+        left: 0;
+        bottom: .5em;
+      }
+    }
+    .triangle {
+      color: #bfbfbf;
+    }
+  }
+}

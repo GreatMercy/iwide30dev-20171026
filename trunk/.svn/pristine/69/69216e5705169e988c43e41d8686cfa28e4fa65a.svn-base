@@ -1,0 +1,9 @@
+.jfk-pages__index {
+  .good-lists__head {
+    &-tip {
+      .tip-number {
+        color: var(--font-color-white)
+      }
+    }
+  }
+}

@@ -1,0 +1,23 @@
+@define-mixin button $type, $plain: '', $disabled: '' {
+  @if $type != '' {
+    background-color: var(--button-$(type)-fill-color);
+    border-color: var(--button-$(type)-border);
+    color: var(--button-$(type)-color);
+  }
+  @if $plain != '' {
+    background-color: transparent;
+    @if $type == primary {
+      color: var(--button-$(type)-plain-color);
+    }
+  }
+  @if $disabled != '' {
+    color: var(--button-disabled-color);
+    @if $type != ghost {
+      border-color: var(--button-disabled-border);
+    }
+    @if $plain != '' {
+      background-olor: var(--button-disabled-fill-color);
+    }
+  }
+  @mixin-content;
+}

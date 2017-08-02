@@ -1,0 +1,24 @@
+<?php
+use App\libraries\Iapi\BaseConst;
+
+/**
+ * Class Index
+ * @author renshuai  <renshuai@mofly.cn>
+ *
+ */
+class Index extends MY_Front_Soma_Iapi
+{
+
+    /**
+     * get http://domain/index.php/iapi/soma/index/test?id=a450089706&openid=o9VbtwwUedrHzhXFSfegtSFMIKtU
+     *
+     * @author renshuai  <renshuai@jperation.cn>
+     */
+    public function test()
+    {
+        $this->out_put_msg(BaseConst::OPER_STATUS_SUCCESS, '', ['id' => $this->inter_id]);
+    }
+
+
+
+}

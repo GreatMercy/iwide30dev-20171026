@@ -1,0 +1,48 @@
+@define-mixin lazy-image $name, $theme: black {
+  @if $theme == black {
+    background-image: url(../../../assets/image/default_$(name).svg);
+  }
+  @else {
+    background-image: url(../../../assets/image/default_$(name)_gray.svg);
+  }
+}
+
+@define-mixin ellipsis $row: 1, $width: 100% {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  @if ($row == 1) {
+    white-space: nowrap;
+  } @else {
+    display: -webkit-box;
+    -webkit-line-clamp: $(row);
+    -webkit-box-orient: vertical;
+  }
+}
+
+@define-mixin one-line-base $direction, $size{
+  content: '';
+  position: absolute;
+  @if $direction == vertical {
+    height: $(size);
+    width: 1px;
+    transform: scale(0.5, 1);
+  } @else {
+    width: $(size);
+    height: 1px;
+    transform: scale(1, 0.5);
+  }
+}
+
+@define-mixin one-line $direction: vertical, $size: 100%, $pseudo: before {
+  @if $pseudo == null {
+    @mixin one-line-base $(direction), $(size);
+    @mixin-content;
+  } @else {
+    position: relative;
+    &::$(pseudo) {
+      @mixin-content;
+      @mixin one-line-base $(direction), $(size);
+
+    }
+  }
+}

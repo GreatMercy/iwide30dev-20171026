@@ -1,0 +1,43 @@
+.jfk-button {
+  border-radius: px2rem(var(--button-border-radius));
+  height: px2rem(var(--button-base-height));
+  line-height: px2rem(var(--button-base-height) - 4);
+  &--default {
+    @mixin button default;
+    &:disabled,&.is-disabled {
+      @mixin button default, '', true
+    }
+  }
+  &--primary {
+    @mixin button primary;
+    &:disabled,&.is-disabled {
+      @mixin button primary, '', true
+    }
+  }
+  &--ghost {
+    @mixin button ghost;
+    &:disabled,&.is-disabled {
+      @mixin button ghost, '', true
+    }
+  }
+  &.is-plain {
+    @mixin button '', true;
+    &:disabled,&.is-disabled {
+      @mixin button '', true, true
+    }
+  }
+  &--primary.is-plain {
+    @mixin button primary, true;
+    &:disabled,&.is-disabled {
+      @mixin button primary, true, true
+    }
+  }
+  &--higher {
+    height: px2rem(var(--button-higher-height));
+    line-height: px2rem(var(--button-higher-height) - 4);
+  }
+  &--lower {
+    height: px2rem(var(--button-lower-height));
+    line-height: px2rem(var(--button-lower-height) - 4);
+  }
+}

@@ -1,0 +1,25 @@
+.jfk-pages__home {
+  .good-layout {
+    .good-lists {
+      &__head {
+        &-tip {
+          .tip-number {
+            color: var(--font-color-white)
+          }
+        }
+      }
+      &__item {
+        .goods {
+          &-tag {
+            color: var(--good-tag-color)
+          }
+        }
+      }
+    }
+  }
+  .good-lists__head {
+    &-tip {
+
+    }
+  }
+}

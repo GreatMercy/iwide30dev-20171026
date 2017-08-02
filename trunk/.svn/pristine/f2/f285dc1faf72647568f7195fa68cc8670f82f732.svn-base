@@ -1,0 +1,41 @@
+import JfkBanner from './packages/banner/index.js'
+import JfkInfiniteScroll from './packages/infiniteScroll/index.js'
+import JfkLoadmore from './packages/loadmore/index.js'
+import JfkSupport from './packages/support/index.js'
+import JfkToast from './packages/toast/index.js'
+import JfkMessageBox from './packages/messageBox/index.js'
+
+const components = [
+  JfkBanner,
+  JfkLoadmore,
+  JfkSupport
+]
+const install = function (Vue) {
+  if (install.installed) {
+    return
+  }
+  components.map(component => {
+    Vue.component(component.name, component)
+  })
+  Vue.use(JfkInfiniteScroll)
+  Vue.prototype.$jfkToast = JfkToast
+  Vue.prototype.$jfkAlert = JfkMessageBox.alert
+  Vue.prototype.$jfkConfirm = JfkMessageBox.confirm
+  Vue.prototype.$jfkPrompt = JfkMessageBox.prompt
+}
+
+/* istanbul ignore if */
+if (typeof window !== 'undefined' && window.Vue) {
+  install(window.Vue)
+}
+
+export default {
+  version: '1.0.0',
+  install,
+  JfkBanner,
+  JfkInfiniteScroll,
+  JfkLoadmore,
+  JfkSupport,
+  JfkToast,
+  JfkMessageBox
+}

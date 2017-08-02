@@ -1,0 +1,16 @@
+@import '../variable/dark.postcss';
+
+@define-mixin line-down $height: 8, $width: 100% {
+  position: relative;
+  @mixin-content;
+  &:before {
+    width: $(width);
+    height: px2rem($(height));
+    content: '';
+    position: absolute;
+    bottom: calc(-1 * px2rem($(height)));
+    left: 0;
+    background-image: radial-gradient(ellipse at top center, color(var(--color-golden) a(70%)) 10%, color(var(--color-golden) a(40%)) 50%, rgba(0,0,0,0) 90%);
+    border-radius: 0 0 50% 50%;
+  }
+}

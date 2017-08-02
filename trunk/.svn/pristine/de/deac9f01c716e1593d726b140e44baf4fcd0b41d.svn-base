@@ -1,0 +1,39 @@
+import {
+  GET_EXPRESS_ORDER_LIST,
+  UPDATE_EXPRESS_LIST,
+  UPDATE_TABLE_LOADING
+} from '@/service/mall/types'
+import { getExpressOrderList } from '@/service/mall/http'
+export default {
+  [GET_EXPRESS_ORDER_LIST] ({commit, state}) {
+    return getExpressOrderList({
+      like: state['express_logistics_list']['keyword'],
+      status: state['express_logistics_list']['status'],
+      begin_time: state['express_logistics_list']['begin_time'],
+      end_time: state['express_logistics_list']['end_time'],
+      page_num: state['express_logistics_list']['page_num'],
+      page_size: state['express_logistics_list']['page_size'],
+      type: 2
+    }).then((res) => {
+      let keys = []
+      const content = res['web_data']
+      // 数据中的所有月份 和 年数
+      for (let key in content) {
+        keys.push(key)
+      }
+      keys = keys.sort()
+      let tableData = []
+      for (let i = 0; i < keys.length - 1; i++) {
+        tableData.push(content[i])
+      }
+      commit(UPDATE_EXPRESS_LIST, {
+        list: tableData,
+        page_resource: res['web_data']['page_resource']
+      })
+      commit(UPDATE_TABLE_LOADING, false)
+    }).catch(() => {
+      commit(UPDATE_TABLE_LOADING, false)
+    })
+  }
+}
+

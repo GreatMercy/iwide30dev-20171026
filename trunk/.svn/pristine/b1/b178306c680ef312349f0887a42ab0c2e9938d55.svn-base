@@ -1,0 +1,14 @@
+/*
+  .jfk-image 通过扩展vue-lazyload类名进行扩展
+ */
+.jfk-image__lazy {
+  @each $key, $val in (3-3, 4-2, banner, city), (3_3, 4_2, banner, city) {
+    &--$(key) {
+      &[lazy="loading"] {
+        &:before {
+          @mixin lazy-image $(val);
+        }
+      }
+    }
+  }
+}

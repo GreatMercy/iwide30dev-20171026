@@ -1,0 +1,87 @@
+<template>
+  <div class="jfk-pages jfk-pages__index">
+    <div class="jfk-pages__theme"></div>
+    <div class="jfk-pt-30">
+      <jfk-swiper :items="advs"></jfk-swiper>
+    </div>
+    <div class="jfk-tab">
+      <div class="jfk-tab__head jfk-pl-30">
+        <ul class="jfk-flex">
+          <li
+            v-for="(item, sort) in sorts"
+            :key="sort"
+            :class="{'jfk-tab__head-item': true, 'jfk-tab__head-item--selected': item.type === currentSort}"
+          >
+          <a href="javascript:;">{{item.name}}</a>
+          </li>
+        </ul>
+      </div>
+      <div class="jfk-tab__body">
+        <good-list class="jfk-tab__body-item" :goods="goods" :layout="layout"></good-list>
+      </div>
+    </div>
+    <JfkSupport v-once></JfkSupport>
+    <tabbar class="font-size--24"></tabbar>
+  </div>
+</template>
+<script>
+import { formatUrlParams } from '@/utils/utils'
+import { getMallAdvs, getGoodLists } from '@/service/http'
+import JfkSupport from '@/components/common/support'
+import Tabbar from '@/components/common/tabbar'
+import JfkSwiper from './module/swiper'
+import GoodList from './module/good_list'
+let layouts = ['card', 'pic']
+export default {
+  name: 'app',
+  components: {
+    JfkSupport,
+    Tabbar,
+    JfkSwiper,
+    GoodList
+  },
+  beforeCreate () {
+    let params = formatUrlParams(location.href)
+    let layout = 'card'
+    if (params.layout !== undefined) {
+      layout = layouts[params.layout] || layouts[0]
+    }
+    this.layout = layout
+  },
+  created () {
+    let that = this
+    getMallAdvs().then(function (advs) {
+      that.advs = advs
+    })
+    getGoodLists().then(function (goods) {
+      that.goods = Object.assign({}, that.goods, goods)
+    })
+  },
+  data () {
+    return {
+      src: 'https://www.baidu.com/img/bd_logo1.png',
+      advs: [],
+      goods: {},
+      currentSort: 1,
+      sorts: [{
+        name: '全部商品',
+        type: 1
+      }, {
+        name: '自助餐',
+        type: 2
+      }, {
+        name: '西餐',
+        type: 3
+      }, {
+        name: '中餐',
+        type: 4
+      }]
+    }
+  },
+  watch: {
+  }
+}
+</script>
+
+<style>
+</style>

@@ -1,0 +1,28 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>大奖</title>  <!-- 网页标题 -->
+<script src="jquery.js"></script>
+<link href="draw.css" rel="stylesheet">
+</head>
+<body>
+<audio src="1.mp3" loop="-1" id="ms"></audio>
+<audio src="5012.wav" id="me"></audio>
+<div class="setting">奖项设置</div>
+<div class="drawlist" onclick="showdraw(event,false);">中奖名单</div>
+<div class="history" onclick="showdraw(event,true);">历史名单</div>
+<div class="restart">清除所有</div>
+<div id="box"><div class="item"><div><img src="none.jpg" /></div><p>?</p></div></div>
+<div id="bt" onClick="doit(event)">开始</div>
+<div class="pull pullsetting" style="display:none">
+    <div class="drawname">
+        <input placeholder="设置抽奖人数" />
+    </div>
+    <div class="btn">确定</div>
+</div>
+<div class="pull showdraw" style="display:none">
+</div>
+</body>
+<script src="draw.js" type="text/javascript"></script>
+</html>

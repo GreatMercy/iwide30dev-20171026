@@ -1,0 +1,139 @@
+<!doctype html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="apple-mobile-web-app-capable" content="yes" >
+<meta name="apple-touch-fullscreen" content="yes">
+<meta name="format-detection" content="telephone=no,email=no">
+<meta name="ML-Config" content="fullscreen=yes,preventMove=no">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="viewport" content="width=320.1,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,minimal-ui">
+<link href="styles/global.css" rel="stylesheet">
+<link href="styles/default.css" rel="stylesheet">
+<link href="styles/theme.css" rel="stylesheet">
+<link href="zongzi/zongzi.css" rel="stylesheet">
+<link href="v1/v1.css" rel="stylesheet">
+<script src="scripts/jquery.js"></script>
+<script src="scripts/alert.js"></script>
+<script src="scripts/ui_control.js"></script>
+<title>商城 5.0</title>
+</head>
+<body>
+<div class="pageloading"><p class="isload">正在加载</p></div>
+<!-- 以上为header.php -->
+<script src="scripts/imgscroll.js"></script>
+<script src="scripts/jquery.touchwipe.min.js"></script>
+<div class="fixed_body theme_bg">
+    <div class="relative main_content_box center">
+        <div class="relative">
+            <div class="imgscroll">
+                <div class="headerslide">
+                <a class="slideson" href=""><img src="images/box2.png"></a>
+                <a class="slideson" href=""><img src="images/eg1.png"></a>
+                <a class="slideson" href=""><img src="images/img-8.jpg"></a>
+                <a class="slideson" href="">
+                	<div class="more_link">
+                    	<div class="h32">全部的商品</div>
+                        <div class="h24 color_888">点击查看更多的端午特惠礼包</div>
+                    </div>
+                    <img style="display:none" title="占位图">
+                </a>
+                </div>
+            </div>
+            <div class="pre_btn" style="display:none">&nbsp;</div>
+            <div class="next_btn">&nbsp;</div>
+        </div>
+        <div class="h32" style="margin-top:4px" id="name"></div>
+        <div class="img_price">
+            <span id="ImgPrice"><span></span></span>
+            <del class="h24"></del>
+        </div>
+    </div>
+    <div class="webkitbox center martop img_btn_list h30" id="send_link">
+        <div class="color_000" id="ToMyself">
+            <span class="btnimg"><img src="zongzi/btn01.png"></span>
+        </div>
+        <div class="color_000" id="ToFriend">
+            <span class="btnimg"><img src="zongzi/btn01.png"></span>
+        </div>
+    </div>
+    <div class="btm_link webkitbox">
+    	<a href="" class="icon1" style="color:#a3bf78">首 页</a>
+    	<a href="" class="icon2">订 单</a>
+    	<a href="" class="icon3">我的礼物</a>
+    	<a href="" class="icon4">个人中心</a>
+    </div>
+</div>
+</body>
+
+<script>
+var cur_goods_index = 0;
+var moonCakeArr ;
+var goods = [
+	{name:'金房卡蛋黄咸粽子大礼盒',origin:'300',price:'12.34'},
+	{name:'凑数1111111',origin:'999',price:'56.78'},
+	{name:'凑数333333333',origin:'1',price:'90.12'}
+];
+function fill_data(index){
+	if(goods.length>index){
+		$('#send_link').show();
+		$('#name').show().html(goods[index].name);
+		$('.img_price del').show().html('原价: '+goods[index].origin);
+		$('#ImgPrice').show();
+		$('#ImgPrice span').html('');
+		var num = goods[index].price;
+		var point = num.indexOf('.');
+		var array = num.split("");
+		for(var i = 0;i<array.length;i++){
+			var tt = $('<tt></tt>');
+			if( point==i){
+				tt.addClass('_point');
+			}else{
+				tt.addClass('_'+array[i]);
+			}
+			$('#ImgPrice span').append(tt);
+			tt.addClass('fadein');
+		}
+	}else{
+		$('#send_link').hide();
+		$('#name').hide();
+		$('.img_price del').hide();
+		$('#ImgPrice').hide();
+	}
+}
+fill_data(cur_goods_index);
+$.fn.imgscroll({
+	imgrate     :440/360,       
+	partent_div :'imgscroll', 
+	circleshow  :false,
+	speed		:200,
+	delay	    :3,
+	prebtn		:'.pre_btn',
+	nextbtn		:'.next_btn',
+	isround		:false, //循环
+	autowipe    :false,
+	callback    :function(data){
+        cur_goods_index=data.index;
+		fill_data(cur_goods_index);
+		if(cur_goods_index==0)$('.pre_btn').hide();
+		if(cur_goods_index >0)$('.pre_btn').show();
+		if(cur_goods_index<$('.headerslide img').length/3-1)$('.next_btn').show();
+		if(cur_goods_index==$('.headerslide img').length/3-1)$('.next_btn').hide();		
+    }
+});
+var productPayUrl = "<?php echo Soma_const_url::inst()->get_package_pay();?>";
+$('#ToMyself').click(function(){
+    var pid = moonCakeArr[cur_goods_index];
+    location.href= productPayUrl + "&pid=" + pid + "&bType=mail";
+	//console.log('送自己');
+})
+
+$('#ToFriend').click(function(){
+    var pid = moonCakeArr[cur_goods_index];
+    location.href= productPayUrl + "&pid=" + pid + "&bType=gift";
+   // console.log('送朋友');
+})
+</script>
+</html>

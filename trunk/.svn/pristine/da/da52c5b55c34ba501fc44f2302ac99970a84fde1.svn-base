@@ -1,0 +1,44 @@
+<!doctype html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-touch-fullscreen" content="yes">
+<meta name="format-detection" content="telephone=no,email=no">
+<meta name="ML-Config" content="fullscreen=yes,preventMove=no">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="viewport" content="width=320,initial-scale=1,user-scalable=0">
+<script src="js/jquery.js"></script>
+<script src="js/ui_control.js"></script>
+<link href="css/global.css" rel="stylesheet">
+<link href="css/mycss.css" rel="stylesheet">
+<title>免房金攻略</title>
+</head>
+<body class="bg1">
+<div class="pageloading"><p class="isload">正在加载</p></div>
+	<div class="times color_fff h32">2016.8.01-12.31</div>
+	<div class="con_txt color_fff center P_17">
+    	<div class="h30 weight" style="margin-bottom:3%;">
+        	<font class="color_ffde00">免房金</font>
+            攻略
+        </div>
+        <div class="h24">
+        	<font class="weight h26">第一步：发邀请派银卡</font>
+            <br>（38元卡费含50元房费我们买单,你只管送） 
+        </div>
+        <div class="j_ico"><img src="images/polygon.png" /></div>
+        <div class="h24">
+        	<font class="weight h26">坐等“邀金”</font>
+            <br>  （朋友注册后,你即获100积分） 
+        </div>
+        <div class="j_ico"><img src="images/polygon.png" /></div>
+        <div class="h24">
+        	<font class="weight h26">继续邀请抢“免费住房金”</font>
+            <br> （还在等什么,快点去抢免房金吧！）
+         </div>
+    </div>
+    <a class="btn_h h30 center" href="form_d.html">抢免房金</a>
+</body>
+</html>

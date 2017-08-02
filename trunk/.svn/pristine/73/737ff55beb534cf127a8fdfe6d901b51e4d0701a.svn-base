@@ -1,0 +1,541 @@
+<?php
+/**
+ * @DATE : 2017-07-24
+ * @SPEC : 管理员账号管理
+ * @AUTHOR : 沙沙
+ * @VERSION: v1.0
+ */
+defined ( 'BASEPATH' ) or exit ( 'No direct script access allowed' );
+class Accounts extends MY_Admin_Iapi
+{
+	protected $label_controller = '账号管理';
+	protected $label_action = '';
+    protected $admin_profile;
+    protected $common_data;
+
+    const SUCCESS = 1;//成功
+    const FAIL_AUTO = 2;//失败自动消失
+    const FAIL_ALTER = 3;//失败 需要点击确认
+    const UN_LOGIN = 4;//未登录
+    const UN_KNOWN = 5;//未知错误
+    const INTER_STOP = 6;//公众号已停止服务
+    const PARAM_ERROR = 10;//参数错误
+    const UN_OP = 11;//参数错误
+    const TOKEN_KEY = 'JFK！@#78523bind';
+    const INTER_ID = 'a429262688';
+	public function __construct()
+    {
+		parent::__construct ();
+        $this->admin_profile = $this->session->userdata('admin_profile');
+
+        $this->admin_profile['parent_id'] = 1;//调试接口
+
+		$this->common_data['csrf_token'] = $this->security->get_csrf_token_name();
+		$this->common_data['csrf_value'] = $this->security->get_csrf_hash();
+        $this->load->helper('appointment');//加载所需函数
+        header('content-type:application/json;charset=utf-8');//定义文本输出返回格式
+        print_r($this->admin_profile);exit;
+	}
+
+
+    /**
+     * 账号列表 接口
+     */
+	public function accountsList()
+    {
+        $param = request();
+        $filter['keyword'] = !empty($param['keyword']) ? addslashes(trim($param['keyword'])) : '';
+        //查询当前管理员下的账号
+        $filter['parent_id'] = !empty($this->admin_profile['parent_id']) ? $this->admin_profile['parent_id'] : '';
+        $perPage = !empty($param['limit']) ? intval($param['limit']) : 20;//显示数量
+        $curPage = !empty($param['offset']) ? intval($param['offset']) : 1;//页码
+
+        $this->load->model('authority/authority_accounts_model');
+        $total = $this->authority_accounts_model->countAccount($filter);
+        $list = array();
+        if ($total > 0)
+        {
+            $list = $this->authority_accounts_model->accountList($filter);
+            if (!empty($list))
+            {
+                //获取角色信息
+                $temp = $this->authority_accounts_model->getRoles('role_id,role_name');
+                $roles = array();
+                if (!empty($temp))
+                {
+                    foreach ($temp as $item)
+                    {
+                        $roles[$item['role_id']] = $item['role_name'];
+                    }
+                }
+                unset($temp);
+                $status = array('无效','有效');
+                foreach ($list as $key => $value)
+                {
+                    $value['status'] = $status[$value['status']];
+                    $value['role_name'] = !empty($roles[$value['role_id']]) ? $roles[$value['role_id']] : '--';
+                    $value['edit_url'] = site_url('authority/accounts/edit?admin_id='.$value['admin_id']);
+
+                    $value['inter_name'] = $value['inter_name'] ? $value['inter_name'] : '--';
+                    unset($value['role_id']);
+                    $list[$key] = $value;
+                }
+            }
+        }
+
+        //分页数据
+        $arrPage = get_page($total, $curPage, $perPage);
+
+        //返回信息
+        $ajaxData = array(
+            'csrf' => $this->common_data,
+            'list' => $list,
+            'page' => $arrPage,
+            'add_url' => site_url('authority/accounts/add')
+        );
+        $this->out_put_msg(self::SUCCESS,'成功',$ajaxData,'authority/accounts/accountsList');
+    }
+
+
+    /**
+     * 添加账户 接口
+     */
+    public function addAccount()
+    {
+        $param = request();
+        $insert['username'] = !empty($param['username']) ? addslashes(trim($param['username'])) : '';
+        $insert['nickname'] = !empty($param['nickname']) ? addslashes(trim($param['nickname'])) : '';
+        $insert['password'] = !empty($param['password']) ? addslashes(trim($param['password'])) : '';
+        $insert['confirmPwd'] = !empty($param['confirmPwd']) ? addslashes(trim($param['confirmPwd'])) : '';
+        $insert['status'] = !empty($param['status']) ? intval($param['status']) : '1';
+
+        $interInfo = !empty($param['interInfo']) ? $param['interInfo'] : '';//公众号信息
+        $interInfo = json_decode($interInfo,true);
+        //查询当前管理员下的账号
+        $insert['parent_id'] = !empty($this->admin_profile['parent_id']) ? $this->admin_profile['parent_id'] : '';
+
+        if (empty($insert['parent_id']))
+        {
+            $this->out_put_msg(self::UN_KNOWN,'非法操作');
+        }
+
+        if (empty($insert['username']) || empty($insert['password']))
+        {
+            $this->out_put_msg(self::PARAM_ERROR,'参数错误');
+        }
+
+        //密码一致性
+        if ($insert['password'] != $insert['confirmPwd'])
+        {
+            $this->out_put_msg(self::UN_KNOWN,'两次密码不一致');
+        }
+        unset($insert['confirmPwd']);
+
+        $this->load->model('authority/authority_accounts_model');
+        //校验用户名是否存在
+        $account = $this->authority_accounts_model->getOne('admin_id',array('username' => $insert['username']));
+        if (!empty($account))
+        {
+            $this->out_put_msg(self::UN_KNOWN,'用户名已被占用');
+        }
+
+        $insert['create_time'] = date('Y-m-d H:i:s');
+        $insert['update_time'] = $insert['create_time'];
+        $insert['passsalt'] = getRandomCode(8);
+        $insert['password'] = do_hash($insert['password'] . $insert['passsalt']);
+        $adminId = $this->authority_accounts_model->addAccount($insert);
+        //插入成功
+        if ($adminId > 0 && !empty($interInfo))
+        {
+            $this->load->model('authority/accounts_entities_model');
+            //循环插入公众号信息
+            foreach ($interInfo as $key => $item)
+            {
+                $entities = $item;
+                $entities['entity_id'] = json_encode($entities['entity_id']);
+                $entities['admin_id'] = $adminId;
+                $entities['is_default'] = $key == 0 ? 1 : 0;
+                $entities['create_time'] = date('Y-m-d H:i:s');
+                $this->accounts_entities_model->addEntities($entities);
+            }
+        }
+
+        $this->out_put_msg(1,'添加成功');
+    }
+
+
+    /**
+     * 编辑账户 接口
+     */
+    public function editAccount()
+    {
+        $param = request();
+        //$update['username'] = !empty($param['username']) ? addslashes(trim($param['username'])) : '';//不允许修改用户名
+        $update['nickname'] = !empty($param['nickname']) ? addslashes(trim($param['nickname'])) : '';
+        $update['password'] = !empty($param['password']) ? addslashes(trim($param['password'])) : '';
+        $update['confirmPwd'] = !empty($param['confirmPwd']) ? addslashes(trim($param['confirmPwd'])) : '';
+        $update['oldPassword'] = !empty($param['oldPassword']) ? addslashes(trim($param['oldPassword'])) : '';
+        $update['status'] = !empty($param['status']) ? intval($param['status']) : '';
+        $update['bind_status'] = isset($param['bind_status']) ? intval($param['bind_status']) : '1';
+        $adminId= !empty($param['admin_id']) ? intval($param['admin_id']) : '';
+        $parentId = !empty($this->admin_profile['parent_id']) ? $this->admin_profile['parent_id'] : '';
+        $interInfo = !empty($param['interInfo']) ? $param['interInfo'] : '';//公众号信息
+        $interInfo = json_decode($interInfo,true);
+
+        if (empty($adminId))
+        {
+            $this->out_put_msg(self::UN_KNOWN,'参数错误');
+        }
+
+        //密码一致性
+        if (!empty($update['oldPassword']) && $update['password'] != $update['confirmPwd'])
+        {
+            $this->out_put_msg(self::UN_KNOWN,'两次新密码不一致');
+        }
+
+        $this->load->model('authority/authority_accounts_model');
+        //校验用户名是否存在
+        $account = $this->authority_accounts_model->getOne('*',array('admin_id' => $adminId,'parent_id' => $parentId));
+        if (empty($account))
+        {
+            $this->out_put_msg(self::PARAM_ERROR,'用户不存在');
+        }
+        else if (do_hash($update['oldPassword'] . $account['passsalt']) != $account['password'])
+        {
+            $this->out_put_msg(self::PARAM_ERROR,'旧密码错误');
+        }
+
+        unset($update['confirmPwd'],$update['oldPassword']);
+        $update['update_time'] = date('Y-m-d H:i:s');
+        $update['password'] = do_hash($update['password'] . $account['passsalt']);
+
+        //解绑微信
+        if ($update['bind_status'] == 0)
+        {
+            $update['openid'] = '';
+            $update['wx_nickname'] = '';
+        }
+
+        $whereUpdate = array(
+            'admin_id' => $adminId,
+        );
+        $resRow = $this->authority_accounts_model->saveAccount($whereUpdate,$update);
+        //更改成功
+        if ($resRow > 0 && !empty($interInfo))
+        {
+            $this->load->model('authority/accounts_entities_model');
+            //获取默认实体
+            $interId = '';
+            $defaultData = $this->accounts_entities_model->getOne('inter_id',array('admin_id' => $adminId,'is_default' => 1));
+            if (!empty($defaultData))
+            {
+                $interId = $defaultData['inter_id'];
+            }
+
+            //先删除实体再添加
+            $this->accounts_entities_model->deleteEntities($whereUpdate);
+            //循环插入公众号信息
+            $hadDefault = 0;
+            $count = count($interInfo);
+            foreach ($interInfo as $key => $item)
+            {
+                $isDefault = 0;
+                //设置默认公众号
+                if (($interId == $item['inter_id']) || (($count == $key + 1) && $hadDefault == 0))
+                {
+                    $isDefault = $hadDefault = 1;
+                }
+
+                $entities = $item;
+                $entities['entity_id'] = json_encode($entities['entity_id']);
+                $entities['admin_id'] = $adminId;
+                $entities['is_default'] = $isDefault == 1 ? 1 : 0;
+                $entities['create_time'] = date('Y-m-d H:i:s');
+                $this->accounts_entities_model->addEntities($entities);
+            }
+        }
+
+        $this->out_put_msg(1,'编辑成功');
+    }
+
+
+    /**
+     * 获取账号信息 接口
+     */
+    public function getAccountInfo()
+    {
+        $param = request();
+        $filter['admin_id'] = !empty($param['admin_id']) ? intval($param['admin_id']) : '';
+        $filter['parent_id'] = !empty($this->admin_profile['parent_id']) ? $this->admin_profile['parent_id'] : '';
+
+        if (!empty($filter['admin_id']) && !empty($filter['parent_id']))
+        {
+            $this->load->model('authority/authority_accounts_model');
+            $this->load->model('authority/accounts_entities_model');
+            //校验用户名是否存在
+            $account = $this->authority_accounts_model->getOne('admin_id,username,nickname,head_pic,create_time,status,bind_status,wx_nickname',$filter);
+
+            $entities = $this->accounts_entities_model->accountEntities($filter);
+            if (!empty($entities))
+            {
+                //获取角色信息
+                $temp = $this->authority_accounts_model->getRoles('role_id,role_name');
+                $roles = array();
+                if (!empty($temp))
+                {
+                    foreach ($temp as $item)
+                    {
+                        $roles[$item['role_id']] = $item['role_name'];
+                    }
+                }
+
+                foreach ($entities as $key => $value)
+                {
+                    //处理酒店&&店铺
+                    $shops = $hotels = array();
+                    if (!empty($value['entity_id']))
+                    {
+                        $hotel_ids = array();
+                        $entityId = json_decode($value['entity_id'],true);
+                        $value['entity_id'] = $entityId;
+                        foreach ($entityId as $item)
+                        {
+                            $hotel_ids[] = $item['hotel_id'];
+                            //查询店铺名称
+                            if ($item['shop_id'])
+                            {
+                                $where = array(
+                                    'shop_id' => $item['shop_id'],
+                                );
+                                $shop = $this->accounts_entities_model->getShops('shop_id,shop_name',$where);
+                                $tmp = '';
+                                if (!empty($shop))
+                                {
+                                    foreach ($shop as $v)
+                                    {
+                                        $tmp[] = $v['shop_name'];
+                                    }
+
+                                    $tmp = implode(',',$tmp);
+                                }
+
+                                $shops[$item['hotel_id']] = $tmp;
+                            }
+                        }
+
+                        //查询酒店名称
+                        $where = array(
+                            'hotel_id' => $hotel_ids,
+                            'inter_id' => $value['inter_id'],
+                        );
+
+                        $hotels = $this->accounts_entities_model->getHotels('hotel_id,name',$where);
+                        if (!empty($hotels))
+                        {
+                            foreach ($hotels as $k => $val)
+                            {
+                                $val['shopInfo'] = !empty($shops[$val['hotel_id']]) ? $shops[$val['hotel_id']] : '';
+                                $hotels[$k] = $val;
+                            }
+                        }
+                    }
+
+                    $value['hotels'] = $hotels;
+                    $value['role_name'] = !empty($roles[$value['role_id']]) ? $roles[$value['role_id']] : '--';
+                    unset($value['entity_id']);
+                    $entities[$key] = $value;
+                }
+            }
+        }
+
+
+        $status = array(
+            0 => array('name' => '有效','value' => '1'),
+            1 => array('name' => '无效','value' => '0'),
+        );
+
+        //返回数据
+        $ajaxData = array(
+            'accountInfo' => !empty($account) ? $account : '',
+            'entities'  => !empty($entities) ? $entities :  '',
+            'status'    => $status,
+            'csrf'      => $this->common_data,
+        );
+
+        $this->out_put_msg(1,'获取成功',$ajaxData);
+    }
+
+    /**
+     * 设置默认公众号状态 接口
+     */
+    public function setAccountEntities()
+    {
+        $param = request();
+        $interId = !empty($param['inter_id']) ? addslashes(trim($param['inter_id'])) : '';
+        $adminId = $this->admin_profile['admin_id'];
+
+        $this->load->model('authority/accounts_entities_model');
+        //先清空默认状态
+        $fitter = array(
+            'admin_id' => $adminId,
+            'is_default' => 1,
+        );
+        $this->accounts_entities_model->saveEntities($fitter,array('is_default' => 0));
+
+        //再设置默认状态
+        $fitter = array(
+            'admin_id' => $adminId,
+            'inter_id' => $interId,
+        );
+        $res_row = $this->accounts_entities_model->saveEntities($fitter,array('is_default' => 1));
+        if ($res_row > 0)
+        {
+
+
+            $this->out_put_msg(1,'设置成功');
+        }
+        $this->out_put_msg(2,'设置失败');
+    }
+
+
+    /**
+     * 获取公众号信息
+     */
+    public function getInter()
+    {
+        $this->load->model('authority/authority_accounts_model');
+
+        //获取公众号
+        $filter_public = array();
+        if ($this->admin_profile['inter_id'] != 'ALL_PRIVILEGES')
+        {
+            $filter_public['inter_id'] = $this->admin_profile['inter_id'];
+        }
+        $this->load->model('wx/publics_model');
+        $public = $this->publics_model->get_public_hash($filter_public,array('inter_id','name'));
+
+        //获取角色信息
+        $roles = $this->authority_accounts_model->getRoles('role_id,role_name');
+
+        $ajaxData = array(
+            'public' => $public,
+            'role'  => $roles,
+        );
+
+        $this->out_put_msg(1,'成功',$ajaxData);
+    }
+
+    /**
+     * 加载公众号下的酒店信息
+     */
+    public function loadInterData()
+    {
+        $param = request();
+        $filter['inter_id'] = !empty($param['inter_id']) ? addslashes($param['inter_id']) : '';
+        $filter['inter_name'] = !empty($param['inter_name']) ? addslashes($param['inter_name']) : '';
+        $filter['role_id'] = !empty($param['role_id']) ? intval($param['role_id']) : '';
+        $filter['role_name'] = !empty($param['role_name']) ? addslashes($param['role_name']) : '';
+
+        if (empty($filter['inter_id']) || empty($filter['role_id']))
+        {
+            $this->out_put_msg(2,'参数错误');
+        }
+
+        //获取公众号下的酒店
+        $this->load->model('hotel/hotel_model');
+        $this->load->model('authority/accounts_entities_model');
+        $hotels = $this->hotel_model->get_hotel_hash(array('inter_id' => $filter['inter_id'],'status'=>1));
+        $hotel_id = $shopsData =  array();
+        if (!empty($hotels))
+        {
+            foreach ($hotels as $key => $value)
+            {
+                $item = array(
+                    'hotel_id' => $value['hotel_id'],
+                    'hotel_name' => $value['name'],
+                );
+
+                $hotel_id[] = $value['hotel_id'];
+                $hotels[$key] = $item;
+            }
+
+            //获取点餐模块店铺信息
+            $shopsTmp = $this->accounts_entities_model->getShopByHotelId(array('inter_id' => $filter['inter_id'],'hotel_id' => $hotel_id), 'shop_id,shop_name,hotel_id');
+            if (!empty($shopsTmp))
+            {
+                foreach ($shopsTmp as $shop)
+                {
+                    $shops[$shop['hotel_id']][] = $shop;
+                }
+
+                foreach ($hotels as $key => $val)
+                {
+                    if (empty($shops[$val['hotel_id']]))
+                    {
+                        $shopsData[$val['hotel_id']] = array();
+                    }
+                    else
+                    {
+                        $shopsData[$val['hotel_id']] =  $shops[$val['hotel_id']] ;
+                    }
+                }
+                $shopsData = array_values($shopsData);
+            }
+        }
+
+        //返回数据
+        $ajaxData = array(
+            'publicInfo' => $filter,
+            'hotels'     => $hotels,
+            'shops'      => $shopsData,
+            'csrf'       => $this->common_data,
+        );
+
+        $this->out_put_msg(1,'获取成功',$ajaxData);
+    }
+
+
+    /**
+     * 生成绑定二维码
+     */
+    public function createQrCode()
+    {
+        $param = request();
+        $adminId = !empty($param['admin_id']) ? addslashes($param['admin_id']) : '';
+        if (empty($adminId))
+        {
+            $this->out_put_msg(2,'参数错误');
+        }
+
+        $this->load->model('authority/valify_tokens_model');
+        $add = array(
+            'admin_id' => $adminId,
+            'type' => 2,
+            'create_time' => date('Y-m-d H:i:s'),
+            'expire_time' => time() + 300,//5分钟失效
+        );
+
+        $add['token'] = MD5($adminId . getMillisecond() . self::TOKEN_KEY);
+        $row = $this->valify_tokens_model->addToken($add);
+        //创建成功
+        if ($row > 0)
+        {
+            $host = $this->config->config['authority_show_url'];//获取配置前台URL
+            $host = empty($host) ? 'http://zb.jinfangka.cn/' : $host;
+
+            $text = $host . 'index.php/authority/auth/bind?id='.self::INTER_ID.'&token='.$add['token'];
+            $ajaxData = array(
+                'imgUrl' => site_url('/authority/accounts/showAuthQr?url=').urlencode($text),
+                'expire_time' => $add['expire_time'],
+            );
+            $this->out_put_msg(1,'成功',$ajaxData);
+        }
+        else
+        {
+            $this->out_put_msg(2,'生成二维码失败');
+        }
+    }
+
+
+
+}

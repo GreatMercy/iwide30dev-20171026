@@ -1,0 +1,13 @@
+@import '../../variable/common.postcss';
+/* font-size */
+@each $size in var(--size-queue) {
+  .font-size--$(size) {
+    font-size: px2rem($size)
+  }
+}
+/* padding margin */
+@each $key, $val in var(--direction) {
+  .jfk-p$(key)-30 {
+    padding-$(val): px2rem(30);
+  }
+}

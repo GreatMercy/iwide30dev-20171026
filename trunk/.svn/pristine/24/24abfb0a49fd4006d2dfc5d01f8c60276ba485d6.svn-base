@@ -1,0 +1,22 @@
+*{margin:0;padding:0;list-style-type:none;}
+a,img{border:0;}
+html{font:12px/180% "Microsoft YaHei","微软雅黑", "宋体";background:url(bg2.jpg) no-repeat center bottom; background-size:cover;height:100%; text-align:center;color:#fff;}
+.setting,#bt,.drawname span,.btn,.drawlist{cursor:pointer;}
+.setting,.drawlist,.restart,.history{ cursor:pointer;padding:20px; position:absolute; bottom:0; right:0; opacity:0.7}
+.drawlist{ right:100px}
+.history{right:300px}
+.restart{right:200px}
+#box{margin:auto;font-size:66px;text-align:center;padding:0 30px;margin-top:150px; overflow:hidden; height:300px;}
+#box p{font-size:24px; position:absolute; bottom:0; width:100%; background:rgba(0,0,0,0.5); padding:10px 0}
+#box div img{height:240px;}
+#box div{ overflow:hidden; height:240px;width:240px; display:inline-block; background:#fff;}
+#box .item{display:inline-block; margin-right:10px; vertical-align:top; position:relative}
+#bt{ display:inline-block;width:284px; height:127px; line-height:100px;text-align:center;margin-top:75px;color:#fff;font-size:25px; background:url(button.png) no-repeat;}
+.pull{padding:10px; background:rgba(0,0,0,0.5); position:absolute; z-index:999; text-align:center; bottom:60px; }
+.pullsetting{right:20px;}
+.drawname span,.btn{ display:inline-block; padding:5px 25px; border:1px solid #e4e4e4; margin:20px; border-radius:10px;}
+.btn{ background:#fff; color:#555;}
+.cur{ background:#ff7200; color:#fff;}
+.showdraw{top:10%; max-width:1000px;}
+.showdraw img{width:120px;}
+.showdraw div{ display:inline-block; padding:30px;}

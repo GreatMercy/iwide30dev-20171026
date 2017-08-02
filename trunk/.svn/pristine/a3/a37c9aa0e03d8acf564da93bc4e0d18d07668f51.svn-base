@@ -1,0 +1,98 @@
+<!doctype html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="apple-mobile-web-app-capable" content="yes" >
+<meta name="apple-touch-fullscreen" content="yes">
+<meta name="format-detection" content="telephone=no,email=no">
+<meta name="ML-Config" content="fullscreen=yes,preventMove=no">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="viewport" content="width=320.1,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,minimal-ui">
+<link href="css/global.css" rel="stylesheet">
+<link href="css/mycss.css" rel="stylesheet">
+<script src="js/jquery.js"></script>
+<script src="js/alert.js"></script>
+<script src="js/ui_control.js"></script>
+<title>“邀金”大作战</title>
+</head>
+<body style="background:#f4f6f5 !important;">
+<div class="pageloading"><p class="isload">正在加载</p></div>
+<!-------------------------------  以上为公共部分  ---------------------------------->
+
+
+<script src="js/imgscroll.js"></script>
+<script src="js/jquery.touchwipe.min.js"></script>
+<div class="scroll_box"> 
+  <div class="headerslide">
+      <a class="slideson ui_img_auto_cut" href="notLogged?OldCardNO={$user_info.0.open_id}">
+         <img src="images/327681253941850457.jpg" />
+      </a>
+      <a class="slideson ui_img_auto_cut" href="notLogged?OldCardNO={$user_info.0.open_id}">
+         <img src="images/327681253941850457.jpg" />
+      </a>
+  </div>
+</div>
+<div class="integral bg_fff f_s_185 border_bottom">
+	<img class="cup" src="images/cup.png"/>
+    <span>1300分</span>
+    <a  href=""><div class="now_btn">立即兑换</div></a>
+</div>
+<div class="link_list martop border_top border_bottom bg_fff">
+  <a href="ranking_list.html" class="arrow item border_bottom">
+      <span class="iconfont h14">&#x0a10;</span>
+      <span class="mark">前30名可获得免费房一间哦~</span>
+      <span class="h30">邀金榜</span>
+  </a>
+  <a href="javascript:;" class="arrow border_bottom item Invitation">
+    <span class="iconfont h14">&#xa3;</span>
+    <span class="mark">获取免费房，永久会员等惊喜宝典~</span>
+    <span class="h30">邀金宝典</span>
+  </a>
+	<a href="description.html" class="arrow item">
+    	<span class="iconfont h14">&#xa9;</span>
+    	<span class="h30">活动说明</span>
+    </a>
+</div>
+<div class="ui_pull" style="display:none;">
+  <div class="Canon">
+      <h1 class="j_title center">《“邀金”宝典 》</h1>
+        <div class="scroll" style="height:70%;">
+          <b class="til_list color_000" style="padding-left:0px;">如何抢免费房：</b>
+            <p>抢闸奖：首位邀请注册人数达到 9/19/29/39 49/59/69/79/89/99人，即可获得免费房1间</p>
+            <p>排名奖：邀请注册数位列排行榜前30名，即可 获得免费房1间</p>
+            <p>积分兑换：攒邀请积分，直接通过东呈微信－ 酒店预订进行兑换</p>
+            <p>其他惊喜：去积分商城看看呗～</p>
+          <b  class="til_list color_000" style="padding-left:0px;">如何免费升级永久有效会员：</b>
+            <p> 领取银卡体验卡后，3个月内入住东呈旗下任 一酒店1晚</p>
+            <p> 邀请5位好友新注册会员，即可获得500积分， 即可以499积分升级银卡</p>
+            <p> 通过东呈微信、官网、手机官网、手机app、 门店支付38元可立即升级  </p>
+        </div>
+        <div class="pull_foot_btn center">
+          <a class="take_m"  href="javascript:;">拿下邀金</a>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+/*初始化滚动  imgrate为图片大小*/
+$.fn.imgscroll({ partent_div:'scroll_box' , imgrate: 640/325,circlesize:'7px' });
+$(function(){
+	var w_h=$(window).height();
+	if(w_h<=417){
+		$("body,html").css("min-height",w_h+"px");
+		$(".pull_foot_btn >.take_m").css("margin-top","7%");
+	}
+  $('.Invitation').click(function(){
+    $('.ui_pull').show();
+    $('.move_none').click(function(){
+      $('.ui_pull').hide();
+    })
+  })
+  $('.take_m').click(function(){
+      $('.ui_pull').hide();
+  })
+})
+</script>
+</html>

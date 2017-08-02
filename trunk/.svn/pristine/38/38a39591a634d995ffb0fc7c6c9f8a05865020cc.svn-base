@@ -1,0 +1,88 @@
+let showLoadError = function (err) {
+  if (process.env.NODE_ENV === 'development') {
+    return console.error(err)
+  }
+  return console.error(err.message)
+}
+// 首页
+const home = (r) => {
+  require.ensure([], function (require) {
+    let home = require('./index/index')
+    r(home.default)
+  }, showLoadError, 'home')
+}
+// 登录
+const login = (r) => {
+  require.ensure([], function (require) {
+    let login = require('./login/index')
+    r(login.default)
+  }, showLoadError, 'login')
+}
+// 注册
+const register = (r) => {
+  require.ensure([], function (require) {
+    let register = require('./register/index')
+    r(register.default)
+  }, showLoadError, 'register')
+}
+// 余额
+// const balance = (r) => {
+//   require.ensure([], function (require) {
+//     let balance = require('./balance/index')
+//     r(balance.default)
+//   }, showLoadError, 'balance')
+// }
+// // 积分
+// const integral = (r) => {
+//   require.ensure([], function (require) {
+//     let integral = require('./integral/index')
+//     r(integral.default)
+//   }, showLoadError, 'integral')
+// }
+// // 个人信息
+// const info = (r) => {
+//   require.ensure([], function (require) {
+//     let info = require('./info/index')
+//     r(info.default)
+//   }, showLoadError, 'info')
+// }
+// // 会员权益
+// const number = (r) => {
+//   require.ensure([], function (require) {
+//     let number = require('./number/index')
+//     r(number.default)
+//   }, showLoadError, 'number')
+// }
+// // 我要购卡支付页
+// const payPurchaes = (r) => {
+//   require.ensure([], function (require) {
+//     let payPurchaes = require('./payPurchaes/index')
+//     r(payPurchaes.default)
+//   }, showLoadError, 'payPurchaes')
+// }
+// // 我要购卡
+// const purchase = (r) => {
+//   require.ensure([], function (require) {
+//     let purchase = require('./purchase/index')
+//     r(purchase.default)
+//   }, showLoadError, 'purchase')
+// }
+// // 储值支付
+// const storedValue = (r) => {
+//   require.ensure([], function (require) {
+//     let storedValue = require('./storedValue/index')
+//     r(storedValue.default)
+//   }, showLoadError, 'storedValue')
+// }
+export default {
+  home,
+  login,
+  register
+  // balance,
+  // integral
+  // info,
+  // number,
+  // payPurchaes,
+  // purchase,
+  // storedValue
+}

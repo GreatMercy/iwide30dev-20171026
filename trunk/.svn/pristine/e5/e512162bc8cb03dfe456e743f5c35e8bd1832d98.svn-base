@@ -1,0 +1,47 @@
+.jfk-pages__orderDetail{
+    .orderDetail__state{
+        padding-top: px2rem(70);
+        &__main{
+            padding-left: px2rem(70);
+            padding-right: px2rem(70);
+            position: relative;
+            .goldlight{
+                position: absolute;
+                left: 0;
+                top: 0;
+                height: px2rem(80);
+            }            
+        }
+        &__type{
+            line-height: px2rem(80);
+            i{
+                font-size: px2rem(60);
+            }
+        }
+        &__tip{
+            color: #808080;
+            line-height: px2rem(30);
+            margin-top: px2rem(30);
+        }
+    }
+    .orderDetail__gift{
+        padding-left: px2rem(90);
+        padding-right: px2rem(90);
+        margin-top: px2rem(94);
+        &__info{
+            .productimg{
+                width: calc(155 / 568 * 100%);
+                border-radius: 3px;
+                float: left;
+
+            }
+            .content{
+                color: #fff;
+                float: left;
+                width: cal(413/568 *100%);
+            }
+
+        }
+
+    }
+}

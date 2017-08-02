@@ -1,0 +1,164 @@
+webpackJsonp([4],[
+/* 0 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+let showLoadError = function (err) {
+  if (false) {
+    return console.error(err);
+  }
+  return console.error(err.message);
+};
+// 首页
+const home = r => {
+  __webpack_require__.e/* require.ensure */(2).then((function (require) {
+    let home = __webpack_require__(11);
+    r(home.default);
+  }).bind(null, __webpack_require__)).catch(showLoadError);
+};
+// 登录
+const login = r => {
+  __webpack_require__.e/* require.ensure */(1).then((function (require) {
+    let login = __webpack_require__(12);
+    r(login.default);
+  }).bind(null, __webpack_require__)).catch(showLoadError);
+};
+// 注册
+const register = r => {
+  __webpack_require__.e/* require.ensure */(0).then((function (require) {
+    let register = __webpack_require__(13);
+    r(register.default);
+  }).bind(null, __webpack_require__)).catch(showLoadError);
+};
+// 余额
+// const balance = (r) => {
+//   require.ensure([], function (require) {
+//     let balance = require('./balance/index')
+//     r(balance.default)
+//   }, showLoadError, 'balance')
+// }
+// // 积分
+// const integral = (r) => {
+//   require.ensure([], function (require) {
+//     let integral = require('./integral/index')
+//     r(integral.default)
+//   }, showLoadError, 'integral')
+// }
+// // 个人信息
+// const info = (r) => {
+//   require.ensure([], function (require) {
+//     let info = require('./info/index')
+//     r(info.default)
+//   }, showLoadError, 'info')
+// }
+// // 会员权益
+// const number = (r) => {
+//   require.ensure([], function (require) {
+//     let number = require('./number/index')
+//     r(number.default)
+//   }, showLoadError, 'number')
+// }
+// // 我要购卡支付页
+// const payPurchaes = (r) => {
+//   require.ensure([], function (require) {
+//     let payPurchaes = require('./payPurchaes/index')
+//     r(payPurchaes.default)
+//   }, showLoadError, 'payPurchaes')
+// }
+// // 我要购卡
+// const purchase = (r) => {
+//   require.ensure([], function (require) {
+//     let purchase = require('./purchase/index')
+//     r(purchase.default)
+//   }, showLoadError, 'purchase')
+// }
+// // 储值支付
+// const storedValue = (r) => {
+//   require.ensure([], function (require) {
+//     let storedValue = require('./storedValue/index')
+//     r(storedValue.default)
+//   }, showLoadError, 'storedValue')
+// }
+/* harmony default export */ __webpack_exports__["a"] = ({
+  home,
+  login,
+  register
+  // balance,
+  // integral
+  // info,
+  // number,
+  // payPurchaes,
+  // purchase,
+  // storedValue
+});
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 4 */,
+/* 5 */,
+/* 6 */,
+/* 7 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__styles_postcss_reset_postcss__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__styles_postcss_reset_postcss___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__styles_postcss_reset_postcss__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__assets_css_index_css__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__assets_css_index_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__assets_css_index_css__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__assets_css_mycss_css__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__assets_css_mycss_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__assets_css_mycss_css__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_promise_polyfill__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_promise_polyfill___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_promise_polyfill__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__pages_page__ = __webpack_require__(0);
+// The Vue build version to load with the `import` command
+// (runtime-only or standalone) has been set in webpack.base.conf with an alias.
+
+
+
+
+
+
+
+if (!window.Promise) {
+  window.Promise = __WEBPACK_IMPORTED_MODULE_3_promise_polyfill___default.a;
+}
+
+let call = function () {
+  let config = arguments[0];
+  if (typeof config === 'function') {
+    config();
+  }
+  if (Object.prototype.toString.call(config) === '[object Object]' && typeof config.init === 'function') {
+    config.init(config);
+  }
+};
+
+document.addEventListener('DOMContentLoaded', function (event) {
+  let scriptAreaElement = document.getElementById('scriptArea');
+  let pageId = scriptAreaElement && scriptAreaElement.dataset.pageId || 'home';
+  let pageConfig = __WEBPACK_IMPORTED_MODULE_4__pages_page__["a" /* default */][pageId];
+  if (pageConfig) {
+    pageConfig(call);
+  }
+});
+
+/***/ })
+],[7]);

@@ -1,0 +1,13 @@
+.jfk-flex{
+  display: flex;
+  @each $key, $val in (start, end, center, space-around, space-between), (flex-start, flex-end, center, space-around, space-around) {
+    &.is-justify-$(key) {
+      justify-content: $(val);
+    }
+  }
+  @each $key, $val in (top, middle, bottom), (flex-start, center, flex-end) {
+    &.is-align-$(key) {
+      align-items: $(val);
+    }
+  }
+}

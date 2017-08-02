@@ -1,0 +1,499 @@
+<?php
+use App\libraries\Iapi\BaseConst;
+use App\libraries\Iapi\FrontConst;
+use App\services\Result;
+use App\services\soma\ExpressService;
+use App\services\soma\OrderService;
+use App\services\soma\ScopeDiscountService;
+
+
+/**
+ * Class Order
+ * @author renshuai  <renshuai@mofly.cn>
+ *
+ *
+ * @property Sales_order_model $salesOrderModel
+ */
+class Order extends MY_Front_Soma_Iapi
+{
+
+    /**
+     * @var array
+     */
+    public $wft_pay_inter_ids = [
+        'a479457264',//厦门海旅温德姆至尊酒店
+        'a482210445',//厦门帝元维多利亚大酒店
+        'a489326393',//都江堰紫坪铺滑翔伞飞行营地
+        'a494820079',//成都群光君悦酒店
+        'a496652649',//株洲万豪
+        'a497580480',// 苏州吴宫泛太平洋酒店
+        'a499046681',
+        'a492763532',
+        'a498545803',
+        'a484533415',
+        'a498095405',
+    ];
+
+
+    /**
+     * @SWG\Get(
+     *     path="/order/index",
+     *     summary="订单列表",
+     *     tags={"order"},
+     *     @SWG\Response(
+     *         response=200,
+     *         description="订单列表",
+     *         @SWG\Schema(ref="#/definitions/SomaSalesOrderModel"),
+     *     )
+     * )
+     */
+    public function get_index()
+    {
+        $this->json(1, '', [1]);
+    }
+
+
+    /**
+     * @SWG\Post(
+     *     path="/order/index",
+     *     summary="下单",
+     *     tags={"order"},
+     *     @SWG\Parameter(
+     *         in="formData",
+     *         name="business",
+     *         required=true,
+     *         type="string",
+     *     ),
+     *     @SWG\Parameter(
+     *         in="formData",
+     *         name="settlement",
+     *         required=true,
+     *         type="string",
+     *         default="default"
+     *     ),
+     *     @SWG\Response(
+     *         response=200,
+     *         description="订单列表",
+     *         @SWG\Schema(ref="#/definitions/SomaSalesOrderModel"),
+     *     )
+     * )
+     */
+    public function post_index()
+    {
+        $posts = $this->input->post();
+
+        if (ENVIRONMENT == 'dev') {
+            $posts = array(
+                'business' => 'package',
+                'settlement' => 'default',
+                'hotel_id' => 3,
+                'qty' => array(
+                    '11866' => 1
+                ),
+                'product_id' => 11866,
+                'name' => '123',
+                'phone' => 323,
+                'saler' => 0,
+                'fans_saler' => 0,
+                'inid' => 0,
+                'mcid' => 2657169,
+            );
+        }
+
+        $createResult = OrderService::getInstance()->create($posts);
+        if ($createResult->getStatus() === Result::STATUS_FAIL) {
+            $message = $createResult->getMessage();
+            $this->json(FrontConst::OPER_STATUS_FAIL_ALERT, $message);
+            return;
+        }
+
+        $data = $createResult->getData();
+        $salesOrderModel = $data['salesOrderModel'];
+        $payChannel = $data['payChannel'];
+
+        $this->load->model('soma/sales_order_model', 'salesOrderModel');
+        $order = $this->salesOrderModel->load($data['salesOrderModel']->order_id);
+
+        $grand_total = $order->m_get('grand_total');
+        if( $grand_total < 0.005){
+            $pay_res['paid_type'] = empty($salesOrderModel->payment_extra)? Sales_payment_model::PAY_TYPE_HD : $salesOrderModel->payment_extra;
+            $payResult = $this->_inner_payment($order, $pay_res, false);
+            $this->json(FrontConst::OPER_STATUS_SUCCESS, '', $payResult);
+            return;
+        }
+
+        // 储值支付
+        if($payChannel === 'balance_pay') {
+
+            $bpay_passwd = $posts['bpay_passwd'];
+            $pay_res = $this->balance_pay($salesOrderModel->inter_id, $salesOrderModel->openid, $bpay_passwd, $salesOrderModel->order_id);
+
+            if($pay_res && $pay_res['status'] == Soma_base::STATUS_TRUE) {
+                $pay_res['paid_type'] = Sales_payment_model::PAY_TYPE_CZ;
+                $payResult = $this->_inner_payment($order, $pay_res);
+                $this->json(FrontConst::OPER_STATUS_SUCCESS, '', $payResult);
+                return;
+            } else {
+                $message = $pay_res['message'];
+                $this->json(FrontConst::OPER_STATUS_FAIL_ALERT, $message);
+                return;
+            }
+
+        }elseif($payChannel === 'point_pay') {
+            $pay_res = $this->point_pay($order);
+            if($pay_res && $pay_res['status'] == Soma_base::STATUS_TRUE) {
+                $pay_res['paid_type'] = Sales_payment_model::PAY_TYPE_JF;
+                $payResult = $this->_inner_payment($order, $pay_res);
+                $this->json(FrontConst::OPER_STATUS_SUCCESS, '', $payResult);
+                return;
+            } else {
+                $message = $pay_res['message'];
+                $this->json(FrontConst::OPER_STATUS_FAIL_ALERT, $message);
+                return;
+            }
+        }
+
+        $result['status'] = Soma_base::STATUS_TRUE;
+        $result['data'] = [
+            'orderId' => $salesOrderModel->order_id
+        ];
+        $this->json(FrontConst::OPER_STATUS_SUCCESS, '', $result);
+        return ;
+    }
+
+    /**
+     * @param Sales_order_model $order
+     * @param $payment
+     * @param bool $save_flag
+     * @return mixed
+     * @author renshuai  <renshuai@jperation.cn>
+     */
+    protected function _inner_payment($order, $payment, $save_flag = true) {
+
+        $result['status'] = Soma_base::STATUS_FALSE;
+        $result['message']  = '订单支付失败';
+        $result['step'] = 'fail';
+
+        $log_data= array();
+        $log_data['paid_ip'] = $this->input->ip_address();
+        $log_data['paid_type'] = $payment['paid_type'];
+        $log_data['order_id'] = $order->m_get('order_id');
+        $log_data['openid'] = $order->m_get('openid');
+        $log_data['business'] = $order->m_get('business');
+        $log_data['settlement'] = $order->m_get('settlement');
+        $log_data['inter_id'] = $order->m_get('inter_id');
+        $log_data['hotel_id'] = $order->m_get('hotel_id');
+        $log_data['grand_total'] = $order->m_get('grand_total');
+        $log_data['transaction_id'] = isset($payment['trans_id']) ? $payment['trans_id'] : '';
+
+        $order->order_payment($log_data );
+        $order->order_payment_post($log_data );
+
+        if($save_flag) {
+            $this->load->model('soma/Sales_payment_model', 'pay_model');
+            $this->pay_model->save_payment($log_data);
+        }
+
+        $result['status'] = Soma_base::STATUS_TRUE;
+        $result['message']  = '订单支付成功';
+        $result['data'] = array( 'orderId' => $order->m_get('order_id') );
+        $result['step'] = 'success';
+
+        $url_params = array(
+            'id' => $order->m_get('inter_id'),
+            'order_id' => $order->m_get('order_id')
+        );
+
+        $url = Soma_const_url::inst()->get_payment_package_success($url_params);
+        $result['success_url'] = $url;
+
+        $bType = $this->input->get('bType', true);
+        $result['bType'] = $bType;
+        // 月饼说分流
+        if($bType) {
+            $url = Soma_const_url::inst()->get_payment_package_success(array('id'=>$this->inter_id, 'order_id' => $order->m_get('inter_id')));
+            $order_detail = $order->m_data();
+            $result['success_url'] = $order->success_payment_path($this->inter_id, $bType, $order_detail, $url);
+        }
+
+        return $result;
+    }
+
+
+    /**
+     * @SWG\Get(
+     *     tags={"order"},
+     *     path="/order/pay",
+     *     summary="跳至下单页面",
+     *     description="跳至下单页面，所要获取相关数据",
+     *     operationId="get_pay",
+     *     produces={"application/json"},
+     *     @SWG\Parameter(
+     *         description="商品id",
+     *         in="query",
+     *         name="pid",
+     *         required=false,
+     *         type="integer",
+     *         format="int32",
+     *     ),
+     *     @SWG\Parameter(
+     *         description="公众号内部id",
+     *         in="query",
+     *         name="id",
+     *         required=false,
+     *         type="string",
+     *     ),
+     *     @SWG\Parameter(
+     *         description="业务类型，默认：package",
+     *         in="query",
+     *         name="btype",
+     *         required=true,
+     *         type="string",
+     *     ),
+     *    @SWG\Parameter(
+     *         description="openid",
+     *         in="query",
+     *         name="openid",
+     *         required=true,
+     *         type="string",
+     *     ),
+     *     @SWG\Response(
+     *         response="200",
+     *         description="successful operation",
+     *         @SWG\Schema(
+     *              type="object",
+     *              @SWG\Property(
+     *                  property="customer_info",
+     *                  description="联系人信息",
+     *                  type = "array",
+     *                  @SWG\Items(ref="#/definitions/SomaCustomerContact")
+     *              ),
+     *              @SWG\Property(
+     *                  property="coupons",
+     *                  type="integer" ,
+     *                  description="可用优惠券数量" ,
+     *              ),
+     *              @SWG\Property(
+     *                  property="point",
+     *                  type="integer" ,
+     *                  description="可用积分" ,
+     *              ),
+     *              @SWG\Property(
+     *                  property="count",
+     *                  type="integer" ,
+     *                  description="购买数量" ,
+     *              ),
+     *              @SWG\Property(
+     *                  property="balance_password",
+     *                  type="integer" ,
+     *                  description="某些公众号储值类型商品必须输入密码，0：不需要，1：需要" ,
+     *              ),
+     *              @SWG\Property(
+     *                  property="balance",
+     *                  type="integer" ,
+     *                  description="用户信息信息。money：储值金额，url：储值充值中心链接" ,
+     *              ),
+     *              @SWG\Property(
+     *                  property="psp_setting",
+     *                  type="array" ,
+     *                  description="多规格商品款式设置" ,
+     *                  @SWG\Items(ref="#/definitions/SomaProductSpecificationSetting")
+     *              ),
+     *              @SWG\Property(
+     *                  property="scope_product_link",
+     *                  type="array" ,
+     *                  description="判断是否使用价格配置的价格，如果使用的话就不能使用优惠券了" ,
+     *              ),
+     *              @SWG\Property(
+     *                  property="pay_params",
+     *                  type="array" ,
+     *                  description="下单参数。id：公众号内部id，btype：业务类型（默认：package）" ,
+     *              ),
+     *              @SWG\Property(
+     *                  property="package",
+     *                  description="购买商品信息",
+     *                  type="array" ,
+     *                  @SWG\Items(ref="#/definitions/SomaPackage")
+     *              ),
+     *              @SWG\Property(
+     *                  property="address",
+     *                  description="邮寄地址。default: 默认，list：列表",
+     *                  type = "array",
+     *                  @SWG\Items(ref="#/definitions/SomaCustomerAddress")
+     *              ),
+     *              @SWG\Property(
+     *                  property="saler",
+     *                  description="分销员信息",
+     *                  type = "array",
+     *                  @SWG\Items(ref="#/definitions/IwideHotelStaff")
+     *              )
+     *
+     *         )
+     *     ),
+     *     @SWG\Response(
+     *         response="400",
+     *         description="Invalid pid supplied"
+     *     ),
+     *     @SWG\Response(
+     *         response="404",
+     *         description="Package not found"
+     *     )
+     * )
+     */
+    public function get_pay()
+    {
+
+        $data = [];
+
+        $productId = intval($this->input->get('pid'));
+        if (empty($productId)) {
+            show_error('Invalid pid supplied', 400);
+        }
+
+        $this->load->model('soma/Product_package_model', 'productPackageModel');
+        $productDetail = $this->productPackageModel->get_product_package_detail_by_product_id($productId, $this->inter_id);
+
+        //商品不存在
+        if (!$productDetail) {
+            show_404();
+        }
+
+        $productModel = $this->productPackageModel;
+
+        //做过期处理过滤
+        if ($productDetail['type'] == $productModel::PRODUCT_TYPE_BALANCE || $productDetail['type'] == $productModel::PRODUCT_TYPE_POINT) {
+            //todo: 跳至会员登录页
+        }
+
+        $is_expire = false;
+        if ($productDetail['goods_type'] != $productModel::SPEC_TYPE_TICKET && $productDetail['date_type'] == $productModel::DATE_TYPE_STATIC) {
+            $time = time();
+            $expireTime = isset($productDetail['expiration_date']) ? strtotime($productDetail['expiration_date']) : null;
+            if ($expireTime && $expireTime < $time) {
+                $is_expire = true;
+            }
+        }
+        $productDetail['is_expire'] = $is_expire;
+
+        //如果是积分商品，去掉小数点，向上取整
+        if ($productDetail['type'] == $productModel::PRODUCT_TYPE_POINT) {
+            $productDetail['price_package'] = ceil($productDetail['price_package']);
+            $productDetail['price_market'] = ceil($productDetail['price_market']);
+        }
+
+        //取出联系人和电话
+        $data['customer_info'] = $this->productPackageModel->get_customer_contact(['openid' => $this->openid]);
+
+        //读取购买人的可用券
+        $this->load->library('Soma/Api_member');
+        $api = new Api_member($this->inter_id);
+
+        //可用优惠券数量
+        $result = $api->get_token();
+        $result['data'] = isset($result['data']) ? $result['data'] : array();
+        $api->set_token($result['data']);
+        $result = $api->conpon_sign_list($this->openid);
+        $result['data'] = isset($result['data']) ? $result['data'] : array();
+        $data['coupons'] = count($result['data']);
+
+        //储值类型商品读取购买人的储值信息
+        $data['balance'] = ['money' => 0, 'url' => null];
+        if($productDetail['type'] == Product_package_model::PRODUCT_TYPE_BALANCE)
+        {
+            $result = $api->get_token();
+            $result['data'] = isset($result['data']) ? $result['data'] : array();
+            $api->set_token($result['data']);
+            $balance = $api->balence_info($this->openid);
+            $balance['data'] = isset($balance['data']) ? $balance['data'] : 0;
+            $data['balance']['money'] = $balance['data'];
+            $data['balance']['url'] = $api->balence_deposit_url($this->inter_id);
+        }
+
+        //积分商品拉取用户积分信息
+        $data['point'] = 0;
+        if($productDetail['type'] == Product_package_model::PRODUCT_TYPE_POINT) {
+            $result = $api->get_token();
+            $result['data'] = isset($result['data']) ? $result['data'] : array();
+            $api->set_token($result['data']);
+            $point = $api->point_info($this->openid);
+            $data['point'] = isset($point['data']) ? (int)$point['data'] : 0;
+        }
+
+        $this->load->helper('soma/time_calculate');
+        $this->load->model('soma/Sales_rule_model');
+        $this->load->model('soma/Sales_order_discount_model');
+        $this->load->model('soma/Sales_order_model');
+
+        $salesRuleModel = $this->Sales_rule_model;
+
+        //根据rid规则ID参数确定应该默认买多少份
+        $data['count'] = 0;
+        $fix_rule = $salesRuleModel->find(array('rule_id' => $this->input->get('rid')));
+        if ($fix_rule && $fix_rule['lease_cost'] && $productDetail['price_package']) {
+            $fix_qty = $fix_rule['lease_cost'] / $productDetail['price_package'];
+            if ($fix_qty < 1) {
+                $fix_qty = 1;
+            }
+            else{
+                if($fix_qty > 1) {
+                    $fix_qty = ceil($fix_qty);
+                } else {
+                    $fix_qty = intval($fix_qty);
+                }
+            }
+            $data['count'] = $fix_qty > 200 ? 200 : $fix_qty;
+        }
+
+
+        $payParams = array('id' => $this->inter_id);
+        $btype = $this->input->get('btype');
+        if (!empty($btype)) {
+            $payParams['btype'] = $btype;
+        }
+
+        //加载产品规格信息
+        $data['psp_setting'] = [];
+        $psp_sid = $this->input->get('psp_sid', true);
+        if ($psp_sid) {
+            $this->load->model('soma/Product_specification_setting_model', 'psp_model');
+            $psp_setting = $this->psp_model->get_specification_compose($this->inter_id, $productId, $psp_sid);
+            if (!empty($psp_setting)) {
+                $setting_val = array_values($psp_setting);
+                $data['psp_setting'] = $setting_val;
+                //替换原产品价格信息
+                $productDetail['price_package'] = $setting_val[0]['specprice'];
+            }
+        }
+
+
+        //判断是否使用价格配置的价格，如果使用的话就不能使用优惠券了
+        $scope_product_link = ScopeDiscountService::getInstance()->useScopeDiscount($this->inter_id, $this->openid, $productDetail, $psp_sid);
+        $data['scope_product_link'] = $scope_product_link;
+        if (!empty($scope_product_link)) {
+            $productDetail['price_package'] = $scope_product_link['price'];
+        }
+
+        //邮寄
+        $defaultAddress = array();
+        $userAddressList = array();
+        if(isset($productDetail['can_mail']) && $productDetail['can_mail'] == Product_package_model::CAN_T) {
+            $userAddressList = ExpressService::getInstance()->getUserAddressList($this->openid, $this->inter_id, 100);
+            if (!empty($userAddressList)) {
+                $defaultAddress = $userAddressList[0];
+            }
+        }
+
+        $data['pay_params'] = $payParams;
+        $data['package'] = $productDetail;
+        $data['address'] = ['default' => $defaultAddress, 'list' => $userAddressList];
+        $data['balance_password'] = Soma_base::STATUS_FALSE;
+        if(in_array($this->inter_id, array('a457946152', 'a471258436', 'a450089706'))) {
+            $data['balance_password'] = Soma_base::STATUS_TRUE;
+        }
+
+        //分销信息
+        $data['saler'] = ['self' => $this->input->get('saler'), 'fans' => $this->input->get('fans_saler')];
+
+        $this->json(BaseConst::OPER_STATUS_SUCCESS, '', $data);
+    }
+}

@@ -1,0 +1,150 @@
+<template>
+  <div>
+    <bc />
+    <div class="shengguang">
+      <img src="../../assets/image/shengguang.png">
+    </div>
+    <headTitle :headTitleMsg="headTitleMsg"/>
+    <div class="main">
+      <div class="gou">
+        <img src="../../assets/image/gou.png">
+      </div>
+      <div class="wenan">&#xe619;&#xe625;&#xe623; {{name === '购买成功' ? '&#xe617;&#xe61f;' : '&#xe62b;&#xe62a;'}}&#xe604;&#xe606;&#xe655;</div>
+      <div class="zz" v-if="name === '转赠成功'">好友24小时未点击领取，将会自动退回至您的账户</div>
+      <div class="btns" :class="{gao : name === '购买成功'}">
+        <div>&#xe629;&#xe61a;&#xe617;&#xe61f;</div>
+        <div>&#xe61c;&#xe627;&#xe615;&#xe612;</div>
+      </div>
+      <div class="btn2s">
+        <div>分享订单</div>
+        <div>关注享优惠</div>
+      </div>
+    </div>
+  </div>
+</template>
+<script>
+  import bc from '../../components/common/background_color'
+  import headTitle from '../../components/common/headTitle'
+
+  export default {
+    name: 'success',
+    components: {
+      bc,
+      headTitle
+    },
+    data () {
+      return {
+        name: '转赠成功',
+        headTitleMsg: '本商品由柚子酒店提供'
+      }
+    },
+    mounted: function () {
+      document.title = this.name
+    }
+  }
+</script>
+<style lang="postcss" scoped>
+@import '../../styles/postcss/all.postcss';
+.main{
+  position:relative;
+}
+.gou{
+  width: px2rem(154);
+  height: px2rem(154);
+  margin: auto;
+  margin-top: px2rem(60);
+}
+.gou>img{
+  width: 100%;
+  height: 100%;
+}
+.shengguang{
+  width: 100%;
+  position: absolute;
+}
+.shengguang>img{
+  width: 100%;
+}
+.wenan{
+  @extend icon;
+  color: var(--white);
+  letter-spacing: px2rem(2);
+  text-align: center;
+  margin-top: px2rem(60);
+  font-size: px2rem(46);
+  text-shadow: 0px 0px 20px var(--darkgold);
+}
+.gao{
+  margin-top: px2rem(90) !important;
+}
+.zz{
+  text-align: center;
+  margin-top: px2rem(66);
+  color: var(--c808080);
+  font-size: px2rem(24);
+}
+.btns{
+  width: px2rem(590);
+  margin: auto;
+  margin-top: px2rem(66);
+  @extend flex;
+  @extend between;
+}
+.btns>div{
+  @extend icon;
+  width: px2rem(266);
+  height: px2rem(64);
+  line-height: px2rem(64);
+  font-size: px2rem(30);
+  color: var(--white);
+  text-align: center;
+  border:1px solid var(--darkgold);
+}
+.btns>div:last-child{
+  background-color: var(--darkgold);
+}
+.btn2s{
+  margin: px2rem(73) px2rem(30) 0 px2rem(30);
+  border-top: 1px solid rgba(54,54,54,0.5);
+  border-bottom: 1px solid rgba(54,54,54,0.5);
+  position: relative;
+  @extend flex;
+}
+.btn2s::after{
+  content: "";
+  height: px2rem(20);
+  width: 1px;
+  position: absolute;
+  background-color: rgba(54,54,54,0.5);
+  left: 50%;
+  top: 50%;
+  margin-top: px2rem(-10);
+}
+.btn2s>div{
+  color: var(--bfbfbf);
+  width: 50%;
+  display: inline-block;
+  text-align: center;
+  height: px2rem(130);
+  line-height: px2rem(130);
+  font-size: px2rem(24);
+}
+.btn2s>div:first-child::before{
+  content: "\e639";
+  @extend icon;
+  margin-right: px2rem(20);
+  color: var(--darkgold);
+  text-shadow: 0px 0px 15px var(--darkgold);
+  font-size: px2rem(36);
+  vertical-align: middle;
+}
+.btn2s>div:last-child::before{
+  content: "\e637";
+  @extend icon;
+  margin-right: px2rem(20);
+  color: var(--darkgold);
+  text-shadow: 0px 0px 15px var(--darkgold);
+  font-size: px2rem(36);
+  vertical-align: middle;
+}
+</style>

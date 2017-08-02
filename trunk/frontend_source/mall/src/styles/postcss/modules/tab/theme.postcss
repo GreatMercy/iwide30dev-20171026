@@ -1,0 +1,22 @@
+.jfk-tab{
+  &__head{
+    &-item{
+      & + .jfk-tab__head-item {
+        a {
+          &:before {
+            background-color: var(--tab-separate-line-color);
+          }
+        }
+      }
+      a {
+        color: var(--tab-font-color);
+      }
+      &--selected {
+        @mixin line-down;
+        a {
+          color: var(--tab-selected-font-color);
+        }
+      }
+    }
+  }
+}

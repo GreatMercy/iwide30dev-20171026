@@ -1,0 +1,63 @@
+import api from '@/service/distribution/http'
+
+export default {
+  state: {
+    'hotel': [{
+      'hotel_id': '',
+      'hotel_name': '',
+      'status': '1'
+    }],
+    'module': [{
+      'value': '',
+      'name': '',
+      'status': ''
+    }],
+    'form': {
+      'module': '',
+      'regular_jfk_cost': '',
+      'regular_jfk': '',
+      'regular_group': '',
+      'regular_hotel': '',
+      'regular_dist': ''
+    },
+    'inter_id': '',
+    'hotel_id': '',
+    'inter_name': '',
+    'rule_id': '',
+    'select': {
+      regular_jfk_cost: '1',
+      regular_jfk: '1',
+      regular_group: '1',
+      regular_hotel: '1',
+      regular_dist: '4'
+    }
+  },
+  getSplitRule: function (a) {
+    api.getSplitRule(a).then(function (res) {
+      this.state.hotel = res.data.hotel
+      this.state.module = res.data.module
+      this.state.inter_id = res.data.rule.inter_id
+      this.state.inter_name = res.data.rule.inter_name
+      this.state.hotel_id = res.data.rule.hotel_id
+      this.state.rule_id = res.data.rule.rule_id
+      this.state.form.module = res.data.rule.module
+      this.state.form.regular_jfk_cost = res.data.rule.regular_jfk_cost.value
+      this.state.form.regular_jfk = res.data.rule.regular_jfk.value
+      this.state.form.regular_group = res.data.rule.regular_group.value === '-1' ? '' : res.data.rule.regular_group.value
+      this.state.form.regular_hotel = res.data.rule.regular_hotel.value === '-1' ? '' : res.data.rule.regular_hotel.value
+      this.state.form.regular_dist = res.data.rule.regular_dist.value
+      this.state.select.regular_jfk_cost = res.data.rule.regular_jfk_cost.type
+      this.state.select.regular_jfk = res.data.rule.regular_jfk.type
+      this.state.select.regular_group = res.data.rule.regular_group.type
+      this.state.select.regular_hotel = res.data.rule.regular_hotel.type
+      this.state.select.regular_dist = res.data.rule.regular_dist.type
+    }.bind(this))
+  },
+  putSaveRule: function (a, callback, callback2) {
+    api.putSaveRule(a).then(function (res) {
+      callback(res)
+    }).catch(function (res) {
+      callback2(res)
+    })
+  }
+}

@@ -1,0 +1,11 @@
+.jfk-image__lazy {
+  @each $key, $val in (3-3, 4-2, banner, city), (3_3, 4_2, banner, city) {
+    &--$(key) {
+      &[lazy="loading"],&.jfk-image__lazy--preload {
+        &:before {
+          background-image: svg-load('../../../image/default_$(val)_gray.svg')
+        }
+      }
+    }
+  }
+}

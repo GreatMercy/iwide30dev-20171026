@@ -1,0 +1,17 @@
+/* 首页商品列表 */
+.jfk-pages__index {
+  .good-lists__head {
+    &-title{
+      color: var(--color-white);
+      opacity: 0.6;
+    }
+  }
+  .good-lists__body{
+    .goods-info{
+      background-color: #1f1f1f;
+      &:before{
+        background-color: #1f1f1f;
+      }
+    }
+  }
+}

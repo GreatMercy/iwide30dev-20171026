@@ -1,0 +1,134 @@
+<?php
+/**
+ * @DATE : 2017-07-24
+ * @SPEC : 管理员账号管理
+ * @AUTHOR : 沙沙
+ * @VERSION: v1.0
+ */
+defined ( 'BASEPATH' ) or exit ( 'No direct script access allowed' );
+class Accounts extends MY_Admin_Iapi
+{
+	protected $label_controller = '账号管理';
+	protected $label_action = '';
+    protected $admin_profile;
+    protected $common_data;
+
+    const SUCCESS = 1;//成功
+    const FAIL_AUTO = 2;//失败自动消失
+    const FAIL_ALTER = 3;//失败 需要点击确认
+    const UN_LOGIN = 4;//未登录
+    const UN_KNOWN = 5;//未知错误
+    const INTER_STOP = 6;//公众号已停止服务
+    const PARAM_ERROR = 10;//参数错误
+    const UN_OP = 11;//参数错误
+
+	public function __construct()
+    {
+		parent::__construct ();
+        $this->admin_profile = $this->session->userdata('admin_profile');
+
+        $this->admin_profile['parent_id'] = 1;//调试接口
+
+		$this->common_data['csrf_token'] = $this->security->get_csrf_token_name();
+		$this->common_data['csrf_value'] = $this->security->get_csrf_hash();
+        $this->load->helper('appointment');//加载所需函数
+        header('content-type:application/json;charset=utf-8');//定义文本输出返回格式
+	}
+
+
+    /**
+     * 账号列表 接口
+     */
+	public function accountsList()
+    {
+        $param = request();
+        $filter['keyword'] = !empty($param['keyword']) ? addslashes(trim($param['keyword'])) : '';
+        //查询当前管理员下的账号
+        $filter['parent_id'] = !empty($this->admin_profile['parent_id']) ? $this->admin_profile['parent_id'] : '';
+        $perPage = !empty($param['limit']) ? intval($param['limit']) : 20;//显示数量
+        $curPage = !empty($param['offset']) ? intval($param['offset']) : 1;//页码
+
+        $this->load->model('authority/authority_accounts_model');
+        $total = $this->authority_accounts_model->countAccount($filter);
+        $list = array();
+        if ($total > 0)
+        {
+            $list = $this->authority_accounts_model->accountList($filter);
+            if (!empty($list))
+            {
+                //获取角色信息
+                $temp = $this->authority_accounts_model->getRoles('role_id,role_name');
+                $roles = array();
+                if (!empty($temp))
+                {
+                    foreach ($temp as $item)
+                    {
+                        $roles[$item['role_id']] = $item['role_name'];
+                    }
+                }
+                unset($temp);
+                $status = array('无效','有效');
+                foreach ($list as $key => $value)
+                {
+                    $value['status'] = $status[$value['status']];
+                    $value['role_name'] = !empty($roles[$value['role_id']]) ? $roles[$value['role_id']] : '--';
+                    $value['edit_url'] = site_url('authority/accounts/edit?admin_id='.$value['admin_id']);
+                    $list[$key] = $value;
+                }
+            }
+        }
+
+        //分页数据
+        $arrPage = get_page($total, $curPage, $perPage);
+
+        //返回信息
+        $ajaxData = array(
+            'csrf' => $this->common_data,
+            'list' => $list,
+            'page' =>$arrPage,
+            'add_url' => site_url('authority/accounts/add')
+        );
+        $this->out_put_msg(self::SUCCESS,'成功',$ajaxData,'authority/accounts/accountsList');
+    }
+
+
+    /**
+     * 添加账户 接口
+     */
+    public function addAccount()
+    {
+        $param = request();
+        $ajaxData = array(
+            'param' => $param,
+        );
+        $this->out_put_msg(1,'添加成功',$ajaxData);
+    }
+
+    /**
+     * 编辑账户 接口
+     */
+    public function editAccount()
+    {
+        $param = request();
+
+        $ajaxData = array(
+            'param' => $param,
+        );
+        $this->out_put_msg(1,'编辑成功',$ajaxData);
+    }
+
+    /**
+     * 删除状态 接口
+     */
+    public function delAccount()
+    {
+        $param = request();
+
+        $ajaxData = array(
+            'param' => $param,
+        );
+        $this->out_put_msg(1,'编辑成功',$ajaxData);
+    }
+
+
+}

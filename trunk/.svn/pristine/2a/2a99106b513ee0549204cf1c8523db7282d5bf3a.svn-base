@@ -1,0 +1,58 @@
+// member主路径
+let MEMBER_URL_SUFFIX = '/index.php/iapi/membervip'
+let MEMBER_URL = '/index.php/membervip'
+const member = {
+  // 获取会员中心
+  GET_INDEX_INFO: `${MEMBER_URL_SUFFIX}/center/member_center?id=a484619482&openid=oX3WojklzII6FwXZkN2ob0MpBzHo`,
+  // 获取登录页面信息
+  GET_LOGIN_INFO: `${MEMBER_URL_SUFFIX}/login/index?id=a484619482&openid=oX3WojklzII6FwXZkN2ob0MpBzHo`,
+  // 获取注册页面信息
+  GET_REG_INFO: `${MEMBER_URL_SUFFIX}/reg/index?id=a484619482&openid=oX3WojklzII6FwXZkN2ob0MpBzHo`,
+  // 获取存重置密码
+  GET_RESETPSW_INFO: `${MEMBER_URL_SUFFIX}/resetpassword/index?id=a484619482&openid=oX3WojklzII6FwXZkN2ob0MpBzHo`,
+  // 保存重置密码
+  POST_RESETPSW_SAVE: `${MEMBER_URL_SUFFIX}/resetpassword/saveresetpassword?id=a484619482&openid=oX3WojklzII6FwXZkN2ob0MpBzHo`,
+  // 注册请求接口
+  POST_REG_INTERFACE: `${MEMBER_URL_SUFFIX}/reg/savereg?id=a484619482&openid=oX3WojklzII6FwXZkN2ob0MpBzHo`,
+  // 登录接
+  POST_LOGIN_INTERFACE: `${MEMBER_URL_SUFFIX}/login/savelogin?id=a484619482&openid=oX3WojklzII6FwXZkN2ob0MpBzHo`,
+  // 会员信息
+  GET_MEMBER_INFO: `${MEMBER_URL_SUFFIX}/center/info?id=a484619482&openid=oX3WojklzII6FwXZkN2ob0MpBzHo`,
+  // 修改会员信息
+  GET_PERFECTINFO_INFO: `${MEMBER_URL_SUFFIX}/perfectinfo/index?id=a484619482&openid=oX3WojklzII6FwXZkN2ob0MpBzHo`,
+  // 保存会员信息
+  POST_PERFECTINFO_SAVE: `${MEMBER_URL_SUFFIX}/perfectinfo/save?id=a484619482&openid=oX3WojklzII6FwXZkN2ob0MpBzHo`,
+  // 余额记录
+  GET_BALANCE_INFO: `${MEMBER_URL_SUFFIX}/balance/index?id=a484619482&openid=oX3WojklzII6FwXZkN2ob0MpBzHo`,
+  // 充值页面
+  GET_BALANCE_PAY: `${MEMBER_URL_SUFFIX}/balance/pay?id=a484619482&openid=oX3WojklzII6FwXZkN2ob0MpBzHo`,
+  // 提交充值
+  POST_BALANCE_SUBPAY: `${MEMBER_URL_SUFFIX}/balance/sub_pay?id=a484619482&openid=oX3WojklzII6FwXZkN2ob0MpBzHo`,
+  // 储值支付成功
+  GET_BALANCE_OKPAY: `${MEMBER_URL_SUFFIX}/balance/okpay?id=a484619482&openid=oX3WojklzII6FwXZkN2ob0MpBzHo`,
+  // 储值支付失败
+  GET_BALANCE_NOPAY: `${MEMBER_URL_SUFFIX}/balance/nopay?id=a484619482&openid=oX3WojklzII6FwXZkN2ob0MpBzHo`,
+  // 积分记录
+  GET_BONUS_INFO: `${MEMBER_URL_SUFFIX}/bonus/index?id=a484619482&openid=oX3WojklzII6FwXZkN2ob0MpBzHo`,
+  // 会员可购卡列表
+  GET_DEPOSITCARD_INFO: `${MEMBER_URL_SUFFIX}/depositcard/index?id=a484619482&openid=oX3WojklzII6FwXZkN2ob0MpBzHo`,
+  // 会员购卡详细信息
+  GET_DEPOSITCARD_DETAIL: `${MEMBER_URL_SUFFIX}/depositcard/info?id=a484619482&openid=oX3WojklzII6FwXZkN2ob0MpBzHo`,
+  // 会员开始购卡
+  GET_DEPOSITCARD_BUYCARD: `${MEMBER_URL_SUFFIX}/depositcard/buycard?id=a484619482&openid=oX3WojklzII6FwXZkN2ob0MpBzHo`,
+  // 购卡支付
+  POST_BUYCARD: `${MEMBER_URL_SUFFIX}/depositcard/pay?id=a484619482&openid=oX3WojklzII6FwXZkN2ob0MpBzHo`,
+  // 优惠券详情列表
+  GET_CARD_INFO: `${MEMBER_URL_SUFFIX}/card/index?id=a484619482&openid=oX3WojklzII6FwXZkN2ob0MpBzHo`,
+  // 优惠券详情
+  GET_CARD_DETAIL: `${MEMBER_URL_SUFFIX}/card/cardinfo?id=a484619482&openid=oX3WojklzII6FwXZkN2ob0MpBzHo`,
+  // 领取优惠券
+  GET_CARD_RECEIVE: `${MEMBER_URL_SUFFIX}/card/getcard?id=a484619482&openid=oX3WojklzII6FwXZkN2ob0MpBzHo`,
+  // 优惠券消费码核销
+  POST_DEPOSITCARD_PASSWDUSEOFF: `${MEMBER_URL_SUFFIX}/card/passwduseoff?id=a484619482&openid=oX3WojklzII6FwXZkN2ob0MpBzHo`,
+  // 获取验证码
+  GET_SENDSMS: `${MEMBER_URL}/sendsms?id=a484619482&openid=oX3WojklzII6FwXZkN2ob0MpBzHo`
+}
+export {
+  member
+}

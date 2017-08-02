@@ -1,0 +1,27 @@
+@import '../variable/index';
+@import '../placeholder/index';
+
+@mixin bg($img, $url: $imgurl){
+  background-image: url('#{$imgurl}/#{$img}');
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+@mixin ellipsis ($width) {
+  @extend %tofle;
+  @if $width {
+    width: $width;
+  }
+  @else {
+    width: 100%;
+  }
+}
+
+@mixin hideFont ($type: 1) {
+  @if $type == 1 {
+    font: 0/0 'a'
+  }
+  @else if $type == 2 {
+    text-indent: -999rem;
+  }
+} 

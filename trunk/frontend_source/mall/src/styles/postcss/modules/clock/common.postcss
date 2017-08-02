@@ -1,0 +1,59 @@
+/* 设计稿字体大小为17px，所有距离根据17来计算 */
+.jfk-clock {
+  line-height: 1;
+  text-align: center;
+  letter-spacing: -0.31em;
+  text-rendering: optimizespeed;
+  span{
+    letter-spacing: normal;
+  }
+  .tip,.prefix,.status,.unit{
+    font-size: calc(12 / 17)em;
+  }
+  &.is-default{
+    .dates,.hours,.minutes,.seconds{
+      width: calc(64 / 2 / 17)em;
+    }
+    .prefix,.status{
+      letter-spacing: calc(4 / 2 / 12)em;
+    }
+    .status{
+      padding-left: calc(4 / 2 / 12)em;
+    }
+  }
+  &.is-square {
+    .dates,.hours,.minutes,.seconds{
+      margin-left: calc(32 / 2 / 17)em;
+      border-radius: px2rem(7);
+      width: calc(56 / 2 / 17)em;
+      height: calc(50 / 2 / 17)em;
+      line-height: calc(50 / 2 / 17)em;
+      position: relative;
+      background: #222;
+    }
+    .hours{
+      margin-left: calc(20 / 2 / 17)em;
+    }
+    .hours, .minutes{
+      &:before,&:after{
+        position: absolute;
+        content: '';
+        width: calc(2 / 17)em;
+        height: calc(2 / 17)em;
+        right: calc((32 + 8) / 2 / 17 * -0.5)em;
+      }
+      &:before{
+        top: calc(16 / 17)em;
+      }
+      &:after{
+        bottom: calc(16 / 17)em;
+      }
+    }
+    .status {
+      margin-left: px2rem(14)
+    }
+    .dates{
+      margin-right: px2rem(14);
+    }
+  }
+}

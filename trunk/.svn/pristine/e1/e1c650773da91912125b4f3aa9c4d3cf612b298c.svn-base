@@ -1,0 +1,65 @@
+import Mock, { Random } from 'mockjs'
+import moment from 'moment'
+import advLists from './advs.mock'
+import products from './products.mock'
+import url from 'url'
+import { v1 } from '@/service/api'
+
+const strToReg = function (str) {
+  return new RegExp(str.replace(/\//g, '\\/').replace(/\./g, '\\.'))
+}
+Mock.mock(strToReg(v1.GET_MALL_ADVS), function (options) {
+  return advLists
+})
+let goodGroupTitles = ['', '热卖', '限时秒杀', '团购专场']
+Mock.mock(strToReg(v1.GET_GOODS_LIST), function (options) {
+  const urlObj = url.parse(options.url, true)
+  const { type } = urlObj.query
+  let killsec
+  let groupon
+  let ordinary
+  if (!type || type === 1) {
+    // 添加热卖
+    ordinary = {
+      title: goodGroupTitles[1],
+      items: products.ordinary
+    }
+  }
+  if (!type || type === 2) {
+    // 添加秒杀
+    let momentFormatTpl = 'YYYY-MM-DD HH:mm:ss'
+    let now = moment()
+    let killsecTime = now.clone().add(Random.integer(0, 20), Random.pick(['h', 's', 'm']))
+    killsec = {
+      title: goodGroupTitles[2],
+      items: products.killsec,
+      start_time: now.clone().subtract(1, Random.pick(['h', 'd', 'y'])).format(momentFormatTpl),
+      end_time: killsecTime.add(Random.integer(1, 3), 'd').format(momentFormatTpl)
+    }
+  }
+  if (!type || type === 3) {
+    let discount = Random[Math.random() > 0.5 ? 'float' : 'integer'](10, 99, 0, 2)
+    let price = Math.ceil(discount * 6)
+    groupon = {
+      title: goodGroupTitles[3],
+      items: products.groupon,
+      discount: discount,
+      price: price
+    }
+  }
+  switch (type) {
+    case 1:
+      return ordinary
+    case 2:
+      return killsec
+    case 3:
+      return groupon
+    default:
+      return {
+        killsec,
+        ordinary,
+        groupon
+      }
+  }
+})
+

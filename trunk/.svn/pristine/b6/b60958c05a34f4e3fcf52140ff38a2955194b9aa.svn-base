@@ -1,0 +1,8 @@
+@define-mixin lazy-image $name, $theme: black {
+  @if $theme == black {
+    background-image: url(../../../assets/image/default_$(name).svg);
+  }
+  @else {
+    background-image: url(../../../assets/image/default_$(name)_gray.svg);
+  }
+}

@@ -1,0 +1,14 @@
+.jfk-swiper__recommendation {
+  .jfk-swiper {
+    &__item {
+      &--empty {
+        background-color: var(--recommendation-empty-fill-color);
+        .empty-tip {
+          .zh:before{
+            background-color: var(--recommendation-gap-line-color);
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,103 @@
+<!doctype html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-touch-fullscreen" content="yes">
+<meta name="format-detection" content="telephone=no,email=no">
+<meta name="ML-Config" content="fullscreen=yes,preventMove=no">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="viewport" content="width=320,initial-scale=1,user-scalable=0">
+<script src="js/jquery.js"></script>
+<script src="js/ui_control.js"></script>
+<link href="css/global.css" rel="stylesheet">
+<link href="css/mycss.css" rel="stylesheet">
+<title>免房金攻略</title>
+</head>
+<body class="bg1">
+<div class="pageloading"><p class="isload">正在加载</p></div>
+	<div class="times color_fff h32">2016.8.01-12.31</div>
+	<div class="con_txt color_fff center">
+    	<div class="h30 title weight">
+        	<font class="color_ffde00">免房金</font>
+            攻略
+        </div>
+        <div class="h24">
+        	<font class="weight h26">第一步：发邀请派银卡</font>
+            <br>（38元卡费含50元房费我们买单,你只管送） 
+        </div>
+        <div class="j_ico"><img src="images/polygon.png" /></div>
+        <div class="h24">
+        	<font class="weight h26">坐等“邀金”</font>
+            <br>  （朋友注册后,你即获100积分） 
+        </div>
+        <div class="j_ico"><img src="images/polygon.png" /></div>
+        <div class="h24">
+        	<font class="weight h26">继续邀请抢“免费住房金”</font>
+            <br> 满3500分可免费入住金房卡酒店一晚 
+        </div>
+        <div class="calculation">
+            <div class="cal_bg"></div>
+            <div class="ruler">
+                <div class="triangle"></div>
+            </div>
+        </div>
+        <div class="number center h24">1200/3500</div>
+    </div>
+    <div class="webkitbox center btn_list p_t_85">
+    	<a class="ico_btn btn_toface" href="javascript:;">
+            <p class="ic_img"><img src="images/1.png"/></p>
+            <p>当面邀请</p>
+        </a>
+    	<a class="ico_btn btn_fenxiang" href="javascript:;">
+            <p class="ic_img"><img src="images/2.png"/></p>
+            <p>千里传音</p>
+        </a>
+    	<a class="ico_btn" href="point.html">
+            <p class="ic_img"><img src="images/3.png"/></p>
+            <p>个人战绩</p>
+        </a>
+    </div>
+    <div class="fix">
+    	<div class="to_face center">
+        	<div class="b_close"><img src="images/close.png" /></div>
+        	<div class="qr_code"><img src="images/ma.png" /></div>
+            <div class="h24 code_txt">扫码体验38元银卡权益，已包含50元房费<br>（可以在会员价基础上立减哦！）</div>
+        </div>
+        <div class="fen_xiang"><img src="images/fensan_03.png"/></div>
+    </div>
+<script>
+$(function(){
+	if($(window).height()==416){  //iphone 4s兼容
+		$('.to_face').css("width","66%");
+		$('.code_txt').css("font-size","0.785rem")
+	}
+	if($('.con_txt').height()>232){
+		$('.con_txt').css("padding","5% 0");
+	}
+	var arr=$('.number').html().split("/");	
+	var percentage=Math.floor(arr[0]/arr[1]*100);
+	if(percentage>100){percentage=100}
+	$(".cal_bg").css("width",percentage+"%");
+	$(".ruler").css("left",percentage+"%");
+	$('.btn_toface').click(function(){
+		$('.fix,.to_face').show();
+		$('.fix,.b_close').click(function(){
+			$('.fix,.to_face').hide();
+		})	
+	})
+	$('.qrcode').click(function(ev){
+		ev.stopPropagation();	
+	})
+	$('.btn_fenxiang').click(function(){
+		$('.fix,.fen_xiang').show();
+		$('.fix').click(function(){
+			$('.fix,.fen_xiang').hide();
+		})		
+	})
+})
+</script>
+</body>
+</html>

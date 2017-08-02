@@ -1,0 +1,473 @@
+<?php
+
+namespace App\services\soma\order;
+
+use App\libraries\Support\Log;
+use App\libraries\Support\Tool;
+use App\models\soma\ScopeProductLink;
+use App\services\Result;
+use App\services\soma\ScopeDiscountService;
+use App\services\soma\contract\OrderContract;
+use Soma_base;
+
+/**
+ * Class NormalOrder
+ * @package App\services\soma\order
+ * @author renshuai  <renshuai@mofly.cn>
+ *
+ */
+class NormalOrder extends AbstractOrder implements OrderContract
+{
+
+    /**
+     * @param $productID
+     * @param $interID
+     * @param $qty
+     * @param $settingID
+     * @param $actID
+     * @param $instanceID
+     * @param $openid
+     * @return Result
+     * @author renshuai  <renshuai@jperation.cn>
+     */
+    public function beforeCreate($productID, $interID, $qty, $settingID, $actID, $instanceID, $openid)
+    {
+        $result = parent::beforeCreate($productID, $interID, $qty, $settingID, $actID, $instanceID, $openid);
+        if ($result->getStatus() === Result::STATUS_FAIL) {
+            return $result;
+        }
+
+        $result->setStatus(Result::STATUS_FAIL);
+
+        /**
+         * @var \Product_package_model $productPackageModel
+         */
+        $productPackageModel = $this->getCI()->productPackageModel;
+        $product = $result->getData();
+
+        if ($settingID > 0) {
+            $this->getCI()->load->model('soma/Product_specification_setting_model', 'productSpecificationSettingModel');
+
+            $pspSetting = $this->getCI()->productSpecificationSettingModel->get('setting_id', $settingID);
+            if (empty($pspSetting)) {
+                $result->setMessage('规格错误');
+                return $result;
+            }
+            $pspSetting = $pspSetting[0];
+            $product['price_package'] = $pspSetting['spec_price'];
+            $product['stock'] = $pspSetting['spec_stock'];
+            $product['setting_id'] = $pspSetting['setting_id'];
+
+            //组装多规格商品名
+            $specType = $pspSetting['type'];
+            $compose = json_decode($pspSetting['setting_spec_compose'], true);
+            $setting_compose = current($compose);
+
+            if ($specType == $productPackageModel::SPEC_TYPE_SCOPE) {
+
+                $this->getCI()->load->model('soma/Product_specification_model', 'productSpecificationModel');
+                $spec_list = $this->getCI()->productSpecificationModel->get_spec_list($interID, $productID, $specType);
+                $spec_list_info = json_decode($spec_list[$specType]['spec_compose'], true);
+
+                $spec_type_name = (isset($spec_list_info['spec_type']) && is_array($spec_list_info['spec_type'])) ? $spec_list_info['spec_type'] : array();
+
+                $product_spec_name = array();
+                foreach ($spec_type_name as $key => $type_name) {
+                    $product_spec_name[] = $type_name . ':' . $setting_compose['spec_name'][$key];
+                }
+
+                $product['name'] .= "(" . implode(';', $product_spec_name) . ")";
+            } elseif ($specType == $productPackageModel::SPEC_TYPE_TICKET) {
+                $product['setting_date'] = Soma_base::STATUS_TRUE;//这里是新加的字段，如果是时间规格的，那么过期时间就是规格时间
+                $product['expiration_date'] = date('Y-m-d 23:59:59', strtotime($setting_compose['date']));
+                $product['name'] .= "(" . $setting_compose['spec_name'][0] . ")";
+            }
+
+        }
+
+        $result->setStatus(Result::STATUS_OK);
+        $result->setData($product);
+
+        return $result;
+    }
+
+    /**
+     * 下单
+     * @param $salesOrderModel
+     * @return Result
+     * @author daikanwu <daikanwu@jperation.com>
+     */
+    public function create($salesOrderModel)
+    {
+        $result = new Result(Result::STATUS_FAIL);
+
+        $res = $this->order_save($salesOrderModel);
+        if ($res->getStatus() == Result::STATUS_FAIL) {
+            $result->setMessage($res->getMessage());
+            return $result;
+        }
+
+        $result->setStatus(Result::STATUS_OK);
+        $result->setData($res->getData());
+
+        return $result;
+    }
+
+
+    /**
+     * 订单保存
+     * Usage:
+     *   $model->saler_id= '';
+     *   $model->customer= '';
+     *   $model->shipping= '';
+     *   $model->discount= array;
+     *   $model->product= array;
+     *   $model->order_save($business, $inter_id);
+     *
+     * @param object $salesOrderModel
+     * @return boolean
+     */
+    public function order_save($salesOrderModel)
+    {
+        $result = new Result();
+
+        try {
+            $db = $this->getCI()->soma_db_conn;
+            $db->trans_begin();
+            $business = $salesOrderModel->business;
+            $inter_id = $salesOrderModel->inter_id;
+            $save_flag = $this->_order_save($business, $inter_id, $salesOrderModel);
+            if ($save_flag->getStatus() == Result::STATUS_FAIL) {
+                $result->setMessage($save_flag->getMessage());
+                return $result;
+            }
+
+            //子商品下单 start ======================================
+            $this->getCI()->load->model('soma/Product_package_link_model', 'somaProductPackageLink');
+            /**
+             * @var \Product_package_link_model $productPackageLink
+             */
+            $productPackageLink = $this->getCI()->somaProductPackageLink;
+
+            $productID = $salesOrderModel->product[0]['product_id'];
+            $childs = $productPackageLink->get('parent_pid', $productID, '*', ['limit' => null]);
+            if (!empty($childs)) {
+                foreach ($childs as $childProductLink) {
+
+                    $this->getCI()->load->model('soma/Product_package_model', 'somaProductPackageModel');
+                    /**
+                     * @var \Product_package_model $productPackage
+                     */
+                    $productPackage = $this->getCI()->somaProductPackageModel;
+                    $childProduct = $productPackage->get('product_id', $childProductLink['child_pid']);
+                    if (empty($childProduct)) {
+                        $result->setMessage('缺少产品信息');
+                        return $result;
+                    }
+
+                    $childProduct = $childProduct[0];
+                    $productPackage->appendEnInfo($childProduct);
+
+                    if (!empty($childProductLink['spec_id'])) {
+                        $productPackage->rewiteInfo($childProduct, $childProductLink['spec_id'], $salesOrderModel->settlement);
+                    }
+
+                    $this->getCI()->load->model('soma/Sales_order_model', 'childSalesOrderModel');
+                    $child_order = $this->getCI()->childSalesOrderModel;
+                    $child_order->business = $business;
+                    $child_order->settlement = $salesOrderModel->settlement;
+                    $child_order->inter_id = $inter_id;
+                    $child_order->openid = $salesOrderModel->customer->openid;
+                    $child_order->member_id = $salesOrderModel->member_id;
+                    $child_order->member_card_id = $salesOrderModel->member_card_id;
+                    $child_order->discount = array();
+
+                    $customer = new \Sales_order_attr_customer($child_order->openid);
+                    $customer->mobile = $salesOrderModel->customer->mobile;
+                    $customer->name = $salesOrderModel->customer->name;
+                    $child_order->customer = $customer;
+                    $customer->openid = $salesOrderModel->customer->openid;
+                    $childProduct['qty'] = $childProductLink['num'] * $salesOrderModel->product[0]['qty'];
+                    $childProduct['price_package'] = 0;
+                    $childProduct['setting_date'] = Soma_base::STATUS_FALSE;
+
+                    $child_order->product = array($childProduct);
+//                    print_r($child_order->product[0]['qty']);exit;
+                    $child_order->saler_id = '0';
+                    $child_order->saler_group = '';
+                    $child_order->killsec_instance = 0;
+
+                    $child_save = $this->_order_save($business, $inter_id, $child_order, $salesOrderModel->order_id);
+                    if ($child_save->getStatus() == Result::STATUS_FAIL) {
+                        $db->trans_rollback();
+                        $result->setMessage($child_save->getMessage());
+                        return $result;
+                    }
+                }
+
+            }
+            //子商品下单 end ======================================
+            if ($db->trans_status() === false) {
+                $db->trans_rollback();
+                return $result;
+            } else {
+                $db->trans_commit();
+                $result->setStatus(Result::STATUS_OK);
+                $result->setData($save_flag->getData());
+                return $result;
+            }
+        } catch (\Exception $e) {
+            $result->setMessage($e->getMessage());
+            return $result;
+        }
+    }
+
+    private function _order_save($business, $inter_id, $salesOrderModel = null, $master_oid = null)
+    {
+        $result = new Result(Result::STATUS_FAIL);
+
+        $business = strtolower($business);
+
+        //下单次数限制检测
+        $can_order = $salesOrderModel->check_client_can_order($salesOrderModel->customer, $business);
+        if (!$can_order) {
+            $result->setMessage('您今天下单次数已超过限制。');
+            return $result;
+        }
+
+        //检查商品状态
+        $this->getCI()->load->model('soma/Product_package_model', 'somaProductPackageModel');
+        if (!empty($salesOrderModel->product[0]) && !$this->getCI()->somaProductPackageModel->isAvaliable($salesOrderModel->product[0])) {
+            Log::error('商品不可用 product id is ', [$salesOrderModel->product[0]]);
+            $result->setMessage('商品不可用。');
+            return $result;
+        }
+
+        //库存检测
+        $stock_enough = $salesOrderModel->check_item_stock();
+        if (!$stock_enough) {
+            $result->setMessage('商品被抢光了，下次早点来');
+            return $result;
+        }
+
+        if ($salesOrderModel->scope_product_link_id) {
+            if (!ScopeDiscountService::getInstance()->checkStock($inter_id, $salesOrderModel->customer->openid, $salesOrderModel->scope_product_link_id, $salesOrderModel->product[0]['qty'])) {
+                $result->setMessage('超过了名额限制。');
+                return $result;
+            }
+
+            if (!ScopeDiscountService::getInstance()->updateStock($inter_id, $salesOrderModel->customer->openid, $salesOrderModel->scope_product_link_id, $salesOrderModel->product[0]['qty'])) {
+                $result->setMessage('更新库存失败。');
+                return $result;
+            }
+        }
+
+        //统一获取订单号
+        $order_id = $salesOrderModel->get_orderid_ticket($business);
+        if (!$order_id) {
+            $result->setMessage('前面人山人海，系统正玩命加载中，请稍后再试。。');
+            return $result;
+        }
+
+        //根据业务类型初始化对象
+        $item_object_name = "Sales_item_{$business}_model";
+        $this->getCI()->load->model('soma/' . $item_object_name, 'salesItemPackageModel');
+        /**
+         * @var \Sales_item_package_model $salesItemPackageModel
+         */
+        $salesItemPackageModel = $this->getCI()->salesItemPackageModel;
+
+        //计算优惠总额，下面为保存时需要的字段
+        $salesOrderModel->order_id = $order_id;
+        $salesOrderModel->inter_id = $inter_id;
+        $salesOrderModel->openid = $salesOrderModel->customer->openid;
+
+        // 初始化储值支付金额为0，在计算折扣的时候再叠加
+        $salesOrderModel->balance_total = 0;
+        $salesOrderModel->point_total = 0;
+        $salesOrderModel->conpon_total = 0;
+        $salesOrderModel->wx_total = 0;
+
+        //使用价格配置的价格
+        if ($salesOrderModel->scope_product_link_id) {
+            $scopeProductLinkModel = new ScopeProductLink();
+            $link = $scopeProductLinkModel->getById($salesOrderModel->scope_product_link_id);
+            if (!empty($link)) {
+                $salesOrderModel->product[0]['price_package'] = $link['price'];
+            }
+        }
+
+        //计算订单总额，与calculate_discount的先后顺序不能颠倒
+        $total = $salesItemPackageModel->calculate_total($salesOrderModel, $inter_id);
+
+        if ($salesOrderModel->scope_product_link_id) { //价格配置不参与优惠!!!!!
+            $discount = 0;
+        } else {
+            $discount = $salesItemPackageModel->calculate_discount($salesOrderModel, $inter_id);//优惠券批量使用，这里需要改成多个mcid 4
+        }
+
+        //实际支付和实际扣减
+        $grand = $salesOrderModel->handle_pay_amount($total['subtotal'], $discount);
+
+        $grand_total = $grand['grand_total'];    //$total['subtotal'],
+        $grand_discount = $grand['grand_discount'];
+
+        //扣减商品库存
+        $salesItemPackageModel->reduce_item_stock($salesOrderModel->product, $inter_id);
+
+        // 2016-10-27 添加购买人、商品信息 fengzhongcheng
+        $contact = '';
+        if (isset($salesOrderModel->customer->name) && $salesOrderModel->customer->name != '') {
+            $contact = $salesOrderModel->customer->name;
+        }
+        $item_name = $item_name_en = '';
+        if (!empty($salesOrderModel->product)) {
+            $product = $salesOrderModel->product[0];
+            $item_name = $product['name'];
+            $item_name_en = isset($product['name_en']) ? $product['name_en'] : '';
+        }
+        // 2017-1-22 添加购买人电话
+        $mobile = '';
+        if (isset($salesOrderModel->customer->mobile) && $salesOrderModel->customer->mobile != '') {
+            $mobile = $salesOrderModel->customer->mobile;
+        }
+
+        $remote_ip = Tool::getUserIP();
+
+        //路由标识,用于统计
+        $route = $this->getCI()->session->userdata(session_id()) ? $this->getCI()->session->userdata(session_id()) : '';
+
+        if ($salesOrderModel->product[0]['type'] == $salesOrderModel::PRODUCT_TYPE_POINT) {
+            // 积分商品金额算进积分支付里面
+            $salesOrderModel->point_total += $grand_total;
+        } else if ($salesOrderModel->product[0]['type'] == $salesOrderModel::PRODUCT_TYPE_BALANCE) {
+            // 储值商品金额算进储值支付里面
+            $salesOrderModel->balance_total += $grand_total;
+        } else {
+            // 微信支付金额
+            $salesOrderModel->wx_total += $grand_total;
+        }
+
+        // 实付等于微信付款+储值付款
+        $real_grand_total = $salesOrderModel->balance_total + $salesOrderModel->wx_total;
+
+        $can_refund = $salesOrderModel->product[0]['can_refund'];
+
+        //组装插入数据
+        $data = array(
+            'order_id' => $order_id,
+            'master_oid' => $master_oid ? $master_oid : 0,
+            'scope_product_link_id' => $salesOrderModel->scope_product_link_id,
+            'business' => $salesOrderModel->business,
+            'settlement' => $salesOrderModel->settlement,
+            'inter_id' => $inter_id,
+            'hotel_id' => $salesOrderModel->hotel_id,   //calculate_total方法中标记
+            'openid' => $salesOrderModel->customer->openid,
+            'member_id' => $salesOrderModel->member_id,
+            'member_card_id' => $salesOrderModel->member_card_id,
+            'create_time' => date('Y-m-d H:i:s'),
+//            'row_qty' => $salesOrderModel->row_qty,
+            'row_qty' => $salesOrderModel->product[0]['qty'],
+            'row_total' => $total['row_total'],
+            'subtotal' => $total['subtotal'],
+            'grand_total' => $grand_total,
+            'discount' => $grand_discount,
+            'is_invoice' => $salesOrderModel::STATUS_FALSE,
+            'is_payment' => $salesOrderModel::STATUS_FALSE,
+            'consume_status' => $salesOrderModel::CONSUME_PENDING,
+            'refund_status' => $salesOrderModel::REFUND_PENDING,
+            'gift_status' => $salesOrderModel::GIFT_PENDING,
+            'status' => $salesOrderModel::STATUS_WAITING,
+            'remote_ip' => $remote_ip,
+            'saler_id' => $salesOrderModel->saler_id,
+            'saler_group' => $salesOrderModel->saler_group,
+            'fans_saler_id' => $salesOrderModel->fans_saler_id,
+            'killsec_instance' => $salesOrderModel->killsec_instance,
+            'wx_total' => $salesOrderModel->wx_total,
+            'balance_total' => $salesOrderModel->balance_total,
+            'point_total' => $salesOrderModel->point_total,
+            'conpon_total' => $salesOrderModel->conpon_total,
+            'real_grand_total' => $real_grand_total,
+            'item_name' => $item_name,
+            'item_name_en' => $item_name_en,
+            'contact' => $contact,
+            'mobile' => $mobile,
+            'route' => $route,
+            'can_refund' => $can_refund
+        );
+
+        //根据保存主订单相关的表，自定义主键需要用 _m_save()
+        $salesOrderModel->_m_save($data);
+
+        $extra = $salesOrderModel->extra;
+        $idxExtraInfo = array();
+        if (isset($extra['mail']) && !empty($extra['mail'])) {
+            $addressId = $extra['mail']['address_id'];
+            $this->getCI()->load->model('soma/Customer_address_model', 'CustomerAddressModel');
+            $CustomerAddressModel = $this->getCI()->CustomerAddressModel;
+            $addressRs = $CustomerAddressModel->get_addresses($salesOrderModel->customer->openid, array('address_id' => $addressId));
+            if (!empty($addressRs)) {
+                $address = $addressRs[0];
+                $idxExtraInfo['mail'] = array(
+                    'address_id' => $address['address_id'],
+                    'province' => $address['province'],
+                    'city' => $address['city'],
+                    'region' => $address['region'],
+                    'address' => $address['address'],
+                    'phone' => $address['phone'],
+                    'contact' => $address['contact']
+                );
+            }
+
+        }
+
+        $idx_data = array(
+            'order_id' => $order_id,
+            'business' => $salesOrderModel->business,
+            'settlement' => $salesOrderModel->settlement,
+            'grand_total' => $grand_total,
+            'real_grand_total' => $real_grand_total,
+            'discount' => $grand_discount,
+            'inter_id' => $inter_id,
+            'hotel_id' => $salesOrderModel->hotel_id,
+//            'row_qty' => $salesOrderModel->row_qty,
+            'row_qty' => $salesOrderModel->product[0]['qty'],
+            'openid' => $salesOrderModel->customer->openid,
+            'status' => $salesOrderModel::STATUS_WAITING,
+            'is_payment' => $salesOrderModel::STATUS_FALSE,
+            'channel' => $this->getCI()->session->tempdata('channel'),
+            'create_time' => date('Y-m-d H:i:s'),
+        );
+
+        if (!empty($idxExtraInfo)) {
+            $idx_data['extra'] = json_encode($idxExtraInfo);
+        }
+
+        $salesOrderModel->_shard_db()->insert($salesOrderModel->order_idx_table_name(), $idx_data);
+
+        //echo $salesOrderModel->_shard_db($inter_id)->last_query();
+
+        //保存各个细单
+        $save_item_result = $salesItemPackageModel->save_item_new($order_id, $salesOrderModel->product, $salesOrderModel->customer, $salesOrderModel->killsec_instance, $business, $inter_id);
+
+        //记录下单IP地址
+        $salesOrderModel->remark_order_ip($salesOrderModel->customer, $business);
+
+        // 交易快照 luguihong 20161031
+        $this->getCI()->load->model('soma/Sales_order_product_record_model', 'productRecordModel');
+
+        /**
+         * @var Sales_order_product_record_model $productRecordModel
+         */
+        $productRecordModel = $this->getCI()->productRecordModel;
+
+        $flag = $productRecordModel->product_record_save_new($inter_id, $salesOrderModel->product, $order_id, $salesOrderModel->customer->openid, $data['create_time'], $data['row_qty'], Soma_base::STATUS_FALSE, $business);
+
+        if ($flag) {
+            $result->setStatus(Result::STATUS_OK);
+            $result->setData($salesOrderModel);
+        }
+
+        return $result;
+    }
+}

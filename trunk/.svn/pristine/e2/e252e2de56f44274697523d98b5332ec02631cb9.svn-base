@@ -1,0 +1,50 @@
+/* 引入模块下的theme样式 */
+/******* 注意: 此处只能导出theme相关的文件 *********/
+@import '../../../../../common/postcss/modules/imageLazy/theme.postcss';
+@import '../modules/lineDown/theme.postcss';
+@import '../../../../../common/postcss/modules/button/theme.postcss';
+@import '../modules/button/theme.postcss';
+@import '../modules/tab/theme.postcss';
+@import '../pages/home/theme.postcss';
+@import '../pages/index/theme.postcss';
+@import '../pages/detail/theme.postcss';
+/* 主题相关类名 */
+.color-golden{
+  color: var(--color-golden);
+}
+.color-pale-yellow{
+  color: var(--color-pale-yellow);
+}
+.color-deep-yellow{
+  color: var(--color-deep-yellow);
+}
+.color-light-black {
+  color: var(--color-light-black)
+}
+.color-danger {
+  color: var(--color-danger);
+}
+.color-warning {
+  color: var(--color-warning);
+}
+.font-color-white {
+  color: var(--font-color-white);
+}
+.font-color-dark-white{
+  color: var(--font-color-dark-white);
+}
+.font-color-extra-light-gray {
+  color: var(--font-color-extra-light-gray);
+}
+.font-color-light-gray {
+  color: var(--font-color-light-gray);
+}
+.font-color-silver {
+  color: var(--font-color-silver);
+}
+.font-color-light-silver {
+  color: var(--font-color-light-silver);
+}
+.button-border-radius {
+  border-radius: var(--button-border-radius);
+}

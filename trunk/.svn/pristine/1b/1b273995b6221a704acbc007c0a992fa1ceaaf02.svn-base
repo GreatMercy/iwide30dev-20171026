@@ -1,0 +1,14 @@
+<?php
+
+/**
+ *
+ * 礼物相关接口
+ *
+ * Class Present
+ * @author renshuai  <renshuai@mofly.cn>
+ *
+ */
+class Present extends MY_Front_Soma_Iapi
+{
+
+}

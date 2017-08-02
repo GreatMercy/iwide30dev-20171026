@@ -1,0 +1,11 @@
+.jfk-calendar {
+  text-align: center;
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+  }
+  .week,.date {
+    width: calc(1 / 7 * 100%)
+  }
+}

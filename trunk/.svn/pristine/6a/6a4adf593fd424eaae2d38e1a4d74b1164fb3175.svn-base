@@ -1,0 +1,40 @@
+<template>
+  <div class="jfk-tabbar">
+    <a v-for="(item, index) in tabItems" :key="index" :href="item.link" class="jfk-tabbar__item font-color-white" :class="{'jfk-tabbar__item--select jfk-line-down': index === selected}">
+      <div class="jfk-tabbar__cont">
+        <i class="jfk-font jfk-tabbar__icon" :class="item.icon"></i>
+        <span class="jfk-tabbar__label">{{item.text}}</span>
+      </div>
+    </a>
+  </div>
+</template>
+<script>
+  export default {
+    name: 'tabbar',
+    data () {
+      return {
+        tabItems: [{
+          link: '/',
+          text: '首页',
+          icon: 'icon-mall_icon_home'
+        }, {
+          link: '/orderCenter',
+          text: '订单',
+          icon: 'icon-user_icon_Onlineboo'
+        }, {
+          link: '/home',
+          text: '我的',
+          icon: 'icon-mall_icon_home_user'
+        }]
+      }
+    },
+    computed: {
+    },
+    props: {
+      selected: {
+        type: Number,
+        default: 0
+      }
+    }
+  }
+</script>

@@ -1,0 +1,91 @@
+<template>
+  <div class="gradient_bg padding_bottom_30">
+	<section class="padding_0_15">
+		<div class="flex between padding_60 font_12">
+			<div class="margin_right_30 relative padding_left_35">
+				<div class="line_left absolute top_971"><img src="../../assets/image/line_03.png" alt=""></div>
+				<div>
+					<div class="font_30 iconfont txt_show3">&#xe612;&#xe613;&#xe61a;&#xe605;.</div>
+					<div class="iconfont margin_top_8 center relative color3">可获得注册大礼包，享受更多会员优惠</div>
+				</div>
+			</div>
+		</div>
+		<form class="form_list font_14">
+			<input type="hidden" name="tel" value="" />
+			<div class="flex form_item bd_bottom padding_18">
+				<div class="margin_right_42 width_120">
+					<div class="flex between">
+						<span class="block">真</span>
+						<span class="block">实</span>
+						<span class="block">姓</span>
+						<span class="block">名</span>
+					</div></div>
+				<div class="flex_1"><input class="font_14" type="text" name="name" placeholder="请输入您的姓名"></div>
+			</div>
+			<div class="flex form_item bd_bottom padding_18">
+				<div class="margin_right_42 width_120">
+					<div class="flex between">
+						<span class="block">性</span>
+						<span class="block">别</span>
+					</div>
+				</div>
+				<div class="flex_1 bg_arrow bg_size1">
+					<select name="sex">
+						<option name="1">男</option>
+						<option name="2">女</option>
+					</select>
+				</div>
+			</div>
+			<div class="flex form_item bd_bottom padding_18">
+				<div class="margin_right_42 width_120">证件号码</div>
+				<div class="flex_1"><input class="font_14" type="text" name="body_id" placeholder="请输入身份证号码"></div>
+			</div>
+			<div class="flex form_item bd_bottom padding_18">
+				<div class="margin_right_42 width_120 block">
+					<div class="flex between">
+						<span class="block">邮</span>
+						<span class="block">箱</span>
+						<span class="block">账</span>
+						<span class="block">号</span>
+					</div>
+				</div>
+				<div class="flex_1"><input class="font_14" type="text" name="email" placeholder="请输入邮箱地址"></div>
+			</div>
+			<div class="flex form_item bd_bottom padding_18">
+				<div class="margin_right_42 width_120">
+					<div class="flex between">
+						<span class="block">手</span>
+						<span class="block">机</span>
+						<span class="block">号</span>
+						<span class="block">码</span>
+					</div>
+				</div>
+				<div class="flex_1"><input class="font_14" type="tel" name="tels" placeholder="请输入手机号码"></div>
+			</div>
+			<div class="flex form_item bd_bottom padding_18">
+				<div class="margin_right_42 width_120">
+				</div>
+				<div class="flex_1"><input class="font_14" type="text" name="v_code" placeholder="请输入手机验证码"></div>
+				<div class="relative border_1_808080 verification">获取验证码</div>
+			</div>
+			<div class="flex form_item bd_bottom padding_18">
+				<div class="margin_right_42 width_120">
+					<div class="flex between">
+						<span class="block">密</span>
+						<span class="block">码</span>
+					</div>
+				</div>
+				<div class="flex_1"><input class="font_14" type="text" name="pwd" placeholder="请输入6-12位登陆密码"></div>
+			</div>
+			<div class="margin_top_35 font_17">
+				<div class="block width_85 center padding_15 auto iconfont entry_btn register">&#xe61a;&ensp;&#xe605;</div>
+			</div>
+			<div class="center margin_top_30">
+				<a class="font_12 " href="form.html">已有账号？   <span class="main_color1">马上登录</span><em class="main_color1 iconfont font_12">&#xe61c;</em></a>
+			</div>
+		</form>
+	</section>
+  </div>
+</template>
+<script>
+</script>

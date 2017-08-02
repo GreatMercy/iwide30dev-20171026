@@ -1,0 +1,268 @@
+<template>
+  <div class="post-pages jfk-pages" v-loading.fullscreen.lock="fullscreenLoading">
+    <el-row>
+      <el-col :span="12">
+        <el-date-picker
+          size="small"
+          v-model="value"
+          type="daterange"
+          placeholder="选择日期范围"
+          align="left"
+          :picker-options="pickerOptions"
+        >
+        </el-date-picker>
+      </el-col>
+
+      <el-col :span="12">
+        <el-row>
+          <el-col :span="12">
+            <el-input v-model="keyword" placeholder="请输入内容" size="small"></el-input>
+          </el-col>
+          <el-col :span="8" :offset="1">
+            <el-button type="primary" icon="search" @click="search" size="small">查找</el-button>
+            <el-button type="primary" @click="exportOrderList" size="small">导出报表</el-button>
+          </el-col>
+        </el-row>
+      </el-col>
+    </el-row>
+
+    <el-row>
+      <el-col>
+        <el-button type="primary" size="small" @click="importOrderList">导入报表发货</el-button>
+      </el-col>
+    </el-row>
+
+    <el-row>
+      <div class="table-content">
+        <el-table :data="express_tabs[this.type].list" class="post-table" v-loading="table_loading">
+          <el-table-column label="物流序号&提交时间" show-overflow-tooltip align="center" width="200px">
+            <template scope="scope">
+              <p v-html="scope.row.shipping_id"></p>
+              <p v-html="scope.row.create_time"></p>
+            </template>
+          </el-table-column>
+
+          <el-table-column prop="name" label="商品名称" show-overflow-tooltip align="left" width="120px">
+          </el-table-column>
+
+          <el-table-column prop="address" label="订单价格&数量" show-overflow-tooltip align="center" width="136px">
+            <template scope="scope">
+              <p v-html="scope.row.per_price"></p>
+              <p v-html="scope.row.qty"></p>
+            </template>
+          </el-table-column>
+
+          <el-table-column prop="address" label="订单号／订单实付" show-overflow-tooltip align="center" width="130px">
+            <template scope="scope">
+              <p v-html="scope.row.order_id"></p>
+              <p v-html="scope.row.real_pay"></p>
+            </template>
+          </el-table-column>
+
+          <el-table-column label="收件人&联系电话" show-overflow-tooltip align="center" width="130px">
+            <template scope="scope">
+              <p v-html="scope.row.contacts"></p>
+              <p v-html="scope.row.phone" class="jfk-ta-c"></p>
+            </template>
+          </el-table-column>
+
+          <el-table-column prop="address" label="地址" show-overflow-tooltip align="center" min-width="200px">
+          </el-table-column>
+
+          <el-table-column label="分销员姓名&ID" show-overflow-tooltip align="center" width="150px">
+            <template scope="scope">
+              <p v-html="scope.row.saler_name"></p>
+              <p v-html="scope.row.saler_id"></p>
+            </template>
+          </el-table-column>
+
+          <el-table-column label="物流公司&快递单号" show-overflow-tooltip align="center" width="180px">
+
+            <template scope="scope">
+              <div v-if="scope.row.status === '1' ">
+                <el-button type="primary" size="small" @click="send(scope.row)">发货</el-button>
+              </div>
+              <div v-else>
+                <p v-html="scope.row.distributor"></p>
+                <p v-html="scope.row.tracking_no"></p>
+              </div>
+            </template>
+
+
+          </el-table-column>
+
+          <el-table-column label="详情" width="108" show-overflow-tooltip align="center">
+            <template scope="scope">
+              <el-button type="primary" icon="search" size="small" v-if="scope.row.shipping_id"
+                         @click="location(scope.row.shipping_id)"></el-button>
+            </template>
+          </el-table-column>
+
+        </el-table>
+      </div>
+    </el-row>
+
+    <el-row>
+      <template>
+        <div class="pagination jfk-ta-c">
+          <el-pagination
+            @current-change="handleCurrentChange"
+            :current-page="express_tabs[this.type].page_num"
+            :page-size="express_tabs[this.type].page_size"
+            layout="total, prev, pager, next, jumper"
+            :total="express_tabs[this.type].total">
+          </el-pagination>
+        </div>
+      </template>
+
+    </el-row>
+
+  </div>
+</template>
+<script>
+  import { mapActions, mapGetters, mapMutations } from 'vuex'
+  import { v1 } from '@/service/mall/api'
+  export default {
+    computed: {
+      ...mapGetters([
+        'express_order_list',
+        'express_tabs',
+        'table_loading'
+      ])
+    },
+    props: {
+      type: String
+    },
+    methods: {
+      ...mapActions([
+        'GET_EXPRESS_ORDER_LIST'
+      ]),
+      ...mapMutations([
+        'UPDATE_EXPRESS_PAGE_NUMBER',
+        'UPDATE_EXPRESS_TIME_RANGE',
+        'UPDATE_EXPRESS_KEYWORD',
+        'UPDATE_EXPRESS_DIALOG',
+        'UPDATE_EXPRESS_SHIPPING_ID',
+        'UPDATE_TABLE_LOADING'
+      ]),
+      location (id) {
+        window.location.href = '/index.php/soma/consumer_shipping/edit?ids=' + id
+      },
+      importOrderList () {
+        window.location.href = '/index.php/soma/express/batch'
+      },
+      exportOrderList () {
+        const data = {
+          begin_time: this.express_tabs[this.type]['begin_time'],
+          end_time: this.express_tabs[this.type]['end_time'],
+          like: this.express_tabs[this.type]['keyword'],
+          status: this.express_tabs[this.type]['status'],
+          type: '1'
+        }
+        const url = v1.GET_EXPRESS_EXPORT_ORDER_LIST + `?begin_time=${data.begin_time}&end_time=${data.end_time}&like=${data.like}&status=${data.status}&type=${data.type}`
+        window.open(url)
+      },
+      handleCurrentChange (val) {
+        this.UPDATE_TABLE_LOADING(true)
+        this.UPDATE_EXPRESS_PAGE_NUMBER(val)
+        this.GET_EXPRESS_ORDER_LIST(true)
+      },
+      formatDate (date) {
+        const y = date.getFullYear()
+        let m = date.getMonth() + 1
+        m = m < 10 ? '0' + m : m
+        let d = date.getDate()
+        d = d < 10 ? ('0' + d) : d
+        return y + '-' + m + '-' + d
+      },
+      search () {
+        this.UPDATE_TABLE_LOADING(true)
+        this.UPDATE_EXPRESS_KEYWORD(this.keyword)
+        this.UPDATE_EXPRESS_PAGE_NUMBER(1)
+        this.GET_EXPRESS_ORDER_LIST(true)
+      },
+      send (item) {
+        this.UPDATE_EXPRESS_SHIPPING_ID(item['shipping_id'])
+        this.UPDATE_EXPRESS_DIALOG(true)
+      }
+    },
+    watch: {
+      value (val) {
+        if (val) {
+          if (val[0] && val[1]) {
+            const beginTime = this.formatDate(val[0])
+            const endTime = this.formatDate(val[1])
+            this.UPDATE_EXPRESS_TIME_RANGE({
+              'begin_time': beginTime,
+              'end_time': endTime
+            })
+          } else {
+            this.UPDATE_EXPRESS_TIME_RANGE({
+              'begin_time': '',
+              'end_time': ''
+            })
+          }
+        }
+      }
+    },
+    data () {
+      return {
+        fullscreenLoading: false,
+        pickerOptions: {
+          shortcuts: [{
+            text: '最近一周',
+            onClick (picker) {
+              const end = new Date()
+              const start = new Date()
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
+              picker.$emit('pick', [start, end])
+            }
+          }, {
+            text: '最近一个月',
+            onClick (picker) {
+              const end = new Date()
+              const start = new Date()
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
+              picker.$emit('pick', [start, end])
+            }
+          }, {
+            text: '最近三个月',
+            onClick (picker) {
+              const end = new Date()
+              const start = new Date()
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
+              picker.$emit('pick', [start, end])
+            }
+          }]
+        },
+        value: '',
+        keyword: ''
+      }
+    }
+  }
+</script>
+<style scoped lang="postcss">
+  .post-pages {
+    .post-table {
+      width: 100%;
+    }
+
+    &.jfk-pages {
+      padding: 0;
+      margin: 0;
+    }
+    .table-content {
+      margin-top: 10px;
+    }
+    .el-col {
+      margin-bottom: 10px;
+    }
+    .pagination {
+      margin-top: 20px;
+      .el-pagination {
+        display: inline-block;
+      }
+    }
+  }
+
+</style>

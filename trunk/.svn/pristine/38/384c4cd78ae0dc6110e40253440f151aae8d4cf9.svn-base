@@ -1,0 +1,135 @@
+<!doctype html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="apple-mobile-web-app-capable" content="yes" >
+<meta name="apple-touch-fullscreen" content="yes">
+<meta name="format-detection" content="telephone=no,email=no">
+<meta name="ML-Config" content="fullscreen=yes,preventMove=no">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="viewport" content="width=320.1,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,minimal-ui">
+<script src="js/jquery.js"></script>
+<script src="js/ui_control.js"></script>
+<script src="js/alert.js"></script>
+<link href="css/global.css" rel="stylesheet">
+<link href="css/mycss.css" rel="stylesheet">
+<title>排行榜</title>
+</head>
+<body style="height:100%;background:#f4f6f5">
+<div class="pageloading"><p class="isload">正在加载</p></div>
+<!-------------------------------  以上为公共部分  ---------------------------------->
+
+<div class="container">
+    <div class="di_flex head_t center coupon_pull border_bottom">
+        <a class="active" href="javascript:;">日排行</a>
+        <a href="javascript:;">月排行</a>
+        <a href="javascript:;">总排行</a>
+    </div>
+    <div class="my_name clearfix pad15 bg_fff">
+        <div class="head_img"><img src="images/avatar-sample-48.png" /></div>
+        <div class="right_txt h32 m_t_5">当前排行:<font class="color_ff950d h36 weight">10</font></div>
+        <div class="name_txt">
+            <p>廖大熊</p>
+            <p class="h26 m_t_1">推荐数：3</p>
+        </div>
+    </div>
+</div>
+<div class="pad10px bg_fff j_detail">
+    <div class="boxs pad15">
+        <div class="my_name clearfix bg_fff">
+            <div class="head_img"><img src="images/avatar-sample-135.png" /></div>
+            <div class="right_txt medal m_t_2"><img src="images/gold.png" /></div>
+            <div class="name_txt">
+                <p>陈小姐 </p>
+                <p class="h26 m_t_1">推荐数：3</p>
+            </div>
+        </div>
+        <div class="my_name clearfix bg_fff">
+            <div class="head_img"><img src="images/avatar-sample-135.png" /></div>
+            <div class="right_txt medal m_t_2"><img src="images/silver.png" /></div>
+            <div class="name_txt">
+                <p>陈小姐 </p>
+                <p class="h26 m_t_1">推荐数：3</p>
+            </div>
+        </div>
+        <div class="my_name clearfix bg_fff">
+            <div class="head_img"><img src="images/avatar-sample-135.png" /></div>
+            <div class="right_txt medal m_t_2"><img src="images/copper.png" /></div>
+            <div class="name_txt">
+                <p>陈小姐 </p>
+                <p class="h26 m_t_1">推荐数：3</p>
+            </div>
+        </div>
+        <div class="my_name clearfix bg_fff">
+            <div class="head_img"><img src="images/avatar-sample-135.png" /></div>
+            <div class="right_txt h36 weight m_t_5 color_b7b7b7 p_r_3">4</div>
+            <div class="name_txt">
+                <p>陈小姐</p>
+                <p class="h26 m_t_1">推荐数：3</p>
+            </div>
+        </div>
+        <div class="my_name clearfix bg_fff">
+            <div class="head_img"><img src="images/avatar-sample-135.png" /></div>
+            <div class="right_txt h36 weight m_t_5 color_b7b7b7 p_r_3">5</div>
+            <div class="name_txt">
+                <p>陈小姐</p>
+                <p class="h26 m_t_1">推荐数：3</p>
+            </div>
+        </div>
+        <div class="my_name clearfix bg_fff">
+            <div class="head_img"><img src="images/avatar-sample-135.png" /></div>
+            <div class="right_txt h36 weight m_t_5 color_b7b7b7 p_r_3">6</div>
+            <div class="name_txt">
+                <p>陈小姐</p>
+                <p class="h26 m_t_1">推荐数：3</p>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script type="text/javascript">
+$(function(){
+	var w_h=$(window).height();
+	if(w_h<=417){
+		$(".j_detail").css("height","371");
+	}else{
+		var con_h=$(".container").height();
+		$(".j_detail").css("height",(w_h-con_h)+"px");
+	}
+  /*  var _h=$('.j_detail').height();
+    var bool=true;
+    var p =2;
+    $('.j_detail').scroll(function(){
+        var h=$('.boxs').height();
+        var jl=h-_h-10;
+        if(jl<=$('.j_detail').scrollTop()&&bool){
+            bool=false;
+            $.ajax({
+                url:'ajaxgetpoint/'+p,
+                type:"GET",
+                success: function(data){
+                    if(data == 0){
+                        bool=false;return false; 
+                    }
+                    data = JSON.parse(data);
+                    var html = '';
+                    for (mydata in data){
+                        html+='<div class="webkitbox pad5px center">';
+                        html+='<p>'+ data[mydata].MemberName +'</p>';
+                        html+='<p class="">'+ data[mydata].CreateTime +'</p>';
+                        html+='<p class="color_pink">+'+ data[mydata].Point +'</p>';
+                        html+='</div>';
+                    }
+
+                    $('.boxs').append(html);
+                    bool=true; 
+                    p++; 
+                }
+            });
+        }
+    })*/
+})
+</script>
+</html>

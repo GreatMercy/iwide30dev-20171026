@@ -1,0 +1,33 @@
+@import './variable/index.postcss';
+@font-face{
+  font-family: 'icon';
+  src : url('../../assets/fonts/iconfont.ttf') format('truetype'),
+        url('../../assets/fonts/iconfont.woff') format('woff');
+}
+@font-face{
+  font-family: 'shuzi';
+  src : url('../../assets/fonts/shuzi.ttf') format('truetype'),
+        url('../../assets/fonts/shuzi.woff') format('woff');
+}
+html{
+  font-size: var(--baseFontSize)px;
+  font-family: var(--baseFontFamily);
+}
+body, div, span, p, em, i, b, th, td, dl, dt, dd, ul, ol, li, a, h1, h2, h3, h4, h5, h6, form, textarea {
+  tap-highlight-color: rgba(0,0,0,0);
+}
+body, p, ul, ol, h1, h2, h3, h4, h5, h6{
+  margin: 0
+}
+h1,h2,h3,h4,h5,h5{
+  font-weight: normal;
+}
+li, ul{
+  padding: 0
+}
+li {
+  list-style: none inside none;
+}
+*{
+  font-family: var(--baseFontFamily);
+}

@@ -1,0 +1,50 @@
+<template>
+  <div class="gradient_bg">
+  <section class="padding_0_15">
+    <p class="center padding_top_48">储 值</p>
+    <div class="iconfont center main_color1 mar_t40"><font class="iconfont margin_right_7 font_19">&#xe643;</font><em class="iconfonts font_30">678.78</em></div>
+    <p class="padding_top_48 font_15 padding_0_20">充值<span class="main_color1">5000</span> 可以获得xxx</p>
+    <p class="font_14 color3 mar_t40">储值充值</p>
+    <div>
+      <div class="condition h30 color1 mar_t40">
+        <div class="active"><p><em class="font_14">¥</em><em class="font_17">500</em></p><span class="iconfonts main_color1 h48">&#xE031;</span></div>
+        <div><p><em class="font_14">¥</em><em class="font_17">500</em></p><span class="iconfonts main_color1 h48">&#xE031;</span></div>
+        <div><p><em class="font_14">¥</em><em class="font_17">500</em></p><span class="iconfonts main_color1 h48">&#xE031;</span></div>
+        <div><p><em class="font_14">¥</em><em class="font_17">500</em></p><span class="iconfonts main_color1 h48">&#xE031;</span></div>
+        <div><p><em class="font_14">¥</em><em class="font_17">500</em></p><span class="iconfonts main_color1 h48">&#xE031;</span></div>
+        <div><p><em class="font_14">¥</em><em class="font_17">500</em></p><span class="iconfonts main_color1 h48">&#xE031;</span></div>
+      </div>
+    </div>
+    <div class="flex form_item bd_top bd_bottom padding_18 mar_t40">
+      <div class="margin_right_42 width_120"><div class="flex between">
+        <span class="block font_17">其他金额</span></div></div>
+        <div class="flex_1 font_14"><input type="number" name="money" placeholder="输入其他金额(充值上限10000元)"></div>
+    </div>
+  </section>
+  <section class="flex layer_bg fixed_btn font_17 color_fff">
+    <div class="iconfont center main_bg1 padding_17" @click="submit()" style="width:100%;">立即充值</div>
+  </section>
+</div>
+</template>
+<script>
+import { getBalancePay, getBuydepositInfo } from '@/service/http'
+export default {
+  data () {
+    return {
+      dataList: []
+    }
+  },
+  created () {
+    getBuydepositInfo().then((res) => {
+      console.log(res)
+    })
+    getBalancePay().then((res) => {
+      this.dataList = res.web_data
+    })
+  },
+  methods: {
+    submit () {
+    }
+  }
+}
+</script>

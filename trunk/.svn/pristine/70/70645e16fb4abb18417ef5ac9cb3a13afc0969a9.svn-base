@@ -1,0 +1,12 @@
+import * as apiConfig from './api'
+import ajax from '@/utils/http'
+
+const getMallAdvs = (data, config, version = 'v1') => {
+  let url = apiConfig[version] && apiConfig[version].GET_MALL_ADVS || apiConfig.v1.GET_MALL_ADVS
+  return ajax.get(url, data, config)
+}
+const getGoodLists = (data, config, version = 'v1') => {
+  let url = apiConfig[version] && apiConfig[version].GET_GOODS_LIST || apiConfig.v1.GET_GOODS_LIST
+  return ajax.get(url, data, config)
+}
+export { getMallAdvs, getGoodLists }

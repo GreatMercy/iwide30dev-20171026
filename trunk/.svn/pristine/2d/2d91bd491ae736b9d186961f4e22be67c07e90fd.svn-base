@@ -1,0 +1,13 @@
+.jfk-support {
+  &__logo {
+    background-image: url(../../../assets/image/jperation_gray.png);
+    &-box {
+      &:after,&:before{
+        background-color: #ebebeb;
+      }
+    }
+  }
+  &__info {
+    color: #ebebeb;
+  }
+}

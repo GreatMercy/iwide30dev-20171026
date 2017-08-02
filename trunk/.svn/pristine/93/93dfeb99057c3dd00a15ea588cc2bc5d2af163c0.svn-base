@@ -1,0 +1,27 @@
+.jfk-loadmore {
+  overflow: hidden;
+  &__content {
+    &.is-dropped {
+      transition: .2s;
+    }
+  }
+  &__top,&__bottom{
+    text-align: center;
+    height: 50px;
+    line-height: 50px;
+  }
+  &__top {
+    margin-top: -50px;
+  }
+  &__bottom {
+    margin-bottom: -50px;
+  }
+  &__icon{
+    display: inline-block;
+    margin-right: 5px;
+    vertical-align: middle;
+  }
+  &__text {
+    vertical-align: middle;
+  }
+}

@@ -1,0 +1,5 @@
+@import '../../common/scss/function/index';
+@import '../../common/scss/mixin/index';
+@import '../../common/scss/placeholder/index.scss';
+@import '../../common/scss/variable/index';
+@import './common';

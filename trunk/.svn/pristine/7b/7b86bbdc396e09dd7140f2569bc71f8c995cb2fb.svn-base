@@ -1,0 +1,43 @@
+<template>
+  <div class="jfk-pages jfk-pages__gift-list">
+    <div class="gift-list-bg" :class="theme"></div>
+    <div class="gift-list-wish jfk-ta-c jfk-pl-30 jfk-pr-30">
+      <p class="font-size--30">
+        马云祝愿敬爱的长辈们身体健康健康中秋节人月团圆快乐！
+      </p>
+    </div>
+
+    <ul class="gift-list jfk-pl-30 jfk-pr-30">
+
+      <li class="gift-list-item jfk-flex is-align-middle">
+        <div class="gift-list-item__header"></div>
+        <div class="gift-list-item__info">
+          <p class="font-size--28">马云爸爸</p>
+          <p class="font-size--24">6月12日12:32</p>
+        </div>
+        <div class="gift-list-item__number font-size--34 jfk-ta-r">收到10份</div>
+      </li>
+
+      <li class="gift-list-item jfk-flex is-align-middle">
+        <div class="gift-list-item__header"></div>
+        <div class="gift-list-item__info">
+          <p class="font-size--28">马云爸爸</p>
+          <p class="font-size--24">6月12日12:32</p>
+        </div>
+        <div class="gift-list-item__number font-size--34 jfk-ta-r">收到10份</div>
+      </li>
+
+    </ul>
+
+  </div>
+</template>
+<script>
+  export default {
+    name: 'giftList',
+    data () {
+      return {
+        theme: 'theme_1'
+      }
+    }
+  }
+</script>

@@ -1,0 +1,80 @@
+<!doctype html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="apple-mobile-web-app-capable" content="yes" >
+<meta name="apple-touch-fullscreen" content="yes">
+<meta name="format-detection" content="telephone=no,email=no">
+<meta name="ML-Config" content="fullscreen=yes,preventMove=no">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="viewport" content="width=320,user-scalable=0">
+<title>产生的间夜总数</title>
+<script src="../scripts/jquery.js"></script>
+<script src="../scripts/ui_control.js"></script>
+<link rel="stylesheet" type="text/css" href="../styles/global.css">
+<link rel="stylesheet" type="text/css" href="../styles/group.css">
+</head>
+<style>
+.table thead th:nth-child(1),.table td:nth-child(1),
+.table thead th:nth-child(3),.table td:nth-child(3){width:15%}
+.table thead th:nth-child(2),.table td:nth-child(2){width:30%}
+.table thead th:nth-child(4),.table td:nth-child(4){width:40%}
+</style>
+<script>
+$(function(){
+	$('table thead tr').width($('table').width());
+	$('table thead tr').css('top',$('.topfixed').outerHeight());
+	$('table').css("margin-top",$('table thead tr').height()+'px');
+	var _tmph = $(window).height();
+	var _tableh= $('.topfixed').outerHeight()+ $('.bottomfixed').outerHeight();
+	$('.table').css('min-height',_tmph -_tableh-8);
+});
+</script>
+<body style="background:#eee;">
+<div head class="bg_fff pad3 topfixed" style="border-bottom:7px solid #eee">
+	<em class="ico iconfont bg_main">&#xe602;</em>广州茂腾信息科技有限公司
+</div>
+<div body style="padding:44px 8px">
+    <div class="center table bg_fff bdradius overflow">
+        <table class="_w h22">
+            <thead>
+                <tr class="bg_main h24 _w webkitbox">
+                    <th><em class="iconfont">&#xe606;</em>姓名</th>
+                    <th><em class="iconfont">&#xe603;</em>入离日期</th>
+                    <th><em class="iconfont">&#xe602;</em>金额</th>
+                    <th><em class="iconfont">&#xe607;</em>酒店-房型</th>
+                </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td class="clip_str"><span>逗比淮</span>**</td>
+                <td><p>2016.07.19</p><p>2016.07.19</p></td>
+                <td>300</td>
+                <td><p>信息驿站大酒店信息驿站大酒店</p><p>行政大床房</p></td>
+            </tr>
+            <tr>
+                <td class="clip_str"><span>逗比淮</span>**</td>
+                <td><p>2016.07.19</p><p>2016.07.19</p></td>
+                <td>300</td>
+                <td><p>信息驿站</p><p>行政大床房</p></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div foot class=" center bottomfixed">
+    <div class="webkitbox">
+        <a class="pad3 bg_555">今天<tt class="color_main">(1)</tt></a>
+        <span class="pad3 bg_555 bd_lr">本周<tt class="color_main">(11)</tt></span>
+        <span class="pad3 bg_555">本月<tt class="color_main">(111)</tt></span>
+        <span class="pad3 bg_555 bd_left">总订单<tt class="color_main">(888)</tt></span>
+    </div>
+</div>
+
+
+<div class="ui_none" style="display:none"><div>没有收益记录~</div></div> 
+
+</body>
+</html>

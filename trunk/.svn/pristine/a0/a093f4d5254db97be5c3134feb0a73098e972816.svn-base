@@ -1,0 +1,249 @@
+<!doctype html>
+<html><head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="apple-mobile-web-app-capable" content="yes" >
+<meta name="apple-touch-fullscreen" content="yes">
+<meta name="format-detection" content="telephone=no,email=no">
+<meta name="ML-Config" content="fullscreen=yes,preventMove=no">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script src="../theme_1_1/scripts/viewport.js"></script>
+<script src="../theme_1_1/scripts/jquery.js"></script>
+<script src="../theme_1_1/scripts/ui_control.js"></script>
+<script src="../default/scripts/lazyload.js"></script> 
+<link href="../theme_1_1/styles/global.css" rel="stylesheet">
+<link href="../theme_1_1/styles/comand.css" rel="stylesheet">
+<link href="../theme_1_1/styles/income.css" rel="stylesheet">
+<title>全员营销</title>
+</head>
+<style>
+.pullhaibao{display:none; background:#000;}
+.pullhaibao >div{position:relative;overflow:auto;height:100%; font-size:0}
+.pullhaibao .haibao_user,.pullhaibao .haibao_erweima,.pullhaibao .bg_erweima,.saveimg{position:absolute}
+.pullhaibao .haibao_user{ left:0;top:46.5%; width:94%; padding:0 3%;}
+.pullhaibao .haibao_user > p{width:2rem; height:2rem; float:left; margin-right:3%; background:#fff; font-size:0}
+.pullhaibao .haibao_user > p img,.pullhaibao >div> img{ min-height:100%}
+.pullhaibao .haibao_user div{ background:#026eb3; height:1.5rem; padding-top:0.5rem}
+.pullhaibao .haibao_erweima{top:92%;left:0; text-align:center; width:100%;}
+.pullhaibao .haibao_erweima img{width:46.875%;}
+.pullhaibao .bg_erweima{width:100%; height:100%; opacity:0;left:0; bottom:0;}
+.saveimg{padding:2% 4%; color:#fff; background:rgba(0,0,0,0.5); z-index:9999; right:3%; bottom:3%; opacity:0.9}
+</style>
+<body>
+<div class="head">
+	<a href=" echo site_url('distribute/dis_v1/incomes?id= echo $inter_id" class="income">
+    	<div><span>总收益</span><span> echo $total_amount</span></div>
+    	<div><span>今日收益</span><span> echo $today_amount</span></div>
+    	<div><span>昨日收益</span><span> echo $yestoday_amount</span></div>
+    </a>
+	<div class="padding overflow">
+        <div class="user_img"><img src="http://wx.qlogo.cn/mmopen/ajNVdqHZLLCfcG3uiajqAO6tnnSkTOUOlY41ffGialBlqRdLJAfD54wNa1iah6aSP4m8COKBXnUnL5Ot5zZJcJpicQ/0" /></div>	
+        <div class="user_name">Name<span class="h3">&nbsp;No. 001</span></div>
+        <div class="viplv_black">Hotelname</div>
+    </div>
+</div>
+<div class="ui_btn_list ui_border">
+	<a href=" echo site_url('distribute/dis_v1/incomes?id= echo $inter_id" class="item">
+    	<em class="ui_ico ui_ico4"></em>
+    	<tt>我的收益( echo $total_amount)</tt>
+    </a>
+	<a href=" echo site_url('distribute/dis_v1/my_fans?id= echo $inter_id" class="item">
+    	<em class="ui_ico ui_ico5"></em>
+    	<tt>我的粉丝( echo $saler_details['fans_count'])</tt>
+    	<!-- <span class="new">+1</span> -->
+    </a>
+</div>
+
+<div class="ui_btn_list ui_border">
+	<a href=" echo site_url('distribute/dis_v1/ranking?id= echo $inter_id" class="item">
+    	<em class="ui_ico ui_ico8"></em>
+    	<tt>琅琊榜</tt>
+    </a>
+</div>
+<div class="ui_btn_list ui_border">
+	<a class="item my_erwen" >
+    	<em class="ui_ico ui_ico6"></em>
+    	<tt>我的二维码</tt>
+    </a>
+	<a class="item _haibao">
+    	<em class="ui_ico ui_ico6"></em>
+    	<tt>生成二维码海报 </tt>
+    </a>
+	<a class="item my_erwen_mall" >
+    	<em class="ui_ico ui_ico6"></em>
+    	<tt>粽子分销二维码</tt>
+    </a>
+</div>
+<div class="ui_btn_list ui_border">
+	<a href=" echo site_url('distribute/dis_v1/msgs?id= echo $inter_id" class="item">
+    	<em class="ui_ico ui_ico7"></em>
+    	<tt>我的消息</tt>
+    	<span class="ui_red">有 echo $new_msg_count;条新消息</span>
+    </a>
+</div>
+<div class="pull pullerwei my_code" style="display:none" onClick="toclose()">
+	<div class="box">
+        <div class="bg_fff">
+            <div class="pullclose h1 ui_gray">&times;</div>
+            <div class="ui_gray h1 padding" style="padding-bottom:1%"> echo $publics['name']</div>
+            <div class="h padding">扫码关注&nbsp;&nbsp;优惠多多</div>
+        </div>
+   		<div class="border_hr"></div>
+        <div class="bg_fff er_log">
+            <img src=" echo $saler_details['url'];" />
+            <p> echo $saler_details['name']&nbsp;No. echo $saler_details['id']</p>
+        	<p class="ui_gray h1" style="padding:2rem;">便捷入住&nbsp;&nbsp;管家服务</p>
+        </div>
+    </div>
+</div>
+<div class="pull pullerwei mall_code" style="display:none" onClick="toclose()">
+	<div class="box">
+        <div class="bg_fff">
+            <div class="pullclose h1 ui_gray">&times;</div>
+            <div class="ui_gray h1 padding" style="padding-bottom:1%"> echo $publics['name']</div>
+            <div class="h padding">扫码关注&nbsp;&nbsp;优惠多多<</div>
+        </div>
+   		<div class="border_hr"></div>
+        <div class="bg_fff er_log">
+            <img src=" echo $mall_qrcode;" />
+        	<p> echo $saler_details['name']&nbsp;No. echo $saler_details['id']</p>
+        	<p class="ui_gray h1" style="padding:2rem;">便捷入住&nbsp;&nbsp;管家服务</p>
+        </div>
+    </div>
+</div>
+<div class="pull pullhaibao">
+	<div>
+        <img src="" >
+    	<canvas id="canvas"></canvas>
+    </div>
+</div>
+</body>
+</html>
+<script>
+function getPixelRatio(context) {
+	var backingStore = context.backingStorePixelRatio ||
+	context.webkitBackingStorePixelRatio ||
+	context.mozBackingStorePixelRatio ||
+	context.msBackingStorePixelRatio ||
+	context.oBackingStorePixelRatio ||
+	context.backingStorePixelRatio || 1;
+	
+	return (window.devicePixelRatio || 1) / backingStore;
+}
+var _time,_tmpurl,a,b;
+var bgimg=new Image;
+var userimg=new Image;
+var erweima=new Image;
+var getbase64url ="http://credit.iwide.cn/index.php/distribute/dis_v1/file2base64?id=a463458103&openid=ojPkpwxCYZaDHHSWwSXh6bhpbnvk";
+var getimgeurl="http://credit.iwide.cn/index.php/distribute/dis_v1/base64_2file?id=a463458103&openid=ojPkpwxCYZaDHHSWwSXh6bhpbnvk";
+bgimg.src="";
+userimg.src="";
+erweima.src="";
+bgimg.src="default/images/a450939254.jpg";
+$(function(){
+	var canvas=$('#canvas').get(0);
+	var isdown=false;
+	var isfirst=true;
+	var _count=0;
+	var _rate = 640/1008;
+	var _w=$(window).width();
+	var _h=_w/_rate;
+	if ( _h <$(window).height()) _h=$(window).height();
+	var _r = getPixelRatio(canvas.getContext("2d"));
+	_w=_w*_r;
+	_h=_h*_r;
+	//用户图片宽,坐标;
+	var u_w=_w*120/640; 
+	var u_x=_w*30/640;
+	var u_y=_h*470/1008;
+	//二维码宽高;
+	var e_w=_w*300/640;
+	var e_x=_w*170/640;
+	var e_y=_h*630/1008;
+	 endif;
+	//方形宽;
+	var r_w=_w*460/640;
+	var r_x=_w*150/640;
+	//文字坐标;
+	var t_s= parseInt($("body").css('font-size'))*_r;
+	var t_x=_w*170/640;
+	var t_y=_h*465/1008+(u_w+t_s)/2;
+	$('.my_erwen').click(function(){
+		toshow($('.my_code'));
+		reset_time('我的二维码海报');
+	});
+	$('.my_erwen_mall').click(function(){
+		toshow($('.mall_code'));
+		reset_time('我的二维码海报');
+	});
+	$('.pullclose').click(toclose);
+	
+	$('._haibao').on('click',function(){
+		if ( isdown) return;
+		if(bgimg.src==''){ isdown=true; alert('暂未添加此功能');return false;}
+		if(isfirst){
+			$.get(getbase64url,{'url':'http://wx.qlogo.cn/mmopen/ajNVdqHZLLCfcG3uiajqAO6tnnSkTOUOlY41ffGialBlqRdLJAfD54wNa1iah6aSP4m8COKBXnUnL5Ot5zZJcJpicQ/0'},function(data){
+				userimg.src="data:image/jpeg;base64,"+data;
+				a='complete';
+			},'text');
+			$.get(getbase64url,{'url':'https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=gQG08DoAAAAAAAAAASxodHRwOi8vd2VpeGluLnFxLmNvbS9xLzZUaURDdWJsc2E3SVEzdWpVUlJJAAIE4LI6VwMEAAAAAA=='},function(data){
+				erweima.src="data:image/jpeg;base64,"+data;
+				b='complete';
+			},'text');
+			isfirst=false;
+		}
+		if ( !a=='complete' || !b=='complete' || !bgimg.complete ){ 
+			cutdown('生成');
+		}
+		else{
+			if ($('.pullhaibao img').attr('src')=='') cutdown('生成');
+			else toshow($('.pullhaibao'));
+		}
+	});
+	
+	function creat(){
+		isdown=true;
+		var cxt=canvas.getContext("2d");
+		$('#canvas').attr('width',_w);
+		$('#canvas').attr('height',_h);
+		cxt.drawImage(bgimg,0,0,_w,_h);
+		cxt.drawImage(userimg,u_x,u_y,u_w,u_w);
+		cxt.drawImage(erweima,e_x,e_y,e_w,e_w);
+		var txt='扫码关注，畅享优惠';
+		cxt.fillStyle = "#026eb3";
+		cxt.fillRect(r_x,u_y,r_w,u_w);
+		cxt.fillStyle = "#ffffff";
+		cxt.font=t_s+'px Helvetica Neue,sans-serif';
+		cxt.fillText(txt,t_x,t_y);
+		isdown=false;
+		$('.pullhaibao img').attr('src',canvas.toDataURL());
+		$('#canvas').hide();
+		reset_time( '我的二维码海报!');
+		toshow($('.pullhaibao')); 
+		_count=0;
+	}
+	function cutdown(str){
+		window.clearInterval(_time);
+		$('._haibao tt').html('正在'+str+'二维码海报,请稍候('+_count+'s)');
+		_time=window.setInterval(function(){
+			_count++;
+			$('._haibao tt').html('正在'+str+'二维码海报,请稍候('+_count+'s)');
+			if( a=='complete' && b=='complete'  && bgimg.complete){
+				if (!isdown) creat();
+			}
+			if (_count>180){
+				_count=0;
+				isdown=false;
+				reset_time( str+'二维码海报');
+			}
+		},1000);
+	}
+	function reset_time(str){
+		window.clearInterval(_time);
+		$('._haibao tt').html(str);
+	}
+
+})
+
+</script>

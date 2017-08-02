@@ -1,0 +1,63 @@
+/*
+  .jfk-image 通过扩展vue-lazyload类名进行扩展
+ */
+.jfk-image__lazy {
+  position: relative;
+  z-index: 1;
+  &--background-image{
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+  }
+  &--4-2,&--3-3, &--banner, &--city{
+    &[lazy="loading"] {
+      &:before {
+        position: absolute;
+        content: '';
+        background-repeat: no-repeat;
+        background-position: center center;
+        z-index: 2;
+      }
+    }
+  }
+  &--3-3 {
+    &[lazy="loading"] {
+      &:before {
+        width: calc(3 / 10 * 100%);
+        height: calc(3 / 10 * 100%);
+        top: calc(7 / 10 / 2 * 100%);
+        left: calc(7 / 10 / 2 * 100%);
+      }
+    }
+  }
+  &--4-2 {
+    &[lazy="loading"] {
+      &:before {
+        width: calc(4 / 10 * 100%);
+        height: calc(2 / 10 * 100%);
+        top: calc(8 / 10 / 2 * 100%);
+        left: calc(6 / 10 / 2 * 100%);
+      }
+    }
+  }
+  &--banner {
+    &[lazy="loading"] {
+      &:before {
+        width: calc(150 / 638 * 100%);
+        height: calc(162 / 308 * 100%);
+        top: calc((308 - 162) / 308 / 2 * 100%);
+        left: calc((638 - 150) / 638 / 2 * 100%);
+      }
+    }
+  }
+  &--city {
+    &[lazy="loading"] {
+      &:before {
+        width: calc(85 / 190 * 100%);
+        height: calc(88 / 134 * 100%);
+        top: calc((134 - 88) / 134 / 2 * 100%);
+        left: calc((190 - 85) / 190 / 2 * 100%);
+      }
+    }
+  }
+}

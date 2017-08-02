@@ -1,0 +1,37 @@
+  /* banner */
+  .jfk-banner {
+    width: 100%;
+    &__item{
+      &-mask{
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        display: none;
+      }
+    }
+    .jfk-swiper__item-box {
+      padding-bottom: 50%;
+      display: block;
+      border-radius: px2rem(var(--border-radius-big));
+      overflow: hidden;
+    }
+    .swiper-lazy-loaded,.jfk-image__lazy[lazy="loaded"]{
+      .banners__item-mask{
+        display: block;
+      }
+    }
+    .swiper {
+      &-container{
+        height: 100%;
+      }
+      &-pagination {
+        color: #fff;
+        padding-right: 15%;
+        box-sizing: border-box;
+        text-align: right;
+        &-current{
+          font-size: calc(32 / 24)em;
+        }
+      }
+    }
+  }

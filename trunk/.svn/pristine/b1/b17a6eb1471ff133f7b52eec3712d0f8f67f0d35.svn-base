@@ -1,0 +1,13 @@
+import './gift'
+import Vue from 'vue'
+import App from './gift.vue'
+
+console.log('gift')
+/* eslint-disable no-new */
+export default () => {
+  new Vue({
+    el: '#app',
+    template: '<App/>',
+    components: { App }
+  })
+}

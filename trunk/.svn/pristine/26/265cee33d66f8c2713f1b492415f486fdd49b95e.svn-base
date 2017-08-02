@@ -1,0 +1,347 @@
+<body>
+<link href="<?php echo base_url('public/soma/v1/v1.css'). config_item('css_debug');?>" rel="stylesheet">
+<script src="<?php echo base_url('public/soma/scripts/imgscroll.js');?>"></script>
+<script src="<?php echo base_url('public/soma/scripts/jquery.touchwipe.min.js');?>"></script>
+<script>
+    wx.config({
+        debug: false,
+        appId: '<?php echo $wx_config["appId"]?>',
+        timestamp: <?php echo $wx_config["timestamp"]?>,
+        nonceStr: '<?php echo $wx_config["nonceStr"]?>',
+        signature: '<?php echo $wx_config["signature"]?>',
+        jsApiList: [<?php echo $js_api_list; ?>,'getLocation','openLocation']
+    });
+    wx.ready(function(){
+        <?php if( $js_menu_hide ): ?>wx.hideMenuItems({ menuList: [<?php echo $js_menu_hide; ?>] });<?php endif; ?>
+        <?php if( $js_menu_show ): ?>wx.showMenuItems({ menuList: [<?php echo $js_menu_show; ?>] });<?php endif; ?>
+
+        <?php if( $js_share_config ): ?>
+        wx.onMenuShareTimeline({
+            title: '<?php echo $js_share_config["title"]?>',
+            link: '<?php echo $js_share_config["link"]?>',
+            imgUrl: '<?php echo $js_share_config["imgUrl"]?>',
+            success: function () {},
+            cancel: function () {}
+        });
+        wx.onMenuShareAppMessage({
+            title: '<?php echo $js_share_config["title"]?>',
+            desc: '<?php echo $js_share_config["desc"]?>',
+            link: '<?php echo $js_share_config["link"]?>',
+            imgUrl: '<?php echo $js_share_config["imgUrl"]?>',
+            //type: '', //music|video|link(default)
+            //dataUrl: '', //use in music|video
+            success: function () {},
+            cancel: function () {}
+        });
+
+        <?php endif; ?>
+        <?php if($inter_id != 'a455510007'){ //速8需要隐藏 ?>
+        document.querySelector('#openLocation').onclick = function () {
+            wx.openLocation({
+                latitude:<?php echo $package['latitude'];?>,
+                longitude:<?php echo $package['longitude'];?>,
+                name: '<?php echo $package['hotel_name'];?>',
+                address: '<?php echo $package['hotel_address'];?>',
+                scale: 14,
+                infoUrl: 'http://weixin.qq.com'
+            });
+        };
+        <?php } ?>
+    });
+</script>
+
+<div id="goodsDetail">
+    <?php if(!empty($effective_rule) && !empty($saler_info)): ?>
+        <div class="tips box">
+            <div class="tips-left"></div>
+            <div class="tips-right flex1 f24">
+                <!--粉丝福利：分享本产品，您的好友购买成功后，您将获得<span><small>5</small>元</span>红包奖励，隔天发至您的微信钱包-->
+                <?php if($saler_info['saler_type'] == 'FANS'): ?>粉丝福利：<?php else: ?>员工福利：<?php endif; ?>
+                    分享本产品，您的好友购买成功后，您将获得
+                    <?php if($effective_rule['reward_type'] == Reward_rule_model::REWARD_TYPE_PERCENT): ?>
+                    订单<?php endif; ?><span class="haoma"><?php echo $effective_rule['reward_rate']; ?></span>
+                    <?php if($effective_rule['reward_type'] == Reward_rule_model::REWARD_TYPE_PERCENT): ?>
+                    <span class="percent">%</span><?php else: ?>元<?php endif; ?>红包奖励，<?php if($saler_info['saler_type'] == 'FANS'): ?>
+                    隔天发至您的微信钱包<?php else: ?>由酒店发放<?php endif; ?>
+                    </div>
+            </div>
+        </div>
+    <?php endif; ?>
+
+    <div class="banner">
+
+       <div class="swiper-container">
+          <div class="swiper-wrapper">
+              <?php if( $gallery): ?>
+                  <?php foreach($gallery as $k=>$v){?>
+                    <div class="swiper-slide">
+                      <a>
+                          <img src="<?php echo $v['gry_url'];?>" />
+                      </a>
+                     </div>
+                  <?php }?>
+                  <?php else: ?>
+                      <a>
+                          <img src="<?php echo base_url('public/soma/images/default.jpg'); ?>" />
+                      </a>
+                  <?php endif; ?>
+          </div>
+
+           <div class="swiper-pagination"></div>
+
+        </div>
+    </div>
+    <div class="detail">
+
+        <div class="countdown box">
+            <div class="countdown-title f24">距结束还有</div>
+            <div class="countdown-content f28" countdown="1499947525000" id="countdown">
+                22：12：28
+            </div>
+        </div>
+
+        <div class="title f34">
+            <?php echo $package['name'];?>
+        </div>
+
+        <div class="number box f24">
+            <div class="sub-title">已售</div>
+            <div><?php echo $package['sales_cnt']; ?></div>
+            <div class="line"></div>
+            <div class="sub-title">剩余名额</div>
+            <div><span id="currentNumber">5/</span><span class="f20" id="total">10</span></div>
+            <div class="progress flex1">
+                <div id="progress"></div>
+            </div>
+        </div>
+
+        <div class="price-wrap">
+            <div class="price">
+                <span class="symbol f28">¥</span>
+                <span class="f46"><?php echo $package['price_package'];?></span>
+                <span class="original f24">¥ <?php echo $package['price_market'];?></span>
+            </div>
+        </div>
+
+        <div class="selected box" id="selectSpec">
+            <div class="f28" id="selected"><span>已选：</span>大三元经典款月饼礼盒套餐一</div>
+            <div class="flex1"></div>
+        </div>
+
+        <div class="service box">
+            <div class="item flex1">
+                <p class="icon icon1"></p>
+                <p class="text f24 ta-c">品质保证</p>
+            </div>
+
+            <div class="item flex1">
+                <p class="icon icon2"></p>
+                <p class="text f24 ta-c">随时退款</p>
+            </div>
+
+            <div class="item flex1">
+                <p class="icon icon3"></p>
+                <p class="text f24 ta-c">邮寄到家</p>
+            </div>
+
+            <div class="item flex1">
+                <p class="icon icon4"></p>
+                <p class="text f24 ta-c">赠送好友</p>
+            </div>
+
+            <div class="item flex1 more" id="more">
+                <p class="icon"></p>
+                <p class="text f24 ta-c"></p>
+            </div>
+
+            <!--<div class="item flex1">-->
+            <!--<p class="icon icon5"></p>-->
+            <!--<p class="text f24 ta-c">到店自提</p>-->
+            <!--</div>-->
+
+            <!--<div class="item flex1">-->
+            <!--<p class="icon icon6"></p>-->
+            <!--<p class="text f24 ta-c">开具发票</p>-->
+            <!--</div>-->
+
+            <!--<div class="item flex1">-->
+            <!--<p class="icon icon1"></p>-->
+            <!--<p class="text f24 ta-c">正品验证</p>-->
+            <!--</div>-->
+
+        </div>
+    </div>
+
+    <div class="tabs clearfix" id="tabs">
+        <a href="javascript:void(0)" class="fl pr f32 ta-c active">
+            图文详情
+        </a>
+        <a href="javascript:void(0)" class="fl pr f32 ta-c">
+            订购须知
+        </a>
+    </div>
+
+    <div class="pic-content" style="display: block;">
+        图文详情
+    </div>
+    <div class="pic-content">
+        订购须知
+    </div>
+
+    <footer>
+        <div class="clearfix">
+            <div class="cell fl box">
+                <a href="" class="flex1">
+                    <p class="icon homepage"></p>
+                    <p class="ta-c f20 text">首页</p>
+                </a>
+                <a href="" class="flex1">
+                    <p class="icon order"></p>
+                    <p class="ta-c f20 text">订单</p>
+                </a>
+                <a href="" class="flex1">
+                    <p class="icon gift"></p>
+                    <p class="ta-c f20 text">送礼</p>
+                </a>
+            </div>
+            <a href="javascript:void(0)" class="fl ta-c f32 btn" id="buy">立即购买</a>
+        </div>
+    </footer>
+</div>
+
+
+<div class="popup" id="specPopup">
+    <a href="javascript:void(0)" class="buy-now f32" id="buyNow">立即支付</a>
+    <div class="popup-wrap pr">
+        <div class="popup-header">
+            <a href="javascript:void(0)" class="fr"></a>
+        </div>
+
+        <div class="popup-content">
+            <div class="spec-wrap">
+
+                <div class="goods-detail">
+                    <div class="box">
+                        <div class="img"></div>
+                        <div class="info flex1">
+                            <p class="name f30">大三元经典月饼</p>
+                            <p class="price">
+                                <span class="f24">￥</span>145～<span class="f24">￥</span>245
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="spec-box">
+                    <div class="spec-title f24">商品种类</div>
+                    <ul class="clearfix spec-list">
+                        <li class="item fl f30" value="1">经典款</li>
+                        <li class="item fl f30" value="2">经典款</li>
+                        <li class="item fl f30" value="20">经典款</li>
+                        <li class="item fl f30" value="3">经典款</li>
+                    </ul>
+
+                    <div class="spec-title f24">商品种类</div>
+                    <ul class="clearfix spec-list">
+                        <li class="item fl f30" value="6">经典款</li>
+                        <li class="item fl f30" value="7">经典款</li>
+                        <li class="item fl f30" value="8">经典款</li>
+                        <li class="item fl f30" value="9">经典款</li>
+                    </ul>
+
+                    <div class="spec-title f24">商品种类</div>
+                    <ul class="clearfix spec-list">
+                        <li class="item fl f30" value="10">经典款</li>
+                        <li class="item fl f30" value="11">经典款</li>
+                        <li class="item fl f30" value="11">经典款</li>
+                        <li class="item fl f30" value="12">经典款</li>
+                    </ul>
+
+
+                </div>
+
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="popup" id="servicePopup">
+    <div class="popup-wrap pr">
+        <div class="popup-header">
+            <a href="javascript:void(0)" class="fr"></a>
+        </div>
+
+        <div class="popup-content">
+            <div class="service-title ta-c">服务说明</div>
+            <ul class="service-list">
+                <li class="box">
+                    <div class="icon icon1"></div>
+                    <div class="service-content flex1">
+                        <p class="f28 title">品质保证</p>
+                        <p class="f28 service-item">支持未过期随时退款支持未过期随时退款支持未过期款</p>
+                    </div>
+                </li>
+
+                <li class="box">
+                    <div class="icon icon2"></div>
+                    <div class="service-content flex1">
+                        <p class="f28 title">随时退款</p>
+                        <p class="f28 service-item">支持未过期随时退款支持未过期随时退款支持未过期款</p>
+                    </div>
+                </li>
+
+                <li class="box">
+                    <div class="icon icon3"></div>
+                    <div class="service-content flex1">
+                        <p class="f28 title">邮寄到家</p>
+                    </div>
+                </li>
+
+                <li class="box">
+                    <div class="icon icon4"></div>
+                    <div class="service-content flex1">
+                        <p class="f28 title">赠送好友</p>
+                        <p class="f28 service-item">支持微信转赠</p>
+                    </div>
+                </li>
+
+
+                <li class="box">
+                    <div class="icon icon5"></div>
+                    <div class="service-content flex1">
+                        <p class="f28 title">到店自提</p>
+                        <p class="f28 service-item">支持到店自提</p>
+                    </div>
+                </li>
+
+                <li class="box">
+                    <div class="icon icon6"></div>
+                    <div class="service-content flex1">
+                        <p class="f28 title">开具发票</p>
+                    </div>
+                </li>
+
+                <li class="box">
+                    <div class="icon icon1"></div>
+                    <div class="service-content flex1">
+                        <p class="f28 title">品质保证</p>
+                        <p class="f28 service-item">支持未过期随时退款支持未过期随时退款支持未过期款</p>
+                    </div>
+                </li>
+
+
+            </ul>
+        </div>
+
+    </div>
+</div>
+
+</body>
+<script src="<?php echo get_cdn_url('public/soma/mooncake4/js/fastclick.js');?>"></script>
+<script src="<?php echo get_cdn_url('public/soma/mooncake4/js/moment.js');?>"></script>
+<script src="<?php echo get_cdn_url('public/soma/mooncake4/js/public.js');?>"></script>
+<script src="<?php echo get_cdn_url('public/soma/mooncake4/js/detail.js');?>"></script>
+
+</html>

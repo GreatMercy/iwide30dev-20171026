@@ -1,0 +1,66 @@
+/* 首页商品列表 */
+.jfk-pages__home {
+  .good-layout {
+    .good-lists {
+      &__head{
+        &-title {
+          &:before,&:after{
+            background-color: color(#fff a(55%))
+          }
+          .title-text{
+            color: var(--color-white);
+            opacity: 0.6;
+          }
+        }
+      }
+    }
+    &--card {
+      .good-lists {
+        &__item {
+          .goods {
+            &-info {
+              background-color: #1f1f1f;
+              &:before{
+                background-color: #1f1f1f;
+              }
+            }
+          }
+        }
+      }
+    }
+    &--pic {
+      .good-lists {
+        &__item {
+          padding-bottom: calc(400 / 750 * 100%);
+          .item-cont {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+          }
+          .goods {
+            &-image {
+              height: 100%;
+            }
+            &-info {
+              position: absolute;
+              bottom: px2rem(26);
+              left: 0;
+              z-index: 1;
+            }
+            &-title {
+              padding-bottom: px2rem(4);
+            }
+            &-control {
+              padding-top: px2rem(16);
+            }
+          }
+        }
+      }
+    }
+  }
+  .jfk-tabbar{
+    background-color: #141414;
+  }
+}

@@ -1,0 +1,54 @@
+<!doctype html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="apple-mobile-web-app-capable" content="yes" >
+<meta name="apple-touch-fullscreen" content="yes">
+<meta name="format-detection" content="telephone=no,email=no">
+<meta name="ML-Config" content="fullscreen=yes,preventMove=no">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="viewport" content="width=320,user-scalable=0">
+<title>社群客</title>
+<script src="../scripts/jquery.js"></script>
+<script src="../scripts/ui_control.js"></script>
+<link rel="stylesheet" type="text/css" href="../styles/global.css">
+<link rel="stylesheet" type="text/css" href="../styles/group.css">
+</head>
+<body>
+
+<div class="group_head center color_000">
+	<div class="img"><div class="squareimg"><img src="../images/eg3.jpg" /></div></div>
+    <div><p><em  class="iconfont">&#xE600;</em>用户名</p><p><em>&#xE607;</em>ID:001</p><p><em>&#xE60f;</em>金房卡大酒店</p></div>
+</div>
+<div class="list_style_3">
+	<a class="bdradius" href="add_new.html">
+    	<div><em class="iconfont" style="background:#aa89bd">&#xE606;</em>新增社群客</div>
+        <tt>可新增5个</tt>
+    </a>
+	<a class="bdradius" href="bind.html">
+    	<div><em class="iconfont" style="background:#aa89bd">&#xE606;</em>绑定社群客</div>
+        <tt>可新增5个</tt>
+    </a>
+	<div class="disable bdradius">
+    	<div><em class="iconfont" style="background:#aa89bd">&#xE606;</em>新增社群客</div>
+        <tt>已满</tt>
+    </div>
+	<a class="bdradius" href="group_list.html">
+    	<div><em class="iconfont" style="background:#00a0e9">&#xE609;</em>社群客列表</div>
+        <tt>0个</tt>
+    </a>
+	<a class="bdradius" href="income_list.html">
+    	<div><em class="iconfont" style="background:#ea68a2">&#xE60d;</em>收益记录</div>
+        <tt></tt>
+    </a>
+	<a class="bdradius" href="rank.html">
+    	<div><em class="iconfont" style="background:#fe9402">&#xE607;</em>社群客琅琊榜</div>
+    </a>
+	<a class="bdradius" href="help.html">
+    	<div><em class="iconfont" style="background:#eb6100">&#xE60f;</em>帮助</div>
+    </a>
+</div>
+</body>
+</html>

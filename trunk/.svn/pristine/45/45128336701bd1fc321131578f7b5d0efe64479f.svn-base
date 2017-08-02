@@ -1,0 +1,21 @@
+<template></template>
+<script>
+  import { formatUrlParams } from 'jfkcommon/utils/utils'
+  export default {
+    beforeCreate () {
+      let query = formatUrlParams(location.href)
+      this.query = query
+    },
+    created: function () {
+      const { modal, message, position, type } = this.query
+      let config = {
+        message: message ? '测试信息测试信息测试信息测试信息测试信息测试信息测试信息测试信息测试信息测试信息测试信息测试信息测试信息测试信息测试信息测试信息测试信息测试信息测试信息测试信息测试信息测试信息测试信息测试信息测试信息测试信息测试信息测试信息测试信息测试信息测试信息测试信息测试信息测试信息' : '测试信息',
+        modal: Boolean(modal),
+        position: position === '1' ? 'top' : position === '2' ? 'bottom' : 'middle',
+        type: type ? 'fail' : '',
+        duration: -1
+      }
+      this.$jfkToast(config)
+    }
+  }
+</script>

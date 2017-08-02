@@ -1,0 +1,75 @@
+<?php
+use App\libraries\Iapi\BaseConst;
+use App\services\soma\ScopeDiscountService;
+use App\services\soma\PaginateService;
+use App\libraries\Support\Log;
+
+/**
+ * Class Index
+ * @author renshuai  <renshuai@mofly.cn>
+ *
+ */
+class Index extends MY_Front_Soma_Iapi
+{
+
+    /**
+     * 新版皮肤
+     * @author daikanwu <daikanwu@jperation.com>
+     */
+    public function get_index()
+    {
+
+    }
+
+    /**
+     * @SWG\Get(
+     *     path="/index/test",
+     *     summary="test",
+     *     tags={"package"},
+     *     @SWG\Response(
+     *         response=200,
+     *         description="package",
+     *         @SWG\Schema(
+     *             ref="#/definitions/SomaPackage",
+     *             additionalProperties={
+     *                  "name":"test",
+     *                  "type":"integer",
+     *                  "format":"int32"
+     *              }
+     *         ),
+     *     )
+     * )
+     */
+    public function get_test()
+    {
+        echo 1;
+    }
+
+    /**
+     * @SWG\Get(
+     *     path="/index/test2",
+     *     summary="test",
+     *     tags={"package"},
+     *     @SWG\Response(
+     *         response=200,
+     *         description="package",
+     *         @SWG\Schema(
+     *              type="object",
+     *              @SWG\Property(
+     *                  property="products",
+     *                  ref="#/definitions/SomaPackage",
+     *              ),
+     *              @SWG\Property(
+     *                  property="killsecs",
+     *                  ref="#/definitions/SomaKillsec",
+     *              )
+     *         ),
+     *     )
+     * )
+     */
+    public function get_test2()
+    {
+        echo 2;
+    }
+
+}

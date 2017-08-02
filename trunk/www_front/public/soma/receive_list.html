@@ -1,0 +1,79 @@
+<!doctype html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="apple-mobile-web-app-capable" content="yes" >
+<meta name="apple-touch-fullscreen" content="yes">
+<meta name="format-detection" content="telephone=no,email=no">
+<meta name="ML-Config" content="fullscreen=yes,preventMove=no">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="viewport" content="width=320,user-scalable=0,shrink-to-fit=no">
+<script src="scripts/jquery.js"></script>
+<script src="scripts/ui_control.js"></script>
+<link href="styles/global.css" rel="stylesheet">
+<link href="styles/default.css" rel="stylesheet">
+<link href="styles/theme.css" rel="stylesheet">
+<link href="mooncake_v1/mooncake.css" rel="stylesheet">
+<title>月饼说</title>
+</head>
+<style>
+/*颜色控制*/
+
+/*主色*/
+.color_main,a.color_main{color:#ff9900;}
+.bg_main,a.bg_main,.btn_main,a.btn_main{background:#ff9900;}
+
+/*副色*/
+.color_minor,a.color_minor{color:#ff7200;}
+.bg_minor,a.bg_minor,.btn_minor,a.btn_minor{background:#ff7200;}
+
+/* 背景图640*1030 */
+/* 
+.theme_bg{background-image:url(images/theme1_bg.jpg) !important}
+ */
+
+</style>
+<body>
+<style>
+body,html{background:#fff}
+</style>
+<div class="pageloading"><p class="isload" style="margin-top:150px">正在加载</p></div>
+<!-- 以上为head -->
+<div class="pay_status block nomember">
+	<p><em class="iconfont">&nbsp;</em></p>
+    <p>来晚了，礼物已被抢光</p>
+</div>
+
+<div class=" foot_btn">
+	<a style="color:#fff;" href="<?php echo Soma_const_url::inst()->get_url('*/package/index', array( 'id'=>$inter_id ) ); ?>">我也要购买</a>
+</div>
+<div class="center pad10 h26">
+	<span class="color_fff" style="background:#434343; border-radius:1rem; display:inline-block; padding:3px 8px;">送出礼物：金房卡月饼</span>
+</div>
+<div class="receive_list" style="padding-top:15px">
+    <ul class="list_style bd">
+        <li class="webkitbox">
+            <div class="img"><div class="squareimg"><img src="images/eg3.jpg"></div></div>
+            <div>
+                <p>李小姐</p>
+                <p>6月12日 12:23</p>
+            </div>
+            <div class="txt_r">收到2份</div>
+        </li>        
+        <li class="webkitbox">
+            <div class="img"><div class="squareimg"><img src="images/eg3.jpg"></div></div>
+            <div>
+                <p>李小姐</p>
+                <p>6月12日 12:23</p>
+            </div>
+            <div class="txt_r">收到2份</div>
+        </li>
+    </ul>
+</div>
+
+
+
+</body>
+</html>

@@ -1,0 +1,1032 @@
+{
+    "status": 1000,
+    "err": 0,
+    "msg": "OK",
+    "msg_type": "toast",
+    "web_data": {
+        "page_resource": {
+            "links": {
+                "list": "http://admin.iwide.com/index.php/membervip/membertask/coupon_task",
+                "post": "http://admin.iwide.com/index.php/membervip/membertask/save_create",
+                "edit": "http://admin.iwide.com/index.php/membervip/membertask/create"
+            }
+        },
+        "input_tag": {
+            "task_name": {
+                "name": "请填写任务名称",
+                "value": ""
+            },
+            "receive_repeat": {
+                "name": "重复领取",
+                "value": 1
+            },
+            "temp_title": {
+                "name": "模版消息",
+                "value": "会员权益到账通知"
+            },
+            "temp_id": {
+                "name": "模版ID",
+                "value": ""
+            },
+            "auto_jump_url": {
+                "name": "自定义链接",
+                "value": ""
+            }
+        },
+        "temp_input_group": [
+            {
+                "name": "first",
+                "field": "first",
+                "value": "您好，您的会员奖励已经成功到账"
+            },
+            {
+                "name": "keyword1",
+                "field": "keyword1",
+                "value": "{membernum}{username}"
+            },
+            {
+                "name": "keyword2",
+                "field": "keyword2",
+                "value": "{temp_content}"
+            },
+            {
+                "name": "keyword3",
+                "field": "keyword3",
+                "value": "会员奖励"
+            },
+            {
+                "name": "keyword4",
+                "field": "keyword4",
+                "value": "{send_time}"
+            },
+            {
+                "name": "remark",
+                "field": "remark",
+                "value": "马上查看"
+            }
+        ],
+        "enum_des": {
+            "send_type": {
+                "1": "发送优惠券",
+                "2": "发送礼包"
+            },
+            "card": {
+                "1000047": {
+                    "card_id": "1000047",
+                    "inter_id": "a450089706",
+                    "title": "30元离店代金券",
+                    "time_start": "1453046400",
+                    "time_end": "1483113600",
+                    "use_time_end_model": "g",
+                    "use_time_end": "1483113600",
+                    "card_stock": "999997",
+                    "state": 0,
+                    "err_msg": "\"30元离店代金券\"已过领取时间"
+                },
+                "1000062": {
+                    "card_id": "1000062",
+                    "inter_id": "a450089706",
+                    "title": "99元微信金卡",
+                    "time_start": "1469980800",
+                    "time_end": "1472572800",
+                    "use_time_end_model": "g",
+                    "use_time_end": "1472572800",
+                    "card_stock": "999996",
+                    "state": 0,
+                    "err_msg": "\"99元微信金卡\"已过领取时间"
+                },
+                "1000085": {
+                    "card_id": "1000085",
+                    "inter_id": "a450089706",
+                    "title": "莫林风尚新春30元代金券",
+                    "time_start": "1454428800",
+                    "time_end": "1459353600",
+                    "use_time_end_model": "g",
+                    "use_time_end": "1459353600",
+                    "card_stock": "49",
+                    "state": 0,
+                    "err_msg": "\"莫林风尚新春30元代金券\"已过领取时间"
+                },
+                "1000086": {
+                    "card_id": "1000086",
+                    "inter_id": "a450089706",
+                    "title": "莫林风尚新春10元代金券",
+                    "time_start": "1454342400",
+                    "time_end": "1459353600",
+                    "use_time_end_model": "g",
+                    "use_time_end": "1459353600",
+                    "card_stock": "966",
+                    "state": 0,
+                    "err_msg": "\"莫林风尚新春10元代金券\"已过领取时间"
+                },
+                "1000087": {
+                    "card_id": "1000087",
+                    "inter_id": "a450089706",
+                    "title": "莫林风尚新春20元代金券",
+                    "time_start": "1454428800",
+                    "time_end": "1459353600",
+                    "use_time_end_model": "g",
+                    "use_time_end": "1459353600",
+                    "card_stock": "484",
+                    "state": 0,
+                    "err_msg": "\"莫林风尚新春20元代金券\"已过领取时间"
+                },
+                "1000090": {
+                    "card_id": "1000090",
+                    "inter_id": "a450089706",
+                    "title": "莫林风尚关注送积分",
+                    "time_start": "0",
+                    "time_end": "0",
+                    "use_time_end_model": "g",
+                    "use_time_end": "0",
+                    "card_stock": "0",
+                    "state": 0,
+                    "err_msg": "\"莫林风尚关注送积分\"已过领取时间"
+                },
+                "1000091": {
+                    "card_id": "1000091",
+                    "inter_id": "a450089706",
+                    "title": "测试价格代码专用券5元",
+                    "time_start": "1454256000",
+                    "time_end": "1456675200",
+                    "use_time_end_model": "g",
+                    "use_time_end": "1456675200",
+                    "card_stock": "1108",
+                    "state": 0,
+                    "err_msg": "\"测试价格代码专用券5元\"已过领取时间"
+                },
+                "1000121": {
+                    "card_id": "1000121",
+                    "inter_id": "a450089706",
+                    "title": "莫林风尚订房10元代金券",
+                    "time_start": "1457452800",
+                    "time_end": "1472572800",
+                    "use_time_end_model": "g",
+                    "use_time_end": "1470672000",
+                    "card_stock": "768",
+                    "state": 0,
+                    "err_msg": "\"莫林风尚订房10元代金券\"已过领取时间"
+                },
+                "1000122": {
+                    "card_id": "1000122",
+                    "inter_id": "a450089706",
+                    "title": "莫林风尚订房20元代金券",
+                    "time_start": "1457452800",
+                    "time_end": "1472572800",
+                    "use_time_end_model": "g",
+                    "use_time_end": "1472572800",
+                    "card_stock": "187",
+                    "state": 0,
+                    "err_msg": "\"莫林风尚订房20元代金券\"已过领取时间"
+                },
+                "1000175": {
+                    "card_id": "1000175",
+                    "inter_id": "a450089706",
+                    "title": "关注送券10元",
+                    "time_start": "1484323200",
+                    "time_end": "1484323200",
+                    "use_time_end_model": "g",
+                    "use_time_end": "1484323200",
+                    "card_stock": "89014",
+                    "state": 0,
+                    "err_msg": "\"关注送券10元\"已过领取时间"
+                },
+                "1000176": {
+                    "card_id": "1000176",
+                    "inter_id": "a450089706",
+                    "title": "关注送券20元",
+                    "time_start": "1460390400",
+                    "time_end": "1470326400",
+                    "use_time_end_model": "g",
+                    "use_time_end": "1470326400",
+                    "card_stock": "89031",
+                    "state": 0,
+                    "err_msg": "\"关注送券20元\"已过领取时间"
+                },
+                "1000177": {
+                    "card_id": "1000177",
+                    "inter_id": "a450089706",
+                    "title": "测试抵用券",
+                    "time_start": "1467302400",
+                    "time_end": "1472572800",
+                    "use_time_end_model": "g",
+                    "use_time_end": "1470153600",
+                    "card_stock": "1109",
+                    "state": 0,
+                    "err_msg": "\"测试抵用券\"已过领取时间"
+                },
+                "1000178": {
+                    "card_id": "1000178",
+                    "inter_id": "a450089706",
+                    "title": "长期测试抵用券",
+                    "time_start": "1467302400",
+                    "time_end": "1498838400",
+                    "use_time_end_model": "g",
+                    "use_time_end": "1530374400",
+                    "card_stock": "992"
+                },
+                "1000179": {
+                    "card_id": "1000179",
+                    "inter_id": "a450089706",
+                    "title": "长期测试折扣券",
+                    "time_start": "1467302400",
+                    "time_end": "1498838400",
+                    "use_time_end_model": "g",
+                    "use_time_end": "1530374400",
+                    "card_stock": "25"
+                },
+                "1000180": {
+                    "card_id": "1000180",
+                    "inter_id": "a450089706",
+                    "title": "长期测试兑换券",
+                    "time_start": "1467302400",
+                    "time_end": "1498838400",
+                    "use_time_end_model": "g",
+                    "use_time_end": "1530374400",
+                    "card_stock": "0"
+                },
+                "1001469": {
+                    "card_id": "1001469",
+                    "inter_id": "a450089706",
+                    "title": "测试抵用券（抵用上限）",
+                    "time_start": "1470585600",
+                    "time_end": "1472572800",
+                    "use_time_end_model": "g",
+                    "use_time_end": "1472572800",
+                    "card_stock": "999",
+                    "state": 0,
+                    "err_msg": "\"测试抵用券（抵用上限）\"已过领取时间"
+                },
+                "1001470": {
+                    "card_id": "1001470",
+                    "inter_id": "a450089706",
+                    "title": "测试折扣券（使用上限）",
+                    "time_start": "1470585600",
+                    "time_end": "1472572800",
+                    "use_time_end_model": "g",
+                    "use_time_end": "1472572800",
+                    "card_stock": "999",
+                    "state": 0,
+                    "err_msg": "\"测试折扣券（使用上限）\"已过领取时间"
+                },
+                "1001471": {
+                    "card_id": "1001471",
+                    "inter_id": "a450089706",
+                    "title": "测试折扣券1",
+                    "time_start": "1470585600",
+                    "time_end": "1472572800",
+                    "use_time_end_model": "g",
+                    "use_time_end": "1472572800",
+                    "card_stock": "998",
+                    "state": 0,
+                    "err_msg": "\"测试折扣券1\"已过领取时间"
+                },
+                "1001474": {
+                    "card_id": "1001474",
+                    "inter_id": "a450089706",
+                    "title": "测试抵用卷1",
+                    "time_start": "1482163200",
+                    "time_end": "1482163200",
+                    "use_time_end_model": "g",
+                    "use_time_end": "1482163200",
+                    "card_stock": "9781",
+                    "state": 0,
+                    "err_msg": "\"测试抵用卷1\"已过领取时间"
+                },
+                "2375310": {
+                    "card_id": "2375310",
+                    "inter_id": "a450089706",
+                    "title": "快乐付礼包券1",
+                    "time_start": "1454256000",
+                    "time_end": "1498320000",
+                    "use_time_end_model": "y",
+                    "use_time_end": "1488556800",
+                    "card_stock": "9962",
+                    "state": 0,
+                    "err_msg": "\"快乐付礼包券1\"已过领取时间"
+                },
+                "2375311": {
+                    "card_id": "2375311",
+                    "inter_id": "a450089706",
+                    "title": "快乐付礼包券2",
+                    "time_start": "1476633600",
+                    "time_end": "1478188800",
+                    "use_time_end_model": "g",
+                    "use_time_end": "1477843200",
+                    "card_stock": "0",
+                    "state": 0,
+                    "err_msg": "\"快乐付礼包券2\"已过领取时间"
+                },
+                "2375313": {
+                    "card_id": "2375313",
+                    "inter_id": "a450089706",
+                    "title": "测试优惠券同步",
+                    "time_start": "1478275200",
+                    "time_end": "1483113600",
+                    "use_time_end_model": "g",
+                    "use_time_end": "1483113600",
+                    "card_stock": "823",
+                    "state": 0,
+                    "err_msg": "\"测试优惠券同步\"已过领取时间"
+                },
+                "2375316": {
+                    "card_id": "2375316",
+                    "inter_id": "a450089706",
+                    "title": "测试使用时间",
+                    "time_start": "1478102400",
+                    "time_end": "1480867200",
+                    "use_time_end_model": "g",
+                    "use_time_end": "1484150400",
+                    "card_stock": "88",
+                    "state": 0,
+                    "err_msg": "\"测试使用时间\"已过领取时间"
+                },
+                "2375324": {
+                    "card_id": "2375324",
+                    "inter_id": "a450089706",
+                    "title": "测试扫码核销",
+                    "time_start": "1480521600",
+                    "time_end": "1514649600",
+                    "use_time_end_model": "g",
+                    "use_time_end": "1514649600",
+                    "card_stock": "998"
+                },
+                "2375333": {
+                    "card_id": "2375333",
+                    "inter_id": "a450089706",
+                    "title": "关注送券",
+                    "time_start": "1484323200",
+                    "time_end": "1484323200",
+                    "use_time_end_model": "g",
+                    "use_time_end": "1484323200",
+                    "card_stock": "10",
+                    "state": 0,
+                    "err_msg": "\"关注送券\"已过领取时间"
+                },
+                "2376643": {
+                    "card_id": "2376643",
+                    "inter_id": "a450089706",
+                    "title": "测试卡券名字一定长1",
+                    "time_start": "1490112000",
+                    "time_end": "1490112000",
+                    "use_time_end_model": "g",
+                    "use_time_end": "1490198400",
+                    "card_stock": "391",
+                    "state": 0,
+                    "err_msg": "\"测试卡券名字一定长1\"已过领取时间"
+                },
+                "2376644": {
+                    "card_id": "2376644",
+                    "inter_id": "a450089706",
+                    "title": "测试卡券名字一定长1",
+                    "time_start": "1490112000",
+                    "time_end": "1490112000",
+                    "use_time_end_model": "g",
+                    "use_time_end": "1490198400",
+                    "card_stock": "391",
+                    "state": 0,
+                    "err_msg": "\"测试卡券名字一定长1\"已过领取时间"
+                },
+                "2376645": {
+                    "card_id": "2376645",
+                    "inter_id": "a450089706",
+                    "title": "测试卡券名字一定长1",
+                    "time_start": "1490112000",
+                    "time_end": "1490112000",
+                    "use_time_end_model": "g",
+                    "use_time_end": "1490198400",
+                    "card_stock": "391",
+                    "state": 0,
+                    "err_msg": "\"测试卡券名字一定长1\"已过领取时间"
+                },
+                "2376646": {
+                    "card_id": "2376646",
+                    "inter_id": "a450089706",
+                    "title": "测试卡券12",
+                    "time_start": "1490112000",
+                    "time_end": "1490112000",
+                    "use_time_end_model": "g",
+                    "use_time_end": "1490112000",
+                    "card_stock": "391",
+                    "state": 0,
+                    "err_msg": "\"测试卡券12\"已过领取时间"
+                },
+                "2376653": {
+                    "card_id": "2376653",
+                    "inter_id": "a450089706",
+                    "title": "测试赠送优惠券",
+                    "time_start": "1490544000",
+                    "time_end": "1490889600",
+                    "use_time_end_model": "g",
+                    "use_time_end": "1490889600",
+                    "card_stock": "1",
+                    "state": 0,
+                    "err_msg": "\"测试赠送优惠券\"已过领取时间"
+                },
+                "2376655": {
+                    "card_id": "2376655",
+                    "inter_id": "a450089706",
+                    "title": "测试券码用",
+                    "time_start": "1492012800",
+                    "time_end": "1493481600",
+                    "use_time_end_model": "g",
+                    "use_time_end": "1493481600",
+                    "card_stock": "99",
+                    "state": 0,
+                    "err_msg": "\"测试券码用\"已过领取时间"
+                }
+            },
+            "package": {
+                "1": {
+                    "package_id": "1",
+                    "inter_id": "a450089706",
+                    "name": "测试套餐",
+                    "package_element_id": "11",
+                    "package_status": "1",
+                    "credit": "200",
+                    "balance": "150",
+                    "lvl_name": "5"
+                },
+                "2": {
+                    "package_id": "2",
+                    "inter_id": "a450089706",
+                    "name": "测试套餐",
+                    "package_element_id": "18",
+                    "package_status": "1",
+                    "credit": "200",
+                    "balance": "150",
+                    "lvl_name": "5",
+                    "card": {
+                        "4": {
+                            "card_id": "4",
+                            "state": 0,
+                            "count": "2",
+                            "status": "1",
+                            "element_id": "17"
+                        },
+                        "5": {
+                            "card_id": "5",
+                            "state": 0,
+                            "count": "1",
+                            "status": "1",
+                            "element_id": "18"
+                        }
+                    }
+                },
+                "3": {
+                    "package_id": "3",
+                    "inter_id": "a450089706",
+                    "name": "测试套餐",
+                    "package_element_id": "23",
+                    "package_status": "1",
+                    "credit": "200",
+                    "balance": "150",
+                    "lvl_name": "5",
+                    "card": {
+                        "4": {
+                            "card_id": "4",
+                            "state": 0,
+                            "count": "2",
+                            "status": "1",
+                            "element_id": "22"
+                        },
+                        "5": {
+                            "card_id": "5",
+                            "state": 0,
+                            "count": "1",
+                            "status": "1",
+                            "element_id": "23"
+                        }
+                    }
+                },
+                "4": {
+                    "package_id": "4",
+                    "inter_id": "a450089706",
+                    "name": "完善资料送积分储值",
+                    "package_element_id": "26",
+                    "package_status": "1",
+                    "credit": "200",
+                    "balance": "20",
+                    "lvl_name": "6"
+                },
+                "5": {
+                    "package_id": "5",
+                    "inter_id": "a450089706",
+                    "name": "完善资料送积分储值",
+                    "package_element_id": "30",
+                    "package_status": "1",
+                    "credit": "200",
+                    "balance": "20",
+                    "lvl_name": "6",
+                    "card": {
+                        "1": {
+                            "card_id": "1",
+                            "state": 0,
+                            "count": "1",
+                            "status": "1",
+                            "element_id": "30"
+                        }
+                    }
+                },
+                "6": {
+                    "package_id": "6",
+                    "inter_id": "a450089706",
+                    "name": "完善资料送大礼包",
+                    "package_element_id": "34",
+                    "package_status": "1",
+                    "credit": "1000",
+                    "balance": "1000",
+                    "lvl_name": "6",
+                    "card": {
+                        "4": {
+                            "card_id": "4",
+                            "state": 0,
+                            "count": "10",
+                            "status": "1",
+                            "element_id": "34"
+                        }
+                    }
+                },
+                "9": {
+                    "package_id": "9",
+                    "inter_id": "a450089706",
+                    "name": "test套餐",
+                    "package_element_id": "48",
+                    "package_status": "1",
+                    "credit": "110",
+                    "balance": "100",
+                    "lvl_name": "3",
+                    "card": {
+                        "6": {
+                            "card_id": "6",
+                            "state": 0,
+                            "count": "1",
+                            "status": "1",
+                            "element_id": "48"
+                        }
+                    }
+                },
+                "10": {
+                    "package_id": "10",
+                    "inter_id": "a450089706",
+                    "name": "test套餐",
+                    "package_element_id": "52",
+                    "package_status": "1",
+                    "credit": "110",
+                    "balance": "100",
+                    "lvl_name": "3",
+                    "card": {
+                        "6": {
+                            "card_id": "6",
+                            "state": 0,
+                            "count": "1",
+                            "status": "1",
+                            "element_id": "52"
+                        }
+                    }
+                },
+                "11": {
+                    "package_id": "11",
+                    "inter_id": "a450089706",
+                    "name": "test套餐",
+                    "package_element_id": "55",
+                    "package_status": "1",
+                    "credit": "110",
+                    "balance": "100",
+                    "lvl_name": "3"
+                },
+                "12": {
+                    "package_id": "12",
+                    "inter_id": "a450089706",
+                    "name": "test套餐",
+                    "package_element_id": "58",
+                    "package_status": "1",
+                    "credit": "110",
+                    "balance": "100",
+                    "lvl_name": "6"
+                },
+                "13": {
+                    "package_id": "13",
+                    "inter_id": "a450089706",
+                    "name": "test套餐",
+                    "package_element_id": "61",
+                    "package_status": "1",
+                    "credit": "110",
+                    "balance": "100",
+                    "lvl_name": "6"
+                },
+                "14": {
+                    "package_id": "14",
+                    "inter_id": "a450089706",
+                    "name": "测试2",
+                    "package_element_id": "64",
+                    "package_status": "1",
+                    "credit": "111",
+                    "balance": "222",
+                    "lvl_name": "3"
+                },
+                "16": {
+                    "package_id": "16",
+                    "inter_id": "a450089706",
+                    "name": "测试3",
+                    "package_element_id": "71",
+                    "package_status": "1",
+                    "credit": "100",
+                    "balance": "200",
+                    "lvl_name": ""
+                },
+                "17": {
+                    "package_id": "17",
+                    "inter_id": "a450089706",
+                    "name": "银卡",
+                    "package_element_id": "74",
+                    "package_status": "1",
+                    "credit": "100",
+                    "balance": "100",
+                    "lvl_name": "3"
+                },
+                "18": {
+                    "package_id": "18",
+                    "inter_id": "a450089706",
+                    "name": "银卡1",
+                    "package_element_id": "77",
+                    "package_status": "1",
+                    "credit": "100",
+                    "balance": "100",
+                    "lvl_name": "5"
+                },
+                "19": {
+                    "package_id": "19",
+                    "inter_id": "a450089706",
+                    "name": "完善资料",
+                    "package_element_id": "78",
+                    "package_status": "1",
+                    "lvl_name": "6"
+                },
+                "21": {
+                    "package_id": "21",
+                    "inter_id": "a450089706",
+                    "name": "关注送礼包（test）",
+                    "package_element_id": "182",
+                    "package_status": "1",
+                    "credit": "100",
+                    "balance": "2",
+                    "lvl_name": "18",
+                    "card": {
+                        "2375316": {
+                            "card_id": "2375316",
+                            "state": 0,
+                            "count": "2",
+                            "status": "1",
+                            "element_id": "182",
+                            "err_msg": "\"测试使用时间\"已过领取时间"
+                        }
+                    },
+                    "state": 0,
+                    "err_msg": "\"测试使用时间\"已过领取时间"
+                },
+                "22": {
+                    "package_id": "22",
+                    "inter_id": "a450089706",
+                    "name": "送储值10000",
+                    "package_element_id": "107",
+                    "package_status": "1",
+                    "credit": "1000000",
+                    "balance": "10000",
+                    "lvl_name": ""
+                },
+                "23": {
+                    "package_id": "23",
+                    "inter_id": "a450089706",
+                    "name": "关注送储值（test）",
+                    "package_element_id": "117",
+                    "package_status": "1",
+                    "credit": "1000",
+                    "balance": "5000",
+                    "lvl_name": "6",
+                    "card": {
+                        "1000047": {
+                            "card_id": "1000047",
+                            "state": 0,
+                            "count": "1",
+                            "status": "1",
+                            "element_id": "117",
+                            "err_msg": "\"30元离店代金券\"已过领取时间"
+                        },
+                        "1000062": {
+                            "card_id": "1000062",
+                            "state": 0,
+                            "count": "1",
+                            "status": "1",
+                            "element_id": "116",
+                            "err_msg": "\"99元微信金卡\"已过领取时间"
+                        }
+                    },
+                    "state": 0,
+                    "err_msg": "\"30元离店代金券\"已过领取时间"
+                },
+                "24": {
+                    "package_id": "24",
+                    "inter_id": "a450089706",
+                    "name": "购买银卡",
+                    "package_element_id": "124",
+                    "package_status": "1",
+                    "lvl_name": "6",
+                    "credit": "1",
+                    "balance": "1"
+                },
+                "33": {
+                    "package_id": "33",
+                    "inter_id": "a450089706",
+                    "name": "完善资料大礼包",
+                    "package_element_id": "317",
+                    "package_status": "1",
+                    "card": {
+                        "1000046": {
+                            "card_id": "1000046",
+                            "state": 0,
+                            "count": "1",
+                            "status": "1",
+                            "element_id": "108"
+                        },
+                        "2376653": {
+                            "card_id": "2376653",
+                            "state": 0,
+                            "count": "1",
+                            "status": "1",
+                            "element_id": "287",
+                            "err_msg": "\"测试赠送优惠券\"已过领取时间"
+                        },
+                        "2376655": {
+                            "card_id": "2376655",
+                            "state": 0,
+                            "count": "1",
+                            "status": "1",
+                            "element_id": "317",
+                            "err_msg": "\"测试券码用\"已过领取时间"
+                        }
+                    },
+                    "credit": "1",
+                    "balance": "0.01",
+                    "lvl_name": "",
+                    "state": 0,
+                    "err_msg": "\"测试券码用\"已过领取时间"
+                },
+                "34": {
+                    "package_id": "34",
+                    "inter_id": "a450089706",
+                    "name": "优惠礼包3",
+                    "package_element_id": "388",
+                    "package_status": "1",
+                    "card": {
+                        "1001474": {
+                            "card_id": "1001474",
+                            "state": 0,
+                            "count": "2",
+                            "status": "1",
+                            "element_id": "122",
+                            "err_msg": "\"测试抵用卷1\"已过领取时间"
+                        }
+                    },
+                    "credit": "3",
+                    "balance": "3",
+                    "lvl_name": "",
+                    "state": 0,
+                    "err_msg": "\"测试抵用卷1\"已过领取时间"
+                },
+                "46": {
+                    "package_id": "46",
+                    "inter_id": "a450089706",
+                    "name": "优惠大礼包88",
+                    "package_element_id": "385",
+                    "package_status": "1",
+                    "card": {
+                        "1000180": {
+                            "card_id": "1000180",
+                            "state": 1,
+                            "count": "1",
+                            "status": "1",
+                            "element_id": "172"
+                        }
+                    },
+                    "credit": "8",
+                    "balance": "8",
+                    "lvl_name": ""
+                },
+                "47": {
+                    "package_id": "47",
+                    "inter_id": "a450089706",
+                    "name": "只要88，优惠带回家",
+                    "package_element_id": "175",
+                    "package_status": "1",
+                    "credit": "20",
+                    "balance": "10",
+                    "lvl_name": ""
+                },
+                "48": {
+                    "package_id": "48",
+                    "inter_id": "a450089706",
+                    "name": "测试快乐付礼包",
+                    "package_element_id": "397",
+                    "package_status": "1",
+                    "card": {
+                        "2375310": {
+                            "card_id": "2375310",
+                            "state": 0,
+                            "count": "1",
+                            "status": "1",
+                            "element_id": "181",
+                            "err_msg": "\"快乐付礼包券1\"已过领取时间"
+                        },
+                        "2375311": {
+                            "card_id": "2375311",
+                            "state": 0,
+                            "count": "2",
+                            "status": "1",
+                            "element_id": "180",
+                            "err_msg": "\"快乐付礼包券2\"已过领取时间"
+                        }
+                    },
+                    "credit": "5",
+                    "balance": "5",
+                    "lvl_name": "",
+                    "state": 0,
+                    "err_msg": "\"快乐付礼包券1\"已过领取时间"
+                },
+                "50": {
+                    "package_id": "50",
+                    "inter_id": "a450089706",
+                    "name": "优惠礼包2（含兑换券）",
+                    "package_element_id": "382",
+                    "package_status": "1",
+                    "card": {
+                        "1000180": {
+                            "card_id": "1000180",
+                            "state": 1,
+                            "count": "1",
+                            "status": "1",
+                            "element_id": "191"
+                        }
+                    },
+                    "credit": "2",
+                    "balance": "2",
+                    "lvl_name": ""
+                },
+                "51": {
+                    "package_id": "51",
+                    "inter_id": "a450089706",
+                    "name": "优惠礼包1（含折扣券）",
+                    "package_element_id": "400",
+                    "package_status": "1",
+                    "card": {
+                        "1000179": {
+                            "card_id": "1000179",
+                            "state": 1,
+                            "count": "1",
+                            "status": "1",
+                            "element_id": "195"
+                        }
+                    },
+                    "credit": "0.00",
+                    "balance": "10000",
+                    "lvl_name": ""
+                },
+                "77": {
+                    "package_id": "77",
+                    "inter_id": "a450089706",
+                    "name": "测试新版领券",
+                    "package_element_id": "267",
+                    "package_status": "1",
+                    "credit": "1",
+                    "balance": "2",
+                    "lvl_name": "6",
+                    "card": {
+                        "1000178": {
+                            "card_id": "1000178",
+                            "state": 1,
+                            "count": "3",
+                            "status": "1",
+                            "element_id": "267"
+                        },
+                        "1000179": {
+                            "card_id": "1000179",
+                            "state": 1,
+                            "count": "2",
+                            "status": "1",
+                            "element_id": "266"
+                        },
+                        "1000180": {
+                            "card_id": "1000180",
+                            "state": 1,
+                            "count": "1",
+                            "status": "1",
+                            "element_id": "265"
+                        }
+                    }
+                }
+            },
+            "send_target": {
+                "1": "会员等级",
+                "2": "RFM模型",
+                "3": "导入发放名单"
+            },
+            "send_member_lvl[]": [
+                {
+                    "member_lvl_id": "6",
+                    "lvl_name": "微信银卡",
+                    "is_default": "f"
+                },
+                {
+                    "member_lvl_id": "18",
+                    "lvl_name": "微信金卡",
+                    "is_default": "f"
+                },
+                {
+                    "member_lvl_id": "19",
+                    "lvl_name": "微信铂金卡",
+                    "is_default": "f"
+                }
+            ],
+            "source": {
+                "1": "订房",
+                "2": "商城"
+            },
+            "rfm": {
+                "r": "R 最近一次消费",
+                "f": "F 消费频次",
+                "m": "M 消费金额"
+            },
+            "r_level": {
+                "1": "高活跃用户",
+                "2": "中活跃",
+                "3": "一般活跃",
+                "4": "沉睡用户"
+            },
+            "f_level": {
+                "1": "新用户",
+                "2": "老用户",
+                "3": "成熟用户",
+                "4": "忠诚用户"
+            },
+            "m_level": {
+                "1": "低贡献",
+                "2": "中贡献",
+                "3": "中高贡献",
+                "4": "高贡献"
+            },
+            "send_target_field": {
+                "1": "手机号码",
+                "2": "会员ID",
+                "3": "会员卡号",
+                "4": "OPEN ID"
+            },
+            "target_type": {
+                "1": "录入用户手机号码",
+                "2": "导入文件"
+            },
+            "is_send_temp": {
+                "1": "录入用户手机号码",
+                "2": "导入文件"
+            },
+            "jump_type": {
+                "1": "跳转链接",
+                "2": "自定义链接",
+                "3": "无跳转"
+            },
+            "jump_url": {
+                "1": "优惠券列表",
+                "2": "会员中心"
+            }
+        },
+        "page_field": [
+            "send_member_lvl[]",
+            "send_value",
+            "send_target_value",
+            "send_target_file"
+        ],
+        "page_hint": {
+            "temp_hint": [
+                "",
+                "酒店旅游 - 酒店",
+                "XXX",
+                "会员权益到账通知"
+            ],
+            "temp_contet_hint": [
+                "{{first.DATA}}",
+                "会员卡号：{{keyword1.DATA}}",
+                "成功到账：{{keyword2.DATA}}",
+                "来源：{{keyword3.DATA}}",
+                "{{keyword3.DATA}}",
+                "{{keyword3.DATA}}"
+            ],
+            "temp_field_hint": [
+                "会员卡号：{membernum}",
+                "优惠券发送内容：{temp_content}",
+                "发送时间：{send_time}",
+                "会员名称：{username}"
+            ]
+        }
+    },
+    "referer": "",
+    "state": "success"
+}

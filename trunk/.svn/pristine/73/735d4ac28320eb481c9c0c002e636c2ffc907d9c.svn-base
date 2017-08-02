@@ -1,0 +1,58 @@
+import { member } from './api'
+import ajax from '@/utils/http'
+/**
+ * 会员中心
+ * @param {Object} data get请求参数
+ * @param {number} [data.pcode] 请求的code
+ * @param {object} config axios配置
+ * @return {Promise} 返回一个promise
+ */
+const getIndexInfo = (data, config) => {
+  let url = member.GET_INDEX_INFO
+  return ajax.get(url, data)
+}
+/**
+ * 获取注册信息
+ * @param {Object} data get请求参数
+ * @param {number} [data.pcode] 请求的code
+ * @param {object} config axios配置
+ * @return {Promise} 返回一个promise
+ */
+const getRegInfo = (data, config) => {
+  let url = member.GET_REG_INFO
+  return ajax.get(url, data)
+}
+/**
+ * 发送登录信息
+ * @param {Object} data get请求参数
+ * @param {number} [data.pcode] 请求的code
+ * @param {object} config axios配置
+ * @return {Promise} 返回一个promise
+ */
+const getLoginInfo = (data, config) => {
+  let url = member.GET_LOGIN_INFO
+  return ajax.get(url, data)
+}
+/**
+ * 请求注册接口
+ * @param {Object} data get请求参数
+ * @param {number} [data.pcode] 请求的code
+ * @param {object} config axios配置
+ * @return {Promise} 返回一个promise
+ */
+const postReg = (data, config) => {
+  let url = member.POST_REG_INTERFACE
+  return ajax.post(url, data)
+}
+/**
+ * 登录接口
+ * @param {Object} data get请求参数
+ * @param {number} [data.pcode] 请求的code
+ * @param {object} config axios配置
+ * @return {Promise} 返回一个promise
+ */
+const postLogin = (data, config) => {
+  let url = member.POST_LOGIN_INTERFACE
+  return ajax.post(url, data)
+}
+export { getIndexInfo, getRegInfo, getLoginInfo, postReg, postLogin }

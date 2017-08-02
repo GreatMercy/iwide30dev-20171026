@@ -1,0 +1,72 @@
+<!doctype html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="apple-mobile-web-app-capable" content="yes" >
+<meta name="apple-touch-fullscreen" content="yes">
+<meta name="format-detection" content="telephone=no,email=no">
+<meta name="ML-Config" content="fullscreen=yes,preventMove=no">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="viewport" content="width=320,user-scalable=0,shrink-to-fit=no">
+<script src="scripts/jquery.js"></script>
+<script src="scripts/ui_control.js"></script>
+<link href="styles/global.css" rel="stylesheet">
+<link href="styles/default.css" rel="stylesheet">
+<link href="mooncake_v1/mooncake.css" rel="stylesheet">
+<title>月饼说</title>
+</head>
+<style>
+/*颜色控制*/
+
+/*主色*/
+.color_main,a.color_main{color:#ff9900;}
+.bg_main,a.bg_main,.btn_main,a.btn_main{background:#ff9900;}
+
+/*副色*/
+.color_minor,a.color_minor{color:#ff7200;}
+.bg_minor,a.bg_minor,.btn_minor,a.btn_minor{background:#ff7200;}
+
+/* 背景图640*1030 */
+/* 
+.theme_bg{background-image:url(images/theme1_bg.jpg) !important}
+ */
+
+</style>
+<body>
+<div class="pageloading"><p class="isload" style="margin-top:150px">正在加载</p></div>
+<!-- 以上为head -->
+<!--
+收到的主题使用样式名是
+theme0
+theme1
+theme2
+theme3
+ -->
+    <div class="preview_theme theme3">
+    	<div class="relative themeparent scroll">
+        	<div class="themechid1"><p><span>马丁</span>送您一份中秋新意</p><p>恭祝您全家团团圆圆</p></div>
+            <div class="themechid2"><img src="images/eg1.png" /></div>
+            <div class="webkitbox">
+            	<div><span class="btn_main h24">邮寄到家</span></div>
+            	<div><span class="btn_main h24">送给朋友</span></div>
+            	<div><span class="btn_main h24">到店用劵</span></div>
+            </div>
+            <div class="themechid3">暂不使用，放至订单中心<em class="iconfont">&#xe61B;</em></div>
+        </div>
+    </div>
+</body>
+<script>
+showtips({
+	title : '提示',
+	tips  : '您还没有关注公众号，可能会影响礼物使用先关注XXX',
+	leftLink: '现在使用',
+	leftUrl: 'www.baidu.com',
+	leftClick: '$(this).remove()',
+	rightLink: '点击关注',
+	rightUrl: 'www.baidu.com',
+	rightClick: ''
+});
+</script>
+</html>

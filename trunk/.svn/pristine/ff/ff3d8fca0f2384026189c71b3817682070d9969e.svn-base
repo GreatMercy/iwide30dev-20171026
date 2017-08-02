@@ -1,0 +1,123 @@
+<body class="goods-list-bg ">
+<link href="<?php echo base_url('public/soma/v1/v1.css'). config_item('css_debug');?>" rel="stylesheet">
+<div class="pageloading"><p class="isload">正在加载</p></div>
+
+  <div id="goodsList">
+        <div class="banner">
+            <img src="<?php echo base_url('public/soma/mooncake4/images/goods_list_banner.png');?>">
+        </div>
+        <div class="goods-list">
+            <ul class="clearfix" id="list">
+
+                <li class="pr">
+                 <div class="pa label">
+                    <span class="f24">会员</span>
+                 </div>
+                 <a href="http://www.baidu.com">
+                    <p class="img"></p>
+                    <p class="title f30">大三元经典月饼</p>
+                    <div class="price">
+                        <p>
+                            <span class="f24">¥</span>
+                            <span class="discount f36">145</span>
+                            <span class="original f24">¥ 546</span>
+                        </p>
+                    </div>
+                    </a>
+                </li>
+
+                <li class="pr">
+                   <div class="pa label">
+                      <span class="f24">会员</span>
+                   </div>
+                   <a href="http://www.baidu.com">
+                      <p class="img"></p>
+                      <p class="title f30">大三元经典月饼</p>
+                      <div class="price">
+                          <p>
+                              <span class="f24">¥</span>
+                              <span class="discount f36">145</span>
+                              <span class="original f24">¥ 546</span>
+                          </p>
+                      </div>
+                      </a>
+                 </li>
+
+                  <li class="pr">
+                    <div class="pa label">
+                       <span class="f24">会员</span>
+                    </div>
+                    <a href="http://www.baidu.com">
+                       <p class="img"></p>
+                       <p class="title f30">大三元经典月饼</p>
+                       <div class="price">
+                           <p>
+                               <span class="f24">¥</span>
+                               <span class="discount f36">145</span>
+                               <span class="original f24">¥ 546</span>
+                           </p>
+                       </div>
+                       </a>
+                   </li>
+
+                   <li class="pr">
+                     <div class="pa label">
+                        <span class="f24">会员</span>
+                     </div>
+                     <a href="http://www.baidu.com">
+                        <p class="img"></p>
+                        <p class="title f30">大三元经典月饼</p>
+                        <div class="price">
+                            <p>
+                                <span class="f24">¥</span>
+                                <span class="discount f36">145</span>
+                                <span class="original f24">¥ 546</span>
+                            </p>
+                        </div>
+                        </a>
+                   </li>
+
+                    <li class="pr">
+                        <div class="pa label">
+                           <span class="f24">会员</span>
+                        </div>
+                        <a href="http://www.baidu.com">
+                           <p class="img"></p>
+                           <p class="title f30">大三元经典月饼</p>
+                           <div class="price">
+                               <p>
+                                   <span class="f24">¥</span>
+                                   <span class="discount f36">145</span>
+                                   <span class="original f24">¥ 546</span>
+                               </p>
+                           </div>
+                           </a>
+                      </li>
+
+
+                     <li class="pr">
+                         <div class="pa label">
+                            <span class="f24">会员</span>
+                         </div>
+                         <a href="http://www.baidu.com">
+                            <p class="img"></p>
+                            <p class="title f30">大三元经典月饼</p>
+                            <div class="price">
+                                <p>
+                                    <span class="f24">¥</span>
+                                    <span class="discount f36">145</span>
+                                    <span class="original f24">¥ 546</span>
+                                </p>
+                            </div>
+                            </a>
+                       </li>
+
+            </ul>
+        </div>
+    </div>
+
+
+
+</body>
+<script src="<?php echo get_cdn_url('public/soma/mooncake4/js/search.js');?>"></script>
+</html>

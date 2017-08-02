@@ -1,0 +1,15 @@
+
+@each $color, $i in var(--price-tag-fill-colors) {
+  @if $(i) > 0 {
+    .jfk-price-tag--theme-$(i) {
+      @mixin price-tag $(color)
+    }
+  } @else {
+    .jfk-price-tag {
+      @mixin price-tag $(color) {
+        position: absolute;
+        z-index: 10
+      }
+    }
+  }
+}

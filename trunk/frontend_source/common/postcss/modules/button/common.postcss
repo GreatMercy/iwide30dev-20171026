@@ -1,0 +1,33 @@
+.jfk-button {
+  display: inline-block;
+  text-align: center;
+  white-space: nowrap;
+  cursor: pointer;
+  box-sizing: border-box;
+  outline: none;
+  margin: 0;
+  padding: 0;
+  border-width: 1px;
+  border-style: solid;
+  a&{
+    text-decoration: none;
+  }
+  &--free {
+    width: 100%;
+  }
+  &--length-2{
+    letter-spacing: .333em;
+    text-indent: .333em;
+  }
+  &__text {
+    &-item {
+      font-size: 1em;
+    }
+    &--length-2 {
+      letter-spacing: .333em;
+    }
+  }
+  &:disabled,&.is-disabled {
+    pointer-events: none;
+  }
+}

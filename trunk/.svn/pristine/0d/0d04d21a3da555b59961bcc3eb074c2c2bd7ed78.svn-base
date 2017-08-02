@@ -1,0 +1,277 @@
+<template>
+  <div class="good-spec">
+    <jfk-popup class="jfk-popup__specTicket" v-model="specVisible" position="bottom" :showCloseButton="true" :closeOnClickModal="false" :lockScroll="true">
+      <div class="popup-box">
+        <div class="popup-spec" v-if="spec.spec_type">
+          <div class="section-title font-size--24 font-color-extra-light-gray">选择规格</div>
+          <ul class="list">
+            <li class="item" v-for="(item, index) in spec.spec_type"
+              :key="spec.spec_type_id[index]">
+                <div class="title font-size--24 font-color-light-gray">{{item}}</div>
+                <div class="cont">
+                  <span class="spec-item jfk-d-ib color-golden font-size--30 jfk-radio jfk-radio--shape-rect"
+                    :class="{
+                      'jfk-radio--checked': id === specKeys[index],
+                      'jfk-radio--disabled': specMaps[index + '_' + id].disabled
+                    }"
+                    :key="id"
+                    v-for="(id, idx) in spec.spec_name_id[index]"
+                    @click="handleSpecChange(id, idx, index)">
+                    <label class="jfk-radio__label">
+                      <span class="jfk-radio__text">{{spec.spec_name[index][idx]}}</span>
+                      <span class="jfk-radio__icon"><i class="jfk-font icon-radio_icon_selected_default icon"></i></span>
+                    </label>
+                  </span>
+                </div>
+              </li>
+          </ul>
+        </div>
+        <div class="popup-time"></div>
+      </div>
+    </jfk-popup>
+    <div class="good-spec__footer" v-show="specVisible">
+      <div class="jfk-clearfix">
+        <div class="jfk-fl-l price color-golden jfk-flex is-align-middle">
+          <div class="cont ">
+          <span class="jfk-price__currency font-size--24">￥</span>
+          <span class="jfk-price__number font-size--48">{{pricePackage}}</span>
+          </div>
+        </div>
+        <div class="jfk-fl-r control">
+          <button :disabled="specButtonDisabled()" class="jfk-button jfk-button--free jfk-button--higher jfk-button--primary font-size--34">立即购买</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+<script>
+  import { getPackageSpec } from '@/service/http'
+  const parseSpecNameId = function (a) {
+    return a.map(function (i, j) {
+      return j + '_' + i
+    })
+  }
+  const parseSpecData = function (data) {
+    let specMaps = {}
+    let hasDisabledSpecItems = false
+    for (let i in data) {
+      const specNameId = parseSpecNameId(data[i].spec_name_id)
+      specNameId.forEach(function (id) {
+        if (!specMaps[id]) {
+          specMaps[id] = {
+            disabled: false,
+            ids: [],
+            paths: []
+          }
+        }
+        if (Number(data[i].stock) !== 0) {
+          specNameId.forEach(function (i) {
+            if (specMaps[id].ids.indexOf(i) === -1) {
+              specMaps[id].ids.push(i)
+            }
+          })
+          specMaps[id].paths.push(specNameId.join('/'))
+        } else {
+          hasDisabledSpecItems = true
+        }
+      })
+    }
+    for (let i in specMaps) {
+      if (specMaps[i].ids.length < 2) {
+        specMaps[i].disabled = true
+      }
+    }
+    return {
+      specMaps,
+      hasDisabledSpecItems
+    }
+  }
+  const parseSpecRows = function (data) {
+    let rows = {}
+    let keys = []
+    data.forEach(function (v, k) {
+      rows[k] = []
+      keys.push(-1)
+      v.forEach(function (i) {
+        rows[k].push(k + '_' + i)
+      })
+    })
+    return {
+      rows,
+      keys
+    }
+  }
+  const rowRegExp = /^(\d+)_/
+  export default {
+    name: 'good-spec',
+    data () {
+      return {
+        spec: {},
+        specKeys: [],
+        settingId: '-1',
+        pricePackage: this.price,
+        hasDisabledSpecItems: false,
+        specMaps: {},
+        specRows: {},
+        enableSpecItems: []
+      }
+    },
+    created () {
+      let that = this
+      getPackageSpec({
+        pid: this.productId
+      }).then(function (res) {
+        that.spec = Object.assign({}, that.spec, res.web_data)
+        if (that.spec.spec_type) {
+          let a = parseSpecRows(that.spec.spec_name_id)
+          that.specKeys = a.keys
+          that.specRows = a.rows
+          let d = parseSpecData(that.spec.data)
+          that.hasDisabledSpecItems = d.hasDisabledSpecItems
+          that.specMaps = Object.assign({}, that.specMaps, d.specMaps)
+        }
+      }).catch(function (err) {
+        console.log(err)
+      })
+    },
+    computed: {
+      specVisible: {
+        get () {
+          return this.visible
+        },
+        set (val) {
+          this.$emit('update:visible', val)
+        }
+      }
+    },
+    watch: {
+      specKeys: function (val) {
+        if (val.indexOf(-1) === -1) {
+          let settingId = this.getSettingId()
+          this.settingId = settingId
+          this.pricePackage = this.spec.data[settingId].spec_price
+        } else {
+          this.settingId = '-1'
+        }
+      }
+    },
+    methods: {
+      // 根据已选择的规格筛选可选择的完整规格路线
+      getFullSpecItems (items) {
+        let that = this
+        if (items.length > 1) {
+          let result = []
+          items.forEach(function (i) {
+            result = result.concat(that.specMaps[i].paths)
+          })
+          let o = {}
+          let _result = []
+          result.forEach(function (k) {
+            if (o[k]) {
+              let karr = k.split('/')
+              _result = _result.concat(karr)
+            } else {
+              o[k] = 1
+            }
+          })
+          return _result
+        } else {
+          return this.specMaps[items[0]].ids
+        }
+      },
+      changeSpecItemsStatus (item, enableSpecItems) {
+        let that = this
+        item.forEach(function (i) {
+          if (enableSpecItems.indexOf(i) !== -1) {
+            that.specMaps[i].disabled = false
+          } else {
+            that.specMaps[i].disabled = true
+          }
+        })
+      },
+      resetSpecItemsStatus () {
+        for (let i in this.specMaps) {
+          if (this.specMaps[i].ids.length < 2) {
+            this.specMaps[i].disabled = true
+          } else {
+            this.specMaps[i].disabled = false
+          }
+        }
+      },
+      detectionSpecStatus () {
+        // 无禁用项
+        if (!this.hasDisabledSpecItems) {
+          return true
+        }
+        let checkedSpecRows = []
+        let checkedSpecItems = []
+        let uncheckedSpecItems = []
+        let that = this
+        this.specKeys.forEach(function (i, j) {
+          let k = j + '_' + i
+          let rows = that.specRows[j]
+          if (i !== -1) {
+            checkedSpecRows.push(j)
+            checkedSpecItems.push(k)
+          } else {
+            uncheckedSpecItems = uncheckedSpecItems.concat(rows)
+          }
+        })
+        if (!checkedSpecItems.length) {
+          this.resetSpecItemsStatus()
+        } else {
+          // 设置未选择行的状态
+          let fullSpecItems = this.getFullSpecItems(checkedSpecItems)
+          this.changeSpecItemsStatus(uncheckedSpecItems, fullSpecItems)
+          if (checkedSpecRows.length > 1) {
+            checkedSpecItems.forEach(function (i) {
+              let d = checkedSpecItems.filter(function (j) {
+                return j !== i
+              })
+              let fullSpecItems1 = that.getFullSpecItems(d)
+              let row = rowRegExp.exec(i)[1]
+              let uncheckedSpecItems1 = that.specRows[row]
+              that.changeSpecItemsStatus(uncheckedSpecItems1, fullSpecItems1)
+            })
+          }
+        }
+      },
+      getSettingId () {
+        let key = this.specKeys.join('')
+        let index = this.spec.spec_id.indexOf(key)
+        if (index > -1) {
+          return this.spec.setting_id[index]
+        }
+      },
+      handleSpecChange (val, col, row) {
+        let key = row + '_' + val
+        if (this.specMaps[key].disabled) {
+          return
+        }
+        if (val === this.specKeys[row]) {
+          val = -1
+        }
+        this.$set(this.specKeys, row, val)
+        this.detectionSpecStatus()
+      },
+      specButtonDisabled () {
+        return this.settingId === '-1' || Number(this.spec.data[this.settingId].spec_stock) === 0
+      }
+    },
+    props: {
+      visible: {
+        type: Boolean,
+        required: true,
+        default: false
+      },
+      productId: {
+        type: String,
+        required: true
+      },
+      price: {
+        type: String,
+        required: true
+      }
+    }
+  }
+</script>

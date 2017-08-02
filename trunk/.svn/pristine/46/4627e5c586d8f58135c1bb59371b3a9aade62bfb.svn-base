@@ -1,0 +1,27 @@
+.jfk-tabbar{
+  display: flex;
+  justify-content: space-around;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  z-index: 1000;
+  width: 100%;
+  height: px2rem(100);
+  align-items: center;
+  &__item {
+    text-decoration: none;
+    font-size: 1em;
+  }
+  &__cont{
+    padding-bottom: calc(14 / 24 / 2)em;
+    font-size: 1em;
+    line-height: 1;
+  }
+  &__icon{
+    font-size: calc(28 / 24)em;
+  }
+  &__label{
+    padding-left: calc(14 / 24 / 2)em;
+    font-size: 1em;
+  }
+}

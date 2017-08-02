@@ -1,0 +1,154 @@
+<template>
+  <div v-loading="loading">
+    <div class="jfk-pages jfk-pages__price">
+      <transition name="fade">
+        <router-view class="view"></router-view>
+      </transition>
+    </div>
+  </div>
+</template>
+<script>
+  import routesConfig from './router/config'
+  import { mapActions, mapState } from 'vuex'
+  import { GET_COUPON_INFO } from '@/service/user/types'
+  import { formatUrlParams } from '@/utils/utils'
+  let steps = routesConfig.concat()
+  export default {
+    data () {
+      return {
+        steps: steps,
+        step: 0
+      }
+    },
+    created () {
+      let args = {
+        id: this.id
+      }
+      this[GET_COUPON_INFO](args)
+    },
+    beforeCreate () {
+      let params = formatUrlParams(location.search)
+      console.log(params.id)
+      if (params.id) {
+        this.id = params.id
+      }
+    },
+    methods: {
+      ...mapActions([
+        GET_COUPON_INFO
+      ])
+    },
+    computed: {
+      ...mapState([
+        'increment',
+        'loading'
+      ])
+    },
+    watch: {
+      'increment': function (val) {
+        // 下一步
+        if (val > 0) {
+          this.$router.push(this.steps[this.step + 1].path)
+        } else {
+          this.$router.go(-1)
+        }
+      }
+    }
+}
+</script>
+<style lang="postcss" scoped>
+  .jfk-pages__price{
+    margin-top: 0;
+    padding-top: 25px
+  }
+</style>
+<style  lang="postcss">
+  .jfk-pages__price{
+    .el-upload__input{
+      display: none!important;
+    }
+    .el-table{
+      width: 100%;
+      margin-top:40px;
+      border: 0px;
+      text-align: center;
+    }
+    .el-table::before , .el-table::after{
+      display: none;
+    }
+    .el-table__header-wrapper thead div{
+      background: transparent;
+    }
+    .el-table__row--striped{
+      background-color: #F9FAFC;
+    }
+    .el-table th{
+      text-align: center;
+      background: transparent;
+    }
+    .el-table td{
+      padding: 10px 0;
+      border-bottom: 0px;
+    }
+    .el-pagination{
+      text-align: center;
+    }
+    .gray-bg{
+      background-color: #f6f6f6;
+      padding: 10px 0;
+    }
+    .el-row{
+      padding:10px 0;
+    }
+    .choice-rows{
+      margin-left: 25px;
+    }
+    .choice-line{
+      border-right: 1px solid #CCCCCC;
+      width: 1px;
+      height: 50px;
+      display: inline-block;
+    }
+    .choice-step-title{
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+    .choice-step-word{
+      font-size: 17px;
+      color: #808080;
+    }
+    .choice-step-num{
+      font-style: italic;
+      font-size: 42px;
+      color: rgb(151, 168, 190);
+    }
+    .choice-step-active{
+      color: #AC9456;
+    }
+    .jfk-fieldset__hd{
+      padding:10px 0;
+    }
+    .gray-bg{
+      padding-left: 10px;
+    }
+    .gray-bg .el-form-item{
+      margin-bottom: 0px;
+    }
+    .choice-tips {
+      margin-top: 15px;
+    }
+    .choice-tips > div{
+      float: left;
+      color: #808080;
+    }
+    .choice-radio-right .el-radio{
+      margin-right: 35px;
+    }
+    .choice-checkbox-right .el-checkbox{
+      margin-right: 35px;
+    }
+    textarea{
+      resize:none;
+    }
+  }
+</style>

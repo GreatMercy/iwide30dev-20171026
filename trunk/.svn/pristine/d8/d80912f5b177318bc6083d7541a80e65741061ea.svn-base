@@ -1,0 +1,100 @@
+@import '../element-variables.css';
+@import './variable/index.postcss';
+@import './placeholder/index.postcss';
+@import './mixin/index.postcss';
+@import './modules/button.postcss';
+@import './modules/datepicker.postcss';
+@import './modules/input.postcss';
+@import './modules/page.postcss';
+@import './modules/select.postcss';
+@import './modules/fieldset.postcss';
+@import './modules/dialog.postcss';
+@import './modules/steps.postcss';
+@import './modules/table.postcss';
+@import './modules/notification.postcss';
+body {
+  &.skin-blue{
+    background: #f5f9fc;
+  }
+}
+.jfk {
+  &-ta {
+    &-r{
+      @extend tar;
+    }
+    &-c {
+      @extend tac;
+    }
+    &-l {
+      @extend tal
+    }
+  }
+  &-d-ib {
+    @extend dib
+  }
+  &-f-l{
+    @extend fl
+  }
+  &-va {
+    &-m{
+      vertical-align: middle
+    }
+  }
+}
+@each $key in primary, success, warning, danger, info, white, dark-white, black, base-black, light-black, extra-light-black, base-silver, light-silver, extra-light-silver, base-gray, light-gray, extra-light-gray {
+  .jfk-color--$(key) {
+    color: var(--color-$(key))
+  }
+  .jfk-bg--$(key) {
+    background-color: var(--color-$(key))
+  }
+}
+.jfk-tag-a {
+  text-decoration: none;
+  color: var(--link-color);
+  &:hover {
+    color: var(--link-hover-color);
+  }
+  &--line {
+    text-decoration: underline;
+  }
+}
+.jfk-color--gray{
+  color: var(--color-base-gray);
+}
+.jfk-color--primary{
+  color: var(--color-primary);
+}
+.jfk-color--success{
+  color: var(--color-success);
+}
+.jfk-color--warning {
+  color: var(--color-warning)
+}
+/* 一般与分页在同一项 */
+.jfk-lh--32 {
+  line-height: 32px;
+}
+@each $num in var(--size-queue) {
+  .jfk-m-$(num) {
+    @extend m$(num)
+  }
+  .jfk-p-$(num) {
+    @extend p$(num)
+  }
+  @each $key, $val in (t, r, b, l), (top, right, bottom, left) {
+    .jfk-m$(key)-$(num) {
+      @extend m$(key)$(num);
+    }
+    .jfk-p$(key)-$(num) {
+      @extend p$(key)$(num);
+    }
+  }
+}
+
+@each $num in var(--font-size-queue) {
+  .jfk-fz-$(num) {
+    @extend fz$(num)
+  }
+}
+

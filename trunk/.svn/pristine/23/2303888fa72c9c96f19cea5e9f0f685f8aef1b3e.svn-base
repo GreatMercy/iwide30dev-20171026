@@ -1,0 +1,103 @@
+<template>
+  <div class="jfk-pages jfk-pages__gift-list" :class="theme">
+    <gift-bg :wish="'测试一动画看啥看的哈就是客户贷记卡哈萨克的话哈哈哈哈哈下文案'"></gift-bg>
+
+    <div class="gift-list-wrap" ref="list">
+      <ul class="gift-list jfk-pl-30 jfk-pr-30">
+        <li class="gift-list-item jfk-flex is-align-middle">
+          <div class="gift-list-item__header"></div>
+          <div class="gift-list-item__info">
+            <p class="font-size--28 gift-list-item__name">马云爸爸</p>
+            <p class="font-size--24 gift-list-item__date">6月12日12:32</p>
+          </div>
+          <div class="gift-list-item__number font-size--34 jfk-ta-r">收到10份</div>
+        </li>
+
+        <li class="gift-list-item jfk-flex is-align-middle">
+          <div class="gift-list-item__header"></div>
+          <div class="gift-list-item__info">
+            <p class="font-size--28 gift-list-item__name">马云爸爸</p>
+            <p class="font-size--24 gift-list-item__date">6月12日12:32</p>
+          </div>
+          <div class="gift-list-item__number font-size--34 jfk-ta-r">收到10份</div>
+        </li>
+
+        <li class="gift-list-item jfk-flex is-align-middle">
+          <div class="gift-list-item__header"></div>
+          <div class="gift-list-item__info">
+            <p class="font-size--28 gift-list-item__name">马云爸爸</p>
+            <p class="font-size--24 gift-list-item__date">6月12日12:32</p>
+          </div>
+          <div class="gift-list-item__number font-size--34 jfk-ta-r">收到10份</div>
+        </li>
+
+        <li class="gift-list-item jfk-flex is-align-middle">
+          <div class="gift-list-item__header"></div>
+          <div class="gift-list-item__info">
+            <p class="font-size--28 gift-list-item__name">马云爸爸</p>
+            <p class="font-size--24 gift-list-item__date">6月12日12:32</p>
+          </div>
+          <div class="gift-list-item__number font-size--34 jfk-ta-r">收到10份</div>
+        </li>
+
+
+        <li class="gift-list-item jfk-flex is-align-middle">
+          <div class="gift-list-item__header"></div>
+          <div class="gift-list-item__info">
+            <p class="font-size--28 gift-list-item__name">马云爸爸</p>
+            <p class="font-size--24 gift-list-item__date">6月12日12:32</p>
+          </div>
+          <div class="gift-list-item__number font-size--34 jfk-ta-r">收到10份</div>
+        </li>
+
+
+      </ul>
+    </div>
+
+
+    <div class="gift-state jfk-ta-c">
+      <!--<a class="font-size&#45;&#45;32 gift-state-receive gift-state-arrow">查看退回的礼物</a>-->
+      <a class="font-size--32 gift-state-send gift-state-arrow" href="javascript:void(0)">继续赠送</a>
+      <p class="font-size--24 gift-state-number">已领取 4/10</p>
+    </div>
+
+  </div>
+</template>
+<script>
+  import giftBg from '@/components/gift_themes/gift_background'
+  const formatUrlParams = require('jfk-ui/lib/format-urlparams.js')
+  const params = formatUrlParams.default(location.href)
+  import { getPresentsList } from '@/service/http'
+  import BScroll from 'better-scroll'
+  export default {
+    name: 'giftList',
+    created () {
+      // getPresentsSendList().then((res) => {})
+      // console.log(BScroll)
+      const requestParams = {
+        'gid': params['gid'] || ''
+      }
+      getPresentsList(requestParams).then((res) => {
+        console.log(res)
+      })
+      this.$nextTick(() => {
+        this.scroll = new BScroll(this.$refs.list, {
+          bounce: false
+        })
+      })
+    },
+    components: {
+      giftBg
+    },
+    data () {
+      return {
+        // 选择了哪个主题
+        theme: 'gift-theme1',
+        // 礼物列表
+        giftInfo: [],
+        // scroll
+        scroll: null
+      }
+    }
+  }
+</script>

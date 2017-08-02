@@ -1,0 +1,35 @@
+import {
+  GET_COUPON_INFO,
+  CODE_INFO,
+  UPDATE_LOADING
+} from '@/service/user/types'
+import { getCouponCode } from '@/service/user/http'
+
+export default {
+  [GET_COUPON_INFO] ({
+    commit,
+    state
+  }, params) {
+    commit(UPDATE_LOADING, { loading: true })
+    getCouponCode(params).then(function (res) {
+      /* eslint-disable camelcase */
+      const {
+        csrf_token = '',
+        csrf_value = '',
+        enum_des = {},
+        enum_des_selected = {},
+        input_tag = {},
+        page_field = {},
+        page_hint = {},
+        page_resource = {},
+        temp_input_group = {},
+        text_selected = {}
+      } = res.web_data
+      commit(CODE_INFO, { csrf_token, csrf_value, enum_des, enum_des_selected, input_tag, page_field, page_hint, page_resource, temp_input_group, text_selected })
+      commit(UPDATE_LOADING, { loading: false })
+    }).catch(function (err) {
+      console.log(err)
+      commit(UPDATE_LOADING, { loading: false })
+    })
+  }
+}

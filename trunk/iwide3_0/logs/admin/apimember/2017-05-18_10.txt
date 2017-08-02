@@ -1,0 +1,6 @@
+----------------------------------------
+[request : 2017-05-18 10:44:08 : 127.0.0.1]
+a:3:{s:3:"url";s:39:"http://vip.iwide.cn/api/accesstoken/get";s:9:"post_data";a:2:{s:2:"id";s:3:"vip";s:6:"secret";s:10:"iwide30vip";}s:6:"result";s:106:"{"data":"98608beff41682507fe0300dfccc814ceb0c273fbbcbe437230450bb5e32726b3545b5ba33b43e0d","expire":86400}";}
+----------------------------------------
+[request : 2017-05-18 10:44:13 : 127.0.0.1]
+a:3:{s:3:"url";s:39:"http://vip.iwide.cn/api/accesstoken/get";s:9:"post_data";a:2:{s:2:"id";s:3:"vip";s:6:"secret";s:10:"iwide30vip";}s:6:"result";s:106:"{"data":"2429628e623d73b522df0e11467ef68c439acef0430a64421a2cda6b94b6353a0ad22dd19f028e3f","expire":86400}";}

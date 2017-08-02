@@ -1,0 +1,75 @@
+<template>
+  <li class="good-lists__item-pic">
+    <a :href="detail" class="item-cont">
+      <div class="goods-box">
+        <div class="jfk-price-tag jfk-price-tag__theme-0 font-size--26" v-if="status === 1">
+          <div class="jfk-price-tag__mask"></div>
+          <div class="jfk-price-tag__words is-justify-space-between">
+            <i class="jfk-font jfk-price-tag__word icon-font_zh_xian_fzdbs"></i>
+            <i class="jfk-font jfk-price-tag__word icon-font_zh_shi_fzdbs"></i>
+            <i class="jfk-font jfk-price-tag__word icon-font_zh_te_fzdbs"></i>
+            <i class="jfk-font jfk-price-tag__word icon-font_zh_hui_fzdbs"></i>
+          </div>
+        </div>
+        <div class="jfk-price-tag jfk-price-tag__theme-1 font-size--26" v-else-if="status === 2">
+          <div class="jfk-price-tag__mask"></div>
+          <div class="jfk-price-tag__words is-justify-space-between">
+            <i class="jfk-font jfk-price-tag__word icon-font_zh_te_fzdbs"></i>
+            <i class="jfk-font jfk-price-tag__word icon-font_zh_hui_fzdbs"></i>
+          </div>
+        </div>
+        <div class="jfk-price-tag jfk-price-tag__theme-2 font-size--26" v-else-if="status === 3">
+          <div class="jfk-price-tag__mask"></div>
+          <div class="jfk-price-tag__words is-justify-space-between">
+            <i class="jfk-font jfk-price-tag__word icon-font_zh_tui_fzdbs"></i>
+            <i class="jfk-font jfk-price-tag__word icon-font_zh_jian_fzdbs"></i>
+          </div>
+        </div>
+        <div class="jfk-price-tag jfk-price-tag__theme-3 font-size--26" v-else-if="status === 4">
+          <div class="jfk-price-tag__mask"></div>
+          <div class="jfk-price-tag__words is-justify-space-between">
+            <i class="jfk-font jfk-price-tag__word icon-font_zh_xin_fzdbs"></i>
+            <i class="jfk-font jfk-price-tag__word icon-font_zh_dian_fzdbs"></i>
+          </div>
+        </div>
+        <div class="jfk-price-tag jfk-price-tag__theme-4 font-size--26" v-else-if="status === 5">
+          <div class="jfk-price-tag__mask"></div>
+          <div class="jfk-price-tag__words is-justify-center">
+            <i class="jfk-font jfk-price-tag__word icon-font_en_hot_ktj"></i>
+          </div>
+        </div>
+        <div class="goods-image">
+          <div class="jfk-image__lazy goods-image-cont jfk-image__lazy--background-image jfk-image__lazy--3-3" v-lazy:background-image="item.face_img">
+          </div>
+        </div>
+        <div class="goods-info jfk-clearfix">
+          <div class="jfk-fl-l goods-info--left">
+            <h3 class="goods-title font-size--32 font-color-dark-white" v-once>{{item.name}}</h3>
+            <div class="goods-price">
+              <span class="jfk-price goods-price-discount color-golden font-size--54">
+                <i class="jfk-font-number jfk-price__currency">￥</i>
+                <i class="jfk-font-number jfk-price__number">{{price}}</i>
+              </span>
+              <span v-if="type !== 'ordinary'" class="goods-price-market font-size--24 font-color-light-gray">￥{{item.price_market}}</span>
+            </div>
+          </div>
+          <div class="goods-control jfk-fl-r jfk-ta-r">
+            <JfkButton :type="type === 'killsec' ? 'primary' : 'default'" @click.native="clickHandler" @click="clickHandler" class="font-size--30 goods-button" font="qkbys">{{buttonText}}</JfkButton>
+          </div>
+        </div>
+      </div>
+    </a>
+  </li>
+</template>
+<script>
+  import listMixin from './listMixin'
+  export default {
+    name: 'good-list-image',
+    mixins: [listMixin],
+    data () {
+      return {
+        status: Math.ceil(Math.random() * 5)
+      }
+    }
+  }
+</script>

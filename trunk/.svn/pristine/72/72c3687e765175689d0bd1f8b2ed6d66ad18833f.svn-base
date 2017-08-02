@@ -1,0 +1,9 @@
+ // 获取配置及编辑的信息
+export const GET_INDEX_INFO = 'GET_INDEX_INFO'
+export const GET_LOGIN_INFO = 'GET_LOGIN_INFO'
+export const GET_REG_INFO = 'GET_REG_INFO'
+export const POST_REG_INTERFACE = 'POST_REG_INTERFACE'
+export const POST_LOGIN_INTERFACE = 'POST_LOGIN_INTERFACE'
+
+// 加载状态
+export const UPDATE_LOADING = 'UPDATE_LOADING'

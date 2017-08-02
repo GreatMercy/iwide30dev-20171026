@@ -1,0 +1,64 @@
+<!doctype html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="apple-mobile-web-app-capable" content="yes" >
+<meta name="apple-touch-fullscreen" content="yes">
+<meta name="format-detection" content="telephone=no,email=no">
+<meta name="ML-Config" content="fullscreen=yes,preventMove=no">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="viewport" content="width=320,user-scalable=0,shrink-to-fit=no">
+<script src="scripts/jquery.js"></script>
+<script src="scripts/ui_control.js"></script>
+<link href="styles/global.css" rel="stylesheet">
+<link href="styles/quantity.css" rel="stylesheet">
+<link href="mooncake_v1/mooncake.css" rel="stylesheet">
+<title>月饼说</title>
+</head>
+<style>
+/*颜色控制*/
+
+/*主色*/
+.color_main,a.color_main{color:#ff9900;}
+.bg_main,a.bg_main,.btn_main,a.btn_main{background:#ff9900;}
+
+/*副色*/
+.color_minor,a.color_minor{color:#ff7200;}
+.bg_minor,a.bg_minor,.btn_minor,a.btn_minor{background:#ff7200;}
+
+/* 背景图640*1030 */
+/* 
+.theme_bg{background-image:url(images/theme1_bg.jpg) !important}
+ */
+
+</style>
+<body>
+<div class="pageloading"><p class="isload" style="margin-top:150px">正在加载</p></div>
+<!-- 以上为head -->
+
+<div class="whiteblock webkitbox justify bd" style="margin-top:0">
+	<span>订单号：21212121212121</span>
+    <span>2016-03-08 16：00：00</span>
+</div>
+<a class="goods webkitbox bd whiteblock">
+	<div class="goodsimg"><div class="squareimg"><img src="images/eg4.jpg" /></div></div>
+    <div>
+    	<p class="h30">金房卡月饼</p>
+        <p class="color_888">零售价：¥188/盒</p>
+    </div>
+</a>
+
+<div class="pad10 center martop color_888 h26">您的信息已提交，2小时内，将会有专门人员跟您确认付款事宜，请保持手机畅通</div>
+
+<div class="webkitbox center martop pad10">
+	<p><a class="btn_main bdradius" href="tel:020-12341234">主动联系酒店</a></p>
+    <p><a class="btn_main bdradius" href="quantity.html">看看其他商品</a></p>
+</div>
+
+<div class="webkitbox center martop pad10">
+    <p><a class="btn_main bdradius" href="">您的订单已确认，请点击使用</a></p>
+</div>
+</body>
+</html>

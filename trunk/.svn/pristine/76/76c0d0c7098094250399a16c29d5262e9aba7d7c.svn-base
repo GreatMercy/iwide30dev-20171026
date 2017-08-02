@@ -1,0 +1,5 @@
+<?php
+$config['shunfeng'] = [
+    'appID' => '00029291',
+    'appKey' => '345ABEF53B6F4A75463A3D625F9763BB'
+];

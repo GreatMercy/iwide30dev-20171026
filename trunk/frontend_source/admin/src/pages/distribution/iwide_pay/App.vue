@@ -1,0 +1,196 @@
+<template>
+  <div class="jfk-pages">
+    <el-row>
+      <el-col :span="24">
+        <el-form :model="storeState.normal.search" label-width="100px">
+          <el-row :gutter="20">
+          <!-- <el-form-item label="修改时间">
+            <el-col :span="11">
+              <el-form-item>
+                <el-date-picker type="date" placeholder="选择日期" v-model="storeState.normal.search.date1" style="width: 100%;"></el-date-picker>
+              </el-form-item>
+            </el-col>
+            <el-col class="line" :span="2">至</el-col>
+            <el-col :span="11">
+              <el-form-item>
+                <el-date-picker type="date" placeholder="选择日期" v-model="storeState.normal.search.date2" style="width: 100%;"></el-date-picker>
+              </el-form-item>
+            </el-col>
+          </el-form-item> -->
+          <el-col :span="8">
+          <el-form-item label="所属公众号">
+            <el-select filterable v-model="storeState.normal.search.inter_id" placeholder="所有公众号">
+              <el-option v-for="item in storeState.publics" :key="item.inter_id" :label="item.name" :value="item.inter_id"></el-option>
+            </el-select>
+          </el-form-item>
+          </el-col>
+          <el-col :span="2">
+            <el-button type="primary" @click="submitForm()">查  询</el-button>
+          </el-col>
+          </el-row>
+        </el-form>
+      </el-col>
+      <el-col :span="24">
+        <el-table
+          :data="storeState.list"
+          border
+          style="width: 100%"
+          max-height="auto"
+          class="jfk-table--no-border">
+          <el-table-column
+            prop="created_at"
+            label="修改时间"
+            >
+          </el-table-column>
+          <el-table-column
+            prop="name"
+            label="所属公众号"
+            >
+          </el-table-column>
+          <el-table-column
+            prop="rule_number"
+            label="规则条数"
+            >
+          </el-table-column>
+          <el-table-column
+            label="规则状态"
+            >
+            <template scope="scope">
+              <span :class="storeState.list[scope.$index].split_status === '停用' ? 'danger' : ''">{{storeState.list[scope.$index].split_status}}</span>
+            </template>
+          </el-table-column>
+          <el-table-column
+            label="操作"
+            >
+            <template scope="scope">
+              <el-button
+                @click.native.prevent="seeRow(scope.$index)"
+                type="text"
+                size="small">
+                查看
+              </el-button>
+              <el-button
+                @click.native.prevent="changerow(scope.$index)"
+                type="text"
+                :class="storeState.list[scope.$index].split_status === '启用' ? 'danger' : ''"
+                size="small"
+                :disabled="storeState.list[scope.$index].split_status === ''"
+                >
+                {{storeState.list[scope.$index].split_status === '启用' ? '停用分账' : '启用分账'}}
+              </el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      </el-col>
+      <el-col :span="24">
+        <el-row type="flex" justify="end" style="margin-top:20px;">
+          <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page.sync="storeState.normal.page.current"
+            :page-sizes="[10, 20, 30, 40]"
+            :page-size="storeState.normal.page.page_size"
+            layout="sizes, prev, pager, next, jumper"
+            :total="storeState.normal.page.total">
+          </el-pagination>
+        </el-row>
+      </el-col>
+    </el-row>
+  </div>
+</template>
+<script>
+  import store from './store/main'
+  export default {
+    data () {
+      return {
+        storeState: store.state
+      }
+    },
+    methods: {
+      changerow (e) {
+        let init = {
+          inter_id: this.storeState.list[e].inter_id,
+          split_status: this.storeState.list[e].split_status === '启用' ? '0' : '1'
+        }
+        let type = this.storeState.list[e].split_status === '启用' ? '停用' : '启用'
+        this.$confirm('是否' + type + '分账', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          store.changeSplitStatus(init, function (res) {
+            if (res.status === '1000' || res.status === 1000) {
+              this.storeState.list[e].split_status = type
+            } else {
+              this.$message({
+                showClose: true,
+                message: res.msg,
+                type: 'error'
+              })
+            }
+          }.bind(this))
+        })
+      },
+      seeRow (e) {
+        let url = this.storeState.list[e].url
+        window.location = url
+      },
+      submitForm () {
+        this.loadList()
+      },
+      output () {
+        let url = this.storeState.ext_data
+        window.location = url
+      },
+      handleSizeChange (e) {
+        this.storeState.normal.page.page_size = e
+        this.loadList()
+      },
+      handleCurrentChange (e) {
+        this.storeState.normal.page.current = e
+        this.loadList()
+      },
+      loadList () {
+        let init = {
+          inter_id: this.storeState.normal.search.inter_id,
+          start_time: this.storeState.normal.search.date1,
+          end_time: this.storeState.normal.search.date2,
+          offset: this.storeState.normal.page.current,
+          limit: this.storeState.normal.page.page_size
+        }
+        store.getSplitRuleList(init)
+      }
+    },
+    mounted: function () {
+      let init = {
+        inter_id: '',
+        start_time: '',
+        end_time: '',
+        offset: '',
+        limit: ''
+      }
+      store.getSplitRuleList(init)
+      store.getPublics()
+    }
+  }
+</script>
+<style>
+  .line{
+    text-align: center;
+  }
+  .el-select{
+    width: 100%;
+  }
+  .el-row{
+    margin:10px 0px;
+  }
+  .danger{
+    color: #FF4949;
+  }
+  .jfk-pages{
+  padding-top: 2.7%;
+}
+.el-table--border th, .el-table--border td {
+    border-right: 0px !important;
+}
+</style>

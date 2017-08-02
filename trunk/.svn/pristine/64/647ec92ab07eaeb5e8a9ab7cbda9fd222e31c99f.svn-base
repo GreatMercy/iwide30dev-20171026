@@ -1,0 +1,21 @@
+<?php
+/**
+ * table iwide_soma_sales_order
+ *
+ * @SWG\Definition(type="object", @SWG\Xml(name="SomaSalesOrderModel"))
+ */
+class SomaSalesOrderModel
+{
+    /**
+     * @SWG\Property(format="int32", description="订单号")
+     * @var int
+     */
+    public $order_id;
+
+    /**
+     * pet status in the store
+     * @var string
+     * @SWG\Property(enum={1, 2, 3})
+     */
+    public $status;
+}

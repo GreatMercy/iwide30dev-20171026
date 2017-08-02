@@ -1,0 +1,11 @@
+.jfk-toast{
+  &__icon {
+    text-shadow: 0 0 calc(57 / 80)em color(var(--color-golden) 20%);
+  }
+  &.is-modal{
+    background-color: var(--popup-mask-fill-color);
+  }
+  &__cont{
+    background-color: var(--popup-fill-color);
+  }
+}

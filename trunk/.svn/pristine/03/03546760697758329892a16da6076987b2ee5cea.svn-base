@@ -1,0 +1,116 @@
+<?php
+use App\libraries\Iapi\FrontConst;
+use App\services\soma\ScopeDiscountService;
+use App\libraries\Iapi\BaseConst;
+use App\services\soma\KillsecService;
+use App\services\soma\WxService;
+use App\services\soma\PackageService;
+use App\services\Result;
+
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+/**
+ * 秒杀相关接口
+ * Class Killsec
+ * @author daikanwu <daikanwu@jperation.com>
+ *
+ */
+class Killsec extends MY_Front_Soma_Iapi
+{
+
+    /**
+     * @SWG\POST(
+     *     tags={"killsec"},
+     *     path="/killsec/notice",
+     *     description="秒杀设置提醒",
+     *     operationId="post_notice",
+     *     produces={"application/json"},
+     *     @SWG\Parameter(
+     *         description="秒杀id",
+     *         in="formData",
+     *         name="act_id",
+     *         required=true,
+     *         type="integer"
+     *     ),
+     *     @SWG\Response(
+     *         response="200",
+     *         description="successful operation",
+     *         @SWG\Schema(
+     *              type="object",
+     *              @SWG\Property(
+     *                  property="data",
+     *                  description="返回数据 非空的话表示公众号二维码地址",
+     *                  type = "string",
+     *              ),
+     *             @SWG\Property(
+     *                  property="status",
+     *                  type="integer",
+     *                  enum={1, 2},
+     *                  description="1：设置提醒成功 2：提示设置成功，请关注公众号",
+     *              )
+     *         )
+     *     ),
+     *     @SWG\Response(
+     *         response="400",
+     *         description="参数错误"
+     *     ),
+     *     @SWG\Response(
+     *         response="404",
+     *         description="秒杀不存在"
+     *      )
+     * )
+     */
+    public function post_notice()
+    {
+        $request_param = $this->input->input_json();
+        $actId = $request_param->get('act_id');
+
+        $return = array('data' => array(), 'message' => '');
+        if (empty($actId)) {
+            show_error('秒杀不存在或过期', 400);
+        }
+
+        $this->load->model('soma/Activity_killsec_model', 'activityKillsecModel');
+        $this->load->model('soma/Activity_killsec_notice_model', 'activityKillsecNoticeModel');
+        $activity = $this->activityKillsecModel->get_aviliable_activity(array('act_id' => $actId, 'inter_id' => $this->inter_id));
+        if (empty($activity)) {
+            show_404();
+        }
+
+        $activity = $activity[0];
+        //校验订阅时间
+        if ($activity['killsec_time'] < date('Y-m-d H:i:s', strtotime('+10 minute'))) {
+            $this->out_put_msg(FrontConst::OPER_STATUS_FAIL_TOAST, $this->lang->line('subscription_overtime'));
+
+            return;
+        }
+
+        $data = array('act_id' => $actId, 'openid' => $this->openid, 'inter_id' => $activity['inter_id'], 'product_id' => $activity['product_id'], 'product_name' => $activity['product_name'], 'killsec_price' => $activity['killsec_price'], 'killsec_time' => $activity['killsec_time'],);
+
+        $result = $this->activityKillsecNoticeModel->add_notice($activity['inter_id'], $data);
+        if (!$result) {
+            $this->out_put_msg(FrontConst::OPER_STATUS_FAIL_TOAST, '已订阅，请耐心等待活动开始', $return['data']);
+
+            return;
+        }
+
+        $this->load->model('wx/Fans_model', 'fansModel');
+        $subscribeStatus = $this->fansModel->subscribeStatus($this->inter_id, $this->openid);
+        //没有关注的话返回二维码 关注了公众号的弹窗提示【设置成功】
+        if (!$subscribeStatus) {
+            $return['message'] = $this->lang->line('subscibe_follow_tip');
+            $qrcodeResult = WxService::getInstance()->getQrcode(WxService::QR_CODE_KILLSEC_SUBSCRIBE);
+            if ($qrcodeResult->getStatus() === Result::STATUS_OK && $activity['is_subscribe'] == Activity_killsec_model::STATUS_TRUE) {
+                $return['data'] = $qrcodeResult->getData();
+                $return['status'] = 2;
+            }
+        } else {
+            $return['data'] = '';
+            $return['status'] = 1;
+            $return['message'] = $this->lang->line('subscription_success');
+        }
+
+        $res = array('data' => $return['data'], 'status' => $return['status']);
+        $this->out_put_msg(FrontConst::OPER_STATUS_SUCCESS, $return['message'], $res);
+    }
+}

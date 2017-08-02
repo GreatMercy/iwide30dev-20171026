@@ -1,0 +1,111 @@
+<!doctype html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="apple-mobile-web-app-capable" content="yes" >
+<meta name="apple-touch-fullscreen" content="yes">
+<meta name="format-detection" content="telephone=no,email=no">
+<meta name="ML-Config" content="fullscreen=yes,preventMove=no">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="viewport" content="width=320,user-scalable=0">
+<title>社群客列表</title>
+<script src="../scripts/jquery.js"></script>
+<script src="../scripts/ui_control.js"></script>
+<link rel="stylesheet" type="text/css" href="../styles/global.css">
+<link rel="stylesheet" type="text/css" href="../styles/group.css">
+</head>
+<body>
+
+
+<div class="tabmenus webkitbox center bg_fff">
+	<div class="bg_E4E4E4 bg_main" type='0'>全部社群客</div>
+	<div class="bg_E4E4E4" type='1'>审核中</div>
+	<div class="bg_E4E4E4" type='1'>已过期</div>
+</div>
+<div class="group_list" style="padding-top:36px">
+    <div item class="bg_fff">
+    	<div class="webkitbox justify bd_bottom">
+            <div><em class="bg_main iconfont">&#xE600;</em>广州茂腾信息科技有限公司</div>
+            <div class="h18">
+                <p class="total_num">上限人数:100人</p>
+                <p status>审核中</p>
+            </div>
+    	</div>
+        <div class="martop bd_bottom">
+            <div class="webkitbox justify">
+                <span><em class="color_main iconfont">&#xE607;</em>部分酒店适用</span>
+                <span><em class="color_main iconfont">&#xE60d;</em>协议价A</span>
+            </div>
+            <p class="h22 color_888" style="padding-left:25px">有效时间：20160101 - 20161231</p>
+            <p class="h22 color_888" style="padding-left:25px">生成时间：20160101</p>
+        	<p class="martop txt_r">已产生间夜数: 100<em class="iconfont">&#xE611;</em></p>
+        </div>
+        <div class="list_foot color_main">
+            <div class="btn_main xs show_detail h24">查看成员明细</div>
+            <a class="btn_main xs h24" href="code.html">生成圣火令</a>
+        </div>
+    </div>
+    <div item class="bg_fff">
+    	<div class="webkitbox justify bd_bottom">
+            <div><em class="bg_main iconfont">A</em>广州茂腾信息科技有限公司</div>
+            <div class="h18">
+                <p class="total_num">上限人数:100人</p>
+                <p status>已加入59人</p>
+            </div>
+    	</div>
+        <div class="martop bd_bottom">
+            <div class="webkitbox justify">
+                <span><em class="color_main iconfont">A</em>部分酒店适用</span>
+                <span><em class="color_main iconfont">A</em>协议价A</span>
+            </div>
+            <p class="h22 color_888" style="padding-left:25px">有效时间：20160101 - 20161231</p>
+            <p class="h22 color_888" style="padding-left:25px">生成时间：20160101</p>
+        	<p class="martop txt_r">已产生间夜数: 100</p>
+        </div>
+        <div class="list_foot color_main">
+        	<span>审核中</span>
+        </div>
+    </div>
+</div>
+<div class="ui_pull" id="detail_pull"  style="display:none">
+	<div class="detail_list bg_fff">
+        <div class="center bg_main pad3 h30"><em class="iconfont">&#xE607;</em>酒店明细</div>
+        <ul class="scroll" id="detail_list"></ul>
+        <div class="bg_555 color_main center pad10" id="num">共0家</div>
+    </div>
+</div>
+
+<!-- 没有社群客的样式 -->
+<div class="ui_none"><div>你还没有社群客~<a href="add_new.html" class="color_link">点此添加</a></div></div> 
+<!-----end---->
+<script>
+	
+$('.tabmenus >*').click(function(){
+	var _this = $(this);
+	$(this).addClass('bg_main').siblings().removeClass('bg_main');
+	if($(this).attr('type')==0){
+		$('[item]').show();
+	}else{
+		$('[item]').each(function(index, element) {
+			if($('[status]',this).html()==_this.html())$(this).show();
+			else $(this).hide();
+        });
+	}
+})
+$('.show_detail').click(function(){
+	pageloading('请稍候');
+	window.setTimeout(function(){//模拟延迟
+		var html='<li>天美石牌桥酒店</li><li>天美火车站店</li><li>天美番禺店</li><li>天美番禺店</li>';
+		if ( html=='' )
+			html='<li>加载失败</li>';
+		$('#detail_list').html(html);
+		$('#num').html('共'+$('#detail_list li').length+'家');
+		toshow($('#detail_pull'));
+		removeload()
+	},500);
+})
+</script>
+</body>
+</html>

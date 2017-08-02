@@ -1,0 +1,132 @@
+/*赠送礼物主题相关的样式*/
+.gift-theme {
+  width: 100%;
+  position: relative;
+
+  &-bg {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+  }
+
+  &-logo {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, 0);
+    background-size: contain;
+    background-repeat: no-repeat;
+  }
+
+  &-wish {
+    &__content {
+      padding-top: px2rem(320);
+      line-height: px2rem(48);
+      padding-left: px2rem(100);
+      padding-right: px2rem(100);
+      @mixin ellipsis 2 {
+      }
+    }
+  }
+}
+
+/*主题1 */
+
+.gift-theme1 {
+  /* 主题的logo */
+  .gift-theme-logo {
+    width: px2rem(439);
+    height: px2rem(272);
+    background-image: background-image(/gift_themes/theme1/title.png);
+    top: px2rem(20);
+  }
+
+  /* 主题的背景图 */
+  .gift-theme-bg {
+    background-image: background-image(/gift_themes/theme1/bg.png);
+  }
+
+  /*主题的祝福语的颜色*/
+  .gift-theme-wish__content {
+    color: #b57943;
+  }
+
+  /*礼物列表边线的颜色*/
+  .gift-list-item:before {
+    background-color: #d6c7a9;
+  }
+
+  .gift-list-item:first-child:after {
+    background-color: #d6c7a9;
+  }
+
+  /*礼物列表名字的颜色*/
+  .gift-list-item__name {
+    color: #a6835f;
+  }
+
+  /*礼物列表日期的颜色*/
+  .gift-list-item__date {
+    color: #c29b72;
+  }
+
+  /*礼物列表数量的颜色*/
+  .gift-list-item__number {
+    color: #a07e5b;
+  }
+
+  /* 礼物列表 继续赠送或查看退回的礼物 文字颜色和箭头颜色*/
+  .gift-state-arrow {
+    color: #412f21;
+    &:after {
+      border-top: 1px solid #463427;
+      border-right: 1px solid #463427;
+    }
+  }
+
+  /*礼物列表 已经领取或已经过去文字颜色*/
+  .gift-state-number {
+    color: #74685e;
+  }
+
+  /*礼物详情按钮的背景*/
+  .gift-goods-btn {
+    .jfk-button {
+      background-image: background-image(/gift_themes/theme1/btn.png);
+    }
+  }
+
+  /*礼物详情商品名称*/
+  .gift-goods-name {
+    color: #412f21;
+  }
+
+  /*商品详情使用数量*/
+  .gift-goods-number {
+    color: #412f21;
+  }
+
+  /*商品详情页分割线*/
+  .gift-detail-line {
+    &::before {
+      background-color: #c2b8ad;
+    }
+  }
+
+  .gift-detail-put-order {
+    color: #412f21;
+    &:after {
+      border-top: 1px solid #412f21;
+      border-right: 1px solid #412f21;
+    }
+  }
+
+}
+
+
+
+
+

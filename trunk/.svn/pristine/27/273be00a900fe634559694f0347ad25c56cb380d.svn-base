@@ -1,0 +1,54 @@
+<?php
+use App\libraries\Support\Log;
+
+/**
+ * Class MY_Front_Soma_Iapi
+ * @author renshuai  <renshuai@mofly.cn>
+ *
+ *
+ * @property Shard_config_model $shardConfigModel
+ */
+class MY_Front_Soma_Iapi extends MY_Front_Iapi
+{
+    /**
+     * MY_Front_Soma_Iapi constructor.
+     *
+     */
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->current_inter_id = $this->inter_id;
+
+        //数据库链接
+        $this->load->somaDatabase($this->db_soma);
+        $this->load->somaDatabaseRead($this->db_soma_read);
+
+        //初始化数据库分片配置
+        $this->load->model('soma/shard_config_model', 'shardConfigModel');
+        $this->db_shard_config = $this->shardConfigModel->build_shard_config($this->inter_id);
+
+        MYLOG::soma_tracker($this->inter_id, $this->openid);
+    }
+
+    /**
+     * @param $method
+     * @param array $params
+     * @return mixed
+     * @author renshuai  <renshuai@jperation.cn>
+     *
+     */
+    public function _remap($method, $params = array())
+    {
+        $requestMethod = strtolower($_SERVER['REQUEST_METHOD']);
+        $method = "{$requestMethod}_{$method}";
+
+        if (method_exists($this, $method))
+        {
+            return call_user_func_array(array($this, $method), $params);
+        } else {
+            show_404('api not found');
+        }
+    }
+
+}

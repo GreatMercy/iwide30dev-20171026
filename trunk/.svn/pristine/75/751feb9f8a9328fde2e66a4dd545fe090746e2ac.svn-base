@@ -1,0 +1,109 @@
+<?php
+
+/**
+ * @SWG\Definition(type="object", @SWG\Xml(name="SomaGiftOrder"))
+ */
+class SomaGiftOrder
+{
+
+    /**
+     * @SWG\Property(type="string",description="赠送id")
+     * @var string $gift_id
+     */
+    public $gift_id;
+
+    /**
+     * @SWG\Property(type="string",description="业务类型")
+     * @var string $business
+     */
+    public $business;
+
+    /**
+     * @SWG\Property(type="string",description="公众号ID")
+     * @var string $inter_id
+     */
+    public $inter_id;
+
+    /**
+     * @SWG\Property(type="string",description="酒店ID")
+     * @var string $hotel_id
+     */
+    public $hotel_id;
+
+    /**
+     * @SWG\Property(type="string",description="主题ID")
+     * @var string $theme_id
+     */
+    public $theme_id;
+
+    /**
+     * @SWG\Property(type="string",description="一共派多少份")
+     * @var string $total_qty
+     */
+    public $total_qty;
+
+    /**
+     * @SWG\Property(type="string",description="")
+     * @var string $count_give
+     */
+    public $count_give;
+
+    /**
+     * @SWG\Property(type="string",description="每人领几份")
+     * @var string $per_give
+     */
+    public $per_give;
+
+    /**
+     * @SWG\Property(type="string",description="1私人对私人2群发礼物")
+     * @var string $is_p2p
+     */
+    public $is_p2p;
+
+    /**
+     * @SWG\Property(type="string",description="祝福语")
+     * @var string $message
+     */
+    public $message;
+
+
+    /**
+     * @SWG\Property(type="string",description="发起赠送时间")
+     * @var string $create_time
+     */
+    public $create_time;
+
+    /**
+     * @SWG\Property(type="string",description="领取时间")
+     * @var string $update_time
+     */
+    public $update_time;
+
+
+    /**
+     * @SWG\Property(type="string",description="赠送状态")
+     * @var string $status
+     */
+    public $status;
+
+    /**
+     * @SWG\Property(type="string",description="赠送状态对应中文标签")
+     * @var string $status_label
+     */
+    public $status_label;
+
+
+    /**
+     * @SWG\Property(type="string",description="赠送人昵称")
+     * @var string $openid_nickname
+     */
+    public $openid_nickname;
+
+    /**
+     * @SWG\Property(type="string",description="已经消费数量")
+     * @var string $consum_qty
+     */
+    public $consum_qty;
+
+
+}

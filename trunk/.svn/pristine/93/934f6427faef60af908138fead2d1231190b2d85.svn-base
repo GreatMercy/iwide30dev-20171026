@@ -1,0 +1,115 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>无标题文档</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1">
+<style>
+blockquote,body,button,dd,dl,dt,fieldset,form,h1,h2,h3,h4,h5,h6,hr,html,img,input,legend,li,ol,p,pre,td,textarea,th,ul {
+	margin:0;
+	padding:0
+}
+html {
+	color:#666;
+	background-color:#F2F2F2;
+	-webkit-text-size-adjust:100%;
+	-webkit-touch-callout:none;
+	-webkit-user-select:none;
+	-webkit-tap-highlight-color:transparent
+}
+body,button,input,select,textarea {
+	font:14px/1.5 "Helvetica neue",Helvetica,Tahoma,Arial,"\5FAE\8F6F\96C5\9ED1","\5B8B\4F53",sans-serif
+}
+img {
+	border:0;
+	max-width:100%;
+	height:auto
+}
+.clearfix:after {
+	visibility:hidden;
+	display:block;
+	font-size:0;
+	content:" ";
+	clear:both;
+	height:0
+}
+a,a:link,a:visited {
+	color:#666;
+	text-decoration:none;
+	-webkit-tap-highlight-color:transparent
+}
+a:active,a:hover {
+	text-decoration:none
+}
+.stat_btn{padding:2% 4%;float:right;border:1px solid #EB4949;background-color:#F55656;color:#fff;border-radius:4px;margin-top:5%;}
+#content{width:auto;padding:2%;}
+.game{border: 1px solid #E3E3E3;background-color: #fff;border-radius: 10px;box-sizing:border-box;padding:18px;margin-top:10px;}
+.g_img{height:3.5rem;width:3.5rem;border-radius:10px;float:left;margin-right:5%;}
+.game > div p{margin-bottom:8px;}
+</style>
+</head>
+<body>
+<div id="content">
+</div>
+<script src="jquery.js"></script>
+<script>
+(function(){
+var i=0;
+var arr=[];
+var baseurl='http://ihotels.iwide.cn/game/';
+var ico='/icon.png';
+arr[i]=new Array();
+arr[i].name='《吃包子大赛》';
+arr[i].src=baseurl+'baozi';
+arr[i].ico='baozi'+ico;
+i++;
+arr[i]=new Array();
+arr[i].name='拆弹专家';
+arr[i].src=baseurl+'cdzj';
+arr[i].ico='cdzj'+ico;
+i++;
+arr[i]=new Array();
+arr[i].name='灭蚊大作战';
+arr[i].src=baseurl+'dwz';
+arr[i].ico='dwz'+ico;
+i++;
+arr[i]=new Array();
+arr[i].name='捉住胡巴';
+arr[i].src=baseurl+'huba';
+arr[i].ico='huba'+ico;
+i++;
+arr[i]=new Array();
+arr[i].name='一起逮火鸡';
+arr[i].src=baseurl+'huoji';
+arr[i].ico='huoji'+ico;
+i++;
+arr[i]=new Array();
+arr[i].name='美女啵一个';
+arr[i].src=baseurl+'mnbyg';
+arr[i].ico='mnbyg'+ico;
+i++;
+arr[i]=new Array();
+arr[i].name='测测你有没有财运？';
+arr[i].src=baseurl+'money';
+arr[i].ico='money'+ico;
+i++;
+arr[i]=new Array();
+arr[i].name='双十一抢钱';
+arr[i].src=baseurl+'syjq';
+arr[i].ico='syjq'+ico;
+i++;
+arr[i]=new Array();
+arr[i].name='亡命射箭';
+arr[i].src=baseurl+'wmsj';
+arr[i].ico='wmsj'+ico;
+i++; 
+var str='';
+for(var j=0;j<arr.length;j++){
+	var ra_number=Math.random()*10000000<<0;
+	str+='<div class="game clearfix"><div class="g_img"><a href="'+arr[j].src+'"><img src="'+arr[j].ico+'" /></a></div><a href="'+arr[j].src+'"><div class="stat_btn">开始游戏</div></a><div><p>'+arr[j].name+'</p><p>有'+ra_number+'人玩过</p></div></div>';
+}
+$('#content').html(str);
+})();
+</script>
+</body>
+</html>

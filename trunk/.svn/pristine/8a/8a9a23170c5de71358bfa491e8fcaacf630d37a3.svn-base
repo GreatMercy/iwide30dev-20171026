@@ -1,0 +1,244 @@
+<template>
+  <div>
+    <div class="jfk-pages jfk-pages__price">
+      <template>
+        <div id="conpon-wrapper">
+            <el-row class="coupon-list-header gray-bg"> 
+              <div>
+                  <span>任务名称 : </span>
+                  <el-input v-model="keyword"  placeholder="请输入内容" style="width:250px;"></el-input>
+              </div>  
+              <div>
+                <span class="">发送时间 : </span>
+                <el-date-picker
+                  type="daterange"
+                  v-model="time"
+                  style="width:250px;"
+                  @change="setTime"
+                  range-separator=" 至 "
+                  placeholder="选择日期范围">
+                </el-date-picker>
+              </div>
+              <div style="float: right;">
+                <el-button type="primary" @click="search"  class="jfk-button--small coupon-search-button" size="large">查询</el-button>
+                <a :href="couponItems.page_resource.links.edit"><el-button type="" class="jfk-button--small establish-task-button" size="large">+创建批量任务</el-button></a>
+              </div>
+            </el-row>
+            <el-table
+              v-loading="couponItems.loading"
+              style="width: 100%;"
+              :data="couponItems.data"
+              stripe>
+                <el-table-column
+                  prop="0"
+                  label="任务名称">
+                </el-table-column>
+                <el-table-column
+                  prop="1"
+                  width="116"
+                  label="发送时间">
+                </el-table-column>
+                <el-table-column
+                  prop="2"
+                  label="发送内容">
+                </el-table-column>
+                <el-table-column
+                  prop="3"
+                  label="礼包 / 优惠券">
+                </el-table-column>
+                <el-table-column
+                  prop="4"
+                  label="目标用户">
+                </el-table-column>
+                <el-table-column
+                  prop="5"
+                  label="发送人数">
+                </el-table-column>
+                <el-table-column
+                  prop="6"
+                  label="发送状态">
+                </el-table-column>
+                <el-table-column
+                  prop="7"
+                  label="发送失败人数">
+                </el-table-column>
+                <el-table-column
+                  prop="8.nickname"
+                  label="操作人">
+                </el-table-column>
+                <el-table-column label="操作">
+                <template scope="scope">
+                  <a v-show="scope.is_edit === 2" @click="goHref(scope.row[9])">
+                    <el-button
+                      size="small"
+                      type=""
+                      class="coupon-list-detail">查看详情</el-button>
+                  </a>
+                  <span v-show="scope.is_edit === 0">发送中</span>
+                </template>
+              </el-table-column>
+            </el-table>
+            <div class="block" style="margin-top:30px;">
+             <el-pagination
+                @current-change="current"
+                :page-size="couponItems.page_resource.size"
+                layout="total, prev, pager, next, jumper"
+                :total="couponItems.page_resource.count">
+              </el-pagination> 
+            </div>
+        </div>
+    </template>
+    </div>
+  </div>
+</template>
+<script>
+  import store from './store/main'
+  export default {
+    data () {
+      return {
+        couponItems: store.state,
+        time: '',
+        getTime: ['', ''],
+        keyword: ''
+      }
+    },
+    methods: {
+      search () {
+        let getData = {
+          task_name: this.keyword,
+          start_time: this.getTime[0],
+          end_time: this.getTime[1],
+          p: this.couponItems.page_resource.page
+        }
+        store.getDetail(getData)
+      },
+      current (e) {
+        this.couponItems.page_resource.page = e
+        this.search()
+      },
+      setTime (value) {
+        this.getTime = value.split(' 至 ')
+      },
+      goHref (value) {
+        window.location.href = this.couponItems.page_resource.links.item + '?Id=' + value
+      }
+    },
+    mounted () {
+      store.getDetail()
+    }
+  }
+</script>
+<style lang="postcss" scoped>
+  .jfk-pages__price{
+    margin-top: 0;
+    padding-top: 25px
+  }
+</style>
+<style  lang="postcss">
+  .jfk-pages__price{
+    .el-table{
+      width: 100%;
+      margin-top:40px;
+      border: 0px;
+      text-align: center;
+    }
+    .el-table::before , .el-table::after{
+      display: none;
+    }
+    .el-table__header-wrapper thead div{
+      background: transparent;
+    }
+    .el-table__row--striped{
+      background-color: #F9FAFC;
+    }
+    .el-table th{
+      text-align: center;
+      background: transparent;
+    }
+    .el-table td{
+      padding: 10px 0;
+      border-bottom: 0px;
+    }
+    .el-pagination{
+      text-align: center;
+    }
+    .gray-bg{
+      background-color: #f6f6f6;
+      padding: 10px 0;
+    }
+    .el-row{
+      padding:10px 0;
+    }
+    .choice-rows{
+      margin-left: 25px;
+    }
+    .choice-line{
+      border-right: 1px solid #CCCCCC;
+      width: 1px;
+      height: 50px;
+      display: inline-block;
+    }
+    .choice-step-title{
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+    .choice-step-word{
+      font-size: 17px;
+      color: #808080;
+    }
+    .choice-step-num{
+      font-style: italic;
+      font-size: 42px;
+      color: rgb(151, 168, 190);
+    }
+    .choice-step-active{
+      color: #AC9456;
+    }
+    .jfk-fieldset__hd{
+      padding:10px 0;
+    }
+    .gray-bg{
+      padding-left: 10px;
+    }
+    .gray-bg .el-form-item{
+      margin-bottom: 0px;
+    }
+    .choice-tips {
+      margin-top: 15px;
+    }
+    .choice-tips > div{
+      float: left;
+      color: #808080;
+    }
+    .choice-radio-right .el-radio{
+      margin-right: 35px;
+    }
+    .choice-checkbox-right .el-checkbox{
+      margin-right: 35px;
+    }
+    .coupon-list-header{
+      margin: 0px!important;
+    }
+    .coupon-list-header > div{
+      margin-right:15px;
+      display: inline-block;
+    }
+    .coupon-search-button{
+      width: 85px;
+      padding: 8px 20px;
+    }
+    .establish-task-button{
+      color: #AC9456;
+      width: 135px;
+      padding: 8px 20px;
+    }
+    .el-date-editor.el-input{
+      width: 130px;
+    }
+    .coupon-list-detail{
+      border: 1px solid #AC9456;
+      color: #AC9456;
+      border-radius: 2px;
+    }
+  }
+</style>

@@ -1,0 +1,57 @@
+<template>
+  <div class="jfk-pages">
+    <el-row>
+        <el-form ref="search" :model="storeState.normal.search" label-width="120px">
+          <el-col :span="12">
+            <el-form-item label="结算时间">
+              <el-col :span="11">
+                <el-form-item>
+                  <el-date-picker type="date" placeholder="选择日期" v-model="storeState.normal.search.start_time" style="width: 100%;"></el-date-picker>
+                </el-form-item>
+              </el-col>
+              <el-col class="line" :span="2">至</el-col>
+              <el-col :span="11">
+                <el-form-item prop="date2">
+                  <el-date-picker type="date" placeholder="选择日期" v-model="storeState.normal.search.end_time" style="width: 100%;"></el-date-picker>
+                </el-form-item>
+              </el-col>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item>
+              <el-button type="primary" @click="submitForm">下载对账单</el-button>
+            </el-form-item>
+          </el-col>
+        </el-form>
+    </el-row>
+  </div>
+</template>
+<script>
+  import store from './store/main'
+  export default {
+    data () {
+      return {
+        storeState: store.state
+      }
+    },
+    methods: {
+      submitForm () {
+        store.loadFinancialBill(this.storeState.normal.search)
+      }
+    }
+  }
+</script>
+<style>
+  .line{
+    text-align: center;
+  }
+  .el-select{
+    width: 100%;
+  }
+  .jfk-pages{
+  padding-top: 2.7%;
+}
+.el-table--border th, .el-table--border td {
+    border-right: 0px !important;
+}
+</style>

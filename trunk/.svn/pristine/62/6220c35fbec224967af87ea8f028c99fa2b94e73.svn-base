@@ -1,0 +1,79 @@
+<template>
+  <div class="jfk-toast" :class="toastClass" v-show="visible">
+    <div class="jfk-toast__box">
+      <transition name="jfk-toast">
+        <div class="jfk-toast__wrap">
+            <div class="jfk-toast__cont">
+            <i class="jfk-toast__icon font-size--80 color-golden" :class="[iconClass, iconTypeClass]" v-if="type || iconClass !== ''"></i>
+            <div class="jfk-toast__text font-size--28 font-color-extra-light-gray">{{ message }}</div>
+          </div>
+        </div>
+      </transition>
+    </div>
+  </div>
+</template>
+<script>
+  const typeMap = {
+    fail: 'user_icon_fail_norma'
+  }
+  export default {
+    props: {
+      message: String,
+      className: {
+        type: String,
+        default: ''
+      },
+      position: {
+        type: String,
+        default: 'middle'
+      },
+      iconClass: {
+        type: String,
+        default: ''
+      },
+      modal: {
+        type: Boolean,
+        default: true
+      }
+    },
+    data() {
+      return {
+        visible: false,
+        type: ''
+      };
+    },
+    created () {
+      console.log(this.modal)
+    },
+    computed: {
+      toastClass () {
+        var classes = [];
+        if (this.modal) {
+          classes.push('is-modal')
+          this.position = 'middle'
+        }
+        switch (this.position) {
+          case 'top':
+            classes.push('is-placetop');
+            break;
+          case 'bottom':
+            classes.push('is-placebottom');
+            break;
+          default:
+            classes.push('is-placemiddle');
+        }
+        this.className && classes.push(this.className);
+        if (this.iconClass || this.type) {
+          classes.push('is-icon')
+        } else {
+          classes.push('no-icon')
+        }
+        console.log(classes)
+        return classes.join(' ');
+      },
+      iconTypeClass: function () {
+        return this.type && typeMap[this.type] ? `jfk-font icon-${ typeMap[this.type] }` : '';
+      }
+    }
+  };
+</script>

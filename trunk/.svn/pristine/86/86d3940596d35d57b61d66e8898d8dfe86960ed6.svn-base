@@ -1,0 +1,161 @@
+<template>
+  <div class="jfk-pages">
+    <el-row>
+      <el-col :span="14">
+        <el-form :model="ruleForm" ref="search" label-width="120px">
+          <el-col :span="12">
+            <el-form-item label="关键字">
+              <el-input v-model="ruleForm.keyword" placeholder="所属公众号、酒店名称、账户别名"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="账户类型">
+              <el-select v-model="ruleForm.accountType" filterable>
+                <el-option v-for="item in storeState.data.account_type" :key="item.value" :label="item.name" :value="item.value"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-form>
+      </el-col>
+      <el-col :span="10" style="text-align:center;">
+        <el-button type="primary" @click="submitForm()">查  询</el-button>
+        <el-button @click="createaccount()">创建账户</el-button>
+        <el-button @click="output()">导出数据</el-button>
+      </el-col>
+    </el-row>
+    <el-row>
+      <el-table
+        :data="storeState.data.list"
+        border
+        style="width: 100%"
+        max-height="auto"
+        class="jfk-table--no-border">
+        <el-table-column
+          prop="name"
+          label="所属公众号"
+          >
+        </el-table-column>
+        <el-table-column
+          prop="hotel_name"
+          label="酒店名称"
+          >
+        </el-table-column>
+        <el-table-column
+          prop="account_aliases"
+          label="账户别名"
+          >
+        </el-table-column>
+        <el-table-column
+          prop="is_company"
+          label="账户类型"
+          >
+        </el-table-column>
+        <el-table-column
+          prop="status"
+          label="账户状态"
+          >
+        </el-table-column>
+        <el-table-column
+          prop="edit_url"
+           label="操作"
+           >
+          <template scope="scope">
+            <el-button
+              @click.native.prevent="edit(scope.$index, storeState.data.list)"
+              type="text"
+              size="small"
+              v-if="storeState.data.list[scope.$index].type === 'dist'">
+              编辑
+            </el-button>
+            <el-button
+              @click.native.prevent="deleteRow(scope.$index, storeState.data.list)"
+              type="text"
+              size="small"
+              class="jfk-color--danger"
+              v-if="storeState.data.list[scope.$index].type !== 'jfk'">
+              删除
+            </el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-row>
+    <el-row type="flex" justify="end" style="margin-top:20px;">
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page.sync="storeState.data.page.current"
+        :page-sizes="[10, 20, 30, 40]"
+        :page-size="storeState.data.page.page_size"
+        layout="sizes, prev, pager, next, jumper"
+        :total="storeState.data.page.total">
+      </el-pagination>
+    </el-row>
+  </div>
+</template>
+<script>
+  import store from './store/main'
+  export default {
+    data () {
+      return {
+        storeState: store.state,
+        ruleForm: {
+          accountType: '',
+          keyword: ''
+        }
+      }
+    },
+    methods: {
+      submitForm () {
+        this.freshList()
+      },
+      edit (a, b) {
+        let url = b[a].edit_url
+        window.location = url
+      },
+      deleteRow (a, b) {
+        let id = b[a].id
+        store.deleteAccount({id: id}, function () {
+          this.freshList()
+        }.bind(this))
+      },
+      createaccount () {
+        let url = this.storeState.data.url.create
+        window.location = url
+      },
+      output () {
+        let url = this.storeState.data.url.ext_data
+        window.location = url
+      },
+      handleCurrentChange (e) {
+        this.storeState.data.page.current = e
+        this.freshList()
+      },
+      handleSizeChange (e) {
+        this.storeState.data.page.page_size = e
+        this.freshList()
+      },
+      freshList () {
+        store.getList({
+          type: this.ruleForm.accountType,
+          keyword: this.ruleForm.keyword,
+          offset: this.storeState.data.page.current,
+          limit: this.storeState.data.page.page_size
+        })
+      }
+    },
+    mounted: function () {
+      store.getList()
+    }
+  }
+</script>
+<style>
+.el-select{
+  width: 100%;
+}
+.jfk-pages{
+  padding-top: 2.7%;
+}
+.el-table--border th, .el-table--border td {
+    border-right: 0px !important;
+}
+</style>

@@ -1,0 +1,60 @@
+@font-face {
+  font-family: 'jfkFontNumber';
+  src:
+    url('fonts/jfkFontNumber.ttf?4e6c7m') format('truetype'),
+    url('fonts/jfkFontNumber.woff?4e6c7m') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.jfk-font-number {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'jfkFontNumber' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-price_icon_symbol_normal:before {
+  content: "\ffe5";
+}
+.icon-font_number_one_ht:before {
+  content: "\31";
+}
+.icon-font_number_two_ht:before {
+  content: "\32";
+}
+.icon-font_number_three_ht:before {
+  content: "\33";
+}
+.icon-font_number_four_ht:before {
+  content: "\34";
+}
+.icon-font_number_five_ht:before {
+  content: "\35";
+}
+.icon-font_number_six_ht:before {
+  content: "\36";
+}
+.icon-font_number_seven_ht:before {
+  content: "\37";
+}
+.icon-font_number_eight_ht:before {
+  content: "\38";
+}
+.icon-font_number_nine_ht:before {
+  content: "\39";
+}
+.icon-font_number_zero_ht:before {
+  content: "\30";
+}
+.icon-user_icon_digital_p:before {
+  content: "\2e";
+}

@@ -1,0 +1,79 @@
+<template>
+  <transition :name="currentTransition">
+    <div v-show="currentValue" class="jfk-popup" :class="[position ? 'jfk-popup__' + position : '', full ? 'is-full' : '']">
+      <i class="jfk-popup__close font-size--30 jfk-font icon-icon_close" v-show="showCloseButton" @click="handleClose"></i>
+      <slot></slot>
+    </div>
+  </transition>
+</template>
+<script>
+  import Popup from '../../../utils/popup/index.js';
+  export default {
+    name: 'jfk-popup',
+    mixins: [Popup],
+    props: {
+      modal: {
+        default: true
+      },
+      modalFade: {
+        default: false
+      },
+      lockScroll: {
+        default: false
+      },
+      closeOnClickModal: {
+        default: true
+      },
+      popupTransition: {
+        type: String,
+        default: 'popup-slide'
+      },
+      position: {
+        type: String,
+        default: 'default'
+      },
+      showCloseButton: {
+        type: Boolean,
+        default: false
+      },
+      willClose: {
+        type: Function
+      },
+      full: {
+        type: Boolean,
+        default: true
+      }
+    },
+    data() {
+      return {
+        currentValue: false,
+        currentTransition: this.popupTransition
+      };
+    },
+    watch: {
+      currentValue(val) {
+        this.$emit('input', val);
+      },
+      value(val) {
+        this.currentValue = val;
+      }
+    },
+    beforeMount() {
+      if (this.popupTransition !== 'popup-fade') {
+        this.currentTransition = `popup-slide-${ this.position }`;
+      }
+    },
+    mounted() {
+      if (this.value) {
+        this.rendered = true;
+        this.currentValue = true;
+        this.open();
+      }
+    },
+    methods: {
+      handleClose () {
+        this.close()
+      }
+    }
+  };
+</script>

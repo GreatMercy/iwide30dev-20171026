@@ -1,0 +1,499 @@
+<?php
+use App\libraries\Iapi\FrontConst;
+
+/**
+ * Class Presents
+ *
+ *
+ * 商品赠送相关接口
+ *
+ * @property Product_package_model $productPackageModel
+ */
+class Presents extends MY_Front_Soma_Iapi
+{
+
+
+    protected $itemFiledFilter = ['parent_id','parent_id','hotel_id','openid_origin','type','sku','conn_devices','name_en','card_id','compose','transparent_img','compose_en',
+        'use_cnt','can_split_use','can_wx_booking','wx_booking_config','can_refund','can_mail','can_gift','can_pickup','can_sms_notify','can_invoice','can_reserve','is_hide_reserve_date',
+        'room_id','add_time','send_wxtemp_status'
+    ];
+    //http://local.iwide.com/iapi/soma/presents/package?aiid=6132&group=1&id=a450089706&bsn=package&send_from=1&send_order_id=1000011754&saler=29&openid=o9Vbtw1W0ke-eb0g6kE4SD1eh6qU
+
+    /**
+     * @SWG\Get(
+     *     tags={"present"},
+     *     path="/presents/package",
+     *     summary="赠送礼物",
+     *     description="return item info",
+     *     operationId="get_package",
+     *     produces={"application/json"},
+     *     @SWG\Parameter(
+     *         description="资产ID",
+     *         in="query",
+     *         name="aiid",
+     *         required=true,
+     *         type="integer"
+     *     ),
+     *     @SWG\Parameter(
+     *         description="是否是群发，1是，2不是",
+     *         in="query",
+     *         name = "group",
+     *         required=false,
+     *         type="integer"
+     *     ),
+     *     @SWG\Parameter(
+     *         description="公众号ID",
+     *         in="query",
+     *         name = "id",
+     *         required=true,
+     *         type="integer"
+     *     ),
+     *     @SWG\Parameter(
+     *         description="业务类型，如package",
+     *         in="query",
+     *         name = "bsn",
+     *         required=true,
+     *         type="integer"
+     *     ),
+     *     @SWG\Parameter(
+     *         description="1表示来自礼物",
+     *         in="query",
+     *         name = "send_from",
+     *         required=false,
+     *         type="integer"
+     *     ),
+     *     @SWG\Parameter(
+     *         description="订单ID",
+     *         in="query",
+     *         name = "send_order_id",
+     *         required=false,
+     *         type="integer"
+     *     ),
+     *     @SWG\Response(
+     *         response="200",
+     *         description="successful operation",
+     *         @SWG\Schema(
+     *              type="object",
+     *              @SWG\Property(
+     *                  property="items",
+     *                  description="资产列表",
+     *                  type = "array",
+     *                  @SWG\Items(ref="#/definitions/SomaGift")
+     *              ),
+     *              @SWG\Property(
+     *                  property="giftTheme",
+     *
+     *                  description="主题列表",
+     *                  type = "array",
+     *                  @SWG\Items(ref="#/definitions/SomaGiftTheme")
+     *              ),
+     *              @SWG\Property(
+     *                  property="item_ids",
+     *                  description="资产的ID",
+     *                  type = "array",
+     *                  example="[1,2]"
+     *               ),
+     *              @SWG\Property(
+     *                  property="is_expire",
+     *                  description="是否已经过期,1已经过期，2未过期",
+     *                  type = "string"
+     *               ),
+     *              @SWG\Property(
+     *                  property="is_group",
+     *                  description="是否属于群发，1是，2不是",
+     *                  type = "string"
+     *               )
+     *         )
+     *     )
+     * )
+     */
+    public function get_package()
+    {
+
+        $is_group= $this->input->get('group');
+        $business= $this->input->get('bsn');
+
+        $this->load->model('soma/Gift_order_model','giftOrderModel');
+        $this->load->model('soma/Asset_item_package_model','assetItemModel');
+        $asset_item_id= $this->input->get('aiid');
+        $inter_id= $this->inter_id;
+        $items= $this->assetItemModel->get_order_items_byItemids( array($asset_item_id), $business, $inter_id );
+
+        $item_ids= $this->assetItemModel->array_to_hash($items, 'item_id' );
+
+        $filter_array = $this->itemFiledFilter;
+        foreach($items as $key => $item){
+            $item = new \App\libraries\Support\Collection($item);  //collect collect($item)
+            $item->toArray();
+            $item = $item->except($filter_array);
+            $items[$key] = $item->toArray();
+        }
+
+        //检查能否赠送
+        $this->load->model("soma/Sales_order_model",'SalesOrderModel');
+        $order_id = isset( $items[0]['order_id'] ) ? $items[0]['order_id'] : '';
+        $SalesOrderModel = $this->SalesOrderModel->load( $order_id );
+        if( $SalesOrderModel ){
+            if( !$SalesOrderModel->can_gift_order() ){
+                die($this->lang->line('can_not_gift_tip'));
+            }
+        }else{
+            die('检查能否赠送失败，加载sales_order_model失败！');
+        }
+
+        if( count($items)==0 ){
+            die('参数错误！');
+
+        } elseif( $items[0]['openid'] != $this->openid ){
+            //并非自己的资产不能处理
+            die('无可赠送礼物');
+        }
+        //纠正发送方式
+        if( $items[0]['qty']<2 ){
+            $is_group= Soma_base::STATUS_FALSE;
+        }
+        if( !$is_group ){
+            $is_group = Soma_base::STATUS_FALSE;//防止没有传group参数进来，而且剩余数量大于2
+        }
+
+        $time = time();
+        $expireTime = isset( $items[0]['expiration_date'] ) ? strtotime( $items[0]['expiration_date'] ) : NULL;
+        $is_expire = Soma_base::STATUS_FALSE;
+        if( $expireTime && $expireTime < $time ){
+            $is_expire = Soma_base::STATUS_TRUE;
+            die('已经过期不能进行赠送！');
+        }
+
+        $giftTheme = array(
+            //这些数据暂时是不可修改的，后台有上传功能，直接从数据库取
+            //theme字段是暂时定义的，到时候在后台上传赠送主题，则不需要，直接使用背景图链接即可
+            array('theme_id'=>1,'theme'=>'theme0.jpg','theme_name'=>$this->lang->line('featured')),
+            // array('theme_id'=>2,'theme'=>'theme1.jpg','theme_name'=>'爱情'),
+            // array('theme_id'=>3,'theme'=>'theme2.jpg','theme_name'=>'父母'),
+            // array('theme_id'=>4,'theme'=>'theme3.jpg','theme_name'=>'长辈'),
+            // array('theme_id'=>5,'theme'=>'theme4.jpg','theme_name'=>'亲人'),
+            // array('theme_id'=>6,'theme'=>'theme5.jpg','theme_name'=>'朋友'),
+            // array('theme_id'=>7,'theme'=>'theme6.jpg','theme_name'=>'精选'),
+        );
+
+        $this->load->helper('soma/package');
+
+
+
+//        $check_follow_ajax_url= Soma_const_url::inst()->get_url( '*/*/follow_status', array('id'=>$this->inter_id) );
+        $returnData = array(
+            'items'             => $items, //资产
+            'item_ids'          => array_values($item_ids), //资产ID数组
+//            'item_model'        => $this->assetItemModel,
+            'is_expire'         => $is_expire, //是否已经过期
+            'is_group'          => $is_group, //是否群发
+            'giftTheme'         => $giftTheme, //主题
+//            'check_follow_ajax' => $check_follow_ajax_url         //是否关注的ajax请求
+        );
+
+
+        $this->json(FrontConst::OPER_STATUS_SUCCESS, '', $returnData);
+    }
+
+
+
+    //检测是否关注
+    public function get_follow_status(){
+        $this->load->model('wx/publics_model');
+        $userinfo= $this->publics_model->get_wxuser_info($this->inter_id, $this->openid );
+        $returnData= array(
+            'status'=> Soma_base::STATUS_TRUE,
+            'message'=> '',
+            'data'=> '',
+        );
+        $public= $this->publics_model->get_public_by_id($this->inter_id);
+        $statis_url= $public['follow_page'];
+
+        if( isset($userinfo['subscribe']) && $userinfo['subscribe']==0 ){
+            //微信返回的信息显示没有关注
+            $returnData['status']= 2;
+            $returnData['message']= str_replace('[0]', $public['name'], $this->lang->line('follow_use'));
+            $returnData['data']= $statis_url;
+
+        } else {
+            $returnData['message']= str_replace('[0]', $public['name'], $this->lang->line('use_gift_in_officaial_account_tip'));
+            $returnData['data']= Soma_const_url::inst()->get_pacakge_home_page();
+        }
+
+
+        $this->json(FrontConst::OPER_STATUS_SUCCESS, '', $returnData);
+
+    }
+
+
+    /**
+     * @SWG\Post(
+     *     tags={"present"},
+     *     path="/presents/send_out",
+     *     summary="apply to pack up a gift",
+     *     description="return item info",
+     *     operationId="post_send_out",
+     *     produces={"application/json"},
+     *     @SWG\Parameter(
+     *         description="公众号ID",
+     *         in="query",
+     *         name="id",
+     *         required=true,
+     *         type="string"
+     *     ),
+     *     @SWG\Parameter(
+     *         description="公众号ID",
+     *         in="query",
+     *         name="id",
+     *         required=true,
+     *         type="string"
+     *     ),
+     *     @SWG\Response(
+     *         response="200",
+     *         description="successful operation",
+     *         @SWG\Schema(
+     *              type="object",
+     *              @SWG\Property(
+     *                  property="items",
+     *                  description="资产列表",
+     *                  type = "array",
+     *                  @SWG\Items(ref="#/definitions/SomaGift")
+     *              ),
+     *              @SWG\Property(
+     *                  property="giftTheme",
+     *                  description="主题列表",
+     *                  type = "array",
+     *                  @SWG\Items(ref="#/definitions/SomaGiftTheme")
+     *              ),
+     *         )
+     *     )
+     * )
+     */
+
+    public function post_send_out(){
+
+        $request_param = $this->input->input_json();
+
+        $request_array = json_decode($request_param,true);  //TODO  input_json 返回的是 Collection
+
+
+        $inter_id= $this->inter_id;
+        $business= 'package';
+        $aiids= $request_array['aiids']; //asset_item的需求量json数组,required
+        $message= $request_array['msg']; //祝福语
+        $theme_id= $request_array['tid']; //礼物主题ID ,required
+        $is_group= $request_array['is_group']; //是否是群发
+        $count_give= (int) $request_array['count_give']; //收礼人数   ,required
+        $per_give= (int) $request_array['per_give']; //发出礼盒数    ,required
+
+        $total_qty= $per_give* $count_give;
+
+        $send_from = isset($request_array['send_from']) ? $request_array['send_from'] :'';
+        $send_order_id =  isset($request_array['send_order_id']) ? $request_array['send_order_id'] : '';
+
+        $item_ids= array_keys($aiids);
+        $this->load->model('soma/Asset_item_package_model','assetItemModel');
+        $items= $this->assetItemModel->get_order_items_byItemids( $item_ids, $business, $inter_id );
+
+        if( !$items || $items[0]['qty']< $total_qty ){
+            $this->out_put_msg(FrontConst::OPER_STATUS_FAIL_ALERT, '您的礼品数量不足！', array());
+            return;
+        }
+        foreach ($items as $k=>$v){
+            if( $v['can_gift']== Asset_item_package_model::STATUS_CAN_NO ){
+                $this->out_put_msg(FrontConst::OPER_STATUS_FAIL_ALERT, $v['name']. '不允许赠送', array());
+                return;
+            }else if( in_array($v['item_id'], $item_ids) ){
+                $items[$k]['qty_require']= $aiids[$v['item_id']];
+            }
+        }
+
+        $this->load->model('soma/Gift_order','giftOrderModel');
+        $this->giftOrderModel->is_p2p= ( $is_group== Soma_base::STATUS_TRUE )? Soma_base::STATUS_FALSE: Soma_base::STATUS_TRUE;
+        $this->giftOrderModel->sender= new Gift_order_attr_customer( $this->openid );
+        $this->giftOrderModel->rule= new Gift_order_attr_rule($per_give, $count_give);
+        $this->giftOrderModel->theme= new Gift_order_attr_theme($theme_id, $message);
+        $this->giftOrderModel->item= $items;
+
+        $this->giftOrderModel->send_from = $send_from;
+        $this->giftOrderModel->send_order_id = $send_order_id;
+
+        $result = $this->giftOrderModel->order_save($business, $this->inter_id);
+
+        if($result['status'] == Soma_base::STATUS_TRUE && isset($result['gift_id'])){
+            $gift_id =  $result['gift_id'];
+            if($gift_id){
+                if( $is_group== Soma_base::STATUS_TRUE ){
+                    $sendResult= $this->giftOrderModel->set_redis_list($inter_id, $gift_id);
+                } else {
+                    $sendResult= TRUE;
+                }
+                $sign= Soma_base::inst()->str_encrypt($gift_id, TRUE);
+                    $returnData['gift']= $gift_id;
+                    $returnData['sign']= $sign;
+                    $returnData['desc']= $message;
+                    $message = $sendResult? '赠礼打包成功':
+                        '您群发的礼物暂时无法领取，'. Gift_order_model::EXPIRED_HOURS. '小时候将自动退回';
+                $this->out_put_msg(FrontConst::OPER_STATUS_SUCCESS, $message, $returnData);
+                return;
+            }else{
+
+            }
+
+        }else{
+
+            $this->out_put_msg(FrontConst::OPER_STATUS_FAIL_ALERT, '', array());  //todo  报错
+         }
+
+    }
+
+    //我的礼物
+    /**
+     * @author zhangyi  <zhangyi@mofly.cn>
+     */
+
+    /**
+     * @SWG\Get(
+     *     tags={"present"},
+     *     path="/presents/received",
+     *     summary="我的礼物列表",
+     *     description="return  my gifts list",
+     *     operationId="get_received",
+     *     produces={"application/json"},
+     *     @SWG\Parameter(
+     *         description="inter_id",
+     *         in="query",
+     *         name="id",
+     *         required=true,
+     *         type="string"
+     *     ),
+     *     @SWG\Response(
+     *         response="200",
+     *         description="successful operation",
+     *         @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="giftInfo",
+     *                  description="订单信息",
+     *                  type = "array",
+     *                  @SWG\Items(ref="#/definitions/SomaGiftOrder"),
+     *              ),
+     *              @SWG\Property(
+     *                  property="items",
+     *                  description="资产列表",
+     *                  type = "array",
+     *                  @SWG\Items(ref="#/definitions/SomaGift")
+     *              )
+     *         )
+     *     )
+     * )
+     */
+    public function get_received(){
+        $business= 'package';
+        $inter_id= $this->inter_id;
+        $openid= $this->openid;
+
+        $pageTitle = $this->lang->line('received_gift');
+        if( defined('PROJECT_AREA')
+            && PROJECT_AREA=='mooncake' ){   //todo  这个没用吧
+            $pageTitle = '月饼说-' . $pageTitle;
+        }
+
+        $header = array(
+            'title' => $pageTitle,
+            'gift_identify'=> 'received',
+        );
+        $this->load->model('soma/Gift_order_model', 'giftOrderModel');
+
+        //私人对私人赠送单
+        $gift_list= $this->giftOrderModel->get_order_list($business, $inter_id, array('is_p2p'=> Soma_base::STATUS_TRUE, 'openid_received'=>$openid ), 'gift_id desc' );
+
+
+        $rec_list= $this->giftOrderModel->get_receiver_list_byOpenId($inter_id, $openid );
+        $gift_ids= $this->giftOrderModel->array_to_hash($rec_list, 'gift_id');
+        $rec_gift_list = array();
+        if( count($gift_ids)>0 ){
+            //叠加群发接收的订单，得到最终的接受列表
+
+            //资产细单model luguihong 20160907 添加这个目的，准确查找到对应的资产
+            $this->load->model( 'soma/Asset_item_'.$business.'_model', 'AssetItemModel' );
+            $AssetItemModel = $this->AssetItemModel;
+            $assetItems = $AssetItemModel->get_order_items_byGiftids($gift_ids, $business, $inter_id);
+            $assetItems = $this->giftOrderModel->filter_items_by_openid( $assetItems, $openid );
+
+            $rec_gift_list= $this->giftOrderModel->get_order_list_byIds('package', $inter_id, $gift_ids, array('is_p2p'=> Soma_base::STATUS_FALSE ), 'gift_id desc' );//这里查找到的资产不准确
+            foreach( $assetItems as $k=>$v ){
+                if( in_array( $v['gift_id'], $gift_ids ) ){
+                    $rec_gift_list[$v['gift_id']]['items'][0] = $v;
+                }
+            }
+            $gift_list += $rec_gift_list;
+            //统计各个群发订单的接受情况
+            //$all_ids= $this->giftOrderModel->array_to_hash($rec_gift_list, 'gift_id');
+        }
+
+        //键值做排序，由高到低
+        krsort( $gift_list );
+
+        //所有群发接受清单
+        //$all_receiver= $this->giftOrderModel->get_receiver_list($inter_id, NULL, array('gift_id'=> $all_ids) );
+
+        //进行群发数组组装
+        foreach ($rec_gift_list as $k=>$v){
+            if( array_key_exists($v['gift_id'], $gift_list) )
+                $gift_list[$v['gift_id']]['receivers'][]= $v;
+        }
+
+        if(count($gift_list) > 0) {
+            //消费信息
+            $this->load->model('soma/Asset_item_package_model');
+            $asset_item= $this->Asset_item_package_model->get_order_items_by_filter($inter_id, array(
+                'openid'=> $openid, 'gift_id'=> array_keys($gift_list),
+            ));
+            $consum_hash= $this->Asset_item_package_model->array_to_hash($asset_item, 'qty', 'gift_id');
+
+            //循环提取必要信息
+            $openids= array();
+            foreach ($gift_list as $k=>$v){
+                $openids[]= $v['openid_give'];
+            }
+            $this->load->model('wx/Publics_model');
+            $openid_data= $this->Publics_model->get_fans_info_byIds($openids);
+            $openid_hash= $this->giftOrderModel->array_to_hash($openid_data, 'nickname', 'openid');
+
+            $status= $this->giftOrderModel->get_status_label();
+            //填充必要字段信息
+            foreach ($gift_list as $k=>$v){
+                if( array_key_exists($v['status'], $status) )
+                    $gift_list[$k]['status_label']= $status[$v['status']];
+
+                //填充openid昵称
+                if( array_key_exists($v['openid_give'], $openid_hash ))
+                    $gift_list[$k]['openid_nickname']= $openid_hash[$v['openid_give']];
+
+                //填充消费情况
+                if( array_key_exists($v['gift_id'], $consum_hash) ) $gift_list[$k]['consum_qty']= $consum_hash[$v['gift_id']];
+                else $gift_list[$k]['consum_qty']= 0;
+            }
+        }
+
+
+        $returnData = array();
+        if (!empty($gift_list)) {
+            foreach ($gift_list as $giftKey => $singleGift) {
+                if (!empty($singleGift['items'])) {
+                    foreach ($singleGift['items'] as $itemKey => $singleItem) {
+                        $singleItem = new \App\libraries\Support\Collection($singleItem);
+                        $singleItem = $singleItem->except($this->itemFiledFilter);
+                        $gift_list[$giftKey]['items'][$itemKey] = $singleItem->toArray();
+                    }
+
+                }
+                $returnData[] = $gift_list[$giftKey];
+            }
+        }
+
+
+        $this->json(FrontConst::OPER_STATUS_SUCCESS, '', $returnData);
+    }
+
+}

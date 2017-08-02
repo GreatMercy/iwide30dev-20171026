@@ -1,0 +1,31 @@
+<?php
+use App\libraries\Iapi\BaseConst;
+use App\services\soma\ScopeDiscountService;
+use App\services\soma\PaginateService;
+use App\libraries\Support\Log;
+
+/**
+ * Class Index
+ * @author renshuai  <renshuai@mofly.cn>
+ *
+ */
+class Index extends MY_Front_Soma_Iapi
+{
+    public function __construct()
+    {
+        parent::__construct();
+        $this->load->library('Soma_base');
+    }
+
+    /**
+     * 新版皮肤
+     * @author daikanwu <daikanwu@jperation.com>
+     */
+    public function get_index()
+    {
+
+
+    }
+
+
+}

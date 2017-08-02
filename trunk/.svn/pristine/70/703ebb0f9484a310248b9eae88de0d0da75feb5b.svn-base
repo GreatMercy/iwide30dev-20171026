@@ -1,0 +1,67 @@
+<template>
+  <div class="main">
+    <div v-on:click="tclick(0)" :class="btn[0] ? 'select' : ''">全部</div>
+    <div v-on:click="tclick(1)" :class="btn[1] ? 'select' : ''">待使用</div>
+    <div v-on:click="tclick(2)" :class="btn[2] ? 'select' : ''">已完成</div>
+    <div v-on:click="tclick(3)" :class="btn[3] ? 'select' : ''">我的礼物</div>
+  </div>
+</template>
+<script>
+  export default {
+    name: 'orderTitle',
+    data () {
+      return {
+        btn: [true, false, false, false]
+      }
+    },
+    methods: {
+      tclick: function (e) {
+        let btnarr = [false, false, false, false]
+        btnarr[e] = true
+        this.btn = btnarr
+      }
+    }
+  }
+</script>
+<style lang="postcss" scoped>
+@import '../../styles/postcss/all.postcss';
+.main{
+  position: relative;
+  @extend flex;
+}
+.main>div{
+  font-size: px2rem(32);
+  color: var(--bfbfbf);
+  text-align: center;
+  width: 25%;
+  margin-top: px2rem(45);
+  position: relative;
+}
+.main>div::after{
+  content: "";
+  position: absolute;
+  width: 1px;
+  height: px2rem(20);
+  background-color: var(--c3a3a3a);
+  left: 0px;
+  top: 50%;
+  margin-top: px2rem(-10);
+}
+.main>div:first-child::after{
+  background-color: transparent;
+}
+.select{
+  color: var(--white) !important;
+}
+.select::before{
+  content: "";
+  position: absolute;
+  width: 100%;
+  left: 0px;
+  top: 100%;
+  margin-top: px2rem(15);
+  height: px2rem(15);
+  background-image: url('../../assets/image/select.png');
+  background-size: 100% 100%;
+}
+</style>

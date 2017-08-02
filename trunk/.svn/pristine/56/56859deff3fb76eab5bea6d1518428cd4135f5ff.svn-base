@@ -1,0 +1,21 @@
+$baseFontSize: 16;
+$baseFontFamily: 'PingFang SC', Arial, Helvetica, sans-serif;
+
+// color
+$black: #000; // 黑色
+$darkBlack: #090909; // 深黑色
+$lightBlack: #0e0e0e; // 浅黑色
+$white: #fff; // 白色
+$lightGray: #bfbfbf; // 浅灰色
+$gray: #808080; // 灰色
+$orange: #b2945e; // 橙色
+$drakOrange: #887453; // 深橙色
+$countColor: #d8c67c; // 倒计时的颜色
+$borderColor: #363636; // 边框的颜色
+$bgColor: #1f1f1f; // 底色
+$fontColor: #666; // 字体颜色
+$disabledColor: #333; // 不可选的颜色
+$arrowDisabledColor: #2d2d2d; // 箭头不可点击的颜色
+
+
+

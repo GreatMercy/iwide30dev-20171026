@@ -1,0 +1,41 @@
+<template>
+  <div class="gradient_bg">
+  <section class="padding_0_15 padding_15">
+    <div v-for="(value,key) in dataList.card_list" class="block radius_3 layer_bg card_item margin_top_15">
+      <div class="flex between">
+        <div class="relative">
+          <div>
+            <span class="gold margin_right_15"></span>
+            <span class="margin_right_10 font_19">{{value.title}}</span>
+            <!-- <span class="font_12">SILVER CARD</span> -->
+          </div>
+          <div class="font_12 width_85">{{value.description}}</div>
+        </div>
+        <div class="font_12 width_100"><a :href="dataList.page_resource.links.buycard + '&cardId=' +value.deposit_card_id"><span class="margin_right_6">查看详情</span><em class="iconfont color3">&#xe61c;</em></a></div>
+      </div>
+      <p class="relative border_bottom margin_top_15 height_1"></p>
+      <div class="flex between margin_top_13">
+        <div class="main_color1 font_12"><font class="iconfont margin_right_6 font_16">&#xe643;</font><em class="iconfonts font_23">{{value.money}}</em></div>
+        <a :href="dataList.page_resource.links.buycard + '&cardId=' +value.deposit_card_id"><div class="font_14 border_1 width_100 center padding_6 relative border_b2945e">立即购买</div></a>
+      </div>
+    </div>
+  </section>
+</div>
+</template>
+<script>
+import { getDepositcardInfo } from '@/service/http'
+export default {
+  data () {
+    return {
+      dataList: []
+    }
+  },
+  created () {
+    getDepositcardInfo().then((res) => {
+      this.dataList = res.web_data
+    })
+  },
+  methods: {
+  }
+}
+</script>

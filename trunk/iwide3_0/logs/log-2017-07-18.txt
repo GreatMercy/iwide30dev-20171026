@@ -1,0 +1,6 @@
+ERROR - 2017-07-18 14:15:09 --> Severity: Warning --> Illegal offset type in isset or empty /private/home/www/30dev/iwide3_0/libraries/Iapi/FrontConst.php 9
+ERROR - 2017-07-18 14:17:45 --> Severity: Warning --> Illegal offset type in isset or empty /private/home/www/30dev/iwide3_0/libraries/Iapi/FrontConst.php 9
+ERROR - 2017-07-18 14:18:37 --> Severity: Notice --> Array to string conversion /private/home/www/30dev/iwide3_0/libraries/Iapi/FrontConst.php 9
+ERROR - 2017-07-18 15:09:30 --> Severity: Error --> Class 'App\services\member\EA_const_url' not found /private/home/www/30dev/iwide3_0/services/member/CenterService.php 25
+ERROR - 2017-07-18 15:17:08 --> Severity: Notice --> Undefined property: App\services\member\CenterService::$inter_id /private/home/www/30dev/iwide3_0/services/member/CenterService.php 113
+ERROR - 2017-07-18 16:46:06 --> Severity: Notice --> Undefined variable: cardlist /private/home/www/30dev/iwide3_0/view/front/member/phase2/card.php 361

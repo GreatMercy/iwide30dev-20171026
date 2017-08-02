@@ -1,0 +1,105 @@
+<!doctype html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="apple-mobile-web-app-capable" content="yes" >
+<meta name="apple-touch-fullscreen" content="yes">
+<meta name="format-detection" content="telephone=no,email=no">
+<meta name="ML-Config" content="fullscreen=yes,preventMove=no">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="viewport" content="width=320,user-scalable=0,shrink-to-fit=no">
+<script src="scripts/jquery.js"></script>
+<script src="scripts/alert.js"></script>
+<script src="scripts/ui_control.js"></script>
+<link href="styles/global.css" rel="stylesheet">
+<link href="styles/default.css" rel="stylesheet">
+<title>交易快照</title>
+</head>
+<style>
+/*颜色控制*/
+
+
+/*主色*/
+.color_main,a.color_main,.btn_void, a.btn_void{color:#ff9900;}
+.bg_main,a.bg_main,.btn_main,a.btn_main{background:#ff9900;}
+.bd_main_color,.btn_void, a.btn_void{border-color:#ff9900 !important}
+
+/*副色*/
+
+.color_minor,a.color_minor{color:#fd595a;}
+.bg_minor,a.bg_minor,.btn_minor,a.btn_minor{background:#fd595a;}
+
+</style>
+<body>
+<div class="pageloading"><p class="isload">正在加载</p></div>
+<!-- 以上为header.php -->
+
+<div class="pad10 center h22"><em class="iconfont">&#Xe627;</em>你现在查看的是交易快照</div>
+<ul class="bd list_style_1">
+    <li class="input_item webkitbox justify">
+        <span class="color_888">订单编号</span>
+        <span><?php echo $orderDetail['order_id'];?></span>
+        <span><?php echo $orderDetail['create_time'];?></span>
+    </li>
+</ul>
+
+<div class="order_list bd martop">
+    <div class="item bg_fff">
+        <div class="item_left">
+            <div class="img"><img src="<?php echo $v['face_img'];?>" /></div>
+            <p class="txtclip h30"><?php echo $v['name'];?></p>
+            <p class="txtclip color_888"><?php echo $v['hotel_name'];?></p>
+            <p class="txtclip color_main"><span class="y"><?php echo $v['price_package'];?></span></p>
+        </div>
+    </div>
+</div>
+<div class="whiteblock bd support_list">
+
+    <?php if($package['can_refund'] == $packageModel::CAN_T){ ?>
+        <span tips="购买后，您可以在订单中心直接申请退款，并原路退回"><em class="iconfont color_main">&#xe61e;</em><tt>微信退款</tt></span>
+    <?php } ?>
+
+    <?php if($package['can_gift'] == $packageModel::CAN_T){ ?>
+        <span tips="该商品购买成功后，可微信转赠给好友，好友可继续使用"><em class="iconfont color_main">&#xe61e;</em><tt>赠送朋友</tt></span>
+    <?php } ?>
+
+    <?php if($package['can_mail'] == $packageModel::CAN_T){ ?>
+        <span tips="这件商品，是可以邮寄的商品哟"><em class="iconfont color_main">&#xe61e;</em><tt>邮寄到家</tt></span>
+    <?php } ?>
+
+    <?php if($package['can_pickup'] == $packageModel::CAN_T){ ?>
+        <span tips="此商品支持您到店使用／自提"><em class="iconfont color_main">&#xe61e;</em><tt>到店自提</tt></span>
+    <?php } ?>
+    <?php if($package['can_invoice'] == $packageModel::CAN_T){ ?>
+        <span tips="此商品购买成功后，您可以提交发票信息开票"><em class="iconfont color_main">&#xe61e;</em><tt>开具发票</tt></span>
+    <?php } ?>
+    <?php if($package['can_split_use'] == $packageModel::CAN_T){ ?>
+        <span tips="此商品分时可用"><em class="iconfont color_main">&#xe61e;</em><tt>分时可用</tt></span>
+    <?php } ?>
+</div>
+
+<div class="whiteblock bd">
+	<span><em class="iconfont color_main">&#xe60F;</em> <tt> 使用截止时间：2017-10-30</tt></span>
+</div>
+
+<?php if(isset($package['order_notice'])  && !empty($package['order_notice']) ){?>
+<div class="bg_fff block martop h24">
+	<p class="bd_bottom">
+    	<span class="color_555">订购需知</span>
+    	<span class="h22"></span>
+    </p>
+    <p  class="color_999 f_s_12">
+        <?php echo $package['order_notice']; ?>
+    </p>
+</div>
+<?php } ?>
+<div class="bg_fff bd martop block h24 color_555" id="showdetail">
+	<p class="bd_bottom">图文详情</p>
+    <div class="h24 fillcontent"><?php echo $package['img_detail'];?></div>
+</div>
+
+</body>
+
+</html>

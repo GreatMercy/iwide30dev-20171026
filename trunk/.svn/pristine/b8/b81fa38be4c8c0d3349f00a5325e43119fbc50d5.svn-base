@@ -1,0 +1,157 @@
+<template>
+  <div class="good-spec">
+    <jfk-popup class="jfk-popup__specTicket" v-model="specVisible" position="bottom-full" :willClose="handleBeforeClose" :showCloseButton="true">
+      <div class="popup-box">
+        <div class="popup-spec" v-if="isSpec && spec.spec_type">
+          <div class="section-title font-size--24 font-color-extra-light-gray">选择规格</div>
+          <ul class="list">
+            <li class="item" v-for="(item, index) in spec.spec_type"
+              :key="spec.spec_type_id[index]">
+                <div class="title font-size--24 font-color-light-gray">{{item}}</div>
+                <div class="cont">
+                  <span class="spec-item jfk-d-ib color-golden font-size--30 jfk-radio jfk-radio--shape-rect" :key="id" v-for="(id, idx) in spec.spec_name_id[index]">
+                    <label class="jfk-radio__label">
+                      <input type="radio" :disabled="specItemDisabled(id, idx, index)" :name="'spec-item-input-' + index" value="id" @change="handleSpecChange(id, idx, index)"/>
+                      <span class="jfk-radio__text">{{spec.spec_name[index][idx]}}</span>
+                      <span class="jfk-radio__icon"><i class="jfk-font icon-radio_icon_selected_default icon"></i></span>
+                    </label>
+                  </span>
+                </div>
+              </li>
+          </ul>
+        </div>
+        <div class="popup-time"></div>
+      </div>
+    </jfk-popup>
+    <div class="good-spec__footer" v-show="specVisible">
+      <div class="jfk-clearfix">
+        <div class="jfk-fl-l price color-golden jfk-flex is-align-middle">
+          <div class="cont ">
+          <span class="jfk-price__currency font-size--24">￥</span>
+          <span class="jfk-price__number font-size--48">{{pricePackage}}</span>
+          </div>
+        </div>
+        <div class="jfk-fl-r control">
+          <button :disabled="specTicketButtonDisabled()" class="jfk-button jfk-button--free jfk-button--higher jfk-button--primary font-size--34">立即购买</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+<script>
+  import { getPackageSpec, getPackageTickTime } from '@/service/http'
+  export default {
+    name: 'good-spec',
+    data () {
+      return {
+        spec: {},
+        ticket: {},
+        specKeys: [],
+        settingId: '-1',
+        pricePackage: this.price
+      }
+    },
+    created () {
+      let that = this
+      if (this.isSpec) {
+        getPackageSpec({
+          pid: this.productId
+        }).then(function (res) {
+          that.spec = Object.assign({}, that.spec, res.web_data)
+          if (that.spec.spec_type) {
+            let i = 0
+            let len = that.spec.spec_type.length
+            let keys = []
+            while (i < len) {
+              keys.push(-1)
+              i++
+            }
+            that.specKeys = keys
+          }
+        }).catch(function (err) {
+          console.log(err)
+        })
+      }
+      if (this.isTicket) {
+        getPackageTickTime({
+          pid: this.productId,
+          bsn: ''
+        }).then(function (res) {
+          console.log(res)
+        }).catch(function (err) {
+          console.log(err)
+        })
+      }
+    },
+    computed: {
+      specVisible: {
+        get () {
+          return this.visible
+        },
+        set (val) {
+          this.$emit('update:visible', val)
+        }
+      }
+    },
+    watch: {
+      specKeys: function (val) {
+        if (val.indexOf(-1) === -1) {
+          let settingId = this.getSettingId()
+          this.settingId = settingId
+          this.pricePackage = this.spec.data[settingId].spec_price
+        } else {
+          this.settingId = -1
+        }
+      }
+    },
+    methods: {
+      getSettingId () {
+        let key = this.specKeys.join('')
+        let index = this.spec.spec_id.indexOf(key)
+        if (index > -1) {
+          return this.spec.setting_id[index]
+        }
+      },
+      handleBeforeClose () {
+        console.log(111)
+        return true
+      },
+      handleSpecChange (val, col, row) {
+        this.$set(this.specKeys, row, val)
+      },
+      specItemDisabled (val, col, row) {
+        if (this.settingId) {
+          return false
+        }
+        console.log(val, col, row)
+      },
+      specTicketButtonDisabled () {
+        console.log(this.settingId)
+        return this.settingId === '-1'
+      }
+    },
+    props: {
+      visible: {
+        type: Boolean,
+        required: true,
+        default: false
+      },
+      productId: {
+        type: String,
+        required: true
+      },
+      isSpec: {
+        type: Boolean,
+        required: true
+      },
+      isTicket: {
+        type: Boolean,
+        required: true
+      },
+      price: {
+        type: String,
+        required: true
+      }
+    }
+  }
+</script>

@@ -1,0 +1,365 @@
+api路径：
+iwide3_0/controllers/iapi/admin/hotel
+
+类均继承于MY_Admin_Iapi
+$this->out_put_msg() 返回数据,会根据配置筛选数据
+具体说明看程序注释
+
+配置文件：iwide3_0/libraries/Iapi/Admin_const.php
+$oper_status：操作状态码
+$msg_lv：消息级别
+$common_dehydrate_samples：通用预设过滤模板
+$dehydrate_samples：各方法返回数据过滤模板
+
+每个api接口必须配置数据过滤模板：
+$dehydrate_samples 为输出数据模板
+输出数据时会根据模板筛选数据，结构会保持一致
+'方法名'=>mode(模板)
+通用模板：
+static $common_dehydrate_samples = array (
+            'hotel' => array (
+                    'member' => array (
+                            'type' => 'arr',
+                            'keys' => array (
+                                    'member_id',
+                                    'name',
+                            ) 
+                    ),
+                    'signPackage' => array (
+                            'type' => 'arr',
+                            'keys' => array (
+                                    'appId',
+                                    'nonceStr',
+                                    'timestamp',
+                            ) 
+                    ),
+                    'pagetitle' => array (
+                            'type' => 'keys' 
+                    ) 
+            ) 
+    );
+mode结构(递归)：
+array (
+        'common'=>array(//通用模板，会将$common_dehydrate_samples中对应模板配置加入
+            'member',
+            'signPackage',
+            'pagetitle' 
+        ),
+        'keys' => array (//keys 为 需要原样输出的数据字段
+                'inter_id',//输出数据会包含 $data['inter_id'],$data['handled']
+                'handled' 
+        ),
+        'arr' => array (//arr 为 只需其中某些字段的数组 其中键名为该数组名，结构为mode结构
+                'member' => array (
+                        'keys' => array (//会在$data['member']中检索，输出数据会包含 $data['member']['inter_id'],$data['member']['open_id']
+                                'member_id',
+                                'open_id' 
+                        ) 
+                ) 
+        ),
+        'mul_arr' => array (// mul_arr 为 需要循环输出的数组 其中键名为该数组名，结构为mode结构
+                'orders' => array (
+                /*会循环$data['orders']中元素，输出数据会包含 
+                    (根据keys)$data['orders'][数组索引]['name'],$data['orders'][数组索引]['tel'],$data['orders'][数组索引]['id']
+                    (根据arr)$data['orders'][数组索引]['first_detail']['id']
+                    (根据mul_arr)循环输出：$data['orders'][数组索引]['order_details'][order_details的数组索引]['id'],$data['orders'][数组索引]['order_details'][order_details的数组索引]['roomname']
+                */
+                        'keys' => array (
+                                'name',
+                                'tel',
+                                'id' 
+                        ),
+                        'arr' => array (
+                                'first_detail' => array (
+                                        'keys' => array (
+                                                'id' 
+                                        ) 
+                                ) 
+                        ),
+                        'mul_arr' => array (
+                                'order_details' => array (
+                                        'keys' => array (
+                                                'id',
+                                                'roomname' 
+                                        ) 
+                                ) 
+                        ) 
+                ) 
+        ) 
+) 
+
+示例数据：
+$data=Array
+(
+    [inter_id] => a421641095
+    [member] => Array
+        (
+            [member_id] => 2681638
+            [open_id] => oGaHQjgZz6OrKB_MIjgrQAyrmhRI
+            [inter_id] => a421641095
+            [pms_type] => 
+            [member_mode] => 1
+            [name] => 微信用户
+        )
+
+    [orders] => Array
+        (
+            [0] => Array
+                (
+                    [id] => 163607
+                    [inter_id] => a421641095
+                    [orderid] => RI145274498000450
+                    [coupon_favour] => 0.00
+                    [complete_reward_given] => 0
+                    [coupon_des] => 
+                    [wxpay_favour] => 0.00
+                    [point_given] => 1
+                    [printed] => 1
+                    [order_details] => Array
+                        (
+                            [0] => Array
+                                (
+                                    [id] => 176990
+                                    [orderid] => RI145274498000450
+                                    [inter_id] => a421641095
+                                    [room_id] => 200
+                                    [iprice] => 308.00
+                                    [startdate] => 20160114
+                                    [enddate] => 20160115
+                                    [istatus] => 5
+                                    [allprice] => 308
+                                    [room_no] => 
+                                    [roomname] => 豪华湖景大床房
+                                )
+
+                        )
+
+                    [first_detail] => Array
+                        (
+                            [id] => 176990
+                            [orderid] => RI145274498000450
+                            [inter_id] => a421641095
+                            [room_id] => 200
+                            [iprice] => 308.00
+                            [startdate] => 20160114
+                            [enddate] => 20160115
+                            [istatus] => 5
+                            [allprice] => 308
+                            [room_no] => 
+                            [roomname] => 豪华湖景大床房
+                        )
+
+                    [ori_price] => 308.00
+                    [status_des] => 酒店取消
+                )
+
+            [1] => Array
+                (
+                    [id] => 163594
+                    [inter_id] => a421641095
+                    [orderid] => RI145272777962144
+                    [coupon_favour] => 0.00
+                    [complete_reward_given] => 0
+                    [coupon_des] => 
+                    [wxpay_favour] => 0.00
+                    [point_given] => 1
+                    [printed] => 1
+                    [order_details] => Array
+                        (
+                            [0] => Array
+                                (
+                                    [id] => 176976
+                                    [orderid] => RI145272777962144
+                                    [inter_id] => a421641095
+                                    [room_id] => 62
+                                    [iprice] => 398.00
+                                    [startdate] => 20160114
+                                    [enddate] => 20160115
+                                    [istatus] => 5
+                                    [allprice] => 398
+                                    [room_no] => 
+                                    [roomname] => 高级大床房(B楼)
+                                )
+
+                        )
+
+                    [first_detail] => Array
+                        (
+                            [id] => 176976
+                            [orderid] => RI145272777962144
+                            [inter_id] => a421641095
+                            [room_id] => 62
+                            [iprice] => 398.00
+                            [startdate] => 20160114
+                            [enddate] => 20160115
+                            [istatus] => 5
+                            [allprice] => 398
+                            [room_no] => 
+                            [roomname] => 高级大床房(B楼)
+                        )
+
+                    [ori_price] => 398.00
+                    [status_des] => 酒店取消
+                )
+
+            [2] => Array
+                (
+                    [id] => 163561
+                    [inter_id] => a421641095
+                    [orderid] => RI145266235985225
+                    [coupon_favour] => 0.00
+                    [complete_reward_given] => 0
+                    [coupon_des] => 
+                    [wxpay_favour] => 0.00
+                    [point_given] => 1
+                    [printed] => 1
+                    [order_details] => Array
+                        (
+                            [0] => Array
+                                (
+                                    [id] => 176935
+                                    [orderid] => RI145266235985225
+                                    [inter_id] => a421641095
+                                    [room_id] => 375
+                                    [iprice] => 448.00
+                                    [startdate] => 20160113
+                                    [enddate] => 20160114
+                                    [istatus] => 5
+                                    [allprice] => 448
+                                    [room_no] => 
+                                    [roomname] => 高级大床房
+                                )
+
+                        )
+
+                    [first_detail] => Array
+                        (
+                            [id] => 176935
+                            [orderid] => RI145266235985225
+                            [inter_id] => a421641095
+                            [room_id] => 375
+                            [iprice] => 448.00
+                            [startdate] => 20160113
+                            [enddate] => 20160114
+                            [istatus] => 5
+                            [allprice] => 448
+                            [room_no] => 
+                            [roomname] => 高级大床房
+                        )
+
+                    [ori_price] => 448.00
+                    [status_des] => 酒店取消
+                )
+
+            [3] => Array
+                (
+                    [id] => 142175
+                    [inter_id] => a421641095
+                    [orderid] => RI142510296073025
+                    [coupon_favour] => 0.00
+                    [complete_reward_given] => 0
+                    [coupon_des] => 
+                    [wxpay_favour] => 0.00
+                    [point_given] => 1
+                    [printed] => 1
+                    [order_details] => Array
+                        (
+                            [0] => Array
+                                (
+                                    [id] => 150677
+                                    [orderid] => RI142510296073025
+                                    [inter_id] => a421641095
+                                    [room_id] => 75
+                                    [iprice] => 390.00
+                                    [startdate] => 20150228
+                                    [enddate] => 20150301
+                                    [istatus] => 8
+                                    [allprice] => 390
+                                    [room_no] => 
+                                    [roomname] => 高级大床房
+                                )
+
+                        )
+
+                    [first_detail] => Array
+                        (
+                            [id] => 150677
+                            [orderid] => RI142510296073025
+                            [inter_id] => a421641095
+                            [room_id] => 75
+                            [iprice] => 390.00
+                            [startdate] => 20150228
+                            [enddate] => 20150301
+                            [istatus] => 8
+                            [allprice] => 390
+                            [room_no] => 
+                            [roomname] => 高级大床房
+                        )
+
+                    [ori_price] => 390.00
+                    [status_des] => 未到
+                )
+
+            [4] => Array
+                (
+                    [id] => 142171
+                    [inter_id] => a421641095
+                    [orderid] => RI142483083391306
+                    [coupon_favour] => 0.00
+                    [complete_reward_given] => 0
+                    [coupon_des] => 
+                    [wxpay_favour] => 0.00
+                    [point_given] => 1
+                    [printed] => 1
+                    [order_details] => Array
+                        (
+                            [0] => Array
+                                (
+                                    [id] => 150673
+                                    [orderid] => RI142483083391306
+                                    [inter_id] => a421641095
+                                    [room_id] => 98
+                                    [iprice] => 538.00
+                                    [startdate] => 20150225
+                                    [enddate] => 20150226
+                                    [istatus] => 8
+                                    [allprice] => 538
+                                    [room_no] => 
+                                    [roomname] => 高级大床房
+                                )
+
+                        )
+
+                    [first_detail] => Array
+                        (
+                            [id] => 150673
+                            [orderid] => RI142483083391306
+                            [inter_id] => a421641095
+                            [room_id] => 98
+                            [iprice] => 538.00
+                            [startdate] => 20150225
+                            [enddate] => 20150226
+                            [istatus] => 8
+                            [allprice] => 538
+                            [room_no] => 
+                            [roomname] => 高级大床房
+                        )
+
+                    [ori_price] => 538.00
+                    [status_des] => 未到
+                )
+
+        )
+
+    [handled] => 0
+    [online_pay] => Array
+        (
+            [balance] => 1
+            [daofu] => 2
+            [point] => 1
+            [weixin] => 1
+        )
+
+)
+
+

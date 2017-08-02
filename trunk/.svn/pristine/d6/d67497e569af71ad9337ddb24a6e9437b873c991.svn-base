@@ -1,0 +1,338 @@
+<template>
+  <div>
+    <bc />
+    <div class="main">
+      <div class="gift_title">赠送内容</div>
+      <div class="gift_img">
+        <img src="../../assets/image/gift.png">
+        <div class="mu"></div>
+        <div class="shadow">
+          <img src="../../assets/image/shadow.png">
+        </div>
+        <div class="gift_img_info">
+          <div class="gift_left">
+            <div>柚子酒店中秋月饼大礼盒</div>
+            <div>团圆大礼盒</div>
+          </div>
+          <div v-if="number === 1" class="gift_right">
+            <div class="single">678</div>
+            <div class="single">1份</div>
+          </div>
+          <div v-else class="gift_right">
+            <div class="single2">{{this.sended}}份</div>
+            <div class="single2">{{this.left}}份</div>
+          </div>
+        </div>
+      </div>
+      <div class="line1 mt20" v-if="number > 1">
+        <div>收礼人数</div>
+        <div class="inf">
+          <NumberChoice @Result="persons" :jiangray="renshu <= 1 ? true : false" :jiagray="jiarenshu ? true : false" :initValue="renshu" :maximum="number"/>
+          <div>人</div>
+        </div>
+      </div>
+      <div class="line1" v-if="number > 1">
+        <div>每人收到</div>
+        <div class="inf">
+          <NumberChoice @Result="howmanyeachperson" :jiangray="fenshu <= 1 ? true : false" :jiagray="jiafenshu ? true : false" :initValue="fenshu" :maximum="number"/>
+          <div>份</div>
+        </div>
+      </div>
+      <div class="line1" v-on:click="zhuti_switch=true">
+        <div>礼包主题</div>
+        <div class="zhuti">{{zhuti}}</div>
+      </div>
+      <div class="line1">
+        <input class="theinput" v-on:blur="theblur" v-on:focus="thefocus" v-model="zhufu" type="text">
+      </div>
+      <div :class="{zhai : number > 1}" class="line2">
+        <div>确定赠送</div>
+      </div>
+      <div class="line3">
+        <div>暂不处理，放至订单中心</div>
+      </div>
+    </div>
+    <div class="tk" v-if="zhuti_switch">
+      <choiceGift :swipeinfo="swipeInfo" @choiced="choiced"/>
+    </div>
+  </div>
+</template>
+<script>
+  import bc from '../../components/common/background_color'
+  import NumberChoice from '../../components/common/NumberChoice'
+  import choiceGift from '../../components/sendGift/choiceGift'
+
+  export default {
+    name: 'sendGift',
+    components: {
+      bc,
+      NumberChoice,
+      choiceGift
+    },
+    data () {
+      return {
+        number: 20,
+        zhufu: '送您一件礼物',
+        sended: 1,
+        left: 19,
+        zhuti_switch: false,
+        renshu: 1,
+        fenshu: 1,
+        jiarenshu: false,
+        jiafenshu: false,
+        zhuti: '111',
+        swipeInfo: [
+          {
+            name: '111',
+            imgSrc: require('../../assets/image/bg.png')
+          },
+          {
+            name: '222',
+            imgSrc: require('../../assets/image/bg.png')
+          },
+          {
+            name: '333',
+            imgSrc: require('../../assets/image/bg.png')
+          },
+          {
+            name: '444',
+            imgSrc: require('../../assets/image/bg.png')
+          }
+        ]
+      }
+    },
+    methods: {
+      persons: function (e, b) {
+        this.renshu = e
+        let total = this.renshu * this.fenshu
+        if (total > this.number) {
+          this.renshu = parseInt(this.number / this.fenshu)
+        }
+        let maybe = (this.renshu + 1) * this.fenshu
+        this.jiarenshu = false
+        if (maybe > this.number) {
+          this.jiarenshu = true
+        }
+        let maybe2 = this.renshu * (this.fenshu + 1)
+        this.jiafenshu = false
+        if (maybe2 > this.number) {
+          this.jiafenshu = true
+        }
+        this.sended = this.renshu * this.fenshu
+        this.left = this.number - this.sended
+        b(this.renshu)
+      },
+      howmanyeachperson: function (e, b) {
+        this.fenshu = e
+        let total = this.renshu * this.fenshu
+        if (total > this.number) {
+          this.fenshu = parseInt(this.number / this.renshu)
+        }
+        let maybe = this.renshu * (this.fenshu + 1)
+        this.jiafenshu = false
+        if (maybe > this.number) {
+          this.jiafenshu = true
+        }
+        let maybe2 = (this.renshu + 1) * this.fenshu
+        this.jiarenshu = false
+        if (maybe2 > this.number) {
+          this.jiarenshu = true
+        }
+        this.sended = this.renshu * this.fenshu
+        this.left = this.number - this.sended
+        b(this.fenshu)
+      },
+      thefocus: function () {
+        this.zhufu = ''
+      },
+      theblur: function () {
+        if (this.zhufu === '') {
+          this.zhufu = '送您一件礼物'
+        }
+      },
+      choiced: function (e) {
+        this.zhuti_switch = false
+        this.zhuti = e
+      }
+    }
+  }
+</script>
+<style lang="postcss" scoped>
+@import '../../styles/postcss/all.postcss';
+.main{
+  position: relative;
+  padding: 1px px2rem(30);
+}
+.mu{
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.5);
+}
+.shadow{
+  position: absolute;
+  bottom: 0px;
+  width: 100%;
+  img{
+    width: 100%;
+    float: left;
+  }
+}
+.gift_title{
+  text-align: center;
+  font-size: px2rem(30);
+  color: var(--white);
+  margin: px2rem(53) auto;
+  position: relative;
+}
+.gift_title::before{
+  content: "";
+  position: absolute;
+  width: px2rem(302);
+  height: px2rem(28);
+  background-image: url('../../assets/image/select.png');
+  background-size: 100% 100%;
+  top: 100%;
+  left: 50%;
+  margin-left: px2rem(-151);
+  margin-top: px2rem(17);
+}
+.zhai{
+  margin-top: px2rem(40) !important;
+}
+.gift_img{
+  position: relative;
+  height: px2rem(370);
+  overflow: hidden;
+  border-radius: 3px;
+  align-items: flex-end;
+  display: flex;
+  margin-top: px2rem(70);
+}
+.gift_img>img{
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.gift_img_info{
+  @extend flex;
+  @extend between;
+  margin: 0px px2rem(30);
+  margin-bottom: px2rem(20);
+  position: relative;
+  width: 100%;
+  align-items: flex-end;
+}
+.gift_left{
+  color: var(--white);
+  font-size: px2rem(30);
+  @extend tofle;
+}
+.gift_right>div{
+  display: inline-block;
+  color: var(--white);
+}
+.gift_right>.single:first-child{
+  @extend icon;
+  font-size: px2rem(40);
+  margin-right: px2rem(33);
+}
+.gift_right>.single:first-child::before{
+  content: "¥";
+  font-size: px2rem(24);
+  margin-right: px2rem(10);
+}
+.gift_right>.single2{
+  font-size: px2rem(24);
+  color: var(--bfbfbf);
+}
+.gift_right>.single2:first-child::before{
+  content: "送出";
+  color: var(--c808080);
+}
+.gift_right>.single2:first-child::after{
+  content: "|";
+  color: var(--c808080);
+  margin: 0px px2rem(20);
+  font-size: px2rem(18);
+}
+.gift_right>.single2:last-child::before{
+  content: "剩余";
+  color: var(--c808080);
+}
+.line1{
+  @extend flex;
+  @extend between;
+  padding: px2rem(30) 0px;
+  font-size: px2rem(28);
+  color: var(--bfbfbf);
+  border-bottom: 1px solid var(--c363636);
+}
+.mt20{
+  margin-top: px2rem(20);
+}
+.inf{
+  display: inline-flex;
+  align-items: center;
+}
+.inf>div:last-child{
+  margin-left: px2rem(25);
+  color: var(--c808080);
+}
+.zhuti{
+  color: var(--white);
+}
+.zhuti::after{
+  @extend icon;
+  content: "\e60c";
+  color: var(--bfbfbf);
+  margin-left: px2rem(20);
+  font-size: px2rem(20);
+}
+.theinput{
+  outline: none;
+  border:0px;
+  background-color: transparent;
+  color: var(--bfbfbf);
+  font-size: px2rem(30);
+  width: 100%;
+}
+.line2{
+  text-align: center;
+  margin-top: px2rem(150);
+}
+.line3{
+  text-align: center;
+  margin-top: px2rem(50);
+}
+.line2>div{
+  width: px2rem(586);
+  height: px2rem(88);
+  line-height: px2rem(88);
+  color: var(--white);
+  border:1px solid var(--darkgold);
+  margin: auto;
+  font-size: px2rem(34);
+}
+.line3>div{
+  font-size: px2rem(28);
+  color: var(--c808080);
+}
+.line3>div::after{
+  @extend icon;
+  content: "\e60c";
+  color: var(--c808080);
+  margin-left: px2rem(10);
+  vertical-align: middle;
+  font-size: px2rem(16);
+}
+.tk{
+  position:absolute;
+  width: 100%;
+  top:0px;
+  left:0px;
+  height:100%;
+  background-color: black;
+}
+</style>

@@ -1,0 +1,21 @@
+
+@font-face {font-family: "jfkfont";
+  src: url('./iconfont.eot?t=1497237652175'); /* IE9*/
+  src: url('./iconfont.eot?t=1497237652175#iefix') format('embedded-opentype'), /* IE6-IE8 */
+  url('./iconfont.woff?t=1497237652175') format('woff'), /* chrome, firefox */
+  url('./iconfont.ttf?t=1497237652175') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
+  url('./iconfont.svg?t=1497237652175#jfkfont') format('svg'); /* iOS 4.1- */
+}
+
+.jfkfont {
+  font-family:"jfkfont" !important;
+  font-size:32px;
+  font-style:normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-ipt_icon_gte_default:before { content: "\e602"; }
+
+.icon-ipt_icon_lte_default:before { content: "\e603"; }
+

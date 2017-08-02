@@ -1,0 +1,55 @@
+<body class="goods-list-bg ">
+<link href="<?php echo base_url('public/soma/v1/v1.css'). config_item('css_debug');?>" rel="stylesheet">
+<div class="pageloading"><p class="isload">正在加载</p></div>
+
+  <div id="goodsList">
+        <div class="banner">
+            <img src="<?php echo base_url('public/soma/mooncake4/images/goods_list_banner.png');?>">
+        </div>
+        <div class="goods-list">
+            <ul>
+
+                <li class="pr" label="热销">
+                 <a href="">
+                    <p class="img"></p>
+                    <p class="title f30">大三元经典月饼</p>
+                    <div class="price">
+                        <p>
+                            <span class="f24">¥</span>
+                            <span class="discount f36">145</span>
+                            <span class="original f24">¥ 546</span>
+                        </p>
+                    </div>
+                    </a>
+                </li>
+
+                <li class="pr">
+                    <p class="img"></p>
+                    <p class="title f30">大三元经典月饼</p>
+                    <div class="price">
+                        <p>
+                            <span class="f24">¥</span>
+                            <span class="discount f36">145</span>
+                            <span class="original f24">¥ 546</span>
+                        </p>
+                    </div>
+                </li>
+
+                <li class="pr">
+                    <p class="img"></p>
+                    <p class="title f30">大三元经典月饼</p>
+                    <div class="price">
+                        <p>
+                            <span class="f24">¥</span>
+                            <span class="discount f36">145</span>
+                            <span class="original f24">¥ 546</span>
+                        </p>
+                    </div>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+
+</body>
+</html>

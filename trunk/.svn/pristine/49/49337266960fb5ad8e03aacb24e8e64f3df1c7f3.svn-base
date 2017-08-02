@@ -1,0 +1,95 @@
+@import '../variable/index';
+@import '../placeholder/index';
+@import '../function/index';
+
+// 按钮 fixed
+@mixin fixedBtn() {
+  height: px2rem(100);
+  line-height: px2rem(100);
+  text-align: center;
+  color: $white;
+  background: $orange;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  z-index: 99;
+}
+
+// 底栏
+@mixin footer($height) {
+  width: 100%;
+  height: $height;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  z-index: 999;
+  background: $lightBlack;
+}
+
+// 顶栏
+@mixin header($height) {
+  width: 100%;
+  height: $height;
+  @extend %pf;
+  left: 0;
+  top: 0;
+  z-index: 999;
+}
+
+// 垂直水平居中
+@mixin center() {
+  @extend %pa;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+
+// 图片的外层
+@mixin imgWrap($align) {
+  overflow: hidden;
+  text-align: $align;
+  img {
+    width: 100%;
+  }
+}
+
+// 绝对定位，填充100%
+@mixin paFull() {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+}
+
+// 按钮
+@mixin btn($type) {
+  display: inline-block;
+  width: px2rem(182);
+  height: px2rem(68);
+  line-height: px2rem(68);
+  letter-spacing: 2px;
+  border: 1px solid $orange;
+  @if ($type == 1) {
+    background: $orange;
+  } @else {
+    background: none;
+  }
+
+  font-size: px2rem(32);
+  text-align: center;
+  color: $white;
+}
+
+// 多行省略
+@mixin ellipsis($number) {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: $number;
+  overflow: hidden;
+}
+
+
+

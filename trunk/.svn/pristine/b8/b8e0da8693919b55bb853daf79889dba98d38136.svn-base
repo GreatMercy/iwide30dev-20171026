@@ -1,0 +1,50 @@
+:root {
+  /*主色*/
+  --color-golden: #b2945e;
+  --color-pale-yellow: #dac576;
+  --color-deep-yellow: #1a1a1a;
+  /*辅助色*/
+  --color-danger: #a81c1c;
+  --color-warning: #9e5228;
+  --color-light-black: #f6f7f7;
+  --color-white: #fff;
+  /*文字色*/
+  --font-color-white: #333;
+  --font-color-dark-white: #333;
+  --font-color-extra-light-gray: #808080;
+  --font-color-light-gray: #bfbfbf;
+  --font-color-silver: #bfbfbf;
+  --font-color-light-silver: #666;
+  /*分割线与弹窗色值*/
+  --line-color-light-silver: #ebebeb;
+  --line-color-extra-light-silver: #ebebeb;
+  --line-color-gray: #ebebeb;
+  --line-color-extra-light-black: #fff;
+  /* 按钮 */
+  --button-primary-fill: #1a1a1a;
+  --button-primary-color: #fff;
+  --button-primary-border: #1a1a1a;
+
+  --button-default-fill: transparent;
+  --button-default-color: #1a1a1a;
+  --button-default-border: #1a1a1a;
+
+  --button-border-radius: 3px;
+  --button-border: #1a1a1a;
+  --button-fill: #1a1a1a;
+  --button-times-color: #fff;
+  --button-times-border: #fff;
+
+  /* 默认背景图片颜色 */
+  --image-background-color: #ebebeb;
+
+  /* tab颜色 */
+  --tab-separate-line-color: #ebebeb;
+  --tab-font-color: #808080;
+  --tab-icon-color: #333;
+  --tab-selected-font-color: #b2945e;
+  --tab-selected-icon-color: #b2945e;
+
+  /* goods tag颜色 */
+  --good-tag-color: #fff;
+}

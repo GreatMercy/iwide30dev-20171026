@@ -1,0 +1,154 @@
+@import "./function/index";
+
+.f58 {
+  font-size: px2rem(58);
+  @media screen and (min-width: 414px) {
+    font-size: px2rem(60);
+  }
+}
+
+.f48 {
+  font-size: px2rem(48);
+  @media screen and (min-width: 414px) {
+    font-size: px2rem(50);
+  }
+}
+
+.f40 {
+  font-size: px2rem(40);
+  @media screen and (min-width: 414px) {
+    font-size: px2rem(42);
+  }
+}
+
+.f42 {
+  font-size: px2rem(42);
+  @media screen and (min-width: 414px) {
+    font-size: px2rem(44);
+  }
+}
+
+.f38 {
+  font-size: px2rem(38);
+  @media screen and (min-width: 414px) {
+    font-size: px2rem(40);
+  }
+}
+
+.f36 {
+  font-size: px2rem(36);
+  @media screen and (min-width: 414px) {
+    font-size: px2rem(36);
+  }
+}
+
+.f34 {
+  font-size: px2rem(34);
+  @media screen and (min-width: 414px) {
+    font-size: px2rem(34);
+  }
+}
+
+.f32 {
+  font-size: px2rem(32);
+  @media screen and (min-width: 414px) {
+    font-size: px2rem(34);
+  }
+}
+
+.f30 {
+  font-size: px2rem(30);
+  @media screen and (min-width: 414px) {
+    font-size: px2rem(32);
+  }
+}
+
+.f28 {
+  font-size: px2rem(28);
+  @media screen and (min-width: 414px) {
+    font-size: px2rem(30);
+  }
+}
+
+.f26 {
+  font-size: px2rem(26);
+  @media screen and (min-width: 414px) {
+    font-size: px2rem(28);
+  }
+}
+
+.f24 {
+  font-size: px2rem(24);
+  @media screen and (min-width: 414px) {
+    font-size: px2rem(26);
+  }
+}
+
+.f22 {
+  font-size: px2rem(22);
+  @media screen and (min-width: 414px) {
+    font-size: px2rem(24);
+  }
+}
+
+.f20 {
+  font-size: px2rem(20);
+  @media screen and (min-width: 414px) {
+    font-size: px2rem(22);
+  }
+}
+
+.f16 {
+  font-size: px2rem(16);
+  @media screen and (min-width: 414px) {
+    font-size: px2rem(18);
+  }
+}
+
+.pr {
+  position: relative;
+}
+
+.pa {
+  position: absolute;
+}
+
+.ta-c {
+  text-align: center;
+}
+
+.ta-l {
+  text-align: left;
+}
+
+.ta-r {
+  text-align: right;
+}
+
+.dp-f {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+}
+
+.dp-b {
+  display: block;
+}
+
+.flex-1 {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+}
+
+.tofle {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-all;
+  white-space: nowrap;
+}
+
+
+
+.price-icon {
+  color: $orange;
+}

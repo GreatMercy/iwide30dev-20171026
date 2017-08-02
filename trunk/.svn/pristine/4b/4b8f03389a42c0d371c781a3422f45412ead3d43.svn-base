@@ -1,0 +1,43 @@
+<!doctype html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="apple-mobile-web-app-capable" content="yes" >
+<meta name="apple-touch-fullscreen" content="yes">
+<meta name="format-detection" content="telephone=no,email=no">
+<meta name="ML-Config" content="fullscreen=yes,preventMove=no">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="viewport" content="width=320,user-scalable=0">
+<title>新增社群客</title>
+<script src="../scripts/jquery.js"></script>
+<script src="../scripts/ui_control.js"></script>
+<link rel="stylesheet" type="text/css" href="../styles/global.css">
+<link rel="stylesheet" type="text/css" href="../styles/group.css">
+</head>
+<body>
+<div class="statustep webkitbox center">
+	<div>
+    	<span class="bg_555 h24">1</span>
+        <p class="h22">填写信息</span>
+    </div>
+    <div>
+    	<span class="bg_main h24">2</span><hr>
+        <p class="h22 color_main">激活</span>
+    </div>
+    <div>
+    	<span class="bg_555 h24">3</span><hr>
+        <p class="h22">享受专属价</p>
+    </div>
+</div>
+<div class="center pad15 color_main">
+	<em class="iconfont" style="font-size:60px">&#xE60b;</em>
+	<div>恭喜你, 激活成功</div>
+</div>
+
+<div class="foot_btn martop">
+	<a href="" class="btn_main h28 submitbtn">马上订房</a>
+</div>
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!doctype html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="apple-mobile-web-app-capable" content="yes" >
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta name="format-detection" content="telephone=no,email=no">
+    <meta name="ML-Config" content="fullscreen=yes,preventMove=no">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=320,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
+    <link rel="stylesheet" type="text/css" href="<?php echo refer_res('app.css', 'SOMA') ?>"/>
+    <link rel="stylesheet" type="text/css" href="<?php echo refer_res('dark.css', 'SOMA') ?>"/>
+    <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+    <title><?php echo $title;?></title>
+</head>
+<body>
+
+<script>
+    wx.config({
+        debug: false,
+        appId: '<?php echo $wx_config["appId"]?>',
+        timestamp: <?php echo $wx_config["timestamp"]?>,
+        nonceStr: '<?php echo $wx_config["nonceStr"]?>',
+        signature: '<?php echo $wx_config["signature"]?>',
+        jsApiList: [<?php echo $js_api_list; ?>,'getLocation','openLocation']
+    });
+    wx.ready(function() {
+        <?php if( $js_menu_hide ): ?>wx.hideMenuItems({menuList: [<?php echo $js_menu_hide; ?>]});<?php endif; ?>
+        <?php if( $js_menu_show ): ?>wx.showMenuItems({menuList: [<?php echo $js_menu_show; ?>]});<?php endif; ?>
+
+        <?php if( $js_share_config ): ?>
+        wx.onMenuShareTimeline({
+            title: '<?php echo $js_share_config["title"]?>',
+            link: '<?php echo $js_share_config["link"]?>',
+            imgUrl: '<?php echo $js_share_config["imgUrl"]?>',
+            success: function () {
+                <?php if (isset($js_share_success_function) && $js_share_success_function) {
+                echo $js_share_success_function;
+            }?>
+            },
+            cancel: function () {
+                <?php if (isset($js_share_cancel_function) && $js_share_cancel_function) {
+                echo $js_share_cancel_function;
+            }?>
+            }
+        });
+        wx.onMenuShareAppMessage({
+            title: '<?php echo $js_share_config["title"]?>',
+            desc: '<?php echo $js_share_config["desc"]?>',
+            link: '<?php echo $js_share_config["link"]?>',
+            imgUrl: '<?php echo $js_share_config["imgUrl"]?>',
+            //type: '', //music|video|link(default)
+            //dataUrl: '', //use in music|video
+            success: function () {
+                <?php if (isset($js_share_app_success_function) && $js_share_app_success_function) {
+                    echo $js_share_app_success_function;
+                }?>
+            },
+            cancel: function () {
+                <?php if (isset($js_share_app_cancel_function) && $js_share_app_cancel_function) {
+                    echo $js_share_app_cancel_function;
+                }?>
+            }
+        });
+        <?php endif; ?>
+    });
+</script>

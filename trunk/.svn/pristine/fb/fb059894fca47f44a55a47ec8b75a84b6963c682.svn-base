@@ -1,0 +1,112 @@
+.jfk-pages__order-center {
+  .order-center-tab {
+    padding-top: px2rem(46);
+    &__item {
+      flex: 1;
+      position: relative;
+      i {
+        font-size: calc(28 / 32) em;
+        margin-right: px2rem(12);
+      }
+      @mixin one-line {
+      }
+      &::before {
+        height: px2rem(20);
+        right: 0;
+        top: 50%;
+        margin-top: px2rem(-10);
+      }
+      &:last-child {
+        &::before {
+          width: 0;
+        }
+      }
+    }
+  }
+
+  .order-list {
+    margin-top: px2rem(20);
+    li {
+      position: relative;
+      padding-top: px2rem(92);
+      padding-bottom: px2rem(52);
+      @mixin one-line horizontal {
+      }
+      &::before {
+        bottom: 0;
+        left: 0;
+      }
+    }
+
+    &__order-info {
+      margin-bottom: px2rem(60);
+    }
+
+    &__status {
+      .jfk-font {
+        margin-right: px2rem(20);
+      }
+    }
+
+    &__orderid, &__status {
+      flex: 1;
+    }
+
+    &__info {
+    }
+
+    &__goods-img {
+      width: px2rem(147);
+      height: px2rem(143);
+      margin-right: px2rem(40);
+      overflow: hidden;
+      border-radius: px2rem(7);
+      position: relative;
+      img {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 9999;
+      }
+    }
+
+    &__base-info {
+      flex: 1;
+    }
+
+    &__name {
+      line-height: calc(48 / 38)em;
+      @mixin ellipsis 2 {
+      }
+    }
+
+    &__number {
+      margin-top: px2rem(40);
+      line-height: 1;
+    }
+
+    &__button {
+      vertical-align: top;
+      font-size: 0;
+      margin-top: px2rem(59);
+      .jfk-button {
+        vertical-align: top;
+        width: px2rem(180);
+        height: px2rem(66);
+        line-height: px2rem(66);
+      }
+
+      .order-list__delete {
+        width: auto;
+        border-color: rgba(0, 0, 0, 0);
+        background-color: rgba(0, 0, 0, 0);
+        margin-right: px2rem(62);
+      }
+
+    }
+
+  }
+
+}

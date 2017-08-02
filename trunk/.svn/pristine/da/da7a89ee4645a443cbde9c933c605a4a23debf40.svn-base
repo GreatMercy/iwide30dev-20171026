@@ -1,0 +1,14 @@
+@define-mixin button $type, $plain {
+  @if $type != '' {
+    background-color: var(--button-$(type)-fill-color);
+    border-color: var(--button-$(type)-border);
+    color: var(--button-$(type)-color);
+  }
+  @if $plain != '' {
+    background-color: transparent;
+    @if $type == 'primary' {
+      color: var(--button-$(type)-plain-color);
+    }
+  }
+  @mixin-content;
+}

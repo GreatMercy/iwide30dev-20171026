@@ -1,0 +1,425 @@
+<html>
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta http-equiv="Pragma" content="no-cache">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1, shrink-to-fit=no">
+	<meta name="Maker" content="Taoja" tel="13544425200">
+	<meta name="format-detection" content="telephone=no" />
+	<title>评论设置</title>
+	<link rel="stylesheet" href="tao.css">
+	<link rel="stylesheet" href="jedate.css">
+	<style>
+		.each_line {
+			margin-top: 10px;
+			background-color: white;
+			border: 1px solid #d7e0f1;
+		}
+		
+		.each_line .VA-M:first-child {
+			min-width: 150px;
+			margin-left: 50px;
+		}
+		
+		.each_line .VA-M:nth-of-type(2) {
+			padding: 15px 20px;
+			border-left: 1px solid #d7e0f1;
+		}
+		
+		select {
+			border: #d7e0f1 solid 1px;
+			vertical-align: middle;
+			font-size: 16px;
+			width: 200px;
+			text-align: left;
+			padding: 5px;
+			outline: none;
+			margin: 0px 20px;
+		}
+		
+		select option {
+			font-size: 16px;
+			font-family: 微软雅黑;
+			color: #7e8e9f;
+		}
+		
+		.jiansuo {
+			padding: 5px 20px;
+			color: white;
+			background-color: #ff9900;
+		}
+		
+		.l_title {
+			font-size: 14px;
+		}
+		
+		.l_info {
+			font-size: 12px;
+			color: #aeb9c3;
+		}
+		
+		.ff503f {
+			color: #ff503f;
+		}
+		
+		.fenpei {
+			padding-bottom: 10px;
+			border-bottom: 1px solid #dde5f3;
+		}
+		
+		table tr {
+			border-bottom: 1px solid #dde5f3;
+		}
+		
+		table {
+			border-top: 1px solid #dde5f3;
+		}
+		
+		table td {
+			padding: 10px 0px;
+		}
+		.table2 th{
+			padding: 10px 0px;
+		}
+		.table1 td:nth-child(1) {
+			color: #7e8e9f;
+		}
+		
+		.table1 td:nth-child(2) {
+			color: #4caf50;
+		}
+		
+		.table1 td:nth-child(3) {
+			color: #ff503f;
+		}
+		
+		.table1 td:nth-child(4) {
+			color: #ff9900;
+			text-decoration: underline;
+			cursor: pointer;
+		}
+		.add{
+			color: #ff9900;
+			text-decoration: underline;
+			cursor: pointer;
+			margin-left: 20px;
+		}
+		
+		.btn {
+			border: 1px solid #dde5f3;
+			background-color: white;
+			padding: 5px;
+			margin: 0px 5px;
+			cursor: pointer;
+		}
+		.btn2{
+			border: 1px solid #dde5f3;
+			background-color: white;
+			width: 30px;
+			height: 30px;
+			line-height: 30px;
+			text-align: center;
+			cursor: pointer;
+		}
+		.baocun{
+			    width: 150px;
+    background-color: #ff9900;
+    text-align: center;
+    padding: 10px 0px;
+    margin: 10px;
+    color: white;
+    border-radius: 10px;
+		}
+		.chakan{
+			    width: 150px;
+    background-color: #4caf50;
+    text-align: center;
+    padding: 10px 0px;
+    margin: 10px;
+    color: white;
+    border-radius: 10px;
+		}
+	</style>
+</head>
+
+<body>
+	<flex class="each_line">
+		<ib class="VA-M head">
+			<colorline class="blue_line"></colorline>
+			<div>评论机制</div>
+		</ib>
+		<ib class="VA-M">
+			<ib>酒店名称</ib>
+			<select>
+					<option value="">下拉选择</option>
+				</select>
+			<ib class="jiansuo">检索</ib>
+			<div class="ff9900" style="margin-top:15px;">当前酒店：金房卡大酒店</div>
+			<div style="margin-top:5px;">最近更新时间：2017-02-15 12:00:00</div>
+		</ib>
+	</flex>
+	<flex class="each_line">
+		<ib class="VA-M head">
+			<colorline class="red_line"></colorline>
+			<div>设置调价</div>
+		</ib>
+		<ib class="VA-M">
+			<flex class="mt-20">
+				<div style="min-width:100px;">
+					<input type="radio" name="配置">
+					<ib>统一配置</ib>
+				</div>
+				<flex style="flex-wrap:wrap;">
+					<div class="ml-20" style="background-color: #f0f3f6;">
+						<flex class="m-40">
+							<ib class="w100 center">
+								<div class="l_title">价格范围设置</div>
+								<div class="l_info">设置此价格在微信售卖最低价和最高价</div>
+							</ib>
+							<ib class="ml-20 white">
+								<flex class="pad-20" width450>
+									<input type="radio" name="价格">
+									<ib>固定最低</ib>
+									<input type="text" style="width:50px;margin:0px 10px;">
+									<ib>元,最高</ib>
+									<input type="text" style="width:50px;margin:0px 10px;">
+									<ib>元。</ib>
+								</flex>
+								<flex class="pad-20" width450>
+									<input type="radio" name="价格">
+									<ib>不低于微信价</ib>
+									<input type="number" style="width:50px;margin:0px 10px;">
+									<ib>%，不高于微信价</ib>
+									<input type="number" style="width:50px;margin:0px 10px;">
+									<ib>%。</ib>
+								</flex>
+							</ib>
+						</flex>
+						<flex class="m-40">
+							<ib class="w100 center">
+								<div class="l_title">价格范围设置</div>
+								<div class="l_info">设置此价格在微信售卖最低价和最高价</div>
+							</ib>
+							<ib class="ml-20 white">
+								<flex class="pad-20" width450>
+									<input type="radio" name="价格2">
+									<ib>固定最低</ib>
+									<input type="text" style="width:50px;margin:0px 10px;">
+									<ib>元,最高</ib>
+									<input type="text" style="width:50px;margin:0px 10px;">
+									<ib>元。</ib>
+								</flex>
+								<flex class="pad-20" width450>
+									<input type="radio" name="价格2">
+									<ib>固定最低</ib>
+									<input type="text" style="width:50px;margin:0px 10px;">
+									<ib>元,最高</ib>
+									<input type="text" style="width:50px;margin:0px 10px;">
+									<ib>元。</ib>
+								</flex>
+							</ib>
+						</flex>
+					</div>
+				</flex>
+			</flex>
+			<flex class="mt-20">
+				<div style="min-width:100px;">
+					<input type="radio" name="配置">
+					<ib>分配配置</ib>
+				</div>
+				<flex style="flex-wrap:wrap;">
+					<div class="ml-20" style="background-color: #f0f3f6;">
+						<div class="m-40 fenpei">
+							<div>高级大床房</div>
+							<div>门市价:100 <span style="color:#7ac37d">微信价:100</span> <span class="ff503f">携程价:100</span></div>
+						</div>
+						<flex class="m-40">
+							<ib class="w100 center">
+								<div class="l_title">价格范围设置</div>
+								<div class="l_info">设置此价格在微信售卖最低价和最高价</div>
+							</ib>
+							<ib class="ml-20 white">
+								<flex class="pad-20" width450>
+									<input type="radio" name="价格3">
+									<ib>固定最低</ib>
+									<input type="text" style="width:50px;margin:0px 10px;">
+									<ib>元,最高</ib>
+									<input type="text" style="width:50px;margin:0px 10px;">
+									<ib>元。</ib>
+								</flex>
+								<flex class="pad-20" width450>
+									<input type="radio" name="价格3">
+									<ib>不低于微信价</ib>
+									<input type="number" style="width:50px;margin:0px 10px;">
+									<ib>%，不高于微信价</ib>
+									<input type="number" style="width:50px;margin:0px 10px;">
+									<ib>%。</ib>
+								</flex>
+							</ib>
+						</flex>
+						<flex class="m-40">
+							<ib class="w100 center">
+								<div class="l_title">价格范围设置</div>
+								<div class="l_info">设置此价格在微信售卖最低价和最高价</div>
+							</ib>
+							<ib class="ml-20 white">
+								<flex class="pad-20" width450>
+									<input type="radio" name="价格4">
+									<ib>固定最低</ib>
+									<input type="text" style="width:50px;margin:0px 10px;">
+									<ib>元,最高</ib>
+									<input type="text" style="width:50px;margin:0px 10px;">
+									<ib>元。</ib>
+								</flex>
+								<flex class="pad-20" width450>
+									<input type="radio" name="价格4">
+									<ib>固定最低</ib>
+									<input type="text" style="width:50px;margin:0px 10px;">
+									<ib>元,最高</ib>
+									<input type="text" style="width:50px;margin:0px 10px;">
+									<ib>元。</ib>
+								</flex>
+							</ib>
+						</flex>
+						<div class="m-40">
+							<table class="table1" style="width:100%;">
+								<tr style="display:none">
+									<th></th>
+									<th></th>
+									<th></th>
+									<th></th>
+								</tr>
+								<tr>
+									<td>秒杀价</td>
+									<td>微信价:100</td>
+									<td>携程价:100</td>
+									<td>去匹配房型</td>
+								</tr>
+								<tr>
+									<td>秒杀价</td>
+									<td>微信价:100</td>
+									<td>携程价:100</td>
+									<td>去匹配房型</td>
+								</tr>
+								<tr>
+									<td>秒杀价</td>
+									<td>微信价:100</td>
+									<td>携程价:100</td>
+									<td>去匹配房型</td>
+								</tr>
+							</table>
+							<div style="text-align: right;margin-top:10px;">
+								<ib class="btn">上一个</ib>
+								<ib class="btn">下一个</ib>
+							</div>
+						</div>
+					</div>
+				</flex>
+			</flex>
+		</ib>
+	</flex>
+	<flex class="each_line">
+		<ib class="VA-M head">
+			<colorline class="blue_line"></colorline>
+			<div>调整方式</div>
+		</ib>
+		<ib class="VA-M">
+			<div>
+				<ib style="min-width:100px;">执行日期</ib>
+				<ib style="margin-left:20px;">
+					<input class="datainp wicon" id="date02" type="text" placeholder="YYYY-MM-DD hh:mm" value="" readonly="" style="width: 120px;">
+					<ib>-</ib>
+					<input class="datainp wicon" id="date03" type="text" placeholder="YYYY-MM-DD hh:mm" value="" readonly="" style="width: 120px;">
+				</ib>
+			</div>
+			<div style="margin-top:20px;">
+				<ib style="min-width:100px;">调整方式</ib>
+				<ib style="margin-left:20px;">
+					<flex>
+						<input name="调整方式" type="radio">
+						<ib>发现倒挂后立即调整，无需确认</ib>
+					</flex>
+					<flex style="margin-top:5px;">
+						<input name="调整方式" type="radio">
+						<ib>发现倒挂后发送模版消息给工作人员，确认后调增</ib>
+						<ib class="add">去添加模板消息</ib>
+					</flex>
+				</ib>
+			</div>
+		</ib>
+	</flex>
+	<flex class="each_line" style="justify-content:center;">
+		<ib class="baocun">保存</ib>
+		<ib class="chakan">查看所有调价</ib>
+	</flex>
+	<div class="each_line">
+		<table class="table2">
+			<tr>
+				<td colspan="5">操作记录</td>
+			</tr>
+			<tr>
+				<th>时间</th>
+				<th>来源</th>
+				<th>账号</th>
+				<th style="max-width:250px;">操作记录</th>
+				<th>IP地址</th>
+			</tr>
+			<tr>
+				<td>2017-11-11 12:12</td>
+				<td>后台操作</td>
+				<td>limengqun</td>
+				<td style="max-width:250px;">修改规则：高级房-门市价，比携程低价1元</td>
+				<td>192.168.1.1</td>
+			</tr>
+			<tr>
+				<td>2017-11-11 12:12</td>
+				<td>后台操作</td>
+				<td>limengqun</td>
+				<td style="max-width:250px;">创建规则：高级房-门市价，比携程低价1元
+价格区间范围：最低1元，最高10元，比携程价低2元</td>
+				<td>192.168.1.1</td>
+			</tr>
+			<tr>
+				<td>2017-11-11 12:12</td>
+				<td>后台操作</td>
+				<td>limengqun</td>
+				<td style="max-width:250px;">修改规则：高级房-门市价，比携程低价1元
+价格区间范围：最低1元，最高10元，比携程价低2元
+确认价格调增：高级房-门市价，比携程低价1元</td>
+				<td>192.168.1.1</td>
+			</tr>
+		</table>
+	</div>
+	<flex class="each_line" style="justify-content:space-between;margin-bottom:20px;">
+		<ib style="margin:10px;">当前共筛选到12356条／共64页数据</ib>
+		<ib style="margin:10px;">
+			<ib class="btn2">1</ib>
+			<ib class="btn2">2</ib>
+			<ib class="btn2">3</ib>
+			<ib class="btn2">4</ib>
+			<ib class="btn2">5</ib>
+			<ib class="btn">上一个</ib>
+			<ib class="btn" style="margin-left:0px;">下一个</ib>
+		</ib>
+	</flex>
+</body>
+<script src="jquery-1.7.2.js"></script>
+<script src="jquery.jedate.min.js"></script>
+<script>
+	$("#date02").jeDate({
+    isinitVal:true,
+    festival:true,
+    ishmsVal:false,
+    format:"YYYY-MM-DD hh:mm",
+    zIndex:3000,
+})
+	$("#date03").jeDate({
+    isinitVal:true,
+    festival:true,
+    ishmsVal:false,
+    format:"YYYY-MM-DD hh:mm",
+    zIndex:3000,
+})
+</script>
+</html>

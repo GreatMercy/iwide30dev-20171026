@@ -1,0 +1,397 @@
+<html>
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta http-equiv="Pragma" content="no-cache">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1, shrink-to-fit=no">
+	<meta name="Maker" content="Taoja" tel="13544425200">
+	<meta name="format-detection" content="telephone=no" />
+	<title>评论设置</title>
+	<style>
+		body {
+			margin: 0;
+			background-color: #f0f3f6;
+			font-size: 16px;
+			font-family: 微软雅黑;
+			color: #7e8e9f;
+		}
+		
+		.FL {
+			float: left;
+		}
+		
+		ib {
+			display: inline-block;
+		}
+		
+		.VA-M {
+			vertical-align: middle;
+		}
+		
+		.each_line {
+			margin-top: 10px;
+			background-color: white;
+			border: 1px solid #d7e0f1;
+		}
+		
+		.each_line .VA-M:first-child {
+			width: 150px;
+		}
+		
+		.each_line .VA-M:nth-of-type(2) {
+			padding: 15px 20px;
+			border-left: 1px solid #d7e0f1;
+		}
+		
+		colorline {
+			width: 5px;
+			height: 100%;
+			position: absolute;
+			left: 30px;
+		}
+		
+		.blue_line {
+			background-color: #3f51b5;
+		}
+		
+		.head div {
+			padding: 2px 0px;
+			margin: 1px 0px;
+			margin-left: 40px;
+		}
+		
+		.VA-M {
+			position: relative;
+		}
+		
+		.red_line {
+			background-color: #ff503f;
+		}
+		
+		.green_line {
+			background-color: #4caf50;
+		}
+		
+		.yellow_line {
+			background-color: #ebe814;
+		}
+		
+		.zi_line {
+			background-color: #af4cac;
+		}
+		
+		.keyword input {
+			padding: 5px 10px;
+			font-size: 16px;
+			border: 1px solid #d7e0f1;
+		}
+		
+		.keys div {
+			margin-left: 25px;
+			padding: 5px;
+			border-radius: 5px;
+			border: 1px solid #d7e0f1;
+		}
+		
+		.keys ib:nth-of-type(1) div {
+			margin-left: 0px;
+		}
+		
+		X {
+			border: 1px solid #d7e0f1;
+			border-radius: 100%;
+			width: 15px;
+			height: 15px;
+			display: inline-block;
+			vertical-align: middle;
+			margin-left: 5px;
+			position: relative;
+			cursor: pointer;
+		}
+		
+		X:before {
+			content: "";
+			position: absolute;
+			width: 12px;
+			height: 0px;
+			border-top: 1px solid #d7e0f1;
+			left: 2px;
+			top: 7px;
+			transform: rotate(45deg);
+		}
+		
+		X:after {
+			content: "";
+			position: absolute;
+			width: 12px;
+			height: 0px;
+			border-top: 1px solid #d7e0f1;
+			left: 2px;
+			top: 7px;
+			transform: rotate(-45deg);
+		}
+		
+		p {
+			margin: 1px 0px;
+		}
+		
+		table {
+			text-align: left;
+		}
+		
+		tr {
+			height: 50px;
+		}
+		
+		tr th:first-child {
+			width: 50px;
+		}
+		
+		th {
+			font-weight: 100;
+		}
+		
+		.btn {
+			background-color: #ff9900;
+			display: inline-block;
+			padding: 10px;
+			color: white;
+			border-radius: 5px;
+			margin: 15px;
+		}
+		
+		.jilu {
+			text-align: center;
+			width: 100%;
+			border-collapse: collapse;
+		}
+		
+		.jilu tr {
+			border-bottom: 1px dashed #d7e0f1;
+		}
+		
+		.jilu tr:first-child {
+			border-bottom: 0;
+		}
+		
+		.jilu tr:last-child {
+			border-bottom: 0;
+		}
+
+		*{
+			box-sizing: inherit !important;
+			-webkit-box-sizing: inherit !important;
+		}
+	</style>
+</head>
+
+<body>
+	<div>
+		<div class="each_line">
+			<ib class="VA-M head">
+				<colorline class="blue_line"></colorline>
+				<div>评论机制</div>
+			</ib>
+			<ib class="VA-M">
+				<input name="评论机制" type="radio">
+				<ib>五分制(默认)</ib>
+				<input name="评论机制" type="radio">
+				<ib>百分制</ib>
+			</ib>
+		</div>
+		<div class="each_line">
+			<ib class="VA-M head">
+				<colorline class="red_line"></colorline>
+				<div>审核机制</div>
+			</ib>
+			<ib class="VA-M">
+				<input name="评论机制" type="radio">
+				<ib>无需审核，用户评论后直接展示</ib>
+				<input name="评论机制" type="radio">
+				<ib>需审核后，才展示评论</ib>
+			</ib>
+		</div>
+		<div class="each_line">
+			<ib class="VA-M head">
+				<colorline class="green_line"></colorline>
+				<div>评论关键词</div>
+			</ib>
+			<ib class="VA-M keyword">
+				<input type="text" placeholder="输入标签" class="pinglun_input">
+				<div style="margin-top: 10px;margin-left: 10px;">*按Enter键添加关键词</div>
+				<div style="margin-top:10px;" class="keys">
+					<ib>
+						<div>网络服务好
+							<X data-pinglun="网络服务好"></X>
+						</div>
+					</ib>
+					<ib>
+						<div>网络服务好
+							<X data-pinglun="网络服务好"></X>
+						</div>
+					</ib>
+					<ib>
+						<div>网络服务好
+							<X data-pinglun="网络服务好"></X>
+						</div>
+					</ib>
+				</div>
+			</ib>
+		</div>
+		<div class="each_line">
+			<ib class="VA-M head">
+				<colorline class="zi_line"></colorline>
+				<div>出游类型</div>
+			</ib>
+			<ib class="VA-M keyword">
+				<input type="text" placeholder="输入标签" class="chuyou_input">
+				<div style="margin-top: 10px;margin-left: 10px;">*按Enter键添加关键词</div>
+				<div style="margin-top:10px;" class="keys">
+					<ib>
+						<div>商务出游
+							<X data-chuyou="商务出游"></X>
+						</div>
+					</ib>
+					<ib>
+						<div>情侣出游
+							<X data-chuyou="情侣出游"></X>
+						</div>
+					</ib>
+					<ib>
+						<div>亲子家庭
+							<X data-chuyou="亲子家庭"></X>
+						</div>
+					</ib>
+				</div>
+			</ib>
+		</div>
+		<div class="each_line">
+			<ib class="VA-M head">
+				<colorline class="yellow_line"></colorline>
+				<div>
+					<p>评论维度</p>
+					<p>文字自定义</p>
+				</div>
+			</ib>
+			<ib class="VA-M keyword">
+				<table>
+					<tr>
+						<th>默认</th>
+						<th>修改成</th>
+					</tr>
+					<tr>
+						<td>设施</td>
+						<td><input type="text"></td>
+					</tr>
+					<tr>
+						<td>卫生</td>
+						<td><input type="text"></td>
+					</tr>
+					<tr>
+						<td>服务</td>
+						<td><input type="text"></td>
+					</tr>
+					<tr>
+						<td>网络</td>
+						<td><input type="text"></td>
+					</tr>
+				</table>
+			</ib>
+		</div>
+		<div class="each_line" style="text-align:center;">
+			<div class="btn">保存设置</div>
+		</div>
+		<div class="each_line" style="margin-bottom: 20px;">
+			<div style="margin-left: 10px;margin-top: 10px;">操作记录</div>
+			<table class="jilu">
+				<tr>
+					<th>序号</th>
+					<th>序号</th>
+					<th>操作描述</th>
+					<th>IP地址</th>
+					<th>操作时间</th>
+				</tr>
+				<tr>
+					<td>1</td>
+					<td>limengqun</td>
+					<td>设置了规则</td>
+					<td>192.168.1.1</td>
+					<td>2016-07-22 21:21:21</td>
+				</tr>
+				<tr>
+					<td>1</td>
+					<td>limengqun</td>
+					<td>设置了规则
+						<p>aaa</p>
+						<p>aaa</p>
+					</td>
+					<td>192.168.1.1</td>
+					<td>2016-07-22 21:21:21</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+</body>
+<script src="jquery-1.11.3.min.js"></script>
+<script>
+		Array.prototype.indexOf = function(val) {
+for (var i = 0; i < this.length; i++) {
+if (this[i] == val) return i;
+}
+return -1;
+};
+	Array.prototype.remove = function(val) {
+var index = this.indexOf(val);
+if (index > -1) {
+this.splice(index, 1);
+}
+};
+	var pinglun = [];
+	var chuyou = [];
+	for(var i = 0; i < $("X[data-chuyou]").length;i++){
+		chuyou.push($("X[data-chuyou]")[i].dataset.chuyou);
+	}
+	for(var i = 0; i < $("X[data-pinglun]").length;i++){
+		pinglun.push($("X[data-pinglun]")[i].dataset.pinglun);
+	}
+	$("X[data-chuyou]").on("click",function(){
+		chuyou.remove(this.dataset.chuyou);
+		var father = this.parentElement.parentElement;
+		$(".keys")[1].removeChild(father);
+	});
+	$("X[data-pinglun]").on("click",function(){
+		pinglun.remove(this.dataset.pinglun);
+		var father = this.parentElement.parentElement;
+		$(".keys")[0].removeChild(father);
+	});
+	$(document).on("keydown",function(e){
+		if(e && e.keyCode == "13"){
+			var chuyou_input = $(".chuyou_input").val();
+			var pinglun_input = $(".pinglun_input").val();
+			if(chuyou_input != "" && chuyou_input != undefined){
+				add($(".keys")[1],"chuyou",chuyou_input,chuyou);
+				chuyou.push(chuyou_input);
+			} 
+			if(pinglun_input != "" && pinglun_input != undefined){
+				add($(".keys")[0],"pinglun",pinglun_input,pinglun);
+				pinglun.push(pinglun_input);
+			}
+			$(".chuyou_input").val("");
+			$(".pinglun_input").val("");
+		}
+	});
+	function add(obj,str0,str,bl){
+		var ib = document.createElement("ib");
+		var thehtml = '<div>'+str+'<X data-'+str0+'='+str+'></X></div>';
+		ib.innerHTML = thehtml;
+		obj.appendChild(ib);
+		var thisone = ib.children[0].children[0];
+		$(thisone).on("click",function(){
+			bl.remove(this.dataset[str0]);
+			var father = this.parentElement.parentElement;
+			obj.removeChild(father);
+		});
+	}
+</script>
+</html>

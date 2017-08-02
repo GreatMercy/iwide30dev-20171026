@@ -1,0 +1,8 @@
+/* 默认图片 */
+.jfk-image__lazy {
+  &--4-2,&--3-3, &--banner, &--city{
+    &[lazy="loading"],&.jfk-image__lazy--preload {
+      background-color: var(--default-image-fill-color);
+    }
+  }
+}

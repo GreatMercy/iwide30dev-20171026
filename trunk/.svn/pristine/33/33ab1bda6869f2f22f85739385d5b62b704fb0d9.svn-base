@@ -1,0 +1,117 @@
+<template>
+  <div class="jfk-pages jfk-pages__detail">
+    <div class="jfk-pages__theme"></div>
+    <div class="detail-top">
+      <div class="jfk-image__lazy jfk-image__lazy--preload jfk-image__lazy--banner" :style="{height: '500px'}"></div>
+      <div class="banners">
+        <swiper :options="bannerSwiperOptions" class="jfk-swiper">
+          <swiper-slide v-for="(item, index) in banners" :key="index" class="jfk-swiper__item">
+            <div class="banners__item-box jfk-swiper__item-box">
+              <div :data-background="item" class="banners__item jfk-swiper__item-bg swiper-lazy">
+                <div class="jfk-image__lazy--preload jfk-image__lazy jfk-image__lazy--3-3 jfk-image__lazy--background-image"></div>
+              </div>
+            </div>
+          </swiper-slide>
+          <div class="swiper-pagination font-size--24" slot="pagination"></div>
+        </swiper>
+      </div>
+      <div class="icons">
+        <i class="jfk-font font-size--36 icon-mall_icon_pay_focus"></i>
+        <i class="jfk-font font-size--36 icon-mall_icon_pay_share"></i>
+      </div>
+    </div>
+    <div class="info"></div>
+    <div class="notice"></div>
+    <div class="detail"></div>
+    <div class="recommendation" v-if="recommendations.length">
+      <p class="font-size--24">其他用户还看了</p>
+      <div class="recommendations-list">
+        <swiper :options="recommendationSwiperOptions" class="jfk-swiper" v-if="recommendations.length > 2">
+          <swiper-slide v-for="item in recommendations"
+            :key="item.product_id"
+            class="jfk-swiper__item"
+          >
+            <a href="javascript:;">
+              <div  class="jfk-swiper__item-box">
+                <div class="jfk-swiper__item-bg swiper-lazy" :data-background="item.face_img">
+                  <div class="jfk-image__lazy--preload jfk-image__lazy jfk-image__lazy--3-3 jfk-image__lazy--background-image">
+                  </div>
+                  <div class="recommendation-mask"></div>
+                </div>
+              </div>
+              <div class="recommendation-info">
+                <div class="info-box">
+                <h5 class="title font-size--28 font-color-silver">{{item.name}}</h5>
+                <p class="price">
+                  <span class="jfk-price color-golden font-size--38">
+                    <i class="jfk-font-number jfk-price__currency">￥</i>
+                    <i class="jfk-font-number jfk-price__number">{{item.price_package}}</i>
+                  </span>
+                  <span class="jfk-price__original font-size--24 font-color-extra-light-gray">￥{{item.price_market}}</span>
+                </p>
+                </div>
+              </div>
+            </a>
+          </swiper-slide>
+        </swiper>
+      </div>
+    </div>
+    <JfkSupport v-once></JfkSupport>
+    <footer class="footer jfk-clearfix">
+      <div class="links jfk-fl-l">
+        <div class="jfk-flex is-justify--center is-align-middle">
+          <a href="javascript:;" class="link font-color-white">
+            <i class="jfk-font font-size--30 icon-mall_icon_home"></i>
+            <div class="text font-size--20">首页</div>
+          </a>
+          <a href="javascript:;" class="link font-color-white">
+            <i class="jfk-font font-size--30 icon-user_icon_Onlineboo"></i>
+            <div class="text font-size--20">订单</div>
+          </a>
+        </div>
+      </div>
+      <div class="control jfk-fl-l">
+        <a href="javascript:;" class="jfk-button jfk-button--auto jfk-button--primary">立即购买</a>
+      </div>
+    </footer>
+  </div>
+</template>
+
+<script>
+  import { getPackageInfo, getPackageRecommendation } from '@/service/http'
+  export default {
+    name: 'detail',
+    data () {
+      return {
+        banners: [],
+        bannerSwiperOptions: {
+          autoplay: 0,
+          lazyLoading: true,
+          lazyLoadingInPrevNext: true,
+          lazyPreloaderClass: 'jfk-image__lazy--preload',
+          pagination: '.swiper-pagination',
+          paginationType: 'fraction'
+        },
+        recommendationSwiperOptions: {
+          autoplay: 0,
+          lazyLoading: true,
+          lazyLoadingInPrevNext: true,
+          lazyPreloaderClass: 'jfk-image__lazy--preload',
+          spaceBetween: 15,
+          slidesPerView: 2.3571
+        },
+        recommendations: []
+      }
+    },
+    created () {
+      let that = this
+      getPackageInfo().then(function (data) {
+        that.banners = data.face_img
+      })
+      getPackageRecommendation().then(function (data) {
+        console.log(data)
+        that.recommendations = data.products
+      })
+    }
+  }
+</script>

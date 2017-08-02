@@ -1,0 +1,94 @@
+<!doctype html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="apple-mobile-web-app-capable" content="yes" >
+<meta name="apple-touch-fullscreen" c ontent="yes">
+<meta name="format-detection" content="telephone=no,email=no">
+<meta name="ML-Config" content="fullscreen=yes,preventMove=no">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="viewport" content="width=320,user-scalable=0">
+<title>确认订单</title>
+<link rel="stylesheet" type="text/css" href="styles/global.css">
+<link rel="stylesheet" type="text/css" href="styles/service.css">
+<script src="scripts/jquery.js"></script>
+<script src="scripts/ui_control.js"></script>
+<script src="scripts/alert.js"></script>
+</head>
+<body>
+<div class="pageloading"></div>
+<page class="page">    
+    <section class="scroll flexgrow h26">
+    	<div class="flex flexjustify bg_fff pad10">
+        	<div>餐厅</div>
+            <div class="h24 color_666" shopname></div>
+        </div>
+    	<div class="flex flexjustify bg_fff pad10 bd_top linkblock">
+        	<div>时间</div>
+            <input class="h24 color_555 txt_r cache" id="select_time" required name="name" readonly placeholder="请选择时间">
+        </div>
+    	<div class="flex flexjustify bg_fff bd_top" style="padding:6px 10px;">
+        	<div>人数</div>
+            <div class="num_control">
+                <div class="down_num color_main iconfont" onClick="down_num(event,this)">&#xe629;</div>
+                <div class="result_num"><input readonly value="1" type="tel" min="1" max="12"></div>
+                <div class="up_num iconfont color_main" onClick="up_num(event,this)">&#xe61d;</div>
+            </div>
+        </div>
+    	<div class="flex flexjustify bg_fff pad10 martop">
+        	<div>尊称</div>
+            <input class="h24 color_555 txt_r cache" required name="name" placeholder="请输入您的尊称">
+        </div>
+    	<div class="flex flexjustify bg_fff pad10 bd_top">
+        	<div>手机</div>
+            <input class="h24 color_555 txt_r cache" required name="phone" placeholder="请输入您的手机号码">
+        </div>
+    	<div class="bg_fff pad10 martop">
+        	<div>备注</div>
+            <textarea class="h24 color_555 _w martop" name="info" rows="5" placeholder="请输入您的要求，我们会尽量安排"></textarea>
+        </div>
+    </section>
+    <footer>
+        <div class="pad10 bg_main center _w submit disable" href="orders.html" >
+        	<div>立即预约</div>
+        </div>
+    </footer>
+</page>
+</body>
+<script>
+
+$('[shopname]').html($.getsession('shopname'));
+
+/**/
+function testval(bool){
+	bool=bool?bool:false; 
+	for(var i=0;i<$('input[required]').length;i++){
+        if($('input[required]').eq(i).val()==''){
+			$('.submit').addClass('disable');
+			var tips = $('input[required]').eq(i).attr('placeholder');
+			if(bool)
+				$.MsgBox.Alert(tips);
+			return false;
+		}
+	}
+	$('.submit').removeClass('disable');
+	return true;
+}
+$('input').bind('input propertychange',testval);
+$('.submit').click(function(){
+	if(testval(true)){
+		$('.cache').each(function() {
+            $.setlocal($(this).attr('name'),$(this).val());
+        });
+		window.location.href=$(this).attr('href');
+	};	
+})
+$('.cache').each(function() {
+	$(this).val(  $.getlocal($(this).attr('name')) );
+});
+testval();
+
+</script>
+</html>

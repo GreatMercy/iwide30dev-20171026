@@ -1,0 +1,85 @@
+<!doctype html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="apple-mobile-web-app-capable" content="yes" >
+<meta name="apple-touch-fullscreen" content="yes">
+<meta name="format-detection" content="telephone=no,email=no">
+<meta name="ML-Config" content="fullscreen=yes,preventMove=no">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="viewport" content="width=320,user-scalable=0">
+<title>社群客列表</title>
+<script src="../scripts/jquery.js"></script>
+<script src="../scripts/ui_control.js"></script>
+<link rel="stylesheet" type="text/css" href="../styles/global.css">
+<link rel="stylesheet" type="text/css" href="../styles/group.css">
+</head>
+<body>
+<style>
+body,html{width:100%; height:100%; background:#fff;}
+</style>
+
+<script src="../scripts/alert.js"></script>
+<script src="../scripts/canvas.js"></script>
+
+<!--- 二维码和头像不能跨域 否则不能生成海报  --->
+<div class="haibao">
+	<div class="center color_fff" style="padding-top:12%"> 广州金房卡信息科技有限公司 </div>
+    <div style="width:70%; margin:6% auto; text-align:center">诚邀您的加盟，您将成为酒店尊贵社群客，您的单位成员及贵宾在协议有效期间内可享受诸多优惠及便利。</div>
+	<div class="center" style="padding:5% 0 3% 0">
+        <div style="width:30%; display:inline-block"><div class="squareimg"><img src="../images/eg3.jpg" /></div></div>
+    </div>
+    <div class="center pad3" style="font-size:0.8em;"><span style="border-bottom:1px solid #555;">扫描二维码，登记信息，享受专属优惠价</span></div>
+    <div class="center" style="font-size:1.3em">优惠房型：所有房型</div>
+	<div class="center" style="font-size:1.3em">优惠价格：协议价A </div>
+    <div class="center pad3" style="font-size:0.8em;">有效期：20160101~20161230</div>
+    <div class="center absolute color_main" style="bottom:10%;width:100%;">碧桂园酒店集团，欢迎您的入住！</div>
+    <div class="center absolute color_E4E4E4" style="bottom:1.5%;width:100%;">Powered by 金房卡</div>
+</div>
+<script>
+$(function(){
+	var _w = $(window).width();
+	var rate = 640/1008;
+	var _h = _w/rate;
+	$('.haibao').height(_h);
+	pageloading('生成海报中',0.8);
+
+	var fail = window.setTimeout(function(){
+		removeload();
+		$.MsgBox.Alert('生成失败, 请稍候刷新页面重试!');
+	},10000);
+	var clone=$('.haibao').clone();
+	var _w = $('.haibao').width()*2;
+	var _h = $('.haibao').height()*2;
+	$('body').append(clone).css('overflow','hidden');
+	$('meta').attr('content','width=320,user-scalable=0,initial-scale=1');
+	clone.width(_w);
+	clone.height(_h);
+	clone.css('font-size','1.8rem');
+	/*生成海报代码*/
+
+	window.setTimeout(function(){ //延迟0.3s生成...
+		html2canvas(clone.get(0), {
+			allowTaint: true,
+			taintTest: false,
+			onrendered: function(canvas) {
+				removeload();
+				canvas.id = "mycanvas";
+				var dataUrl = canvas.toDataURL();
+				var newImg = document.createElement("img");
+				newImg.src =  dataUrl;
+				$('.haibao').html(newImg);
+				clone.remove();
+				$('body').removeAttr('style');
+				//$.MsgBox.Alert('你的专属海报,记得长按保存图片哦~');
+				window.clearTimeout(fail);
+			}
+		});
+	},300);
+	
+})
+</script>
+</body>
+</html>

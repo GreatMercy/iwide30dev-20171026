@@ -1,0 +1,20 @@
+// COUPON主路径
+let COUPON_URL_SUFFIX = '/index.php/iapi/v1/membervip/vapi'
+let COUPON_URL_REQUEST = '/index.php/iapi/v1/membervip/tasklogic'
+
+const coupon = {
+  // 发送任务配置
+  GET_COUPON_CODE_INFO: `${COUPON_URL_SUFFIX}/create_coupon_task`,
+  // 发送任务列表
+  GET_COUPON_LIST: `${COUPON_URL_SUFFIX}/coupon_task`,
+  // 发送任务详情
+  GET_COUPON_CONTENT_DETAIL: `${COUPON_URL_SUFFIX}/task_item`,
+  // 新建任务配置
+  GET_REQUEST_CONTENT_INFO: `${COUPON_URL_REQUEST}/save_create`,
+  // 删除任务
+  GET_REQUEST_CONTENT_DELETE: `${COUPON_URL_REQUEST}/delete`
+}
+export {
+  coupon
+}
+

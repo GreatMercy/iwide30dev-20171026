@@ -1,0 +1,94 @@
+<?php
+namespace App\services\soma;
+
+use App\services\BaseService;
+use App\services\Result;
+use App\services\soma\order\OrderProvider;
+
+/**
+ * Class OrderService
+ * @package App\services\soma
+ * @author renshuai  <renshuai@mofly.cn>
+ *
+ */
+class OrderService extends BaseService
+{
+    /**
+     * 获取服务实例方法
+     * @return OrderService
+     */
+    public static function getInstance()
+    {
+        return self::init(self::class);
+    }
+
+    public function create($params)
+    {
+        $provider = new OrderProvider();
+
+        $order = $provider->resolve($params);
+
+        $interID = $this->getCI()->inter_id;
+        $openid = $this->getCI()->openid;
+
+        $productID = $params['product_id'];
+        $settlement = isset($params['settlement']) ? $params['settlement'] : null;
+        $u_type = isset($params['u_type']) ? $params['u_type'] : '';
+        $qtyArr = $params['qty'];
+        $memberCardIDs = isset($params['mcid']) ? $params['mcid'] : [];
+        $salerID = isset($params['saler']) ? $params['saler'] : null;
+        $fanSalerID = isset($params['fans_saler']) ? $params['fans_saler'] : null;
+        $phone = isset($params['phone']) ? $params['phone'] : null;
+        $name = isset($params['name']) ? $params['name'] : null;
+        $quoteType = isset($params['quote_type']) ? $params['quote_type'] : '';
+        $quote = isset($params['quote']) ? $params['quote'] : '';
+        $password = isset($params['password']) ? $params['password'] : '';
+        $pspSettingArr = isset($params['psp_setting']) ? $params['psp_setting'] : [];
+        $actID = isset($params['act_id']) ? $params['act_id'] : 0;
+        $instanceID = isset($params['inid']) ? $params['inid'] : 0;
+        $scopeProductLinkID = isset($params['scope_product_link_id']) ? $params['scope_product_link_id'] : 0;
+        $groupId = 0;
+        $grid = isset($params['grid']) ? $params['grid'] : 0;
+        $type = isset($params['type']) ? $params['type'] : '';
+
+
+        $qty = $qtyArr[$productID];
+        $settingID = isset($pspSettingArr[$productID]) ? $pspSettingArr[$productID] : 0;
+
+        $beforeResult = $order->beforeCreate($productID, $interID, $qty, $settingID, $actID, $instanceID, $openid);
+        if ($beforeResult->getStatus() === Result::STATUS_FAIL) {
+            return $beforeResult;
+        }
+        $product = $beforeResult->getData();
+
+        $buildResult = $order->buildData($product, $interID, $qty, $openid, $memberCardIDs, $salerID, $fanSalerID, $phone, $name, $quoteType, $quote, $password, $scopeProductLinkID);
+        if ($buildResult->getStatus() === Result::STATUS_FAIL) {
+            return $buildResult;
+        }
+        $salesOrderModel = $buildResult->getData();
+        $salesOrderModel->business = 'package';
+        $salesOrderModel->settlement = $settlement;
+
+
+        $createResult = $order->create($salesOrderModel);
+        if ($createResult->getStatus() === Result::STATUS_FAIL) {
+            return $createResult;
+        }
+        $salesOrderModel = $buildResult->getData();
+
+
+        $afterResult = $order->afterCreate($salesOrderModel, $product, $openid, $interID, $name, $phone, $u_type, $instanceID, $groupId);
+        if ($afterResult->getStatus() === Result::STATUS_FAIL) {
+            return $afterResult;
+        }
+
+        return $afterResult;
+    }
+
+
+
+
+
+
+
+}

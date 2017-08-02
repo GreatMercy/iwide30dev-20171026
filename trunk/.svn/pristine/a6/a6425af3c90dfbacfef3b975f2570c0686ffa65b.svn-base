@@ -1,0 +1,13 @@
+export default {
+  functional: true,
+  render () {
+    return (
+      <section class="jfk-support">
+        <div class="jfk-support__box">
+          <a href="javascript:;" class="jfk-support__logo">广州金房卡信息科技有限公司</a>
+          <p class="jfk-support__info">Power by 金房卡</p>
+        </div>
+      </section>
+    )
+  }
+}

@@ -1,0 +1,110 @@
+<?php
+
+namespace App\services\soma\order;
+
+use App\services\Result;
+use App\services\soma\contract\OrderContract;
+
+/**
+ * Class GrouponOrder
+ * @package App\services\soma\order
+ * @author renshuai  <renshuai@mofly.cn>
+ * 
+ */
+class GrouponAbstractOrder extends AbstractOrder implements OrderContract
+{
+    public function beforeCreate($productID, $interID, $qty, $settingID, $actID, $instanceID, $openid)
+    {
+        $result = parent::beforeCreate($productID, $interID, $qty, $settingID, $actID, $instanceID, $openid);
+        if ($result->getStatus() === Result::STATUS_FAIL) {
+            return $result;
+        }
+
+        $product = $result->getData();
+
+        $result->setStatus(Result::STATUS_FAIL);
+        $result->setData([]);
+
+        $this->getCI()->load->model('soma/Product_specification_setting_model', 'productSpecificationSettingModel');
+        // 秒杀拼团统一库存，随机发货，暂时无法回滚库存，秒杀拼团以活动价格为准
+        $psp_settings = $this->getCI()->productSpecificationSettingModel->get_specification_setting($interID, $productID);
+
+        $stocks = 0;
+        foreach ($psp_settings as $setting) {
+            $stocks += $setting['spec_stock'];
+        }
+        $product['stock'] = $stocks;
+        $product['setting_id'] = 'all';
+
+
+        $this->getCI()->load->model('soma/Activity_groupon_model','activityGrouponModel');
+        /**
+         * @var \Activity_groupon_model $grouponModel
+         */
+        $grouponModel =  $this->getCI()->activityGrouponModel;
+
+        $type = 'add'; //todo pass in
+        if($type === 'add'){ //开团
+            $addGroupOnResult = $grouponModel->add_groupon_group($actID, $openid, $interID);
+            if (is_array($addGroupOnResult)) {
+                $result->setMessage($addGroupOnResult['msg']);
+                return $result;
+            }
+            $groupId = $addGroupOnResult;
+        }else{
+            $groupId = 1; //todo pass in
+            /*同步检测人数*/
+            $this->getCI()->load->model('soma/sales_refund_model', 'salesRefundModel');
+            /**
+             * @var \Sales_refund_model $salesRefundModel
+             */
+            $salesRefundModel = $this->getCI()->$salesRefundModel;
+            $grouponModel->set_unavailable_group_user($interID, array('group_id'=> $groupId), $salesRefundModel, 'package');
+        }
+
+        $result->setStatus(Result::STATUS_OK);
+        $result->setData($groupId);
+
+        return $result;
+    }
+
+    /**
+     * @param \Sales_order_model $salesOrderModel
+     * @return Result
+     * @author renshuai  <renshuai@mofly.cn>
+     */
+    public function create($salesOrderModel)
+    {
+        $result = new Result(Result::STATUS_FAIL);
+
+        $salesOrderModel = $salesOrderModel->order_save($salesOrderModel->business, $salesOrderModel->inter_id);
+
+        if (empty($salesOrderModel->order_id)) {
+            $result->setStatus(Result::STATUS_FAIL);
+            $result->setMessage('下单失败，请稍后重新尝试');
+        }
+
+        $result->setStatus(Result::STATUS_OK);
+        $result->setData($salesOrderModel);
+
+        return $result;
+    }
+
+
+    public function afterCreate($salesOrderModel, $product, $openid, $interID, $name, $phone, $u_type, $instanceID, $groupId)
+    {
+
+        $this->getCI()->load->model('soma/Activity_groupon_model','activityGrouponModel');
+        /**
+         * @var \Activity_groupon_model $grouponModel
+         */
+        $grouponModel =  $this->activityGrouponModel;
+
+        $userInfo['order_id'] = $salesOrderModel->order_id;
+        $grouponModel->groupon_user_add($groupId, $userInfo, $interID);
+
+        $result = parent::afterCreate($salesOrderModel, $product, $openid, $interID, $name, $phone, $u_type, $instanceID, $groupId);
+
+        return $result;
+    }
+}

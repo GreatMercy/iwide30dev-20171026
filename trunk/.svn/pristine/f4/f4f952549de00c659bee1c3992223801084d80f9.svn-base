@@ -1,0 +1,25 @@
+.jfk-button {
+  display: inline-block;
+  text-align: center;
+  white-space: nowrap;
+  cursor: pointer;
+  box-sizing: border-box;
+  outline: none;
+  margin: 0;
+  line-height: px2rem(64);
+  font-size: 1em;
+  padding: 0;
+  border-width: 1px;
+  border-style: solid;
+  &--free {
+    width: 100%;
+  }
+  &--default {
+    height: px2rem(90);
+    line-height: px2rem(90);
+  }
+  &--higher {
+    height: px2rem(100);
+    line-height: px2rem(100);
+  }
+}

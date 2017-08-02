@@ -1,0 +1,64 @@
+.jfk-price-tag {
+  line-height: calc(34 / 26);
+  width: calc(102 / 26)em;
+  position: relative;
+  color: #fff;
+  text-align: center;
+  &--large{
+    height: calc(35 / 26 * 2)em;
+    padding: calc(20 / 26)em 0 calc(18 / 26)em 0;
+    .jfk-price-tag__mask {
+      border-radius: 0 calc(33 / 26)em;
+    }
+  }
+  &--small{
+    padding: calc((55 - 34) / 2 / 26)em 0;
+    .jfk-price-tag__mask {
+      border-radius: 0 calc(28 / 26)em;
+    }
+  }
+  &__mask{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+  }
+  &__words{
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    height: 100%;
+    padding: {
+      left: calc(18 / 26)em;
+      right: calc(24 / 26)em;
+    }
+    &.is-justify-space-between{
+      justify-content: space-between;
+    }
+    &.is-justify-center{
+      justify-content: center;
+    }
+  }
+  &__word{
+    font-size: 1em;
+  }
+  &--gaussian-blur {
+    .jfk-price-tag__mask {
+      &:before, &:after{
+        content: '';
+        position: absolute;
+        z-index: -1;
+        background-color: currentColor;
+      }
+      &:before {
+        width: 50%;
+        height: 50%;
+        top: 25%;
+        left: 25%;
+        filter: blur(calc(19 / (2 + 7 / 22 * 2))em)
+      }
+    }
+  }
+}

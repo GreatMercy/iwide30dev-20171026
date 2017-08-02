@@ -1,0 +1,76 @@
+<template>
+  <div class="gradient_bg padding_0_15">
+  <section class="bd_bottom">
+    <div class="iconfont center pad_t60">
+      <img class="okpay_logo" src="../../assets/image/su_gou.png" alt="">
+    </div>
+    <p class="iconfont center color1 mar_t40 font_21">支付成功!</p>
+    <div class="pad_tb40 center">
+      <p class="inblock font_14 color3">恭喜你充值成功,请在我的储值中查看！</p>
+      <div class="inblock width_75 center relative border_1_808080 line_height_20 height_20 radius_3 color3 border_fff font_14"><a :href="dataList.page_resource.links.balance"></a>查看储值</div>
+    </div>
+  </section>
+<!--   <section>
+    <div class="font_12 padding_left_20 pad_t20">
+      <p class="main_color1 relative" style="padding-left:10px;">
+        <em class="iconfont absolute prompt">
+        <img src="../../assets/image/gantan.png" alt="" style="width:16px;"></em>我们检测到您还未进行实名认证,为保障您的资金安全,请填写个人信息进行认证
+      </p>
+    </div>
+    <div class="layer_bg radius_3 padding_20 margin_top_45 padding_0_15">
+      <form class="form_list font_14" ref="form">
+          <div class="flex form_item bd_bottom padding_18">
+            <div class="margin_right_42 width_120">
+              <div class="flex between">
+                <span class="block">姓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;名</span>
+              </div></div>
+            <div class="flex_1 font_14"><input @keyup="setRemove($event)" placeholder="请输入姓名"></div>
+            <div v-if="key === 'phonesms'" @click="smsSend" class="relative border_1_808080 verification">{{smsTitle}}</div>
+          </div>
+          <div class="flex form_item bd_bottom padding_18">
+            <div class="margin_right_42 width_120">
+              <div class="flex between">
+                <span class="block">联系方式</span>
+              </div></div>
+            <div class="flex_1 font_14"><input @keyup="setRemove($event)" placeholder="请输入姓名"></div>
+            <div v-if="key === 'phonesms'" @click="smsSend" class="relative border_1_808080 verification">{{smsTitle}}</div>
+          </div>
+          <div class="flex form_item bd_bottom padding_18">
+            <div class="margin_right_42 width_120">
+              <div class="flex between">
+                <span class="block">身份证号</span>
+              </div></div>
+            <div class="flex_1 font_14"><input @keyup="setRemove($event)" placeholder="请输入姓名"></div>
+            <div v-if="key === 'phonesms'" @click="smsSend" class="relative border_1_808080 verification">{{smsTitle}}</div>
+          </div>
+          <a class="block width_85 center padding_15 auto iconfont entry_btn font_16" style="margin-top:40px;">提交认证</a>
+        </form>
+      </div>
+  </section> -->
+<!--   <section class="padding_bottom_77 margin_top_50">
+      <div class="font_12 padding_left_20">
+        <p class="color2 relative"><em class="iconfont absolute prompt">&#xe642;</em>使用说明</p>
+        <p class="color3 margin_top_15">123</p>
+      </div>
+    </section> -->
+</div>
+</template>
+<script>
+import { getBalanceOkpay } from '@/service/http'
+export default {
+  data () {
+    return {
+      dataList: []
+    }
+  },
+  created () {
+    getBalanceOkpay().then((res) => {
+      this.dataList = res.web_data
+    })
+  },
+  methods: {
+    submit () {
+    }
+  }
+}
+</script>

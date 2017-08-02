@@ -1,0 +1,147 @@
+<!doctype html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="apple-mobile-web-app-capable" content="yes" >
+<meta name="apple-touch-fullscreen" content="yes">
+<meta name="format-detection" content="telephone=no,email=no">
+<meta name="ML-Config" content="fullscreen=yes,preventMove=no">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="viewport" content="width=320,initial-scale=1,user-scalable=0">
+<script src="scripts/jquery.js"></script>
+<script src="scripts/ui_control.js"></script>
+<link href="styles/global.css" rel="stylesheet">
+<title>Demo</title>
+</head>
+<body>
+<a class="btn_main" href="readom.html">链接到开发者文档</a>
+<h2>字体大小</h2>
+<div class="h36">标题文字36px</div>
+<div class="h34">标题文字34px</div>
+<div class="h32">标题文字32px</div>
+<div class="h30">标题文字30px</div>
+<div class="h28">标题文字28px</div>
+<div class="h26">标题文字26px</div>
+<div class="h24">标题文字24px</div>
+<div class="h22">标题文字22px</div>
+<div class="h20">标题文字20px</div>
+<div class="h18">标题文字18px</div>
+<br>
+<h2>主色系</h2>
+<div><span class="color_main">主色</span><span class="bg_main color_fff"> 对应背景色 </span></div>
+<div><span class="color_minor">副色</span><span class="bg_minor color_fff"> 对应背景色 </span></div>
+<div><span class="color_key">重点色</span><span class="bg_key color_fff"> 对应背景色 </span></div>
+<div><span class="color_link">链接色</span><span class="bg_link color_fff"> 对应背景色 </span></div>
+<h2>副色系</h2>
+<div><span class="color_F8F8F8">标题文字</span><span class="bg_F8F8F8">标题文字</span></div>
+<div><span class="color_F3F4F8">标题文字</span><span class="bg_F3F4F8">标题文字</span></div>
+<div><span class="color_eee">标题文字</span><span class="bg_eee">标题文字</span></div>
+<div><span class="color_E4E4E4">标题文字</span><span class="bg_E4E4E4">标题文字</span></div>
+<div><span class="color_D3D3D3">标题文字</span><span class="bg_D3D3D3">标题文字</span></div>
+<div><span class="color_C3C3C3">标题文字</span><span class="bg_C3C3C3">标题文字</span></div>
+<div><span class="color_999">标题文字</span><span class="bg_999 color_fff">标题文字</span></div>
+<div><span class="color_888">标题文字</span><span class="bg_888 color_fff">标题文字</span></div>
+<div><span class="color_555">标题文字</span><span class="bg_555 color_fff">标题文字</span></div>
+<div><span class="color_000">标题文字</span><span class="bg_000 color_fff">标题文字</span></div>
+<h2>常用样式</h2>
+<div>金额<span class="y color_main">55</span></div>
+<h3>小图标</h3>
+<div> <em class="iconfont icon">&#xe600;</em></div>
+<div> <em class="iconfont icon bg_main">&#xe600;</em></div>
+<div> <em class="iconfont icon bg_C3C3C3">&#xe600;</em></div>
+<h3>大图标</h3>
+<div> <em class="iconfont maxicon">&#xe600;</em></div>
+<div> <em class="iconfont maxicon bg_main">&#xe600;</em></div>
+<div> <em class="iconfont maxicon bg_C3C3C3">&#xe600;</em></div>
+
+<div class="txtclip" style="width:100px">标题文字标题文字</div>
+<div class="btn_main">主色按钮</div>
+<div class="btn_main xs">小按钮</div>
+<div class="btn_main btn_small">小按钮2</div>
+<div class="btn_minor">副色按钮</div>
+<div class="btn_main bdradius">圆角按钮</div>
+<div class="btn_main disable">不可用按钮</div>
+<div class="whiteblock">白色块</div>
+<div class="whiteblock bd">带边框白色块</div>
+<div class="whiteblock bd bd_color_d3">边框色为D3D3D3白色块</div>
+<div class="ui_pull center color_fff" style="display:none">弹层</div>
+<div class="list_style bd martop">
+	<div>list1</div>
+    <div class="arrow">list2</div>
+    <a>link1</a>
+    <a>link2</a>
+</div>
+<div class="list_style_3 bd martop">
+	<div class="bdradius">list1</div>
+    <div class="arrow">list2</div>
+    <a>link1</a>
+    <a>link2</a>
+</div>
+<h2>两端对齐的块 使用webkitbox justify</h2>
+<div class="list_style bd martop">
+	<div class="arrow webkitbox justify">
+    	<div>list1</div>
+    	<div>tips</div>
+    </div>
+    <div>list2</div>
+    <a>link1</a>
+    <a>link2</a>
+</div>
+<br>
+<h2>前端JS接口文档</h2>
+<br>
+<div class="btn_main" id='show_bottom'>滚动到底部</div>
+<br>
+<script>
+	$('#show_bottom').click(function(){scrollBottom();});
+</script>
+<h2>图片轮播</h2>
+<script src="scripts/jquery.js"></script>
+<script src="scripts/imgscroll.js"></script>
+<script src="scripts/jquery.touchwipe.min.js"></script>
+<div class="imgscroll">
+  <div class="headerslide">
+    <a class="slideson" href=""><img src="images/eg1.jpg" /></a>
+    <a class="slideson" href=""><img src="images/eg2.jpg" /></a>
+  </div>
+</div>
+<script>
+$.fn.imgscroll({
+    imgrate     :750/400,       
+    partent_div :'imgscroll', 
+    circlesize  :'8px',       
+    circlergb   :'255,85,55', 
+    circleshow  :true,
+});
+</script>
+<br>
+<div class="btn_main" id='show_layer'>显示弹层</div>
+<br>
+<script>
+	$('#show_layer').click(function(){toshow('.ui_pull');});
+	$('.ui_pull').click(toclose);
+</script>
+<br>
+<div class="btn_main" id='show_loading'>显示加载</div>
+<script>
+	$('#show_loading').click(function(){
+		pageloading();
+		$('.pageloading').click(removeload);
+	});
+</script>
+<br>
+<br>
+<div class="btn_main xs" id='show_dom_loading'>元素内部加载</div>
+<div class="target_dom"></div>
+<script>
+	$('#show_dom_loading').click(function(){showload('','.target_dom');});
+</script>
+<br>
+<div class="btn_main" id='show_null'>显示空结果</div>
+<script>
+	$('#show_null').click(function(){isnull();});
+</script>
+</body>
+</html>

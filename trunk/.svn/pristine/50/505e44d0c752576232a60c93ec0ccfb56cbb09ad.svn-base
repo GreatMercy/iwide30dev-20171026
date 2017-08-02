@@ -1,0 +1,772 @@
+<template>
+	<div>
+		<div class="jfk-fieldset__hd">
+	      <div class="jfk-fieldset__title">新建优惠券发放任务</div>
+	    </div>
+	    <div>
+	    	<el-row>
+			  <el-col :span="11">
+			  	<el-col :span="4" class="choice-step-num choice-step-active">
+			  	 	01
+			  	</el-col>
+			  	<el-col :span="20">
+			  		<p class="choice-step-title">选择优惠券发放内容和目标用户</p>
+			  		<p class="choice-step-word">选择发送的优惠券或礼包，并选择需要发送的用户群体</p>
+			  	</el-col>
+			  </el-col>
+			  <el-col :span="2" class="jfk-ta-c">
+			  	<div class="choice-line"></div>
+			  </el-col>	
+			  <el-col :span="11">
+			  <el-col :span="4" class="choice-step-num">
+			  	 	02
+			  	</el-col>
+			  	<el-col :span="20">
+			  		<p class="choice-step-title">设置模版消息</p>
+			  		<p class="choice-step-word">设置一个模版消息，给收到优惠的用户发送一个模版消息</p>
+			  	</el-col></el-col>
+			</el-row>
+	    </div>
+	    <el-form :model="ruleForm" :rules="rules" ref="ruleForm">
+	    	<div class="jfk-fieldset__hd">
+		      <div class="jfk-fieldset__title">任务信息</div>
+		    </div>
+		    <div class="choice-rows">
+			    <el-form-item label="请填写任务名称" style="margin:0;"  prop="task_name">
+				    <el-input v-model="ruleForm.task_name" maxlength="15" placeholder="必填，最多15个汉字" style="width: 250px;"></el-input>
+				</el-form-item>
+				<div class="el-form--inline" style="margin-top: 30px;">
+					<el-form-item label="" prop="send_time_mode">
+						<el-radio-group v-model="ruleForm.send_time_mode">
+						    <el-radio label="1" value="1" style="margin-right: 35px;">马上发送</el-radio>
+						    <el-radio label="2" value="2">定时发送</el-radio>
+						</el-radio-group>
+					</el-form-item>
+					<el-form-item label=""  prop="send_time" v-show="ruleForm.send_time_mode === '2'">
+					    <el-date-picker
+					      v-model="ruleForm.send_time"
+					      type="datetime"
+					      @change="dataChange"
+					      :editable="false"
+					      placeholder="选择日期时间"
+					      :picker-options="pickerOptions">
+					    </el-date-picker>
+					</el-form-item>
+				</div>
+			</div>
+	    	<div class="jfk-fieldset__hd">
+		      <div class="jfk-fieldset__title">选择发送内容</div>
+		    </div>
+		    <div class="choice-rows">
+		    	<el-form-item label="">
+				    <el-radio-group v-model="ruleForm.send_type">
+				      <el-radio
+				        v-for="(value, key) in enum_des.send_type"
+				        :label="key"
+				        :key="key"
+				        :value="key">
+				        {{value}}
+				  	    </el-radio>
+				    </el-radio-group>
+				</el-form-item>
+				<div class="el-form--inline gray-bg">	
+					<el-form-item label="" prop="coupon_value"  v-show="ruleForm.send_type === '1' " >
+					    <el-select v-model="ruleForm.coupon_value" placeholder="选择优惠券"  style="width: 200px;">
+					      <el-option
+					      v-for="(value,key) in enum_des.card"
+					      :label="value.title"
+					      :key="key"
+					      :value="value.card_id">
+					  	  </el-option>
+					    </el-select>
+					</el-form-item>
+					<el-form-item label="" prop="package_value"  v-show="ruleForm.send_type === '2' " >
+					    <el-select v-model="ruleForm.package_value" placeholder="选择礼包"  style="width: 200px;">
+					      <el-option
+					      v-for="(value,key) in enum_des.package"
+					      :label="value.name"
+					      :key="key"
+					      :value="value.package_id">
+					  	  </el-option>
+					    </el-select>
+					</el-form-item>
+					<el-form-item label="" v-show="ruleForm.send_type === '1' " prop="send_count">
+					    <el-input placeholder="赠送数量" v-model="ruleForm.send_count" style="width: 80px;margin-right: 10px;"></el-input>
+					</el-form-item>
+					<span class="send-word" v-show="ruleForm.send_type === '2' ">礼包默认发送一个</span>
+					<el-form-item>
+					    <el-checkbox v-model="ruleForm.receive_repeat" >{{input_tag.receive_repeat.name}}</el-checkbox>
+					</el-form-item>
+				</div>
+				<el-row class="choice-tips">
+					<div>提示&nbsp;:</div>
+					<div>
+						<p>&nbsp;请确保需要发放的优惠券/礼包，库存充足<br>&nbsp;勾选重复领取则已领取过该优惠的用户可以再次领取，否则不可以领取。</p>
+					</div>
+				</el-row>
+			</div>
+			<div class="jfk-fieldset__hd">
+		      <div class="jfk-fieldset__title">发送目标用户</div>
+		    </div>
+		    <div class="choice-rows">
+			    <el-form-item label="">
+				    <el-radio-group v-model="ruleForm.send_target" class="choice-radio-right">
+				        <el-radio
+				        v-for="(value,key) in enum_des.send_target"
+				        :label="key"
+				        :key="key"
+				        :value="value">
+				        {{value}}
+				  	   </el-radio>
+				    </el-radio-group>
+				</el-form-item>
+				<div class="el-form--inline gray-bg" v-show="ruleForm.send_target === '1' ">
+					<div class="el-form--inline choice-checkbox-right">
+						  <el-form-item>
+						 	   <el-checkbox :indeterminate="isIndeterminate" v-model="memberCheckAll" @change="checkAllMember">全选</el-checkbox>
+						  </el-form-item>
+					      <el-form-item prop="send_member_lvl">
+						      <el-checkbox-group v-model="ruleForm.send_member_lvl">
+							      <el-checkbox
+							        v-for="(value,key) in enum_des['send_member_lvl[]']"
+							        @change="checkedMemberChange"
+							        :label="key"
+							        :key="key"
+							        :value="value">
+							        {{value}}
+							  	  </el-checkbox>
+							    </el-checkbox-group>
+						  </el-form-item>
+					</div>
+				</div>
+				<div class="el-form--inline gray-bg"  v-show="ruleForm.send_target === '2' ">
+					<el-form-item prop="source">
+						<el-select v-model="ruleForm.source" placeholder="请选择类型"  style="width: 140px;">
+					      <el-option
+					      v-for="(value,key) in enum_des.source"
+					      :label="value"
+					      :key="key"
+					      :value="key">
+					  	  </el-option>
+					    </el-select>
+				    </el-form-item>
+				    <el-form-item prop="rfm">
+					    <el-select v-model="ruleForm.rfm" placeholder="请选择消费类型"  style="width: 160px;">
+					      <el-option
+					      v-for="(value,key) in enum_des.rfm"
+					      :label="value"
+					      :key="key"
+					      :value="key">
+					  	  </el-option>
+					    </el-select>
+				    </el-form-item>
+				    <el-form-item prop="r_level" v-show="ruleForm.rfm === 'r' ">
+					    <el-select v-model="ruleForm.r_level" placeholder="请选择活跃用户"  style="width: 160px;">
+					      <el-option
+					      v-for="(value,key) in enum_des.r_level"
+					      :label="value"
+					      :key="key"
+					      :value="key">
+					  	  </el-option>
+					    </el-select>
+				    </el-form-item>
+				    <el-form-item prop="f_level" v-show="ruleForm.rfm === 'f' ">
+					    <el-select v-model="ruleForm.f_level" placeholder="请选择用户"  style="width: 160px;">
+					      <el-option
+					      v-for="(value,key) in enum_des.f_level"
+					      :label="value"
+					      :key="key"
+					      :value="key">
+					  	  </el-option>
+					    </el-select>
+				    </el-form-item>				    
+					<el-form-item prop="m_level" v-show="ruleForm.rfm === 'm' ">
+					    <el-select v-model="ruleForm.m_level" placeholder="请选择贡献度"  style="width: 160px;">
+					      <el-option
+					      v-for="(value,key) in enum_des.m_level"
+					      :label="value"
+					      :key="key"
+					      :value="key">
+					  	  </el-option>
+					    </el-select>
+				    </el-form-item>
+				</div>
+				<div class="import-release" v-show="ruleForm.send_target === '3' ">
+					<el-row class="set-wrapper-title">
+						<span 
+						v-for="(value,$item) in enum_des.send_target_field"
+						@click="ruleForm.send_target_field=$item,settest=value" 
+						:class="{active:ruleForm.send_target_field===$item}">{{value}}</span>
+					</el-row>
+					<div style="padding: 0px 20px 30px 20px">
+						<el-row>
+							<el-col class="el-form--inline" :span="12" v-for="(value,key) in enum_des.send_target_type" :key="key">
+								<el-form-item prop="send_target_type">
+									<el-form-item label="" style="margin-bottom:0px;"  v-if="key === '1'">
+									    <el-radio
+									    v-model="ruleForm.send_target_type"
+								        :label="key"
+						       			:key="key"
+						       			:value="key">
+						       			{{test+settest}}
+								  	   </el-radio>
+									</el-form-item>
+									<el-form-item label="" style="margin-bottom:0px;"  v-if="key === '2'">
+									    <el-radio
+									    v-model="ruleForm.send_target_type"
+								        :label="key"
+						       			:key="key"
+						       			:value="key">
+						       			{{value}}
+								  	   </el-radio>
+									</el-form-item>
+									<el-form-item label="" style="margin-bottom:0px;" v-if="key === '2'"  prop="send_target_file">
+									<el-upload
+									  action="/index.php/basic/uploadftp/do_upload?file_post_name=imgFile"
+									  name="imgFile"
+									  :multiple="false"
+									  :on-progress="handleProgress"
+									  :on-error="handleResponse"
+									  :on-remove="handleRemove"
+									  :on-success="handleSuccess"
+									  :file-list="file_list"
+									  v-show="ruleForm.send_target_type === '2'"
+									  :before-upload="beforeAvatarUpload">
+									  <el-button type="primary" id="j-upload" v-show="unload === false ">点击上传</el-button>
+									</el-upload>
+									</el-form-item>
+								</el-form-item>
+							</el-col>
+						</el-row>
+						<el-row>
+						  <el-col :span="12">
+							  <el-form-item prop="send_target_value">
+							  	<el-input
+								  type="textarea"
+								  :rows="5"
+								  v-model="ruleForm.send_target_value"
+								  placeholder="请以英文,分隔"
+								  style="width:80%;margin-left: 20px;"
+								  >
+								</el-input>
+							  </el-form-item>
+						  </el-col>
+						  <el-col :span="12">
+						     <div>
+						     	<a :href="page_resource.links.download" class="el-button el-button--primary">下载导入模版</a>
+						     </div>
+						     <div class="upload-word">
+						     	<p>只能上传 xls或xlsx文件 , 且不超过 500kb</p>
+						     	<p>请根据您所选择的发送名单类型 , 将数据录入到导入模版中</p>
+						     </div>
+						  </el-col>
+						</el-row>
+					</div>
+				</div>
+				
+			</div>
+			<el-row type="flex" justify="center" style="margin-top:25px;">
+				<el-button type="primary" @click.native.prevent="NextStep('ruleForm')"  size="large" class="jfk-button--middle">下一步</el-button>
+		        <a :href="page_resource.links.list" class="el-button jfk-button--middle el-button--default el-button--large" style="margin-left:10px;">返回</a>
+		    </el-row>
+	    </el-form>
+    </div>
+</template>
+<script type="text/javascript">
+import { mapState, mapMutations } from 'vuex'
+import { UPDATE_COUPON_STEP } from '@/service/user/types'
+import { formatUrlParams } from '@/utils/utils'
+const positiveIntegerReg = /^[1-9]\d*$/
+export default {
+  data () {
+    const checkTaskName = (rule, value, callback) => {
+      if (value === '') {
+        this.errorScroll()
+        return callback(new Error(rule.message))
+      }
+      return callback()
+    }
+    const checktimeMode = (rule, value, callback) => {
+      if (value === '') {
+        this.errorScroll()
+        return callback(new Error(rule.message))
+      }
+      return callback()
+    }
+    const checkCouponNum = (rule, value, callback) => {
+      if (this.ruleForm.send_type === '1') {
+        if (value === '') {
+          this.errorScroll()
+          return callback(new Error('请输入数量'))
+        }
+        if (!positiveIntegerReg.test(value)) {
+          this.errorScroll()
+          return callback(new Error('必须为正整数'))
+        }
+      }
+      return callback()
+    }
+    const checkSendTime = (rule, value, callback) => {
+      if (this.ruleForm.send_time_mode === '2') {
+        if (value < this.getTime()) {
+          this.errorScroll()
+          return callback(new Error('定时发送时间必须为至少一个小时之后'))
+        }
+        if (value === '') {
+          this.errorScroll()
+          return callback(new Error('请输入时间'))
+        }
+      }
+      return callback()
+    }
+    const checkSendmemberlvl = (rule, value, callback) => {
+      if (this.ruleForm.send_target === '1') {
+        if (value.length === 0) {
+          return callback(new Error(rule.message))
+        }
+      }
+      return callback()
+    }
+    const checkSource = (rule, value, callback) => {
+      if (this.ruleForm.send_target === '2') {
+        if (value === '') {
+          return callback(new Error(rule.message))
+        }
+      }
+      return callback()
+    }
+    const checkRfm = (rule, value, callback) => {
+      if (this.ruleForm.send_target === '2') {
+        if (value === '') {
+          return callback(new Error(rule.message))
+        }
+      }
+      return callback()
+    }
+    const checkRlevel = (rule, value, callback) => {
+      if (this.ruleForm.send_target === '2' && this.ruleForm.rfm === 'r') {
+        if (value === '') {
+          return callback(new Error(rule.message))
+        }
+      }
+      return callback()
+    }
+    const checkFlevel = (rule, value, callback) => {
+      if (this.ruleForm.send_target === '2' && this.ruleForm.rfm === 'f') {
+        if (value === '') {
+          return callback(new Error(rule.message))
+        }
+      }
+      return callback()
+    }
+    const checkMlevel = (rule, value, callback) => {
+      if (this.ruleForm.send_target === '2' && this.ruleForm.rfm === 'm') {
+        if (value === '') {
+          return callback(new Error(rule.message))
+        }
+      }
+      return callback()
+    }
+    const checkSendTargetType = (rule, value, callback) => {
+      if (this.ruleForm.send_target === '3') {
+        if (value === '') {
+          return callback(new Error(rule.message))
+        }
+      }
+      return callback()
+    }
+    const checkSendTargetValue = (rule, value, callback) => {
+      if (this.ruleForm.send_target === '3' && this.ruleForm.send_target_type === '1') {
+        if (value === '') {
+          return callback(new Error(rule.message))
+        }
+      }
+      return callback()
+    }
+    const checkSendTargetFile = (rule, value, callback) => {
+      if (this.ruleForm.send_target === '3' && this.ruleForm.send_target_type === '2') {
+        if (value === '') {
+          return callback(new Error(rule.message))
+        }
+      }
+      return callback()
+    }
+    const checkSendCouponValue = (rule, value, callback) => {
+      if (this.ruleForm.send_type === '1') {
+        if (value === '') {
+          this.errorScroll()
+          return callback(new Error('请选择优惠券'))
+        }
+        if (this.enum_des.card[value].state === 0) {
+          this.errorScroll()
+          return callback(new Error(this.enum_des.card[value].err_msg))
+        }
+      }
+      return callback()
+    }
+    const checkSendPackageValue = (rule, value, callback) => {
+      if (this.ruleForm.send_type === '2') {
+        if (value === '') {
+          this.errorScroll()
+          return callback(new Error('请选择礼包'))
+        }
+        if (this.enum_des.package[value].state === 0) {
+          this.errorScroll()
+          return callback(new Error(this.enum_des.package[value].err_msg))
+        }
+      }
+      return callback()
+    }
+    return {
+      pickerOptions: {
+        disabledDate (time) {
+          return time.getTime() < Date.now() - 8.64e7
+        }
+      },
+      ruleForm: {
+        task_name: '',
+        send_time_mode: '1',
+        send_time: '',
+        send_type: '1',
+        send_count: '',
+        receive_repeat: false,
+        send_value: '',
+        coupon_value: '',
+        package_value: '',
+        repeatget: '',
+        send_target: '1',
+        source: '',
+        rfm: '',
+        r_level: '',
+        f_level: '',
+        m_level: '',
+        send_target_type: '',
+        send_target_value: '',
+        send_target_field: '1',
+        send_target_file: '',
+        send_member_lvl: []
+      },
+      isIndeterminate: true,
+      memberCheckAll: true,
+      memberOption: [],
+      settest: '手机号码',
+      file_list: [],
+      test: '录入',
+      unload: false,
+      rules: {
+        task_name: [
+            { validator: checkTaskName, message: '请输入活动名称', trigger: 'blur' }
+        ],
+        send_time_mode: [
+            { validator: checktimeMode, message: '请选择任务发送模式', trigger: 'change' }
+        ],
+        send_time: [
+            { validator: checkSendTime, trigger: 'change' }
+        ],
+        send_count: [
+            { validator: checkCouponNum, trigger: 'blur' }
+        ],
+        coupon_value: [
+            { validator: checkSendCouponValue, trigger: 'change' }
+        ],
+        package_value: [
+            { validator: checkSendPackageValue, trigger: 'change' }
+        ],
+        send_member_lvl: [
+            { validator: checkSendmemberlvl, message: '请选择会员等级', trigger: 'change' }
+        ],
+        source: [
+           { validator: checkSource, message: '请选择类型', trigger: 'change' }
+        ],
+        rfm: [
+           { validator: checkRfm, message: '请选择消费类型', trigger: 'change' }
+        ],
+        r_level: [
+           { validator: checkRlevel, message: '请选择活跃用户', trigger: 'change' }
+        ],
+        f_level: [
+           { validator: checkFlevel, message: '请选择用户', trigger: 'change' }
+        ],
+        m_level: [
+           { validator: checkMlevel, message: '请选择贡献度', trigger: 'change' }
+        ],
+        send_target_type: [
+           { validator: checkSendTargetType, message: '选择导入方式', trigger: 'click' }
+        ],
+        send_target_value: [
+           { validator: checkSendTargetValue, message: '请输入内容', trigger: 'click' }
+        ],
+        send_target_file: [
+           { validator: checkSendTargetFile, message: '请上存文件', trigger: 'change' }
+        ]
+      }
+    }
+  },
+  methods: {
+    ...mapMutations([
+      UPDATE_COUPON_STEP
+    ]),
+    NextStep (formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          this.setDate()
+          return this[UPDATE_COUPON_STEP]({
+            increment: true
+          })
+        }
+      })
+    },
+    setDate () {
+      this.sumbit_data.task_name = this.ruleForm.task_name
+      this.sumbit_data.send_type = this.ruleForm.send_type
+      if (this.ruleForm.send_time_mode !== '') {
+        this.sumbit_data.send_time_mode = this.ruleForm.send_time_mode
+      }
+      if (this.ruleForm.send_type === '1') {
+        this.sumbit_data.send_value = this.ruleForm.coupon_value
+      } else {
+        this.sumbit_data.send_value = this.ruleForm.package_value
+      }
+      if (this.ruleForm.send_count !== '') {
+        this.sumbit_data.send_count = this.ruleForm.send_count
+      } else {
+        this.sumbit_data.send_count = 1
+      }
+
+      if (this.ruleForm.send_time !== '') {
+        this.sumbit_data.send_time = this.ruleForm.send_time
+      }
+      if (this.ruleForm.send_target !== '') {
+        this.sumbit_data.send_target = this.ruleForm.send_target
+      }
+      if (this.ruleForm.send_member_lvl !== '') {
+        this.sumbit_data.send_member_lvl = this.ruleForm.send_member_lvl
+      }
+      if (this.ruleForm.source !== '') {
+        this.sumbit_data.source = this.ruleForm.source
+      }
+      if (this.ruleForm.rfm !== '') {
+        this.sumbit_data.rfm = this.ruleForm.rfm
+      }
+      if (this.ruleForm.r_level !== '') {
+        this.sumbit_data.r_level = this.ruleForm.r_level
+      }
+      if (this.ruleForm.f_level !== '') {
+        this.sumbit_data.f_level = this.ruleForm.f_level
+      }
+      if (this.ruleForm.m_level !== '') {
+        this.sumbit_data.m_level = this.ruleForm.m_level
+      }
+      if (this.ruleForm.send_target_type !== '') {
+        this.sumbit_data.send_target_type = this.ruleForm.send_target_type
+      }
+      if (this.ruleForm.send_target_value !== '') {
+        this.sumbit_data.send_target_value = this.ruleForm.send_target_value
+      }
+      if (this.ruleForm.send_target_field !== '') {
+        this.sumbit_data.send_target_field = this.ruleForm.send_target_field
+      }
+      if (this.ruleForm.send_target_file !== '') {
+        this.sumbit_data.send_target_file = this.ruleForm.send_target_file
+      }
+      if (this.ruleForm.receive_repeat) {
+        this.sumbit_data.receive_repeat = 1
+      } else {
+        this.sumbit_data.receive_repeat = 2
+      }
+    },
+    changeType (item, index) {
+      const _this = this
+      this.items.forEach(function (v) {
+        _this.$set(v, 'active', false)
+      })
+      this.$set(item, 'active', true)
+    },
+    dataChange (value) {
+      this.ruleForm.send_time = value
+    },
+    handleRemove () {
+      this.unload = false
+    },
+    handleResponse () {
+      alert('服务器问题，上传失败')
+      this.unload = false
+    },
+    handleSuccess (file, fileList) {
+      if (file.error === 0) {
+        this.ruleForm.send_target_file = file.url
+      }
+    },
+    handleProgress (file) {
+      this.unload = true
+    },
+    checkAllMember (event) {
+      this.ruleForm.send_member_lvl = event.target.checked ? Object.keys(this.enum_des['send_member_lvl[]']) : []
+      this.isIndeterminate = false
+    },
+    checkedMemberChange (value) {
+      let checkedCount = value.length
+      let arrLenght = Object.keys(this.enum_des['send_member_lvl[]']).length
+      this.memberCheckAll = checkedCount === arrLenght
+      this.isIndeterminate = checkedCount > 0 && checkedCount < arrLenght
+    },
+    errorScroll () {
+      window.scroll(0, 230)
+    },
+    getTime () {
+      let date = new Date()
+      date.setHours(date.getHours() + 1)
+      let seperator1 = '-'
+      let seperator2 = ':'
+      let month = date.getMonth() + 1
+      let strDate = date.getDate()
+      if (month >= 1 && month <= 9) {
+        month = '0' + month
+      }
+      if (strDate >= 0 && strDate <= 9) {
+        strDate = '0' + strDate
+      }
+      let currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate + ' ' + date.getHours() + seperator2 + date.getMinutes() + seperator2 + date.getSeconds()
+      return currentdate
+    },
+    beforeAvatarUpload (file) {
+      const isXLS = file.name.indexOf('.xlsx') > 0
+      const isXLSX = file.name.indexOf('.xls') > 0
+      const isCSV = file.name.indexOf('.csv') > 0
+      const isLt500k = file.size / 1024 / 1024 < 0.5
+      if (!isXLS && !isXLSX && !isCSV) {
+        this.$message.error('上传模板只能是 xls,xlsx,csv 格式!')
+        return false
+      }
+      if (!isLt500k) {
+        this.$message.error('上传模板大小不能超过 500kb!')
+        return false
+      }
+    }
+  },
+  computed: {
+    ...mapState([
+      'enum_des',
+      'enum_des_selected',
+      'input_tag',
+      'page_field',
+      'page_hint',
+      'page_resource',
+      'temp_input_group',
+      'text_selected',
+      'sumbit_data'
+    ])
+  },
+  watch: {
+    'enum_des_selected': function (val) {
+      let params = formatUrlParams(location.search)
+      if (params.id) {
+        this.ruleForm.send_time_mode = val.send_time_mode
+        this.ruleForm.coupon_value = val.send_value
+        this.ruleForm.send_target = val.send_target
+        this.ruleForm.send_type = val.send_type
+        if (val.send_type === '1') {
+          this.ruleForm.coupon_value = val.send_value
+        } else {
+          this.ruleForm.package_value = val.send_value
+        }
+        this.ruleForm.send_member_lvl = val['send_member_lvl[]']
+        this.ruleForm.source = val.source.toString()
+        this.ruleForm.rfm = val.rfm
+        this.ruleForm.r_level = val.rfm_level.toString()
+        this.ruleForm.f_level = val.rfm_level.toString()
+        this.ruleForm.m_level = val.rfm_level.toString()
+        this.ruleForm.send_target_field = val.send_target_field.toString()
+        this.ruleForm.send_target_value = val.send_target_value
+        this.ruleForm.send_target_file = val.send_target_file
+        this.ruleForm.send_target_type = val.target_type
+        this.file_list = [{
+          name: val.send_target_file,
+          url: val.send_target_file,
+          status: 'finished'
+        }]
+      }
+    },
+    'input_tag': function (val) {
+      let params = formatUrlParams(location.search)
+      if (params.id) {
+        this.ruleForm.task_name = val.task_name.value
+        if (val.receive_repeat.value === '1') {
+          this.ruleForm.receive_repeat = true
+        }
+      }
+    },
+    'text_selected': function (val) {
+      let params = formatUrlParams(location.search)
+      if (params.id) {
+        this.ruleForm.send_count = val.send_count
+        this.ruleForm.send_time = val.send_time
+      }
+    }
+  }
+}
+</script>
+<style>
+a{
+	text-decoration:none;
+}
+.send-word{
+	padding: 6px 0px;
+    margin-right: 10px;
+    display: inline-block;
+    font-size: 15px;
+}
+#j-upload{
+	color:#AC9456;
+	background-color:#F6F6F6;
+	border:1px solid #EDEDED;
+}
+.up-date-title{
+	font-size: 15px;
+}
+.upload-title{
+	line-height: 15px;
+	overflow: hidden;
+	height: 40px;
+}
+.upload-title *{
+	float: left;
+	margin-right: 15px;
+}
+.upload-speed{
+	background-color: #CBB58C;
+	height: 15px;
+	width: 80px;
+	border: 1px solid #B2945E;
+}
+.unload-delete{
+	cursor: pointer;
+	color: #B2945E;
+}
+.upload-word{
+	margin-top: 15px;
+	color: #808080;
+	font-size: 15px;
+}
+.import-release{
+	border: 1px solid #E5E5E5;
+}
+.jfk-pages__price .set-wrapper-title{
+	font-size: 15px;
+	padding-left: 20px;
+	padding-bottom: 0;
+	background-color: #f6f6f6;
+}
+.set-wrapper-title > span{
+	margin-right: 10px;
+	padding: 0 15px 10px 15px;
+	display: inline-block;
+	cursor: pointer;
+}
+.set-wrapper-title .active{
+	border-bottom: 1px solid #AC9456;
+}
+.el-upload-list{
+	margin-left: -100px;
+}
+</style>

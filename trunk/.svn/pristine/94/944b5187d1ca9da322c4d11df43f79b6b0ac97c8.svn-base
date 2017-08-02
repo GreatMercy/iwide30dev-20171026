@@ -1,0 +1,57 @@
+@define-mixin line-down-base $height, $width, $position {
+  position: absolute;
+  content: '';
+  left: 0;
+  background-color: var(--color-golden);
+  @if $position == outside {
+    bottom: calc(-1 * px2rem($(height)));
+  } @else {
+    bottom: 0
+  }
+  @if $height == default {
+    height: px2rem(2);
+  } @else {
+    height: px2rem($(height));
+  }
+  @if $width == default {
+    width: 100%;
+  } @else {
+    width: $(width);
+  }
+}
+@define-mixin line-down $height: 2, $width: 100%, $position: outside, $pseudo: before {
+  @if $pseudo == null {
+    @mixin line-down-base $(height), $(width), $(position);
+    @mixin-content;
+  } @else {
+    position: relative;
+    &::$(pseudo) {
+      @mixin line-down-base $(height), $(width), $(position);
+      @mixin-content;
+    }
+  }
+}
+@define-mixin button $type, $plain: '', $disabled: '' {
+  @if $disabled != '' {
+    color: var(--button-disabled-color);
+    @if $type != ghost {
+      border-color: var(--button-disabled-border);
+    }
+    @if $plain == '' {
+      background-color: var(--button-disabled-fill-color);
+    }
+  } @else {
+    @if $type != '' {
+      background-color: var(--button-$(type)-fill-color);
+      border-color: var(--button-$(type)-border);
+      color: var(--button-$(type)-color);
+    }
+    @if $plain != '' {
+      background-color: transparent;
+      @if $type == primary {
+        color: var(--button-$(type)-plain-color);
+      }
+    }
+  }
+  @mixin-content;
+}

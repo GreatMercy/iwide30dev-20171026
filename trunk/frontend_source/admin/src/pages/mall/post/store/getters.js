@@ -1,0 +1,23 @@
+export default {
+  express_order_list (state) {
+    return state['express_order_list']
+  },
+  express_tabs (state) {
+    return state['express_tabs']
+  },
+  express_dialog_visible (state) {
+    return state['express_dialog_visible']
+  },
+  express_providers (state) {
+    return state['express_providers']
+  },
+  express_shipping_id (state) {
+    return state['express_shipping_id']
+  },
+  table_loading (state) {
+    return state['table_loading']
+  },
+  express_current_tabs (state) {
+    return state['express_current_tabs']
+  }
+}

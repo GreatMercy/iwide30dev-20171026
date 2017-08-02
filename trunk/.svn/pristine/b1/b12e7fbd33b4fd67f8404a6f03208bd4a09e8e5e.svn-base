@@ -1,0 +1,22 @@
+/* 首页商品列表 */
+.jfk-pages__index {
+  .good-lists__head {
+    &-title{
+      color: var(--font-color-white);
+    }
+  }
+  .good-lists__body{
+    .good-lists__item{
+      &-card {
+        .goods-info{
+          box-shadow: 0px 3px 21px 0px rgba(102, 102, 102, 0.15);
+          background-color: #fff;
+          &:before{
+            background-color: #fff;
+            box-shadow: -21px 18px 50px -20px rgba(102, 102, 102, 0.15);
+          }
+        }
+      }
+    }
+  }
+}

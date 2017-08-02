@@ -1,0 +1,79 @@
+<?php
+/**
+ * @DATE : 2017-07-24
+ * @SPEC : 管理员账号管理
+ * @AUTHOR : 沙沙
+ * @VERSION: v1.0
+ */
+defined ( 'BASEPATH' ) or exit ( 'No direct script access allowed' );
+class Accounts extends MY_Admin_Iapi
+{
+	protected $label_controller = '账号管理';
+	protected $label_action = '';
+	public function __construct()
+    {
+		parent::__construct ();
+		$this->inter_id = $this->session->get_admin_inter_id();
+		$this->common_data['csrf_token'] = $this->security->get_csrf_token_name();
+		$this->common_data['csrf_value'] = $this->security->get_csrf_hash();
+        $this->load->helper('appointment');//加载所需函数
+        header('content-type:application/json;charset=utf-8');//定义文本输出返回格式
+	}
+
+
+    /**
+     * 账号列表 接口
+     */
+	public function accountsList()
+    {
+        $param = request();
+        $ajaxData = array(
+            'csrf' => $this->common_data,
+            'list' => array(),
+            'page' => array(),
+            'param' => $param,
+        );
+        $this->out_put_msg(1,'成功',$ajaxData,'authority/accounts/accountsList');
+    }
+
+
+    /**
+     * 添加账户 接口
+     */
+    public function addAccount()
+    {
+        $param = request();
+        $ajaxData = array(
+            'param' => $param,
+        );
+        $this->out_put_msg(1,'添加成功',$ajaxData);
+    }
+
+    /**
+     * 编辑账户 接口
+     */
+    public function editAccount()
+    {
+        $param = request();
+
+        $ajaxData = array(
+            'param' => $param,
+        );
+        $this->out_put_msg(1,'编辑成功',$ajaxData);
+    }
+
+    /**
+     * 删除状态 接口
+     */
+    public function delAccount()
+    {
+        $param = request();
+
+        $ajaxData = array(
+            'param' => $param,
+        );
+        $this->out_put_msg(1,'编辑成功',$ajaxData);
+    }
+
+
+}

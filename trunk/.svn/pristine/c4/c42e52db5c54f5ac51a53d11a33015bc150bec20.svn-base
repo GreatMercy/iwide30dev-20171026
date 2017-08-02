@@ -1,0 +1,177 @@
+<!doctype html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="apple-mobile-web-app-capable" content="yes" >
+<meta name="apple-touch-fullscreen" content="yes">
+<meta name="format-detection" content="telephone=no,email=no">
+<meta name="ML-Config" content="fullscreen=yes,preventMove=no">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="viewport" content="width=320,initial-scale=1,user-scalable=0">
+<script src="scripts/jquery.js"></script>
+<script src="scripts/ui_control.js"></script>
+<link href="styles/global.css" rel="stylesheet">
+<title>开发者文档</title>
+<style>
+/* demo css */
+body,html{padding:5px;}
+*{font-weight:normal}
+span{ display:block; width:400px; padding:2px 0;}
+</style>
+</head>
+<body>
+<h2> Demo </h2>
+<h3>字体大小  -  数值为设计稿规定的大小</h3> 
+<!-- h后的数字即为设计稿字体大小 不需要换算  -->
+<div class="h36">class="h36"</div>
+<div class="h32">class="h32"</div>
+<div class="h30">class="h30"</div>
+<div class="h28">class="h28"</div>
+<div class="h26">class="h26"</div>
+<div class="h24">class="h24"</div>
+<div class="h22">class="h22"</div>
+<br>
+<h3>色系</h3> 
+<pre>
+<h3>通用样式</h3>
+<h2>色系对应的样式名</h2>
+<h3>主色 class="color_main" 对应背景色 class="bg_main"</h3>
+<h3>副色 class=color_minor" 对应背景色 class="bg_minor"</h3>
+<h3>重点色 class="color_key" 对应背景色 class="bg_key"</h3>
+<h3>链接色 class="color_link" 对应背景色 class="bg_link"</h3>
+<h2>副色系对应的样式名</h2>
+<h3>#F8F8F8 class="color_F8F8F8" #F8F8F8 class="bg_F8F8F8"</h3>
+<h3>#F3F4F8 class="color_F3F4F8" #F3F4F8 class="bg_F3F4F8"</h3>
+<h3>#E4E4E4 class="color_E4E4E4" #E4E4E4 class="bg_E4E4E4"</h3>
+<h3>#EEEEEE class="color_eee"    #EEEEEE class="bg_eee"</h3>
+<h3>#D3D3D3 class="color_D3D3D3" #D3D3D3 class="bg_D3D3D3"</h3>
+<h3>#C3C3C3 class="color_C3C3C3" #C3C3C3 class="bg_C3C3C3"</h3>
+<h3>#999999 class="color_999"    #999999 class="bg_999"</h3>
+<h3>#888888 class="color_888"    #888888 class="bg_888"</h3>
+<h3>#555555 class="color_555"    #555555 class="bg_555"</h3>
+<h3>#000000 class="color_000"    #000000 class="bg_000"</h3>
+<br>
+<h2>1px边框线</h2>
+<h3>左边框  class="bd_left"</h3>
+<h3>右边框  class="bd_right"</h3>
+<h3>上边框  class="bd_top"</h3>
+<h3>下边框  class="bd_bottom"</h3>
+<h3>全边框  class="bd_all"</h3>
+<h3>上下边框  class="bd"</h3>
+<h3>修改边框色为d3d3d3  class="bd bd_color_d3</h3>
+<h3>滚动          class="scroll"</h3>
+<h3>向左浮动       class="float"</h3>
+<h3>弹层          class="ui_pull"</h3>
+<h3>单行文字剪切   class="txtclip"</h3>
+<h3>两行文字剪切   class="multiclip"</h3>
+<h3>隐藏元素       class="hide"</h3>
+<h3>文字居中       class="center"</h3>
+<h3>按钮不可用样式  class="disable"</h3>
+<h3>定义webkitbox  class="webkitbox"</h3>
+<h3>定义icon图标   class="iconfont"</h3>
+<h3>定义主色按钮   class="btn_main"</h3>
+<h3>定义副色按钮   class="btn_minor"</h3>
+<h3>定义圆角      class="bdradius"</h3>
+<h3>定义margintop class="martop"</h3>
+<h3>定义padding   class="pad3"</h3>
+<h3>定义白色块      class="block"</h3>
+<h3>定义普通列表     class="normal_list"</h3>
+<h3>定义按钮/链接列表 class="btn_list"</h3>
+<h3>定义¥符号        class="y"</h3>
+<br>
+<h2>js接口调用,参数均有默认值</h2>
+<h3>首次加载页面 first_load();</h3>
+<h3>覆盖页面的加载效果 pageloading(tips,alpha);  tips:提示文字; alpha:背景透明度(0-1)</h3>
+<h3>元素内部的加载效果  showload(tips,parent);  tips:提示文字; parent:元素class或ID; </h3>
+<h3>移除所有加载 removeload();</h3>
+<h3>空结果 isnull(parent,tips,linkstr,url); parent:填充的位置; tips:提示文字; linkstr:链接文字; url:链接地址</h3>
+<h3>移除空结果 removenull(parent);  parent:移除的位置;</h3>
+<h3>弹层 toshow(parent); parent:需要弹出的class或ID;  注意: 弹层不可在未关闭前重复调用</h3>
+<h3>关闭弹层 toclose();</h3>
+<h3>滚动到底部 scrollBottom();</h3>
+<br>
+<h2>正则变量名</h2>
+<h3>手机号码:reg_phone</h3>
+<h3>身份证:reg_cid</h3>
+<h3>邮箱:reg_email</h3>
+<br>
+<h2>图片轮播JS调用</h2>
+<h3>
+*以下为默认值
+$.fn.imgscroll({
+    imgrate     :640/160,        //图片宽高比例
+    partent_div :'headers',      //轮播的元素
+    circlesize  :'5px',          //轮播小圆点大小
+    circlergb   :'255,255,255,1',//轮播小圆点rgba值
+    circleshow  :true,           //是否显示圆点
+});
+</h3>
+<h3>前端轮播图片html</h3>
+<h3>
+&lt;script src="scripts/jquery.js">&lt;/script>
+&lt;script src="scripts/imgscroll.js">&lt;/script>
+&lt;script src="scripts/jquery.touchwipe.min.js">&lt;/script>
+&lt;header class="headers">
+  &lt;div class="headerslide">
+    &lt;a class="slideson" href="">&lt;img src="" />&lt;/a>
+    &lt;a class="slideson" href="">&lt;img src="" />&lt;/a>
+  &lt;/div>
+&lt;/header>
+</h3>
+<h3>IOS原生弹窗</h3>
+<h3>
+&lt;script src="scripts/alert.js">&lt;/script>
+&lt;script src="scripts/jquery.js">&lt;/script>
+&lt;script>
+$.MsgBox.Alert(msg,fn);//msg:提示的文字;function:点击确定后执行函数
+//示例
+$.MsgBox.Alert('error',function(){alert('你点击了确定')});
+function a(){alert('你点击了确定')}
+$.MsgBox.Alert('error',a);
+&lt;/script>
+</h3>
+<h3>UI设计的弹窗</h3>
+<h3>
+&lt;script src="scripts/jquery.js">&lt;/script>
+&lt;script src="scripts/ui_control.js">&lt;/script>
+&lt;script>
+showtips({
+    title : 'This is title',   //标题, 默认为 '提示'
+    tips  : 'This is tips', // 提示的文案
+    isLink   : true, //是否为链接按钮;默认为true;
+    leftLink: 'cancel',   // 左按钮的文字 
+    leftUrl: 'url',  //左按钮的链接 ,默认为 #
+    leftClick: 'fn()',  //左按钮的点击事件 , 默认为null
+    rightLink: 'ok',  // 右按钮的文字 
+    rightUrl: 'url',  //右按钮的链接 ,默认为 #
+    rightClick: 'fn();',//右按钮的点击事件 , 默认为null
+});
+&lt;/script>
+</h3>
+<h3>IOS原生弹窗日历</h3>
+<h3>
+var opt= { 
+    theme:'ios', //设置显示主题 
+    mode:'scroller', //设置日期选择方式，这里用滚动
+    display:'bottom', //设置控件出现方式及样式
+    preset : 'date', //日期:年 月 日 时 分
+    minDate: '', //最小日期
+    maxDate: '',//最大日期
+    dateFormat: 'yy/mm/dd', // 日期格式
+    dateOrder: 'yymmdd', //面板中日期排列格式
+    stepMinute: 5, //设置分钟步长
+    yearText:'年', 
+    monthText:'月',
+    dayText:'日',
+    lang:'zh' //设置控件语言};
+    
+};
+</h3>
+</pre>
+<script>
+</script>
+
+</body>
+</html>

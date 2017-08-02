@@ -1,0 +1,9 @@
+<template>
+  <div class="jfk-pages jfk-pages__gift">
+  </div>
+</template>
+<script>
+  export default {
+    name: 'giftDetail'
+  }
+</script>

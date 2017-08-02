@@ -1,0 +1,8 @@
+:root{
+  --baseFontFamily: 'PingFang SC',Arial,Helvetica,sans-serif;
+  --size-queue: 24, 26, 30, 32, 34, 50, 54, 65;
+  --border-radius-big: 8;
+  --border-radius-small: 4;
+  --direction: (t, r, b, l), (top, right, bottom, left);
+  --price-tag-fill-colors: #6069ad, #6069ad, #7462ad, #9eb169, #b5699e;
+}

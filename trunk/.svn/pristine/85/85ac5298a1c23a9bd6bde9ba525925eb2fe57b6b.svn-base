@@ -1,0 +1,121 @@
+.jfk-radio {
+  &--shape-rect{
+    .jfk-radio {
+      &__icon {
+        border-color: #505050;
+        .icon {
+          color: #000;
+        }
+      }
+      &__text {
+        color: #fff;
+      }
+    }
+    input[type="radio"] {
+      &:disabled ~ .jfk-radio {
+        &__icon {
+          border-color: #363636;
+        }
+        &__text {
+          color: #363636;
+        }
+      }
+      &:disabled:checked ~ .jfk-radio {
+        &__icon {
+          &:before {
+            border-color: #363636 #363636 transparent transparent;
+          }
+          .icon {
+            color: #1f1f1f
+          }
+        }
+        &__text {
+          color: #363636
+        }
+      }
+    }
+    &.is-disabled{
+      .jfk-radio {
+        &__icon {
+          border-color: #363636;
+        }
+        &__text {
+          color: #363636;
+        }
+      }
+    }
+    &.is-disabled.is-checked {
+      .jfk-radio {
+        &__icon {
+          &:before {
+            border-color: #363636 #363636 transparent transparent;
+          }
+          .icon {
+            color: #1f1f1f
+          }
+        }
+        &__text {
+          color: #363636;
+        }
+      }
+    }
+  }
+}
+
+/* 在弹框上的 */
+.jfk-popup {
+  .jfk-radio {
+    &--shape-rect {
+      input[type="radio"] {
+        &:disabled ~ .jfk-radio {
+          &__icon {
+            border-color: #505050;
+            background-color: #333;
+            z-index: -1;
+          }
+          &__text {
+            color: #505050;
+          }
+        }
+        &:disabled:checked ~ .jfk-radio {
+          &__icon {
+            &:before {
+              border-color: #505050 #505050 transparent transparent;
+            }
+            .icon {
+              color: #282828
+            }
+          }
+        }
+      }
+      &.is-disabled {
+        .jfk-radio {
+          &__icon {
+            border-color: #505050;
+            background-color: #333;
+            z-index: -1;
+          }
+          &__text {
+            color: #505050;
+          }
+        }
+        &.is-checked {
+          .jfk-radio {
+            &__icon {
+              background-color: transparent;
+              &:before {
+                border-color: #505050 #505050 transparent transparent;
+              }
+              .icon {
+                color: #282828
+              }
+            }
+            &__text {
+              color: #808080;
+            }
+          }
+        }
+      }
+    }
+  }
+}

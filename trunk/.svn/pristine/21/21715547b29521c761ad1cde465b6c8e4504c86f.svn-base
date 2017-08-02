@@ -1,0 +1,39 @@
+import { getCouponDetail } from '@/service/user/http'
+export default {
+  state: {
+    csrf_token: '',
+    csrf_value: '',
+    content: {},
+    data: [],
+    page_resource: {
+      count: 0,
+      page: 0,
+      size: 0,
+      links: {}
+    },
+    loading: true,
+    tableloading: false
+  },
+  getDetail (data) {
+    this.state.tableloading = true
+    getCouponDetail(data).then(function (res) {
+      if (res.status === 1000) {
+        let json = res.web_data
+        this.state.csrf_token = json.csrf_token
+        this.state.csrf_value = json.csrf_value
+        let arr = []
+        for (let item in json.data) {
+          json.data[item][9] = item
+          arr.push(json.data[item])
+        }
+        this.state.data = arr
+        this.state.content = json.content
+        this.state.page_resource = json.page_resource
+        this.state.loading = false
+        this.state.tableloading = false
+      } else {
+        alert(res.msg)
+      }
+    }.bind(this))
+  }
+}

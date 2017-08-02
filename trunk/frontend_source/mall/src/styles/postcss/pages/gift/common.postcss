@@ -1,0 +1,67 @@
+.jfk-pages__gift {
+  .gift-box {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, .65);
+
+    &-wish {
+      position: absolute;
+      left: 0;
+      width: 100%;
+      top: px2rem(120);
+      color: #ffffff;
+      letter-spacing: 2px;
+    }
+
+    &-envelope {
+      width: 92%;
+      max-width: px2rem(690);
+      height: px2rem(708);
+      background-image: background-image(/gift/envelope.png);
+      background-size: cover;
+      margin: 16% auto;
+      overflow: hidden;
+      position: relative;
+      border-radius: px2rem(7);
+    }
+
+    &-content {
+      position: absolute;
+      width: px2rem(488);
+      height: px2rem(446);
+      background-image: background-image(/gift/gift.png);
+      background-size: contain;
+      bottom: px2rem(80);
+      left: 50%;
+      margin-left: px2rem(-244);
+    }
+
+    &-bg {
+      position: absolute;
+      width: 100%;
+      height: px2rem(302);
+      background-image: background-image(/gift/envelope_bg.png);
+      background-size: 100% 100%;
+      bottom: 0;
+      left: 0;
+    }
+
+    &-btn {
+      position: absolute;
+      width: px2rem(400);
+      height: px2rem(82);
+      line-height: px2rem(82);
+      background-image: background-image(/gift/btn.png);
+      background-size: contain;
+      letter-spacing: 2px;
+      left: 50%;
+      bottom: px2rem(60);
+      margin-left: px2rem(-200);
+      color: #ffffff;
+    }
+
+  }
+}

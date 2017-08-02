@@ -1,0 +1,13 @@
+@import './variable/common.postcss';
+@import './placeholder/common.postcss';
+@import './mixins/common.postcss';
+@import './modules/common/common.postcss';
+@import './modules/button/common.postcss';
+@import './modules/imageLazy/common.postcss';
+@import './modules/price/common.postcss';
+@import './modules/support/common.postcss';
+@import './modules/tab/common.postcss';
+@import './modules/tabbar/common.postcss';
+@import './modules/clock/common.postcss';
+@import './modules/priceTag/common.postcss';
+@import './pages/index/common.postcss';

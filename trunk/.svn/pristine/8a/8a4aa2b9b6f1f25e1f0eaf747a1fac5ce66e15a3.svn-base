@@ -1,0 +1,51 @@
+<template>
+  <div class="jfk-pages">
+    <div class="jfk-pages__theme"></div>
+  <ul>
+    <li v-for="type in types">
+      <a href="javascript:;" class="jfk-button" :class="'jfk-button--' + type" @click="togglePopup">测试按钮</a>
+      <a href="javascript:;" class="jfk-button is-plain" :class="'jfk-button--' + type">测试按钮</a>
+    </li>
+  </ul>
+  <jfk-popup
+    v-model="visible"
+    position="bottom-full"
+  >
+  <ul>
+    <li v-for="type in types">
+      <a href="javascript:;" class="jfk-button" :class="'jfk-button--' + type">测试按钮</a>
+      <a href="javascript:;" class="jfk-button is-plain" :class="'jfk-button--' + type">测试按钮</a>
+    </li>
+  </ul>
+  </jfk-popup>
+  </div>
+</template>
+<script>
+  export default {
+    data () {
+      return {
+        types: ['default', 'primary', 'ghost'],
+        visible: false
+      }
+    },
+    created () {
+      this.$jfkPrompt('确认接口和', '标题', {
+        showCloseButton: true
+      }).then(function (action) {
+        console.log(action, 'resolve')
+      }).catch(function (action) {
+        console.log(action, 'reject')
+      })
+    },
+    methods: {
+      togglePopup () {
+        this.visible = !this.visible
+      }
+    }
+  }
+</script>
+<style>
+  li{
+    padding: 90px;
+  }
+</style>

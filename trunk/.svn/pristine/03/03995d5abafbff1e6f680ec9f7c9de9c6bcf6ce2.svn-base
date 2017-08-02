@@ -1,0 +1,28 @@
+import * as apiConfig from './api'
+import ajax from '@/utils/http'
+
+const getMallAdvs = (data, config, version = 'v1') => {
+  let url = apiConfig[version] && apiConfig[version].GET_MALL_ADVS || apiConfig.v1.GET_MALL_ADVS
+  return ajax.get(url, data, config)
+}
+const getGoodLists = (data, config, version = 'v1') => {
+  let url = apiConfig[version] && apiConfig[version].GET_GOODS_LIST || apiConfig.v1.GET_GOODS_LIST
+  return ajax.get(url, data, config)
+}
+/**
+ * 获取商品详情
+ * @param  {Object} data    请求参数
+ * @param  {String} data.pid 商品id
+ * @param  {Object} config  axios配置
+ * @param  {String} version api版本
+ * @return {Object}         返回商品详情
+ */
+const getGoodData = (data, config, version = 'v1') => {
+  let url = apiConfig[version] && apiConfig[version].GET_GOOD_DATA || apiConfig.v1.GET_GOOD_DATA
+  return ajax.get(url, data, config)
+}
+const getGoodRecommendation = (data, config, version = 'v1') => {
+  let url = apiConfig[version] && apiConfig[version].GET_GOOD_RECOMMENDATION || apiConfig.v1.GET_GOOD_RECOMMENDATION
+  return ajax.get(url, data, config)
+}
+export { getMallAdvs, getGoodLists, getGoodData, getGoodRecommendation }

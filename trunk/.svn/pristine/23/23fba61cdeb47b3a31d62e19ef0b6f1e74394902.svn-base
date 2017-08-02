@@ -1,0 +1,170 @@
+<body>
+<link href="<?php echo base_url('public/soma/v1/v1.css'). config_item('css_debug');?>" rel="stylesheet">
+<div class="pageloading"><p class="isload">正在加载</p></div>
+
+<div id="goodsDetail">
+
+    <div class="tips box">
+        <div class="tips-left"></div>
+        <div class="tips-right flex1 f24">
+            粉丝福利：分享本产品，您的好友购买成功后，您将获得<span><small>5</small>元</span>红包奖励，隔天发至您的微信钱包
+        </div>
+    </div>
+
+    <div class="banner"></div>
+
+    <div class="detail">
+
+        <div class="countdown box">
+            <div class="countdown-title f24">距结束还有</div>
+            <div class="countdown-content f28">
+                22：12：28
+            </div>
+        </div>
+
+        <div class="title f34">
+            大三元经典款月饼大三元经典款月饼大三元经典款月饼大三元经典款
+        </div>
+
+        <div class="number box f24">
+            <div class="sub-title">已售</div>
+            <div>100</div>
+            <div class="line"></div>
+            <div class="sub-title">剩余名额</div>
+            <div>5/<span class="f20">10</span></div>
+            <div class="progress flex1">
+                <div></div>
+            </div>
+        </div>
+
+        <div class="price-wrap">
+            <div class="price">
+                <span class="symbol f28">¥</span>
+                <span class="f46">145</span>
+                <span class="original f24">¥ 546</span>
+            </div>
+        </div>
+
+        <div class="selected box">
+            <div class="f28"><span>已选：</span>大三元经典款月饼礼盒套餐一</div>
+            <div class="flex1"></div>
+        </div>
+
+        <div class="service box">
+            <div class="item flex1">
+                <p class="icon"></p>
+                <p class="text f24 ta-c">邮寄到家</p>
+            </div>
+
+            <div class="item flex1">
+                <p class="icon"></p>
+                <p class="text f24 ta-c">赠送好友</p>
+            </div>
+
+            <div class="item flex1">
+                <p class="icon"></p>
+                <p class="text f24 ta-c">到店自提</p>
+            </div>
+
+            <div class="item flex1">
+                <p class="icon"></p>
+                <p class="text f24 ta-c">随时退款</p>
+            </div>
+
+            <div class="item flex1">
+                <p class="icon"></p>
+                <p class="text f24 ta-c">随时退款</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="tabs clearfix">
+        <a href="javascript:void(0)" class="fl pr f32 ta-c active">
+            图文详情
+        </a>
+        <a href="javascript:void(0)" class="fl pr f32 ta-c">
+            订购须知
+        </a>
+    </div>
+
+    <div class="pic-content"></div>
+
+    <footer>
+        <div class="clearfix">
+            <div class="cell fl box">
+                <a href="" class="flex1">
+                    <p class="icon homepage"></p>
+                    <p class="ta-c f20 text">首页</p>
+                </a>
+                <a href="" class="flex1">
+                    <p class="icon order"></p>
+                    <p class="ta-c f20 text">订单</p>
+                </a>
+                <a href="" class="flex1">
+                    <p class="icon gift"></p>
+                    <p class="ta-c f20 text">送礼</p>
+                </a>
+            </div>
+            <a href="javascript:void(0)" class="fl ta-c f32 btn">立即购买</a>
+        </div>
+    </footer>
+</div>
+
+
+<div class="popup" style="display: none">
+    <div class="popup-wrap pr">
+        <div class="popup-header">
+            <a href="javascript:void(0)" class="fr"></a>
+        </div>
+
+        <div class="popup-content">
+            <div class="spec-wrap">
+
+                <div class="goods-detail">
+                    <div class="box">
+                        <div class="img"></div>
+                        <div class="info flex1">
+                            <p class="name f30">大三元经典月饼</p>
+                            <p class="price">
+                                <span class="f24">￥</span>145～<span class="f24">￥</span>245
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="spec-box">
+                    <div class="spec-title f24">商品种类</div>
+                    <ul class="clearfix">
+                        <li class="item fl f30">经典款</li>
+                        <li class="item fl f30">经典款</li>
+                        <li class="item fl f30">经典款</li>
+                        <li class="item fl f30">经典款</li>
+                    </ul>
+
+                    <div class="spec-title f24">商品种类</div>
+                    <ul class="clearfix">
+                        <li class="item fl f30">经典款</li>
+                        <li class="item fl f30">经典款</li>
+                        <li class="item fl f30">经典款</li>
+                        <li class="item fl f30">经典款</li>
+                    </ul>
+
+                    <div class="spec-title f24">商品种类</div>
+                    <ul class="clearfix">
+                        <li class="item fl f30">经典款</li>
+                        <li class="item fl f30">经典款</li>
+                        <li class="item fl f30">经典款</li>
+                        <li class="item fl f30">经典款</li>
+                    </ul>
+                </div>
+
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+</body>
+</html>

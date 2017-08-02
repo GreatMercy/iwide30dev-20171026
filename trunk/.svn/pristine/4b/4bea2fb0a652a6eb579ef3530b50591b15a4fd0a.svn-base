@@ -1,0 +1,77 @@
+
+@font-face {font-family: "jfk-font";
+  src: url('iconfont.eot?t=1500012238314'); /* IE9*/
+  src: url('iconfont.eot?t=1500012238314#iefix') format('embedded-opentype'), /* IE6-IE8 */
+  url('iconfont.woff?t=1500012238314') format('woff'), /* chrome, firefox */
+  url('iconfont.ttf?t=1500012238314') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
+  url('iconfont.svg?t=1500012238314#jfk-font') format('svg'); /* iOS 4.1- */
+}
+
+.jfk-font {
+  font-family:"jfk-font" !important;
+  font-size:16px;
+  font-style:normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-user_icon_Onlineboo:before { content: "\e60d"; }
+
+.icon-font_zh_dian_fzdbs:before { content: "\e615"; }
+
+.icon-font_zh_ding_qkbys:before { content: "\e614"; }
+
+.icon-font_zh_hui_fzdbs:before { content: "\e618"; }
+
+.icon-font_zh_jian_fzdbs:before { content: "\e61a"; }
+
+.icon-font_zh_mai_qkbys:before { content: "\e61e"; }
+
+.icon-font_zh_miao_fzdbs:before { content: "\e625"; }
+
+.icon-font_zh_miao_qkbys:before { content: "\e61f"; }
+
+.icon-font_zh_qu_qkbys:before { content: "\e620"; }
+
+.icon-font_zh_sha_qkbys:before { content: "\e621"; }
+
+.icon-font_zh_ti_qkbys:before { content: "\e622"; }
+
+.icon-font_zh_shi_fzdbs:before { content: "\e623"; }
+
+.icon-font_zh_te_fzdbs:before { content: "\e624"; }
+
+.icon-font_zh_vou_fzdbs:before { content: "\e628"; }
+
+.icon-font_zh_tui_fzdbs:before { content: "\e62a"; }
+
+.icon-font_zh_xian_fzdbs:before { content: "\e62b"; }
+
+.icon-font_zh_xing_qkbys:before { content: "\e626"; }
+
+.icon-font_zh_xin_fzdbs:before { content: "\e62c"; }
+
+.icon-font_zh_yue_qkbys:before { content: "\e629"; }
+
+.icon-font_zh_zhuan_fzdbs:before { content: "\e62d"; }
+
+.icon-mall_icon_home_user:before { content: "\e633"; }
+
+.icon-mall_icon_home:before { content: "\e634"; }
+
+.icon-font_zh_gou_qkbys:before { content: "\e65a"; }
+
+.icon-font_zh_chang_2_fzdb:before { content: "\e65b"; }
+
+.icon-font_zh_tuan_1_fzdbs:before { content: "\e65c"; }
+
+.icon-font_zh_sha_2_fzdbs:before { content: "\e65d"; }
+
+.icon-font_zh_xian_1_fzdbs:before { content: "\e65e"; }
+
+.icon-font_zh_mai_2_fzdbs:before { content: "\e65f"; }
+
+.icon-font_zh_re_1_fzdbs:before { content: "\e660"; }
+
+.icon-font_en_hot_ktj:before { content: "\e661"; }
+

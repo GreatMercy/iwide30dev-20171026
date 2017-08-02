@@ -1,0 +1,83 @@
+<!doctype html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="apple-mobile-web-app-capable" content="yes" >
+<meta name="apple-touch-fullscreen" content="yes">
+<meta name="format-detection" content="telephone=no,email=no">
+<meta name="ML-Config" content="fullscreen=yes,preventMove=no">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="viewport" content="width=320,user-scalable=0">
+<title>员工登记</title>
+<script src="../../media/scripts/jquery.js"></script>
+<script src="../public/scripts/ui_control.js"></script>
+<link rel="stylesheet" type="text/css" href="../public/styles/global.css">
+</head>
+<style>
+body,html{background:#ffffff; color:#555}input,select{width:85%; font-size:14px}.circle,.wait>*{border-radius:50%;}
+.steps .circle,.wait{ width:3.4rem; height:3.4rem; line-height:3.4rem; font-size:1.5rem; font-family:arial; display:inline-block; }
+.not .circle{background:#efefef}
+.steps >* {position:relative}
+.steps hr{ position:absolute; width:40%; left:-20%; top:1.8rem;}
+.form{width:80%; margin:7% auto; overflow:hidden; border:1px solid #efefef; padding-left:2.2rem; box-shadow:-5px 8px 25px rgba(180,180,180,0.1)}
+.form > *{padding:12px 0;}
+.form .iconfont:first-child{ margin-left:-1.4rem}
+.wait{background:#272636; line-height:3rem}
+.wait>*{background:#fff; display:inline-block; width:7px; height:7px; line-height:0; margin:0 2px}
+</style>
+<body>
+<div class="page" style="display:none">
+    <div class="steps webkitbox center pad15 h20">
+        <div class="">
+            <p class="circle bg_main">1</p>
+            <p class="martop">登记信息</p>
+        </div>
+        <div class="not">
+            <hr>
+            <p class="circle bg_main">2</p>
+            <p class="martop">后台审核</p>
+        </div>
+        <div class="not">
+            <hr>
+            <p class="circle bg_main">3</p>
+            <p class="martop">审核结果</p>
+        </div>
+    </div>
+    <div class="form bdradius">
+        <div class="bd_bottom">
+            <em class="iconfont">&#x38;</em>
+            <input name="" placeholder="输入姓名">
+        </div>
+        <div>
+            <em class="iconfont">&#x41;</em>
+            <select>
+                <option>酒店酒店酒店酒店酒店酒店酒店酒店酒店1</option><option>酒店2</option><option>酒店3</option>
+            </select>
+            <em class="iconfont">&#x2B;</em>
+        </div>
+    </div>
+    <div class="foot_btn" style="margin-top:50px"><button class="btn_void color_main bdradius disable">提交</button></div>
+</div>
+<div class="page center h20" style="display:none">
+	<div class="wait circle color_fff" style="margin-top:50px"><span></span><span></span><span></span></div>
+	<div class="martop">等待审核</div>
+</div>
+</body>
+<script>
+var curstep = 1; ///设置状态
+	$('input').bind('input propertychange',function(){
+		if($.trim($(this).val())!='') $('button').removeClass('disable');
+		else  $('button').addClass('disable');
+	})
+	$('button').click(function(){
+		if($(this).hasClass('disable'))return;
+		alert('提交成功');
+		curstep=2;
+		showpage();
+	})
+	function showpage(){$('.page').eq(curstep-1).show().siblings('.page').hide();}
+	showpage();
+</script>
+</html>

@@ -1,0 +1,7 @@
+.jfk-support {
+  &__box {
+    &:before,&:after{
+      background-color: #f2f2f2;
+    }
+  }
+}

@@ -1,0 +1,105 @@
+let showLoadError = function (err) {
+  if (process.env.NODE_ENV === 'development') {
+    return console.error(err)
+  }
+  return console.error(err.message)
+}
+const index = (r) => {
+  require.ensure([], function (require) {
+    let index = require('./index/index')
+    r(index.default)
+  }, showLoadError, 'index')
+}
+const home = (r) => {
+  require.ensure([], function (require) {
+    let index = require('./home/index')
+    r(index.default)
+  }, showLoadError, 'home')
+}
+const detail = (r) => {
+  import(/* webpackChunkName: "home" */ './detail/index').then(function (detail) {
+    r(detail.default)
+  }).catch(function (err) {
+    showLoadError(err, 'detail')
+  })
+}
+const pay = (r) => {
+  import(/* webpackChunkName: "home" */ './pay/index').then(function (pay) {
+    r(pay.default)
+  }).catch(function (err) {
+    showLoadError(err, 'pay')
+  })
+}
+const orderDetail = (r) => {
+  import(/* webpackChunkName: "home" */ './orderDetail/index').then(function (orderDetail) {
+    r(orderDetail.default)
+  }).catch(function (err) {
+    showLoadError(err, 'orderDetail')
+  })
+}
+const orderCenter = (r) => {
+  import(/* webpackChunkName: "home" */ './orderCenter/index').then(function (orderCenter) {
+    r(orderCenter.default)
+  }).catch(function (err) {
+    showLoadError(err, 'orderCenter')
+  })
+}
+// 转赠礼物
+const sendGift = (r) => {
+  import(/* webpackChunkName: "home" */ './send_gift/index').then(function (sendGift) {
+    r(sendGift.default)
+  }).catch(function (err) {
+    showLoadError(err, 'sendGift')
+  })
+}
+// 收礼列表
+const giftList = (r) => {
+  import(/* webpackChunkName: "home" */ './gift_list/index').then(function (giftList) {
+    r(giftList.default)
+  }).catch(function (err) {
+    showLoadError(err, 'giftList')
+  })
+}
+// 礼物详情
+const giftDetail = (r) => {
+  import(/* webpackChunkName: "home" */ './gift_detail/index').then(function (giftList) {
+    r(giftList.default)
+  }).catch(function (err) {
+    showLoadError(err, 'giftDetail')
+  })
+}
+const success = (r) => {
+  import(/* webpackChunkName: "home" */ './success/index').then(function (success) {
+    r(success.default)
+  }).catch(function (err) {
+    showLoadError(err, 'success')
+  })
+}
+const gift = (r) => {
+  import(/* webpackChunkName: "home" */ './gift/index').then(function (gift) {
+    r(gift.default)
+  }).catch(function (err) {
+    showLoadError(err, 'gift')
+  })
+}
+const test = (r) => {
+  import(/* webpackChunkName: "home" */ './test/index').then(function (gift) {
+    r(gift.default)
+  }).catch(function (err) {
+    showLoadError(err, 'gift')
+  })
+}
+export default {
+  home,
+  index,
+  detail,
+  pay,
+  orderDetail,
+  orderCenter,
+  sendGift,
+  success,
+  gift,
+  giftList,
+  giftDetail,
+  test
+}

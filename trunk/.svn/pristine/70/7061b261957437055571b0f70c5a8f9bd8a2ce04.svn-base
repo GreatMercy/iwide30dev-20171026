@@ -1,0 +1,16 @@
+<template>
+  <div class="watermark"></div>
+</template>
+<script>
+  export default {}
+</script>
+<style lang="scss" scoped>
+  @import '../../../common/scss/include';
+
+  .watermark {
+    width: 100%;
+    height: px2rem(103);
+    background: url(./img/watermark.png) center center no-repeat;
+    background-size: contain;
+  }
+</style>

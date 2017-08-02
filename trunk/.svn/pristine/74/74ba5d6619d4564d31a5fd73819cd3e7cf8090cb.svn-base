@@ -1,0 +1,27 @@
+// api v1版本
+let API_URL_SUFFIX = 'index.php/iapi'
+let API_URL_SUFFIX_V1 = `${API_URL_SUFFIX}/soma`
+
+// 商品相关部分
+let API_PACKAGE_V1 = `${API_URL_SUFFIX_V1}/package`
+// 秒杀相关
+let API_KILLSEC_V1 = `${API_URL_SUFFIX_V1}/killsec`
+// 订单相关
+let API_ORDER_V1 = `${API_URL_SUFFIX_V1}/order`
+const v1 = {
+  // 请求商品列表
+  GET_PACKAGE_LISTS: `${API_PACKAGE_V1}/list`,
+  // 请求商品详情
+  GET_PACKAGE_INFO: `${API_PACKAGE_V1}/info`,
+  // 请求推荐
+  GET_PACKAGE_RECOMMENDATION: `${API_PACKAGE_V1}/goods/get_recommendation`,
+  // 订阅秒杀提醒
+  POST_KILLSEC_NOTICE: `${API_KILLSEC_V1}/notice`,
+  // 订单列表
+  GET_ORDER_LIST: `${API_ORDER_V1}/index`,
+  // 下单
+  POST_ORDER: `${API_ORDER_V1}/index`
+}
+export {
+  v1
+}

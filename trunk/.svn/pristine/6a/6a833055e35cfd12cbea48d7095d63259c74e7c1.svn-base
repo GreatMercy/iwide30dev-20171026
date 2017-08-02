@@ -1,0 +1,121 @@
+/* 转赠 */
+
+.jfk-pages__send-gift {
+  .jfk-pages__theme {
+    &.jfk-pages__theme-list {
+      background-color: var(--color-light-black);
+    }
+  }
+}
+
+.jfk-pages__send-gift {
+  .button-box {
+    .jfk-button {
+      border: 1px solid var(--button-primary-fill);
+      color: var(--button-primary-fill);
+    }
+  }
+
+  .goods-info {
+    &-name {
+      color: var(--tab-separate-line-color);
+    }
+
+    &-desc {
+
+      &__price {
+        .jfk-price {
+          color: var(--color-white);
+        }
+        &-number {
+          color: var(--color-white);
+        }
+      }
+
+      &__packname {
+        color: var(--tab-separate-line-color);
+      }
+      &__title {
+        color: var(--font-color-extra-light-gray);
+      }
+      &__number {
+        color: var(--font-color-light-gray);
+      }
+      &__line {
+        background-color: var(--tab-font-color);
+      }
+    }
+  }
+
+  .gift-put-order {
+    color: var(--tab-font-color);
+    &:after {
+      border-top: 1px solid var(--font-color-extra-light-gray);
+      border-right: 1px solid var(--font-color-extra-light-gray);
+    }
+  }
+
+  .jfk-pages__theme {
+    background-color: var(--color-white);
+  }
+
+  .title {
+    color: var(--font-color-white);
+    @mixin line-down 2, 5.6% {
+    }
+    &:before {
+      left: 50%;
+      background-color: var(--line-color-light-silver);
+      transform: translate(-50%, 0);
+      bottom: px2rem(-18);
+    }
+  }
+
+  .gift-info {
+
+    &-theme {
+      color: var(--font-color-white);
+      &__arrow {
+        &:after {
+          border-top: 1px solid var(--font-color-extra-light-gray);
+          border-right: 1px solid var(--font-color-extra-light-gray);
+        }
+      }
+    }
+
+    &-content {
+      &__unit {
+        color: var(--font-color-light-gray);
+      }
+    }
+
+    &__item {
+      &:before {
+        background-color: var(--line-color-light-silver);
+        left: 0;
+        bottom: 0;
+      }
+    }
+
+    &-title {
+      color: var(--tab-font-color);
+    }
+
+    &-wish {
+      &::-webkit-input-placeholder {
+        color: var(--font-color-light-gray);
+      }
+    }
+  }
+
+  .gift-theme-list {
+    &__box {
+      box-shadow: 0 0 5px var(--font-color-extra-light-gray);
+    }
+
+    &__name {
+      background-color: var(--good-tag-color);
+    }
+  }
+
+}

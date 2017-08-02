@@ -1,0 +1,102 @@
+<!doctype html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="apple-mobile-web-app-capable" content="yes" >
+<meta name="apple-touch-fullscreen" c ontent="yes">
+<meta name="format-detection" content="telephone=no,email=no">
+<meta name="ML-Config" content="fullscreen=yes,preventMove=no">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="viewport" content="width=320,user-scalable=0">
+<title>订单详情</title>
+<link rel="stylesheet" type="text/css" href="styles/global.css">
+<link rel="stylesheet" type="text/css" href="styles/service.css">
+<script src="scripts/jquery.js"></script>
+<script src="scripts/ui_control.js"></script>
+<script src="scripts/alert.js"></script>
+</head>
+<body>
+<div class="pageloading"></div>
+<page class="page h24">
+	<header>
+    	<div class="center bg_fff flex flexjustify tablayer color_main">
+        	<div class="iscur" type="using"><tt>预约中</tt></div>
+        	<div type="used"><tt>已用餐</tt></div>
+        	<div type="cancel"><tt>已取消</tt></div>
+        	<div type="all"><tt>全部</tt></div>
+        </div>
+    </header>
+    <section class="scroll flexgrow orders" style="padding-bottom:10px">
+        <div class="list_style_2 martop flexlist" orderid="123456">
+            <div class="flex flexjustify h24">
+            	<div class="color_999">2017-01-16</div>
+				<div class="color_main">预约中</div>
+            </div>
+        	<div class="flex">
+                <div class="img"><div class="squareimg"><img src="images/egimg/eg_user.png"></div></div>
+            	<div class="flexgrow">
+                    <span class="h24">凤轩中餐厅</span>
+                	<div class="h20 color_999">2017-01-18 14:00 4人</div>
+                </div>
+            </div>
+            <div class="btnlayer">
+            	<div class="btn_void h22 color_999" onClick="cancel(this)">取消</div>
+            </div>
+        </div>
+    </section>
+    <footer></footer>
+</page>
+</body>
+<script>
+
+$('.tablayer>*').click(function(){
+	$(this).addClass('iscur').siblings().removeClass('iscur');
+	pageloading();
+	getData();
+});
+function isnone(str){
+	str = str?str:'暂无订单结果';
+	str = '<div style="padding:30px 0" class="center color_999 h22">'+str+'</div>';
+	$('.orders').html(str);
+}
+function getData(){
+	var type = $('.tablayer .iscur').attr('type');
+	$.ajax({
+		url:'',
+		data:type,
+		dataType:"json",
+		complete: function(data){
+			removeload();
+			if($('.flexlist').length<=0) isnone();
+		},
+		success: function(data){
+			var str = '';
+			$('.orders').html(str);
+			if($('.flexlist').length<=0) isnone();
+		}
+	});
+}
+function cancel(dom){
+	pageloading();
+	var oid = $(dom).parents('[orderid]').attr('orderid');
+	$.ajax({
+		url:'',
+		data:oid,
+		dataType:"json",
+		complete: function(data){
+			removeload();
+		},
+		success: function(data){
+			$.MsgBox.Alert('取消成功',function(){
+				$('[type="cancel"]').trigger('click');
+			});
+			$('#mb_btn_no').remove();
+		}
+	});
+}
+
+getData();
+</script>
+</html>

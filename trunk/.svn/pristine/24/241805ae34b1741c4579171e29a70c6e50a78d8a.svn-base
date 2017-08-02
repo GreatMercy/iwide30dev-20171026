@@ -1,0 +1,20 @@
+        <script>
+            var jfkConfig = {
+                wxConfig: <?php echo json_encode($wx_config); ?>,
+                wxApiList: <?php echo $js_api_list; ?>,
+                wxMenuHide: <?php echo $js_menu_hide; ?>,
+                wxShare: <?php echo json_encode($js_share_config); ?>,
+                interID: '<?php echo $inter_id;?>',
+                token: <?php echo json_encode($token)?>
+            }
+        </script>
+        <script type=text/javascript src="<?php echo refer_res('manifest.js', 'SOMA') ?>"></script>
+        <script type=text/javascript src="<?php echo refer_res('vendor.js', 'SOMA') ?>"></script>
+        <script type=text/javascript src="<?php echo refer_res('app.js', 'SOMA') ?>"></script>
+        <script>
+            /*下列字符不能删除，用作替换之用*/
+            //[<sign_update_code>]
+            <?php echo isset($statistics_js) ? $statistics_js :'' ;?>
+        </script>
+    </body>
+</html>

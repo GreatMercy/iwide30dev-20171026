@@ -1,0 +1,119 @@
+import KillsecTime from 'jfkcommon/utils/killsecTime'
+import { postKillsecNotice } from '@/service/http'
+const priceTagMap = {
+  // 1：专属 2：秒杀 3：拼团 4：满减 5：组合 6：储值 7：积分
+  '1': '<i class="jfk-font jfk-price-tag__word icon-font_zh_zhuan_fzdbs"></i><i class="jfk-font jfk-price-tag__word icon-font_zh_shu_fzdbs"></i>',
+  '2': '<i class="jfk-font jfk-price-tag__word icon-font_zh_miao_fzdbs"></i><i class="jfk-font jfk-price-tag__word icon-font_zh_sha_fzdbs"></i>',
+  '3': '<i class="jfk-font jfk-price-tag__word icon-font_zh_pin_fzdbs"></i><i class="jfk-font jfk-price-tag__word icon-font_zh_tuan_fzdbs"></i>',
+  '4': '<i class="jfk-font jfk-price-tag__word icon-font_zh_man_fzdbs"></i><i class="jfk-font jfk-price-tag__word icon-font_zh_jian_fzdbs"></i>',
+  '5': '<i class="jfk-font jfk-price-tag__word icon-font_zh_zu_fzdbs"></i><i class="jfk-font jfk-price-tag__word icon-font_zh_he_fzdbs"></i>',
+  '6': '<i class="jfk-font jfk-price-tag__word icon-font_zh_chu_fzdbs"></i><i class="jfk-font jfk-price-tag__word icon-font_zh_zhi_fzdbs"></i>',
+  '7': '<i class="jfk-font jfk-price-tag__word icon-font_zh_ji_fzdbs"></i><i class="jfk-font jfk-price-tag__word icon-font_zh_fen_fzdbs"></i>'
+}
+const buttonTextMap = {
+  // 1 立即购买2 去秒杀 3 订阅提醒 4 已订阅
+  '1': '<i class="jfk-font jfk-button__text-item icon-font_zh_li_qkbys"></i><i class="jfk-font jfk-button__text-item icon-font_zh_ji_qkbys"></i><i class="jfk-font jfk-button__text-item icon-font_zh_gou_qkbys"></i><i class="jfk-font jfk-button__text-item icon-font_zh_mai_qkbys"></i>',
+  '2': '<i class="jfk-font jfk-button__text-item icon-font_zh_qu_qkbys"></i><i class="jfk-font jfk-button__text-item icon-font_zh_miao_qkbys"></i><i class="jfk-font jfk-button__text-item icon-font_zh_sha_qkbys"></i>',
+  '3': '<i class="jfk-font jfk-button__text-item icon-font_zh_ding_qkbys"></i><i class="jfk-font jfk-button__text-item icon-font_zh_yue_qkbys"></i><i class="jfk-font jfk-button__text-item icon-font_zh_ti_qkbys"></i><i class="jfk-font jfk-button__text-item icon-font_zh_xing_qkbys"></i>',
+  '4': '<i class="jfk-font jfk-button__text-item icon-font_zh_yi_qkbys"></i><i class="jfk-font jfk-button__text-item icon-font_zh_ding_qkbys"></i><i class="jfk-font jfk-button__text-item icon-font_zh_yue_qkbys"></i>'
+}
+const buttonThemeMap = {
+  '1': 'default',
+  '2': 'primary',
+  '3': 'primary',
+  '4': 'default'
+}
+const buttonTextFn = function (type) {
+  return '<button class="jfk-button jfk-button--' + buttonThemeMap[type] + ' font-size--30 product-button"><span class="jfk-button__text">' + buttonTextMap[type] + '</span></button>'
+}
+export default {
+  data () {
+    return {
+      killsecTime: {},
+      buttonText: '',
+      // 点击按钮后的操作，1 跳详情页 2 订阅提醒 3 已订阅
+      buttonType: 1
+    }
+  },
+  created () {
+    let that = this
+    if (that.product.tag === 2) {
+      if (that.product.killsec.subscribe_status === 1) {
+        that.buttonText = buttonTextFn(4)
+        that.buttonType = 3
+      } else {
+        const { killsec_time: start, end_time: end } = that.product.killsec
+        let advanceTenMinutes = start * 1000 - 60000
+        that.killsecTime = new KillsecTime({
+          start: start * 1000,
+          end: end * 1000,
+          callback: function (type, val, ctx) {
+            if (type === 'has-finish' || type === 'on-finish' || type === 'has-start' || type === 'on-start' || (type === 'is-change' && ctx.process === 2 && val > advanceTenMinutes)) {
+              that.buttonText = buttonTextFn(2)
+              that.buttonType = 1
+            } else {
+              that.buttonText = buttonTextFn(3)
+              that.buttonType = 2
+            }
+          }
+        })
+      }
+    } else {
+      that.buttonText = buttonTextFn(1)
+    }
+  },
+  computed: {
+    pricePackage () {
+      let price = this.product.tag === 2 ? this.product.killsec.killsec_price : this.product.price_package
+      return (this.product.tag !== 7 ? '<i class="jfk-font-number jfk-price__currency">￥</i>' : '') + '<i class="jfk-font-number jfk-price__number">' + price + '</i>'
+    },
+    priceTagText () {
+      return priceTagMap[this.product.tag]
+    },
+    productNumber () {
+      if (this.product.tag === 2) {
+        return '限' + this.product.killsec.killsec_count
+      } else {
+        return '已售' + this.product.sales_cnt
+      }
+    },
+    detailUrl () {
+      if (process.env.NODE_ENV === 'development') {
+        return '/detail'
+      }
+      return this.detailUrlPrefix + this.product.product_id
+    }
+  },
+  methods: {
+    handleButtonClick () {
+      if (this.buttonType === 1) {
+        location.href = this.detailUrl
+      } else if (this.buttonType === 2) {
+        postKillsecNotice({
+          act_id: this.product.killsec.act_id
+        }).then(function (res) {
+          console.log(res)
+        }).catch(function (err) {
+          console.log(err)
+        })
+      } else if (this.buttonType === 3) {
+        console.log(3333)
+      }
+    }
+  },
+  props: {
+    product: {
+      type: Object,
+      required: true
+    },
+    detailUrlPrefix: {
+      type: String,
+      required: true
+    }
+  },
+  beforeDestroy () {
+    if (this.product.tag === 2) {
+      this.killsecTime.close()
+    }
+  }
+}

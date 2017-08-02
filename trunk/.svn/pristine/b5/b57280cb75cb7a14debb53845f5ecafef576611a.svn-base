@@ -1,0 +1,75 @@
+/* 转赠 */
+.jfk-pages__send-gift {
+
+  .button-box {
+    .jfk-button {
+      border: 1px solid var(--button-primary-fill);
+      color: var(--button-primary-fill);
+    }
+  }
+
+  .goods-info {
+    &-name {
+      color: var(--color-white);
+    }
+
+    &-desc {
+      &__packname {
+        color: var(--color-white);
+      }
+      &__title {
+        color: var(--font-color-extra-light-gray);
+      }
+      &__number {
+        color: var(--font-color-light-gray);
+      }
+      &__line {
+        background-color: var(--tab-font-color);
+      }
+    }
+  }
+
+  .gift-put-order {
+    color: var(--tab-font-color);
+  }
+
+  .jfk-pages__theme {
+    background-color: var(--color-white);
+  }
+
+  .title {
+    color: var(--font-color-white);
+    &:after {
+      background: var(--line-color-light-silver);
+    }
+  }
+
+  .gift-info {
+
+    &-theme {
+      color: var(--font-color-white);
+      &__arrow {
+        &:after {
+          border-top: 1px solid var(--font-color-extra-light-gray);
+          border-right: 1px solid var(--font-color-extra-light-gray);
+        }
+      }
+    }
+
+    &__item {
+      border-bottom: 1px solid var(--line-color-light-silver);
+    }
+
+    &-title {
+      color: var(--tab-font-color);
+    }
+
+    &-wish {
+      &::-webkit-input-placeholder {
+        color: var(--font-color-light-gray);
+      }
+    }
+
+  }
+
+}

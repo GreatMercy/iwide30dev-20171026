@@ -1,0 +1,10 @@
+.jfk-pages__invalid{
+    .invalid_content{
+        .invalid_icon{
+            color: #333;
+        }
+        p{
+            color: #333;
+        }
+    }
+}

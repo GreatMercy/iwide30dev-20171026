@@ -1,0 +1,123 @@
+<template>
+  <section class="gradient_bg padding_0_15">
+    <header>
+      <div class="banner padding_top_15">
+          <div class="relative radius_5 overflow"  v-if="data.centerinfo.is_login !== 't' && data.centerinfo.member_mode !== '2'">
+              <div class="banner_img">
+                <img src="../../assets/image/nologin_box.png" alt="">
+              </div>
+              <div class="banner_txt absolute l_t_0 flex between font_15">
+                <span class="block center flex_1">加入XXX，领取¥200大礼包</span>
+                <a class="block" href="/index.php/membervip/reg/index">
+                  <span class="iconfont main_color1 font_17 margin_right_15">&#xe607;&#xe610;/&#xe61a;&#xe605;<em class="iconfont font_16">&#xe61c;</em>
+                  </span>
+                </a>
+              </div>
+          </div>
+          </div>
+      <div class="flex between padding_60 font_12 bd_bottom">
+        <div class="margin_right_30 relative padding_left_35">
+          <div class="line_left absolute"><img src="../../assets/image/line_03.png" alt=""></div>
+          <div>
+            <div class="head_img"><img alt="" :src="data.info.headimgurl"></div>
+            <div class="iconfont margin_top_8 center relative"><em class="iconfont font_21 bold absolute spot color_338b43">&#xe7b0;</em>{{data.centerinfo.lvl_name}}</div>
+          </div>
+        </div>
+        <div class="flex_1">
+          <a class="block flex between">
+            <div>
+              <p class="font_19">
+                 <span v-if="data.centerinfo.name === '微信用户' || data.centerinfo.name === ''">{{data.centerinfo.nickname}}</span>
+                 <span v-else>{{data.centerinfo.name}}</span>
+              </p>
+              <p>{{data.centerinfo.membership_number}}</p>
+            </div>
+            <div v-if="data.centerinfo.is_login === 't' && data.centerinfo.member_mode === '2'">
+              <a href="/info.html"><em class="iconfont font_15 bold">&#xe61c;</em></a>
+            </div>
+          </a>
+          <!-- <a class="block margin_top_20">查看会员权益<em class="iconfont margin_left_8 font_17">&#xe61e;</em></a> -->
+        </div>
+      </div>
+
+      <div class="flex between padding_60 bd_bottom padding_0_14" v-if="data.centerinfo.is_login !== 't' && data.centerinfo.member_mode !== '2'">
+        <a class="block margin_right_20 center flex_1 padding_15 relative border_1"><em class="iconfont font_19 margin_right_8">&#xe64f;</em>微信登陆</a>
+        <a href="/index.php/membervip/reg/index" class="block center flex_1 padding_16 color_fff bg_b2945e">会员登陆/注册</a>
+      </div>
+    </header>
+    <section class="flex around padding_35 font_12">
+      <div class="flex_1 center">
+        <a :href="data.assets_bottons.credit_name.link">
+          <p><em class="iconfont margin_right_8 txt_show1">&#xe622;</em>{{data.assets_bottons.credit_name.name}}<em class="iconfont margin_left_4 font_17">&#xe61e;</em></p>
+          <p class="font_19">
+            <span v-if="data.centerinfo.value === 'login' &&  data.centerinfo.member_mode === 1 ">-</span>
+            <span v-else>{{data.centerinfo.credit}}</span>
+          </p>
+        </a>
+      </div>
+      <div class="line_center"><img alt="" src="../../assets/image/line_01.png" /></div>
+      <div class="flex_1 center">
+        <a :href="data.assets_bottons.balance_name.link">
+          <p><em class="iconfont margin_right_8 txt_show1">&#xe62e;</em>{{data.assets_bottons.balance_name.name}}<em class="iconfont margin_left_4 font_17">&#xe61e;</em></p>
+          <p>¥<span class="font_19" v-if="data.centerinfo.value === 'login' &&  data.centerinfo.member_mode === 1">-</span><span v-else>{{data.centerinfo.balance}}</span>
+          </p>
+        </a>
+      </div>
+      <div class="line_center"><img alt="" src="../../assets/image/line_01.png" /></div>
+      <div class="flex_1 center">
+        <a :href="data.assets_bottons.coupon_name.link">
+          <p><em class="iconfont margin_right_8 txt_show1">&#xe61f;</em>{{data.assets_bottons.coupon_name.name}}<em class="iconfont margin_left_4 font_17">&#xe61e;</em></p>
+          <p>¥<span class="font_19">{{data.centerinfo.card_count}}</span></p>
+        </a>
+      </div>
+    </section>
+    <section class="flex ">
+      <a class="block flex_1 center bg_202020 radius_3 padding_32">
+        <em class="iconfont margin_left_8 txt_show2">&#xe62b;</em>
+        <span class="iconfont">商城订单</span>
+        <em class="iconfont margin_left_8 font_17">&#xe61e;</em>
+      </a>
+      <a class="block flex_1 center bg_202020 radius_3 padding_32 margin_left_15">
+        <em class="iconfont margin_left_8 txt_show2">&#xe62d;</em>
+        <span class="iconfont">订房订单</span>
+        <em class="iconfont margin_left_8 font_17">&#xe61e;</em>
+      </a>
+    </section>
+    <section class="flex wrap margin_top_35 padding_bottom_77 font_12">
+      <a v-for="(value,key) in menulist" class="block width_25" :href="value.link"> 
+        <div class="flex column center padding_20">
+          <p><em class="iconfont font_21 color_fff">&#xe629;</em></p>
+          <div class="margin_top_18">{{value.modelname}}</div>
+        </div>
+      </a>
+    </section>
+  </section>
+</template>
+<script>
+import { getIndexInfo } from '@/service/http'
+export default {
+  data () {
+    return {
+      data: [],
+      menulist: []
+    }
+  },
+  created () {
+    getIndexInfo().then((res) => {
+      this.data = res.web_data
+      for (let item in this.data.menu) {
+        for (let inItem in this.data.menu[item]) {
+          if (this.data.centerinfo.member_mode === 2 && this.data.centerinfo.is_login === 'f') {
+            this.data.menu[item][inItem].link = '/index.php/membervip/login'
+          } else if (this.data.centerinfo.member_mode === 1 && this.data.centerinfo.is_login === 'login') {
+            this.data.menu[item][inItem].link = '/index.php/membervip/login'
+          }
+          this.menulist.push(this.data.menu[item][inItem])
+        }
+      }
+    })
+  },
+  methods: {
+  }
+}
+</script>

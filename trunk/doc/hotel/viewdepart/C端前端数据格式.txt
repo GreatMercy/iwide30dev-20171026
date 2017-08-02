@@ -1,0 +1,90 @@
+请求地址格式：
+http://ihotels.iwide.cn/index.php/iapi/hotel/hotel/search
+发送数据格式(post,json)：
+如：{
+    "ts": 1495636743859,//请求时间
+    "send_data": {
+    }
+}
+status:
+1000, // 1000: 成功                                
+1001, // 1001：失败，前端用toast显示错误提示（不需要用户操作，自动消失）    
+1002, // 1002：失败，前端用alert显示错误提示（要点击确认）           
+1003, // 1003：未登录状态。                              
+1004, // 1004：未知错误。                              
+1005 //1005：公众号已停止服务     
+
+msg_type:
+'toast'//前端用toast显示msg（不需要用户操作，自动消失） 
+'alert'//前端用alert显示msg（要点击确认）          
+           
+page_resource:页面资源，包括跳转链接links，分页数据：page，count，size   
+返回格式：
+{
+    "status": 1000,
+    "msg": "",
+    "msg_type": "",
+    "web_data": {
+        "page_resource": {
+            "links": {
+                "edit": "http://www.ai3.cn/index.php/hotel/prices/edit"
+            }
+        },
+        "citys": {
+            "A": [
+                {
+                    "city": "安庆市",
+                    "hotel_num": "1"
+                },
+                {
+                    "city": "鞍山市",
+                    "hotel_num": "1"
+                }
+            ],
+            "C": [
+                {
+                    "city": "池州市",
+                    "hotel_num": "1"
+                },
+                {
+                    "city": "巢湖市",
+                    "hotel_num": "2"
+                },
+                {
+                    "city": "滁州市",
+                    "hotel_num": "1"
+                },
+                {
+                    "city": "重庆市",
+                    "hotel_num": "1"
+                },
+                {
+                    "city": "长沙市",
+                    "hotel_num": "2"
+                }
+            ]
+        },
+        "first_city": "广州",
+        "hot_city": [
+            "江门市",
+            "广州市",
+            "海口市"
+        ],
+        "pre_sp_date": 0,
+        "member": {
+            "member_id": "2622122",
+            "name": "浩",
+            "is_login": "t"
+        },
+        "pubimgs": [
+            {
+                "image_url": "http://7n.cdn.iwide.cn/public/uploads/201705/qf121906564841.jpg",
+                "link": "http://biguiyuan30.iwide.cn/index.php/hotel/hotel/index?h=4815&id=a421641095&lsaler=27039&start=2017/05/18&end=2017/05/19"
+            },
+            {
+                "image_url": "http://7n.cdn.iwide.cn/public/uploads/201701/qf191428119390.jpg",
+                "link": "http://biguiyuan30.iwide.cn/index.php/hotel/hotel/index?id=a421641095&h=7&start=2017/02/17&end=2017/02/18"
+            }
+        ]
+    }
+}

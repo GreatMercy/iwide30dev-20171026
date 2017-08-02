@@ -1,0 +1,37 @@
+<template>
+  <div class="jfk-pages jfk-pages__gift-detail jfk-ta-c" :class="theme">
+    <giftBg wish="身体健康"></giftBg>
+    <p class="gift-goods-img jfk-ta-c jfk-pl-30 jfk-pr-30"></p>
+    <p class="gift-goods-name jfk-ta-c font-size--30 jfk-pl-30 jfk-pr-30">碧桂园大酒店中秋冰皮月饼6个装</p>
+    <p class="gift-goods-number jfk-ta-c font-size--24 jfk-pl-30 jfk-pr-30">已使用8/10份</p>
+    <p class="gift-goods-btn">
+      <button class="jfk-button jfk-button--primary  jfk-button--free">
+      <span class="jfk-button__text font-size--34">
+        <i class="jfk-font jfk-button__text-item icon-font_zh_li_qkbys"></i>
+        <i class="jfk-font jfk-button__text-item icon-font_zh_ji_qkbys"></i>
+        <i class="jfk-font jfk-button__text-item icon-font_zh_gou_qkbys"></i>
+        <i class="jfk-font jfk-button__text-item icon-font_zh_mai_qkbys"></i>
+      </span>
+      </button>
+    </p>
+
+    <div class="gift-detail-bottom">
+      <div class="gift-detail-line"></div>
+      <div class="font-size--28 jfk-ta-c gift-detail-put-order">暂不使用，放至订单中心</div>
+    </div>
+  </div>
+</template>
+<script>
+  import giftBg from '@/components/gift_themes/gift_background'
+  export default {
+    name: 'giftDetail',
+    components: {
+      giftBg
+    },
+    data () {
+      return {
+        theme: 'gift-theme1'
+      }
+    }
+  }
+</script>

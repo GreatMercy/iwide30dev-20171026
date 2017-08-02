@@ -1,0 +1,60 @@
+<template>
+  <section v-once class="jperation-support">
+    <div class="jperation-support__box">
+      <a href="javascript:;" class="jperation-support__logo">广州金房卡信息科技有限公司</a>
+      <p class="jperation-support__name">由金房卡信息科技有限公司提供技术支持</p>
+    </div>
+  </section>
+</template>
+
+<script>
+  export default {
+    name: 'jperation-support'
+  }
+</script>
+
+<style lang="scss" scoped>
+  @import '../../styles/scss/function/index';
+  @import '../../styles/scss/mixin/index';
+  @import '../../styles/scss/placeholder/index.scss';
+
+  .jperation-support{
+    @extend %tac;
+    &__box{
+      @extend %posr;
+      @extend %dib;
+      &:before,&:after{
+        content: '';
+        @extend %posa;
+        height: 1px;
+        transform: scale(1, 0.5);
+        background-color: $c363636;
+        opacity: 0.4;
+        width: px2rem(48);
+        top: 50%;
+      }
+      &:before{
+        left: 15%;
+      }
+      &:after{
+        right: 15%;
+      }
+    }
+    &__logo{
+      @include hideFont;
+      margin-bottom: px2rem(24 - 10);
+      width: px2rem(231);
+      height: px2rem(46);
+      background-size: 50%;
+      @include bg('jperation.png');
+      @extend %dib;
+    }
+    
+    &__name{
+      font-size: px2rem(40);
+      transform: scale(0.5);
+      color: $lightBlack;
+      line-height: 1;
+    }
+  }
+</style>
