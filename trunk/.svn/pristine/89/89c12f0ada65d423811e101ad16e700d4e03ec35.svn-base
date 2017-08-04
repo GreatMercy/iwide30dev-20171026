@@ -1,0 +1,67 @@
+.orderCoupon__detail{
+    .coupon__inn{
+        background-color: #1f1f1f;
+    }
+    .coupon__detail__list{
+        .item{
+            border-bottom: 1px dotted #3a3a3a;
+            &__left{
+                &:before{
+                    box-shadow: 0px 0px 10px  #b2945e;
+                }
+            }
+
+            .number{
+                color: #fff;
+            }
+
+            .coupon__state{
+                color: #808080;
+            }
+            &__invalid{
+                .item__left{
+                    &:before{
+                        background: linear-gradient(169deg,#a5a5a5,#6d6d6d);
+                        box-shadow: 0px 0px 10px  #a1a1a1;                        
+                    }
+                }
+                .number{
+                     color: #808080;
+                }
+
+            }
+            &__post{
+                .item__left{
+                    &:before{
+                        background: linear-gradient(169deg,#81d6cc,#21dac4);
+                        box-shadow: 0px 0px 10px  #6fd7cb;                        
+                    }
+                }
+                .coupon__state{
+                    color: #21dac4;
+                }
+              
+            }
+            &__send{
+                .item__left{
+                    &:before{
+                        background: linear-gradient(169deg,#e69c8d,#e86c54);
+                        box-shadow: 0px 0px 10px  #e78e7d;                        
+                    }
+                }
+                .coupon__state{
+                    color: #e86c54;
+                }                
+            }
+        }
+    }
+    .coupon__showhide{
+       color: #bfbfbf;
+       i{
+            color: #c7c7c7;
+       }
+       &.hideCoupon{
+           border-top: 1px solid #3a3a3a;
+       }
+    }
+}

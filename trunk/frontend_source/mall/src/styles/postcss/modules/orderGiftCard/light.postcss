@@ -1,0 +1,101 @@
+        .gift-card{
+          .card__ul{
+            &__item{
+              box-shadow: 3px 3px 21px 3px rgba(102,102,102,0.15); 
+              .item__keyword{
+                &__content{
+                  .card__money{
+                      color: #ffffff;
+                  }
+                  
+                  .discount-color{
+                      opacity: 0.9;
+                      color: #fff;
+                      text-shadow: 3px 3px 15px  rgba(118,131,200,0.24);
+                  }
+                  .change-color{
+                      color: #fff;
+                  }
+                  &:after{
+                    background-color: #dbdfef;
+                  }
+                  &.bg__gold{
+                      &:after{
+                          background-color: #dfceaf;
+                      }
+                  }
+                  &.bg__green{
+                      &:after{
+                          background-color: #d3e8d6;
+                      }
+                  }
+                  &.bg__blue{
+                      &:after{
+                          background-color: #cbcede;
+                      }
+                  }
+                }
+              }
+              .item__content{
+                .card__name{
+                    color: #333333;
+                }
+                .card__date{
+                    color: #808080;
+                }
+                .tip{
+                    color: #808080;
+                }
+                .seemore{
+                    color: #808080;
+                    .arrow{
+                        &:before,&:after{
+                            background-color: #808080;
+                        }
+                    }
+                }
+                .usegiftcard{
+                    color: #fff;
+                    background-color: #161616;
+                }
+              }
+              .card__description{
+                  background-color: #ffffff;
+                  border-top: 1px solid #ebebeb;
+                  h3{
+                      color: #333333;
+                  }
+                  p{
+                      color: #808080;
+                  }
+              }
+            }
+            .card__invalid{
+                .item__keyword{
+                    &__content{
+                        &:after{
+                            background-color: #cbcbcb;
+                        }
+                        .discount-color,.change-color{
+                            color: #dbdbdb;
+                        }
+                    }
+                }
+                .item__content{
+                    &__box{
+                        .jfk-button--disabled{
+                            background-color: #ececec;
+                            border: none;
+                            color: #bfbfbf;
+                        }
+                        .card__name{
+                            color: #bfbfbf;
+                        }
+                        .card__date{
+                            color: #bfbfbf;
+                        }
+                    }
+                }
+            }
+          }
+        }

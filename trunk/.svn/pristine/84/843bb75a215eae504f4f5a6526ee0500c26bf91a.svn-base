@@ -1,0 +1,61 @@
+.jfk-input-number {
+  font-size: 1em;
+  width: calc(215 / 32)em;
+  &__box {
+    box-sizing: border-box;
+    width: 100%;
+    padding: calc(0) calc(53 / 32)em;
+    position: relative;
+    border-radius: px2rem(5);
+  }
+  &__control {
+    position: absolute;
+    top: 0;
+    width: calc(43 / 32)em;
+    height: 100%;
+    &.is-sub {
+      left: 0;
+      &:before {
+        width: calc(15 / 32)em;
+        height: calc(3 / 32)em;
+        content: '';
+        position: absolute;
+        top: 50%;
+        right: 0;
+      }
+    }
+    &.is-add {
+      right: 0;
+      &:before,&:after {
+        width: calc(15 / 32)em;
+        height: calc(3 / 32)em;
+        content: '';
+        position: absolute;
+      }
+      &:before {
+        top: 50%;
+        left: 0;
+      }
+      &:after {
+        top: 50%;
+        transform: rotate(-90deg);
+      }
+    }
+  }
+  &__cont {
+    padding: calc(8 / 32)em 0;
+  }
+  &__input {
+    width: 100%;
+    background: transparent;
+    outline: 0 none;
+    font: 1em/1 var(--base-font-family);
+    &::-webkit-outer-spin-button,&::-webkit-inner-spin-button {
+      -webkit-appearance: none !important;
+    }
+    padding: 0;
+    border: 0;
+
+
+  }
+}

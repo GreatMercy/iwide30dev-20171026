@@ -1,0 +1,8 @@
+.jfk-page__orderCoupon{
+    .orderCoupon__main{
+        background-color: #1f1f1f;
+        .line{
+            background-color: #363636;
+        }
+    }
+}
