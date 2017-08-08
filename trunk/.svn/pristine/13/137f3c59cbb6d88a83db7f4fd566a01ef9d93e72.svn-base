@@ -1,2 +1,0 @@
-@import './radio/common.postcss';
-@import './inputNumber/common.postcss';

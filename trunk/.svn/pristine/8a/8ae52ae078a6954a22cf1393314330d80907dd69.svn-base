@@ -1,9 +1,0 @@
-var express = require('express');
-var app = express();
-app.use(express.static('/websoft/web/iwide30dev/frontend_source/mall/public'));
-app.get('/mall',function(req,res){
-  var page = req.query.page;
-  console.log(page);
-  res.sendFile("./"+page+".html",{root : "/websoft/web/iwide30dev/frontend_source/mall/public"});
-});
-app.listen(2333);

@@ -4,7 +4,10 @@
     "stage-2",
     "es2015"
   ],
-  "plugins": ["transform-runtime", "transform-vue-jsx"],
+  "plugins": ["transform-runtime", "transform-vue-jsx", ["component", {
+    "style": false,
+    "libraryName": "jfk-ui"
+  }]],
   "comments": false,
   "env": {
     "test": {

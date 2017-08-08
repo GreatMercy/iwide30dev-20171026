@@ -1,5 +1,0 @@
- // 获取配置及编辑的信息
-export const GET_LOGIN_INFO = 'GET_LOGIN_INFO'
-
-// 加载状态
-export const UPDATE_LOADING = 'UPDATE_LOADING'

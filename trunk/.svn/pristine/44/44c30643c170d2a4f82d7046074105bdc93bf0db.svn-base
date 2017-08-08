@@ -1,9 +1,0 @@
-<?php
-
-require("../vendor/autoload.php");
-
-$swagger = \Swagger\scan('../iwide3_0/controllers/iapi/front/soma');
-header('Content-Type: application/json');
-echo $swagger;
-
-?>

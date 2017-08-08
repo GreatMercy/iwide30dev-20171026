@@ -1,7 +1,0 @@
-:root{
-  --baseFontFamily: 'PingFang SC',Arial,Helvetica,sans-serif;
-  --size-queue: 24, 30, 32, 50, 54, 65;
-  --border-radius-big: 8;
-  --border-radius-small: 4;
-  --direction: (t, r, b, l), (top, right, bottom, left);
-}

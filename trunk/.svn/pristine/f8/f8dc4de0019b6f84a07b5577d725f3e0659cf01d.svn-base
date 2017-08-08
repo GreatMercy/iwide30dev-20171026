@@ -1,0 +1,37 @@
+.jfk-coupons {
+  &__item {
+    background: #131313;
+    &.is-disabled {
+      .discount,.exchange,.offset {
+        color: #505050;
+      }
+      .jfk-coupons {
+        &__name {
+          color: #333;
+        }
+        &__scope{
+          color: #454444;
+        }
+        &__status{
+          &-text {
+            color: #333;
+          }
+        }
+      }
+    }
+  }
+  &__cont {
+    background-color: #1f1f1f;
+    &:before {
+      background-color: #1f1f1f;
+    }
+  }
+  &__money {
+    .discount {
+      color: #7d85a6;
+    }
+    .exchange {
+      color: #697f6d;
+    }
+  }
+}

@@ -1,7 +1,0 @@
-/* 转赠 */
-.jfk-pages__send-gift {
-
-  .title {
-    padding-top: px2rem(47);
-  }
-}

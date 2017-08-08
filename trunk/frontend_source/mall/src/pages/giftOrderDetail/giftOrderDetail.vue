@@ -1,0 +1,353 @@
+<template>
+  <div class="jfk-pages jfk-page__orderCoupon">
+    <div class="jfk-pages__theme"></div>
+    <headTitle :headTitleMsg="headTitleMsg" />
+    <div class="orderDetail__state jfk-pl-30 jfk-pr-30 ">
+      <div class="orderDetail__state__main">
+        <img src="../../assets/image/goldlight.png" class="goldlight">
+        <div class="orderDetail__state__type color-golden" v-html="orderStatusMsg">
+         </div>
+      </div>
+    </div>
+    <div class="orderCoupon jfk-pl-30 jfk-pr-30">
+      <div class="orderCoupon__main">
+        <ordergiftinfo  :giftinfo="giftinfo"/>
+        <div class="jfk-menuList" v-if="validCoupon.status === '2'&&!used&&!overdue&&!refunded">
+            <div class="menu-inn jfk-flex">
+                <div class="item" v-if="menuList.canReserve"><a :href="pageResource.package_booking+'&aiid='+validCoupon.asset_item_id"><i class="jfk-font icon-user_icon_Checkin_normal"></i><p class="font-size--24">预约</p></a></div>
+                <div class="item" v-if="menuList.canCheck"><a :href="pageResource.package_usage+'&aiid='+validCoupon.asset_item_id"><i class="jfk-font icon-mall_icon_orderDetail_verify"></i><p class="font-size--24">验券</p></a></div>
+                <div class="item" v-if="menuList.canPost"><a :href="pageResource.show_shipping_info+'&oid='+validCoupon.order_id"><i class="jfk-font icon-mall_icon_orderDetail_post"></i><p class="font-size--24">邮寄</p></a></div>
+                <div class="item" v-if="menuList.canSend"><a :href="pageResource.package_send+'&aiid='+validCoupon.asset_item_id+'&oid='+validCoupon.order_id"><i class="jfk-font icon-user_icon_Polite_nor"></i><p class="font-size--24">转赠</p></a></div>
+
+            </div>
+        </div>        
+      </div>
+    <div class="orderCoupon__detail" v-if="!refunded">
+        <h3 class="coupon__detail__title font-size--24">包含券码</h3>
+        <div class="coupon__inn">
+            <div class="coupon__detail__list" >
+              <template v-for="item ,idx in coupons" >
+                <div class="item jfk-flex"  :class="{ item__invalid : item.status=='3'&&item.shipping_id=='0',item__post: item.status=='3'&&item.shipping_id!='0',item__send: item.status=='4'}"  v-if='idx==0' >
+                    <div class="item__left">
+                        <span class="title font-size--28">券码</span>
+                        <span class="number fot-size--32">{{item.code}}</span>
+                    </div>
+                    <div class="item__right" v-if="item.status=='2'" @click="handleQrcode(item.code,item.qrcode_url)">
+                      <a href="javascript:;">
+                        <i class="jfk-font icon-mall_icon_pay_focus qrcode"></i>
+                        <i class="jfk-font icon-user_icon_jump_normal arrow"></i>
+                      </a>
+                    </div>                    
+                    <div class="item__right" v-else-if="item.status=='4'">
+                      <a :href="pageResource.get_received_list+'&gid='+item.gid">
+                        <span class="coupon__state font-size--24" >已赠送</span>
+                        <i class="jfk-font icon-user_icon_jump_normal arrow"></i>
+                      </a>
+                    </div>
+                    <div class="item__right" v-else-if="item.status=='3'&&item.shipping_id!='0'">
+                      <a :href="pageResource.shipping_detail+'&spid='+item.shipping_id">
+                        <span class="coupon__state font-size--24">已邮寄</span>
+                        <i class="jfk-font icon-user_icon_jump_normal arrow"></i>
+                      </a>
+                    </div>    
+                    <div class="item__right" v-else-if="item.status=='3'&&item.shipping_id=='0'">
+                      <a :href="pageResource.package_review+'&ciid='+item.consumer_item_id">
+                        <span class="coupon__state font-size--24">已使用</span>
+                        <i class="jfk-font icon-user_icon_jump_normal arrow"></i>
+                      </a>
+                    </div>
+                </div>
+                <div class="item jfk-flex"  :class="{ item__invalid : item.status=='3'&&item.shipping_id=='0',item__post: item.status=='3'&&item.shipping_id!='0',item__send: item.status=='4'}"  v-else-if='couponsShow' >
+                    <div class="item__left">
+                        <span class="title font-size--28">券码</span>
+                        <span class="number fot-size--32">{{item.code}}</span>
+                    </div>
+                    <div class="item__right" v-if="item.status=='2'" @click="handleQrcode(item.code,item.qrcode_url)">
+                      <a href="javascript:;">
+                        <i class="jfk-font icon-mall_icon_pay_focus qrcode"></i>
+                        <i class="jfk-font icon-user_icon_jump_normal arrow"></i>
+                      </a>
+                    </div>                    
+                    <div class="item__right" v-else-if="item.status=='4'">
+                      <a :href="pageResource.get_received_list+'&gid='+item.gid">
+                        <span class="coupon__state font-size--24" >已赠送</span>
+                        <i class="jfk-font icon-user_icon_jump_normal arrow"></i>
+                      </a>
+                    </div>
+                    <div class="item__right" v-else-if="item.status=='3'&&item.shipping_id!='0'">
+                      <a :href="pageResource.shipping_detail+'&spid='+item.shipping_id">
+                        <span class="coupon__state font-size--24">已邮寄</span>
+                        <i class="jfk-font icon-user_icon_jump_normal arrow"></i>
+                      </a>
+                    </div>    
+                    <div class="item__right" v-else-if="item.status=='3'&&item.shipping_id=='0'">
+                      <a :href="pageResource.package_review+'&ciid='+item.consumer_item_id">
+                        <span class="coupon__state font-size--24">已使用</span>
+                        <i class="jfk-font icon-user_icon_jump_normal arrow"></i>
+                      </a>
+                    </div>
+                </div>
+              </template>
+            </div>
+            <div class="coupon__showhide jfk-ta-c font-size--24" :class="{hideCoupon:couponsShow}"  @click="couponShowHide" v-if='coupons.length>1'>
+              <div class="inn">
+              <span v-if="couponsShow">收起</span>
+              <span v-else>查看其他{{coupons.length-1}}张券</span>
+                <i class="jfk-font icon-home_icon_Jump_norma"></i>
+              </div>
+            </div>
+        </div>
+    </div>      
+    </div>
+    <div class="orderInfo jfk-pl-30 jfk-pr-30">
+      <h3 class="font-size--24">订单信息</h3>
+      <div class="moreinfo__item"><span class="item__name font-size--28">订单编号</span><span class="item__value font-size--30">{{product.order_id}}</span></div>
+      <div class="moreinfo__item"><span class="item__name font-size--28">下单时间</span><span class="item__value font-size--30">{{product.create_time}}</span></div>
+      <div class="moreinfo__item"><span class="item__name font-size--28">订单总价</span><span class="jfk-price  font-size--34 item__value"><i class="jfk-font-number jfk-price__currency">￥</i><i class="jfk-font-number jfk-price__number">{{product.real_grand_total}}</i></span><span class="item__showTrade font-size--24" @click="handleTradePhoto">交易快照<i class="jfk-font icon-user_icon_jump_normal"></i></span></div>
+    </div>
+    <div class="orderBtns jfk-pl-30 jfk-pr-30">
+        <div class="jfk-flex btn-box">
+          <div class="btn-item" v-if="canRefundOrder">
+            <a :href="pageResource.refund_index+product.order_id">
+              <i class="jfk-font icon-mall_icon_orderDetail_refund btn-item-icon"></i>
+              <i class="jfk-font icon-font_zh_shen_qkbys"></i>
+              <i class="jfk-font icon-font_zh_qing__qkbys"></i>
+              <i class="jfk-font icon-font_zh_tui_qkbys"></i>
+              <i class="jfk-font icon-font_zh_kuan_qkbys"></i>
+            </a>
+          </div>
+          <div class="btn-item" v-if="canDeleteOrder" @click="handleDeleteOrder(pageResource.del_order)">
+            <a >
+              <i class="jfk-font icon-mall_icon_orderDetail_delete btn-item-icon"></i>
+              <i class="jfk-font icon-font_zh_shan_qkbys"></i>
+              <i class="jfk-font icon-font_zh_chu_qkbys"></i>
+              <i class="jfk-font icon-font_zh_ding_qkbys"></i>
+              <i class="jfk-font icon-font_zh_dan_qkbys"></i>
+            </a>   
+          </div>  
+          <div class="btn-item" @click="handleHotelPhone(productPackage.hotel_tel)">
+            <a >
+              <i class="jfk-font icon-mall_icon_orderDetail_contact btn-item-icon"></i>
+              <i class="jfk-font icon-font_zh_ke_qkbys"></i>
+              <i class="jfk-font icon-font_zh_fu_qkbys1"></i>
+              <i class="jfk-font icon-font_zh_dian__qkbys"></i>
+              <i class="jfk-font icon-font_zh_hua_qkbys"></i>
+            </a> 
+          </div>
+        </div>
+    </div>
+    <jfk-popup v-model="showQrcode" :showCloseButton="true" class="coupon-qrcode jfk-ta-c">
+      <img :src="popQrcodeUrl"></img>
+      <p class="font-color-extra-light-gray font-size--28 content">{{popQrcodeNum}}</p>
+    </jfk-popup>   
+    <jfk-popup v-model="showTradePhoto" :showCloseButton="true" class="trade-photo" position="top">
+       <div class="tradeBox">
+         <div class="order-timeId font-size--24">
+           <p class="item"><span>订单号</span>{{product.order_id}}</p>
+           <p class="item"><span>下单时间</span>{{product.create_time}}</p>
+         </div>
+        <div class="order__gift__info jfk-clearfix">
+            <img  :src="giftinfo.imgUrl" class="productimg"/>
+            <div class="content jfk-pl-30 ">
+                <h2 class="font-size--34">{{giftinfo.title}}</h2>
+                <p class="font-size--24 validate">{{productPackage.hotel_name}}</p>
+                <div class="price_box"><span class="jfk-price  font-size--34"><i class="jfk-font-number jfk-price__currency">￥</i><i class="jfk-font-number jfk-price__number">{{giftinfo.price}}</i></span><span class="number font-size--24">{{giftinfo.number}}份</span></div>
+            </div>
+        </div>
+         <div class="trade-service">
+           <ul class="jfk-clearfix jfk-ta-c font-size--28">
+             <li><i class="jfk-font icon-mall_icon_support_ensure"></i>
+             <p>品质保证</p>
+             </li>
+             <li v-if="menuList.canRefund"><i class="jfk-font icon-mall_icon_orderDetail_refund"></i>
+             <p>随时退款</p>
+             </li>
+             <li v-if="menuList.canPost"><i class="jfk-font icon-mall_icon_orderDetail_post"></i>
+             <p>邮寄到家</p>
+             </li>
+             <li v-if="menuList.canSend"><i class="jfk-font icon-user_icon_Polite_nor"></i>
+             <p>赠送好友</p>
+             </li>
+             <li><i class="jfk-font icon-mall_icon_support_deliver"></i>
+             <p>到店自提</p>
+             </li> 
+             <li v-if="menuList.canInvoice"><i class="jfk-font icon-mall_icon_support_invoice"></i>
+             <p>开具发票</p>
+             </li>
+             <li v-if="menuList.canWxBooking"><i class="jfk-font icon-user_icon_Reservatio"></i>
+             <p>微信订房</p>
+             </li>                                                                             
+           </ul>
+         </div>
+         <div class="trade-moreinfo">
+           <h3 class="font-size--24">使用截至时间</h3>
+           <p class="font-size--28">{{giftinfo.validate}}</p>
+           <h3 class="font-size--24">订购需知</h3>
+           <div v-html="productPackage.order_notice" class="font-size--28"></div>
+         </div>
+       </div>
+         <div class="trade-product font-size--24 jfk-ta-c">
+           <a :href="pageResource.package_detail+productPackage.product_id">查看商品详情<i class="jfk-font icon-home_icon_Jump_norma"></i></a>
+         </div>       
+    </jfk-popup>    
+  </div>
+</template>
+<script>
+  import formatUrlParams from 'jfk-ui/lib/format-urlparams.js'
+  import { getOrderDetail } from '@/service/http'
+  import headTitle from '../../components/common/headTitle'
+  import orderStatus from '../../components/orderDetail/orderStatus.vue'
+  import ordergiftinfo from '../../components/orderDetail/orderGiftinfo.vue'
+  export default {
+    name: 'giftOrderDetail',
+    components: {
+      headTitle,
+      orderStatus,
+      ordergiftinfo
+    },
+    data () {
+      return {
+        headTitleMsg: '',
+        showQrcode: false,
+        showTradePhoto: false,
+        showDeleteOrder: true,
+        giftinfo: {
+          imgUrl: '',
+          title: '',
+          number: '1',
+          price: '',
+          validate: '',
+          showValidate: true
+        },
+        menuList: {
+          canReserve: true,
+          canCheck: true,
+          canPost: true,
+          canOrder: true,
+          canSend: true,
+          canRefund: true,
+          canInvoice: true,
+          canWxBooking: true
+        },
+        canDeleteOrder: false,
+        canRefundOrder: false,
+        orderStatus: {
+          success: '<i class="jfk-font icon-font_zh_gou_qkbys"></i><i class="jfk-font icon-font_zh_mai_qkbys"></i><i class="jfk-font icon-font_zh_cheng_qkbys"></i><i class="jfk-font icon-font_zh_gong_qkbys"></i>',
+          refund: '<i class="jfk-font icon-font_zh_yi_qkbys"></i><i class="jfk-font icon-font_zh_tui_qkbys"></i><i class="jfk-font icon-font_zh_kuan_qkbys"></i>',
+          used: '<i class="jfk-font icon-font_zh_tui_qkbys"></i><i class="jfk-font icon-font_zh_yong_qkbys"></i><i class="jfk-font icon-font_zh_wan_qkbys"></i><i class="jfk-font icon-font_zh_gong_qkbys"></i>',
+          invalid: '<i class="jfk-font icon-font_zh_yi_qkbys"></i><i class="jfk-font icon-font_zh_guo_qkbys"></i><i class="jfk-font icon-font_zh_qi_qkbys"></i>'
+        },
+        orderStatusMsg: '',
+        orderInfoObject: {
+          orderNumber: '1208328478',
+          offerTime: '2017/05/01',
+          orderPrice: '987'
+        },
+        coupons: [],
+        pageResource: {},
+        couponsShow: false,
+        validCoupon: {},
+        product: {},
+        productPackage: {},
+        popQrcodeNum: '',
+        popQrcodeUrl: '',
+        overdue: false,
+        used: false,
+        refunded: false
+      }
+    },
+    beforeCreate () {
+      let params = formatUrlParams(location.href)
+      if (process.env.NODE_ENV === 'development' && !params.oid) {
+        params.oid = '1000012316'
+      }
+      this.oid = params.oid
+    },
+    created () {
+      let that = this
+      getOrderDetail({
+        oid: this.oid
+      }).then(function (res) {
+        let product = res.web_data.product
+        let productPackage = product.package[0]
+        let code = res.web_data.code
+        that.headTitleMsg = '该商品由' + productPackage.hotel_name + '提供'
+        that.giftinfo.imgUrl = productPackage.face_img
+        that.giftinfo.title = productPackage.name
+        that.giftinfo.validate = productPackage.expiration_date
+        that.giftinfo.price = productPackage.price_market
+        that.giftinfo.number = product.row_qty
+        that.coupons = code
+        that.pageResource = res.web_data.page_resource.link
+        that.product = product
+        that.menuList.canReserve = productPackage.can_reserve === '1' ? 'true' : false
+        that.menuList.canCheck = productPackage.can_pickup === '1' ? 'true' : false
+        that.menuList.canPost = productPackage.can_mail === '1' ? 'true' : false
+        that.menuList.canOrder = productPackage.can_wx_booking === '1' ? 'true' : false
+        that.menuList.canSend = productPackage.can_gift === '1' ? 'true' : false
+        that.menuList.canRefund = productPackage.can_refund === '1' ? 'true' : false
+        that.menuList.canInvoice = productPackage.can_invoice === '1' ? 'true' : false
+        that.menuList.canWxBooking = productPackage.can_wx_booking === '1' ? 'true' : false
+        that.productPackage = productPackage
+        that.overdue = new Date() > new Date(that.giftinfo.validate) ? 'true' : false
+        that.used = product.consume_status === '23' ? 'true' : false
+        that.refunded = product.refund_status === '33' ? 'true' : false
+        if (code[0] && code[0].status === '2') {
+          that.validCoupon = code[0]
+        }
+        if (that.overdue || product.consume_status === '23' || product.refund_status === '33') {
+          that.canDeleteOrder = true
+        }
+        if (that.menuList.canRefund && product.consume_status === '21' && !that.overdue && product.refund_status !== '33') {
+          that.canRefundOrder = true
+        }
+        if (product.status === '12') {
+          that.orderStatusMsg = that.orderStatus.success
+        }
+        if (that.refunded) {
+          that.orderStatusMsg = that.orderStatus.refund
+        }
+        if (that.overdue) {
+          that.orderStatusMsg = that.orderStatus.invalid
+        }
+        if (that.used) {
+          that.orderStatusMsg = that.orderStatus.used
+        }
+      })
+    },
+    methods: {
+      couponShowHide () {
+        this.couponsShow = (this.couponsShow) === false ? 'true' : false
+      },
+      handleQrcode (code, qrcodeurl) {
+        this.popQrcodeNum = code
+        this.popQrcodeUrl = qrcodeurl
+        this.showQrcode = true
+      },
+      handleTradePhoto () {
+        this.showTradePhoto = true
+      },
+      handleDeleteOrder (link) {
+        this.$jfkConfirm('确定删除订单？').then(action => {
+          if (action === 'confirm') {
+            window.location.href = link + '&oid=' + this.oid
+          }
+        }).catch(() => {
+        })
+      },
+      handleHotelPhone (tel) {
+        this.$jfkConfirm('确定拨打电话' + tel + '？').then(action => {
+          if (action === 'confirm') {
+            window.location.href = 'tel:' + tel
+          }
+        }).catch(() => {
+        })
+      }
+    },
+    computed: {
+      couponUrl () {
+        console.log(this.coupons)
+      }
+    }
+  }
+</script>

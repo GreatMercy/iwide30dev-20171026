@@ -1,0 +1,107 @@
+.jfk-pages__booking {
+
+  .booking-status {
+    padding-top: px2rem(20);
+
+    &__content {
+      height: px2rem(32);
+      line-height: px2rem(32);
+      padding-top: px2rem(14);
+      padding-bottom: px2rem(14);
+      border-radius: px2rem(var(--border-radius-big));
+
+      span {
+        width: px2rem(32);
+        height: px2rem(32);
+        vertical-align: top;
+        margin-right: px2rem(14);
+      }
+    }
+  }
+
+  .booking-information {
+    padding-top: px2rem(150);
+    padding-left: px2rem(78);
+    position: relative;
+    &__shadow {
+      left: 0;
+    }
+
+    &__name {
+      flex: 1;
+    }
+
+    &__hotel {
+      margin-top: px2rem(28);
+    }
+
+    .jfk-price__currency {
+      margin-right: px2rem(8);
+    }
+
+    &__price {
+      margin-top: px2rem(36);
+      margin-bottom: px2rem(86);
+    }
+  }
+
+  .booking-coupon-wrap {
+    overflow: hidden;
+    border-radius: px2rem(7);
+    margin-bottom: px2rem(40);
+  }
+
+  .booking-coupon {
+    &-list {
+      padding-left: px2rem(40);
+      padding-right: px2rem(40);
+      padding-top: px2rem(58);
+      line-height: 1;
+
+      &__content {
+        padding-top: px2rem(74);
+        padding-bottom: px2rem(80);
+
+        span {
+          display: block;
+        }
+      }
+
+      &__left {
+        i {
+          margin-right: px2rem(26);
+        }
+      }
+
+      &__right {
+        flex: 1;
+        margin-left: px2rem(40);
+      }
+    }
+
+    &-phone {
+      padding-left: px2rem(40);
+      padding-right: px2rem(40);
+      height: px2rem(138);
+      position: relative;
+      &__number {
+      }
+      &__line {
+        width: 1px;
+        position: absolute;
+        right: calc(180 / 750 * 100%);
+        top: 50%;
+        transform: translate(0, -50%);
+        height: px2rem(28);
+      }
+      &__icon {
+        top: 50%;
+        transform: translate(0, -50%);
+        position: absolute;
+        right: calc(75 / 750 * 100%);
+      }
+    }
+
+  }
+
+}

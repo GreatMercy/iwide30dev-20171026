@@ -1,0 +1,109 @@
+.orderCoupon__detail{
+    .coupon__detail__title{
+        color: #808080;
+        margin-bottom: px2rem(30);
+
+    }
+    .coupon__inn{
+        border-radius: 4px;
+    }
+    .coupon__detail__list{
+        border-radius: 4px;
+        padding-left: px2rem(40);
+        padding-right: px2rem(40);          
+        .item{
+            justify-content: space-between;
+            padding-top: px2rem(40);
+            padding-bottom: px2rem(40);
+            align-items: center;
+            &:last-child{
+                border-bottom: none;
+            }
+            &__left{
+                position: relative;
+                &:before{
+                    position: absolute;
+                    content: '';
+                    display: inline-block;
+                    width: px2rem(4);
+                    height: px2rem(20);
+                    left: px2rem(10);
+                    top: 50%;
+                    margin-top: px2rem(-10);
+                    background: linear-gradient(169deg,#d6bf94,#b3945e);
+
+                }
+            }
+            .title{
+                color: #808080;
+                margin-left: px2rem(50);
+            }
+            .number{
+                margin-left: px2rem(30);
+
+            }
+            .arrow{
+                color: #808080;
+                font-size: px2rem(24);
+                margin-left: px2rem(26);
+            }
+            .qrcode{
+                color: #666;
+                font-size: px2rem(44);
+            }
+            &__invalid{
+                .item__left{
+                    &:before{
+                        background: linear-gradient(169deg,#a5a5a5,#6d6d6d);
+                        box-shadow: 0px 0px 10px  #a1a1a1;                        
+                    }
+                }
+                .number{
+                     text-decoration: line-through;
+                }
+
+            }
+            &__post{
+                .item__left{
+                    &:before{
+                        background: linear-gradient(169deg,#81d6cc,#21dac4);
+                        box-shadow: 0px 0px 10px  #6fd7cb;                        
+                    }
+                }
+                .coupon__state{
+                    color: #21dac4;
+                }
+              
+            }
+            &__send{
+                .item__left{
+                    &:before{
+                        background: linear-gradient(169deg,#e69c8d,#e86c54);
+                        box-shadow: 0px 0px 10px  #e78e7d;                        
+                    }
+                }
+                .coupon__state{
+                    color: #e86c54;
+                }                
+            }
+        }
+    }
+    .coupon__showhide{
+        padding-left: px2rem(40);
+        padding-right: px2rem(40);
+       .inn{
+            padding-top: px2rem(30);
+            padding-bottom: px2rem(30);
+            border-top: 1px dotted #3a3a3a;
+       }
+       &.hideCoupon{
+            padding-left: 0;
+            padding-right: 0;          
+           i{
+               display: inline-block;
+               transform: rotate(180deg);
+               vertical-align: middle;
+           }
+       }
+    }
+}

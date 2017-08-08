@@ -1,0 +1,74 @@
+.jfk-pages__coupon {
+  .booking-status {
+    &__content {
+      color: var(--color-danger);
+      background-color: var(--line-color-extra-light-black);
+    }
+  }
+
+  .booking-base-info {
+
+    &__shadow {
+      @mixin line-down 4, default, inside;
+      position: absolute;
+      width: px2rem(30);
+      height: px2rem(10);
+      transform: rotate(-90deg);
+      &::before {
+        bottom: px2rem(-10);
+      }
+    }
+
+    &__name {
+      color: var(--font-color-white);
+    }
+
+    &__hotel {
+      color: var(--font-color-extra-light-gray);
+    }
+
+    &__price {
+      color: var(--tab-selected-font-color);
+    }
+  }
+
+  .booking-coupon {
+
+    &-list {
+      background-color: var(--popup-fill-color);
+      &__title {
+        color: var(--font-color-light-silver);
+      }
+
+      &__left {
+        color: var(--font-color-extra-light-gray);
+      }
+
+      &__right {
+        color: var(--font-color-white);
+      }
+    }
+
+    &-phone {
+      background-color: var(--color-white);
+      @mixin one-line horizontal {
+      }
+      &::before {
+        left: 0;
+        top: 0;
+        background-color: var(--line-color-extra-light-silver);
+      }
+      &__number {
+        color: var(--font-color-white);
+      }
+      &__line {
+        background-color: var(--line-color-light-silver);
+      }
+      &__icon {
+        color: var(--tab-selected-font-color);
+      }
+    }
+
+  }
+
+}

@@ -1,0 +1,12 @@
+.jfk-form {
+  .form-item {
+    &:before {
+      background-color: #363636;
+    }
+    input[type="text"] {
+      &::placeholder {
+        color: var(--font-color-light-gray);
+      }
+    }
+  }
+}

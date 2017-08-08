@@ -1,0 +1,78 @@
+@font-face{
+  font-family: 'icon';
+  src : url('../../assets/fonts/iconfont.ttf') format('truetype'),
+        url('../../assets/fonts/iconfont.woff') format('woff');
+}
+//use fonts
+%icon{
+  font-family: icon !important;
+}
+
+// text-align
+%tac {
+  text-align: center;
+}
+%tal {
+  text-align: left;
+}
+%tar {
+  text-align: right;
+}
+
+// position
+@each $key, $val in (r: relative, a: absolute, f: fixed, s: static) {
+  %pos#{$key} {
+    position: #{$val} 
+  }
+}
+
+// clear
+%clb {
+  &:before, &:after{
+    display: table;
+    content: '';
+  }
+  &:after{
+    clear: both;
+  }
+}
+
+// text-overflow
+%tofle {
+  text-overflow: ellipsis;
+  word-break: break-all;
+  white-space: nowrap;
+  overflow:hidden;
+}
+
+// display
+@each $key, $val in (i: inline, ib: inline-block, n: none, b: block, f: flex, tb: table, tc: table-column, tr: table-row, it: initial) {
+  %d#{$key} {
+    display: $val
+  }
+}
+
+//clear input
+%ci{
+  border:none;
+  background-color:transparent;
+  outline:none;
+  padding:0;
+  margin:0;
+}
+
+
+//flex ib速写
+%ib {
+    display: inline-block;
+    vertical-align: middle;
+    word-break: break-all;
+}
+%flex {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+%between {
+    justify-content: space-between;
+}

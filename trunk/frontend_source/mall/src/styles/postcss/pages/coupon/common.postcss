@@ -1,0 +1,74 @@
+.jfk-pages__coupon {
+
+  .coupon-base-info {
+    padding-top: px2rem(150);
+    padding-left: px2rem(78);
+    position: relative;
+    &__shadow {
+      left: 0;
+    }
+
+    &__name {
+      flex: 1;
+    }
+
+    &__hotel {
+      margin-top: px2rem(28);
+    }
+
+    &__service {
+      margin-top: px2rem(36);
+      li {
+        line-height: calc(36 / 24)em;
+      }
+      span {
+        margin-left: px2rem(12);
+      }
+    }
+  }
+
+  .coupon-way {
+    margin-top: px2rem(110);
+    &__title {
+      margin-bottom: px2rem(32);
+    }
+
+    &__qrcode {
+      overflow: hidden;
+      min-height: 100px;
+      padding-left: px2rem(40);
+      padding-right: px2rem(40);
+      padding-top: px2rem(48);
+      padding-bottom: px2rem(76);
+      border-radius: px2rem(var(--border-radius-big));
+      margin-bottom: px2rem(40);
+    }
+
+    &__name {
+      margin-bottom: px2rem(56);
+    }
+
+    &__code {
+    }
+
+    &__img {
+      margin-top: px2rem(40);
+      margin-left: auto;
+      margin-right: auto;
+      overflow: hidden;
+      width: calc(382 / 750 * 100)%;
+      position: relative;
+      img {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        left: 0;
+        top: 0;
+        z-index: 99;
+      }
+    }
+
+
+  }
+
+}

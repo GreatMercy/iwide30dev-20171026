@@ -1,0 +1,28 @@
+.jfk-tab{
+  &__head{
+    font-size: 1em;
+    &-item{
+      line-height: calc((18 + 32 + 18) / 32);
+      margin: 0 1px;
+      & + .jfk-tab__head-item {
+        a {
+          &:before {
+            content: '';
+            position: absolute;
+            width: 1px;
+            top: calc(20 / (22 + 22 + 20) * 100%);
+            bottom: calc(20 / (22 + 22 + 20) * 100%);
+            left: 0;
+            transform: scale(0.5, 1);
+          }
+        }
+      }
+      a {
+        text-decoration: none;
+        display: block;
+        position: relative;
+        padding: 0 calc(30 / 32)em;
+      }
+    }
+  }
+}

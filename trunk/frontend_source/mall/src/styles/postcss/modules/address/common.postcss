@@ -1,0 +1,92 @@
+.jfk-address {
+  /*列表*/
+  &__list {
+    &-box {
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+    &-item {
+      &-cont {
+        height: px2rem(158);
+        padding-left: px2rem(34);
+        padding-right: px2rem(74);
+        position: relative;
+      }
+      .address-item-edit {
+        position: absolute;
+        right: 0;
+        height: 100%;
+        top: 0;
+        width: px2rem(74);
+        z-index: 1;
+      }
+      .address-item-box {
+        line-height: 1.5;
+        text-align: left;
+        width: 100%;
+        @mixin one-line {
+          top: 0;
+          right: 0;
+        }
+      }
+      .address-item-cont {
+        & + .address-item-cont {
+          padding-top: px2rem(16);
+        }
+      }
+      .jfk-radio {
+        &--shape-rect {
+          .jfk-radio {
+            &__text {
+              padding-right: 0;
+            }
+            &__icon {
+              border-color: transparent;
+            }
+          }
+        }
+      }
+    }
+    &-control {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      left: 0;
+      font-size: calc(34 / 28)em;
+      letter-spacing: 1px;
+      z-index: 9999;
+      i {
+        vertical-align: middle;
+      }
+    }
+    &-icon {
+      font-size: calc(28 / 34)em;
+      display: inline-block;
+      width: calc(30 / 28)em;
+      height: calc(30 / 28)em;
+      border: solid 1px currentColor;
+      line-height: calc(27 / 28)em;
+      border-radius: 50%;
+      margin-right: calc(14 / 28)em;
+      text-align: center;
+      letter-spacing: normal;
+    }
+  }
+  /*添加*/
+  &__add {
+    &-control {
+      position: absolute;
+      bottom: px2rem(142);
+      left: calc(82 / 750 * 100%);
+      right: calc(82 / 750 * 100%);
+    }
+  }
+}
+/*地址选择器*/
+.jfk-actionsheet__address{
+  .jfk-picker__toolbar {
+    span {
+      padding: 0 px2rem(17);
+    }
+  }
+}

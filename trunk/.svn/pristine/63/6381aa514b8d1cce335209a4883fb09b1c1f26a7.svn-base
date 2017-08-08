@@ -1,9 +1,0 @@
-<template>
-  <div class="jfk-pages"></div>
-</template>
-<script>
-  export default {
-    created () {
-    }
-  }
-</script>

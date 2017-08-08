@@ -1,0 +1,46 @@
+.jfk-switch {
+  position: relative;
+  display: inline-block;
+  * {
+    pointer-events: none;
+  }
+  &__core {
+    width: calc(102 / 30)em;
+    height: calc(62 / 30)em;
+    display: inline-block;
+    position: relative;
+    box-sizing: border-box;
+    overflow: hidden;
+    border-radius: calc(31 / 30)em;
+    &:before,&:after{
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      transition: transform 0.3s;
+      border-radius: calc(31 / 30)em;
+    }
+    &:after {
+      height: calc(56 / 30)em;
+      width: calc(56 / 30)em;
+      border-radius: 50%;
+    }
+    &:before {
+      width: 100%;
+      height: 100%;
+    }
+  }
+  &__input {
+    display: none;
+    &:checked {
+      + .jfk-switch__core {
+        &::before {
+          transform: scale(0);
+        }
+        &::after {
+          transform: translateX(calc(40 / 30)em);
+        }
+      }
+    }
+  }
+}

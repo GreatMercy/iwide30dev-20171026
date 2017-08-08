@@ -1,0 +1,139 @@
+<template>
+  <div class="gradient_bg padding_35">
+	<section class="padding_0_15">
+		<form class="form_list font_14" ref=form>
+			<div  v-for="(value,key) in configList" v-if="value.show === 1" :data="value.show" class="flex form_item bd_bottom padding_18">
+				<div class="margin_right_42 width_120">
+					<div class="flex between">
+						<span class="block">{{value.name}}</span>
+					</div>
+				</div>
+				<div class="flex_1 font_14"><input @keyup="setRemove($event)" :type="value.type" :name="key" :placeholder="value.note"></div>
+        <div v-if="key === 'phonesms'" @click="smsSend" class="relative border_1_808080 verification">{{smsTitle}}</div>
+			</div>
+			<div class="margin_top_35 font_17">
+				<a class="block width_85 center padding_15 auto iconfont entry_btn land_btn" @click="submit()">&#xe607;&ensp;&#xe610;</a>
+			</div>
+      <div class="overflow">
+  			<div class="center margin_top_30 font_12 float"><a :href="link.reg" class="main_color1">马上注册</a><em class="iconfont font_12">&#xe61c;</em>
+  			</div>
+        <div class="center margin_top_30 font_12 floatr"><a :href="link.resetpassword" class="main_color1">找回密码</a><em class="iconfont font_12">&#xe61c;</em>
+        </div>
+      </div>
+		</form>
+		<div class="flex layer_bg padding_20 radius_3 margin_top_40 centers padding_0_23">
+			<div class="margin_right_23"><em class="iconfont main_color1 txt_show3">&#xe62a;</em></div>
+			<div class="font_12">注册可获得注册<font class="main_color1">大礼包</font>,享受更多<font class="main_color1">会员优惠</font>!</div>
+		</div>
+	</section>
+  <JfkSupport v-once></JfkSupport>
+</div>
+</template>
+<script>
+import { getLoginInfo, postLogin, getSendsms } from '@/service/http'
+export default {
+  data () {
+    return {
+      configList: [],
+      link: [],
+      sms: true,
+      smsTitle: '获取验证码',
+      smsTime: 60,
+      time: ''
+    }
+  },
+  created () {
+    getLoginInfo().then((res) => {
+      this.configList = res.web_data.login_config
+      this.link = res.web_data.page_resource.links
+    })
+  },
+  methods: {
+    submit () {
+      let result = this.$refs.form
+      let setDate = {}
+      let setBol = true
+
+      for (let item in this.configList) {
+        if (this.configList[item].show === 0) {
+          continue
+        }
+        if (result[[item]].value === '') {
+          result[[item]].setAttribute('class', 'bg_ico_close')
+          setBol = false
+          continue
+        }
+        if (this.configList[item].check === 1) {
+          let str = '/' + this.configList[item].regular + '/'
+          /* eslint-disable */let reg = eval(str)
+          if (!reg.test(result[[item]].value)) {
+            result[[item]].value = ''
+            result[[item]].placeholder = '请输入正确的' + this.configList[item].name
+            result[[item]].setAttribute('class', 'bg_ico_sigh')
+            setBol = false
+            continue
+          }
+        }
+        setDate[[item]] = result[[item]].value 
+      }
+
+      if (setBol) {
+        // setDate.debug = 1
+        postLogin(setDate).then((res) => {
+          console.log(res)
+          if (res.status === 1000) {
+            window.location.href = res.web_data.page_resource.links.next
+            console.log(res)
+          } else {
+            alert(res.msg)
+          }
+        })
+      }
+    },
+    smsSend () {
+      if (this.sms) {
+        let str = '/' + this.configList['phone'].regular + '/'
+        let result = this.$refs.form
+        /* eslint-disable */let reg = eval(str)
+        if (!reg.test(result[['phone']].value)) {
+          result['phone'].value = ''
+          result['phone'].placeholder = '请输入正确的' + this.configList['phone'].name
+          result['phone'].setAttribute('class', 'bg_ico_sigh')
+        } else {
+          let that = this
+          let data = {
+            phone: result['phone'].value,
+            phonesms: result['phonesms'].value,
+            smstype: 2
+          }
+          getSendsms(data).then((res) => {
+            if (res.status === 1000) {
+              alert('短信已发送,请注意查收')
+            } else {
+              alert(res.msg)
+            }
+          })
+          that.time = setInterval(function() {
+            that.checkSms()
+          },1000)
+        }
+      }
+    },
+    checkSms () {
+      if (this.smsTime === 0 ) {
+        clearInterval(this.time)
+        this.sms = true
+        this.smsTitle = '获取验证码'
+        this.smsTime = 60
+      } else {
+        this.sms = false
+        this.smsTime--
+        this.smsTitle = this.smsTime + '秒后再获取'
+      }
+    },
+    setRemove (even) {
+      even.target.className = ''
+    }
+  }
+}
+</script>

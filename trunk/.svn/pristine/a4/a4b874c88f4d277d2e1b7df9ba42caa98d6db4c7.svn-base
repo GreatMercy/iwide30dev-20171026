@@ -1,0 +1,11 @@
+@import '../../../../../common/postcss/variable/common.postcss';
+@import '../../../../../common/postcss/variable/dark.postcss';
+@import '../../../../../common/postcss/mixins/common.postcss';
+@import '../../../../../common/postcss/mixins/dark.postcss';
+@import '../../../../../common/postcss/modules/bodyBgColor/dark.postcss';
+@import '../../../../../common/postcss/modules/imageLazy/dark.postcss';
+@import '../../../../../common/postcss/modules/support/dark.postcss';
+@import '../../../../../common/postcss/modules/banner/dark.postcss';
+@import '../../../../../common/postcss/modules/messageBox/dark.postcss';
+@import '../../../../../common/postcss/modules/form/dark.postcss';
+@import '../../../../../common/postcss/modules/calendar/dark.postcss';

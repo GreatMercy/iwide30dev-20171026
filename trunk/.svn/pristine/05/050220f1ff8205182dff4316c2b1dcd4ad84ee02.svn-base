@@ -1,0 +1,30 @@
+<template>
+  <div class="gradient_bg padding_0_15">
+  <section>
+    <div class="iconfont center pad_t60">
+      <img class="okpay_logo" src="../../assets/image/su_gou.png" alt="">
+    </div>
+    <p class="iconfont center color1 mar_t40 font_21">支付成功!</p>
+    <div class="pad_tb40 center">
+      <p class="inblock font_14 color3">恭喜你充值成功,请在我的储值中查看！</p>
+      <div class="inblock width_75 center relative border_1_808080 line_height_20 height_20 radius_3 color3 border_fff font_14"><a :href="dataList.page_resource.links.balance">查看储值</a></div>
+    </div>
+  </section>
+  <JfkSupport v-once></JfkSupport>
+</div>
+</template>
+<script>
+import { getBalanceOkpay } from '@/service/http'
+export default {
+  data () {
+    return {
+      dataList: []
+    }
+  },
+  created () {
+    getBalanceOkpay().then((res) => {
+      this.dataList = res.web_data
+    })
+  }
+}
+</script>

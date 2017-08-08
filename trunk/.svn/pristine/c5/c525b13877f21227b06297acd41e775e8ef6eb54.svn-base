@@ -1,0 +1,22 @@
+.jfk-switch {
+  &__core {
+    border: solid calc(3 / 30)em #ebebeb;
+    &:after {
+      background-color: #fff;
+      box-shadow: 0px 4px 3px 2px rgba(145, 149, 149, 0.06);
+    }
+    &:before {
+      background-image: linear-gradient(to top, #fff, #f9f9f9);
+    }
+  }
+  &__input {
+    &:checked + .jfk-switch__core {
+      border-color: currentColor;
+      background-color: currentColor;
+      &:after {
+        background-color: #fff;
+        box-shadow: 0px 4px 3px 2px rgba(0, 0, 1, 0.06);
+      }
+    }
+  }
+}

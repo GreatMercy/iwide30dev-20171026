@@ -1,8 +1,0 @@
-@each $color, $i in var(--price-tag-fill-colors) {
-  .jfk-price-tag__theme-$(i) {
-    @mixin price-tag $(color) {
-      position: absolute;
-      z-index: 10;
-    }
-  }
-}

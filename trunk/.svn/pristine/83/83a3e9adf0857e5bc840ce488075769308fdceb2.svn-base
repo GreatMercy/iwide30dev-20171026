@@ -1,0 +1,27 @@
+.jfk-address {
+  /*列表*/
+  &__list {
+    &-item {
+      .address-item-box {
+        &:before {
+          background-color: #363636;
+        }
+      }
+    }
+    .jfk-radio {
+      &--shape-rect {
+        .jfk-radio {
+          &__icon {
+            border-color: transparent;
+            background-color: #1f1f1f;
+          }
+        }
+      }
+    }
+  }
+}
+.jfk-actionsheet__address {
+  .jfk-picker__toolbar {
+    background-color: #282828;
+  }
+}

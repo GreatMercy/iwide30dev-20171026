@@ -1,0 +1,134 @@
+<template>
+  <div class="jfk-pages jfk-pages__index">
+    <div class="jfk-pages__theme"></div>
+    <jfk-banner :items="advs" v-if="advs.length"></jfk-banner>
+    <div class="categories jfk-pl-30">
+      <swiper class="jfk-swiper" :options="tabSwiperOptions">
+        <swiper-slide v-for="(category, index) in categories" :key="category.cat_id" :data-cid="category.cat_id" class="category__item" :class="{'is-selected': index === curCategoryIndex}">
+          <span class="category__label font-size--32 font-color-white">{{category.cat_name}}</span>
+        </swiper-slide>
+      </swiper>
+    </div>
+    <good-list class="jfk-tab__body-item" :products="products" :detailUrlPrefix="detailUrlPrefix" :layout="layout" v-infinite-scroll="loadMore" infinite-scroll-disabled="disableLoadProduct" infinite-scroll-distance="60"></good-list>
+    <p class="color-golden" v-show="isLoadProduct">正在加载商品</p>
+    <JfkSupport v-once></JfkSupport>
+    <tabbar class="font-size--24" :tabbarItems="tabbarItems"></tabbar>
+  </div>
+</template>
+<script>
+import formatUrlParams from 'jfk-ui/lib/format-urlparams.js'
+import { getPackageLists } from '@/service/http'
+import Tabbar from '@/components/common/tabbar'
+import GoodList from './module/good_list'
+let layouts = ['card', 'pic']
+export default {
+  name: 'app',
+  components: {
+    Tabbar,
+    GoodList
+  },
+  beforeCreate () {
+    let params = formatUrlParams(location.href)
+    let layout = 'card'
+    if (params.layout !== undefined) {
+      layout = layouts[params.layout] || layouts[0]
+    }
+    this.layout = layout
+  },
+  data () {
+    let that = this
+    return {
+      advs: [],
+      products: [],
+      disableLoadProduct: false,
+      isLoadProduct: false,
+      categories: [],
+      tabbarItems: [],
+      page: 1,
+      fcid: '-1',
+      detailUrlPrefix: 'javascript:;',
+      showAdsCat: 1,
+      curCategoryIndex: 0,
+      pageSize: 20,
+      tabSwiperOptions: {
+        autoplay: 0,
+        slidesPerView: 'auto',
+        slideToClickedSlide: true,
+        notNextTick: true,
+        onTap: function (swiper) {
+          let idx = swiper.clickedIndex
+          if (idx !== that.curCategoryIndex) {
+            that.curCategoryIndex = idx
+            try {
+              let cid = swiper.clickedSlide.dataset.cid
+              if (cid) {
+                that.fcid = cid
+                that.disableLoadProduct = false
+                that.page = 1
+                that.loadPackages(true)
+              }
+            } catch (e) {
+              console.log(e)
+            }
+          }
+        }
+      }
+    }
+  },
+  methods: {
+    loadPackages (resetProducts) {
+      let that = this
+      let args = {
+        page: that.page,
+        show_ads_cat: that.showAdsCat,
+        page_size: that.pageSize
+      }
+      if (that.fcid > 0) {
+        args.fcid = that.fcid
+      }
+      that.isLoadProduct = true
+      getPackageLists(args).then(function (res) {
+        that.isLoadProduct = false
+        const { advs, categories, products, page_resource } = res.web_data
+        /* eslint camelcase: 0 */
+        const { page = 1, size = 20, count = 0, link = {} } = page_resource
+        if (resetProducts) {
+          that.products = products
+        } else {
+          that.products = that.products.concat(products)
+        }
+        if (that.showAdsCat === 1) {
+          that.detailUrlPrefix = link.detail
+          that.showAdsCat = 2
+          that.advs = advs
+          that.categories = [{cat_id: '-1', cat_name: '全部商品'}].concat(categories)
+          that.tabbarItems = [{
+            link: link.home,
+            text: '首页',
+            icon: 'icon-mall_icon_home'
+          }, {
+            link: link.order,
+            text: '订单',
+            icon: 'icon-user_icon_Onlineboo'
+          }, {
+            link: link.center,
+            text: '我的',
+            icon: 'icon-mall_icon_home_user'
+          }]
+        }
+        that.disableLoadProduct = page * size >= count
+        if (!that.disableLoadProduct) {
+          that.page = +page + 1
+        }
+      }).catch(function (e) {
+        that.isLoadProduct = false
+        console.log(e)
+      })
+    },
+    loadMore () {
+      this.disableLoadProduct = true
+      this.loadPackages()
+    }
+  }
+}
+</script>

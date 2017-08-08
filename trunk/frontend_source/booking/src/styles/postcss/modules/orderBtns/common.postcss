@@ -1,0 +1,35 @@
+.orderBtns{
+    .btn-box{
+        padding-top: px2rem(60);
+        padding-bottom: px2rem(106);
+        justify-content: space-between;
+        .btn-item{
+            position: relative;
+            width: 100%;
+            text-align: center;
+            i{
+                font-size: px2rem(28);
+                vertical-align: middle;
+            }
+            .btn-item-icon{
+                font-size: px2rem(36);
+            }
+            &:after{
+                content: '';
+                position: absolute;
+                right: 0;
+                top: 50%;
+                display: inline-block;
+                width: 1px;
+                margin-top: px2rem(-9);
+                height: px2rem(18);
+            }
+            &:last-child{
+                &:after{
+                    display: none;
+                }
+            }
+        }
+    }
+
+}

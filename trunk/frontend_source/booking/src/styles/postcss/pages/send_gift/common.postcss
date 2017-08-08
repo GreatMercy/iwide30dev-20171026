@@ -1,0 +1,268 @@
+/* 转赠 */
+.jfk-pages__send-gift {
+  .button-box {
+    margin-top: px2rem(44);
+    margin-left: auto;
+    margin-right: auto;
+    width: px2rem(590);
+
+    @media screen and (max-width: 320px) {
+      width: px2rem(506);
+    }
+
+    &.gift-theme-btn {
+      margin-top: px2rem(76);
+      margin-bottom: px2rem(76);
+    }
+
+    .jfk-button {
+      width: 100%;
+      height: px2rem(84);
+      line-height: px2rem(84);
+      font-size: px2rem(34);
+      box-sizing: content-box;
+    }
+  }
+
+  .gift-put-order {
+    margin-top: px2rem(52);
+    margin-bottom: px2rem(40);
+    letter-spacing: 2px;
+    display: block;
+    position: relative;
+    &:after {
+      display: inline-block;
+      vertical-align: middle;
+      margin-left: -4px;
+      content: '';
+      height: px2rem(10);
+      width: px2rem(10);
+      transform: rotate(45deg);
+    }
+  }
+
+  .title {
+    padding-top: px2rem(47);
+    position: relative;
+    margin-bottom: px2rem(60);
+  }
+
+  .goods-info {
+    height: px2rem(365);
+    margin-bottom: px2rem(44);
+    border-radius: px2rem(7);
+    position: relative;
+    overflow: hidden;
+
+    img {
+      position: relative;
+      width: 100%;
+      left: 0;
+      top: 0;
+      z-index: 3;
+    }
+
+    &-mask {
+      position: absolute;
+      width: 100%;
+      height: px2rem(151);
+      left: 0;
+      bottom: -1px;
+      background: background-image(/send_gift/goods_mask.png) center center no-repeat;
+      background-size: 100% 100%;
+      overflow: hidden;
+      z-index: 3;
+    }
+
+    &-content {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: px2rem(365);
+      z-index: 4;
+    }
+
+    &-desc {
+      width: 100%;
+      height: px2rem(80);
+      position: absolute;
+      left: 0;
+      bottom: px2rem(20);
+      font-size: 0;
+
+      &__price {
+        margin-left: calc(109 / 750 * 100%);
+        padding-right: calc(30 / 750 * 100%);
+        box-sizing: border-box;
+        flex: 1;
+        .jfk-price {
+          vertical-align: middle;
+        }
+        &-number {
+          vertical-align: middle;
+          margin-left: calc(36 / 24)em;
+        }
+      }
+
+      &__line {
+        height: px2rem(20);
+        width: 1px;
+        margin-left: calc(26 / 750 * 100%);
+        margin-right: calc(26 / 750 * 100%);
+      }
+
+      &__packname {
+        padding-left: calc(30 / 750 * 100%);
+        width: calc(343 / 750 * 100%);
+        @mixin ellipsis 2 {
+        }
+      }
+
+      &__goods_number {
+        flex: 1;
+        margin-left: calc(64 / 750 * 100%);
+        padding-right: calc(30 / 750 * 100%);
+      }
+
+    }
+
+
+  }
+
+  .gift-info {
+    &__item {
+      height: px2rem(100);
+      overflow: hidden;
+      position: relative;
+      @mixin one-line horizontal {
+      }
+    }
+
+    &-title {
+      letter-spacing: 2px;
+    }
+
+    &-content {
+      flex: 1;
+      font-size: 0;
+      &__number-input {
+        width: px2rem(215);
+        height: px2rem(63);
+      }
+
+      &__unit {
+        height: px2rem(63);
+        line-height: px2rem(63);
+        vertical-align: top;
+        margin-left: px2rem(28);
+      }
+    }
+
+    &-theme {
+      flex: 1;
+      height: px2rem(70);
+      line-height: px2rem(70);
+      position: relative;
+      text-align: right;
+      padding-right: px2rem(32);
+
+      &__arrow {
+        &:after {
+          top: 50%;
+          right: 1px;
+          margin-top: px2rem(-5/2);
+          content: '';
+          position: absolute;
+          height: px2rem(10);
+          width: px2rem(10);
+          transform: rotate(45deg);
+        }
+      }
+    }
+
+    &-wish {
+      background: none;
+      border: none;
+      outline: none;
+      height: px2rem(50);
+      line-height: 1;
+    }
+  }
+
+  .gift-theme-list {
+    padding-top: px2rem(70);
+
+    &__box {
+      position: relative;
+      overflow: hidden;
+      border-radius: px2rem(10);
+      transform: scale(0.9);
+      &:after {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, .4);
+        left: 0;
+        top: 0;
+      }
+    }
+
+    .swiper-slide {
+      width: px2rem(590);
+      height: px2rem(875);
+      position: relative;
+      overflow: hidden;
+
+      .gift-theme-list__imgbox {
+        height: px2rem(746);
+
+        @media screen and (max-width: 320px) {
+          height: px2rem(638);
+        }
+      }
+
+      @media screen and (max-width: 320px) {
+        width: px2rem(506);
+        height: px2rem(767);
+      }
+
+    }
+
+    .swiper-slide-active {
+      .gift-theme-list__box {
+        transform: scale(1);
+        transform-origin: center;
+        transition: all 1s;
+        &:after {
+          background-color: rgba(0, 0, 0, 0);
+        }
+      }
+    }
+
+    &__name {
+      height: px2rem(129);
+      line-height: px2rem(129);
+      letter-spacing: 2px;
+    }
+
+    &__item {
+      position: absolute;
+      transform: translate(-50%, -50%);
+      width: 100%;
+      left: 50%;
+      top: 50%;
+      overflow: hidden;
+      border-radius: px2rem(7);
+      height: 100%;
+      img {
+        width: 100%;
+        height: 100%;
+        border: 0;
+        outline: none;
+      }
+    }
+  }
+
+}

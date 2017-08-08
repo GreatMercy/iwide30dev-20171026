@@ -128,12 +128,12 @@ if( isset($_SERVER['CI_ENV']) && $_SERVER['CI_ENV']=='production' ){
     define('INTER_PATH_URL2', 'http://member.iwide.cn/api2/');
 
 } elseif( isset($_SERVER['CI_ENV']) && $_SERVER['CI_ENV']=='testing' ) {
-    define('PMS_PATH_URL', 'http://api.iwide.com/vapi/');
-    define('INTER_PATH_URL', 'http://api.iwide.com/api/');
-    define('INTER_PATH_URL2', 'http://api.iwide.com/api2/');
+    define('PMS_PATH_URL', 'http://vip.iwide.cn/vapi/');
+    define('INTER_PATH_URL', 'http://vip.iwide.cn/api/');
+    define('INTER_PATH_URL2', 'http://vip.iwide.cn/api2/');
 
 } else{
-	define('PMS_PATH_URL', 'http://api.iwide.com/vapi/');
-    define('INTER_PATH_URL', 'http://api.iwide.com/api/');
-    define('INTER_PATH_URL2', 'http://api.iwide.com/api2/');
+	define('PMS_PATH_URL', 'http://vip.iwide.cn/vapi/');
+    define('INTER_PATH_URL', 'http://vip.iwide.cn/api/');
+    define('INTER_PATH_URL2', 'http://vip.iwide.cn/api2/');
 }

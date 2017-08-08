@@ -44,9 +44,9 @@
 <div class="coupon_list" id="usable">
     <?php if(!empty($usableCardLists)){ foreach ($usableCardLists as $v) { ?>
     <?php if(!isset($v['is_pms_card'])){ ?>
-    <a href="<?php echo base_url("index.php/membervip/card/cardinfo?member_card_id=".$v['member_card_id'].'&id='.$inter_id)?>">
+    <a href="<?=!empty($cardinfo_url)?"{$cardinfo_url}&member_card_id={$v['member_card_id']}":''?>">
         <?php }else{ ?>
-        <a href="<?php echo base_url("index.php/membervip/card/pcardinfo?member_card_id=".$v['member_card_id'].'&id='.$inter_id)?>">
+        <a href="<?=!empty($pcardinfo_url)?"{$pcardinfo_url}&member_card_id={$v['member_card_id']}":''?>">
             <?php } ?>
         <div class="
             <?php
@@ -357,94 +357,5 @@
 
     })
 </script>
-<!--
-<?php if ($cardlist) { ?>
-<?php foreach ($cardlist as $card) { ?>
-		<?php if (!isset($card['is_pms_card'])) { ?>
-			<a href="<?php echo base_url("index.php/membervip/card/cardinfo?member_card_id=" . $card['member_card_id'] . '&id=' . $inter_id) ?>">
-		<?php } else { ?>
-			<a href="<?php echo base_url("index.php/membervip/card/pcardinfo?member_card_id=" . $card['member_card_id'] . '&id=' . $inter_id) ?>">
-		<?php } ?>
-			<?php if (($card['use_time_start'] + 7200) >= time()) { ?>
-			   <div class="sign bgc_73e">新到</div>
-			<?php } ?>
-			<?php if (isset($card['expire_time']) && ($card['expire_time'] + 43200) <= time()) { ?>
-				<div class="sign bgc_f64">快过期</div>
-			<?php } ?>
-			<div class="b_rig">
-				<div class="l_h_1 r_title"><?php echo $card['title']; ?></div>
-				<div class="arrow"></div>
-				<div><?php echo $card['brand_name']; ?></div>
-			</div>
-			<div class="logo_txt color_ff7">
-				<?php if (!isset($card['is_pms_card'])) { ?>
-					<?php if ($card['card_type'] == 1) { ?>
-						抵用券
-					<?php } elseif ($card['card_type'] == 2) { ?>
-						折扣券
-					<?php } elseif ($card['card_type'] == 3) { ?>
-						兑换券
-					<?php } elseif ($card['card_type'] == 4) { ?>
-						储值卡
-					<?php } else { ?>
-						错误卡券
-					<?php } ?>
-				<?php } else { ?>
-					官方券
-				<?php } ?>
-			</div>
-			<div class="price color_ff7">
-				
-					<?php if ($card['card_type'] == 1) { ?>
-						¥<font><?php echo $card['reduce_cost']; ?></font>
-					<?php } elseif ($card['card_type'] == 2) { ?>
-						<font><?php echo $card['discount']; ?></font> 折
-					<?php } elseif ($card['card_type'] == 3) { ?>
-						
-					<?php } elseif ($card['card_type'] == 4) { ?>
-						¥<font><?php echo $card['money']; ?></font>
-					<?php } elseif ($card['card_type'] == 5) { ?>
-						<font>1</font> 张
-					<?php } else { ?>
-						物品抵扣券
-					<?php } ?>
-				
-			</div>
-			<div class="ra_inline"></div>
-		</a>
-		<div class="f_date" >
-			<?php if (!isset($card['is_pms_card'])) { ?>
-				<?php if ($card['can_give_friend'] == 't') { ?>
-					<a href="<?php echo base_url("index.php/membervip/card/givecard?member_card_id=" . $card['member_card_id'] . '&id=' . $inter_id) ?>" class="weui_btn weui_btn_mini weui_btn_primary" style="float:left;">赠送好友</a>
-				<?php } ?>
-				<?php echo date('Y.m.d', $card['use_time_start']); ?>
-				<?php if (isset($card['expire_time']) && !empty($card['expire_time'])) { ?>
-					-
-					<?php echo date('Y.m.d', $card['expire_time']); ?>
-					<?php if (($card['expire_time'] + 43200) < time()) { ?>
-						<font class="color_f64">（仅剩1天）</font>
-						<?php } ?>
-				<?php } ?>
-			<?php } else { ?>
-				<?php echo date('Y.m.d', $card['use_time_start']); ?>
-				<?php if (isset($card['expire_time']) && !empty($card['expire_time'])) { ?>
-				-
-				<?php echo date('Y.m.d', $card['expire_time']); ?>
-				<?php if (($card['expire_time'] + 43200) < time()) { ?>
-					<font class="color_f64">（仅剩1天）</font>
-				<?php } ?>
-			<?php } ?>
-			<?php } ?>
-			<?php if (isset($card['pms_card_sno_show']) && $card['pms_card_sno_show'] == true) { ?>
-			<br/>
-			<?php echo $card['pms_card_sno']; ?>
-			<?php } ?>
-		</div>
-	</div>
-</div>
-<?php } ?>
-<?php } else { ?>暂无卡券
-<?php } ?>
--->
 </body>
 </html>

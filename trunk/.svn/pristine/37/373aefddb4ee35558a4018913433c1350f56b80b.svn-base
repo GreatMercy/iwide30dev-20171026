@@ -1,0 +1,129 @@
+<template>
+  <div class="gradient_bg padding_35">
+  <section class="padding_0_15">
+    <form class="form_list font_14"  ref="form">
+      <div v-for="(value,key) in configList" v-if="value.show === 1" :data="value.show" class="flex form_item bd_bottom padding_18">
+        <div class="margin_right_42 width_120">
+          <div class="flex between">
+            <span class="block">{{value.name}}</span>
+          </div></div>
+        <div class="flex_1 font_14"><input @keyup="setRemove($event)" :type="value.type" :name="key" :placeholder="value.note"></div>
+        <div v-if="key === 'phonesms'" @click="smsSend" class="relative border_1_808080 verification">{{smsTitle}}</div>
+      </div>
+      <div class="margin_top_35 font_17">
+        <a class="block width_85 center padding_15 auto iconfont entry_btn reset" @click="submit()">&#xe608;&ensp;&#xe60a;</a>
+      </div>
+    </form>
+  </section>
+  <JfkSupport v-once></JfkSupport>
+</div>
+</template>
+<script>
+import { getResetpswInfo, postResetpswSave, getSendsms } from '@/service/http'
+export default {
+  data () {
+    return {
+      configList: [],
+      links: [],
+      sms: true,
+      smsTitle: '获取验证码',
+      smsTime: 60,
+      time: ''
+    }
+  },
+  created () {
+    getResetpswInfo().then((res) => {
+      this.configList = res.web_data.login_config
+      this.links = res.web_data.page_resource.links
+    })
+  },
+  methods: {
+    submit () {
+      let result = this.$refs.form
+      let setDate = {}
+      let setBol = true
+
+      for (let item in this.configList) {
+        if (this.configList[item].show === 0) {
+          continue
+        }
+        if (result[[item]].value === '') {
+          result[[item]].setAttribute('class', 'bg_ico_close')
+          setBol = false
+          continue
+        }
+        if (this.configList[item].check === 1) {
+          let str = '/' + this.configList[item].regular + '/'
+          /* eslint-disable */let reg = eval(str)
+          if (!reg.test(result[[item]].value)) {
+            result[[item]].value = ''
+            result[[item]].placeholder = '请输入正确的' + this.configList[item].name
+            result[[item]].setAttribute('class', 'bg_ico_sigh')
+            setBol = false
+            continue
+          }
+        }
+        setDate[[item]] = result[[item]].value 
+      }
+
+      if (setBol) {
+        postResetpswSave(setDate).then((res) => {
+          if (res.status === 1000) {
+            let check = confirm(res.msg)
+            if (check) {
+              window.location.href = res.web_data.page_resource.links.next
+            }
+          } else {
+            alert(res.msg)
+          }
+        })
+      }
+    },
+    smsSend () {
+      if (this.sms) {
+        let str = '/' + this.configList['phone'].regular + '/'
+        let result = this.$refs.form
+        /* eslint-disable */let reg = eval(str)
+        if (!reg.test(result[['phone']].value)) {
+          result['phone'].value = ''
+          result['phone'].placeholder = '请输入正确的' + this.configList['phone'].name
+          result['phone'].setAttribute('class', 'bg_ico_sigh')
+        } else {
+          let that = this
+          let data = {
+            phone: result['phone'].value,
+            phonesms: result['phonesms'].value,
+            smstype: 4
+          }
+          getSendsms(data).then((res) => {
+            if (res.status === 1000) {
+              alert('短信已发送,请注意查收')
+            } else {
+              alert(res.msg)
+            }
+          })
+          that.time = setInterval(function() {
+            that.checkSms()
+          },1000)
+        }
+      }
+    },
+    checkSms () {
+      if (this.smsTime === 0 ) {
+        clearInterval(this.time)
+        this.sms = true
+        this.smsTitle = '获取验证码'
+        this.smsTime = 60
+      } else {
+        this.sms = false
+        this.smsTime--
+        this.smsTitle = this.smsTime + '秒后再获取'
+      }
+    },
+    setRemove (even) {
+      even.target.className = ''
+    }
+  }
+}
+</script>
+
