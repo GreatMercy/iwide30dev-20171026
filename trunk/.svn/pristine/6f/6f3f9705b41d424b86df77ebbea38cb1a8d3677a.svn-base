@@ -1,0 +1,228 @@
+<template>
+  <div class="jfk-pages">
+      <el-form ref="search"  label-width="120px">
+        <el-row :gutter="20">
+          <el-col :span="10">
+            <el-form-item label="结算时间">
+              <el-col :span="11">
+                <el-form-item>
+                  <el-date-picker type="date" placeholder="选择日期"  style="width: 100%;" v-model="startTime"></el-date-picker>
+                </el-form-item>
+              </el-col>
+              <el-col class="line" :span="2">至</el-col>
+              <el-col :span="11">
+                <el-form-item prop="date2">
+                  <el-date-picker type="date" placeholder="选择日期"  style="width: 100%;" v-model="endTime"></el-date-picker>
+                </el-form-item>
+              </el-col>
+            </el-form-item>
+          </el-col>
+          <el-col :span="10">
+            <el-form-item label="酒店筛选">
+              <el-col :span="11">
+                <el-select v-model="value" placeholder="所有公众号" >
+                    <el-option
+                      v-for="item in options"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value">
+                    </el-option>
+                </el-select>
+              </el-col>
+              <el-col :span="2"></el-col>
+              <el-col :span="11">
+                <el-select v-model="value" placeholder="所有酒店" >
+                    <el-option
+                      v-for="item in options"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value">
+                    </el-option>
+                </el-select>
+              </el-col>              
+
+            </el-form-item>
+          </el-col>       
+          <el-col :span="4">
+              <el-button type="primary" >查询</el-button>
+          </el-col>
+        </el-row>
+      </el-form>
+      
+      <el-row :gutter="20" class="pricetag" type="flex" justify="space-around">
+        <el-col :span="3">
+          <span>监管账户余额</span>
+          <p>12300</p>
+        </el-col>
+        <el-col :span="3">
+          <span>用户支付金额</span>
+          <p>2400</p>
+        </el-col>
+        <el-col :span="3">
+          <span>退款金额</span>
+          <p>120</p>
+        </el-col>
+        <el-col :span="3">
+          <span>提现金额</span>
+          <p>360</p>
+        </el-col>
+        <el-col :span="3">
+          <span>金房卡佣金</span>
+          <p>14</p>
+        </el-col>
+        <el-col :span="3">
+          <span>分销佣金</span>
+          <p>10</p>
+        </el-col>
+        <el-col :span="3">
+          <span>欠款金额</span>
+          <p>0</p>
+        </el-col>                                                
+      </el-row>
+      <el-table
+        :data="tableData"
+        stripe
+        style="width: 100%;margin-top: 40px" >
+            <el-table-column
+              prop="name"
+              label="所属公众号">
+            </el-table-column>
+            <el-table-column
+              prop="hotel"
+              label="所属门店">
+            </el-table-column>
+            <el-table-column
+              prop="accountBalance"
+              label="监管账户余额">
+            </el-table-column>
+            <el-table-column
+              prop="paymentAmount"
+              label="用户支付金额">
+            </el-table-column>  
+            <el-table-column
+              prop="refundAmount"
+              label="退款金额">
+            </el-table-column> 
+            <el-table-column
+              prop="withdrawalAmount"
+              label="提现金额">
+            </el-table-column>
+            <el-table-column
+              prop="jfkAmount"
+              label="金房卡佣金">
+            </el-table-column>  
+            <el-table-column
+              prop="disCommission"
+              label="分销佣金">
+            </el-table-column> 
+            <el-table-column
+              prop="debt"
+              label="欠款金额">
+            </el-table-column>                                                                           
+      </el-table>
+      <div class="block" style="text-align: right;margin-top: 30px;">
+        <el-pagination
+          @current-change="handleCurrentChange"
+          :current-page="currentPage"
+          :page-size="100"
+          layout="total, prev, pager, next, jumper"
+          :total="400">
+        </el-pagination>
+        </div>
+  </div>
+</template>
+
+<script>
+  export default {
+    data () {
+      return {
+        options: [{
+          value: '选项1',
+          label: '黄金糕'
+        }, {
+          value: '选项2',
+          label: '双皮奶'
+        }, {
+          value: '选项3',
+          label: '蚵仔煎'
+        }, {
+          value: '选项4',
+          label: '龙须面'
+        }, {
+          value: '选项5',
+          label: '北京烤鸭'
+        }],
+        value: '',
+        startTime: '',
+        endTime: '',
+        tableData: [{
+          name: '金房卡',
+          hotel: '金房卡',
+          accountBalance: '2352897.89',
+          paymentAmount: '23467678.87',
+          refundAmount: '0',
+          withdrawalAmount: '300',
+          jfkAmount: '30',
+          disCommission: '1465769',
+          debt: '52'
+        }, {
+          name: '金房卡',
+          hotel: '金房卡',
+          accountBalance: '2352897.89',
+          paymentAmount: '23467678.87',
+          refundAmount: '0',
+          withdrawalAmount: '300',
+          jfkAmount: '30',
+          disCommission: '1465769',
+          debt: '52'
+        }, {
+          name: '金房卡',
+          hotel: '金房卡',
+          accountBalance: '2352897.89',
+          paymentAmount: '23467678.87',
+          refundAmount: '0',
+          withdrawalAmount: '300',
+          jfkAmount: '30',
+          disCommission: '1465769',
+          debt: '52'
+        }, {
+          name: '金房卡',
+          hotel: '金房卡',
+          accountBalance: '2352897.89',
+          paymentAmount: '23467678.87',
+          refundAmount: '0',
+          withdrawalAmount: '300',
+          jfkAmount: '30',
+          disCommission: '1465769',
+          debt: '52'
+        }],
+        currentPage: 1
+      }
+    },
+    methods: {
+      handleSizeChange (val) {
+        console.log(`每页 ${val} 条`)
+      },
+      handleCurrentChange (val) {
+        console.log(`当前页: ${val}`)
+      }
+    }
+  }
+</script>
+<style lang="postcss" scoped>
+  .pricetag{
+    text-align: center;
+    margin-top: 20px;
+  }
+  .pricetag span{
+    font-size: 18px;
+    color: #AC9456;
+    
+  }
+  .pricetag p{
+    font-size: 22px;
+    margin-top: 10px;
+    color: #333;
+  }
+
+</style>

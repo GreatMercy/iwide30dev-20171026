@@ -1,0 +1,423 @@
+  .jfk-pages__bookingHotel{
+    .font-size--42{
+      font-size: px2rem(42);
+    }
+    .banners{
+      .jfk-swiper__item-box{
+        height: px2rem(750);      
+      }
+      .swiper-container{
+        margin-left: 0;
+        padding-top:0;
+        height: px2rem(750);
+      }
+      .swiper-pagination{
+        color: #fff;
+        text-align: right;
+        padding-right: calc(34 / 750 * 100%);
+        box-sizing: border-box;
+        &-current{
+          font-size: calc(38 / 24)em;
+        }
+      }
+    }
+    .detail-top{
+      position: relative;
+      .icons{
+        color: #fff;
+        position: absolute;
+        top: 12px;
+        right: 11px;
+        text-align: right;
+        z-index: 10;
+        .jfk-font{
+          padding: 5px;
+          & + .jfk-font{
+            margin-left: 11px;
+          }
+        }
+      }
+    }
+
+    .title_info_container{
+      height: px2rem(260);
+      padding: 0 px2rem(30);
+      text-align: center;
+      & .title_info{
+         width: 100%;
+         height: 100%;
+         @mixin one-line horzin {};
+         position:relative;
+         &::before {
+           bottom: 0;
+           left: 0;
+         }
+         &_ht_name{
+            @mixin ellipsis 1;
+            padding: 0 px2rem(48);
+            margin-top: px2rem(40);
+         }post
+          &_ht_place{
+             @mixin ellipsis 1;
+             padding: 0 px2rem(50);
+             margin-top: px2rem(20);
+          }
+
+          .btn_group{
+            font-size: px2rem(22);
+            text-align: left;
+            padding: 0 px2rem(48);
+            .btn_span{
+              width: px2rem(120);
+              height: px2rem(40);
+              line-height: px2rem(40);
+              display: inline-block;
+              text-align: center;
+              margin-top: px2rem(30);
+              margin-right: px2rem(20);
+            }
+          }
+        }
+    }
+
+    .score_info_container{
+      /* height: px2rem(180); */
+      padding: 0 px2rem(30);
+      /* padding-top: px2rem(60); */
+      /* background: url(icon_line.png) no-repeat; */
+      .score_info{
+       @mixin one-line horzin {};
+        position:relative;
+        height: 100%;
+        &::before {
+          bottom: 0;
+          left: 0;
+        }
+
+        &_score{
+          width: 30%;
+          height: 100%;
+          padding-right: 2%;
+          line-height: px2rem(180);
+          display: inline-block;
+          text-align: right;
+          font-size: px2rem(24);
+          vertical-align: super;
+          .font{
+            font-size: px2rem(50);
+          }
+        }
+      }
+      .star_info{
+        width: 35%;
+        height: 100%;
+        display: inline-block;
+        font-size: px2rem(26);
+        .star_info_5{
+          width: 100%;
+          display: inline-block;
+          margin-bottom: px2rem(10);
+          & .i0{
+            color: #d6bf95;
+          }
+          & .i1{
+            color: #cdb280;
+          }
+          & .i2{
+            color: #c7a973;
+          }
+          & .i3{
+            color: #be9f67;
+          }
+          & .i4{
+            color: #b2943e;
+          }
+        }
+        .comments{
+          i{
+            font-size: px2rem(20);
+          }
+        }
+      }
+      
+      .center_line{
+        display: inline-block;
+        width: 0;
+        height:px2rem(80);
+        border: 1px solid #bfbfbf;
+        transform:rotate(28deg);
+        -o-transform:rotate(28deg);
+        -moz-transform:rotate(28deg);
+        -webkit-transform:rotate(28deg);
+        position: absolute;
+        top: 26%;
+        right: 33%;
+      }
+
+      .live_date{
+        font-size: px2rem(24);
+        display: inline-block;
+        width: 26%;
+        text-align:left;
+        height: 100%;
+        line-height: 1.8;
+        position: relative;
+
+        .icon_arrow{
+          color: #b2943e;
+          font-size:px2rem(16);
+          position: absolute;
+          top: 25%;
+          right: 14%;
+        }
+      }
+    }
+
+    .hotel_info{
+      padding: 0 px2rem(30);
+      &_title{
+        margin-bottom: px2rem(40);
+        width: 100%;
+        height: px2rem(100);
+        line-height: px2rem(100);
+        text-align:center;
+        font-size: px2rem(32);
+        &_item{
+          height: 100%;
+          display: inline-block;
+
+          span{
+            display: inline-block;
+            width: 100%;
+            height: px2rem(30);
+            @mixin one-line vertical {};
+            &::before {
+              position: absolute;
+              top: 100%;
+              right: 0;
+            }
+          }
+        }
+        &_item.item1{
+          width: 36%;
+        }
+        &_item.item2{
+          width: 36%;
+        }
+        &_item.item3{
+          width: 24%;
+        }
+
+        &_item.active{
+          position: relative;
+          @mixin one-line horzin {};
+          &::before {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+          }
+        }
+      }
+
+      &_room{
+        & .room_pic{
+          position: relative;
+          img{
+            height: px2rem(370);
+            border-radius: 5px;
+            width: 100%;
+          }
+          &_info{
+            position: absolute;
+            left: px2rem(20);
+            bottom: px2rem(20);
+            & .room_type{
+              position: relative;
+              display: inline-block;
+              padding-right:px2rem(30);
+            & .room_icon{
+                position: absolute;
+                right: 0;
+                bottom: px2rem(-8);
+                display: inline-block;
+                transform: rotate(315deg);
+                -o-transform: rotate(315deg);
+                -moz-transform: rotate(315deg);
+                -webkit-transform: rotate(315deg);
+                i{
+                  font-size: px2rem(10);
+                }
+
+              }
+            }
+            & .room_type_ul{
+              padding: 0 px2rem(30);
+              li{
+                float: left;
+                margin-right: px2rem(80);
+                list-style: inherit;
+              }
+            }
+          }
+        }
+        padding-bottom: px2rem(40);
+        @mixin one-line horzin {};
+        position:relative;
+        &::before {
+         position: absolute;
+         bottom: 0;
+         left: 0;
+        }
+      }
+    }
+
+    .hotel_info_room_price{
+      height: px2rem(60);
+      line-height: px2rem(60);
+      & .price{
+        & .sFont{
+          display: inline-block;
+          @mixin one-line horzin {};
+          position: relative;
+          &::before {
+           position: absolute;
+           bottom: 58%;
+           left: 0;
+          }
+        }
+      }
+      & .shBtn{
+        float:right;
+        & i{
+          margin-right: px2rem(10);
+        }
+        & .ishide{
+            margin-right: px2rem(10);
+            display: inline-block; 
+            transform: rotate(180deg);
+            -o-transform: rotate(180deg);
+            -moz-transform: rotate(180deg);
+            -webkit-transform: rotate(180deg);
+        }
+      }
+    } 
+
+    .room_price_ul_container{
+      padding: 0 px2rem(30);
+      position: relative;
+      border-radius: px2rem(5);
+      .price_icon{
+        display: inline-block;
+        position: absolute;
+        top: px2rem(-30);
+        left: px2rem(60);
+        transform: rotate(-180deg);
+        -o-transform: rotate(-180deg);
+        -moz-transform: rotate(-180deg);
+        -webkit-transform: rotate(-180deg);
+      }
+      .room_price_ul{
+        margin-top: px2rem(40);
+        overflow: hidden;
+        li{
+            height: px2rem(140);
+            position: relative;
+            line-height: px2rem(140);
+            @mixin one-line horzin {};
+            position:relative;
+            &::before {
+             position: absolute;
+             bottom: 0;
+             left: 0;
+            }
+
+            .food,.price_num,.pay_btn,.price_type{
+              width: 10%;
+              display: inline-block;
+              text-align: center;
+            }
+            .price_type{
+              width: 35%;
+              text-align: left;
+              vertical-align: middle;
+              line-height: px2rem(40);
+              .belong{
+                font-size: px2rem(20);
+                position: relative;
+                padding-left: px2rem(20);
+                &::before {
+                content: '.';
+                position: absolute;
+                bottom: 10%;
+                left: px2rem(5);
+                }
+              }
+
+            }
+
+            .price_num{
+              width: 30%;
+              line-height: px2rem(40);
+            }
+
+            .pay_btn{
+              width: 18%;
+              height: px2rem(60);
+              line-height: px2rem(60);
+
+            }
+        }
+
+        li:last-child{
+          &::before{
+            display: none;
+          }
+        }
+      }
+    }
+
+    .ht_int{
+      padding: 0 px2rem(30);
+      .title{
+        text-align: center;
+        margin: px2rem(40) 0;
+        padding-bottom: px2rem(10);
+        @mixin one-line horzin {};
+        position:relative;
+        &::before {
+          width: 5%;
+          position: absolute;
+          bottom: 0;
+          left: 47%;
+        }
+      }
+      &_item{
+        text-align: left;
+        word-break: break-all;
+        padding: 0 px2rem(60);
+      }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

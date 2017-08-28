@@ -1,0 +1,32 @@
+.jfk-pages__rank {
+  .cup {
+    .tip {
+      &:before {
+        background-color: #363636;
+      }
+    }
+  }
+  .rank-tabs__head {
+    &-item {
+      &.is-selected {
+        span {
+          @mixin line-down 4;
+        }
+      }
+    }
+  }
+  .rank-list {
+    &__item {
+      .arrow {
+        &:before {
+          border:{
+            color: #bfbfbf transparent transparent transparent;
+          }
+        }
+        &:after {
+          border-color: #282828 transparent transparent transparent;
+        }
+      }
+    }
+  }
+}

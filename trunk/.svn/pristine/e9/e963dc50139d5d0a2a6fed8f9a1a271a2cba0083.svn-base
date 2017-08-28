@@ -1,0 +1,16 @@
+// api v1版本
+let API_URL_SUFFIX = '/index.php/iapi'
+let API_URL_SUFFIX_V1 = `${API_URL_SUFFIX}/soma`
+
+// 商品相关部分
+let API_PACKAGE_V1 = `${API_URL_SUFFIX_V1}/package`
+// 酒店相关
+let API_HOTEL_V1 = `${API_URL_SUFFIX}/hotel`
+const v1 = {
+  // 请求商品列表
+  GET_PACKAGE_LISTS: `${API_PACKAGE_V1}/list`,
+  GET_BANNER_LIST: `${API_HOTEL_V1}/hotel/search`
+}
+export {
+  v1
+}

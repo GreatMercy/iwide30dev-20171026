@@ -1,0 +1,97 @@
+<template>
+  <div class="jfk-pages jfk-pages__refund">
+    <div class="jfk-pages__theme"></div>
+    <jfk-notification :message="message" class="font-size--24"></jfk-notification>
+
+
+    <div class="refund-information jfk-pl-30 jfk-pr-30 is-align-middle">
+      <div class="refund-information__name font-size--38 is-align-middle jfk-flex">
+        <div class="refund-information__shadow"></div>
+        <span>“欢乐一家”一晚套餐</span>
+      </div>
+      <div class="refund-information__hotel font-size--24">金房卡大酒店提供</div>
+      <div class="jfk-price font-size--54 refund-information__price">
+        <i class="jfk-font-number jfk-price__currency">¥</i>
+        <i class="jfk-font-number jfk-price__number">678</i>
+      </div>
+    </div>
+
+    <div class="refund-order jfk-pl-30 jfk-pr-30">
+      <div class="refund-order__main-title font-size--24">订单信息</div>
+      <ul class="refund-order__info">
+
+        <li class="jfk-flex is-align-middle">
+          <div class="refund-order__title font-size--28">订单编号</div>
+          <div class="refund-order__content font-size--30">1208328478</div>
+        </li>
+
+        <li class="jfk-flex is-align-middle">
+          <div class="refund-order__title font-size--28">下单时间</div>
+          <div class="refund-order__content font-size--30">2017/03/01 13:34:09</div>
+        </li>
+
+        <li class="jfk-flex is-align-middle">
+          <div class="refund-order__title font-size--28">订单总价</div>
+          <div class="refund-order__content font-size--30">
+            <span class="jfk-price font-size--38">
+              <i class="jfk-font-number jfk-price__currency">¥</i>
+              <i class="jfk-font-number jfk-price__number">678</i>
+            </span>
+          </div>
+        </li>
+
+        <li class="jfk-flex is-align-middle">
+          <div class="refund-order__title font-size--28">退还方式</div>
+          <div class="refund-order__content font-size--30">原路退回</div>
+        </li>
+
+      </ul>
+    </div>
+
+    <div class="refund-reason jfk-pl-30 jfk-pr-30">
+      <div class="refund-reason__title font-size--24">退款原因（至少选择一项）</div>
+      <ul class="refund-reason__list">
+
+        <li class="font-size--28">
+          <span class="refund-reason__list-text">预约不上</span>
+          <i class="refund-reason__list-select jfk-fl-r">
+            <small class="jfk-font icon-btn_icon_selected_normal"></small>
+          </i>
+        </li>
+
+
+        <li class="font-size--28 refund-reason__list-active">
+          <span class="refund-reason__list-text">预约不上</span>
+          <i class="refund-reason__list-select jfk-fl-r">
+            <small class="jfk-font icon-btn_icon_selected_normal icon-btn_icon_selected_pressed"></small>
+          </i>
+        </li>
+
+      </ul>
+
+      <div class="refund-btn">
+        <button class="jfk-button jfk-button--primary is-plain font-size--30 jfk-button--free">提交</button>
+      </div>
+
+    </div>
+  </div>
+</template>
+<script>
+  export default {
+    components: {
+    },
+    beforeCreate () {
+    },
+    created () {
+    },
+    data () {
+      return {
+        message: '退款状态下，您的订单将被暂时锁定'
+      }
+    },
+    watch: {}
+  }
+</script>
+
+<style>
+</style>

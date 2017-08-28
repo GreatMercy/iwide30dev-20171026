@@ -1,0 +1,155 @@
+.jfk-page__orderCoupon{
+    .orderCoupon__main{
+        margin-top: px2rem(80);
+        border-radius: 4px;
+        padding: px2rem(60) px2rem(40);
+    }
+    .orderCoupon__detail{
+        margin-top: px2rem(70);
+    }
+    .coupon-qrcode{
+        padding-left: 3.4375rem;
+        padding-right: 3.4375rem;
+        padding-top: 3.125rem;
+        img{
+            width: 14rem;
+        }
+        .content{
+           margin-top: 1.5rem;
+           margin-bottom: 2.5rem;
+           letter-spacing: 2px;
+        }
+    }
+    .trade-photo{
+        .tradeBox{
+            padding: px2rem(66) 0;
+            &-cont {
+                padding: 0 px2rem(40);
+                overflow-y: auto;
+                overflow-x: hidden;
+            }
+            .order-timeId{
+                padding-bottom: px2rem(50);
+                .item{
+                    color: #808080;
+                    line-height: px2rem(40);
+                    span{
+                        margin-right: px2rem(20);
+                        width: px2rem(110);
+                        display: inline-block;
+                        text-align: justify;
+                        height: px2rem(40);
+                        vertical-align: top;
+                        &:after{
+                            content: '';
+                            display: inline-block;
+                            height: 0;
+                            overflow: hidden;
+                            width: 100%;
+                        }
+                    }
+                }
+            }
+            .order__gift__info{
+                .price_box{
+                    color: #b2945e;
+                }
+            }
+            .product-button{
+                width: px2rem(190);
+                margin-top: px2rem(80);
+                display: block;
+                line-height: px2rem(60);
+                height: px2rem(60);
+            }
+            .trade-service{
+                margin-top: px2rem(66);
+                ul{
+                    li{
+                        float: left;
+                        width: 25%;
+                        margin-top: px2rem(52);
+                        i{
+                            font-size: 1em;
+                            color: #808080;
+                        }
+                        p{
+                            margin-top: px2rem(20);
+                            letter-spacing: px2rem(2);
+                        }
+                    }
+                }
+            }
+            .trade-moreinfo{
+                margin-top: px2rem(60);
+                h3{
+                    margin-top: px2rem(66);
+                    color: #808080;
+                }
+                img{
+                    max-width: 100%;
+                    display: block;
+                    margin-top: px2rem(30);
+                }
+                p{
+                    margin-top: px2rem(30);
+                    line-height: px2rem(56);
+                    img{
+                        margin-top: 0;
+                        &+img{
+                            margin-top: px2rem(30);
+                        }
+                    }
+                    &+p{
+                        margin-top: 0;
+                    }
+                }
+                .order_notice{
+                    margin-top: px2rem(30);
+                    &+p{
+                        margin-top: 0;
+                    }
+                }
+                .productDetail{
+                    .name{
+                        color: #808080;
+                    }
+                    .num{
+                        color: #808080;
+                        margin-left: px2rem(10);
+                    }
+                }
+            }
+        }
+        .trade-product{
+            margin-top: px2rem(70);
+
+            p{
+                padding: px2rem(30) px2rem(40);
+                width: 100%;   
+                margin-left: px2rem(-40);     
+                i{
+                    margin-left: px2rem(10);
+                    vertical-align: middle;
+                }
+            }
+            &.hideProductimg{
+                i{
+                    transform: rotate(180deg);
+                    display: inline-block;
+                }
+            }
+        }
+    }
+    .coupon-deteleOrder{
+        padding-top: px2rem(90);
+        h3{
+            color: #fff;
+            margin-bottom: px2rem(140);
+        }
+        button{
+            width: calc( 306/644 *100%);
+            height: px2rem(84);
+        }
+    }
+}

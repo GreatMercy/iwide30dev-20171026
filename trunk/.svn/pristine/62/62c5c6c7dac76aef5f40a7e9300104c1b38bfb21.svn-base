@@ -1,6 +1,0 @@
-.jfk-notification {
-  background-color: var(--line-color-extra-light-black);
-  &_content {
-    color: #e18a56;
-  }
-}

@@ -1,0 +1,68 @@
+body{
+  background-color: var(--color-white) !important;
+}
+.jfk-pages__myorder{
+    .goldColor{
+      color:var(--color-golden);
+    }
+    .grayColorbf{
+      color:var(--font-color-light-gray);
+    }
+    .jfk-pages__theme{
+      background-color: var(--color-white) !important;
+    }
+
+    .order_list{
+      &_item{
+        &::before {
+          background-color: var(--line-color-extra-light-silver);
+        }
+        & .status{
+          margin-bottom: px2rem(50);
+          &::before {
+            background-color:var(--color-golden);
+          }
+        }
+
+      .btn_container{
+        .order_btn{
+          color: var(--color-white);
+          background-color: var(--color-deep-yellow);
+        }
+        .order_btn.whiteColor{
+          background-color: var(--color-white);
+          border: 1px solid var(--color-deep-yellow);
+          color: var(--color-deep-yellow);
+        }
+        & .comment{
+            &::before {
+              background-color: var(--line-color-extra-light-silver);
+            }
+        }
+      }
+
+      }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}

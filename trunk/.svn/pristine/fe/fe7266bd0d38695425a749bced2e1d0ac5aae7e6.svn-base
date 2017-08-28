@@ -1,0 +1,339 @@
+<template>
+  <div class="jfk-pages add-role-outer">
+    <el-row>
+      <el-col :span="24">
+        <div class="grid-content bg-purple">
+          <!--步骤-->
+          <el-steps :space="1000" :active="activeStep" finish-status="success" class="jfk-steps--bg-gray jfk-steps">
+            <el-step title="基础信息"></el-step>
+            <el-step title="角色权限"></el-step>
+          </el-steps>
+          <!--基础信息-->
+          <template v-if="activeStep === 0">
+            <!--超级管理员-->
+            <el-form v-if="inforData.admin_type === 1" ref="inforData" label-width="200px">
+              <el-form-item label="角色类型">
+                <el-select placeholder="角色类型">
+                  <el-option label="标准角色" value="标准角色"></el-option>
+                  <el-option label="管理员角色" value="管理员角色"></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="角色名称">
+                <el-select placeholder="角色名称">
+                  <el-option label="速八酒店前台" value="速八酒店前台"></el-option>
+                  <el-option label="七天酒店前台" value="七天酒店前台"></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="状态">
+                <el-select placeholder="状态">
+                  <el-option label="有效" value="有效"></el-option>
+                  <el-option label="无效" value="无效"></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item>
+                <el-button type="primary" size="small">下一步</el-button>
+              </el-form-item>
+            </el-form>
+            <!--普通管理员-->
+            <el-form v-else-if="inforData.admin_type === 2" :model="createdInfor" :rules="roleInforRules"
+                     ref="createdInfor"
+                     label-width="200px">
+              <el-form-item label="选择公众号" prop="arr_inter_id">
+                <el-select placeholder="请选择公众号" v-model="createdInfor.arr_inter_id">
+                  <el-option v-for="item in inforData.arr_inter_id" :key="item.inter_name" :lable="item.inter_name"
+                             :value="item.inter_name"></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="关联角色" prop="related_role_id">
+                <el-select placeholder="请关联角色" v-model="createdInfor.related_role_id">
+                  <el-option v-for="item in inforData.standard_roles" :key="item.role_name"
+                             :value="item.role_id"
+                             :label="item.role_name"></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="自定义角色名称" prop="userDefinedName">
+                <el-input placeholder="请输入自定义角色名称" v-model="createdInfor.userDefinedName"></el-input>
+              </el-form-item>
+              <div>
+                <div class="status_lable">角色状态</div>
+                <div class="status_value">有效</div>
+              </div>
+              <!--编辑的时候选择状态  新建是默认有效 不展示-->
+              <!--<el-form-item label="状态">-->
+              <!--<el-select placeholder="状态" v-model="createdInfor.status">-->
+              <!--<el-option v-for="item in inforData.status" :key="item" :value="item" :label="item"></el-option>-->
+              <!--</el-select>-->
+              <!--</el-form-item>-->
+              <el-form-item>
+                <el-button type="primary" size="small" @click="nextStep('createdInfor')">下一步</el-button>
+              </el-form-item>
+            </el-form>
+          </template>
+          <!--角色权限-->
+          <template v-else-if="activeStep === 1">
+            <el-tabs v-model="activeTab" type="card">
+              <el-tab-pane label="订房" name="tab_1">
+                <!--全选-->
+                <div class="all-outer">
+                  <!--indeterminate 用于控制全选与非全选 之间的样式-->
+                  <el-checkbox :indeterminate="isIndeterminate" @change="">全选当前页所有
+                  </el-checkbox>
+                  <el-checkbox :indeterminate="isIndeterminate" @change="">
+                    默认开通全部（含未来新功能）
+                  </el-checkbox>
+                </div>
+                <!--角色权限列表-->
+                <table class="table-outer">
+                  <tr class="table-header">
+                    <td width="30%">权限</td>
+                    <td width="70%">子项及操作</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <el-checkbox style="margin-bottom: 5px">订单管理</el-checkbox>
+                      <br>
+                      <el-checkbox>全选</el-checkbox>
+                      <el-checkbox>全部</el-checkbox>
+                    </td>
+                    <td>
+                      <ul class="sub-item-list">
+                        <li>
+                          <table class="table-inner">
+                            <tr>
+                              <td class="sub-item">
+                                <el-checkbox>管理列表</el-checkbox>
+                              </td>
+                              <td class="sub-item-control">
+                                <el-checkbox>显示订单金额</el-checkbox>
+                                <el-checkbox>显示订单号</el-checkbox>
+                                <el-checkbox>显示昵称</el-checkbox>
+                              </td>
+                            </tr>
+                          </table>
+                        </li>
+                        <li>
+                          <table class="table-inner">
+                            <tr>
+                              <td class="sub-item">
+                                <el-checkbox v-model="checked">查看列表</el-checkbox>
+                              </td>
+                              <td class="sub-item-control">
+                                <el-checkbox>显示订单金额</el-checkbox>
+                                <el-checkbox>显示订单号</el-checkbox>
+                                <el-checkbox>显示昵称</el-checkbox>
+                              </td>
+                            </tr>
+                          </table>
+                        </li>
+                      </ul>
+                      <ul>
+                      </ul>
+                    </td>
+                  </tr>
+                </table>
+              </el-tab-pane>
+              <el-tab-pane label="商城" name="tab_2">
+              </el-tab-pane>
+              <el-tab-pane label="会员" name="tab_3">会员</el-tab-pane>
+              <el-tab-pane label="分销" name="tab_4">分销</el-tab-pane>
+              <el-tab-pane label="快乐送" name="tab_5">快乐送</el-tab-pane>
+              <el-tab-pane label="快乐付" name="tab_6">快乐付</el-tab-pane>
+            </el-tabs>
+          </template>
+          <!--<div style="text-align: center">-->
+          <!--<el-button type="primary" size="large">完成</el-button>-->
+          <!--</div>-->
+        </div>
+      </el-col>
+    </el-row>
+
+  </div>
+</template>
+
+<script>
+  import {getRoleInfor, getRoleAuthority} from '@/service/system/http'
+
+  export default {
+    name: 'addrole',
+    created () {
+      // 获取基础信息
+      this.getInforData()
+//      this.getAuthorityData()
+    },
+    data () {
+      return {
+        activeStep: 0,
+        // 获取的基础信息
+        inforData: {
+          admin_type: 1,
+          arr_inter_id: [],
+          standard_roles: [],
+          status: ['有效', '无效']
+        },
+        // 用户自己填写的用户信息
+        createdInfor: {
+          arr_inter_id: '',
+          related_role_id: '',
+          userDefinedName: '',
+          role_id: 0
+        },
+        // 控制显示某个模块的权限列表
+        activeTab: 'tab_1',
+        roleInforRules: {
+          arr_inter_id: [
+            {required: true, message: '请选择公众号', trigger: 'change'}
+          ],
+          related_role_id: [
+            {required: true, message: '请选择关联角色', trigger: 'change'}
+          ],
+          userDefinedName: [
+            {required: true, message: '请输入自定义角色名称', trigger: 'blur'},
+            {min: 2, message: '长度在 3 到 5 个字符', trigger: 'blur'}
+          ]
+        }
+      }
+    },
+    methods: {
+      getInforData () {
+        getRoleInfor({}).then((res) => {
+          this.inforData.admin_type = res.web_data.admin_type
+          this.inforData.arr_inter_id = res.web_data.arr_inter_id
+          this.inforData.standard_roles = res.web_data.standard_roles
+        })
+      },
+      getAuthorityData () {
+        getRoleAuthority({}).then((res) => {
+          console.log(res)
+        })
+      },
+      changeStep () {
+        this.activeStep += 1
+        this.getInforData()
+      },
+      changeRelatedRole (option) {
+      },
+      changePublicAccount (option) {
+//        console.log(option)
+      },
+      // 点击下一步校验表单填写内容
+      nextStep (formName) {
+        console.log(this.$refs[formName])
+        this.$refs[formName].validate((valid) => {
+          if (!valid) {
+            console.log(formName)
+          } else {
+            return false
+          }
+        })
+      }
+    }
+  }
+</script>
+
+<style lang="postcss">
+  .add-role-outer {
+    color: #48576a;
+    .el-form-item {
+      .el-select, .el-input {
+        width: 500px;
+      }
+    }
+
+    .table-outer {
+      width: 100%;
+      border-collapse: collapse;
+      border: 1px solid #eee;
+      margin-bottom: 20px;
+      .table-header {
+        background-color: #f6f6f6;
+      }
+      td {
+        padding: 10px 0;
+        color: rgb(31, 45, 61);
+        text-align: center;
+        border: 1px solid #eee;
+        text-align: left;
+        padding-left: 20px;
+      }
+    }
+
+    .el-steps {
+      width: 1060px;
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+    .status_lable {
+      display: inline-block;
+      width: 188px;
+      margin-right: 12px;
+      text-align: right;
+      margin-bottom: 15px;
+    }
+    .status_value {
+      display: inline-block;
+    }
+    .all-outer {
+      padding: 15px 0;
+    }
+
+    .sub-item-list {
+      margin-top: 20px;
+      li {
+        list-style: none;
+        padding-bottom: 20px;
+        .table-inner {
+          border: 0;
+          width: 100%;
+          tr {
+            width: 100%;
+          }
+          td {
+            border: 0;
+            padding: 0;
+          }
+        }
+        &:after {
+          clear: both;
+          height: 0;
+          display: block;
+          content: "";
+        }
+        .sub-item {
+          width: 25%;
+        }
+        .sub-item-control {
+          width: 55%;
+          .el-checkbox {
+            margin-left: 15px;
+            margin-bottom: 10px;
+          }
+        }
+      }
+
+    }
+    .el-tabs {
+      .el-tabs__header {
+        border-bottom: 0;
+        background-color: #fff
+      }
+      .el-tabs__nav {
+        width: 100%;
+        .el-tabs__item {
+          text-align: center;
+          width: 100px;
+          height: 30px;
+          line-height: 30px;
+          background-color: #f6f6f6;
+          padding: 0;
+          margin-left: 30px;
+          &.is-active {
+            background-color: rgb(233, 168, 1);
+            color: #fff;
+            border: 0;
+            border-radius: 2px;
+          }
+        }
+      }
+    }
+  }
+</style>

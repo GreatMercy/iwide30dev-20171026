@@ -1,0 +1,137 @@
+.jfk-pages__submitOrder {
+  .submit_order_top {
+    padding: px2rem(30);
+    &_title {
+      width: 100%;
+      height: px2rem(100);
+      line-height: px2rem(100);
+      background-image: background-image(/login_bg.png);
+      background-size: 100% 100%;
+      margin-bottom: px2rem(70);
+
+      & .word {
+        margin-left: px2rem(110);
+      }
+
+      & .if {
+        float: right;
+        margin-right: px2rem(30);
+      }
+    }
+
+    & .hotel_name{
+      margin-bottom: px2rem(30);
+      padding-left: px2rem(40);
+      @mixin one-line vertical {};
+      position:relative;
+        &::before {
+          width: 3px;
+          height: px2rem(30);
+          position: absolute;
+          background-color: red;
+          top: 20%;
+          left: 0;
+        }
+    }
+
+    & .stay_time{
+      padding-left: px2rem(40);
+      margin-bottom: px2rem(40);
+      .in,.left,.time{
+        margin-right: px2rem(40);
+      }
+      .date{
+        color: black;
+      }
+    }
+
+    .room_del{
+      padding-left: px2rem(40);
+      margin-bottom: px2rem(20);
+    }
+
+    .room_other{
+      padding-left: px2rem(40);
+    }
+
+
+  }
+
+  .order-info{
+    background: #fff;
+
+    .pay_for{
+      background: #fff;
+      overflow: hidden;
+      &_item{
+        color: #9c9c9c;
+        width: 49%;
+        float: left;
+        display: inline-block;
+        margin:px2rem(70) 0;
+
+        & .counp{
+          display: inline-block;
+          margin-bottom: px2rem(30);
+        }
+
+        & .counpon{
+          line-height: px2rem(40);
+        }
+      }
+      &_item:first-child{
+        @mixin one-line vertical {};
+        position:relative;
+        &::before {
+          width: 1px;
+          height: px2rem(100);
+          position: absolute;
+          background-color: red;
+          top: 13%;
+          right: 17%;
+          transform:rotate(30deg);
+          -ms-transform:rotate(30deg);
+          -moz-transform:rotate(30deg);
+          -webkit-transform:rotate(30deg);
+          -o-transform:rotate(30deg);
+        }
+      }
+    }
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

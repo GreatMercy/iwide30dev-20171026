@@ -1,0 +1,59 @@
+<template>
+  <div class="products-layout" :class="'products-layout--' + layout">
+    <div class="products-layout__body">
+      <ul :class="layout === 'card' ? 'jfk-pl-30 jfk-pr-30' : ''">
+        <component :is="viewsMap[layout]" class="products-list__item" v-for="product in products" :product="product" :key="product.product_id" :detailUrlPrefix="detailUrlPrefix" @qrcode-change="qrCodeChange"></component>
+      </ul>
+    </div>
+    <jfk-popup v-model="qrcodeVisible" :showCloseButton="true" :closeOnClickModal="false" class="jfk-popup__qrcode jfk-ta-c">
+      <div class="qrcode">
+        <img :src="qrcodeUrl" />
+      </div>
+      <div class="tip font-size--28 font-color-extra-light-gray jfk-pl-30 jfk-pr-30">{{qrcodeTip}}</div>
+    </jfk-popup>
+  </div>
+</template>
+<script>
+  import GoodListCard from './good_list_card'
+  import GoodListImage from './good_list_image'
+  export default {
+    name: 'good-list',
+    data () {
+      return {
+        viewsMap: {
+          'card': 'GoodListCard',
+          'pic': 'GoodListImage'
+        },
+        qrcodeVisible: false,
+        qrcodeUrl: '',
+        qrcodeTip: ''
+      }
+    },
+    components: {
+      GoodListCard,
+      GoodListImage
+    },
+    methods: {
+      qrCodeChange (val) {
+        this.qrcodeUrl = val.url
+        this.qrcodeTip = val.tip
+        this.qrcodeVisible = true
+      }
+    },
+    props: {
+      products: {
+        type: Array,
+        required: true
+      },
+      layout: {
+        type: String,
+        required: true,
+        default: 'card'
+      },
+      detailUrlPrefix: {
+        type: String,
+        required: true
+      }
+    }
+  }
+</script>

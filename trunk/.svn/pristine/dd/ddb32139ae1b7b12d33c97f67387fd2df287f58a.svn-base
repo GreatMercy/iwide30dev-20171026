@@ -1,0 +1,7 @@
+.jfk-sticky {
+  z-index: 8888;
+  &.jfk-pos-st,&.jfk-pos-f {
+    width: 100%;
+    top: 0;
+  }
+}

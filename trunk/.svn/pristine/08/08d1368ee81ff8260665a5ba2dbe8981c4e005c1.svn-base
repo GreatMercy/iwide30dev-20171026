@@ -1,0 +1,58 @@
+  .jfk-pages__roomDesc{
+    
+    .room_desc_ul_container{
+      .room_desc_ul{
+        &::before {
+        background-color: var(--line-color-extra-light-silver);
+        }
+      }
+    }
+
+
+
+
+
+
+
+
+
+
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

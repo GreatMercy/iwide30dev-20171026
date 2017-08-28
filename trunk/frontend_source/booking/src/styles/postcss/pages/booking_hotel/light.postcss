@@ -1,0 +1,132 @@
+  body{
+    background-color: var(--color-white) !important;
+  }
+  .jfk-pages__bookingHotel{
+    margin-bottom:10rem;
+  .title_info_container{
+    & .title_info{
+       &::before {
+         background-color: var(--font-color-light-gray);
+       }
+        &_ht_place{
+           color: var(--font-color-light-gray);
+        }
+        .btn_group{
+          color: var(--color-golden);
+          .btn_span{
+            border: 1px solid var(--color-golden);
+          }
+
+        }
+      }
+  }
+    .score_info_container{
+      .score_info{
+        &::before {
+          background-color: var(--font-color-light-gray);
+        }
+
+      }
+      .center_line{
+        &::before {
+          background-color: var(--font-color-light-gray);
+        }
+      }
+    }
+
+    .hotel_info{
+      &_room{
+        &::before{
+          background-color: var(--line-color-extra-light-silver);
+        }
+      }
+      &_title{
+        &_item{
+          span{
+            &::before {
+              background-color: var(--line-color-extra-light-silver);
+            }
+          }
+        }
+
+        color: var(--font-color-extra-light-gray);
+        &_item.active{
+          color: var(--color-golden);
+          &::before {
+           background-color: var(--color-golden);
+          }
+        }
+
+      }
+    }
+
+    .hotel_info_room{
+      & .room_pic{
+        &_info{
+          & .room_type{
+            color: #fff;
+          }
+          & .room_type_ul{
+
+            li{
+              color: #928d89;
+            }
+          }
+        }
+      }
+    }
+    
+    .hotel_info_room_price{
+      color: var(--font-color-light-gray);
+      & .price{
+        & .sFont{
+          &::before{
+            background-color: var(--font-color-light-gray);
+          }
+        }
+      }
+    }
+
+    .room_price_ul_container{
+      color: var(--font-color-extra-light-gray);
+      background-color: var(--color-light-black);
+      .price_icon{
+        color: var(--color-light-black);
+      }
+      .room_price_ul{
+        li{
+            &::before {
+              background-color: var(--font-color-light-gray);
+            }
+          .price_type{
+            .belong{
+              color: #dac576;
+            }
+            & .belong.blueColor{
+              color: #637fa1;
+            }
+          }
+          .price_num{
+            color: var(--color-golden);
+          }
+          .pay_btn{
+            background-color: var(--button-default-color);
+            color: var(--color-white)
+          }
+        }
+
+      }
+    }
+
+    .ht_int{
+      .title{
+        &::before{
+          background-color: var(--font-color-light-gray);
+        }
+      }
+      &_item{
+        color: var(--font-color-light-gray);
+      }
+    }
+
+}

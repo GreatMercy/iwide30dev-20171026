@@ -1,0 +1,197 @@
+import * as apiConfig from './api'
+import ajax from '@/utils/http'
+
+/**
+ * 获取套餐产品列表
+ * @param {Object} data get请求参数
+ * @param {number} [data.page] 请求的页码数
+ * @param {number} [data.status] 商品的状态值 0: 所有商品 1:上架中商品 3: 已下架商品
+ * @param {string} [data.word] 商品关键字
+ * @param {number} [data.cat] 商品分类
+ * @param {string} [data.sortid] ID排序 asc: 升序 desc: 降序
+ * @param {string} [data.sortprice] 价格排序 asc: 升序 desc: 降序
+ * @param {string} [data.sortstock] 库存排序 asc: 升序 desc: 降序
+ * @param {string} [data.sortdate] 创建时间排序 asc: 升序 desc: 降序
+ * @param {string} [data.sort] 优先级排序 asc: 升序 desc: 降序
+ * @param {object} config axios配置
+ * @param {string} [version=v1] api版本
+ * @return {Promise} 返回一个promise
+ */
+const getPackageListDatas = (data, config, version = 'v1') => {
+  let url = apiConfig[version] && apiConfig[version].GET_PACKAGE_LIST_DATAS || apiConfig['v1'].GET_PACKAGE_LIST_DATAS
+  return ajax.get(url, data, config)
+}
+
+/**
+ * 订单邮寄 发货
+ * @param {string} data.shipping_id
+ * @param {string} data.distributor 快递服务提供商
+ * @param {string} data.tracking_no 快递单号
+ */
+const postExpressDelivery = (data, config, version = 'v1') => {
+  let url = apiConfig[version] && apiConfig[version].POST_EXPRESS_DELIVERY || apiConfig['v1'].POST_EXPRESS_DELIVERY
+  return ajax.post(url, data, config)
+}
+
+/**
+ * 邮寄订单列表
+ * @param {string} data.like 条件
+ * @param {number} data.status 1 未发货 2 发货 空值为全部
+ * @param {string} data.begin_time 开始时间
+ * @param {string} data.end_time 结束时间
+ * @param {number} data.page_num 当前的页数
+ * @param {number} data.page_size 一页多少条
+ * @param {number} data.type 类型
+ * */
+const getExpressOrderList = (data, config, version = 'v1') => {
+  let url = apiConfig[version] && apiConfig[version].GET_EXPRESS_ORDER_LIST || apiConfig['v1'].GET_EXPRESS_ORDER_LIST
+  return ajax.get(url, data, config)
+}
+
+/**
+ * 获取物流下拉列表
+ * */
+const getExpressList = (data, config, version = 'v1') => {
+  let url = apiConfig[version] && apiConfig[version].GET_EXPRESS_LIST || apiConfig['v1'].GET_EXPRESS_LIST
+  return ajax.get(url, data, config)
+}
+
+/**
+ * 邮寄批量导入
+ * */
+const postExpressBatchPost = (data, config, version = 'v1') => {
+  let url = apiConfig[version] && apiConfig[version].POST_EXPRESS_BATCH_POST || apiConfig['v1'].POST_EXPRESS_BATCH_POST
+  return ajax.post(url, data, config)
+}
+
+/**
+ * 邮寄批量下单
+ * @param {string} data.shipping_id
+ */
+const postExpressBatchCreateOrder = (data, config, version = 'v1') => {
+  let url = apiConfig[version] && apiConfig[version].POST_EXPRESS_BATCH_CREATE_ORDER || apiConfig['v1'].POST_EXPRESS_BATCH_CREATE_ORDER
+  return ajax.post(url, data, config)
+}
+/**
+ * 权限角色列表
+ * @param {string} data.pages
+ * @param {string} data.size
+ */
+const getRoleList = (data, config, version = 'v1') => {
+  let url = apiConfig[version] && apiConfig[version].GET_ROLE_LIST || apiConfig['v1'].GET_ROLE_LIST
+  return ajax.get(url, data, config)
+}
+/**
+ * 权限角色--新建角色--获取基础信息
+ * @param {Number} data.role_id
+ */
+const getRoleInfor = (data, config, version = 'v1') => {
+  let url = apiConfig[version] && apiConfig[version].GET_ROLE_INFOR || apiConfig['v1'].GET_ROLE_INFOR
+  return ajax.get(url, data, config)
+}
+/**
+ * 权限角色--新建角色--获取角色权限
+ * @param {Number} data.related_role_id
+ * @param {Number} data.role_id
+ */
+const getRoleAuthority = (data, config, version = 'v1') => {
+  let url = apiConfig[version] && apiConfig[version].GET_ROLE_AUTHORITY || apiConfig['v1'].GET_ROLE_AUTHORITY
+  return ajax.get(url, data, config)
+}
+/**
+ * 权限角色--新建角色--提交角色信息
+ * @param {Number} data.role_id
+ * @param {string} data.inter_id
+ * @param {string} data.role_type
+ * @param {string} data.role_name
+ * @param {Number} data.status
+ * @param {ARRAY} data.role_authority
+ */
+const postRoleData = (data, config, version = 'v1') => {
+  let url = apiConfig[version] && apiConfig[version].POST_ROLE_DATA || apiConfig['v1'].POST_ROLE_DATA
+  return ajax.post(url, data, config)
+}
+/**
+ * 权限角色--权限清单--权限模块列表
+ * @param 无
+ */
+const getAuthorityModule = (data, config, version = 'v1') => {
+  let url = apiConfig[version] && apiConfig[version].GET_AUTHORITY_MODULE || apiConfig['v1'].GET_AUTHORITY_MODULE
+  return ajax.post(url, data, config)
+}
+/**
+ * 权限角色--权限清单--某模块权限列表
+ * @param {string} data.module_code
+ */
+const getAuthorityList = (data, config, version = 'v1') => {
+  let url = apiConfig[version] && apiConfig[version].GET_AUTHORITY_LIST || apiConfig['v1'].GET_AUTHORITY_LIST
+  return ajax.get(url, data, config)
+}
+/**
+ * 权限角色--权限清单--提交权限新增或修改
+ * @param {string} data.module_code
+ * @param {string} data.ctlr_code
+ * @param {string} data.ctlr_name
+ * @param {string} data.ctlr_des
+ * @param {Number} data.ctlr_state
+ * @param {Number} data.ctlr_id
+ */
+const postAuthorityChange = (data, config, version = 'v1') => {
+  let url = apiConfig[version] && apiConfig[version].POST_AUTHORITY_CHANGE || apiConfig['v1'].POST_AUTHORITY_CHANGE
+  return ajax.post(url, data, config)
+}
+/**
+ * 权限角色--权限清单--提交子项新增或修改
+ * @param {string} data.ctlr_id
+ * @param {string} data.func_code
+ * @param {string} data.func_name
+ * @param {string} data.func_des
+ * @param {Number} data.func_state
+ * @param {Number} data.func_id
+ */
+const postSubItemChange = (data, config, version = 'v1') => {
+  let url = apiConfig[version] && apiConfig[version].POST_SUB_CHANGE || apiConfig['v1'].POST_SUB_CHANGE
+  return ajax.post(url, data, config)
+}
+/**
+ * 权限角色--权限清单--提交子项操作新增或修改
+ * @param {Number} data.func_id
+ * @param {string} data.oper_code
+ * @param {string} data.oper_name
+ * @param {string} data.oper_des
+ * @param {Number} data.oper_state
+ * @param {Number} data.oper_id
+ */
+const postOperationChange = (data, config, version = 'v1') => {
+  let url = apiConfig[version] && apiConfig[version].POST_OPERATION_CHANGE || apiConfig['v1'].POST_OPERATION_CHANGE
+  return ajax.post(url, data, config)
+}
+/**
+ * 权限账户--账户列表
+ * @param {string} data.keyword
+ * @param {string} data.offset
+ * @param {string} data.limit
+ */
+const getAccountList = (data, config, version = 'v1') => {
+  let url = apiConfig[version] && apiConfig[version].GET_ACCOUNT_LIST || apiConfig['v1'].GET_ACCOUNT_LIST
+  return ajax.get(url, data, config)
+}
+
+export {
+  getPackageListDatas,
+  postExpressDelivery,
+  getExpressOrderList,
+  postExpressBatchPost,
+  postExpressBatchCreateOrder,
+  getExpressList,
+  getRoleList,
+  getRoleInfor,
+  getRoleAuthority,
+  postRoleData,
+  getAuthorityModule,
+  getAuthorityList,
+  postAuthorityChange,
+  postSubItemChange,
+  postOperationChange,
+  getAccountList
+}

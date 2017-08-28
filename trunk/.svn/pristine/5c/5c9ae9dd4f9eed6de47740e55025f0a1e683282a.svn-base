@@ -1,0 +1,112 @@
+.jfk-pages__refund {
+
+  .refund-information {
+    padding-top: px2rem(150);
+    padding-left: px2rem(78);
+    position: relative;
+    &__shadow {
+      position: absolute;
+      left: px2rem(-48);
+      top: 50%;
+      transform: translate(0, -50%);
+      background-repeat: no-repeat;
+      background-size: contain;
+    }
+
+    &__name {
+      position: relative;
+      flex: 1;
+    }
+
+    &__hotel {
+      margin-top: px2rem(28);
+    }
+
+    .jfk-price__currency {
+      margin-right: px2rem(8);
+    }
+
+    &__price {
+      margin-top: px2rem(36);
+      margin-bottom: px2rem(90);
+    }
+  }
+
+  .refund-order {
+    &__main-title {
+      margin-bottom: px2rem(45);
+    }
+
+    &__info {
+      position: relative;
+      padding-bottom: px2rem(70);
+
+      @mixin one-line horizontal {
+      }
+
+      &::before {
+        bottom: 0;
+        left: 0;
+      }
+
+      li {
+        margin-bottom: px2rem(44);
+      }
+    }
+
+    &__title {
+      width: calc((750 - 30 - 30) / 160) em;
+    }
+
+    &__content {
+      flex: 1;
+      margin-left: px2rem(59);
+    }
+  }
+
+  .refund-reason {
+    padding-top: px2rem(70);
+
+    &__title {
+      margin-bottom: px2rem(35);
+    }
+
+    &__list {
+      padding-top: px2rem(10);
+      padding-bottom: px2rem(64);
+      padding-left: px2rem(41);
+      padding-right: px2rem(41);
+
+      li {
+        height: px2rem(90);
+        line-height: px2rem(90);
+        position: relative;
+
+        @mixin one-line horizontal {
+        }
+
+        &::before {
+          bottom: 0;
+          left: 0;
+        }
+      }
+
+      &-select {
+        display: inline-block;
+        width: px2rem(30);
+        height: px2rem(90);
+        font-size: calc(28 / 30)em;
+        @media screen and (min-width:414px) {
+           font-size: calc(31 / 30)em;
+        }
+      }
+    }
+  }
+
+  .refund-btn {
+    padding-left: px2rem(40);
+    padding-right: px2rem(40);
+    margin: px2rem(73) 0;
+  }
+
+}

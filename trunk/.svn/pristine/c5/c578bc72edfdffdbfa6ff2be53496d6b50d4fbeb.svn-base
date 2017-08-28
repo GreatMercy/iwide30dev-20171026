@@ -1,0 +1,282 @@
+.page_home{
+    .topbanner{
+        position: relative;
+
+    }
+    .swiper-slide{
+        img{
+            width: 100%;
+        }
+    }
+    .swiper-pagination{
+        bottom: 25px;
+        font-size: 11px;
+        color: #ffffff;
+        text-align: right;
+        .swiper-pagination-current{
+            font-size: 16px;
+        }
+        .swiper-pagination-total{
+            margin-right: 18px;
+        }
+    }
+    .subtitle{
+        text-align: center;
+        font-size: 12px;
+        color: #a6a6a6;
+        padding: 20px 0 ;
+        letter-spacing: 3px;
+    }
+    .bestPlace{
+        padding-left: 15px;
+        padding-right: 15px;
+        padding-bottom: 25px;
+        border-bottom: 10px solid #f6f7f7;
+        .swiper-slide{
+            img{
+                border-radius: 4px;
+                display: block;
+            }
+            .tab{
+                color: #333333;
+                font-size: 15px;
+                margin-top: 8px;
+                i{
+                    display: inline-block;
+                    width: 10px;
+                    height: 16px;
+                    margin-right: 10px;
+                    background:{
+                        image: url('../../assets/accorIcon.png');
+                        size: 100%;
+                        position: 0 -15px;
+                    }
+                }
+                span{
+                    color: #a6a6a6;
+                    font-size: 12px;
+                    margin-left: 6px;
+                }
+            }
+        }
+        .seemore{
+            a{
+                text-align: center;
+                display: block;
+                
+            }
+        }
+    }
+    .ads{
+        padding-top: 30px;
+        padding-left: 15px;
+        padding-right: 15px;
+        padding-bottom: 20px;
+        display: flex;
+        a{
+           width: 33.33%;
+           margin-right: 10px;
+           img{
+               width: 100%;
+               border-radius: 4px;
+           }
+           &:last-child{
+               margin-right: 0;
+           }
+        }
+    }
+    .brand{
+        padding-left: 15px;
+        padding-right: 15px;
+        img{
+            height: 45px;
+            width: auto;
+            display: block;
+            margin: 0 auto;
+        }
+        .swiper-container{
+            padding-left: 15px;
+            padding-right: 15px;
+        }
+        .swiper-button-prev,.swiper-button-next{
+            background: none;
+            opacity: 1;
+            height: 20px;
+            margin-top: -10px;
+            &:before,&:after{
+                position: absolute;
+                width: 12px;
+                height: 1px;
+                content: '';
+                display: inline-block;
+                background-color: #51c0ff;
+            }
+            &:before{
+                transform: rotate(60deg);
+            }
+            &:after{
+                transform: rotate(-60deg);
+            }            
+        }
+        .swiper-button-disabled{
+            &:before,&:after{
+                background-color: #989898;
+            }
+        }
+        .swiper-button-prev{
+            &:before{
+                top: 15px;
+            }
+            &:after{
+                top: 5px;
+            }               
+        }
+        .swiper-button-next{
+            right: 0;
+            &:before{
+                top: 5px
+            }
+            &:after{
+                top: 15px;
+            }            
+        }
+    }
+    .bestSelect{
+        padding: 0 15px;
+        img{
+            width: 100%;
+            display: block;
+            border-radius: 4px;
+        }
+        .twoimg{
+            display: flex;
+            margin-top: 10px;
+            margin-bottom: 45px;
+            a{
+                width: 50%;
+                margin-right: 10px;
+                &:last-child{
+                    margin-right: 0;
+                }
+            }
+        }
+
+    }
+}
+.page_list{
+    height: 100%;
+    .main{
+        position: relative;
+        height: 100%;
+    }
+    .leftmenu{
+        width: 90px;
+        position: fixed;
+        left: 0;
+        top: 0;
+        background-color: #f6f7f7;
+        text-align: center;
+        height: 100%;
+        overflow: auto;
+        .list{
+            padding-left: 12px;
+            padding-right: 12px;
+            padding-top: 7px;
+            
+            padding-bottom: 20px;
+
+            li{
+                margin-top: 15px;
+                color: #808080;
+                height: 30px;
+                line-height: 30px;
+                font-size: 15px;
+                &.active{
+                    background-color: #38b7ff;
+                    border-radius: 20px;
+                    color: #fff;
+                    padding-left: 25px;
+                    text-align: left;
+                    position: relative;
+                    &:before{
+                        content: '';
+                        display: inline-block;
+                        position: absolute;
+                        width: 10px;
+                        height: 16px;
+                        left: 10px;
+                        top: 50%;
+                        margin-top: -7px;
+                        background:{
+                            image: url('../../assets/accorIcon.png');
+                            size: 100%;
+                            position: 0 0px;
+                        }                                          
+                    }
+                }
+            }
+        }
+    }
+    .rightcontent{
+        padding-left: 90px;
+        ul{
+            padding-left: 14px;
+            padding-right: 14px;
+            padding-top: 10px;
+            li{
+                position: relative;
+                padding-top: 15px;
+                padding-bottom: 15px;
+                border-bottom: 1px solid #ebebeb;
+                img{
+                    position: absolute;
+                    left: 0;
+                    top: 15px;
+                    display: block;
+                    width: 45px;
+                    height: 45px;
+                }
+                .hotelinfo{
+                    padding-left: 60px;
+                    h3{
+                        font-size: 15px;
+                        color: #333333;
+                        width: 100%;
+                        overflow: hidden;
+                        white-space: nowrap;text-overflow: ellipsis;
+                    }
+                    p{
+                        font-size: 12px;
+                        color: #808080;
+                        margin-top: 7px;
+                        a{
+                            color: #bfbfbf;
+                            float: right;
+                            position: relative;
+                            padding-right: 12px;
+                            &:before,&:after{
+                                position: absolute;
+                                width: 8px;
+                                height: 1px;
+                                content: '';
+                                right: 0;
+                                display: inline-block;
+                                background-color: #bfbfbf;
+                            }
+                            &:before{
+                                transform: rotate(40deg);
+                                top: 6px;
+                            }
+                            &:after{
+                                transform: rotate(-40deg);
+                                top: 11px;
+                            } 
+                        }
+                    }
+                }
+            }
+        }
+
+        
+    }
+}

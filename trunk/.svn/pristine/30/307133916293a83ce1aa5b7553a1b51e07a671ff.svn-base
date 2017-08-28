@@ -1,0 +1,159 @@
+<template>
+  <div class="gradient_bg padding_bottom_30">
+	<section class="padding_0_15">
+		<div class="flex between padding_45 font_12">
+			<div class="margin_right_30 relative padding_left_35">
+				<div class="line_left absolute top_65"><img class="line_height65" src="../../assets/image/line_03.png" alt=""></div>
+				<div>
+					<div class="font_30 jfk-font txt_show4 main_color1">马上注册<span class="radius_50">.</span></div>
+					<div class="margin_top_20 center relative color_888">可获得注册大礼包，享受更多会员优惠</div>
+				</div>
+			</div>
+		</div>
+		<form class="form_list font_14" ref="form">
+			<div v-for="(value,key) in configList" v-if="value.show === 1" :data="value.show" class="flex form_item bd_bottom padding_18">
+				<div class="margin_right_22 width_75">
+					<div class="flex between">
+						<div class="margin_right_22 flex between" v-html="value.namehtml"></div>
+					</div>
+        </div>
+				<div class="flex_1 font_14"><input @keyup="setRemove($event)" :type="value.type" :name="key" :placeholder="value.note" maxlength="20"></div>
+        <div v-if="key === 'phonesms'" @click="smsSend" class="relative verification" :class="{verification_active:sms}">{{smsTitle}}</div>
+			</div>
+			<div class="margin_top_75 font_17">
+				<div class="block width_85 center padding_15 auto jfk-font entry_btn register" @click="submit()">注&ensp;册</div>
+			</div>
+			<div class="center margin_top_30 font_12 color3">已有账号？<span class="mar_l20"><a class="main_color1" :href="links.login">马上登录</a></span><em class="color3 mar_l10 jfk-font xx-small">&#xe61c;</em></a>
+			</div>
+		</form>
+	</section>
+  <JfkSupport v-once></JfkSupport>
+  </div>
+</template>
+<script>
+import { JfkMessageBox } from 'jfk-ui'
+import { getRegInfo, postReg, getSendsms } from '@/service/http'
+export default {
+  data () {
+    return {
+      configList: [],
+      links: [],
+      sms: true,
+      smsTitle: '获取验证码',
+      smsTime: 60,
+      time: ''
+    }
+  },
+  created () {
+    getRegInfo().then((res) => {
+      this.configList = res.web_data.login_config
+      this.recombination()
+      this.links = res.web_data.page_resource.links
+    })
+  },
+  methods: {
+    recombination () {
+      for (let item in this.configList) {
+        if (this.configList[item]['show'] === 1) {
+          let nameArr = ''
+          for (let i = 0; i < this.configList[item]['name'].length; i++) {
+            nameArr += '<span class="block">' + this.configList[item]['name'][i] + '</span>'
+          }
+          this.configList[item]['namehtml'] = nameArr
+        }
+      }
+    },
+    submit () {
+      let result = this.$refs.form
+      let setDate = {}
+      let setBol = true
+
+      for (let item in this.configList) {
+        if (this.configList[item].show === 0) {
+          continue
+        }
+        if (result[[item]].value === '') {
+          result[[item]].setAttribute('class', 'bg_ico_close')
+          setBol = false
+          continue
+        }
+        if (this.configList[item].check === 1) {
+          let str = '/' + this.configList[item].regular + '/'
+          /* eslint-disable */let reg = eval(str)
+          if (!reg.test(result[[item]].value)) {
+            result[[item]].placeholder = '请输入正确的' + this.configList[item].name
+            result[[item]].setAttribute('class', 'bg_ico_sigh')
+            setBol = false
+            continue
+          }
+        }
+        setDate[[item]] = result[[item]].value 
+      }
+
+      if (setBol) {
+        postReg(setDate).then((res) => {
+          if (res.status === 1000) {
+            JfkMessageBox.alert('注册成功', '', {
+              iconType: 'success'
+            }).then((res) => {
+              window.location.href = this.links.login
+            })
+          } else {
+            JfkMessageBox.alert(res.msg, '', {
+              iconType: 'error'
+            })
+          }
+        })
+      }
+    },
+    smsSend () {
+      if (this.sms) {
+        let str = '/' + this.configList['phone'].regular + '/'
+        let result = this.$refs.form
+        /* eslint-disable */let reg = eval(str)
+        if (!reg.test(result[['phone']].value)) {
+          result['phone'].value = ''
+          result['phone'].placeholder = '请输入正确的' + this.configList['phone'].name
+          result['phone'].setAttribute('class', 'bg_ico_sigh')
+        } else {
+          let that = this
+          let data = {
+            phone: result['phone'].value,
+            phonesms: result['phonesms'].value,
+            smstype: 0
+          }
+          getSendsms(data).then((res) => {
+            if (res.status === 1000) {
+              JfkMessageBox.alert('短信已发送,请注意查收', '', {
+                iconType: 'success'
+              })
+            } else {
+              JfkMessageBox.alert(res.msg, '', {
+                iconType: 'error'
+              })
+            }
+          })
+          that.time = setInterval(function() {
+            that.checkSms()
+          },1000)
+        }
+      }
+    },
+    checkSms () {
+      if (this.smsTime === 0 ) {
+        clearInterval(this.time)
+        this.sms = true
+        this.smsTitle = '获取验证码'
+        this.smsTime = 60
+      } else {
+        this.sms = false
+        this.smsTime--
+        this.smsTitle = this.smsTime + '秒后再获取'
+      }
+    },
+    setRemove (even) {
+      even.target.className = ''
+    }
+  }
+}
+</script>

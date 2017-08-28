@@ -1,0 +1,48 @@
+
+html {
+  font-size: var(--base-font-size)px;
+  font-family: var(--base-font-family);
+}
+body, div, span, p, em, i, b, th, td, dl, dt, dd, ul, ol, li, a, h1, h2, h3, h4, h5, h6, form, textarea {
+  tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+body, p, ul, ol, h1, h2, h3, h4, h5, h6 {
+  margin: 0
+}
+
+h1, h2, h3, h4, h5, h5 {
+  font-weight: normal;
+}
+
+li, ul {
+  padding: 0
+}
+
+li {
+  list-style: none inside none;
+}
+
+a, label, div, span, li, i {
+  tap-highlight-color: transparent;
+  -webkit-tap-highlight-color: transparent;
+}
+
+a, label, div, span, li, i {
+  &:focus {
+    outline: none;
+  }
+}
+
+a {
+  text-decoration: none;
+}
+i {
+  font-style: normal;
+}
+input, textarea, button, select {
+  font-family: var(--base-font-family);
+}
+input, textarea {
+  appearance: none;
+}

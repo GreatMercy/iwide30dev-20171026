@@ -1,0 +1,39 @@
+.order__gift__info{
+    display: flex;
+    align-items: center;  
+    position: relative;          
+    .productimg{
+        width: 80px;
+        border-radius: 3px;
+        height: 80px;
+        background-size: cover;
+        position: absolute;
+        left: 0;
+        top: 0
+    }
+    .content{
+        color: #fff;
+        width: 100%;
+        box-sizing: border-box;
+        margin-top: 5px;
+        padding-left: 93px;
+        .number{
+            vertical-align: 3px;
+            margin-left: px2rem(30);
+        }
+        h2{
+            font-weight: normal;
+            line-height: px2rem(36);
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+        .validate{
+            margin-top: px2rem(20);
+            color: #808080;
+        }
+        .price_box{
+            margin-top: px2rem(30);
+        }
+    }
+}

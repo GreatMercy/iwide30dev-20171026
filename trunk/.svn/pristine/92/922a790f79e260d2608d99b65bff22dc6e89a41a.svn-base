@@ -1,0 +1,32 @@
+import * as apiConfig from './api'
+import ajax from '@/utils/http'
+
+/**
+ * 查询申请退款的订单
+ * @param {Object} data get请求参数
+ * @param {string} [data.order_no] 订单号
+ * @param {object} config axios配置
+ * @param {string} [version=v1] api版本
+ * @return {Promise} 返回一个promise
+ */
+const getRefundOrder = (data, config, version = 'v1') => {
+  let url = apiConfig[version] && apiConfig[version].GET_REFUND_ORDER || apiConfig['v1'].GET_REFUND_ORDER
+  return ajax.get(url, data)
+}
+
+/**
+ * 新增银行账户信息
+ * @param {Object} data get请求参数 {很多参数}
+ * @param {object} config axios配置
+ * @param {string} [version=v1] api版本
+ * @return {Promise} 返回一个promise
+ */
+const postrefund = (data, config, version = 'v1') => {
+  let url = apiConfig[version] && apiConfig[version].POST_REFUND || apiConfig['v1'].POST_REFUND
+  return ajax.post(url, data, config)
+}
+
+export default {
+  getRefundOrder,
+  postrefund
+}

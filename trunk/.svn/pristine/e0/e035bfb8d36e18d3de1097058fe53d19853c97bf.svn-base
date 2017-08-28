@@ -1,0 +1,135 @@
+  .jfk-pages__useCoupon{
+    padding: 0 px2rem(30);
+    padding-bottom: 10rem;
+
+   .useCoupon_top{
+    margin-top: px2rem(80);
+    padding-left: px2rem(50);
+
+    & .useCoupon_price{
+      margin-bottom: px2rem(120);
+    }
+
+    & .useCoupon_title{
+      @mixin one-line vertical {};
+      position:relative;
+      &::before {
+        position: absolute;
+        width: px2rem(3);
+        height: px2rem(40);
+        bottom: px2rem(10);
+        left: px2rem(-50);
+      }
+    }
+  
+
+    .qr_code{
+      &_title{
+
+      }
+    }
+   }
+    .qr_code_type1{
+      margin-top: px2rem(40);
+      padding-top: px2rem(50);
+      padding-left:px2rem(40);
+      position: relative;
+      height: px2rem(680);
+      border-radius: px2rem(5);
+
+      .qr_img{
+        width: px2rem(380);
+        height: px2rem(380);
+        margin: auto;
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        top: 0;
+      }
+      .qr_num{
+        margin-top: px2rem(520);
+        text-align: center;
+        margin-left: px2rem(-40);
+      }
+    }
+    
+    .qr_code_type2{
+      margin-top: px2rem(40);
+      padding-top: px2rem(50);
+      padding-left:px2rem(40);
+      padding-right:px2rem(40);
+      position: relative;
+      height: px2rem(450);
+      border-radius: px2rem(5);
+
+      & .input_num{
+        outline: none;
+        border: none;
+        -webkit-appearance: none;
+        border-radius: 0; 
+        width: 100%;
+        margin-top: px2rem(20);
+        height: px2rem(80);
+        line-height: px2rem(80);
+        
+      }
+    }
+    
+    .submit_btn{
+      width: 90%;
+      height: px2rem(90);
+      line-height: px2rem(90);
+      text-align: center;
+      display: inline-block;
+      margin-left: 5%;
+      margin-top: px2rem(100);
+      border-radius: px2rem(3);
+
+    }
+
+  
+
+
+
+
+
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

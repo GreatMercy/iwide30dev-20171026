@@ -1,0 +1,26 @@
+{
+  "name": "common-admin",
+  "version": "1.0.0",
+  "description": "基于element的二次定制主题",
+  "author": {
+    "fsy0718": "fanshaoyong@jperation.com"
+  },
+  "private": true,
+  "scripts": {
+    "theme": "node theme.js"
+  },
+  "browserslist": [
+    "ie_mob >= 10",
+    "ff >= 30",
+    "chrome >= 34",
+    "safari >= 6",
+    "opera >= 12.1",
+    "ios >= 6",
+    "android >= 4.4",
+    "and_uc >= 9.9"
+  ],
+  "dependencies": {
+    "element-theme": "^0.7.2",
+    "element-theme-default": "^1.4.2"
+  }
+}

@@ -1,0 +1,49 @@
+<template>
+  <div class="jfk-pages jfk-page__statistics-example">
+    <el-tabs v-model="tabIndex" type="card" @tab-click="handleTabClick">
+      <el-tab-pane label="柱图" name="bar"></el-tab-pane>
+      <el-tab-pane label="折线图" name="line"></el-tab-pane>
+      <el-tab-pane label="饼图" name="pie"></el-tab-pane>
+      <el-tab-pane label="漏斗图" name="funnel"></el-tab-pane>
+    </el-tabs>
+    <div class="charts">
+      <IEcharts :option="chartOption" :loading="chartLoading" @ready="chartReady" @click="chartClick"></IEcharts>
+    </div>
+  </div>
+</template>
+<script>
+  import IEcharts from 'vue-echarts-v3/src/lite.vue'
+  import 'echarts/lib/chart/bar'
+  import 'echarts/lib/chart/line'
+  import 'echarts/lib/chart/pie'
+  import 'echarts/lib/chart/funnel'
+  export default {
+    name: '',
+    components: {
+      IEcharts
+    },
+    data () {
+      return {
+        tabIndex: 'bar',
+        chartOption: {},
+        chartLoading: true
+      }
+    },
+    methods: {
+      chartReady (inst) {
+        this.chartLoading = false
+      },
+      chartClick (e, inst, echarts) {
+        console.log(arguments)
+      }
+    },
+    watch: {
+      tabIndex (val) {
+        this.chartLoading = true
+        if (val === 'line') {
+          return {}
+        }
+      }
+    }
+  }
+</script>

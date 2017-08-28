@@ -1,0 +1,137 @@
+  body{
+  	background-color: var(--color-light-black) !important;
+  }
+.jfk-pages__cityChoose{
+		.grayColor{
+	    color:var(--font-color-extra-light-gray);
+  	}
+  	.goldColor{
+        color: var(--color-golden);
+      }
+		.float_word{
+			backgrund-color: rgba(255,255,255,.5);
+		}
+   	.search_city{
+   		background-color: var(--color-light-black);
+   		& input{
+   			background-color: var(--color-light-black);
+   		}
+    	& input::placeholder{
+	        color: var(--font-color-light-gray);
+	        background-color: var(--color-light-black);
+	    }
+	    .color{
+	    	color: var(--font-color-light-gray);
+	    }
+	    .icon-icon_search{
+	    	color: var(--font-color-light-gray);
+	    }
+	    &::before {
+	    	background-color: var(--font-color-light-gray);
+	    }
+	    & .no_far{
+	    	color: var(--color-golden);
+	    }
+  	}
+
+  	.history_search{
+	    span{
+	      border: 1px solid var(--line-color-extra-light-silver);
+	    }
+  	}
+		
+		.hot_search {
+	    .jfk-swiper__recommendation{
+	      position: relative;
+	      & .swiper_mask{
+	        color: white;
+	      }
+    	}
+
+	    .jfk-swiper__recommendation{
+	      & .swiper_mask{
+	        background-color: rgba(0,0,0,.5);
+	      }
+	    }
+  	}
+
+	  .all_city{
+			color: var(--font-color-extra-light-gray);
+			&_item_word{
+				&::before{
+        	background-color: var(--font-color-light-gray);
+	      }
+			}
+	    & ul li{
+        color: #000;
+	      &::before{
+        	background-color: var(--font-color-light-gray);
+	      }
+	    }
+	  }
+
+	  .search_city_list{
+    &_item{
+    	p{
+    		color: var(--font-color-white);
+    		&::before {
+    			background-color: var(--font-color-light-gray);
+    		}
+    	}
+    }
+  }
+	
+	.for_you{
+    &_list_item{
+      & p{
+					color: var(--font-color-white);
+          &::before {
+           background-color: var(--font-color-light-gray);
+          }
+          i{
+          	color: var(--font-color-silver);
+          }
+      }
+    }
+  }
+
+
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

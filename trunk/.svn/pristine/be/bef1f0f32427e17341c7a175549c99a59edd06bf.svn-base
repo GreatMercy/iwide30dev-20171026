@@ -1,0 +1,71 @@
+<template>
+  <div class="jfk-pages authority-module-outer">
+    <!--模块列表-->
+    <ul class="module-list">
+      <li v-for="item in authorityModules"><a
+        :href="link+'?module_code='+item.module_code">{{item.module_name}}</a>
+      </li>
+    </ul>
+  </div>
+</template>
+<script>
+  import {getAuthorityModule} from '@/service/system/http'
+
+  export default {
+    name: 'authorityModule',
+    created () {
+      this.getModules()
+    },
+    data () {
+      return {
+        authorityModules: [],
+        link: ''
+      }
+    },
+    methods: {
+      getModules () {
+        getAuthorityModule({}).then((res) => {
+          this.authorityModules = res.web_data.modules
+          this.link = res.web_data.link
+        })
+      }
+    }
+  }
+</script>
+<style lang="postcss">
+  .authority-module-outer {
+    color: rgb(31, 45, 61);
+    margin-top: 70px;
+    li {
+      list-style: none
+    }
+    .module-list {
+      width: 900px;
+      margin: 0 auto;
+      padding-top: 30px;
+      &:after {
+        clear: both;
+        height: 0;
+        content: '';
+        display: block;
+      }
+      li {
+        width: 200px;
+        height: 200px;
+        float: left;
+        line-height: 200px;
+        text-align: center;
+        margin: 0 50px 50px 50px;
+        a {
+          height: 100%;
+          display: block;
+          border: 1px solid rgb(191, 203, 217);
+          font-size: 16px;
+          color: #333;
+          text-decoration: none;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+</style>

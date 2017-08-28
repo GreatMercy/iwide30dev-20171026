@@ -1,0 +1,92 @@
+.jfk-pages__theme{
+  background-color: #fff;
+}
+body{
+  background-color: #fff !important;
+}
+.jfk-pages__commentContent {
+  .goldColor {
+    color: var(--color-golden);
+  }
+  .grayColorbf {
+    color: var(--font-color-light-gray);
+  }
+  .grayColor80 {
+    color: var(--font-color-extra-light-gray);
+  }
+
+  .comment_top{
+    & .container{
+      &::before {
+        background-color: var(--line-color-light-silver);
+      }
+    }
+
+    .pregress_list{
+        & .pregress_item{
+          .pregress{
+            .name{
+              color: #666;
+            }
+            .bar{
+              background: linear-gradient(to right, #d6bf94, #b3955f);
+            }
+          }
+        }
+    }
+  }
+  
+  .talk{
+    ul{
+      &::before {
+        background-color: var(--line-color-light-silver);
+      }
+      li{
+        border: 1px solid #ebebeb;
+        color: var(--font-color-dark-white);
+      }
+      li.active{
+        color: var(--color-golden);
+        border: 1px solid var(--color-golden);
+      }
+      li.bad{
+        color: #808080;
+        border: 1px solid #ebebeb;
+      }
+    }
+  }
+
+  .content{
+    .comment{
+      color: var(--font-color-dark-white);
+    }
+    .repeat_content{
+      background-color: #f6f7f7;
+    }
+  }
+  .booking_now{
+    background-color: #1a1a1a;
+    color: #fff;
+  }
+  
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}

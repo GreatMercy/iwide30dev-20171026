@@ -1,0 +1,38 @@
+.jfk-popup__pancake {
+  .popup-cont {
+    padding: px2rem(60) px2rem(54) px2rem(62) px2rem(54);
+  }
+  .title {
+    line-height: 2;
+    padding-bottom: px2rem(48);
+  }
+  .cont {
+    line-height: 2;
+  }
+  .btns {
+    padding-top: px2rem(78);
+    padding-bottom: px2rem(16);
+    &-2 {
+      @mixin clearfix;
+      .jfk-button {
+        width: calc(306 / 642 * 100%);
+      }
+    }
+  }
+  .share {
+    display: inline-block;
+    vertical-align: bottom;
+    margin: 0 calc(14 / 24)em;
+    &-cont {
+      padding: 0 calc(10 / 24)em;
+      height:calc(62 / 24)em;
+      width: calc(42 / 24)em;
+    }
+    .dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      
+    }
+  }
+}

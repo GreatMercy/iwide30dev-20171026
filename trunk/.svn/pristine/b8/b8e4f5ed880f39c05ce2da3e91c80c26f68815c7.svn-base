@@ -1,0 +1,25 @@
+.jfk-page__giftOrder{
+    .order__gift__info {
+        .content{
+            position: relative;
+            .price_box{
+                .number{
+                    margin-left: 0;
+                }
+            }
+            .sendGift{
+                position: absolute;
+                right: 0;
+                bottom: px2rem(-24);
+                a{
+                    height: px2rem(60);
+                    line-height: px2rem(60);
+                    width: px2rem(204);
+                }
+            }
+        }
+    }
+    .orderInfo{
+        margin-bottom: 0;
+    }
+}

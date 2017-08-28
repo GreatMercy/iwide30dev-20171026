@@ -1,0 +1,81 @@
+.jfk-pages__record {
+  .jfk-pages__body {
+    padding-bottom: px2rem(100);
+  }
+  .avatar {
+    border-radius: 50%;
+    display: inline-block;
+    overflow: hidden;
+    width: calc(94 / 30)em;
+    height: calc(94 / 30)em;
+    img {
+      width: 100%;
+      display: block;
+    }
+    &.is-default {
+      background-image: background-image(/avatar.png);
+      background-size:  100%;
+    }
+  }
+  .user {
+    text-align: center;
+    padding-top: calc(38 / 30)em;
+    padding-bottom: calc(4 / 30)em;
+    .name {
+      line-height: calc((22 + 22 + 38) / 30);
+    }
+  }
+  .times {
+    line-height: px2rem(36 + 36 + 30);
+    @mixin one-line horizontal {
+      bottom: 0;
+      left: 0;
+    };
+    display: flex;
+    justify-content: center;
+    span {
+      flex-grow: 1;
+      text-align: center;
+      letter-spacing: .1em;
+    }
+  }
+  .record-box {
+    .title {
+      margin-bottom: px2rem(36);
+      margin-top: px2rem(78);
+    }
+  }
+  .record-list {
+    &__item {
+      line-height: px2rem(90);
+      margin-top: px2rem(60);
+      .order {
+        width: calc(86 / 690 * 100%);
+      }
+      .prize {
+        width: calc(220 / 690 * 100%);
+      }
+      .prize-num {
+        width: calc(206 / 690 * 100%);
+      }
+      .prize-btns {
+        width: calc(177 / 690 * 100%);
+        @mixin clearfix;
+        .btn {
+          display: inline-block;
+          width: calc(92 / 30)em;
+          height: calc(50 / 30)em;
+          line-height: calc(48 / 30)em;
+        }
+        .jfk-button {
+          line-height: calc(48 / 30)em;
+          height: calc(50 / 30)em;
+          font-size: 1em;
+        }
+        .num {
+          float: right;
+        }
+      }
+    }
+  }
+}

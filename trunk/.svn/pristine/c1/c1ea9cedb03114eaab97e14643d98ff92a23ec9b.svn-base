@@ -1,0 +1,476 @@
+<template>
+  <div class="jfk-pages add-role-outer">
+    <el-row>
+      <el-col :span="24">
+        <div class="grid-content bg-purple">
+          <!--步骤-->
+          <el-steps :space="1000" :active="activeStep" finish-status="success" class="jfk-steps--bg-gray jfk-steps">
+            <el-step title="基础信息"></el-step>
+            <el-step title="角色权限"></el-step>
+          </el-steps>
+          <!--基础信息-->
+          <template v-if="activeStep === 0">
+            <!--超级管理员-->
+            <el-form v-if="inforData.admin_type === 1" :model="createdInfor" :rules="rules" ref="createdInfor1"
+                     label-width="200px">
+              <div>
+                <div class="lable">角色类型</div>
+                <div class="value">标准角色</div>
+              </div>
+              <el-form-item label="角色名称" prop="superRoleName">
+                <el-input placeholder="请输入角色名称" v-model="createdInfor.superRoleName"></el-input>
+              </el-form-item>
+              <div>
+                <div class="lable">角色状态</div>
+                <div class="value">有效</div>
+              </div>
+              <el-form-item>
+                <el-button type="primary" size="small" @click="nextStepBtn('createdInfor1')">下一步</el-button>
+              </el-form-item>
+            </el-form>
+            <!--普通管理员-->
+            <el-form v-else-if="inforData.admin_type === 2" :model="createdInfor" :rules="rules" ref="createdInfor"
+                     label-width="200px">
+              <el-form-item label="选择公众号" prop="arr_inter_id">
+                <el-select placeholder="请选择公众号" v-model="createdInfor.arr_inter_id">
+                  <el-option v-for="item in inforData.arr_inter_id" :key="item.inter_name" :lable="item.inter_id"
+                             :value="item.inter_name"></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="关联角色" prop="related_role_id">
+                <el-select placeholder="请关联角色" v-model="createdInfor.related_role_id">
+                  <el-option v-for="item in inforData.standard_roles" :key="item.role_name"
+                             :value="item.role_id"
+                             :label="item.role_name"></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="自定义角色名称" prop="userDefinedName">
+                <el-input placeholder="请输入自定义角色名称" v-model="createdInfor.userDefinedName"></el-input>
+              </el-form-item>
+              <div>
+                <div class="lable">角色状态</div>
+                <div class="value">有效</div>
+              </div>
+              <!--编辑的时候选择状态  新建是默认有效 不展示-->
+              <!--<el-form-item label="状态">-->
+              <!--<el-select placeholder="状态" v-model="createdInfor.status">-->
+              <!--<el-option v-for="item in inforData.status" :key="item" :value="item" :label="item"></el-option>-->
+              <!--</el-select>-->
+              <!--</el-form-item>-->
+              <el-form-item>
+                <el-button type="primary" size="small" @click="nextStepBtn('createdInfor')">下一步</el-button>
+              </el-form-item>
+            </el-form>
+          </template>
+          <!--角色权限-->
+          <template v-else-if="activeStep === 1">
+            <div v-loading="loading">
+              <el-tabs v-model="activeTab" type="card">
+                <el-tab-pane v-for="(item,index) in authorities" :key="index" :label="item.name" :name="'tab_'+ index">
+                  <!--全选-->
+                  <div class="all-outer">
+                    <el-checkbox v-model="thisPageAllBtn[index]" @change="thisPageAllChange(index)">全选当前页所有
+                    </el-checkbox>
+                    <el-checkbox v-model="defaultAllBtn[index]">
+                      默认开通全部（含未来新功能）
+                    </el-checkbox>
+                  </div>
+                  <!--角色权限列表-->
+                  <table class="table-outer">
+                    <tr class="table-header">
+                      <td width="30%">权限</td>
+                      <td width="70%">子项及操作</td>
+                    </tr>
+                    <tr v-for="(item1,index1) in item.controllers">
+                      <td>
+                        <!--权限-->
+                        <el-checkbox style="margin-bottom: 5px"
+                                     v-model="item1.nowCheck" :key="index1">
+                          {{item1.name}}
+                        </el-checkbox>
+                        <br>
+                        <el-checkbox v-model="authorityAllBtn[index*10+index1]"
+                                     @change="authorityAllChange(index,index1)">全选
+                        </el-checkbox>
+                        <el-checkbox v-model="authorityDefaultAllBtn[index*10+index1]">
+                          全部
+                        </el-checkbox>
+                      </td>
+                      <td>
+                        <ul class="sub-item-list">
+                          <li v-for="(item2,index2) in item1.funcs">
+                            <table class="table-inner">
+                              <tr>
+                                <td class="sub-item">
+                                  <!--子项-->
+                                  <!--启用-->
+                                  <el-checkbox v-if="item1.nowCheck" v-model="item2.nowCheck" :key="index1+'-'+index2">
+                                    {{item2.name}}
+                                  </el-checkbox>
+                                  <!--禁用-->
+                                  <el-checkbox v-else disabled v-model="item2.nowCheck" :key="index1+'-'+index2">
+                                    {{item2.name}}
+                                  </el-checkbox>
+                                </td>
+                                <td class="sub-item-control" v-for="(item3,index3) in item2.operations">
+                                  <!--子项操作-->
+                                  <!--启用-->
+                                  <el-checkbox v-if="item1.nowCheck && item2.nowCheck" v-model="item3.nowCheck"
+                                               :key="index1+ '-' + index2 + '-' + index3">
+                                    {{item3.name}}
+                                  </el-checkbox>
+                                  <!--禁用-->
+                                  <el-checkbox v-else disabled v-model="item3.nowCheck"
+                                               :key="index1+ '-' + index2 + '-' + index3">
+                                    {{item3.name}}
+                                  </el-checkbox>
+                                </td>
+                              </tr>
+                            </table>
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                  </table>
+                </el-tab-pane>
+              </el-tabs>
+              <div style="text-align: center" v-if="!loading">
+                <el-button type="primary" size="large" @click="prevStep()">上一步</el-button>
+                <el-button type="primary" size="large" @click="postRoleData()">完成</el-button>
+              </div>
+            </div>
+          </template>
+        </div>
+      </el-col>
+    </el-row>
+
+  </div>
+</template>
+
+<script>
+  import {getRoleInfor, getRoleAuthority, postRoleData} from '@/service/system/http'
+
+  export default {
+    name: 'addrole',
+    created () {
+      // 获取role_id
+      this.getQueryString('role_id')
+      // 获取基础信息
+      this.getInforData()
+    },
+    data () {
+      return {
+        loading: true,
+        // 被编辑角色的id
+        role_id: null,
+        // 当前步骤
+        activeStep: 0,
+        // 获取的基础信息
+        inforData: {
+          admin_type: 0,
+          arr_inter_id: [],
+          standard_roles: [],
+          status: ['有效', '无效']
+        },
+        // 用户自己填写的用户信息
+        createdInfor: {
+          arr_inter_id: '',
+          related_role_id: '',
+          userDefinedName: '',
+          superRoleName: '',
+          role_id: 0
+        },
+        // 控制显示某个模块
+        activeTab: 'tab_0',
+        // 全选当前页所有
+        thisPageAllBtn: [],
+        // 默认勾选全部
+        defaultAllBtn: [],
+        // 某个权限下的所有子项及操作
+        authorityAllBtn: [],
+        // 某个权限下的所有子项及操作默认
+        authorityDefaultAllBtn: [],
+        // 某个模块的权限列表
+        authorities: [],
+        // 重组权限列表
+        postData: {
+          role_id: 0,
+          role_authority: [],
+          role_type: 0,
+          role_name: '',
+          status: 0,
+          inter_id: ''
+        },
+        rules: {
+          arr_inter_id: [
+            {required: true, message: '请选择公众号', trigger: 'change'}
+          ],
+          related_role_id: [
+            {required: true, message: '请选择关联角色', trigger: 'change'}
+          ],
+          userDefinedName: [
+            {required: true, message: '请自定义角色名称', trigger: 'blur'},
+            {min: 2, max: 20, message: '长度在 2 到 20 个字符', trigger: 'blur'}
+          ],
+          superRoleName: [
+            {required: true, message: '请输入角色名称', trigger: 'blur'},
+            {min: 2, max: 20, message: '长度在 2 到 20 个字符', trigger: 'blur'}
+          ]
+        }
+      }
+    },
+    methods: {
+      // 全选当前页
+      thisPageAllChange (index) {
+        // 模块
+        let controllersTemp = this.authorities[index].controllers
+        for (var j = 0; j < controllersTemp.length; j++) {
+          // 权限
+          this.authorities[index].controllers[j].nowCheck = this.thisPageAllBtn[index]
+          this.authorityAllBtn[index * 10 + j] = this.thisPageAllBtn[index]
+          let funcsTemp = controllersTemp[j].funcs
+          for (var m = 0; m < funcsTemp.length; m++) {
+            // 子项
+            this.authorities[index].controllers[j].funcs[m].nowCheck = this.thisPageAllBtn[index]
+            let operationsTemp = funcsTemp[m].operations
+            for (var p = 0; p < operationsTemp.length; p++) {
+              // 子项操作
+              this.authorities[index].controllers[j].funcs[m].operations[p].nowCheck = this.thisPageAllBtn[index]
+            }
+          }
+        }
+      },
+      // 全选某权限下所有子项及操作
+      authorityAllChange (index, index1) {
+        // 模块
+        let controllersTemp = this.authorities[index].controllers
+        // 权限
+        this.authorities[index].controllers[index1].nowCheck = this.authorityAllBtn[index * 10 + index1]
+        let funcsTemp = controllersTemp[index1].funcs
+        for (var m = 0; m < funcsTemp.length; m++) {
+          // 子项
+          this.authorities[index].controllers[index1].funcs[m].nowCheck = this.authorityAllBtn[index * 10 + index1]
+          let operationsTemp = funcsTemp[m].operations
+          for (var p = 0; p < operationsTemp.length; p++) {
+            // 子项操作
+            this.authorities[index].controllers[index1].funcs[m].operations[p].nowCheck = this.authorityAllBtn[index * 10 + index1]
+          }
+        }
+      },
+      // 获取基础信息
+      getInforData () {
+        getRoleInfor({role_id: this.role_id}).then((res) => {
+          this.inforData.admin_type = res.web_data.admin_type
+          this.inforData.arr_inter_id = res.web_data.arr_inter_id
+          this.inforData.standard_roles = res.web_data.standard_roles
+        })
+      },
+      // 获取权限列表
+      getAuthorityData () {
+        getRoleAuthority({role_id: 1}).then((res) => {
+          this.loading = false
+          this.authorities = res.web_data.role_authorities
+          for (var i = 0; i < this.authorities.length; i++) {
+            // 模块
+            let controllersTemp = this.authorities[i].controllers
+            for (var j = 0; j < controllersTemp.length; j++) {
+              // 权限
+              this.$set(this.authorities[i].controllers[j], 'nowCheck', controllersTemp[j].check === 1)
+              let funcsTemp = controllersTemp[j].funcs
+              for (var m = 0; m < funcsTemp.length; m++) {
+                // 子项
+                this.$set(this.authorities[i].controllers[j].funcs[m], 'nowCheck', funcsTemp[m].check === 1)
+                let operationsTemp = funcsTemp[m].operations
+                for (var p = 0; p < operationsTemp.length; p++) {
+                  // 子项操作
+                  this.$set(this.authorities[i].controllers[j].funcs[m].operations[p], 'nowCheck', operationsTemp[p].check === 1)
+                }
+              }
+            }
+          }
+//          console.log(this.authorities)
+        })
+      },
+      // 下一步
+      nextStep () {
+        this.activeStep = 1
+        this.getAuthorityData()
+      },
+      // 上一步
+      prevStep () {
+        this.activeStep = 0
+        this.getAuthorityData()
+      },
+      // 点击下一步校验表单填写内容
+      nextStepBtn (formName) {
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            this.nextStep()
+          } else {
+            return false
+          }
+        })
+      },
+      // 点击完成
+      postRoleData () {
+        this.postData.role_id = 1
+        this.postData.role_type = this.inforData.admin_type
+        this.postData.role_name = this.createdInfor.userDefinedName || this.createdInfor.superRoleName
+        this.postData.status = 1
+        this.postData.inter_id = this.createdInfor.arr_inter_id
+        for (var i = 0; i < this.authorities.length; i++) {
+          // 插入模块
+          this.postData.role_authority.push({name: 'modules[]', value: this.authorities[i].module})
+          let controllersTemp = this.authorities[i].controllers
+          for (var j = 0; j < controllersTemp.length; j++) {
+            // 权限
+            this.postData.role_authority.push({
+              name: 'controllers_' + this.authorities[i].module + '[]',
+              value: controllersTemp[j].ctrl_id
+            })
+            let funcsTemp = controllersTemp[j].funcs
+            for (var m = 0; m < funcsTemp.length; m++) {
+              // 子项
+              this.postData.role_authority.push({
+                name: 'funcs_' + controllersTemp[j].ctrl_id + '[]',
+                value: funcsTemp[m].ctrl_id
+              })
+              let operationsTemp = funcsTemp[m].operations
+              for (var p = 0; p < operationsTemp.length; p++) {
+                // 子项操作
+                if (operationsTemp[p].nowCheck === true) {
+                  this.postData.role_authority.push({
+                    name: 'oper_' + funcsTemp[m].ctrl_id + '[]',
+                    value: operationsTemp[p].oper_id
+                  })
+                }
+              }
+            }
+          }
+        }
+        postRoleData(this.postData).then((res) => {
+          if (res.web_data.return_info.status === 1) {
+            window.location.href = '/system/role_list'
+          }
+        })
+      },
+      // 获取查询字符串
+      getQueryString (name) {
+        var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i')
+        var r = window.location.search.substr(1).match(reg)
+        if (r !== null) {
+          this.role_id = decodeURI(r[2])
+        }
+      }
+    }
+  }
+</script>
+
+<style lang="postcss">
+  .add-role-outer {
+    color: #48576a;
+    .el-form-item {
+      .el-select, .el-input {
+        width: 500px;
+      }
+    }
+
+    .table-outer {
+      width: 100%;
+      border-collapse: collapse;
+      border: 1px solid #eee;
+      margin-bottom: 20px;
+      .table-header {
+        background-color: #f6f6f6;
+      }
+      td {
+        padding: 10px 0;
+        color: rgb(31, 45, 61);
+        text-align: center;
+        border: 1px solid #eee;
+        text-align: left;
+        padding-left: 20px;
+      }
+    }
+
+    .el-steps {
+      width: 1060px;
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+    .lable {
+      display: inline-block;
+      width: 188px;
+      margin-right: 12px;
+      text-align: right;
+      margin-bottom: 15px;
+    }
+    .value {
+      display: inline-block;
+    }
+    .all-outer {
+      padding: 15px 0;
+    }
+    .el-form-item {
+      margin-bottom: 30px;
+    }
+    .sub-item-list {
+      margin-top: 20px;
+      li {
+        list-style: none;
+        padding-bottom: 20px;
+        .table-inner {
+          border: 0;
+          width: 100%;
+          tr {
+            width: 100%;
+          }
+          td {
+            border: 0;
+            padding: 0;
+          }
+        }
+        &:after {
+          clear: both;
+          height: 0;
+          display: block;
+          content: "";
+        }
+        .sub-item {
+          width: 25%;
+        }
+        .sub-item-control {
+          width: 55%;
+          .el-checkbox {
+            margin-left: 15px;
+            margin-bottom: 10px;
+          }
+        }
+      }
+
+    }
+    .el-tabs {
+      .el-tabs__header {
+        border-bottom: 0;
+        background-color: #fff
+      }
+      .el-tabs__nav {
+        width: 100%;
+        .el-tabs__item {
+          text-align: center;
+          height: 30px;
+          line-height: 30px;
+          background-color: #f6f6f6;
+          padding: 0 15px;
+          margin-left: 30px;
+          &.is-active {
+            background-color: #AC9456;
+            color: #fff;
+            border: 0;
+            border-radius: 2px;
+          }
+        }
+      }
+    }
+  }
+</style>

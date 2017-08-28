@@ -1,0 +1,73 @@
+.jfk-pages__reserve {
+  /*倒计时*/
+  .killsec-time {
+    .cont {
+      background-image: background-image(/reserve_killsec_white.jpg, theme);
+    }
+  }
+  .product-info {
+    @mixin line-down {
+      transform: rotate(-90deg);
+      transform-origin: center;
+      width: calc(28 / 30)em;
+      top: px2rem(70);
+      bottom: auto;
+      left: -.5em;
+    }
+  }
+  /*卡片*/
+  .card {
+    background: #fff;
+    box-shadow: 0 0 1em color(var(--color-golden) a(15%));
+    border-radius: px2rem(var(--border-radius-big));
+  }
+  /*只邮寄*/
+  .mail-only {
+    .lace{
+      background: #fff;
+      &:after {
+        background-color: #fff;
+        background-image: linear-gradient(to left,
+        #e57979 46%, transparent 46%, transparent 50%, #70a8d3 50%, #70a8d3 96%, transparent 96%, transparent);
+      }
+    }
+  }
+  /*邮寄赠送*/
+  .mail-gift {
+    margin-bottom: px2rem(78);
+    .card {
+      &.no-checked {
+        box-shadow: 0 0 0 transparent;
+      }
+    }
+  }
+  .order-info {
+    background-color: #fff;
+  }
+  .form-item {
+    &:last-child {
+      &:before {
+        background-color: transparent;
+      }
+    }
+    input[type="text"] {
+      &::placeholder {
+        color: var(--font-color-light-gray);
+      }
+    }
+  }
+  .reserve-tip {
+    padding-top: px2rem(80);
+    i {
+      color: #bfbfbf;
+    }
+  }
+  .footer{
+    background-color: #fff;
+    .detail {
+      &:before {
+        border-color: #bfbfbf transparent transparent transparent;
+      }
+    }
+  }
+}

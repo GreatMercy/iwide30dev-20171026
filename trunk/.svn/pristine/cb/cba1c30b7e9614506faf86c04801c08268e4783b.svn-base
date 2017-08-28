@@ -1,0 +1,106 @@
+.jfk-pages__refund-detail {
+
+  .refund-detail {
+    &-step {
+
+      &__line {
+        @mixin one-line horizontal {
+        }
+        &::before {
+          background-color: #232323;
+        }
+      }
+
+      &__start {
+        background-image: background-image(/refund_detail/start.png, theme);
+        background-size: px2rem(20) px2rem(20);
+      }
+
+      &__default {
+        background-image: background-image(/refund_detail/step.png, theme);
+        background-size: px2rem(12) px2rem(12);
+
+        &.refund-detail-step__left {
+          &::before {
+            left: px2rem(-20);
+          }
+        }
+
+        &.refund-detail-step__right {
+          &::after {
+            right: px2rem(-20);
+          }
+        }
+
+      }
+
+      &__finish {
+        background-image: background-image(/refund_detail/finish.png, theme);
+        background-size: px2rem(56) px2rem(56);
+
+        &.refund-detail-step__left {
+          &::before {
+            left: px2rem(-20);
+          }
+        }
+
+        &.refund-detail-step__right {
+          &::after {
+            right: px2rem(-20);
+          }
+        }
+
+      }
+
+      &__end {
+        background-image: background-image(/refund_detail/end.png, theme);
+        background-size: px2rem(68) px2rem(68);
+        &.refund-detail-step__left {
+          &::before {
+            left: px2rem(-16);
+          }
+        }
+      }
+
+      &__right {
+        &::after {
+          background-color: var(--font-color-light-silver);
+        }
+      }
+
+      &__left {
+        &::before {
+          background-color: var(--font-color-light-silver);
+        }
+      }
+
+      &__name {
+        color: var(--font-color-light-gray);
+      }
+
+    }
+  }
+
+
+  .refund-order {
+    &__main-title {
+      color: var(--font-color-light-gray);
+    }
+
+    &__title {
+      color: var(--font-color-extra-light-gray);
+    }
+
+    &__content {
+      color: var(--font-color-white);
+    }
+
+    &__info {
+      &::before {
+        background-color: var(--line-color-light-silver);
+      }
+    }
+  }
+
+
+}

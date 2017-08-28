@@ -1,0 +1,588 @@
+<template>
+  <div class="jfk-pages authority-list-outer" v-loading="loading">
+    <el-row>
+      <el-col :span="24">
+        <div class="grid-content">
+          <!--模块对应的权限-->
+          <div class="module-content">
+            <h3>{{moduleName}}</h3>
+            <table>
+              <tr>
+                <th><span>权限</span>
+                  <el-button class="add-new-btn" type="text" icon="plus" @click="authorityPopup()">新增</el-button>
+                </th>
+                <th><span>权限子项</span>
+                  <el-button class="add-new-btn" type="text" icon="plus" @click="subItemPopup()">新增</el-button>
+                </th>
+                <th>
+                  <span>子项操作</span>
+                  <el-button class="add-new-btn" type="text" icon="plus" @click="operationPopup()">新增</el-button>
+                </th>
+              </tr>
+              <tr v-for="item1 in authorityList">
+                <td><span>{{item1.ctlr_name}}</span><i class="el-icon-edit" @click="authorityPopup(item1)"></i></td>
+                <td colspan="2">
+                  <ul class="sub-item-list">
+                    <li v-for="item2 in item1.ctlr" class="outer-li">
+                      <div class="sub-item"><span>{{item2.func_name}}</span><i class="el-icon-edit"
+                                                                               @click="subItemPopup(item1,item2)"></i>
+                      </div>
+                      <ul class="sub-item-control">
+                        <li v-for="item3 in item2.operations"><span>{{item3.oper_name}}</span><i
+                          class="el-icon-edit" @click="operationPopup(item1,item2,item3)"></i></li>
+                      </ul>
+                    </li>
+                  </ul>
+                </td>
+              </tr>
+            </table>
+          </div>
+          <!--新增/修改权限弹窗-->
+          <div class="popup authority" v-if="addPopupIndex === 1">
+            <div class="cancel-btn" @click="cancelPopup()">
+              <i class="el-icon-close"></i>
+            </div>
+            <div class="title">权限</div>
+            <el-form :model="authorityForm" ref="authorityForm" :rules="authorityRules" class="demo-ruleForm">
+              <el-form-item label="权限名称" prop="name">
+                <el-input v-model="authorityForm.name" placeholder="请输入权限名称"></el-input>
+              </el-form-item>
+              <el-form-item label="权限描述">
+                <el-input v-model="authorityForm.descript" placeholder="请输入权限描述"></el-input>
+              </el-form-item>
+              <el-form-item label="权限代码" prop="code">
+                <el-input v-model="authorityForm.code" placeholder="请输入权限代码"></el-input>
+              </el-form-item>
+              <el-form-item label="状态" prop="status">
+                <el-radio-group v-model="authorityForm.status">
+                  <el-radio label="1">全开放</el-radio>
+                  <el-radio label="2">禁用</el-radio>
+                  <el-radio label="3">仅管理员角色</el-radio>
+                  <el-radio label="4">仅对特定公众号开放</el-radio>
+                </el-radio-group>
+              </el-form-item>
+              <el-form-item>
+                <el-button type="primary" size="small" @click="confirmAuthority('authorityForm')">确认</el-button>
+              </el-form-item>
+            </el-form>
+          </div>
+          <!--新增/修改权限子项弹窗-->
+          <div class="popup authority-item"
+               v-else-if="addPopupIndex === 2">
+            <div class="cancel-btn" @click="cancelPopup()">
+              <i class="el-icon-close"></i>
+            </div>
+            <div class="title">权限子项</div>
+            <el-form :model="subItemForm" ref="subItemForm" :rules="subItemRules" class="demo-ruleForm">
+              <el-form-item v-if="subItemForm.edit" label="上级权限" prop="upperAuthority">
+                <el-select placeholder="请选择上级权限" v-model="subItemForm.upperAuthority">
+                  <el-option v-for="option in authorityList" :label="option.ctlr_name"
+                             :value="option.ctlr_id" :key="option.ctlr_id"></el-option>
+                </el-select>
+              </el-form-item>
+              <div v-else class="edit-content"><span
+                class="ti">上级权限</span><span>{{subItemForm.upperAuthorityName}}</span></div>
+              <el-form-item label="子项名称" prop="name">
+                <el-input v-model="subItemForm.name" placeholder="请输入子项名称"></el-input>
+              </el-form-item>
+              <el-form-item label="子项描述">
+                <el-input v-model="subItemForm.descript" placeholder="请输入子项描述"></el-input>
+              </el-form-item>
+              <el-form-item label="子项代码" prop="code">
+                <el-input v-model="subItemForm.code" placeholder="请输入子项代码"></el-input>
+              </el-form-item>
+              <el-form-item label="状态" prop="status">
+                <el-radio-group v-model="subItemForm.status">
+                  <el-radio label="1">全开放</el-radio>
+                  <el-radio label="2">禁用</el-radio>
+                  <el-radio label="3">仅管理员角色</el-radio>
+                  <el-radio label="4">仅对特定公众号开放</el-radio>
+                </el-radio-group>
+              </el-form-item>
+              <el-form-item>
+                <el-button type="primary" size="small" @click="confirmSubItem('subItemForm')">确认</el-button>
+              </el-form-item>
+            </el-form>
+          </div>
+          <!--新增/修改权限子项操作弹窗-->
+          <div class="popup authority-control" v-else-if="addPopupIndex === 3">
+            <div class="cancel-btn" @click="cancelPopup()">
+              <i class="el-icon-close"></i>
+            </div>
+            <div class="title">子项操作</div>
+            <el-form :model="operationForm" ref="operationForm" :rules="operationRules" class="demo-ruleForm">
+              <el-form-item v-if="operationForm.edit" label="上级权限" prop="upperAuthority">
+                <el-select v-model="operationForm.upperAuthority" @change="selectUpperAuthority"
+                           placeholder="请选择上级权限">
+                  <el-option v-for="(option,index) in authorityList" :label="option.ctlr_name"
+                             :value="option.ctlr_id" :key="index"></el-option>
+                </el-select>
+              </el-form-item>
+              <div v-else class="edit-content"><span
+                class="ti">上级权限</span><span>{{operationForm.upperAuthorityName}}</span></div>
+              <el-form-item v-if="operationForm.edit" label="上级子项" prop="upperItem">
+                <el-select v-model="operationForm.upperItem" placeholder="请选择上级子项">
+                  <el-option v-for="item in upperItems" :value="item.func_id" :label="item.func_name"
+                             :key="item.func_name"></el-option>
+                </el-select>
+              </el-form-item>
+              <div v-else class="edit-content"><span
+                class="ti">上级子项</span><span>{{operationForm.upperItemName}}</span>
+              </div>
+              <el-form-item label="操作名称" prop="name">
+                <el-input v-model="operationForm.name" placeholder="请输入操作名称"></el-input>
+              </el-form-item>
+              <el-form-item label="操作描述" prop="descript">
+                <el-input v-model="operationForm.descript" placeholder="请输入操作描述"></el-input>
+              </el-form-item>
+              <el-form-item label="子项代码" prop="code">
+                <el-input v-model="operationForm.code" placeholder="请输入操作代码"></el-input>
+              </el-form-item>
+              <el-form-item label="状态" prop="status">
+                <el-radio-group v-model="operationForm.status">
+                  <el-radio label="1">全开放</el-radio>
+                  <el-radio label="2">禁用</el-radio>
+                  <el-radio label="3">仅管理员角色</el-radio>
+                  <el-radio label="4">仅对特定公众号开放</el-radio>
+                </el-radio-group>
+              </el-form-item>
+              <el-form-item>
+                <el-button type="primary" size="small" @click="confirmOperation()">确认</el-button>
+              </el-form-item>
+            </el-form>
+          </div>
+          <!--新建账号完成以后谈窗微信登陆-->
+          <!--<div class="weixin-popup">-->
+          <!--<div class="cancel-btn">-->
+          <!--<i class="el-icon-close"></i>-->
+          <!--</div>-->
+          <!--<img src="http://img4.imgtn.bdimg.com/it/u=1078425506,1374668072&fm=26&gp=0.jpg" alt="微信二维码">-->
+          <!--请打开微信扫描二维码进行账号绑定-->
+          <!--</div>-->
+        </div>
+      </el-col>
+    </el-row>
+    <!--<div class="finish-btn">-->
+    <!--<el-button type="primary">完成</el-button>-->
+    <!--</div>-->
+  </div>
+</template>
+<script>
+  import {getAuthorityList, postAuthorityChange, postSubItemChange, postOperationChange} from '@/service/system/http'
+
+  export default {
+    name: 'authorityList',
+    created () {
+      this.getQueryString('module_code')
+      this.getAuthorityData()
+    },
+    data () {
+      return {
+        loading: true,
+        moduleCode: '',
+        // 控制新增的弹窗
+        addPopupIndex: 0,
+        // 模块名
+        moduleName: '',
+        // 权限列表
+        authorityList: [],
+        authorityRules: {
+          name: [
+            {required: true, message: '必填项', trigger: 'blur'},
+            {min: 1, max: 20, message: '长度在 1 到 20 个字符', trigger: 'blur'}
+          ],
+          code: [
+            {required: true, message: '必填项', trigger: 'blur'},
+            {min: 1, max: 20, message: '长度在 1 到 20 个字符', trigger: 'blur'}
+          ],
+          status: [
+            {required: true, message: '必填项', trigger: 'blur'},
+            {min: 1, max: 20, message: '长度在 1 到 20 个字符', trigger: 'blur'}
+          ],
+          descript: [{required: false}, {min: 1, max: 20, message: '长度在 1 到 20 个字符', trigger: 'blur'}]
+        },
+        subItemRules: {
+          upperAuthority: [{required: true, message: '请选择上级权限', change: 'blur'}],
+          name: [
+            {required: true, message: '必填项', trigger: 'blur'},
+            {min: 1, max: 20, message: '长度在 1 到 20 个字符', trigger: 'blur'}
+          ],
+          code: [
+            {required: true, message: '必填项', trigger: 'blur'},
+            {min: 1, max: 20, message: '长度在 1 到 20 个字符', trigger: 'blur'}
+          ],
+          status: [
+            {required: true, message: '必填项', trigger: 'blur'},
+            {min: 1, max: 20, message: '长度在 1 到 20 个字符', trigger: 'blur'}
+          ],
+          descript: [{required: false}, {min: 1, max: 20, message: '长度在 1 到 20 个字符', trigger: 'blur'}]
+        },
+        operationRules: {
+          upperAuthority: [{required: true, message: '请选择上级权限', change: 'blur'}],
+          upperItem: [{required: true, message: '请选择上级子项', change: 'blur'}],
+          name: [
+            {required: true, message: '必填项', trigger: 'blur'},
+            {min: 1, max: 20, message: '长度在 1 到 20 个字符', trigger: 'blur'}
+          ],
+          code: [
+            {required: true, message: '必填项', trigger: 'blur'},
+            {min: 1, max: 20, message: '长度在 1 到 20 个字符', trigger: 'blur'}
+          ],
+          status: [
+            {required: true, message: '必填项', trigger: 'blur'},
+            {min: 1, max: 20, message: '长度在 1 到 20 个字符', trigger: 'blur'}
+          ],
+          descript: [{required: false}, {min: 1, max: 20, message: '长度在 1 到 20 个字符', trigger: 'blur'}]
+        },
+        // 权限数据
+        authorityForm: {
+          name: '',
+          code: '',
+          status: '1',
+          descript: '',
+          ctlr_id: null
+        },
+        // 子项数据
+        subItemForm: {
+          upperAuthority: '',
+          name: '',
+          code: '',
+          status: '1',
+          descript: '',
+          func_id: null,
+          edit: true,
+          upperAuthorityName: ''
+        },
+        // 子项操作数据
+        operationForm: {
+          upperAuthority: '',
+          upperItem: '',
+          upperAuthorityName: '',
+          upperItemName: '',
+          name: '',
+          code: '',
+          status: '1',
+          descript: '',
+          oper_id: null,
+          edit: true
+        },
+        upperItems: []
+      }
+    },
+    methods: {
+      // 获取权限列表
+      getAuthorityData () {
+        getAuthorityList({module_code: this.moduleCode}).then((res) => {
+          this.loading = false
+          this.moduleName = res.web_data.authorities.module_name
+          this.authorityList = res.web_data.authorities.modules
+        })
+      },
+      // 获取查询字符串
+      getQueryString (name) {
+        var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i')
+        var r = window.location.search.substr(1).match(reg)
+        if (r !== null) {
+          this.moduleCode = decodeURI(r[2])
+        }
+      },
+      // 确认权限
+      confirmAuthority (formName) {
+        let postData = {
+          module_code: this.moduleCode,
+          ctlr_code: this.authorityForm.code,
+          ctlr_name: this.authorityForm.name,
+          ctlr_des: this.authorityForm.descript,
+          ctlr_state: parseInt(this.authorityForm.status),
+          ctlr_id: parseInt(this.authorityForm.ctlr_id)
+        }
+        console.log(postData)
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            postAuthorityChange(postData).then((res) => {
+              if (res.web_data.return_info.status === 1) {
+                window.location.reload()
+              }
+            })
+          }
+        })
+      },
+      // 确认权限子项
+      confirmSubItem (formName) {
+        let postData = {
+          ctlr_id: parseInt(this.subItemForm.upperAuthority),
+          func_code: this.subItemForm.code,
+          func_name: this.subItemForm.name,
+          func_des: this.subItemForm.descript,
+          func_state: parseInt(this.subItemForm.status),
+          func_id: parseInt(this.subItemForm.func_id)
+        }
+        console.log(postData)
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            postSubItemChange(postData).then((res) => {
+              if (res.web_data.return_info.status === 1) {
+                window.location.reload()
+              }
+            })
+          }
+        })
+      },
+      // 子项操作 选择上级权限
+      selectUpperAuthority (value) {
+        let ind = parseInt(value)
+        this.upperItems = this.authorityList[ind].ctlr
+        this.operationForm.upperItem = ''
+      },
+      // 确认子项操作
+      confirmOperation () {
+        let postData = {
+          func_id: parseInt(this.operationForm.upperItem),
+          oper_code: this.operationForm.code,
+          oper_name: this.operationForm.name,
+          oper_des: this.operationForm.descript,
+          oper_state: parseInt(this.operationForm.status),
+          oper_id: this.operationForm.oper_id
+        }
+        console.log(postData)
+        postOperationChange(postData).then((res) => {
+          if (res.web_data.return_info.status === 1) {
+            window.location.reload()
+          }
+        })
+      },
+      // 取消弹窗
+      cancelPopup () {
+        this.addPopupIndex = 0
+      },
+      // 新增或编辑权限
+      authorityPopup (item1) {
+        if (item1) {
+          this.authorityForm.ctlr_id = item1.ctlr_id
+          this.authorityForm.name = item1.ctlr_name
+          this.authorityForm.code = item1.ctlr_code
+          this.authorityForm.descript = item1.ctlr_des
+          this.authorityForm.status = item1.ctlr_state
+        } else {
+          this.authorityForm.ctlr_id = null
+          this.authorityForm.name = ''
+          this.authorityForm.code = ''
+          this.authorityForm.descript = ''
+          this.authorityForm.status = '1'
+        }
+        this.addPopupIndex = 1
+      },
+      // 新增或编辑权限子项
+      subItemPopup (item1, item2) {
+        if (item1 && item2) {
+          this.subItemForm.upperAuthority = item1.ctlr_id
+          this.subItemForm.upperAuthorityName = item1.ctlr_name
+          this.subItemForm.name = item2.func_name
+          this.subItemForm.code = item2.func_code
+          this.subItemForm.descript = item2.func_des
+          this.subItemForm.func_id = item2.func_id
+          this.subItemForm.status = item2.func_state
+          this.subItemForm.edit = false
+        } else {
+          this.subItemForm.func_id = null
+          this.subItemForm.upperAuthority = ''
+          this.subItemForm.name = ''
+          this.subItemForm.code = ''
+          this.subItemForm.descript = ''
+          this.subItemForm.status = '1'
+          this.subItemForm.edit = true
+        }
+        this.addPopupIndex = 2
+      },
+      // 新增或编辑操作
+      operationPopup (item1, item2, item3) {
+        if (item1 && item2 && item3) {
+          this.operationForm.upperAuthorityName = item1.ctlr_name
+          this.operationForm.upperItem = item2.func_id
+          this.operationForm.upperItemName = item2.func_name
+          this.operationForm.name = item3.oper_name
+          this.operationForm.code = item3.oper_code
+          this.operationForm.descript = item3.oper_des
+          this.operationForm.oper_id = item3.oper_id
+          this.operationForm.status = item3.oper_state
+          this.operationForm.edit = false
+        } else {
+          this.operationForm.upperAuthority = ''
+          this.operationForm.upperItem = ''
+          this.operationForm.name = ''
+          this.operationForm.code = ''
+          this.operationForm.descript = ''
+          this.operationForm.oper_id = null
+          this.operationForm.status = '1'
+          this.operationForm.edit = true
+        }
+        this.addPopupIndex = 3
+      }
+    }
+  }
+</script>
+<style lang="postcss">
+  .authority-list-outer {
+    color: #48576a;
+    margin-top: 50px;
+    li {
+      list-style: none
+    }
+    .module-content {
+      width: 1100px;
+      margin: 0 auto;
+      h3 {
+        padding: 20px 0;
+        font-weight: normal;
+        font-size: 17px;
+        color: #333;
+      }
+      table {
+        width: 1100px;
+        text-align: left;
+        border: 1px solid #eee;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+        border-radius: 10px;
+        th {
+          padding: 20px 30px;
+          border: 1px solid #eee;
+          font-weight: normal;
+          font-size: 16px;
+          .add-new-btn {
+            float: right;
+            padding: 2px 0 0 0;
+            font-size: 16px;
+          }
+        }
+        td {
+          padding: 10px 0px;
+          border: 1px solid #eee;
+          text-align: center;
+          span {
+            margin-right: 10px;
+          }
+          i {
+            color: #888282;
+            cursor: pointer;
+            margin-top: 3px;
+            margin-right: 30px;
+            float: right;
+            &:hover {
+              opacity: 0.7;
+            }
+          }
+        }
+        .sub-item-list {
+          .sub-item, .sub-item-control {
+            width: 50%;
+            float: left;
+          }
+          li {
+            &.outer-li:after {
+              clear: both;
+              display: block;
+              height: 0;
+              content: '';
+            }
+            line-height: 30px;
+            i {
+              margin-top: 8px;
+            }
+          }
+        }
+
+      }
+    }
+    .finish-btn {
+      width: 100%;
+      left: 0;
+      background-color: #f5f5f5;
+      padding: 10px 0;
+      text-align: center;
+      position: fixed;
+      bottom: 0;
+      z-index: 10;
+      button {
+        width: 120px;
+        border-radius: 0;
+      }
+    }
+    .cancel-btn {
+      position: absolute;
+      right: 10px;
+      top: 10px;
+      color: #585151;
+      cursor: pointer;
+    }
+    .popup {
+      width: 644px;
+      padding: 30px 0;
+      background-color: #F5F5F5;
+      position: fixed;
+      top: 10%;
+      left: 50%;
+      margin-left: -400px;
+      z-index: 10;
+      text-align: center;
+      .title {
+        font-size: 17px;
+        margin-bottom: 25px;
+      }
+      .edit-content {
+        width: 580px;
+        margin: 0 auto;
+        text-align: left;
+        padding-top: 25px;
+        span.ti {
+          display: inline-block;
+          width: 70px;
+          text-align: right;
+          margin-right: 10px;
+        }
+      }
+      .el-form-item {
+        width: 581px;
+        margin: 25px auto;
+        position: relative;
+        .el-form-item__label {
+          width: 80px;
+          text-align: right;
+        }
+        .el-icon-information {
+          position: absolute;
+          left: 60px;
+          top: 10px;
+        }
+        .el-select, .el-input {
+          width: 500px;
+        }
+        .el-input__inner {
+          border: 0;
+        }
+        .el-form-item__error {
+          margin-left: 80px;
+        }
+      }
+    }
+    .weixin-popup {
+      position: fixed;
+      width: 300px;
+      height: 340px;
+      top: 50%;
+      margin-top: -221px;
+      left: 50%;
+      margin-left: -201px;
+      border: 1px solid #eee;
+      z-index: 10;
+      background-color: #fff;
+      padding: 30px 50px;
+      text-align: center;
+      img {
+        width: 100%;
+        display: block;
+        margin-bottom: 20px;
+      }
+    }
+  }
+</style>

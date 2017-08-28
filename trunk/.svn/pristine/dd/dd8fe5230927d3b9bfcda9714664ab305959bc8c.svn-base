@@ -1,0 +1,78 @@
+  body{
+  	background-color: var(--color-light-black) !important;
+  }
+  .jfk-pages__useCoupon{
+    .useCoupon_top{
+		& .useCoupon_title{
+	      &::before {
+	        background-color: var(--color-golden);
+	      }
+	    }
+	}
+	
+	.qr_code{
+      &_title{
+        span{
+        	color: var(--font-color-light-gray);
+        }
+      }
+    }
+	
+	.qr_code_type1,.qr_code_type2{
+		background: var(--color-white);
+	}
+	
+	.qr_code_type2{
+		& .input_num{
+			border-bottom: 1px solid var(--font-color-light-gray);
+		}
+
+		.submit_btn{
+			background-color: var(--button-ghost-color);
+			color: var(--color-white);
+		}
+	}
+
+
+
+
+
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,136 @@
+.jfk-pages__submitOrder {
+  .goldColor {
+    color: var(--color-golden);
+  }
+  .grayColorbf {
+    color: var(--font-color-light-gray);
+  }
+  .grayColor80 {
+    color: var(--font-color-extra-light-gray);
+  }
+  .submit_order_top {
+    &_title {
+      color: black;
+    }
+    .hotel_name{
+      &::before {
+        background-color: var(--color-golden);
+      }
+    }
+  }
+
+  .order-info {
+    background-color: var(--color-white);
+    .pay_for {
+      background-color: var(--color-white);
+      &::before {
+        background-color: var(--line-color-light-silver);
+      }
+    }
+
+    .pay_for_item {
+      color: #9c9c9c;
+    }
+    .pay_for_item:first-child {
+      &::before {
+        background-color: var(--line-color-light-silver);
+      }
+    }
+  }
+  
+  .pay_type{
+      &_item{
+        background-color: var(--color-white);
+        color: #c8c8c8;
+      }
+      &_item.active{
+        color: #333;
+      }
+      input{
+        border: 1px solid #bfbfbf;
+      }
+    }
+
+  .booking_desc{
+    .title{
+        color: #c0c0c0;
+    }
+    .desc{
+      color: #8b8d8c;
+    }
+  }
+  
+
+  .footer {
+    background-color: var(--color-white);
+    .detail {
+      &:before {
+        border-color: #bfbfbf transparent transparent transparent;
+      }
+    }
+  }
+  
+  .order_detail{
+    &_content{
+      background: var(--color-white);
+    }
+    & .room_cost{
+      & .title{
+          &::before {
+            background-color: var(--line-color-light-silver);;
+          }
+      }
+    }
+  }
+
+  .choose_coupon{
+
+  }
+
+  & .coupon_num{
+      .sliver{
+        color: #c5c5c5;
+      }
+    }
+
+    .coupon_list{
+      &_item{
+        background-color: #fff;
+        & .price{
+          background-color:#fefefe;
+        }
+
+        & .coupon_desc{
+          background: #fff;
+          &::after{
+              background-color: #fff;
+              border-left: 1px solid #ededed;
+          }
+          input{
+            border: 1px solid #cecece;
+          }
+      }
+    }
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}

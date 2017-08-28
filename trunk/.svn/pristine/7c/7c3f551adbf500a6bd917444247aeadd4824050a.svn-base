@@ -1,0 +1,98 @@
+.jfk-pages__search{
+  .search_place_container{
+    .search_place{
+        &::before {
+          background-color: var(--line-color-light-silver);
+        }
+    }
+
+    .search_title{
+      color: var(--font-color-light-gray);
+      &::before {
+         background-color: var(--line-color-light-silver);
+       }
+    }
+
+    .icon_place{
+      color: var(--color-golden);
+    }
+  }
+
+  .date_container{
+      .left_date_style{
+        color: var(--font-color-light-gray);
+      }
+      .live_year{
+        color: var(--font-color-extra-light-gray);
+      }
+     }
+
+     .center_line{
+        &::before {
+         background-color: var(--line-color-light-silver);
+        }
+     }
+
+     .checkBtn{
+        background: black;
+        color: var(--color-white);
+      }
+
+      .search_info{;
+         &_title{
+          color: var(--font-color-light-gray);
+        }
+
+        .item_second{
+          &::before {
+            background-color: var(--line-color-light-silver);
+          }
+        }
+      }
+
+      .foot_card{
+        .card_item{
+          &::before {
+            background-color: var(--font-color-light-gray);
+          }
+          .card_item_time{
+            color: var(--font-color-light-gray);
+          }
+      }
+    }
+
+    .box_container{
+      .gray_color{
+        color: var(--font-color-light-gray);
+      }
+      & .always,& .kill_sec{
+        &::before {
+          background-color: var(--font-color-light-gray);
+        }
+      }
+    }
+
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

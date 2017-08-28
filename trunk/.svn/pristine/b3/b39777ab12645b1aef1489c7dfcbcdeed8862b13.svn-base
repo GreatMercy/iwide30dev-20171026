@@ -1,0 +1,431 @@
+<template>
+  <div class="jfk-pages add-account-outer">
+    <el-row>
+      <el-col :span="24">
+        <div class="grid-content bg-purple">
+          <!--步骤-->
+          <el-steps :space="400" :active="activeStep" finish-status="success" class="jfk-steps--bg-gray jfk-steps">
+            <el-step title="基础信息"></el-step>
+            <el-step title="关联公众号"></el-step>
+            <el-step title="账号权限"></el-step>
+          </el-steps>
+          <!--基础信息填写界面-->
+          <el-form v-if="activeStep === 0" rel="accountInfor" :model="accountInfor" :rules="accountRules" >
+            <el-form-item label="用户名" prop="username">
+              <el-input v-model="accountInfor.username" placeholder="请输入用户名"></el-input>
+            </el-form-item>
+            <el-form-item label="昵称" prop="nickname">
+              <el-input v-model="accountInfor.nickname" placeholder="请输入昵称"></el-input>
+            </el-form-item>
+            <el-form-item label="密码" prop="password">
+              <el-input v-model="accountInfor.password" placeholder="请输入字母与数字的组合"></el-input>
+            </el-form-item>
+            <el-form-item label="确认密码" prop="repassword">
+              <el-input v-model="accountInfor.repassword" placeholder="请再输入密码"></el-input>
+            </el-form-item>
+            <el-form-item label="绑定微信">
+              <el-button type="primary" size="small" icon="plus">绑定</el-button>
+            </el-form-item>
+            <el-form-item label="状态" prop="status">
+              <el-select v-model="accountInfor.status" placeholder="状态">
+                <el-option label="有效" value="有效"></el-option>
+                <el-option label="无效" value="无效"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" size="small" style="margin-left: 70px" @click="nextStepBtn('accountInfor')">下一步
+              </el-button>
+            </el-form-item>
+          </el-form>
+          <!--<div style="text-align: center">-->
+          <!--<el-button type="primary" size="large">完成</el-button>-->
+          <!--</div>-->
+          <!--关联公众号时 初始为空-->
+          <div v-else-if="activeStep === 1" class="set-public-account">
+            <div style="text-align: center">
+              <span>关联公众号、门店、店铺</span>&nbsp&nbsp&nbsp&nbsp
+              <el-button type="primary" size="small" icon="plus">添加</el-button>
+            </div>
+            <!--已经添加的公众号列表-->
+            <div class="public-account-module">
+              <!--查询-->
+              <div class="search-module">
+                <el-input placeholder="请输入名称/角色类型">
+                  <el-button type="success" slot="append" icon="search">搜索</el-button>
+                </el-input>
+              </div>
+              <!--列表-->
+              <!--全选按钮-->
+              <div class="choose-all">
+                <el-checkbox>全选</el-checkbox>
+              </div>
+              <table class="public-account-table">
+                <tr>
+                  <th width="28%">关联公众号</th>
+                  <th width="16%">角色类型</th>
+                  <th width="28%">门店</th>
+                  <th width="28%">店铺</th>
+                </tr>
+                <tr>
+                  <td>
+                    <el-checkbox>速八酒店集团</el-checkbox>
+                  </td>
+                  <td>管理角色</td>
+                  <td colspan="2">
+                    <ul class="combine-ul">
+                      <li>
+                        <div class="left-list">
+                          <el-checkbox>速八酒店集团</el-checkbox>
+                        </div>
+                        <div class="right-list">
+                          <el-checkbox>速八北直门店</el-checkbox>
+                          <el-checkbox>速八北直门店</el-checkbox>
+                          <el-checkbox>速八北直门店</el-checkbox>
+                          <el-checkbox>速八北直门店</el-checkbox>
+                        </div>
+                      </li>
+                      <li>
+                        <div class="left-list">
+                          <el-checkbox>速八酒店集团</el-checkbox>
+                        </div>
+                        <div class="right-list">
+                          <el-checkbox>速八北直门店</el-checkbox>
+                          <el-checkbox>速八北直门店</el-checkbox>
+                          <el-checkbox>速八北直门店</el-checkbox>
+                          <el-checkbox>速八北直门店</el-checkbox>
+                        </div>
+                      </li>
+                      <li>
+                        <div class="left-list">
+                          <el-checkbox>速八酒店集团</el-checkbox>
+                        </div>
+                        <div class="right-list">
+                          <el-checkbox>速八北直门店</el-checkbox>
+                          <el-checkbox>速八北直门店</el-checkbox>
+                          <el-checkbox>速八北直门店</el-checkbox>
+                          <el-checkbox>速八北直门店</el-checkbox>
+                        </div>
+                      </li>
+                    </ul>
+                  </td>
+                </tr>
+              </table>
+              <div style="text-align: center">
+                <el-button type="primary" size="small" icon="plus">新增</el-button>
+              </div>
+              <el-pagination layout="prev, pager, next" :total="50">
+              </el-pagination>
+            </div>
+            <!--新建公众号-->
+            <!--<div class="create-account-box">-->
+            <!--<div class="cancel-btn">-->
+            <!--<i class="el-icon-close"></i>-->
+            <!--</div>-->
+            <!--<el-form ref="form" :model="form" label-width="">-->
+            <!--<el-form-item label="选择公众号">-->
+            <!--<span icon="plus"></span>-->
+            <!--<el-select placeholder="请选择公众号">-->
+            <!--<el-option label="速八酒店集团"></el-option>-->
+            <!--<el-option label="七天国际酒店"></el-option>-->
+            <!--</el-select>-->
+            <!--</el-form-item>-->
+            <!--<el-form-item label="选择角色">-->
+            <!--<el-tooltip placement="right-start" class="add-account-tooltip">-->
+            <!--<div slot="content">-->
+            <!--<span class="el-icon-information"></span>-->
+            <!--<br>-->
+            <!--账号权限与角色权限同步，<br>-->
+            <!--如不能满足，请重新建立角色!-->
+
+            <!--</div>-->
+            <!--<span class="el-icon-information"></span>-->
+            <!--</el-tooltip>-->
+            <!--<el-select placeholder="请选择角色">-->
+            <!--<el-option label="管理角色"></el-option>-->
+            <!--<el-option label="超管角色"></el-option>-->
+            <!--</el-select>-->
+            <!--<el-form-item style="text-align: center;margin-top: 30px;">-->
+            <!--<el-button type="primary" size="small">OK</el-button>-->
+            <!--</el-form-item>-->
+            <!--</el-form-item>-->
+            <!--</el-form>-->
+            <!--<div class="next-btn">-->
+            <!--<el-button type="primary" size="small">下一步</el-button>-->
+            <!--</div>-->
+            <!--</div>-->
+          </div>
+          <!--账号权限-->
+          <el-form v-else-if="activeStep === 2" ref="form" class="account-authority" label-width="">
+            <el-form-item label="选择公众号">
+              <el-select placeholder="请选择公众号">
+                <el-option label="速八"></el-option>
+                <el-option label="七天"></el-option>
+              </el-select>
+            </el-form-item>
+            <div>
+              <span>已选角色&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</span>
+              <san>管理角色</san>
+            </div>
+            <div class="choose-all">
+              <el-checkbox>全选</el-checkbox>
+            </div>
+            <!--账号权限表格-->
+            <table>
+              <tr>
+                <th>模块</th>
+                <th>权限</th>
+                <th>权限子项</th>
+              </tr>
+              <tr>
+                <td>
+                  <el-checkbox>订房</el-checkbox>
+                </td>
+                <td colspan="2">
+                  <ul class="combine-ul">
+                    <li>
+                      <div class="left-list">
+                        <el-checkbox>订单管理</el-checkbox>
+                      </div>
+                      <div class="right-list">
+                        <el-checkbox>查看列表</el-checkbox>
+                        <el-checkbox>查看列表</el-checkbox>
+                        <el-checkbox>查看列表</el-checkbox>
+                        <el-checkbox>查看列表</el-checkbox>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="left-list">
+                        <el-checkbox>订单管理</el-checkbox>
+                      </div>
+                      <div class="right-list">
+                        <el-checkbox>查看列表</el-checkbox>
+                        <el-checkbox>查看列表</el-checkbox>
+                        <el-checkbox>查看列表</el-checkbox>
+                        <el-checkbox>查看列表</el-checkbox>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="left-list">
+                        <el-checkbox>订单管理</el-checkbox>
+                      </div>
+                      <div class="right-list">
+                        <el-checkbox>查看列表</el-checkbox>
+                        <el-checkbox>查看列表</el-checkbox>
+                        <el-checkbox>查看列表</el-checkbox>
+                        <el-checkbox>查看列表</el-checkbox>
+                      </div>
+                    </li>
+                  </ul>
+
+                </td>
+              </tr>
+            </table>
+          </el-form>
+        </div>
+      </el-col>
+    </el-row>
+    <!--<div class="finish-btn">-->
+    <!--<el-button type="primary" size="small">完成</el-button>-->
+    <!--</div>-->
+  </div>
+</template>
+
+<script>
+  export default {
+    name: 'addrole',
+    data () {
+      return {
+        loading: true,
+        // 被编辑角色的id
+        account_id: null,
+        // 当前步骤
+        activeStep: 0,
+        accountRules: {
+          username: [{required: true, message: '请自定义角色名称', trigger: 'blur'},
+            {min: 2, max: 20, message: '长度在 2 到 20 个字符', trigger: 'blur'}],
+          nickname: [{required: true, message: '请自定义角色名称', trigger: 'blur'},
+            {min: 2, max: 20, message: '长度在 2 到 20 个字符', trigger: 'blur'}],
+          password: [{required: true, message: '请输入您的密码', trigger: 'blur'}],
+          repassword: [{required: true, message: '请再次输入您的密码', trigger: 'blur'}],
+          status: [{required: true, message: '请选择您的状态', trigger: 'change'}]
+        },
+        accountInfor: {
+          username: '',
+          nickname: '',
+          password: '',
+          repassword: '',
+          status: ''
+        },
+        checkAll: true,
+        cities: [],
+        steps: [{
+          step: 1,
+          title: '基础信息'
+        }, {
+          step: 2,
+          title: '角色权限'
+        }]
+      }
+    },
+    methods: {
+      // 点击下一步
+      nextStepBtn (formName) {
+        console.log(this)
+//        this.$refs[formName].validate((valid) => {
+//          if (valid) {
+//            this.nextStep()
+//          } else {
+//            return false
+//          }
+//        })
+      },
+      nextStep () {
+        this.activeStep = 1
+      }
+    }
+  }
+</script>
+
+<style lang="postcss">
+  .add-account-outer {
+    color: #48576a;
+    .el-form-item {
+      width: 584px;
+      margin: 25px auto;
+      position: relative;
+      .el-form-item__label {
+        width: 84px;
+        text-align: left;
+      }
+      .el-form-item__error {
+        margin-left: 84px;
+      }
+      .el-icon-information {
+        position: absolute;
+        left: 60px;
+        top: 10px;
+      }
+      .el-select, .el-input {
+        width: 500px;
+      }
+    }
+    .el-steps {
+      width: 830px;
+      margin: 0 auto;
+      margin-bottom: 20px;
+    }
+    .all-outer {
+      padding: 15px 0;
+    }
+    .next-btn {
+      position: fixed;
+      left: 50%;
+      margin-left: 372px;
+      bottom: 20px;
+    }
+    .create-account-box {
+      width: 644px;
+      padding-top: 30px;
+      border: 1px solid #eee;
+      position: fixed;
+      background-color: #fff;
+      left: 50%;
+      margin-left: -322px;
+      z-index: 10;
+      top: 50%;
+      margin-top: -115px;
+      .cancel-btn {
+        position: absolute;
+        right: 10px;
+        top: 10px;
+        color: #585151;
+      }
+    }
+    .search-module {
+      width: 300px;
+      margin-top: 20px;
+      .el-button {
+        background-color: rgb(189, 169, 120);
+        color: #fff;
+        border-radius: 0;
+      }
+    }
+    .choose-all {
+      background-color: #f5f5f5;
+      padding: 20px 0;
+      margin-top: 20px;
+      .el-checkbox {
+        padding-left: 30px;
+      }
+    }
+    table {
+      width: 100%;
+      background-color: #f5f5f5;
+      text-align: left;
+      border: 1px solid #d8cece;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+      th {
+        padding: 10px 30px;
+        border: 1px solid #d8cece;
+      }
+      td {
+        padding: 10px 30px;
+        border: 1px solid #d8cece;
+      }
+    }
+    .combine-ul {
+      li {
+        list-style: none
+      }
+      &:after {
+        clear: both;
+        height: 0;
+        content: "";
+        display: block;
+      }
+      .left-list, .right-list {
+        width: 50%;
+        float: left;
+        margin: 10px 0 20px 0;
+        .el-checkbox {
+          margin-left: 15px;
+        }
+      }
+    }
+    .el-pagination {
+      float: right;
+    }
+    .finish-btn {
+      width: 100%;
+      left: 0;
+      background-color: #f5f5f5;
+      padding: 10px 0;
+      text-align: center;
+      position: fixed;
+      bottom: 0;
+      z-index: 10;
+      button {
+        width: 120px;
+        border-radius: 0;
+      }
+    }
+    .account-authority {
+      width: 1000px;
+      .el-form-item {
+        margin: 20px 0;
+      }
+    }
+  }
+
+  .el-tooltip__popper.is-dark {
+    background-color: #fff;
+    border: 1px solid #eee;
+    color: #999;
+    text-align: center;
+    .popper__arrow {
+      display: none;
+    }
+  }
+
+</style>

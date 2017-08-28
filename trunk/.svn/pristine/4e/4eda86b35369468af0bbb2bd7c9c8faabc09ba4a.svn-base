@@ -1,0 +1,66 @@
+.jfk-pages__comment {
+  .jfk-pages__theme{
+    background-color: var(--color-white);
+  }
+  .grayColor80{
+    color:var(--font-color-extra-light-gray);
+  }
+  .grayColorbf{
+    color: var(--font-color-light-gray);
+  }
+  .choose_prt_top{
+    background-color: var(--color-light-black);
+    &_item2{
+      color: var(--font-color-extra-light-gray);
+    }
+  }
+
+  .star_container{
+    padding: 0 px2rem(30) px2rem(50) px2rem(30);
+    & .star_title{
+        margin-bottom: px2rem(70);
+        &::before {
+          background-color: var(--line-color-extra-light-silver);
+        }
+    }
+
+    & .star_list{
+      text-align:center;
+      @mixin one-line horzin {};
+        position:relative;
+          &::before {
+            width: 100%;
+            position: absolute;
+            background-color: red;
+            bottom: px2rem(-50);
+            left: 0;
+          }
+     &_item{
+        margin-bottom: px2rem(70);
+        & .star_list_item_name{
+          margin-right: px2rem(40);
+        }
+        .jfk-rater a{
+          margin-right: px2rem(40);
+        }
+     }
+    }
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}

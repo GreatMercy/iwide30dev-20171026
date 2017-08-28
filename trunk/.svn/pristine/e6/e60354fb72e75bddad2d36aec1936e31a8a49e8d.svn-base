@@ -1,0 +1,178 @@
+<template>
+  <div class="jfk-pages jfk-pages__search">
+    <div class="search_container" v-show="!showCityChoose">
+    <div class="pageContainer" v-show="true">
+      <div class="jfk-pages__theme"></div>
+    <jfk-banner :items="advs" v-if="advs.length" :swiperOptions="swiperOptions"></jfk-banner>
+    <div class="search_place_container" @click="goCityChoose()">
+      <div class="search_place">
+          <p class="search_title font-size--28">
+            <i class="booking_icon_font icon_search icon-icon_search"></i>
+            {{searchVal}}
+          </p>
+          <i class="booking_icon_font icon_place icon-booking_icon_nearby_normal"></i>
+      </div>
+    </div>
+    <div class="date_container">
+      <div class="left_date" @click="goCalendar()">
+        <span class="left_date_style">入 住</span>
+        <span class="live_date jfk-font-number jfk-price__number"><i class="booking_icon_font icon_arrow icon-booking_icon_dropdown_normal"></i>14</span>
+        <span class="live_year">2014/03</span>
+      </div>
+      <span class="center_line"></span>
+      <div class="right_date" @click="goCalendar()">
+        <span class="left_date_style">离 开</span>
+        <span class="live_date jfk-font-number jfk-price__number"><i class="booking_icon_font icon_arrow icon-booking_icon_dropdown_normal"></i>
+        15</span>
+        <span class="live_year">2014/03</span>
+      </div>
+    </div>
+    <div class="checkBtn">查 询 酒 店</div>
+    <!-- <p class="color-golden" v-show="isLoadProduct">loading</p> -->
+    <div class="search_info" v-show="false">
+      <p class="search_info_title">最近搜索</p>
+      <p class="search_info_item item_first">广州  10月14日-10月15日  石牌桥</p>
+      <p class="search_info_item item_second">广州  10月14日-10月15日  石牌桥</p>
+    </div>
+    <div class="webkitbox others center boxflex pad_lr30 box_container">
+      <a class="layer_bg color2 j_whole_show always">
+          <div class="img">
+            <i class="booking_icon_font icon_arrow icon-booking_icon_timerent_normal font-size--40"></i>
+          </div>
+          <div class="txtclip font-size--28 mar_b">常住酒店</div>
+          <div class="txtclip font-size--24 gray_color">8：00-18：00</div>
+      </a>
+
+      <a class="layer_bg color2 j_whole_show kill_sec">
+        <div class="img">
+          <i class="booking_icon_font icon_arrow icon-booking_icon_timelimitspike_normal font-size--40"></i>
+        </div>
+        <div class="txtclip font-size--28 mar_b">我的收藏</div>
+        <div class="txtclip font-size--24 gray_color">一元拼手气</div>
+      </a>
+      <a class="layer_bg color2 order">
+        <div class="img">
+          <i class="booking_icon_font icon_arrow icon-booking_icon_earlytoearly_normal font-size--40"></i>
+        </div>
+        <div class="txtclip font-size--28 mar_b">我的订单</div>
+        <div class="txtclip font-size--24 gray_color">提前预定享8折</div>
+      </a>
+    </div>
+    </div>
+    <JfkSupport v-once></JfkSupport>
+    <div class="choose_date_calendar" v-show="showCalendar">
+      <jfk-calendar ref="jfkCalendar" format="yyyy/MM/dd" class="font-size--28" @date-click="handleDateClick"></jfk-calendar>
+       <!-- :minDate="min" :maxDate="max" :defaultValue="defaultValue" :dateCellRender="dateCellRender" :disabledDate="disabledDate" @date-click="handleDateClick"  -->
+    </div>
+    </div>
+    <city-choose v-show="showCityChoose"></city-choose>
+  </div> 
+  </div>
+</template>
+<script>
+import { getBannerList } from '@/service/http'
+import cityChoose from '../city_choose/App.vue'
+import { showFullLayer } from '@/utils/utils'
+export default {
+  name: 'index',
+  components: {
+    cityChoose
+  },
+  beforeCreate () {
+  },
+  created () {
+    // 加载swiper
+    this.loadPackages()
+  },
+  data () {
+    return {
+      // 所有数据
+      allData: [],
+      // 模拟id，后期由后台加上
+      id: 'a429262687',
+      openid: 'oX3WojhfNUD4JzmlwTzuKba1MywY',
+      advs: [],
+      isLoadProduct: false,
+      // banner 配置
+      swiperOptions: {
+        autoplay: 0,
+        lazyLoading: true,
+        lazyLoadingInPrevNext: true,
+        lazyPreloaderClass: 'jfk-image__lazy--preload',
+        spaceBetween: 12,
+        slidesPerView: 1.12,
+        pagination: '.swiper-pagination',
+        paginationType: 'fraction'
+      },
+      // 日历显示
+      showCalendar: false,
+      // 搜索框显示的字
+      searchVal: '搜索城市 / 关键字 / 位置',
+      showCityChoose: false,
+      // 显示热搜
+      showHotSearch: false
+      // 日历最小日期
+      // min: '2017/04/21',
+      // 日历最大日期
+      // max: '2017/08/21',
+      // 今天
+      // defaultValue: null
+    }
+  },
+  methods: {
+    loadPackages () {
+      let that = this
+      let args = {
+        id: this.id,
+        openid: this.openid
+      }
+      that.isLoadProduct = true
+      getBannerList(args).then(function (res) {
+        that.allData = res
+        that.isLoadProduct = false
+        for (let i = 0; i < res.web_data.pubimgs.length; i++) {
+          res.web_data.pubimgs[i].logo = res.web_data.pubimgs[i].image_url
+        }
+        that.advs = res.web_data.pubimgs
+        that.logJSON(res)
+      }).catch(function (e) {
+        that.isLoadProduct = false
+        console.log(e)
+      })
+    },
+    // 去往选择城市组件
+    goCityChoose () {
+      let _self = this
+      _self.showCityChoose = true
+      const cb = () => {
+        _self.showCityChoose = false
+      }
+      showFullLayer(null, '选择城市', location.href, cb)
+    },
+    // 去往选择日期组件
+    goCalendar () {
+      let _self = this
+      _self.showCalendar = true
+      const cb = () => {
+        _self.showCalendar = false
+      }
+      showFullLayer(null, '选择日期', location.href, cb)
+    },
+    // 输出专用
+    logJSON (data) {
+      function innerLog (data) {
+        const temp = {}
+        for (let p in data) {
+          if (typeof data[p] === 'object') temp[p] = innerLog(data[p])
+          else temp[p] = data[p]
+        }
+        return temp
+      }
+      console.log(innerLog(data))
+    },
+    handleDateClick () {
+      this.showCalendar = false
+    }
+  }
+}
+</script>

@@ -1,0 +1,421 @@
+.jfk-pages__submitOrder {
+  /* padding-bottom: 1rem; */
+  .submit_order_top {
+    padding: px2rem(30);
+    &_title {
+      width: 100%;
+      height: px2rem(100);
+      line-height: px2rem(100);
+      background-image: background-image(/login_bg.png);
+      background-size: 100% 100%;
+      margin-bottom: px2rem(70);
+
+      & .word {
+        margin-left: px2rem(80);
+      }
+
+      & .if {
+        float: right;
+        margin-right: px2rem(30);
+      }
+    }
+
+    & .hotel_name{
+      margin-bottom: px2rem(30);
+      padding-left: px2rem(40);
+      @mixin one-line vertical {};
+      position:relative;
+        &::before {
+          width: 3px;
+          height: px2rem(30);
+          /* background-color: red; */
+          position: absolute;
+          top: 20%;
+          left: 0;
+        }
+    }
+
+    & .stay_time{
+      padding-left: px2rem(40);
+      margin-bottom: px2rem(40);
+      .in,.left,.time{
+        margin-right: px2rem(40);
+      }
+      .date{
+        color: black;
+      }
+    }
+
+    .room_del{
+      padding-left: px2rem(40);
+      margin-bottom: px2rem(20);
+    }
+
+    .room_other{
+      padding-left: px2rem(40);
+    }
+
+
+  }
+
+  .order-info{
+    .pay_for{
+      overflow: hidden;
+      @mixin one-line horzin {};
+      position:relative;
+      &::before {
+        width: 100%;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+      }
+      &_item{
+        width: 49%;
+        float: left;
+        display: inline-block;
+        margin:px2rem(70) 0;
+
+        & .counp{
+          display: inline-block;
+          margin-bottom: px2rem(30);
+        }
+
+        & .counpon{
+          line-height: px2rem(40);
+        }
+      }
+      &_item:first-child{
+        @mixin one-line vertical {};
+        position:relative;
+        &::before {
+          width: 1px;
+          height: px2rem(100);
+          position: absolute;
+          top: 13%;
+          right: 17%;
+          transform:rotate(30deg);
+          -ms-transform:rotate(30deg);
+          -moz-transform:rotate(30deg);
+          -webkit-transform:rotate(30deg);
+          -o-transform:rotate(30deg);
+        }
+      }
+      &_item:nth-child(2){
+          padding-left: 2%;
+      }
+    }
+  }
+  
+  .pay_type{
+    margin-top: px2rem(70);
+    padding-left: px2rem(30);
+    overflow: hidden;
+    &_item{
+      width: 30%;
+      height: px2rem(130);
+      padding-top: px2rem(40);
+      text-align: center;
+      position: relative;
+      float: left;
+      margin-right: 3%;
+      p{
+        height: 100%;
+        line-height: px2rem(50);
+      }
+      input{
+        width: px2rem(30);
+        height: px2rem(30);
+        position: absolute;
+        top: px2rem(15);
+        right: px2rem(15);
+        border-radius: 50%;
+      }
+      input:checked{
+        background-image: background-image(/icon_checked.png);
+        background-size: 100% 100%;
+        border: none;
+      }
+    }
+  }
+
+  .booking_desc{
+    margin-top: px2rem(100);
+    .desc{
+      line-height: px2rem(40);
+    }
+  }
+  
+  /* 底部 */
+  .footer {
+    height: px2rem(100);
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    .order-detail {
+      width: calc(450 / 750 * 100%);
+      height: px2rem(100);
+      box-sizing: border-box;
+      padding-left: px2rem(60);
+      line-height: 1;
+      padding-top: px2rem(26);
+      span {
+        display: inline-block;
+      }
+      .price {
+        padding-right: px2rem(15);
+      }
+      .detail {
+        position: relative;
+        &:before {
+          content: '';
+          position: absolute;
+          width: 0;
+          height: 0;
+          transition: transform .3s;
+          border: {
+            style: solid dashed dashed dashed;
+            width: px2rem(7);
+          }
+          top: calc(10 / 24)em;
+          right: calc(-30 / 24)em;
+        }
+      }
+      .showDetailIcon{
+        &:before {
+          transform:rotate(180deg);
+          -ms-transform:rotate(180deg);
+          -moz-transform:rotate(180deg);
+          -webkit-transform:rotate(180deg);
+          -o-transform:rotate(180deg);
+          top: 0;
+          right: calc(-30 / 24)em; 
+        }
+      }
+       &.is-open {
+        .detail:before {
+          transform: rotate(-540deg);
+          top: 0;
+        }
+      }
+    }
+    .control {
+      width: calc(300 / 750 * 100%);
+    }
+  }
+
+  .order_detail{
+    padding: px2rem(160) 0 0  0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,.5);
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 999;
+    & .money_icon{
+      font-size: px2rem(16);
+    }
+
+    &_content{
+      overflow-y: scroll;
+      width: 90%;
+      margin-left: 5%;
+      height: px2rem(850);
+      border-radius: px2rem(5);
+    }
+    & .room_cost{
+      padding-top: px2rem(50);
+       .left{
+          float: left;
+        }
+        .right{
+          float: right;
+        }
+      & .title{
+        overflow: hidden;
+        padding-bottom: px2rem(30);
+        margin-bottom: px2rem(10);
+        @mixin one-line horzin {};
+        position:relative;
+          &::before {
+            width: 100%;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+          }
+      }
+      &_item{
+        height: px2rem(60);
+        line-height: px2rem(60);
+      }
+    }
+
+    & .use_coupon{
+      margin-top: px2rem(70);
+      &_item{
+        overflow: hidden;
+        margin-top: px2rem(40);
+        .left{
+          float: left;
+        }
+        .right{
+          float: right;
+        }
+      }
+      &_item:last-child{
+        margin-bottom: px2rem(30);
+      }
+    }
+  }
+  
+  .choose_coupon{
+    padding-top: px2rem(30);
+    height: 100%;
+    background: #f6f7f7;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+
+    &_item{
+      margin-top: px2rem(40);
+    }
+    & .click_open{
+      margin-top: -1rem;
+      float: right;
+      display: inline-block;
+      .booking_icon_font{
+        display: inline-block;
+        transform:rotate(90deg);
+        -ms-transform:rotate(90deg);
+        -moz-transform:rotate(90deg);
+        -webkit-transform:rotate(90deg);
+        -o-transform:rotate(90deg);
+      }
+    }
+    
+    & .coupon_num{
+      margin-top: px2rem(80);
+      text-align:center;
+      height: px2rem(90);
+      line-height: px2rem(90);
+    }
+
+    .coupon_list{
+      &_item{
+        height: px2rem(260);
+        border-radius: px2rem(5);
+        overflow: hidden;
+        & .price{
+          width: 40%;
+          line-height: px2rem(300);
+          height: px2rem(260);
+          float: left;
+          display: inline-block;
+          z-index: 14;
+          & .icon_money{
+            display: inline-block;
+            vertical-align: text-top;
+            margin-left: px2rem(20);
+          }
+          & .icon_num{
+            font-size: px2rem(66);
+            vertical-align: sub;
+          }
+        }
+
+        & .coupon_desc{
+          display: inline-block;
+          width: 58%;
+          height: px2rem(260);
+          position: relative;
+          z-index: 333;
+          &::after{
+              content: '';
+              position: absolute;
+              top: 0;
+              left: 0;
+              width: 100%;
+              height: 100%;
+              -webkit-transform-origin: top right;
+              transform-origin: top right;
+              -webkit-transform: skew(-23deg, 0deg);
+              transform: skew(-23deg, 0deg);
+              z-index: -1;
+          }
+          & .name{
+            margin-top: px2rem(50);
+            @mixin ellipsis 1;
+          }
+          & .desc{
+            margin-top: px2rem(18);
+            @mixin ellipsis 1;
+          }
+          & .date{
+            margin-top: px2rem(50);
+            @mixin ellipsis 1;
+          }
+          input{
+            width: px2rem(30);
+            height: px2rem(30);
+            display: inline-block;
+            border-radius: 50%;
+          }
+          input:checked{
+            background-image: background-image(/icon_checked.png);
+            background-size: 100% 100%;
+            border: none;
+          }
+          .right_status{
+            position: absolute;
+            top: px2rem(20);
+            right: px2rem(24);
+          }
+        }
+      }
+    }
+
+    .btn_submit{
+      width: 99.6%;
+      margin-left: .2%;
+      background: #1a1a1a;
+      height: px2rem(100);
+      line-height: px2rem(100);
+      text-align: center;
+      color: #fff;
+      position: fixed;
+      bottom: .3%;
+      left: 0;
+    }
+  }
+
+
+
+
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

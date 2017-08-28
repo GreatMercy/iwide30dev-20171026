@@ -1,0 +1,137 @@
+.jfk-pages__invoice {
+
+  .invoice-add-address {
+    padding-top: px2rem(30);
+
+    &__content {
+      height: px2rem(100);
+      border-radius: px2rem(var(--border-radius-big));
+      justify-content: center;
+      flex: 1;
+
+      i {
+        width: px2rem(28);
+        height: px2rem(28);
+        margin-right: px2rem(21);
+        border-radius: 100%;
+        position: relative;
+        &::after {
+          content: '';
+          left: 50%;
+          top: 50%;
+          position: absolute;
+          width: px2rem(16);
+          height: px2rem(2);
+          transform: translate(-50%, -50%);
+        }
+
+        &::before {
+          content: '';
+          left: 50%;
+          top: 50%;
+          position: absolute;
+          width: px2rem(2);
+          height: px2rem(16);
+          transform: translate(-50%, -50%);
+        }
+      }
+    }
+  }
+
+  .invoice-address {
+    padding-top: px2rem(30);
+    position: relative;
+    &__content {
+      padding-top: px2rem(60);
+      border-radius: px2rem(var(--border-radius-big));
+      height: px2rem(157);
+      position: relative;
+      padding-left: px2rem(42);
+      padding-right: px2rem(42);
+      overflow: hidden;
+
+      li {
+        line-height: 1;
+        &:first-child {
+          margin-bottom: px2rem(36);
+        }
+      }
+
+      .jfk-font {
+        position: absolute;
+        top: 50%;
+        right: px2rem(12);
+        transform:translate(-50%, -50%);
+      }
+    }
+
+    &__line {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      height: px2rem(5);
+      width: 100%;
+      background-size: contain;
+      background-repeat: repeat-x;
+    }
+
+    &__title {
+      width: calc(152 / 24)em;
+    }
+
+    &__word {
+      letter-spacing: 0.5em;
+    }
+
+    &__item-content {
+      @mixin ellipsis {
+      }
+      i {
+        margin-right: px2rem(30);
+      }
+    }
+  }
+
+  .invoice-info {
+    margin-top: px2rem(76);
+    .invoice-title {
+      margin-bottom: px2rem(21);
+    }
+  }
+
+  .invoice-order-info {
+    .invoice-title {
+      margin-top: px2rem(76);
+      margin-bottom: px2rem(59);
+    }
+
+    li {
+      margin-bottom: px2rem(44);
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+
+    &__title {
+      margin-right: px2rem(60);
+      width: calc(133 / 28)em;
+    }
+
+    &__content {
+      display: block;
+      flex: 1;
+    }
+
+    &__word {
+      letter-spacing: 0.5em;
+    }
+  }
+
+  .invoice-btn {
+    padding-left: px2rem(80);
+    padding-right: px2rem(80);
+    margin-top: px2rem(204);
+    margin-bottom: px2rem(128);
+  }
+
+}

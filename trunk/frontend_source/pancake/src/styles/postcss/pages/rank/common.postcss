@@ -1,0 +1,186 @@
+.jfk-pages__rank {
+  position: relative;
+  .jfk-pages__body {
+    padding-bottom: px2rem(100);
+  }
+  .avatar {
+    border-radius: 50%;
+    display: inline-block;
+    overflow: hidden;
+    img {
+      width: 100%;
+      display: block;
+    }
+    &.is-default {
+      background-image: background-image(/avatar.png);
+      background-size: 100%;
+    }
+  }
+  .user {
+    position: absolute;
+    top: px2rem(6);
+    right: px2rem(22);
+    .avatar {
+      width: px2rem(44);
+      height: px2rem(44);
+      vertical-align: middle;
+    }
+    .name {
+      padding-left: px2rem(5);
+      display: inline-block;
+      vertical-align: middle;
+    }
+  }
+  .cup {
+    padding-top: px2rem(50);
+    text-align: center;
+    .icon {
+      width: calc(146 / 690 * 100%);
+      padding-bottom: calc(186 / 690 * 100%);
+      display: inline-block;
+      background: {
+        image: background-image(/cup.png);
+        size: 100%;
+        repeat: no-repeat;
+        position: center;
+      }
+    }
+    .tip {
+      letter-spacing: .1em;
+      line-height: px2rem(112);
+      @mixin one-line horizontal {
+        bottom: 0;
+        left: 0;
+      }
+    }
+  }
+  .rank-tabs__head {
+    line-height: px2rem(20 + 32 + 20);
+    padding-top: px2rem(56);
+    padding-bottom: px2rem(34);
+    @mixin clearfix;
+    &-item {
+      width: 50%;
+      text-align: center;
+      float: left;
+      span {
+        display: inline-block;
+      }
+    }
+  }
+  .rank-list {
+    &__loading {
+      padding: px2rem(40) 0;
+      text-align: center;
+    }
+    &__item {
+      margin-top: px2rem(60);
+      &-title {
+        width: 100%;
+        box-sizing: border-box;
+        padding-left: calc(172 / 30)em;
+        position: relative;
+        line-height: calc(76 / 30)em;
+        height: calc(76 / 30)em;
+      }
+      &-dices {
+        display: none;
+        justify-content: space-around;
+        padding-left: calc(76 / 30)em;
+        padding-top: px2rem(32);
+        padding-bottom: px2rem(10);
+      }
+      .name {
+        @mixin ellipsis;
+        text-align: center;
+      }
+      .left {
+        position: absolute;
+        top: 0;
+        left: 0;
+        @mixin clearfix;
+        width: calc(162 / 30)em;
+      }
+      .right {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: calc(238 / 30)em;
+        @mixin clearfix;
+        .thumbup {
+          float: right;
+        }
+      }
+      .prize {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: calc(190 / 30)em;
+        text-align: right;
+      }
+      .order {
+        font-size: calc(60 / 30)em;
+      }
+      .avatar {
+        width: calc(76 / 30)em;
+        height: calc(76 / 30)em;
+        float: right;
+      }
+      .arrow {
+        position: relative;
+        display: inline-block;
+        width: calc(20 / 30)em;
+        height: calc(10 / 30)em;
+        vertical-align: middle;
+        &:before,&:after {
+          content: '';
+          position: absolute;
+          border-style: solid dashed dashed dashed;
+        }
+        &:before {
+          top: 0;
+          left: 0;
+          border-width: calc(10 / 30)em;
+        }
+        &:after {
+          top: 1px;
+          left: 2px;
+          border-width: calc(6 / 30)em;
+        }
+      }
+      &.is-selected {
+        .arrow {
+          transform: rotate(180deg);
+        }
+        .rank-list__item-dices {
+          display: flex;
+        }
+      }
+    }
+    &.is-prize {
+      .rank-list__item-title {
+        padding-right: calc(200 / 30)em;
+      }
+    }
+    &.is-times {
+      .rank-list__item-title {
+        padding-right: calc(248 / 30)em;
+      }
+    }
+    &__dice {
+      width: calc(102 / 30)em;
+      height: calc(106 / 30)em;
+      display: block;
+      background: {
+        size: 100%;
+        repeat: no-repeat;
+        position: center;
+      };
+      @for $i from 1 to 6 {
+        &.rank-list__dice-$(i) {
+          background-image: background-image(/dice$(i).png);
+        }
+      }
+    }
+  }
+}

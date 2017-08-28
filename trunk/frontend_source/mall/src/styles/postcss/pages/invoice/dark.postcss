@@ -1,0 +1,59 @@
+.jfk-pages__invoice {
+
+  .invoice-add-address {
+    &__content {
+      background-color: #1f1f1f;
+      color: var(--font-color-extra-light-gray);
+
+      i {
+        border: 1px solid var(--color-deep-yellow);
+        &::after {
+          background-color: var(--color-deep-yellow);
+        }
+
+        &::before {
+          background-color: var(--color-deep-yellow);
+        }
+      }
+    }
+  }
+
+  .invoice-address {
+    &__content {
+      background-color: #1f1f1f;
+
+      .jfk-font {
+        color: var(--font-color-extra-light-gray);
+      }
+
+    }
+
+    &__title {
+      color: var(--font-color-extra-light-gray);
+    }
+
+    &__item-content {
+      color: var(--font-color-white);
+    }
+
+    &__line {
+      background-image: background-image(/invoice/address.png, theme);
+    }
+  }
+
+  .invoice-title {
+    color: var(--font-color-light-gray);
+  }
+
+  .invoice-order-info {
+    &__title {
+      color: var(--font-color-extra-light-gray);
+    }
+
+    &__content {
+      color: var(--font-color-white);
+    }
+
+  }
+
+}

@@ -1,0 +1,69 @@
+@import '../../../../common/postcss/variable/common.postcss';
+
+@font-face {
+  font-family: 'icon';
+  src: url('../../assets/fonts/iconfont.ttf') format('truetype'),
+  url('../../assets/fonts/iconfont.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'shuzi';
+  src: url('../../assets/fonts/shuzi.ttf') format('truetype'),
+  url('../../assets/fonts/shuzi.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'booking_font_icon';  /* project id 332906 */
+  src: url('//at.alicdn.com/t/font_332906_2pnxq2c5p0la0pb9.eot');
+  src: url('//at.alicdn.com/t/font_332906_2pnxq2c5p0la0pb9.eot?#iefix') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_332906_2pnxq2c5p0la0pb9.woff') format('woff'),
+  url('//at.alicdn.com/t/font_332906_2pnxq2c5p0la0pb9.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_332906_2pnxq2c5p0la0pb9.svg#iconfont') format('svg');
+}
+html {
+  font-size: var(--base-font-size)px;
+  font-family: var(--base-font-family);
+}
+body, div, span, p, em, i, b, th, td, dl, dt, dd, ul, ol, li, a, h1, h2, h3, h4, h5, h6, form, textarea {
+  tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+body, p, ul, ol, h1, h2, h3, h4, h5, h6 {
+  margin: 0
+}
+
+h1, h2, h3, h4, h5, h5 {
+  font-weight: normal;
+}
+
+li, ul {
+  padding: 0
+}
+
+li {
+  list-style: none inside none;
+}
+
+a, label, div, span, li, i {
+  tap-highlight-color: transparent;
+  -webkit-tap-highlight-color: transparent;
+}
+
+a, label, div, span, li, i {
+  &:focus {
+    outline: none;
+  }
+}
+
+a {
+  text-decoration: none;
+}
+i {
+  font-style: normal;
+}
+input, textarea, button, select {
+  font-family: var(--base-font-family);
+}
+input, textarea {
+  appearance: none;
+}

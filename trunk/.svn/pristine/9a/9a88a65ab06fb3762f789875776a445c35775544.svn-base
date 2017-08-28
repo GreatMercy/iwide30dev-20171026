@@ -1,0 +1,529 @@
+<?php
+class Roles_model extends CI_Model {
+	function __construct() {
+		parent::__construct ();
+	}
+    const TAB_AC = 'authority_controllers';
+    const TAB_AF = 'authority_functions';
+    const TAB_AM = 'authority_modules';
+    const TAB_AO = 'authority_operations';
+    const TAB_AR = 'authority_roles';
+
+
+    function _load_db() {
+        return $this->db;
+    }
+
+
+    function all_modules($status=''){
+        $db = $this->_load_db ();
+        if(!empty($status)){
+            $db->where('module_status',$status);
+        }
+        return $db->get ( self::TAB_AM )->result_array ();
+
+    }
+
+    function check_modules($module_code){
+        $db = $this->_load_db ();
+        $db->where('module_code',$module_code);
+        return $db->get(self::TAB_AM)->row_array();
+    }
+
+
+    function new_controllers($params){
+
+        $db = $this->_load_db ();
+        $res = $db->insert ( self::TAB_AC, $params );
+
+        if ($res && $db->affected_rows()>0){
+            return true;
+        }
+
+        return false;
+
+    }
+
+
+    function edit_controllers($controller_id,$data){
+
+        $db = $this->_load_db ();
+        $db->where('ctlr_id',$controller_id);
+        $res = $db->update ( self::TAB_AC, $data );
+
+        if ($res && $db->affected_rows()>0){
+            return true;
+        }
+
+        return false;
+    }
+
+
+    function new_function($params){
+
+        $db = $this->_load_db ();
+        $res = $db->insert ( self::TAB_AF, $params );
+
+        if ($res && $db->affected_rows()>0){
+            return true;
+        }
+
+        return false;
+
+    }
+
+
+    function edit_function($func_id,$data){
+
+        $db = $this->_load_db ();
+        $db->where('func_id',$func_id);
+        $res = $db->update ( self::TAB_AF, $data );
+
+        if ($res && $db->affected_rows()>0){
+            return true;
+        }
+
+        return false;
+    }
+
+
+    function new_operation($params){
+
+        $db = $this->_load_db ();
+        $res = $db->insert ( self::TAB_AO, $params );
+
+        if ($res && $db->affected_rows()>0){
+            return true;
+        }
+
+        return false;
+
+    }
+
+
+    function edit_operation($oper_id,$data){
+
+        $db = $this->_load_db ();
+        $db->where('oper_id',$oper_id);
+        $res = $db->update ( self::TAB_AO, $data );
+
+        if ($res && $db->affected_rows()>0){
+            return true;
+        }
+
+        return false;
+    }
+
+
+    function authority_controllers($status=''){
+        $db = $this->_load_db ();
+        if(!empty($status)){
+            $db->where('ctlr_status',$status);
+        }
+        return $db->get ( self::TAB_AC )->result_array ();
+
+    }
+
+
+    function authority_func($ctlr_id='',$status=''){
+        $db = $this->_load_db ();
+        if(!empty($status)){
+            $db->where('ctlr_status',$status);
+        }
+        if(!empty($ctlr_id)){
+            $db->where('ctlr_id',$ctlr_id);
+        }
+
+        return $db->get ( self::TAB_AF )->result_array ();
+
+    }
+
+
+    function authority_operations($func_id='',$status=''){
+        $db = $this->_load_db ();
+        if(!empty($status)){
+            $db->where('oper_status',$status);
+        }
+        if(!empty($func_id)){
+            $db->where('func_id',$func_id);
+        }
+
+        return $db->get ( self::TAB_AO )->result_array ();
+
+    }
+
+
+
+    function all_roles($inter_id,$params=array(),$status=''){
+
+        $db = $this->_load_db ();
+        if(isset($params['size']) && isset($params['offset']))$db->limit ( $params['size'], $params['offset'] );
+
+        if(isset($params['type']) && $params['type']==1){
+            $db->where('role_type',1);
+        }elseif(isset($params['type']) && $params['type']==2){
+            $db->where('role_type',2);
+        }
+
+        if(!empty($status)){
+            $db->where('status',$status);
+        }
+
+        if(!empty($params['keyword'])){
+            $db->like('role_name', $params['keyword'], 'both');
+        }
+
+        $db->where('inter_id',$inter_id);
+
+        $db->order_by('create_time DESC');
+
+        return $db->get ( self::TAB_AR )->result_array ();
+    }
+
+
+    function count_roles($inter_id,$keyword='',$status=''){
+        $db = $this->_load_db ();
+
+        $db->select('count(role_id) total');
+
+        if(!empty($status)){
+            $db->where('status',$status);
+        }
+
+        if(!empty($keyword)){
+            $db->like('role_name', $keyword, 'both');
+        }
+
+        $db->where('inter_id',$inter_id);
+
+        return $db->get ( self::TAB_AR )->row_array ();
+    }
+
+
+
+    function standard_roles($status=''){  //所有标准角色
+
+        $db = $this->_load_db ();
+        if(!empty($status)){
+            $db->where('status',$status);
+        }
+        $db->where('role_type',1);
+        $db->order_by('role_id DESC');
+
+        return $db->get ( self::TAB_AR )->result_array ();
+    }
+
+
+
+    function getRoleById($inter_id,$role_id){
+        $db = $this->_load_db ();
+        $db->where(
+            array(
+                'inter_id'=>$inter_id,
+                'role_id'=>$role_id
+            )
+        );
+        return $db->get ( self::TAB_AR )->row_array ();
+    }
+
+
+    function roles_type(){
+       return array(
+           '1'=>'标准角色',
+           '2'=>'自定义角色',
+           '3'=>'管理员'
+       );
+    }
+
+
+    function get_all_authorities(){    //获取整个平台的权限
+
+        $temp = array();
+        $all_operations = $this->authority_operations();   //权限操作
+        if(!empty($all_operations)){
+            foreach($all_operations as $arr_operations){
+                $temp['operations'][$arr_operations['func_id']][$arr_operations['oper_id']] = $arr_operations;
+            }
+        }
+
+
+        $all_func = $this->authority_func();    //权限方法
+        if(!empty($all_func)){
+            foreach($all_func as $arr_func){
+                $temp['func'][$arr_func['ctlr_id']][$arr_func['func_id']] = $arr_func;
+                if(isset($temp['operations'][$arr_func['func_id']])){
+                    $temp['func'][$arr_func['ctlr_id']][$arr_func['func_id']]['operations'] = $temp['operations'][$arr_func['func_id']];
+                }
+            }
+        }
+
+        $all_controllers = $this->authority_controllers();   //权限控制器
+        if(!empty($all_controllers)){
+            foreach($all_controllers as $arr_controllers){
+                $temp['ctlr'][$arr_controllers['module']][$arr_controllers['ctlr_id']] = $arr_controllers;
+                if(isset($temp['func'][$arr_controllers['ctlr_id']])){
+                    $temp['ctlr'][$arr_controllers['module']][$arr_controllers['ctlr_id']]['ctlr'] = $temp['func'][$arr_controllers['ctlr_id']];
+                }
+            }
+        }
+
+        $all_modules = $this->all_modules();   //权限模块
+        if(!empty($all_modules)){
+            foreach($all_modules as $arr_modules){
+                $temp['modules'][$arr_modules['module_code']] = $arr_modules;
+                if(isset($temp['ctlr'][$arr_modules['module_code']])){
+                    $temp['modules'][$arr_modules['module_code']]['modules'] = $temp['ctlr'][$arr_modules['module_code']];
+                }
+            }
+        }
+
+
+        $all_authorities=array();
+        if(isset($temp['modules'])){        //所有权限
+            $all_authorities = $temp['modules'];
+        }elseif(isset($temp['ctlr'])){
+            $all_authorities = $temp['ctlr'];
+        }elseif(isset($temp['func'])){
+            $all_authorities = $temp['func'];
+        }elseif(isset($temp['operations'])){
+            $all_authorities = $temp['operations'];
+        }
+
+
+        return $all_authorities;
+
+    }
+
+
+    function defined_authorities($role_auth,$extra_auth){   //处理额外添加的权限
+
+        if(empty($role_auth) || empty($extra_auth)) return $role_auth;
+//        $role_auth = unserialize($role_auth);
+        $extra_auth = unserialize($extra_auth);
+
+        if(isset($extra_auth['plus']) && !empty($extra_auth['plus'])){     //关联增加
+            foreach($extra_auth['plus'] as $eap_key => $ea_plus){
+                if(!isset($role_auth[$eap_key]))$role_auth[$eap_key]=array();
+                if(!empty($ea_plus)){
+                    foreach($ea_plus as $ea_ctrl_key => $ea_ctrl){
+                        if(!isset($role_auth[$eap_key][$ea_ctrl_key]))$role_auth[$eap_key][$ea_ctrl_key]=array();
+                        if(!empty($ea_ctrl)){
+                            foreach($ea_ctrl as $ea_func_key => $ea_func){
+                                if(!isset($role_auth[$eap_key][$ea_ctrl_key][$ea_func_key]))$role_auth[$eap_key][$ea_ctrl_key][$ea_func_key]=array();
+                                if(!empty($ea_func)){
+                                    foreach($ea_func as $ea_oper_key => $ea_oper){
+                                        if(!isset($role_auth[$eap_key][$ea_ctrl_key][$ea_func_key][$ea_oper]))$role_auth[$eap_key][$ea_ctrl_key][$ea_func_key][]=$ea_oper;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+
+        if(isset($extra_auth['reduce']) && !empty($extra_auth['reduce'])){    //关联减少
+            foreach($extra_auth['reduce'] as $ead_key => $ea_reduce){
+                if(!isset($role_auth[$ead_key]))continue;
+                if(!empty($ea_reduce)){
+                    foreach($ea_reduce as $ea_ctrl_key => $ea_ctrl){
+                        if(!isset($role_auth[$ead_key][$ea_ctrl_key]))continue;
+                        if(!empty($ea_ctrl)){
+                            foreach($ea_ctrl as $ea_func_key => $ea_func){
+                                if(!isset($role_auth[$ead_key][$ea_ctrl_key][$ea_func_key]))continue;
+                                if(!empty($ea_func)){
+                                    foreach($ea_func as $ea_oper_key => $ea_oper){
+                                        if(isset($role_auth[$ead_key][$ea_ctrl_key][$ea_func_key][$ea_oper]))unset($role_auth[$ead_key][$ea_ctrl_key][$ea_func_key][$ea_oper]);
+                                    }
+                                }else{
+                                    unset($role_auth[$ead_key][$ea_ctrl_key][$ea_func_key]);
+                                }
+                            }
+                        }else{
+                            unset($role_auth[$ead_key][$ea_ctrl_key]);
+                        }
+                    }
+                }else{
+                    unset($role_auth[$ead_key]);
+                }
+            }
+        }
+
+        return $role_auth;
+
+    }
+
+
+    function compare_authorities($all_authorities,$edit_role_authorities=array()){
+
+//        if(empty($related_authorities)){
+            if(!empty($edit_role_authorities)){    //筛选已经勾选了的权限
+                foreach($edit_role_authorities as $m_key => $module){
+                    if(!isset($all_authorities[$m_key]))continue;
+                    if(!isset($all_authorities[$m_key]['check']))$all_authorities[$m_key]['check']=2;
+                    if(isset($module['controllers']) && !empty($module['controllers'])){
+                        foreach($module['controllers'] as $c_key => $ctrl){
+                            if(!isset($all_authorities[$m_key]['controllers'][$c_key]))continue;
+                            $all_authorities[$m_key]['controllers'][$c_key]['check'] = isset($all_authorities[$m_key]['controllers'][$c_key])?1:2;
+                            foreach($ctrl['funcs'] as $f_key => $func){
+                                if(!isset($all_authorities[$m_key]['controllers'][$c_key]['funcs'][$f_key]))continue;
+                                $all_authorities[$m_key]['controllers'][$c_key]['funcs'][$f_key]['check'] = isset($all_authorities[$m_key]['controllers'][$c_key]['funcs'][$f_key])?1:2;
+                                if(isset($edit_role_authorities[$m_key]['controllers'][$c_key]['funcs'][$f_key])){
+                                    $all_authorities[$m_key]['controllers'][$c_key]['funcs'][$f_key]['check'] = 1;
+                                    $all_authorities[$m_key]['controllers'][$c_key]['check'] = 1;
+                                    $all_authorities[$m_key]['check'] = 1;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            $authorities =   $all_authorities;
+            foreach($authorities as $auth_key => $temp_auth){
+                if(!isset($temp_auth['check']))$authorities[$auth_key]['check'] = 2;
+                if(isset($temp_auth['controllers']) && !empty($temp_auth['controllers'])){
+                    foreach($temp_auth['controllers'] as $ctrl_key => $temp_ctrl){
+                        if(!isset($temp_ctrl['check']))$authorities[$auth_key]['controllers'][$ctrl_key]['check'] = 2;
+                        if(isset($temp_ctrl['funcs']) && !empty($temp_ctrl['funcs'])){
+                            foreach($temp_ctrl['funcs'] as $funcs_keys => $temp_funcs){
+                                if(!isset($temp_funcs['check']))$authorities[$auth_key]['controllers'][$ctrl_key]['funcs'][$funcs_keys]['check'] = 2;
+                                if(isset($temp_funcs['operations']) && !empty($temp_funcs['operations'])){
+                                    foreach($temp_funcs['operations'] as $oper_key => $temp_oper){
+                                        if(!isset($temp_oper['check']))$authorities[$auth_key]['controllers'][$ctrl_key]['funcs'][$funcs_keys]['operations'][$oper_key]['check'] = 2;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+        return $authorities;
+
+    }
+
+
+
+    function new_role($inter_id,$post){
+
+        $authority = serialize($post['role_authority']);
+        $create_time = date('Y-m-d H:i:s',time());
+
+        $data = array(
+            'inter_id'=>$inter_id,
+            'role_type'=>$post['role_type'],
+            'role_name'=>$post['role_name'],
+            'role_authority'=>$authority,
+            'create_time'=>$create_time,
+            'update_time'=>$create_time,
+            'creator'=>$post['creator']
+        );
+
+        if(!empty($post['related_role_id']))$data['related_role_id']=$post['related_role_id'];
+
+        return $this->db->insert ( self::TAB_AR, $data );
+
+    }
+
+
+    function update_role($params,$update){
+
+        $update['update_time'] = date('Y-m-d H:i:s',time());
+
+        $this->db->where($params);
+
+        $res = $this->db->update(self::TAB_AR,$update);
+
+        if ($res && $this->db->affected_rows()>0){
+            return true;
+        }
+
+        return false;
+
+
+    }
+
+
+    function login_authority($inter_id,$role_id,$extra_authorities=array()){   //账号登录时返回的权限
+
+        $this->load->model('authority/Module_func_model');
+        $all_authorities=$this->Module_func_model->getAccountFuncList(2,$role_id,'DISP');//1.系统管理员，2.公众号管理员，3.普通账号
+
+        if(empty($all_authorities))return array();
+
+        $role = $this->getRoleById($inter_id,$role_id);
+
+        $res = array();
+        if(!empty($role) && !empty($role['role_authority'])){
+            $role_authority = $this->check_relate_auth($inter_id,$role);
+            if(!empty($extra_authorities)){
+                $role_authority = $this->defined_authorities($role_authority,$extra_authorities);
+            }
+            $authorities = $this->compare_authorities($all_authorities,$role_authority);
+            if(!empty($authorities)){
+                foreach($authorities as $key=>$ctrl){
+                    if($ctrl['check']==1)$res['adminhtml'][$key]=array();
+                    foreach($ctrl['controllers'] as $func){
+                        if($func['check']==1)$res['adminhtml'][$key][$func['code']]=array();
+                        foreach($func['funcs'] as $arr){
+                            if($arr['check']==1){
+                                $res['adminhtml'][$key][$func['code']][] = $arr['code'];
+                            }elseif($arr['related_func']!=0){
+                                if($authorities[$arr['related_module']]['controllers'][$arr['related_ctlr']]['funcs'][$arr['related_func']]['check']==1)$res['adminhtml'][$key][$func['code']][] = $arr['code'];else continue;
+                            } else{
+                                continue;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return $res;
+    }
+
+
+    function account_auth($inter_id,$role_id,$authorities=array()){     //超管账号编辑额外权限
+
+        $role = $this->getRoleById($inter_id,$role_id);
+        $role_auth = $this->check_relate_auth($inter_id,$role);
+
+        $edit_auth = $this->defined_authorities($role_auth,$authorities);
+
+        $this->load->model('authority/Module_func_model');
+        $all_authorities=$this->Module_func_model->getAccountFuncList(2,$role_id,'DISP');//1.系统管理员，2.公众号管理员，3.普通账号
+
+        $res = $this->compare_authorities($all_authorities,$edit_auth);
+
+        return $res;
+
+    }
+
+
+    function check_relate_auth($inter_id,$role){    //过滤角色权限
+
+        if(isset($role['related_role_id']) && !empty($role['related_role_id'])){
+            //有关联角色的还要检查关联后改动的权限
+            $related_role = $this->getRoleById($inter_id,$role['related_role_id']);
+            $related_authorities = unserialize($related_role['role_authority']);
+            if(isset($role['extra_authorities']) && !empty($role['extra_authorities'])){
+                $edit_role_authorities = $this->defined_authorities($related_authorities,$role['extra_authorities']);
+            }else{
+                $edit_role_authorities = $related_authorities;
+            }
+        }else{
+            //没有关联角色的直接读取权限
+            $edit_role_authorities = !empty($role['role_authority'])?unserialize($role['role_authority']):array();
+        }
+
+        return $edit_role_authorities;
+
+    }
+
+
+
+
+
+}

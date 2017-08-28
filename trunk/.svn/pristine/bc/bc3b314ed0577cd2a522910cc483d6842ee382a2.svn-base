@@ -1,0 +1,209 @@
+<template>
+  <div class="jfk-pages jfk-pages__cityChoose">
+    <div class="jfk-pages__theme"></div>
+    <p class="float_word font-size--22" v-show="showHotSearch">
+      A <br/>
+      B <br/>
+      C <br/>
+      D <br/>
+      E <br/>
+      F <br/>
+      G <br/>
+      H <br/>
+      I <br/>
+      J <br/>
+      K <br/>
+      L <br/>
+      N <br/>
+      M <br/>
+      O <br/>
+      P <br/>
+      Q <br/>
+      R <br/>
+      S <br/>
+      T <br/>
+      U <br/>
+      V <br/>
+      W <br/>
+      X <br/>
+      Y <br/>
+      Z <br/>
+    </p>
+    <!--<p class="color-golden" v-show="isLoadProduct">loading</p>-->
+    <!--<JfkSupport v-once></JfkSupport>-->
+    <div class="search_city font-size--38">
+      <input type="text" placeholder="搜索城市/关键字/位置" class="font-size--38">
+      <i class="booking_icon_font font-size--24 icon-icon_search"></i>
+      <i class="booking_icon_font font-size--24 icon-booking_icon_navigation_normal icon-icon_delete"></i>
+    </div>
+    <!-- 热门搜索 -->
+    <div class="search_city font-size--32" v-show="showHotSearch">
+      <span class="no_far">
+        <i class="booking_icon_font font-size--34 icon-booking_icon_businessdistrict_norma"></i>附近</span>
+      <span class="font-size--24 color">
+        &nbsp;&nbsp;&nbsp;附近有什么，去看看
+      </span>
+    </div>
+    <div class="history_search font-size--30" v-show="showHotSearch">
+      <p class="history_search_title font-size--24 grayColor">
+        历史搜索
+      </p>
+      <span>北京</span>
+      <span>新加坡</span>
+      <span>北京北京</span>
+      <span>北京北京</span>
+      <span>北京北京</span>
+      <span>北京北京</span>
+      <span>北京北京</span>
+    </div>
+    <div class="hot_search" v-show="showHotSearch">
+      <p class="hot_search_title font-size--24 grayColor">热门搜索</p>
+      <div class="recommendations-list">
+        <city-swiper :items="recommendations" :linkPrefix="detailUrl" :emptyLink="indexUrl"></city-swiper>
+      </div>
+    </div>
+    <div class="all_city font-size--28" v-show="showHotSearch">
+      <div class="all_city_item">
+        <p class="all_city_item_word">P</p>
+        <ul>
+          <li>广州</li>
+          <li>深圳</li>
+          <li>华强北</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 搜索的城市list -->
+    <div class="search_city_list" v-show="showHotSearch">
+      <div class="search_city_list_item">
+        <p>
+          <i class="booking_icon_font font-size--24 icon-booking_icon_businessdistrict_norma grayColor"></i>
+          七天<span class="goldColor">广州火车店</span>
+        </p>
+      </div>
+      <div class="search_city_list_item">
+        <p>
+          <i class="booking_icon_font font-size--24 icon-booking_icon_businessdistrict_norma grayColor"></i>
+          七天<span class="goldColor">广州火车店</span>
+        </p>
+        <p>
+          <i class="booking_icon_font font-size--24 icon-booking_icon_businessdistrict_norma grayColor"></i>
+          七天<span class="goldColor">广州火车店</span>
+        </p>
+        <p>
+          <i class="booking_icon_font font-size--24 icon-booking_icon_businessdistrict_norma grayColor"></i>
+          七天<span class="goldColor">广州火车店</span>
+        </p>
+        <p>
+          <i class="booking_icon_font font-size--24 icon-booking_icon_businessdistrict_norma grayColor"></i>
+          七天<span class="goldColor">广州火车店</span>
+        </p>
+        <p>
+          <i class="booking_icon_font font-size--24 icon-booking_icon_businessdistrict_norma grayColor"></i>
+          七天<span class="goldColor">广州火车店</span>
+        </p>
+      </div>
+      <div class="search_city_list_item">
+        <p>
+          <i class="booking_icon_font font-size--24 icon-booking_icon_businessdistrict_norma grayColor"></i>
+          七天<span class="goldColor">广州火车店</span>
+        </p>
+      </div>
+    </div>
+    <!-- 无搜索结果 -->
+    <div class="nosearch_container">
+      <div class="no_search">
+        <div class="no_seach_result font-size--24 grayColor">
+          <i class="booking_icon_font icon-icon_search font-size--52 icon_noresult_search"></i><br />
+          没有搜索到相关结果~ <br />
+          换个条件试试
+        </div>
+      </div>
+      <div class="for_you">
+        <p class="for_you_title font-size--24">
+          为您推荐
+        </p>
+        <div class="for_you_list_item font-size--32">
+        <p>
+          <i class="booking_icon_font icon-booking_icon_hotel_normal grayColor"></i>
+          七天<span class="goldColor">广州火车店</span>
+        </p>
+        <p>
+          <i class="booking_icon_font icon-booking_icon_hotel_normal grayColor"></i>
+          七天<span class="goldColor">广州火车店</span>
+        </p>
+        <p>
+          <i class="booking_icon_font icon-booking_icon_hotel_normal grayColor"></i>
+          七天<span class="goldColor">广州火车店</span>
+        </p>
+      </div>
+      </div>
+    </div>
+  </div>
+</template>
+<script>
+import { getPackageLists, getPackageRecommendation } from '@/service/http'
+import citySwiper from './module/cityswiper/src/main.vue'
+export default {
+  name: 'cityChoose',
+  components: {
+    citySwiper
+  },
+  beforeCreate () {
+  },
+  created () {
+//    加载swiper
+    this.loadPackages()
+    let that = this
+   // 推荐商品无分页，page_size设置大一些，一页全部请求完毕
+    getPackageRecommendation({
+      page: 1,
+      page_size: 100
+    }).then(function (res) {
+      const { products, page_resource } = res.web_data
+      that.recommendations = products
+      let { detail, home } = page_resource.link
+      if (process.env.NODE_ENV === 'development') {
+        detail = '/detail?pid='
+        home = '/'
+      }
+      that.detailUrl = detail
+      that.indexUrl = home
+    })
+  },
+  data () {
+    return {
+      detailUrl: '',
+      indexUrl: '',
+      recommendations: [],
+      showHotSearch: false
+    }
+  },
+  methods: {
+    loadPackages (resetProducts) {
+      let that = this
+      let args = {
+        page: that.page,
+        show_ads_cat: that.showAdsCat,
+        page_size: that.pageSize
+      }
+      if (that.fcid > 0) {
+        args.fcid = that.fcid
+      }
+      that.isLoadProduct = true
+      getPackageLists(args).then(function (res) {
+        that.isLoadProduct = false
+        const { advs } = res.web_data
+        /* eslint camelcase: 0 */
+        if (that.showAdsCat === 1) {
+          that.showAdsCat = 2
+          that.advs = advs
+        }
+      }).catch(function (e) {
+        that.isLoadProduct = false
+        console.log(e)
+      })
+    }
+  }
+}
+</script>

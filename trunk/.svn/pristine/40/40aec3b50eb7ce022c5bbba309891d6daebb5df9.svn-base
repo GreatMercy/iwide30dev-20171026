@@ -1,0 +1,106 @@
+.jfk-pages__refund-detail {
+
+  .refund-detail {
+    &-step {
+      position: relative;
+      padding-top: px2rem(64);
+
+      &__line {
+        position: relative;
+        margin-top: px2rem(76);
+        @mixin one-line horizontal {
+        }
+      }
+
+      &__status {
+        position: relative;
+        height: px2rem(68);
+        width: 100%;
+        margin-bottom: px2rem(32);
+        overflow: hidden;
+
+        span {
+          width: 100%;
+          height: px2rem(68);
+          z-index: 9;
+          background-position: center center;
+          background-repeat: no-repeat;
+          position: absolute;
+          left: 0;
+          top: 0;
+        }
+      }
+
+      &__right {
+        &::after {
+          content: '';
+          position: absolute;
+          right: px2rem(-27);
+          top: 50%;
+          width: 50%;
+          height: 1px;
+          transform: translate(0, -50%) scale(1, 0.5);
+        }
+      }
+
+      &__left {
+        &::before {
+          content: '';
+          position: absolute;
+          left: px2rem(-27);
+          top: 50%;
+          width: 50%;
+          height: 1px;
+          transform: translate(0, -50%) scale(1, 0.5);
+        }
+      }
+
+
+      &__item {
+        flex: 1;
+      }
+
+    }
+  }
+
+
+  .refund-order {
+    padding-top: px2rem(58);
+    &__main-title {
+      margin-bottom: px2rem(45);
+    }
+
+    &__info {
+      position: relative;
+      padding-bottom: px2rem(70);
+
+      @mixin one-line horizontal {
+      }
+
+      &::before {
+        bottom: 0;
+        left: 0;
+      }
+
+      li {
+        margin-bottom: px2rem(44);
+      }
+    }
+
+    &__title {
+      width: calc((750 - 30 - 30) / 160) em;
+    }
+
+    &__content {
+      flex: 1;
+      margin-left: px2rem(59);
+    }
+  }
+
+  .recommendation {
+    padding-top: px2rem(60);
+  }
+
+
+
+}

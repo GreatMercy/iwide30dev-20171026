@@ -1,0 +1,43 @@
+.jfk-rater {
+  text-align: left;
+  display: inline-block;
+  line-height: normal;
+
+  &-box {
+    position: relative;
+    display: inline-block;
+    text-align: center;
+    cursor: pointer;
+
+    &:last-child {
+      padding-right: 2px !important;
+      margin-right: 0 !important;
+    }
+
+    &.is-disabled {
+      color: #ccc !important;
+      cursor: not-allowed;
+    }
+  }
+
+  &-inner {
+    position: relative;
+    display: inline-block;
+  }
+
+  &-outer {
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: inline-block;
+    overflow: hidden;
+  }
+
+  &__default{
+    color: #ccc;
+  }
+
+  &__active {
+    color: #ffdd99;
+  }
+}

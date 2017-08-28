@@ -1,0 +1,152 @@
+.jfk-pages__nearby{
+    .search_bar{
+      &_item{
+        height: px2rem(120);
+        line-height: px2rem(140);
+        width: 20%;
+        display: inline-block;
+        text-align: center;
+        & .arrow_icon{
+          font-size:px2rem(18);
+        }
+        @mixin one-line vertical {};
+        position:relative;
+        &::before {
+          width: 1px;
+          height: 20%;
+          position: absolute;
+          top: 50%;
+          right: 0;
+        }
+        & .type{
+          height: px2rem(120);
+          line-height: px2rem(120);
+        }
+        & .type3{
+          display: inline-block;
+          height: px2rem(120);
+          line-height: px2rem(40);
+          text-align: center;
+          vertical-align: bottom;
+        }
+      }
+      & .dateContainer{
+        width:35%;
+        vertical-align: middle;
+        &::before{
+          display: none;
+        }
+      }
+    }
+
+    .img_container{
+      margin-top: px2rem(40);
+      &_item{
+        position: relative;
+        width: 100%;
+        height: px2rem(400);
+        &::before{
+          content:"";
+          position:absolute;
+          width:100%;
+          height:100%;
+        }
+        
+        & .one_img{
+          width: 100%;
+          height: 100%;
+        }
+        & .cheap{
+          width: px2rem(100);
+          height: px2rem(110);
+          line-height: px2rem(110);
+          text-align:center;
+          display: inline-block;
+          border-top-right-radius: px2rem(30);
+          border-bottom-left-radius: px2rem(30);
+          position: absolute;
+          top: px2rem(-10);
+          left: px2rem(30);
+        }
+        & .hotel_name{
+          width: px2rem(480);
+          position: absolute;
+          bottom: px2rem(70);
+          left: px2rem(30);
+          @mixin ellipsis 1;
+          & .score{
+            width: px2rem(60);
+            height: px2rem(40);
+            line-height: px2rem(40);
+            display: inline-block;
+            border-radius: px2rem(5);
+            text-align: center;
+          }
+        }
+        & .address{
+          width: px2rem(480);
+          position: absolute;
+          bottom: px2rem(30);
+          left: px2rem(30);
+          @mixin ellipsis 1;
+          .distance{
+            padding-right: px2rem(10);
+            @mixin one-line vertical {};
+            position:relative;
+            &::before {
+              width: 1px;
+              height: 50%;
+              position: absolute;
+              top: 25%;
+              right: 0;
+            }
+          }
+        }
+        & .jfk-price{
+          position: absolute;
+          right: px2rem(30);
+          bottom: px2rem(50);
+        }
+      }
+    }
+
+  
+
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

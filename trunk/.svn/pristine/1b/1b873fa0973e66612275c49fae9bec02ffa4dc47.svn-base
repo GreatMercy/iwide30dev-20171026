@@ -1,0 +1,21 @@
+.jfk-pages__index {
+  .guide {
+    background-image: linear-gradient(#090909, #161616 50%, #090909);
+  }
+  .jfk-popup__desc {
+    .title {
+      span {
+        @mixin line-down 4;
+      }
+    }
+  }
+  .jfk-popup__pancake {
+    .share {
+      background: #1b1b1f;
+      box-shadow: 0 0 2em color(#fff a(10%));
+      .dot {
+        background: #fff;
+      }
+    }
+  }
+}

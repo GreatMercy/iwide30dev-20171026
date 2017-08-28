@@ -1,0 +1,339 @@
+<template>
+  <div class="jfk-pages authority-list-outer">
+    <el-row>
+      <el-col :span="24">
+        <div class="grid-content bg-purple">
+          <!--模块列表-->
+          <ul class="module-list">
+            <li><a href="">订房</a></li>
+            <li><a href="">商城</a></li>
+            <li><a href="">会员</a></li>
+            <li><a href="">分销</a></li>
+            <li><a href="">快乐付</a></li>
+            <li><a href="">快乐送</a></li>
+          </ul>
+          <!--模块对应的权限-->
+          <div class="module-content">
+            <h3>订房</h3>
+            <table>
+              <tr>
+                <th><span>权限</span>
+                  <el-button class="add-new-btn" type="text" icon="plus">新增</el-button>
+                </th>
+                <th><span>权限子项</span>
+                  <el-button class="add-new-btn" type="text" icon="plus">新增</el-button>
+                </th>
+                <th>
+                  <span>子项操作</span>
+                  <el-button class="add-new-btn" type="text" icon="plus">新增</el-button>
+                </th>
+              </tr>
+              <tr>
+                <td><span>订单管理</span><i class="el-icon-edit"></i></td>
+                <td>
+                  <ul>
+                    <li><span>查看列表1</span><i class="el-icon-edit"></i></li>
+                    <li><span>查看详情2</span><i class="el-icon-edit"></i></li>
+                  </ul>
+                </td>
+                <td>
+                  <ul>
+                    <li><span>查看列表操作1</span><i class="el-icon-edit"></i></li>
+                    <li><span>查看详情操作2</span><i class="el-icon-edit"></i></li>
+                  </ul>
+                </td>
+              </tr>
+              <tr>
+                <td><span>数据导出</span><i class="el-icon-edit"></i></td>
+                <td>
+                  <ul>
+                    <li><span>查看列表</span><i class="el-icon-edit"></i></li>
+                    <li><span>查看详情</span><i class="el-icon-edit"></i></li>
+                  </ul>
+                </td>
+                <td></td>
+              </tr>
+
+            </table>
+          </div>
+          <!--新增/修改权限弹窗-->
+          <div class="popup authority">
+            <div class="title">权限</div>
+            <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
+              <el-form-item label="权限名称" prop="authority-name">
+                <el-input></el-input>
+              </el-form-item>
+              <el-form-item label="权限描述" prop="authority-descri">
+                <el-input></el-input>
+              </el-form-item>
+              <el-form-item label="权限代码" prop="authority-code">
+                <el-input></el-input>
+              </el-form-item>
+              <el-form-item label="状态" prop="authority-status">
+                <el-radio-group>
+                  <el-radio label="有效"></el-radio>
+                  <el-radio label="失效"></el-radio>
+                </el-radio-group>
+              </el-form-item>
+              <el-form-item>
+                <el-button type="primary" size="small">确认</el-button>
+              </el-form-item>
+            </el-form>
+          </div>
+          <!--新增/修改权限子项弹窗-->
+          <div class="popup authority-item">
+            <div class="cancel-btn">
+              <i class="el-icon-close"></i>
+            </div>
+            <div class="title">权限子项</div>
+            <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
+              <el-form-item label="上级权限" prop="authority-name">
+                <el-select placeholder="请选择上级权限">
+                  <el-option label="模板消息管理" value="模板消息管理"></el-option>
+                  <el-option label="查看列表" value="查看列表"></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="子项名称" prop="authority-descri">
+                <el-input></el-input>
+              </el-form-item>
+              <el-form-item label="子项描述" prop="authority-descri">
+                <el-input></el-input>
+              </el-form-item>
+              <el-form-item label="子项代码" prop="authority-code">
+                <el-input></el-input>
+              </el-form-item>
+              <el-form-item label="状态" prop="authority-status">
+                <el-radio-group>
+                  <el-radio label="有效"></el-radio>
+                  <el-radio label="失效"></el-radio>
+                </el-radio-group>
+              </el-form-item>
+              <el-form-item>
+                <el-button type="primary" size="small">确认</el-button>
+              </el-form-item>
+            </el-form>
+          </div>
+          <!--新增/修改权限子项操作弹窗-->
+          <div class="popup authority-control">
+            <div class="cancel-btn">
+              <i class="el-icon-close"></i>
+            </div>
+            <div class="title">子项操作</div>
+            <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
+              <el-form-item label="上级权限" prop="authority-name">
+                <el-select placeholder="请选择上级权限">
+                  <el-option label="模板消息管理" value="模板消息管理"></el-option>
+                  <el-option label="查看列表" value="查看列表"></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="上级子项" prop="authority-name">
+                <el-select placeholder="请选择上级子项">
+                  <el-option label="模板消息管理" value="模板消息管理"></el-option>
+                  <el-option label="查看列表" value="查看列表"></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="操作名称" prop="authority-descri">
+                <el-input></el-input>
+              </el-form-item>
+              <el-form-item label="操作描述" prop="authority-descri">
+                <el-input></el-input>
+              </el-form-item>
+              <el-form-item label="子项代码" prop="authority-code">
+                <el-input></el-input>
+              </el-form-item>
+              <el-form-item label="状态" prop="authority-status">
+                <el-radio-group>
+                  <el-radio label="有效"></el-radio>
+                  <el-radio label="失效"></el-radio>
+                </el-radio-group>
+              </el-form-item>
+              <el-form-item>
+                <el-button type="primary" size="small">确认</el-button>
+              </el-form-item>
+            </el-form>
+          </div>
+          <!--新建账号完成以后谈窗微信登陆-->
+          <div class="weixin-popup">
+            <div class="cancel-btn">
+              <i class="el-icon-close"></i>
+            </div>
+            <img src="http://img4.imgtn.bdimg.com/it/u=1078425506,1374668072&fm=26&gp=0.jpg" alt="微信二维码">
+            请打开微信扫描二维码进行账号绑定
+          </div>
+        </div>
+      </el-col>
+    </el-row>
+    <div class="finish-btn">
+      <el-button type="primary">完成</el-button>
+    </div>
+  </div>
+</template>
+<script>
+  export default {
+    name: 'authorityList',
+    data () {
+      return {}
+    },
+    methods: {}
+  }
+</script>
+<style lang="postcss">
+  .authority-list-outer {
+    color: #48576a;
+    li {
+      list-style: none
+    }
+    .module-list {
+      width: 900px;
+      margin: 0 auto;
+      &:after {
+        clear: both;
+        height: 0;
+        content: '';
+        display: block;
+      }
+      li {
+        width: 200px;
+        height: 200px;
+        float: left;
+        line-height: 200px;
+        text-align: center;
+        margin: 0 50px 50px 50px;
+        a {
+          height: 100%;
+          display: block;
+          border: 1px solid #eee;
+          font-size: 16px;
+          color: #333;
+          text-decoration: none;
+          cursor: pointer;
+        }
+      }
+    }
+    .module-content {
+      width: 800px;
+      margin: 0 auto;
+      h3 {
+        padding: 20px 0;
+        font-weight: normal;
+      }
+      table {
+        width: 800px;
+        text-align: left;
+        border: 1px solid #eee;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+        th {
+          padding: 10px 30px;
+          border: 1px solid #d8cece;
+          font-weight: normal;
+          .add-new-btn {
+            float: right;
+            padding: 2px 0 0 0;
+          }
+        }
+        td {
+          padding: 10px 30px;
+          border: 1px solid #d8cece;
+          text-align: center;
+          span {
+            margin-right: 10px;
+          }
+          i {
+            color: #888282;
+            float: right;
+            cursor: pointer;
+            margin-top: 2px;
+          }
+          li {
+            line-height: 24px;
+          }
+        }
+      }
+    }
+    .finish-btn {
+      width: 100%;
+      left: 0;
+      background-color: #f5f5f5;
+      padding: 10px 0;
+      text-align: center;
+      position: fixed;
+      bottom: 0;
+      z-index: 10;
+      button {
+        width: 120px;
+        border-radius: 0;
+      }
+    }
+    .cancel-btn {
+      position: absolute;
+      right: 10px;
+      top: 10px;
+      color: #585151;
+      cursor: pointer;
+    }
+    .popup {
+      width: 644px;
+      padding: 30px 0;
+      background-color: #F5F5F5;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      margin-left: -400px;
+      margin-top: -165px;
+      z-index: 10;
+      text-align: center;
+      .title {
+        font-size: 16px;
+        margin-bottom: 25px;
+        font-weight: bold;
+      }
+      .el-form-item {
+        width: 571px;
+        margin: 15px auto;
+        position: relative;
+        .el-form-item__label {
+          width: 70px;
+          text-align: right;
+        }
+        .el-icon-information {
+          position: absolute;
+          left: 60px;
+          top: 10px;
+        }
+        .el-select, .el-input {
+          width: 500px;
+        }
+      }
+      &.authority {
+        display: none;
+      }
+      &.authority-item {
+        display: none;
+      }
+      &.authority-control {
+        margin-top: -231px;
+        display: none;
+      }
+    }
+    .weixin-popup {
+      position: fixed;
+      width: 300px;
+      height: 340px;
+      top: 50%;
+      margin-top: -221px;
+      left: 50%;
+      margin-left: -201px;
+      border: 1px solid #eee;
+      z-index: 10;
+      background-color: #fff;
+      padding: 30px 50px;
+      text-align: center;
+      img {
+        width: 100%;
+        display: block;
+        margin-bottom: 20px;
+      }
+    }
+  }
+</style>

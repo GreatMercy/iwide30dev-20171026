@@ -1,0 +1,97 @@
+<template>
+  <div class="gradient_bg">
+  <section class="padding_0_15 bg_show">
+    <p class="center padding_top_48 font_14">{{dataList.filed_name.balance_name}}</p>
+    <div class="jfk-font center main_color1 mar_t40"><font class="jfk-font font_25">&#xe643;</font><em class="iconfonts font_30 font_spacing_1">{{dataList.total_deposit}}</em></div>
+    <p class="padding_top_48 font_14 color1 mar_l40">{{remark}}</p>
+    <p class="font_14 color3 mar_t40">{{dataList.filed_name.balance_name}}充值</p>
+    <div>
+      <div class="condition h30 color1 mar_t40 center">
+        <div v-for="(value,key) in dataList.deposit_list" @click="chooseMoney(key,value.remark)" :class="{active:item === key}"><p><em class="font_14 margin_right_2">¥</em><em class="font_17 pclight ">{{value.money}}</em></p><span class="iconfonts main_color1 h48">&#xE031;</span></div>
+      </div>
+    </div>
+    <div class="flex form_item bd_top bd_bottom padding_18 mar_t40">
+      <div class="margin_right_42 width_120"><div class="flex between">
+        <span class="block font_16">其他金额</span></div></div>
+        <div class="flex_1 font_14"><input type="number" class="color1 font_16" v-model="inputmoney" name="money" @click="item='',remark='',sendType=1" placeholder="输入其他金额(充值上限10000元)"></div>
+    </div>
+  </section>
+  <section class="flex layer_bg fixed_btn font_17 color_fff">
+    <div class="jfk-font center main_bg1 padding_17" @click="submit()" style="width:100%;">{{postText}}</div>
+  </section>
+  <JfkSupport v-once></JfkSupport>
+</div>
+</template>
+<script>
+import { JfkMessageBox } from 'jfk-ui'
+import { getBuydepositInfo, postDepositOrder } from '@/service/http'
+export default {
+  data () {
+    return {
+      dataList: [],
+      item: '',
+      remark: '',
+      sendType: '',
+      money: '',
+      inputmoney: '',
+      posting: false
+    }
+  },
+  created () {
+    getBuydepositInfo().then((res) => {
+      this.dataList = res.web_data
+    })
+  },
+  methods: {
+    submit () {
+      if (this.posting) return
+      if (this.sendType === 0) {
+        this.money = this.dataList.deposit_list[this.item].money
+      } else {
+        this.money = this.inputmoney
+      }
+
+      if (this.money === '' || this.money === 0) {
+        JfkMessageBox.alert('请输入金额', '', {
+          iconType: 'error'
+        })
+      } else if (this.money > 10000) {
+        JfkMessageBox.alert('充值金额不能大于10000', '', {
+          iconType: 'error'
+        })
+      } else if (this.sendType === 1 && this.money % 10 !== 0) {
+        JfkMessageBox.alert('充值金额只能为10的整数倍', '', {
+          iconType: 'error'
+        })
+      } else {
+        let data = {
+          depositId: this.sendType === 0 ? this.dataList.deposit_list[this.item].deposit_card_id : 0,
+          depositMoney: this.sendType === 0 ? this.money : 0,
+          money: this.money
+        }
+        this.posting = true
+        postDepositOrder(data).then((res) => {
+          if (res.status === 1000) {
+            window.location.href = res.web_data.page_resource.links.next
+          } else {
+            JfkMessageBox.alert('充值金额不能大于10000', '', {
+              iconType: 'error'
+            })
+            this.posting = false
+          }
+        })
+      }
+    },
+    chooseMoney (val, str) {
+      this.item = val
+      this.remark = str
+      this.sendType = 0
+    }
+  },
+  computed: {
+    postText () {
+      return `${this.posting ? '正在提交，请稍等' : '立即充值'}`
+    }
+  }
+}
+</script>

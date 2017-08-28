@@ -1,0 +1,11 @@
+// api v1版本
+let API_URL_SUFFIX = '/index.php/iwidepay/IwidepayApi'
+
+const v1 = {
+  GET_REFUND_ORDER: `${API_URL_SUFFIX}/refund_order`,
+  POST_REFUND: `${API_URL_SUFFIX}/send_refund`
+}
+
+export {
+  v1
+}

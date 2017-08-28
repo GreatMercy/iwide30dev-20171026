@@ -1,0 +1,26 @@
+.jfk-address {
+  &__add {
+    background: #fff;
+  }
+  /*列表*/
+  &__list {
+    &-item {
+      .address-item-box {
+        &:before {
+          background-color: #ebebeb;
+        }
+      }
+    }
+    .jfk-radio {
+      &--shape-rect {
+        .jfk-radio {
+          &__icon {
+            border-color: transparent;
+            background-color: #fff;
+            box-shadow: 0 0 1em color(var(--color-golden) a(15%));
+          }
+        }
+      }
+    }
+  }
+}

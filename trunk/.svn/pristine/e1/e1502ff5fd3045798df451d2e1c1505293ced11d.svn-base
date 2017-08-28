@@ -1,0 +1,195 @@
+<template>
+  <div class="jfk-pages jfk-pages__submitOrder">
+    <div class="jfk-pages__theme"></div>
+    <div class="submit_order_top">
+      <div class="submit_order_top_title">
+          <span class="word font-size--28">登陆后享受 <span class="font-size--36">更低优惠</span></span>
+          <span class="if goldColor">
+            <i class="booking_icon_font font-size--34 icon-font_zh_yv_qkbys"></i><i class="booking_icon_font font-size--34 icon-font_zh_yv_qkbys"></i><i class="booking_icon_font font-size--34 icon-font_zh_yv_qkbys"></i><i class="booking_icon_font font-size--34 icon-font_zh_yv_qkbys"></i><i class="booking_icon_font font-size--28 icon-booking_icon_right_normal"></i>
+          </span>
+      </div>
+      <p class="hotel_name font-size--38">金房卡大酒店</p>
+
+      <p class="stay_time grayColor80 font-size--24">
+        <span class="in">入住 <span class="date">03/32</span></span>
+        <span class="left">离店 <span class="date">03/32</span></span>
+        <span class="time">共1晚</span>
+      </p> 
+
+      <p class="room_del font-size--24">大床房</p>
+      <p class="room_other font-size--24">温泉门票+双人自助餐</p>
+    </div>
+
+    <!-- 房间数等 -->
+     <div class="order-info jfk-pl-30 jfk-pr-30">
+      <form class="jfk-form font-size--28">
+        <div class="form-item">
+          <span class="form-item__label font-color-extra-light-gray">房间数</span>
+          <div class="form-item__body jfk-ta-r">
+            <div class="count jfk-d-ib font-size--32">
+              <jfk-input-number v-model="count" :min="min" :max="max"></jfk-input-number>
+            </div>
+          </div>
+        </div>
+        <div class="form-item">
+          <label>
+            <span class="form-item__label  font-color-extra-light-gray form-item__label--word-3">入住人</span>
+            <div class="form-item__body">
+              <input type="text" class="font-color-white" v-model="customerInfo.name" placeholder="请输入入住人姓名" />
+              <div class="form-item__status is-error" v-show="validResult.name.show" @click="handleHiddenError('name')">
+                <i class="form-item__status-icon jfk-font icon-msg_icon_error_norma"></i>
+                <span class="form-item__status-tip">
+                  <i class="form-item__status-cont">{{validResult.name.message}}</i>
+                  <i class="form-item__status-trigger">重新输入</i>
+                </span>
+              </div>
+            </div>
+          </label>
+        </div>
+        <div class="form-item">
+          <span class="form-item__label  font-color-extra-light-gray">联系方式</span>
+          <div class="form-item__body">
+            <input type="text" class="font-color-white" v-model="customerInfo.phone" placeholder="请输入入住人手机" />
+              <div class="form-item__status is-error" v-show="validResult.phone.show" @click="handleHiddenError('phone')">
+                <i class="form-item__status-icon jfk-font icon-msg_icon_error_norma"></i>
+                <span class="form-item__status-tip">
+                  <i class="form-item__status-cont">{{validResult.phone.message}}</i>
+                  <i class="form-item__status-trigger">重新输入</i>
+                </span>
+              </div>
+          </div>
+        </div>
+      </form>
+      <!-- 优惠券 -->
+      <div class="pay_for">
+        <div class="pay_for_item font-size--24">
+          <span class="counp goldColor font-size--34">
+          优惠券
+          <i class="booking_icon_font font-size--24 icon-booking_icon_dropdown_normal"></i>
+          </span>
+          <br>
+          <span class="counpon">
+            新用户专享优惠券
+            <br>
+            ¥100
+          </span>
+        </div>
+        <div class="pay_for_item font-size--24">
+          <span class="counp goldColor font-size--34">积分抵用</span>
+          <br>
+          <span class="counpon">
+            已用1000积分
+            <br>
+            抵用¥100
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+  
+
+    <!--<p class="color-golden" v-show="isLoadProduct">loading</p>-->
+    <JfkSupport v-once></JfkSupport>
+  </div>
+</template>
+<script>
+  import { getPackageLists } from '@/service/http'
+  export default {
+    watch: {},
+    components: {
+    },
+    beforeCreate () {
+    },
+    created () {
+//    加载swiper
+      this.loadPackages()
+    },
+    data () {
+      return {
+        addressPosition: 0,
+        min: 0,
+        max: 9,
+        value: 2.2,
+        count: 0,
+        // 用户信息
+        customerInfo: {
+          name: '',
+          phone: ''
+        },
+        validResult: {
+          name: {
+            passed: false,
+            message: ''
+          },
+          phone: {
+            passed: false,
+            message: ''
+          },
+          area: {
+            passed: false,
+            message: ''
+          }
+        },
+        advs: [
+          {
+            'adv_id': '20',
+            'cat_id': '',
+            'hotel_id': '180',
+            'inter_id': 'a450089706',
+            'link': 'http://',
+            'logo': 'http://30.iwide.cn:821/public/media/a450089706/adv/logo/20160613171158.jpg',
+            'name': '五一出游，应该去的地方',
+            'name_en': '',
+            'product_id': '0',
+            'sort': '3',
+            'status': '1',
+            'type': '1'
+          }
+        ],
+        isLoadProduct: false,
+        categories: [],
+        tabbarItems: [],
+        page: 1,
+        fcid: '-1',
+        showAdsCat: 1,
+        curCategoryIndex: 0,
+        pageSize: 20,
+        bannerSwiperOptions: {
+          autoplay: 3000,
+          lazyLoading: false,
+          lazyLoadingInPrevNext: true,
+          lazyPreloaderClass: 'jfk-image__lazy--preload',
+          pagination: '.swiper-pagination',
+          paginationType: 'fraction'
+        }
+      }
+    },
+    methods: {
+      loadPackages (resetProducts) {
+        let that = this
+        let args = {
+          page: that.page,
+          show_ads_cat: that.showAdsCat,
+          page_size: that.pageSize
+        }
+        if (that.fcid > 0) {
+          args.fcid = that.fcid
+        }
+        that.isLoadProduct = true
+        getPackageLists(args).then(function (res) {
+          that.isLoadProduct = false
+          const {advs} = res.web_data
+          /* eslint camelcase: 0 */
+          if (that.showAdsCat === 1) {
+            that.showAdsCat = 2
+            that.advs = advs
+          }
+        }).catch(function (e) {
+          that.isLoadProduct = false
+          console.log(e)
+        })
+      }
+    }
+  }
+</script>

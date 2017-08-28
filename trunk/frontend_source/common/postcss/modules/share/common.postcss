@@ -1,0 +1,57 @@
+.jfk-share {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+
+  &__content {
+    width: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+
+  &__arrow {
+    width: px2rem(48);
+    height: px2rem(67);
+    margin-right: calc(100 / 750 *100)%;
+    background-image: background-image(/share/arrow.png, common);
+    background-repeat: no-repeat;
+    background-size: contain;
+    @media screen and (min-width:414px) {
+      width: px2rem(68);
+      height: px2rem(87);
+    }
+  }
+
+
+  &__text {
+    width: px2rem(468);
+    height: px2rem(46);
+    margin-right: calc(80 / 750 *100)%;
+    margin-top: calc(20 / 750 *100)%;
+    background-image: background-image(/share/text.png, common);
+    background-repeat: no-repeat;
+    background-size: contain;
+    @media screen and (min-width:414px) {
+      width: px2rem(488);
+      height: px2rem(66);
+    }
+  }
+
+  &__graphic {
+    width: px2rem(445);
+    height: px2rem(176);
+    margin-right: calc(80 / 750 *100)%;
+    margin-top: calc(30 / 750 *100)%;
+    background-image: background-image(/share/share.png, common);
+    background-repeat: no-repeat;
+    background-size: contain;
+    @media screen and (min-width:414px) {
+      width: px2rem(465);
+      height: px2rem(196);
+    }
+  }
+}

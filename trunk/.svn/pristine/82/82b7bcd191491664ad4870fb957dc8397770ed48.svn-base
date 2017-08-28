@@ -1,0 +1,26 @@
+.orderInfo{
+    padding-top: px2rem(50);
+    margin-bottom: px2rem(90);
+    h3{
+        color: #808080;
+    }
+    .moreinfo__item{
+        margin-bottom: px2rem(30);
+        margin-top: px2rem(30);
+        .item__value{
+            margin-left: px2rem(60);
+        }
+        .jfk-price{
+            vertical-align: -3px;
+        }
+        .item__showTrade{
+            float: right;
+            i{
+                font-size: px2rem(18);
+                margin-left: px2rem(14);
+                vertical-align: middle;
+            }
+        }
+        
+    }
+}

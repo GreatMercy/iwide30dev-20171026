@@ -1,0 +1,216 @@
+############ 小黑 openid
+o9Vbtw30wn-MHB5TLqac2jJNvha4
+
+############ 彩群 openid
+o9Vbtw6M2d5kI-uWny3g0TiusGc0
+
+############ yhdsir openid
+o9Vbtw7C0bgNo7ERhdbAeojnsYRU
+
+############ 帅哥 openid
+o9VbtwwUedrHzhXFSfegtSFMIKtU
+
+############ 梁意 openid
+o9Vbtwx82RotM7Prmb2CO7i0F91U
+
+############ 王婵 openid
+o9VbtwzF1rt_bNF2XOBPIHr9-tuw
+
+############ 放心住 inter_id
+a450089706
+
+openid=o9Vbtw7C0bgNo7ERhdbAeojnsYRU
+
+============================ 测试 end
+
+
+
+预发布
+oo89wt-x49qBcs1G26qR8JUoFS34
+a452233816
+
+【【本地调试：路由参数需要增加openid和id】】
+【【id=a450089706&openid=o9Vbtw7C0bgNo7ERhdbAeojnsYRU】】
+
+
+【【数据库表结构修改】】
+alter table iwide_soma_sales_order add del_time int(10) default '0' comment '删除时间( 0 未删除)';
+alter table iwide_soma_sales_order_1001 add del_time int(10) default '0' comment '删除时间( 0 未删除)';
+
+
+【订单列表】【页面】
+http://credit.iwide.cn/index.php/soma/order/my_order_list?fans_saler=10197959&id=a450089706&openid=o9Vbtw7C0bgNo7ERhdbAeojnsYRU
+参数        对应表字段
+id          inter_id
+fans_saler  [暂不使用，粉丝分享相关，下单才需要]
+
+
+【订单列表】【api】
+http://credit.iwide.cn/index.php/iapi/soma/order/index?page=1&page_size=1&type=1&id=a450089706&openid=o9Vbtw7C0bgNo7ERhdbAeojnsYRU
+参数        对应表字段
+page        当前页数
+page_size   每页条数
+type        菜单tab类型：1 全部 2 待使用 3 已完成
+
+
+【删除】【api】
+http://credit.iwide.cn/index.php/iapi/soma/order/delete?id=a450089706&openid=o9Vbtw7C0bgNo7ERhdbAeojnsYRU&oid=
+参数        对应表字段
+oid        订单ID
+
+
+【我的礼物】【api】
+http://credit.iwide.cn/index.php/iapi/soma/order/gift_list?page=1&page_size=1&id=a450089706&openid=o9Vbtw7C0bgNo7ERhdbAeojnsYRU
+
+
+【订单明细】【api】
+http://credit.iwide.cn/index.php/iapi/soma/order/detail?id=a450089706&openid=o9Vbtw7C0bgNo7ERhdbAeojnsYRU&oid=1000010116
+
+
+【订单明细】【卷码】【已使用】【页面】
+http://credit.iwide.cn/index.php/soma/consumer/package_review?ciid=2806&bsn=package&id=a450089706&openid=o9Vbtw7C0bgNo7ERhdbAeojnsYRU
+参数        对应表字段
+ciid        iwide_soma_consumer_order_item_package_1001.item_id
+id          inter_id
+bsn         [暂不使用，相关联到业务场景，对应到数据package表之类]
+[iwide_soma_consumer_order_item_package_1001] 资产细单表
+
+
+【订单明细】【卷码】【已邮寄】【页面】
+http://credit.iwide.cn/index.php/soma/consumer/shipping_detail?spid=430&bsn=&id=a450089706&openid=o9Vbtw7C0bgNo7ERhdbAeojnsYRU
+参数        对应表字段
+spid        iwide_soma_consumer_shipping.shipping_id
+id          inter_id
+bsn         [暂不使用，相关联到业务场景，对应到数据package表之类]
+[iwide_soma_consumer_shipping] 快递信息表
+
+
+【订单明细】【卷码】【已赠送】【页面】
+http://credit.iwide.cn/index.php/soma/gift/get_received_list?gid=1000001950&bsn=&id=a450089706&openid=o9Vbtw7C0bgNo7ERhdbAeojnsYRU
+参数        对应表字段
+oid         order_id
+gid         iwide_soma_gift_order_1001.gift_id  || iwide_soma_gift_order_receiver_1001.gift_id
+id          inter_id
+bsn         [暂不使用，相关联到业务场景，对应到数据package表之类]
+
+需要注意的，要 iwide_soma_gift_order_1001.send_from 判断是哪种赠送方式，1 订单 2 礼品
+
+
+【快照】【api】
+http://credit.iwide.cn/index.php/iapi/soma/order/order_record?id=a450089706&openid=o9Vbtw7C0bgNo7ERhdbAeojnsYRU&oid=1000010116
+
+
+【订单明细】【预约】【api】
+http://credit.iwide.cn/index.php/iapi/soma/order/package_booking?aiid=5034&bsn=package&id=a450089706&openid=o9Vbtw7C0bgNo7ERhdbAeojnsYRU
+
+参数        对应表字段
+aiid        asset_item_id[iwide_soma_asset_item_package_1001]
+
+
+【订单明细】【验卷】【api】
+http://credit.iwide.cn/index.php/iapi/soma/order/package_usage?aiid=5034&aiidi=0&id=a450089706&bsn=package&fans_saler=10197959
+
+参数        对应表字段
+aiid        asset_item_id[iwide_soma_asset_item_package_1001]
+
+
+【快照】【商品详细】【api】
+http://credit.iwide.cn/index.php/soma/package/package_detail?pid=11866&id=a450089706&bsn=package&fans_saler=10197959&openid=o9Vbtw7C0bgNo7ERhdbAeojnsYRU
+
+
+【套票转预订】【选酒店房型】【页面】
+http://credit.iwide.cn/index.php/soma/booking/wx_select_hotel?aiid=6433&oid=1000012265&aiidi=0&id=a450089706&bsn=package&fans_saler=10197959
+
+
+【套票转预订】【选酒店房型】【api】
+http://credit.iwide.cn/index.php/iapi/soma/order/wx_select_hotel?oid=1000012265&id=a450089706&aiid=6433&aiidi=0&openid=o9Vbtw7C0bgNo7ERhdbAeojnsYRU&search=%E5%95%86
+参数        对应表字段
+id
+aiid
+aiidi
+search      查询条件
+
+
+【套票转预订】【价格日历】【页面】
+http://credit.iwide.cn/index.php/soma/booking/select_hotel_time?hid=180&id=a450089706&aiid=6433&aiidi=0&oid=1000012265&bsn=package&rmid=62&cdid=1&fans_saler=101979
+参数        对应表字段
+id
+hid
+aiid
+aiidi
+bsn
+fans_saler
+oid
+rmid        wx_booking_config[酒店ID]['room_ids']['room_id']   === [iwide_soma_asset_item_package_1001.wx_booking_config]
+cdid        wx_booking_config[酒店ID]['room_ids']['price_codes'][]['price_code']   === [iwide_soma_asset_item_package_1001.wx_booking_config]
+
+【套票转预订】【价格日历】【日历】【api】
+http://credit.iwide.cn/index.php/iapi/soma/order/select_hotel_time?hid=180&id=a450089706&openid=o9Vbtw7C0bgNo7ERhdbAeojnsYRU&aiid=6433&aiidi=0&oid=1000012265&bsn=package&rmid=62&cdid=1&fans_saler=10197959&year=2017&month=8
+
+
+【套票转预订】【价格日历】【信息】【api】
+http://credit.iwide.cn/index.php/iapi/soma/order/select_hotel_info?hid=180&id=a450089706&openid=o9Vbtw7C0bgNo7ERhdbAeojnsYRU&aiid=6433&aiidi=0&oid=1000012265&bsn=package&rmid=62&cdid=1&fans_saler=10197959&year=2017&month=8
+
+
+
+【预约】
+
+参数
+aiid =>  asset_item_id
+aiidi => 序号
+
+【预约】
+
+参数
+aiid =>  asset_item_id
+aiidi => 序号
+
+
+【已使用】
+
+参数
+ciid =>  consumer_item_id
+aiidi => 序号
+
+
+
+【数据库相关】
+
+[iwide_soma_gift_order_1001] 礼物表
+[iwide_soma_gift_order_receiver_1001] 礼物细表
+
+
+[iwide_soma_gift_order_1001.is_p2p]
+[group = 1] 群发
+[group = 2] 个人
+
+
+[send_from = 1] 订单发出
+[send_from = 2] 礼物发出
+
+
+【表相关】
+
+【表字段对应关系】
+[iwide_soma_consumer_code][asset_id] => [iwide_soma_asset_customer_1001][asset_id]
+[iwide_soma_consumer_code][asset_item_id] => [iwide_soma_asset_item_package_1001][item_id]
+
+[iwide_soma_consumer_code][consumer_id] => [iwide_soma_consumer_order_1001][consumer_id]
+[iwide_soma_consumer_code][consumer_item_id] => [iwide_soma_consumer_order_item_package_1001][item_id]
+
+[iwide_soma_consumer_code][order_id] => [iwide_soma_sales_order_1001][order_id]
+[iwide_soma_consumer_code][order_item_id] => [iwide_soma_sales_order_item_package_1001][item_id]
+
+
+[iwide_soma_catalog_product_package] 商品表
+
+
+
+# 修改的文件
+iwide30dev\iwide3_0\controllers\iapi\front\soma\Order.php
+iwide30dev\iwide3_0\services\soma\OrderService.php
+iwide30dev\iwide3_0\core\MY_Model_Soma.php
+iwide30dev\iwide3_0\core\MY_Front_Soma_Iapi.php
+iwide30dev\iwide3_0\controllers\front\soma\Order.php
+iwide30dev\iwide3_0\controllers\front\soma\Consumer.php
+iwide30dev\iwide3_0\controllers\front\soma\Booking.php

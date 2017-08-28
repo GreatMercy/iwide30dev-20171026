@@ -1,0 +1,213 @@
+<template>
+  <div class="jfk-pages">
+      <el-row :gutter="20">
+        <el-col :span="20">
+          <el-form  ref="search" label-width="80px">
+            <el-col :span="10">
+              <el-form-item label="订单号">
+                <el-input  placeholder="请输入订单号" v-model="orderId"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="2">
+              <el-button type="primary" @click.native.prevent="searchRefundOrder()">查  询</el-button>
+            </el-col>
+          </el-form>
+        </el-col>
+      </el-row>
+      <el-table
+        :data="tableData"
+        border
+        style="width: 100%" v-if="showRefundOrder">
+        <el-table-column
+          prop="date"
+          label="交易时间"
+          width="180">
+        </el-table-column>
+        <el-table-column
+          prop="name"
+          label="所属公众号">
+        </el-table-column>
+        <el-table-column
+          prop="hotel"
+          label="所属门店">
+        </el-table-column>
+        <el-table-column
+          prop="orderId"
+          label="订单号">
+        </el-table-column>
+        <el-table-column
+          prop="refund"
+          label="退款模块">
+        </el-table-column>
+        <el-table-column
+          prop="transactionAmount"
+          label="交易金额">
+        </el-table-column> 
+        <el-table-column
+          prop="refundAmount"
+          label="可退金额">
+        </el-table-column> 
+        <el-table-column
+          label="操作">
+          <template scope="scope">
+            <el-button
+              @click.native.prevent="applyRefund(scope.$index)"
+              type="text"
+              size="small">
+              退款
+            </el-button>
+            </template>
+        </el-table-column>                                   
+      </el-table>   
+      <div tabindex="-1" class="el-message-box__wrapper refundPopup" style="z-index: 2003;" v-if="showRefundPopup">
+          <div class="el-message-box">
+              <div class="el-message-box__header">
+                  <div class="el-message-box__title">申请退款</div>
+                  <button type="button" aria-label="Close" class="el-message-box__headerbtn" @click="handlePop()"><i class="el-message-box__close el-icon-close"></i></button>
+              </div>
+              <div class="el-message-box__content">
+                  <div class="el-message-box__message" style="margin-left: 0px;">
+                  <el-row>
+                    <el-col :span="5">交易时间：</el-col>
+                    <el-col :span="19">{{popItem.date}}</el-col>
+                  </el-row>
+                  <el-row>
+                    <el-col :span="5">订单号：</el-col>
+                    <el-col :span="19">{{popItem.orderId}}</el-col>
+                  </el-row>
+                  <el-row>
+                    <el-col :span="5">交易金额：</el-col>
+                    <el-col :span="19">{{popItem.transactionAmount}}</el-col>
+                  </el-row>
+                  <el-row>
+                    <el-col :span="5">可退金额：</el-col>
+                    <el-col :span="19">{{popItem.refundAmount}}</el-col>
+                  </el-row>    
+                  <el-row class="refundMoney">
+                    <el-col :span="5">退款金额：</el-col>
+                    <el-col :span="19">
+                      <el-input  placeholder="请输入退款金额" type="text" @change="handleRefundIpt(refundVal, popItem.refundAmount)" v-model="refundVal"></el-input>
+                    </el-col>
+                  </el-row>  
+                  <el-row class="tips" >
+                    <el-col :span="24" >{{refundWarning}}</el-col>
+                  </el-row>                       
+                  </div>
+              </div>
+              <div class="el-message-box__btns">
+                <el-button type="primary" size="large" :disabled="refundBtn" @click="refundReconfirmed()">立即退款</el-button>
+              </div>
+          </div>
+      </div>    
+  </div>
+</template>
+
+<script>
+  // import {getRefundOrder} from '@/service/subAccount/http'
+  const reg = /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/
+  const refundTip = {
+    canRefund: '退款金额提交后不能撤回，请仔细核对',
+    overdrawn: '超过可退金额',
+    inputWrong: '输入的格式不正确'
+  }
+  export default {
+    data () {
+      return {
+        tableData: [{
+          date: '2016-05-02 00:00:00',
+          name: '金房卡',
+          hotel: '金房卡大酒店',
+          orderId: '100005667',
+          refund: '商城',
+          transactionAmount: '230.00',
+          refundAmount: '120.00'
+        }, {
+          date: '2016-05-02 00:00:00',
+          name: '华住',
+          hotel: '汉庭大酒店',
+          orderId: '10000456',
+          refund: '商城',
+          transactionAmount: '250.00',
+          refundAmount: '160.00'
+        }, {
+          date: '2016-05-02 00:00:00',
+          name: '携程',
+          hotel: '万豪大酒店',
+          orderId: '100005667',
+          refund: '商城',
+          transactionAmount: '230.00',
+          refundAmount: '120.00'
+        }, {
+          date: '2016-05-02 00:00:00',
+          name: '金房卡',
+          hotel: '金房卡大酒店',
+          orderId: '100005667',
+          refund: '商城',
+          transactionAmount: '230.00',
+          refundAmount: '120.00'
+        }],
+        showRefundPopup: false,
+        popItem: {},
+        refundBtn: true,
+        refundVal: '',
+        refundWarning: '',
+        showRefundOrder: false,
+        orderId: ''
+      }
+    },
+    methods: {
+      applyRefund (idx) {
+        this.popItem = this.tableData[idx]
+        this.showRefundPopup = true
+      },
+      handlePop () {
+        this.showRefundPopup = false
+        this.refundVal = ''
+        this.refundWarning = ''
+      },
+      handleRefundIpt (refundVal, refundAmount) {
+        let val = this.refundVal.replace(/(^\s*)|(\s*$)/g, '')
+        if (!reg.test(val)) {
+          this.refundWarning = refundTip.inputWrong
+          this.refundBtn = true
+        } else if (val - refundAmount > 0) {
+          this.refundWarning = refundTip.overdrawn
+          this.refundBtn = true
+        } else if (val) {
+          this.refundWarning = refundTip.canRefund
+          this.refundBtn = false
+        }
+      },
+      refundReconfirmed () {
+        this.showRefundPopup = false
+        this.refundVal = ''
+        this.refundWarning = ''
+        this.$confirm('确认退款后，系统将自动完成退款且无法撤回', '温馨提示', {}).then((res) => {
+        }).catch(() => {
+        })
+      },
+      searchRefundOrder () {
+        this.showRefundOrder = true
+      }
+    }
+  }
+</script>
+<style lang="postcss" scoped>
+  .refundPopup{
+    background-color: rgba(0,0,0,0.5);
+  }
+  .refundPopup .el-message-box__btns{
+    text-align: center;
+  }
+  .refundPopup .el-row{
+    line-height: 30px;
+  }
+  .refundPopup .refundMoney{
+    margin-top: 10px;
+  }
+  .refundPopup .tips{
+    color: #ff4949;
+    font-size: 12px;
+    padding-left: 21%;
+  }
+</style>

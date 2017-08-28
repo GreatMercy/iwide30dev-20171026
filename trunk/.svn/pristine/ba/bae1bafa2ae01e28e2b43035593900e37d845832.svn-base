@@ -1,0 +1,185 @@
+<template>
+  <div class="jfk-pages jfk-pages__nearby">
+    <div class="jfk-pages__theme"></div>
+    <!--<p class="color-golden" v-show="isLoadProduct">loading</p>-->
+    <!--<JfkSupport v-once></JfkSupport>-->
+    <div class="search_bar font-size--30 grayColor80">
+      <span class="search_bar_item active">
+        <span class="type">价格</span>
+        <i class="booking_icon_font font-size--24 icon-booking_icon_reverseorder_normal"></i>
+      </span>
+      <span class="search_bar_item">
+        <span class="type">评价</span>
+        <i class="booking_icon_font font-size--24 icon-booking_icon_positiveorder_normal"></i>
+      </span>
+      <span class="search_bar_item">
+        <span class="type">筛选</span>
+        <i class="booking_icon_font icon-booking_icon_dropdown_normal arrow_icon"></i>
+      </span>
+      <span class="search_bar_item dateContainer font-size--28">
+        <span class="type3">
+          <span class="grayColorbf">入住</span> 03/14<br><span class="grayColorbf">离店</span> 03/15
+        </span>
+        <i class="booking_icon_font icon-booking_icon_dropdown_normal arrow_icon"></i>
+      </span>
+    </div>
+    <div class="img_container">
+      <div class="img_container_item">
+        <img src="http://d.5857.com/wmmtf_140507/001.jpg" alt="" class="one_img">
+        <span class="cheap font-size--28">
+          <i class="booking_icon_font font-size--24 icon-font_zh_hui_fzdbs"></i>
+           <i class="booking_icon_font font-size--24 icon-font_zh_hui_fzdbs"></i>
+        </span>
+        <p class="hotel_name font-size--30">
+          <span class="score font-size--24"><span class="font-size--28"> 4</span>.5</span>
+          名字命字名字命字名字命字名字命字名字命字名字命字名字命字名字命字名字命字名字命字名字命字
+        </p>
+        <p class="address font-size--24 grayColor80">
+          <span class="distance">距您100米</span>
+          地址地址地址地址地址地址地址地址地址地址地址地址地址地址地址地址地址地址地址地址
+        </p>
+        <span class="jfk-price product-price-package font-size--24">
+          <i class="jfk-font-number jfk-price__currency font-size--30">￥</i> 
+          <i class="jfk-font-number jfk-price__number font-size--54">678</i>
+          起
+        </span>
+      </div>
+         <div class="img_container_item">
+        <img src="http://d.5857.com/wmmtf_140507/001.jpg" alt="" class="one_img">
+        <span class="cheap font-size--28">
+          <i class="booking_icon_font font-size--24 icon-font_zh_hui_fzdbs"></i>
+           <i class="booking_icon_font font-size--24 icon-font_zh_hui_fzdbs"></i>
+        </span>
+        <p class="hotel_name font-size--30">
+          <span class="score font-size--24"><span class="font-size--28"> 4</span>.5</span>
+          名字命字名字命字名字命字名字命字名字命字名字命字名字命字名字命字名字命字名字命字名字命字
+        </p>
+        <p class="address font-size--24 grayColor80">
+          <span class="distance">距您100米</span>
+          地址地址地址地址地址地址地址地址地址地址地址地址地址地址地址地址地址地址地址地址
+        </p>
+        <span class="jfk-price product-price-package font-size--24">
+          <i class="jfk-font-number jfk-price__currency font-size--30">￥</i> 
+          <i class="jfk-font-number jfk-price__number font-size--54">678</i>
+          起
+        </span>
+      </div>
+         <div class="img_container_item">
+        <img src="http://d.5857.com/wmmtf_140507/001.jpg" alt="" class="one_img">
+        <span class="cheap font-size--28">
+          <i class="booking_icon_font font-size--24 icon-font_zh_hui_fzdbs"></i>
+           <i class="booking_icon_font font-size--24 icon-font_zh_hui_fzdbs"></i>
+        </span>
+        <p class="hotel_name font-size--30">
+          <span class="score font-size--24"><span class="font-size--28"> 4</span>.5</span>
+          名字命字名字命字名字命字名字命字名字命字名字命字名字命字名字命字名字命字名字命字名字命字
+        </p>
+        <p class="address font-size--24 grayColor80">
+          <span class="distance">距您100米</span>
+          地址地址地址地址地址地址地址地址地址地址地址地址地址地址地址地址地址地址地址地址
+        </p>
+        <span class="jfk-price product-price-package font-size--24">
+          <i class="jfk-font-number jfk-price__currency font-size--30">￥</i> 
+          <i class="jfk-font-number jfk-price__number font-size--54">678</i>
+          起
+        </span>
+      </div>
+         <div class="img_container_item">
+        <img src="http://d.5857.com/wmmtf_140507/001.jpg" alt="" class="one_img">
+        <span class="cheap font-size--28">
+          <i class="booking_icon_font font-size--24 icon-font_zh_hui_fzdbs"></i>
+           <i class="booking_icon_font font-size--24 icon-font_zh_hui_fzdbs"></i>
+        </span>
+        <p class="hotel_name font-size--30">
+          <span class="score font-size--24"><span class="font-size--28"> 4</span>.5</span>
+          名字命字名字命字名字命字名字命字名字命字名字命字名字命字名字命字名字命字名字命字名字命字
+        </p>
+        <p class="address font-size--24 grayColor80">
+          <span class="distance">距您100米</span>
+          地址地址地址地址地址地址地址地址地址地址地址地址地址地址地址地址地址地址地址地址
+        </p>
+        <span class="jfk-price product-price-package font-size--24">
+          <i class="jfk-font-number jfk-price__currency font-size--30">￥</i> 
+          <i class="jfk-font-number jfk-price__number font-size--54">678</i>
+          起
+        </span>
+      </div>
+    </div>
+  </div>
+</template>
+<script>
+import { getPackageLists } from '@/service/http'
+export default {
+  name: 'useCoupon',
+  components: {
+  },
+  beforeCreate () {
+  },
+  created () {
+//    加载swiper
+    this.loadPackages()
+  },
+  data () {
+    return {
+      advs: [
+        {
+          'adv_id': '20',
+          'cat_id': '',
+          'hotel_id': '180',
+          'inter_id': 'a450089706',
+          'link': 'http://',
+          'logo': 'http://30.iwide.cn:821/public/media/a450089706/adv/logo/20160613171158.jpg',
+          'name': '五一出游，应该去的地方',
+          'name_en': '',
+          'product_id': '0',
+          'sort': '3',
+          'status': '1',
+          'type': '1'
+        }
+      ],
+      isLoadProduct: false,
+      categories: [],
+      tabbarItems: [],
+      page: 1,
+      fcid: '-1',
+      showAdsCat: 1,
+      curCategoryIndex: 0,
+      pageSize: 20,
+      bannerSwiperOptions: {
+        autoplay: 3000,
+        lazyLoading: false,
+        lazyLoadingInPrevNext: true,
+        lazyPreloaderClass: 'jfk-image__lazy--preload',
+        pagination: '.swiper-pagination',
+        paginationType: 'fraction'
+      }
+    }
+  },
+  methods: {
+    loadPackages (resetProducts) {
+      let that = this
+      let args = {
+        page: that.page,
+        show_ads_cat: that.showAdsCat,
+        page_size: that.pageSize
+      }
+      if (that.fcid > 0) {
+        args.fcid = that.fcid
+      }
+      that.isLoadProduct = true
+      getPackageLists(args).then(function (res) {
+        that.isLoadProduct = false
+        const { advs } = res.web_data
+        /* eslint camelcase: 0 */
+        if (that.showAdsCat === 1) {
+          that.showAdsCat = 2
+          that.advs = advs
+        }
+      }).catch(function (e) {
+        that.isLoadProduct = false
+        console.log(e)
+      })
+    }
+  }
+}
+</script>

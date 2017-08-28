@@ -1,0 +1,70 @@
+.jfk-pages__refund {
+  .refund-information {
+    &__shadow {
+      width: px2rem(22);
+      height: px2rem(103);
+      background-image: background-image(/booking/shadow.png, theme);
+    }
+
+    &__name {
+      color: var(--font-color-white);
+    }
+
+    &__hotel {
+      color: var(--font-color-light-gray);
+    }
+
+    &__price {
+      color: var(--color-golden);
+    }
+  }
+
+  .refund-order {
+    &__main-title {
+      color: var(--font-color-light-gray);
+    }
+
+    &__title {
+      color: var(--font-color-extra-light-gray);
+    }
+
+    &__content {
+      color: var(--font-color-white);
+    }
+
+    &__info {
+      &::before {
+        background-color: var(--line-color-light-silver);
+      }
+    }
+  }
+
+  .refund-reason {
+    &__title {
+      color: var(--font-color-light-gray);
+    }
+
+    &__list {
+      background-color: #1f1f1f;
+      border-radius: px2rem(var(--border-radius-big));
+      li {
+        &::before {
+          background-color: var(--line-color-light-silver);
+        }
+      }
+
+      &-text {
+        color: var(--font-color-light-gray);
+      }
+
+      &-active {
+        .refund-reason__list-text {
+          color: var(--font-color-white);
+        }
+      }
+
+
+    }
+  }
+
+}

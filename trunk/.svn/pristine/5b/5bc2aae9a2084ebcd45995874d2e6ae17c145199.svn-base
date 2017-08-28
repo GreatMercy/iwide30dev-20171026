@@ -1,0 +1,246 @@
+.jfk-pages__cityChooseer{
+  /* padding: 0 px2rem(30); */
+  
+  position: relative;
+  .float_word{
+    position: absolute;
+    right: 0;
+    top: -12%;
+    z-index: 999;
+    width: px2rem(40);
+    text-align:center;
+  }
+  .font-size--52{
+    font-size: px2rem(52);
+  }
+
+  .search_city{
+    padding: px2rem(50) 0;
+    position: relative;
+    @mixin one-line horzin {};
+    position:relative;
+    &::before {
+      width: 100%;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+    }
+
+    & input{
+      outline: none;
+      padding:0 px2rem(40);
+      -webkit-appearance: none;
+      border-radius: 0;
+      border: none;
+      height: px2rem(70);
+      line-height: px2rem(70);
+      width: 90%;
+    }
+
+    .icon-icon_search{
+      position: absolute;
+      left: 0;
+      top: px2rem(75);
+    }
+
+    .icon-icon_delete{
+      position: absolute;
+      right: 0;
+      top: px2rem(70);
+      width: px2rem(40);
+      height: px2rem(40);
+      line-height: px2rem(40);
+      text-align: center;
+
+    }
+
+  }
+  
+  .history_search{
+    &_title{
+      margin-top: px2rem(40);
+      height: px2rem(80);
+      line-height: px2rem(80);
+    }
+    span{
+      display: inline-block;
+      padding: px2rem(14) px2rem(22);
+      border-radius: px2rem(5);
+      margin-top: px2rem(10);
+    }
+  }
+  
+  .hot_search {
+    &_title{
+      margin-top: px2rem(40);
+      height: px2rem(80);
+      line-height: px2rem(80);
+    }
+    .recommendations-list{
+      height: px2rem(130);
+      .jfk-swiper__recommendation .jfk-swiper__item--empty{
+        height: px2rem(130);
+      }
+    }
+    .city_swiper_img{
+      width: px2rem(190);
+      height: px2rem(130);
+    }
+
+    .jfk-swiper__recommendation{
+      position: relative;
+      & .swiper_mask{
+        width: 100%;
+        height: 100%;
+        line-height: 4.5;
+        display: inline-block;
+        position: absolute;
+        left: 0;
+        top: 0;
+        text-align:center;
+      }
+    }
+    .jfk-swiper__recommendation .jfk-swiper__item--empty{
+      width: px2rem(180) !important;
+    }
+  }
+  
+  .all_city{
+    margin-top: px2rem(60);
+
+    &_item_word{
+      height: px2rem(80);
+      line-height: px2rem(80);
+      @mixin one-line horzin {};
+      position:relative;
+        &::before {
+          width: 100%;
+          position: absolute;
+          bottom: 0;
+          left: 0;
+      }
+    }
+    
+    & ul li{
+      height: px2rem(80);
+      line-height: px2rem(80);
+      @mixin one-line horzin {};
+      position:relative;
+        &::before {
+          width: 100%;
+          position: absolute;
+          bottom: 0;
+          left: 0;
+      }
+    }
+
+  }
+
+  .search_city_list{
+    &_item{
+      margin-top: px2rem(50);
+      & p{
+        height: px2rem(80);
+        line-height: px2rem(80);
+        font-size: px2rem(30);
+        @mixin one-line horzin {};
+        position:relative;
+          &::before {
+            width: 100%;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+          }
+      }
+      i{
+        margin-right: px2rem(20);
+      }
+      .goldColor{
+        
+      }
+    }
+    &_item:first{
+        font-size: px2rem(32);
+    }
+  }
+
+  .no_search{
+    height: px2rem(420);
+    padding-top: px2rem(180);
+    text-align: center;
+    .no_seach_result{
+      .icon_noresult_search{
+        
+      }
+
+    }
+  }
+
+  .for_you{
+    &_list_item{
+      margin-top: px2rem(50);
+      & p{
+        height: px2rem(80);
+        line-height: px2rem(80);
+        font-size: px2rem(30);
+        @mixin one-line horzin {};
+        position:relative;
+          &::before {
+            width: 100%;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+          }
+      }
+      i{
+        margin-right: px2rem(20);
+      }
+    }
+    &_item:first{
+        font-size: px2rem(32);
+    }
+  }
+
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,93 @@
+.jfk-pages__comment {
+  .jfk-pages__theme{
+    background-color: var(--color-white);
+  }
+  .grayColor80{
+    color:var(--font-color-extra-light-gray);
+  }
+  .grayColorbf{
+    color: var(--font-color-light-gray);
+  }
+  .choose_prt_top{
+    background-color: var(--color-light-black);
+    &_item2{
+      color: var(--font-color-extra-light-gray);
+    }
+  }
+
+  .star_container{
+    & .star_title{
+        &::before {
+          background-color: var(--line-color-extra-light-silver);
+        }
+    }
+
+    & .star_list{
+        &::before {
+          background-color: var(--line-color-light-silver);
+        }
+    }
+  }
+
+    .trip_type{
+    &::before {
+      background-color: var(--line-color-extra-light-silver);
+    }
+    ul{
+      li{
+        border: 1px solid #bfbfbf;
+      }
+    }
+  }
+
+  .comment_input{
+    & #comment_content{
+      border-bottom: 1px solid var(--line-color-extra-light-silver);
+    }
+
+    & .word_num{
+      color: #c8c8c8;
+      .real_num{
+        color: #666;
+      }
+    }
+  }
+
+  .upload_file{
+    ul{
+      li{
+        border: 1px dashed #ccc;
+        & .add_container{
+          & .img_con{
+            & .icon-mall_icon_orderDetail_delete{
+              color: #fff;
+            }
+          }
+        }
+      }
+    }
+    & .submit_comment{
+      & p{
+        background: black;
+        color: #fff;
+      }
+    }
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}

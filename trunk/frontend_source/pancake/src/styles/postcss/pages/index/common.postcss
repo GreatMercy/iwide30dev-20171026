@@ -1,0 +1,358 @@
+.jfk-pages__index {
+  .guide {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    bottom: px2rem(100);
+    z-index: 1000;
+    text-align: center;
+    padding-top: px2rem(264);
+    .phone {
+      display: inline-block;
+      width: calc(272 / 750 * 100%);
+      padding-bottom: calc(248 / 750 * 100%);
+      background-image: background-image(/phone.png);
+      background-size: 100%;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+    .tip {
+      line-height: (calc(28 + 28 + 32) / 32);
+      padding-bottom: calc(28 / 32)em;
+    }
+    .clock {
+      .num {
+        width: calc(96 / 90)em;
+        height: calc(96 / 90)em;
+        background: currentColor;
+        line-height: calc(96 / 90)em;
+        border-radius: calc(20 / 90)em;
+        display: inline-block;
+        text-align: center;
+        margin-right: px2rem(5);
+      }
+    }
+  }
+  .jfk-pages__body {
+    position: relative;
+    padding-bottom: px2rem(100);
+  }
+  .game {
+    /*提示部分*/
+    &-info {
+      position: absolute;
+      top: px2rem(36);
+      left: px2rem(48);
+      &__item {
+        width: px2rem(60);
+        padding-top: px2rem(60);
+        display: inline-block;
+        text-align: center;
+        background: {
+          repeat: no-repeat;
+          position: top center;
+          size: 100%;
+        }
+        & + .game-info__item {
+          margin-left: px2rem(40);
+        }
+      }
+    }
+    &-raiders {
+      background-image: background-image(/raider.png);
+    }
+    &-desc {
+      background-image: background-image(/desc.png);
+    }
+    /*音乐部分*/
+    &-music {
+      position: absolute;
+      top: px2rem(40);
+      right: px2rem(32);
+    }
+    /*碗*/
+    &-cont {
+      padding-top: px2rem(190);
+      .bowl {
+        width: calc(724 / 750 * 100%);
+        position: relative;
+        margin:{
+          top: 0;
+          right: auto;
+          bottom: 0;
+          left: calc(38 / 750 * 100%);
+        };
+        padding-bottom: calc(750 / 724 * 100%);
+        height: 0;
+        overflow: hidden;
+        background: {
+          position: center;
+          repeat: no-repeat;
+          size: 100%;
+          image: background-image(/bowl.png);
+        }
+        &-area {
+          position: absolute;
+          top: calc(128 / 750 * 100%);
+          bottom: calc(172 / 750 * 100%);
+          left: calc(120 / 750 * 100%);
+          right: calc(140 / 750 * 100%);
+          border-radius: 100%;
+          perspective: calc(var(--dice-size) * 4200 / 200 / 36)em;
+          perspective-origin: center 65%;
+        }
+        .dice-box {
+          animation-name: rotate;
+          position: absolute;
+          animation-iteration-count: infinite;
+          animation-timing-function: linear;
+          animation-duration: 1.6s;
+          animation-play-state: paused;
+          transform-style: preserve-3d;
+          animation-fill-mode: forwards;
+          animation-play-state: running;
+          .dice {
+            box-shadow: 0 -1em 2em color(#96241a a(50%));
+            animation-name: spin-duplicate;
+            animation-duration: 1.6s;
+            animation-timing-function: linear;
+            animation-iteration-count: infinite;
+            animation-play-state: paused;
+            transform-style: preserve-3d;
+            animation-fill-mode: forwards;
+            animation-play-state: running;
+          }
+          &:nth-child(1) {
+            top: 10.5%;
+            left: 15.5%;
+            transform-origin: calc(145 / 36)em calc(160 / 36)em;
+          }
+          &:nth-child(2) {
+            top: 5%;
+            left: 46%;
+            transform-origin: calc(-50 / 36)em calc(160 / 36)em;
+          }
+          &:nth-child(3) {
+            top: 25%;
+            left: 70%;
+            transform-origin: calc(-70 / 36)em calc(140 / 36)em;
+          }
+          &:nth-child(4) {
+            top: 50%;
+            left: 70%;
+            transform-origin: calc(-90 / 36)em calc(-50 / 36)em;
+          }
+          &:nth-child(5) {
+            top: 78%;
+            left: 47.5%;
+            transform-origin: calc(50 / 36)em calc(-120 / 36)em;
+          }
+          &:nth-child(6) {
+            top: 50%;
+            left: 10%;
+            transform-origin: calc(150 / 36)em calc(-90 / 36)em;
+          }
+        }
+      }
+      .tip {
+        text-align: center;
+        padding-bottom: px2rem(45);
+      }
+      .btn {
+        width: calc(582 / 750 * 100%);
+        margin: px2rem(6) auto 0;
+        .jfk-button {
+          letter-spacing: 0.1em;
+          .jfk-font {
+            font-size: 2em;
+          }
+          i {
+            display: inline-block;
+            vertical-align: middle;
+          }
+        }
+      }
+    }
+  }
+  .jfk-popup__pancake-result {
+    .popup-cont {
+      padding: {
+        left: px2rem(54);
+        right: px2rem(54);
+        bottom: px2rem(58);
+      }
+    }
+    .cont {
+      padding-top: px2rem(26);
+    }
+    .tip {
+      text-align: center;
+      margin-top: calc(-24 / 30)em;
+      margin-bottom: calc(42 / 30)em;
+      position: relative;
+      z-index: 2;
+    }
+    .img {
+      width: calc(512 / 582 * 100%);
+      padding-bottom: calc(256 / 582 * 100%);
+      margin: 0 auto;
+      position: relative;
+      z-index:1;
+      background: {
+        size: 100%;
+        position: center center;
+        repeat: no-repeat;
+      }
+    }
+    .btns {
+      &-2 {
+        @mixin clearfix;
+        .jfk-button {
+          width: calc(260 / 582 * 100%);
+          &:first-child {
+            float: left;
+          }
+          &:last-child {
+            float: right;
+          }
+        }
+      }
+    }
+    &.not-win {
+      .img {
+        background-image: background-image(/notWin.jpg)
+      }
+    }
+    &.is-win {
+      .img {
+        background-image: background-image(/win.jpg);
+        .prize-name {
+          transform: translateX(-50%);
+          width: calc(290 / 512 * 100%);
+          padding-bottom: calc(59 / 512 * 100%);
+          position: absolute;
+          top: calc(97 / 256 * 100%);
+          left: 50%;
+          background: {
+            position: center;
+            repeat: no-repeat;
+            size: 100%;
+          };
+          @each $type in var(--prize-types) {
+            &.prize-name-$(type) {
+              background-image: background-image(/prize_$(type).png);
+            }
+          }
+        }
+      }
+    }
+  }
+  .jfk-popup__desc {
+    .popup-box {
+      padding-top: px2rem(66);
+      padding-bottom: px2rem(70);
+    }
+    .desc-box {
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+    .dice {
+      position: relative;
+      font-size: 1em;
+    }
+    .title {
+      text-align: center;
+      span {
+        display: inline-block;
+        line-height: calc((20 + 20 + 32) / 32);
+      }
+    }
+    .desc-tip {
+      line-height: calc(46 / 24)em;
+      padding-top: px2rem(20);
+      padding-bottom: px2rem(42);
+    }
+    .desc {
+      .item {
+        padding-top: px2rem(40);
+        &-title {
+          line-height: calc((28 + 28 + 28) / 28);
+        }
+        &-desc {
+          line-height: calc(46 / 24)em;
+        }
+        &-dices {
+          @mixin clearfix;
+          padding-bottom: px2rem(24);
+          .dice-item {
+            position: relative;
+            perspective: calc(var(--dice-size) * 1200 / 200 / 36)em;
+            perspective-origin: center bottom;
+            float: left;
+            width: calc( 1 / 6 * 100%);
+          }
+        }
+      }
+    }
+  }
+}
+
+/*骰子动画*/
+@keyframes roll {
+  0% { transform: translate3d(calc(var(--dice-size) * -200 / 200 / 36)em, calc(var(--dice-size) * -50 / 200 / 36)em, calc(var(--dice-size) * -400 / 200 / 36)em)}
+  12% { transform: translate3d(0, 0, calc(var(--dice-size) * -100 / 200 / 36)em)}
+  25% { transform: translate3d(calc(var(--dice-size) * 200 / 200 / 36)em, calc(var(--dice-size) * -50 / 200 / 36)em, calc(var(--dice-size) * -400 / 200 / 36)em)}
+  37% { transform: translate3d(0px, calc(var(--dice-size) * -100 / 200 / 36)em, calc(var(--dice-size) * -800 / 200 / 36)em) }
+  50% { transform: translate3d(calc(var(--dice-size) * -200 / 200 / 36)em, calc(var(--dice-size) * -50 / 200 / 36)em, calc(var(--dice-size) * -400 / 200 / 36)em)}
+  62% { transform: translate3d(0px, 0, calc(var(--dice-size) * -100 / 200 / 36)em)}
+  75% { transform: translate3d(calc(var(--dice-size) * 200 / 200 / 36)em, calc(var(--dice-size) * -50 / 200 / 36)em, calc(var(--dice-size) * -400 / 200 / 36)em)}
+  87% { transform: translate3d(0px, calc(var(--dice-size) * -100 / 200 / 36)em, calc(var(--dice-size) * -800 / 200 / 36)em)}
+  100% { transform: translate3d(calc(var(--dice-size) * -200 / 200 / 36)em, calc(var(--dice-size) * -50 / 200 / 36)em, calc(var(--dice-size) * -400 / 200 / 36)em)}
+}
+@keyframes spin-duplicate {
+  0% { transform: translateZ(calc(var(--dice-size) * -100 / 200 / 36)em) rotateX(0deg) rotateY(0deg) rotateZ(0deg); }
+  16% { transform: translateZ(calc(var(--dice-size) * -100 / 200 / 36)em) rotateX(180deg) rotateY(180deg) rotateZ(0deg); }
+  33% { transform: translateZ(calc(var(--dice-size) * -100 / 200 / 36)em) rotateX(360deg) rotateY(90deg) rotateZ(180deg); }
+  50% { transform: translateZ(calc(var(--dice-size) * -100 / 200 / 36)em) rotateX(360deg) rotateY(360deg) rotateZ(360deg); }
+  66% { transform: translateZ(calc(var(--dice-size) * -100 / 200 / 36)em) rotateX(180deg) rotateY(360deg) rotateZ(270deg); }
+  83% { transform: translateZ(calc(var(--dice-size) * -100 / 200 / 36)em) rotateX(270deg) rotateY(180deg) rotateZ(180deg); }
+  100% { transform: translateZ(calc(var(--dice-size) * -100 / 200 / 36)em) rotateX(360deg) rotateY(360deg) rotateZ(360deg); }
+}
+@keyframes empty {}
+@keyframes rotate {
+  0% {
+    transform: translateX(0) translateY(0) rotate(0deg);
+  }
+  10% {
+    transform: translateX(0) translateY(0) rotate(36deg);
+  }
+  20% {
+    transform: translateX(0) translateY(0) rotate(72deg);
+  }
+  30% {
+    transform: translateX(0) translateY(0) rotate(108deg);
+  }
+  40% {
+    transform: translateX(0) translateY(0) rotate(144deg);
+  }
+  50% {
+    transform: translateX(0) translateY(0) rotate(180deg);
+  }
+  60% {
+    transform: translateX(0) translateY(0) rotate(216deg);
+  }
+  70% {
+    transform: translateX(0) translateY(0) rotate(252deg);
+  }
+  80% {
+    transform: translateX(0) translateY(0) rotate(288deg);
+  }
+  90% {
+    transform: translateX(0) translateY(0) rotate(324deg);
+  }
+  100% {
+    transform: translateX(0) translateY(0) rotate(360deg);
+  }
+}
+

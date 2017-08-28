@@ -1,0 +1,68 @@
+<?php
+use App\services\hotel\CheckService;
+if (! defined ( 'BASEPATH' ))
+	exit ( 'No direct script access allowed' );
+class Check extends MY_Front_Hotel {
+	public $default_skin='default2';
+	function __construct() {
+		parent::__construct ();
+	}
+	
+	function nearby() {
+		$data = array();
+        $module_view=$this->get_display_view('hotel/nearby');
+		$module_view=array(
+				'module_view'=>$module_view
+		);
+        if(!$this->is_restful($module_view['module_view']['skin_name'])){
+            $data = CheckService::getInstance()->nearby();
+        }
+		
+		$this->display ( 'hotel/nearby/near_hotel', $data,'',$module_view );
+	}
+	function my_collection() {
+		$data = array();
+        $module_view=$this->get_display_view('hotel/my_collection');
+		$module_view=array(
+				'module_view'=>$module_view
+		);
+        if(!$this->is_restful($module_view['module_view']['skin_name'])){
+            $data = CheckService::getInstance()->my_collection();
+        }
+		$this->display ( 'hotel/my_collection/my_collection', $data,'',$module_view );
+	}
+	
+	function check_repay(){
+		$data = CheckService::getInstance()->check_repay();
+		echo json_encode ( $data );
+	}
+	
+	function ajax_hotel_list() {
+		$data = CheckService::getInstance()->ajax_hotel_list();
+		if($data['s']==1){
+			echo json_encode ( $data, JSON_UNESCAPED_UNICODE );
+		}else{
+			echo json_encode ( $data );
+		}
+	}
+	function ajax_city_filter() {
+		$data = CheckService::getInstance()->ajax_city_filter();
+		if($data['s']==1){
+			echo json_encode ( $data, JSON_UNESCAPED_UNICODE );
+		}else{
+			echo json_encode ( $data );
+		}
+	}
+	function ajax_hotel_search() {
+		$data = CheckService::getInstance()->ajax_hotel_search();
+		if($data['s']==1){
+			echo json_encode ( $data, JSON_UNESCAPED_UNICODE );
+		}else{
+			echo json_encode ( $data );
+		}
+	}
+    function check_order_canpay(){
+    	$data = CheckService::getInstance()->check_order_canpay();
+		echo json_encode ( $data );
+    }
+}

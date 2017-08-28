@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <title><?php echo isset($title) && !empty($title) ? $title : '我的海报';?></title>
+	<meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+    <meta name="format-detection" content="telephone=no">
+    <style type="text/css">
+		*{
+			margin: 0;
+			padding: 0;
+		}
+
+		img {
+			vertical-align: top;
+			max-width: 100%;
+		}
+
+		body {
+			width: 100%;
+			overflow: hidden;
+		}
+		
+		@-webkit-keyframes jfk-rotate {
+        0% {
+            -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+        }
+
+        50% {
+            -webkit-transform: rotate(180deg);
+            transform: rotate(180deg);
+        }
+
+        100% {
+            -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+        }
+    }
+
+    .jfk-popup {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 999999999;
+        background: rgba(0, 0, 0, .85);
+        margin: 0;
+        padding: 0;
+    }
+
+    .jfk-popup .loader {
+        text-align: center;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        -webkit-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+    }
+
+    .ball-clip-rotate>.item {
+        background: #b2945e;
+        border-radius: 100%;
+        margin: 2px;
+        -webkit-animation-fill-mode: both;
+        animation-fill-mode: both;
+        border: 2px solid #b2945e;
+        border-bottom-color: transparent;
+        height: 20px;
+        width: 20px;
+        background: transparent !important;
+        display: inline-block;
+        -webkit-animation: jfk-rotate 0.75s 0s linear infinite;
+        animation: jfk-rotate 0.75s 0s linear infinite;
+    }
+
+    .loading-text {
+    	font-size: 13px;
+ 		color: #b2945e;
+    	text-align:center;
+    }
+		
+	.error {
+		font-size: 13px;
+ 		color: #b2945e;
+		text-align: center;
+		margin: 20% auto;
+	}
+
+    </style>
+</head>
+<body>
+	
+	<div class="jfk-popup" id="loading">
+        <div class="loader">
+            <div class="loader-inner ball-clip-rotate">
+                <div class="item"></div>
+            </div>
+            <div class="loading-text">正在生成海报</div>
+        </div>
+    </div>
+
+</body>
+<script type="text/javascript" src="<?php echo base_url("public/member/scripts/jquery.js");?>"></script>
+<script type="text/javascript">
+// 呢称
+var nickname = "<?=$nickname?>"; 
+// 背景图
+var bgUrl = "<?php echo base_url("public/member/images/bg.jpg");?>";
+var identity = "<?=$identity?>";
+var identity2 = "<?=$identity2?>";
+
+var level=  "<?=$lvl_name?>";
+// 剩余天数
+var countdown = "<?=$countdown?>";
+// 截止时间
+var endtime = "<?=$endtime?>";
+var identity_type = "<?=$identity_type?>";
+var host = window.location.host;
+
+function getQueryString (name) {
+    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+    var r = window.location.search.substr(1).match(reg);
+    if (r !== null) {
+        return decodeURIComponent(r[2]);
+    } else {
+        return null;
+    }
+}
+
+// 二维码图片
+var qrcodeUrl = "<?php echo base_url('/index.php/membervip/poster/posterqrcode?id=');?>";
+
+qrcodeUrl =  qrcodeUrl + getQueryString('id');
+
+ if (getQueryString('openid') !== null) {
+	qrcodeUrl = qrcodeUrl + '&openid=' + getQueryString('openid');
+}
+
+
+var levelContent = {
+	'白银': '<?php echo base_url("public/member/images/1.png");?>',
+	'黄金': '<?php echo base_url("public/member/images/2.png");?>',
+	'青铜': '<?php echo base_url("public/member/images/3.png");?>',
+	'王者': '<?php echo base_url("public/member/images/4.png");?>'
+}
+
+function error () {
+	$('body').html('<div class="error">生成海报失败,请刷新重试</div>');
+}
+
+
+// 宽高的比例
+var rate = 750 / 1334;
+// 图像的宽度
+var canvasWidth = $(window).width();
+// 图像的高度
+var canvasHeight = parseInt(canvasWidth / rate);
+// 如果计算的高度小于屏幕的高度，设置为屏幕的高度
+canvasHeight = canvasHeight <= $(window).height() ? $(window).height() : canvasHeight;
+
+var $loading = $('#loading');
+
+// 背景图
+var bgImg = new Image;
+bgImg.src = bgUrl;
+
+// 二维码
+var qrcodeImg = new Image;
+qrcodeImg.src = qrcodeUrl;
+
+// 等级的logo
+var levelImg = new Image;
+levelImg.src = levelContent[level];
+
+
+var pixelRatio = 2;
+var _height, _width;
+_width = canvasWidth * pixelRatio;
+_height = canvasHeight * pixelRatio;
+
+// 剩余天数 
+var countdownX = _width * 636 / 750;
+var countdownFontSize = _width * 60 / 750;
+var countdownY = _height * 269 / 1334;
+
+// 二维码的宽高、坐标
+var qrcodeWidth = _width * 226 / 750;
+var qrcodeX = _width * 110 / 750;
+var qrcodeY = _height * 1043 / 1334;
+
+
+// 等级的logo的宽高、坐标
+var levelWidth = _width * 152 / 750;
+var levelHeight = _width * 156 / 750;
+var levelX = _width * 283 / 750;
+var levelY = _height * 440 / 1334;
+
+// 呢称
+var nickNameX = _width * 281 / 750;
+var nickNameY = _height * 798 / 1334;
+var nicknameFontSize = _width * 28 / 750;
+
+// 日期
+var activityDate = endtime;
+var activityDateX = _width * 315 / 750;
+var activityDateY = _height * 120 / 1334;
+var activityDateFontSize = _width * 26 / 750;
+
+// 来自
+var fromName = '来自' + nickname + '的招募令';
+var fromNameX = _width * 377 / 750;
+var fromNameY = _height * 1247 / 1334;
+var fromNameFontSize = _width * 24 / 750;
+// canvas 
+var $canvas = $('<canvas id="canvas"  width = "' + _width + '"  height="' + _height + '"></canvas>');
+$canvas.appendTo($('body'));
+var canvas = $canvas.get(0);
+var cxt = canvas.getContext('2d');
+
+
+function loadImg(img, name) {
+    var def = $.Deferred();
+    $(img).on('load', function() {
+        def.resolve('加载' + name + '图片成功');
+    }).on('error', function() {
+        def.reject('加载' + name + '图片失败');
+        error();
+    })
+    return def.promise();
+}
+
+
+// 等待背景图 和 二维码加载完成， 合成海报
+$.when(loadImg(bgImg, '背景'),  loadImg(levelImg, '等级'), loadImg(qrcodeImg, '二维码')).then(function() {
+
+    // 合成背景图
+    cxt.drawImage(bgImg, 0, 0, _width, _height);
+    // 合成二维码
+    cxt.drawImage(qrcodeImg, qrcodeX, qrcodeY, qrcodeWidth, qrcodeWidth);
+
+    // 等级的logo
+    cxt.drawImage(levelImg, levelX, levelY, levelWidth, levelHeight);
+  
+
+    // 合成剩余天数
+    cxt.fillStyle = "#e7dfb8";
+    cxt.font = countdownFontSize + 'px Helvetica Neue,sans-serif';
+    cxt.fillText(countdown, countdownX, countdownY);
+
+
+    // 合成活动时间
+    cxt.fillStyle = "#2a271f";
+    cxt.font = activityDateFontSize + 'px Helvetica Neue,sans-serif';
+    cxt.fillText(activityDate + '截止', activityDateX, activityDateY);
+
+
+    // 来自
+	cxt.fillStyle = "#111111";
+    cxt.font = fromNameFontSize + 'px Helvetica Neue,sans-serif';
+    cxt.fillText(fromName, fromNameX, fromNameY);
+
+    var contrastWidth = _width * (540 / 750);
+
+    // 合成呢称 
+    cxt.save();
+    cxt.fillStyle = "#111111";
+    cxt.font = 'bold ' + nicknameFontSize + 'px Helvetica Neue,sans-serif';
+    cxt.translate((contrastWidth) - ((_width - contrastWidth)/2), _height * 780 / 1334);
+    cxt.textAlign='center';
+    cxt.rotate(-8 * Math.PI / 180);
+    cxt.fillText('我是 '+ nickname, 0, 0);
+    cxt.restore();
+
+
+    cxt.save();
+    cxt.fillStyle = "#111111";
+    cxt.font = 'bold ' + nicknameFontSize + 'px Helvetica Neue,sans-serif';
+    cxt.translate((contrastWidth) - ((_width - contrastWidth)/2), _height * 830 / 1334);
+    cxt.textAlign='center';
+    cxt.rotate(-8 * Math.PI / 180);
+
+  
+	var txt = '';
+
+	// 煎饼侠
+	if ($.trim(identity2).length > 0) {
+		txt = txt + '我是 ' + identity2 + ' ';
+	}
+
+	// 招募者
+	if ($.trim(identity).length > 0) && $.trim(level).length > 0 {
+		txt = txt + '我是 ' + level + identity;
+	}
+
+    cxt.fillText(txt , 0, 0);
+    cxt.restore();
+
+   var imageUrl  = canvas.toDataURL();
+
+   var imgContainer = $('<img src="'+imageUrl+'">');
+   imgContainer.appendTo($('body'));
+   $canvas.remove();
+
+ 	imgContainer.on('load', function () {
+ 		$loading.remove();
+ 	});
+
+ 	imgContainer.on('error', function () {
+ 		error();
+ 	});
+
+});
+
+
+
+
+</script>
+
+</html>
+

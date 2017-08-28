@@ -1,0 +1,189 @@
+.jfk-pages__commentContent {
+  
+  .comment_top{
+    & .container{
+      padding-bottom: px2rem(70);
+      padding-left: px2rem(100);
+      @mixin one-line horzin {};
+      position:relative;
+      &::before {
+        width: 100%;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+      }
+    }
+    & .score{
+      margin-top: px2rem(70);
+      .font-size--80{
+        font-size: px2rem(80);
+      }
+      .font-size--70{
+        font-size: px2rem(70);
+      }
+    }
+    .jfk-rater{
+      margin-top: px2rem(30);
+      & a{
+        margin-right: px2rem(50)!important;
+      }
+    }
+
+    .pregress_list{
+      margin-top: px2rem(80);
+        & .pregress_item{
+          line-height: 0;
+          margin-top: px2rem(40);
+
+          .pregress{
+            width: px2rem(380);
+            display: inline-block;
+            height:px2rem(8);
+            .bar{
+              display: inline-block;
+              height:px2rem(8);
+              border-top-right-radius: 50%;
+              border-radius: px2rem(20);
+            }
+          }
+        }
+    }
+  }
+  
+  .talk{
+    padding-top: px2rem(50);
+    ul{
+      overflow: hidden;
+      z-index: 9999;
+      padding-bottom: px2rem(50);
+      @mixin one-line horzin {};
+      position:relative;
+      &::before {
+        width: 100%;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+      }
+      li{
+        padding: px2rem(10) px2rem(20);
+        float: left;
+        margin-right: px2rem(20);
+        margin-top: px2rem(20);
+        border-radius: px2rem(10);
+      }
+    }
+  }
+
+  .content{
+    & .contitle_info{
+      position: relative;
+      margin-top: px2rem(50);
+      .head_img{
+        width:px2rem(70);
+        height:px2rem(70);
+        border-radius: 50%;
+      }
+      .name{
+        position: absolute;
+        top: 0;
+        left: px2rem(90);
+      }
+      .date{
+        position: absolute;
+        top: px2rem(40);
+        left: px2rem(90);
+      }
+      .score{
+        position: absolute;
+        right: px2rem(30);
+      }
+    }
+
+    .comment{
+      margin: px2rem(40) 0;
+    }
+
+    .show_all{
+      margin: px2rem(30) 0;
+    }
+
+    .file{
+      & .one_img{
+        width: px2rem(390);
+        height: px2rem(380);
+        border-radius: px2rem(10);
+      }
+      & .recommendations-list{
+        & .swiper-slide{
+          width: px2rem(260) !important;
+          margin-right: px2rem(20)!important;
+          img{
+            width: px2rem(260);
+            height: px2rem(270);
+          }
+        }
+      }
+    }
+  
+    .check_repeat{
+      margin: px2rem(60) 0 px2rem(30) 0;
+      .show_icon{
+        display: inline-block;
+        width: px2rem(40);
+        height: px2rem(40);
+        line-height: px2rem(40);
+        margin-left: px2rem(-10);
+        transform:rotate(180deg);
+        -ms-transform:rotate(180deg);
+        -moz-transform:rotate(180deg);
+        -webkit-transform:rotate(180deg);
+        -o-transform:rotate(180deg);
+      }
+    }
+
+    .repeat_content{
+      padding: px2rem(40) px2rem(50);
+      border-radius: px2rem(5);
+    }
+
+  }
+  .booking_now{
+    width: 100%;
+    height: px2rem(100);
+    line-height: px2rem(100);
+    text-align: center;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    border: none;
+    z-index: 999;
+  }
+  
+
+
+
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

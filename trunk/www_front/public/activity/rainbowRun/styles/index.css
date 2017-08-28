@@ -27,6 +27,18 @@ input[type="radio"]{
   visibility: hidden;
   display: none;
 }
+.Lcfx {
+    zoom:1
+}
+
+.Lcfx:before,.Lcfx:after {
+    content: "";
+    display: table
+}
+
+.Lcfx:after {
+    clear: both
+}
 .Ldf{
   display: -webkit-box;
 display: -webkit-flex;
@@ -137,12 +149,6 @@ display: flex;
 .page-index{
   z-index: 10;
 }
-.page-amity{
-  z-index: 11;
-}
-.page-run{
-  z-index: 12;
-}
 .page-info{
   z-index: 13;
 }
@@ -160,6 +166,12 @@ display: flex;
 }
 .page-wechat{
   z-index: 18;
+}
+.page-amity{
+  z-index: 19;
+}
+.page-run{
+  z-index: 20;
 }
 .bg {
   background-position: center;
@@ -336,13 +348,14 @@ display: flex;
   text-align: center;
 }
 .page-run .title{
-  text-align: right;
-  padding-right: 7px;
+  width: 55px;
+  text-align: center;
 }
 
 .page-amity p,.page-run p{
   font-size: 12px;
   line-height: 18px;
+  letter-spacing: 1px;
 }
 .page-amity p + p,.page-run p + p{
   margin-top: 16px;
@@ -379,10 +392,30 @@ display: flex;
 .page-info .protocol{
   margin-top: 8px ;
   border: solid 1px #8fc31f;
-  max-height: 100px;
+  max-height: 130px;
   overflow-y: auto;
   padding: 0 5px;
+
 }
+::-webkit-scrollbar  
+{  
+    width: 8px;   
+    background-color: #8fc31f;  
+}  
+  
+/*定义滚动条轨道 内阴影+圆角*/  
+::-webkit-scrollbar-track  
+{  
+    -webkit-box-shadow: inset 0 0 6px #8fc31f;  
+    background-color: #F5F5F5;  
+}  
+  
+/*定义滑块 内阴影+圆角*/  
+::-webkit-scrollbar-thumb  
+{  
+    -webkit-box-shadow: inset 0 0 6px #8fc31f;  
+    background-color: #8fc31f;  
+}  
 .page-info .protocol p{
   line-height: 18px;
 }
@@ -620,4 +653,34 @@ display: flex;
 }
 .btn + .btn{
   margin-left: 20px;
+}
+.wxshare{
+  text-align: right;
+  position: absolute;
+  width:100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+}
+.wxshare  p{
+    font-size: 14px;
+    color: #fff;
+    text-align: right;
+    padding-top: 70px;
+    padding-right: 20px;
+
+   
+}
+.wxshare .arrow{
+  width: 25px;
+  margin-right: 60px;
+  margin-top: 20px;
+  display: block;
+  float: right;
+
+}
+.wxshare .shareimg{
+  width: 200px;
+  display: block;
+ 
 }

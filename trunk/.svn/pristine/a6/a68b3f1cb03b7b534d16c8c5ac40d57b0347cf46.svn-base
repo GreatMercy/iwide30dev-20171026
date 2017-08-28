@@ -1,0 +1,7 @@
+module.exports = {
+  '/shortterm': {
+    target: 'http://creative.iwide.cn',
+    changeOrigin: true,
+    secure: false
+  }
+}

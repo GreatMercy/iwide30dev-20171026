@@ -1,0 +1,172 @@
+<template>
+  <div class="jfk-pages jfk-pages__search">
+    <div class="jfk-pages__theme"></div>
+    <jfk-banner :items="advs" v-if="advs.length"></jfk-banner>
+    <!-- <div class="categories jfk-pl-30">
+      <swiper class="jfk-swiper" :options="tabSwiperOptions">
+        <swiper-slide v-for="(category, index) in categories" :key="category.cat_id" :data-cid="category.cat_id" class="category__item" :class="{'is-selected': index === curCategoryIndex}">
+          <span class="category__label font-size--32 font-color-white">{{category.cat_name}}</span>
+        </swiper-slide>
+      </swiper>
+    </div> -->
+    <div class="search_place_container">
+      <div class="search_place">
+          <p class="search_title font-size--28">
+            <i class="booking_icon_font icon_search icon-icon_search"></i>
+            搜索城市 / 关键字 / 位置
+          </p>
+          <i class="booking_icon_font icon_place icon-booking_icon_nearby_normal"></i>
+      </div>
+    </div>
+    <div class="date_container">
+      <div class="left_date">
+        <span class="left_date_style">入   住</span>
+        <span class="live_date jfk-font-number jfk-price__number"><i class="booking_icon_font icon_arrow icon-booking_icon_dropdown_normal"></i>14</span>
+        <span class="live_year">2014/03</span>
+      </div>
+      <span class="center_line"></span>
+      <div class="right_date">
+        <span class="left_date_style">离   开</span>
+        <span class="live_date jfk-font-number jfk-price__number"><i class="booking_icon_font icon_arrow icon-booking_icon_dropdown_normal"></i>
+        15</span>
+        <span class="live_year">2014/03</span>
+      </div>
+    </div>
+    <div class="checkBtn">查 询 酒 店</div>
+    <!--<p class="color-golden" v-show="isLoadProduct">loading</p>-->
+    <!--<JfkSupport v-once></JfkSupport>-->
+    <div class="search_info">
+      <p class="search_info_title">最近搜索</p>
+      <p class="search_info_item item_first">广州  10月14日-10月15日  石牌桥</p>
+      <p class="search_info_item item_second">广州  10月14日-10月15日  石牌桥</p>
+    </div>
+
+    <!-- <div class="foot_card">
+      <span class="card_item">
+        <span class="card_item_title">时租房</span>
+        <span class="card_item_time">19：00-21：00</span>
+      </span><span class="card_item">
+        <span class="card_item_title">限时秒杀</span>
+        <span class="card_item_time">一元拼手气</span>
+      </span><span class="card_item card_item_right">
+        <span class="card_item_title">早订早优惠</span>
+        <span class="card_item_time">提前预定享8折</span>
+      </span>
+    </div> -->
+    <div class="webkitbox others center boxflex pad_lr30 box_container">
+      <a class="layer_bg color2 j_whole_show always">
+          <div class="img">
+            <i class="booking_icon_font icon_arrow icon-booking_icon_timerent_normal font-size--40"></i>
+          </div>
+          <div class="txtclip font-size--28 mar_b">时租房</div>
+          <div class="txtclip font-size--24 gray_color">8：00-18：00</div>
+      </a>
+
+      <a class="layer_bg color2 j_whole_show kill_sec">
+        <div class="img">
+          <i class="booking_icon_font icon_arrow icon-booking_icon_timelimitspike_normal font-size--40"></i>
+        </div>
+        <div class="txtclip font-size--28 mar_b">限时秒杀</div>
+        <div class="txtclip font-size--24 gray_color">一元拼手气</div>
+      </a>
+
+      <a class="layer_bg color2 order">
+        <div class="img">
+          <i class="booking_icon_font icon_arrow icon-booking_icon_earlytoearly_normal font-size--40"></i>
+        </div>
+        <div class="txtclip font-size--28 mar_b">早订早优惠</div>
+        <div class="txtclip font-size--24 gray_color">提前预定享8折</div>
+      </a>
+    </div>
+  </div>
+</template>
+<script>
+import { getPackageLists } from '@/service/http'
+export default {
+  name: 'app',
+  components: {
+  },
+  beforeCreate () {
+  },
+  created () {
+//    加载swiper
+    this.loadPackages()
+  },
+  data () {
+    let that = this
+    return {
+      advs: [
+        {
+          'adv_id': '20',
+          'cat_id': '',
+          'hotel_id': '180',
+          'inter_id': 'a450089706',
+          'link': 'http://',
+          'logo': 'http://30.iwide.cn:821/public/media/a450089706/adv/logo/20160613171158.jpg',
+          'name': '五一出游，应该去的地方',
+          'name_en': '',
+          'product_id': '0',
+          'sort': '3',
+          'status': '1',
+          'type': '1'
+        }
+      ],
+      isLoadProduct: false,
+      categories: [],
+      tabbarItems: [],
+      page: 1,
+      fcid: '-1',
+      showAdsCat: 1,
+      curCategoryIndex: 0,
+      pageSize: 20,
+      tabSwiperOptions: {
+        autoplay: 0,
+        slidesPerView: 'auto',
+        slideToClickedSlide: true,
+        notNextTick: true,
+        onTap: function (swiper) {
+          let idx = swiper.clickedIndex
+          if (idx !== that.curCategoryIndex) {
+            that.curCategoryIndex = idx
+            try {
+              let cid = swiper.clickedSlide.dataset.cid
+              if (cid) {
+                that.fcid = cid
+                that.page = 1
+              }
+            } catch (e) {
+              console.log(e)
+            }
+          }
+        }
+      }
+    }
+  },
+  methods: {
+    loadPackages (resetProducts) {
+      let that = this
+      let args = {
+        page: that.page,
+        show_ads_cat: that.showAdsCat,
+        page_size: that.pageSize
+      }
+      if (that.fcid > 0) {
+        args.fcid = that.fcid
+      }
+      that.isLoadProduct = true
+      getPackageLists(args).then(function (res) {
+        that.isLoadProduct = false
+        const { advs } = res.web_data
+        /* eslint camelcase: 0 */
+        if (that.showAdsCat === 1) {
+          that.showAdsCat = 2
+          that.advs = advs
+        }
+      }).catch(function (e) {
+        that.isLoadProduct = false
+        console.log(e)
+      })
+    }
+  }
+}
+</script>
