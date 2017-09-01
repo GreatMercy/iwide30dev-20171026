@@ -411,6 +411,7 @@ class Order extends MY_Front_Soma_Iapi
         }
         $result = OrderService::getInstance()->getOrderDetail($oid, $openid, $inter_id);
         $result_data = $result->getData();
+
         $data = isset($result_data['data']) ? $result_data['data'] : [];
         // 取出aiid
         // 第一个未消费的卷码
@@ -936,8 +937,7 @@ class Order extends MY_Front_Soma_Iapi
         $roomId = $input->get('rmid', null, null);
         $priceCode = $input->get('cdid', null, null);
         $aiid = $input->get('aiid', null, null);
-        //$aiidi = $input->get('aiidi', null, null);
-        $codeId = $input->get('codeid', null, null);
+        $codeId = $input->get('code_id', null, null);
         if (empty($aiid)) {
             show_error('hotel_id or room_id or price_code not get', 400);
         }
@@ -1279,7 +1279,7 @@ class Order extends MY_Front_Soma_Iapi
             $data['page_resource'] = [
                 'link' => [
                     // 下单成功跳转的页面
-                    'pay_success_stay' => $this->link['pay_success_stay_link'] . $params['post_order_id']
+                    'pay_success_stay' => $this->link['pay_success_stay_link'] . $params['orderId']
                 ],
             ];
             $this->json(FrontConst::OPER_STATUS_SUCCESS, '', $data);
@@ -1315,7 +1315,7 @@ class Order extends MY_Front_Soma_Iapi
 
             $scale = $api->balence_scale($openid);
             $pay_total = $api->balence_scale_convert($scale, $order->m_get('grand_total'), false);
-            $uu_code = rand(1000, 9999);
+            $uu_code = $api->uuCode();
 
             $use_result['err'] = 1; // 默认调用失败
 
@@ -1360,7 +1360,7 @@ class Order extends MY_Front_Soma_Iapi
                 return array('status' => Soma_base::STATUS_FALSE, 'message' => '积分余额不足！');
             }
 
-            $uu_code = rand(1000, 9999);
+            $uu_code = $api->uuCode();
             // 积分支付必须是整数，上取整
             $pay_total = ceil($order->m_get('grand_total'));
             $pay_res = $api->point_use($pay_total, $open_id, $uu_code, $order_id, $order);

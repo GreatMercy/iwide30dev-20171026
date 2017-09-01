@@ -43,7 +43,7 @@ class Depositcard extends MY_Front_Member
             echo $data['msg'];exit;
         }
         $data['page_title'] = '详细信息';
-        $this->load->view('member/'.$this->_template.'/depositcardinfo',$data);
+        $this->template_show('member',$this->_template,'depositcardinfo',$data);
     }
 
     /**
@@ -135,7 +135,25 @@ class Depositcard extends MY_Front_Member
         }else{
             $data['ido_show'] = true;
         }
-        $this->load->view('member/'.$this->_template.'/'.$view,$data);
+
+        /*获取微信JSSDK配置*/
+        //主动隐藏某些菜单
+        $base_api_list = array('hideMenuItems', 'showMenuItems');
+        $js_api_list = '';
+        foreach ($base_api_list as $v) {
+            $js_api_list .= "'{$v}',";
+        }
+        $data['js_api_list'] = substr($js_api_list, 0, -1);
+
+        $js_menu_hide = array('menuItem:share:appMessage', 'menuItem:share:timeline', 'menuItem:copyUrl');
+        $menu_hide_list = '';
+        foreach ($js_menu_hide as $v) {
+            $menu_hide_list .= "'{$v}',";
+        }
+        $data['js_menu_hide'] = substr($menu_hide_list, 0, -1);
+        /*end*/
+
+        $this->template_show('member',$this->_template,$view,$data);
     }
     //支付失败
     public function nopay(){
@@ -149,7 +167,25 @@ class Depositcard extends MY_Front_Member
             $view = 'nopay';
         }
         $data['page_title'] = '支付结果';
-        $this->load->view('member/'.$this->_template.'/'.$view,$data);
+
+        /*获取微信JSSDK配置*/
+        //主动隐藏某些菜单
+        $base_api_list = array('hideMenuItems', 'showMenuItems');
+        $js_api_list = '';
+        foreach ($base_api_list as $v) {
+            $js_api_list .= "'{$v}',";
+        }
+        $data['js_api_list'] = substr($js_api_list, 0, -1);
+
+        $js_menu_hide = array('menuItem:share:appMessage', 'menuItem:share:timeline', 'menuItem:copyUrl');
+        $menu_hide_list = '';
+        foreach ($js_menu_hide as $v) {
+            $menu_hide_list .= "'{$v}',";
+        }
+        $data['js_menu_hide'] = substr($menu_hide_list, 0, -1);
+        /*end*/
+
+        $this->template_show('member',$this->_template,$view,$data);
     }
 
     // /**

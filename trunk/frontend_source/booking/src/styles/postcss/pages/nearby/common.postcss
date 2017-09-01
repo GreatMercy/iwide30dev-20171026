@@ -22,6 +22,12 @@
           height: px2rem(120);
           line-height: px2rem(120);
         }
+        .icon-booking_icon_reverseorder_normal{
+          margin-left: px2rem(-10);
+        }
+        .icon-booking_icon_positiveorder_normal{
+          margin-left: px2rem(-10);
+        }
         & .type3{
           display: inline-block;
           height: px2rem(120);
@@ -41,6 +47,7 @@
 
     .img_container{
       margin-top: px2rem(40);
+      z-index: 99;
       &_item{
         position: relative;
         width: 100%;
@@ -51,7 +58,7 @@
           width:100%;
           height:100%;
         }
-        
+
         & .one_img{
           width: 100%;
           height: 100%;
@@ -114,7 +121,17 @@
       }
     }
 
-  
+    .choose_date_calendar{
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      z-index: 9999;
+      padding-top: px2rem(100);
+    }
+
+
 
   }
 

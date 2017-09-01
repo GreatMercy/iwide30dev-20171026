@@ -3,10 +3,12 @@
   .killsec-time {
     padding-top: px2rem(20);
     padding-bottom: calc(70 / 690 * 100%);
+
     position: relative;
     .cont {
       position: absolute;
       top: px2rem(20);
+      height: calc(70 / 32)em;
       left: 0;
       right: 0;
       bottom: 0;
@@ -126,6 +128,14 @@
         position: absolute;
         top: 0;
         left: px2rem(4);
+      }
+    }
+    .item-address {
+      .list {
+        @mixin one-line horizontal {
+          top: 0;
+          
+        }
       }
     }
     .use-type-tip {
@@ -303,12 +313,6 @@
   }
   /* 底部 */
   .footer {
-    height: px2rem(100);
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    z-index: 1000;
     .order-detail {
       width: calc(450 / 750 * 100%);
       height: px2rem(100);

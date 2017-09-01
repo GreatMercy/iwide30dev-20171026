@@ -9,17 +9,13 @@ class Test extends MY_Front_Member
     {
         ini_set('memory_limit', - 1); // 无内存限制
         set_time_limit(0); // 无时间限制
-        $dataset = $this->read_Excel('wn.xlsx');
+        $dataset = $this->read_Excel('zjwh.xlsx');
         // var_dump($dataset);
         $this->make_data($dataset, [
-            'membership_number' => 0,
-            'id_card_no' => 7,
-            'name' => 2,
-            'phone' => 6,
-            'credit' => 9,
-            'birth' => 4,
-            'sex' => 3
-        ], 'a497596757', true, 995);
+            'notnull'=>['0'],
+            'phone' => 0,
+            'credit' => 1,
+        ], 'a500879706', false);
         
         exit();
     }
@@ -71,12 +67,12 @@ class Test extends MY_Front_Member
             unset($new[$a]);
         }
         
-//         var_dump($new);exit;
+        //         var_dump($new);exit;
         $post_save_url = PMS_PATH_URL . "member/bind_gift_card_save";
         
         $res=[];
         foreach ($new as $key=>$val){
-//             var_dump($val);
+            //             var_dump($val);
             $flag=$this->get($val['inter_id'],$val['openid']);
             var_dump($flag);
             if(!$flag){

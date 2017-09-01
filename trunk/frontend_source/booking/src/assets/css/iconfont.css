@@ -9,11 +9,11 @@
 
 @font-face {
   font-family: 'booking_font_icon';  /* project id 332906 */
-  src: url('//at.alicdn.com/t/font_332906_mj82zidxcr8s38fr.eot');
-  src: url('//at.alicdn.com/t/font_332906_mj82zidxcr8s38fr.eot?#iefix') format('embedded-opentype'),
-  url('//at.alicdn.com/t/font_332906_mj82zidxcr8s38fr.woff') format('woff'),
-  url('//at.alicdn.com/t/font_332906_mj82zidxcr8s38fr.ttf') format('truetype'),
-  url('//at.alicdn.com/t/font_332906_mj82zidxcr8s38fr.svg#iconfont') format('svg');
+  src: url('//at.alicdn.com/t/font_332906_tl1m2p6u2chaor.eot');
+  src: url('//at.alicdn.com/t/font_332906_tl1m2p6u2chaor.eot?#iefix') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_332906_tl1m2p6u2chaor.woff') format('woff'),
+  url('//at.alicdn.com/t/font_332906_tl1m2p6u2chaor.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_332906_tl1m2p6u2chaor.svg#iconfont') format('svg');
 }
 .jfk-font {
   font-family:"jfk-font" !important;
@@ -312,6 +312,8 @@
 
 .icon-jifenzhifu:before { content: "\e623"; }
 
+.icon-mall_icon_reservation_contact:before { content: "\e64b"; }
+
 .icon-font_zh_wei_qkbys:before { content: "\e655"; }
 
 .icon-booking_icon_collect:before { content: "\e657"; }
@@ -372,9 +374,13 @@
 
 .icon-font_zh_xiao_qkbys:before { content: "\e695"; }
 
+.icon-font_zh_xuan__qkbys:before { content: "\e696"; }
+
 .icon-font_zh_yue_qkbys:before { content: "\e69c"; }
 
 .icon-font_zh_zhu_qkbys:before { content: "\e69b"; }
+
+.icon-font_zh_ze_qkbys:before { content: "\e6c6"; }
 
 .icon-font_zh_yv_qkbys:before { content: "\e69a"; }
 
@@ -479,3 +485,6 @@
 .icon-font_zh_jiu_a_qkbys:before { content: "\e6d0"; }
 
 .icon-font_zh_yi_a_qkbys:before { content: "\e6d1"; }
+
+.icon-font_zh_jia__qkbys:before { content: "\e6d4"; }
+

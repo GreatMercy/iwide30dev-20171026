@@ -1,16 +1,16 @@
 <template>
   <div class="gradient_bg ">
-    <section class="number_content padding_30 padding_0_15">
-      <div class="flex between font_18 centers color2 number_list ">
+    <section class="getcard_banner padding_30 padding_0_15">
+      <div class="flex between font_18 centers color2 ">
         <img src="../../assets/image/getcard_logo.png" alt="">
       </div>
       <div class="between font_12 mar_t40">
         <div class="margin_right_30 relative padding_left_35">
           <div class="line_left absolute"><img src="../../assets/image/line_03.png" alt=""></div>
         </div>
-        <p v-if="dataList.card_info.is_package === 'f'" class="padding_0_20 padding_16 color_fff font_19">尊贵的会员，您获得了一张{{dataList.card_info.brand_name}}</p>
-        <p v-else class="padding_left_35 padding_16 color_fff font_16">尊贵的会员，您获得了{{dataList.card_info.name}}</p>
-        <p class="padding_left_35 color3 font_spacing_2 font_12">马上领取享受更多的优惠</p>
+        <p v-if="dataList.card_info.is_package === 'f'" class="padding_0_20 padding_16 color_fff font_19 getcard-title">尊贵的会员，您获得了一张{{dataList.card_info.brand_name}}</p>
+        <p v-else class="padding_left_35 padding_16 color_fff font_16 getcard-title">尊贵的会员，您获得了{{dataList.card_info.name}}</p>
+        <p class="padding_left_35 color3 font_spacing_2 font_12 getcard-word">马上领取享受更多的优惠</p>
       </div>
       <div class="margin_top_42" v-if="dataList.card_info.is_package === 'f'">
         <div class="pad_b40">
@@ -51,36 +51,36 @@
           <div v-if="dataList.card_info.lvl_name" class="flex mar_b30 pad_tb60 bg_202020 pad_l80 radius_3">
              <p class="jfk-font txt_show1 main_color1 font_17">&#xe69f;</p>
              <p class="flex_1 mar_l20 color3 font_16">会员等级</p>
-             <p class="color1 font_22 flex_1 iconfonts txt_show2">{{dataList.card_info.lvl_name}}</p>
+             <p class="color1 font_22 flex_1 iconfonts txt_show2 getcard-num">{{dataList.card_info.lvl_name}}</p>
           </div>
           <div v-if="dataList.card_info.credit && dataList.card_info.credit !== '0'  && dataList.card_info.credit !== '0.00'" class="flex mar_b30 pad_tb60 bg_202020 pad_l80 radius_3">
              <p class="jfk-font txt_show1 main_color1 font_15">&#xe622;</p>
              <p class="flex_1 mar_l20 color3 font_16">会员{{dataList.filed_name.credit_name}}</p>
-             <p class="color1 font_22 flex_1 iconfonts txt_show2">{{dataList.card_info.credit}}</p>
+             <p class="color1 font_22 flex_1 iconfonts txt_show2 getcard-num">{{dataList.card_info.credit}}</p>
           </div>
           <div v-if="dataList.card_info.deposit && dataList.card_info.deposit !== '0'  && dataList.card_info.deposit !== '0.00'" class="flex mar_b30 pad_tb60 bg_202020 pad_l80 radius_3">
              <p class="jfk-font txt_show1 main_color1 font_17">&#xe62e;</p>
              <p class="flex_1 mar_l20 color3 font_16">会员{{dataList.filed_name.balance_name}}</p>
-             <p class="color1 font_20 flex_1 iconfonts txt_show2"><span class="iconfonts font_14">&#xFFE5; </span><span class="font_22 iconfonts">{{dataList.card_info.deposit}}</span></p>
+             <p class="color1 font_20 flex_1 iconfonts txt_show2 getcard-num"><span class="iconfonts font_14">&#xFFE5; </span><span class="font_22 iconfonts">{{dataList.card_info.deposit}}</span></p>
           </div>
         </div>
         <div class="pad_b40">
           <div v-for='(value,key) in dataList.card_info.card' class="coupon_rows border_radius layer_bg mar_b30">
             <a href="javascript:;">
               <div class="coupon_img_wrap">
-                <div class="select_coupon_bg gradient_radial_bg main_color1">
-                  <div v-if="value.card_type === '1'">
+                <div class="select_coupon_bg main_color1">
+                  <div v-if="value.card_type === '1'" class="gradient_gold_bg">
                     <span class="font_22 select_coupon_ico iconfonts">&#xFFE5;</span>
                     <span class="iconfonts select_coupon_money font_40">{{value.reduce_cost}}</span>
                   </div>
-                  <div v-else-if="value.card_type === '2'" class="color_zhe">
+                  <div v-else-if="value.card_type === '2'" class="color_zhe gradient_blue_bg">
                     <span class="iconfonts select_coupon_money font_40">{{value.discount}}</span>
                     <span class="font_19 jfk-font">折</span>
                   </div>
-                  <div v-else-if="value.card_type === '3'" class="color_dui">
+                  <div v-else-if="value.card_type === '3'" class="color_dui gradient_green_bg">
                     <span class="iconfonts select_coupon_money font_40">兑</span>
                   </div>
-                  <div v-else-if="value.card_type === '4'">
+                  <div v-else-if="value.card_type === '4'" class="gradient_gold_bg">
                     <span class="font_20 select_coupon_ico iconfonts">&#xFFE5;</span>
                     <span class="iconfonts select_coupon_money font_40">{{value.money}}</span>
                   </div>
@@ -96,7 +96,7 @@
                 </p>
                 <p class="color1 font_16 mar_t40 mar_b10 font_spacing_2">{{value.title}}</p>
                 <p class="color3 h24 cardword font_13">{{value.sub_title}}</p>
-                <p class="h24"><span class="color3 inblock">数量 :</span><span class="color2"> {{value.number}}张</span></p>
+                <p class="h24"><span class="color3 inblock  getcard-ctitle">数量 :</span><span class="color2 getcard-cnum"> {{value.number}}张</span></p>
                 <!-- <p class="color3 h24 mar_t60">{{value.time_start}} 至 {{value.time_end}}</p> -->
               </div>
             </a>

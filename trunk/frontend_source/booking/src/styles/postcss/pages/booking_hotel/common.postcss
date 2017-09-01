@@ -2,9 +2,18 @@
     .font-size--42{
       font-size: px2rem(42);
     }
+    .choose_date_calendar{
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      z-index: 9999;
+      padding-top: px2rem(100);
+    }
     .banners{
       .jfk-swiper__item-box{
-        height: px2rem(750);      
+        height: px2rem(750);
       }
       .swiper-container{
         margin-left: 0;
@@ -19,6 +28,17 @@
         &-current{
           font-size: calc(38 / 24)em;
         }
+      }
+    }
+    .banners__item-box div{
+      @mixin one-line horzin {};
+      position:relative;
+      &::before {
+        width: 100%;
+        height: px2rem(400);
+        position: absolute;
+        bottom: px2rem(-100);
+        left: 0;
       }
     }
     .detail-top{
@@ -38,7 +58,6 @@
         }
       }
     }
-
     .title_info_container{
       height: px2rem(260);
       padding: 0 px2rem(30);
@@ -79,7 +98,6 @@
           }
         }
     }
-
     .score_info_container{
       /* height: px2rem(180); */
       padding: 0 px2rem(30);
@@ -93,7 +111,6 @@
           bottom: 0;
           left: 0;
         }
-
         &_score{
           width: 30%;
           height: 100%;
@@ -139,21 +156,19 @@
           }
         }
       }
-      
       .center_line{
-        display: inline-block;
-        width: 0;
-        height:px2rem(80);
-        border: 1px solid #bfbfbf;
-        transform:rotate(28deg);
-        -o-transform:rotate(28deg);
-        -moz-transform:rotate(28deg);
-        -webkit-transform:rotate(28deg);
-        position: absolute;
-        top: 26%;
-        right: 33%;
+        //display: inline-block;
+        //width: 0;
+        //height:px2rem(80);
+        //border: 1px solid #bfbfbf;
+        //transform:rotate(28deg);
+        //-o-transform:rotate(28deg);
+        //-moz-transform:rotate(28deg);
+        //-webkit-transform:rotate(28deg);
+        //position: absolute;
+        //top: 26%;
+        //right: 33%;
       }
-
       .live_date{
         font-size: px2rem(24);
         display: inline-block;
@@ -162,17 +177,28 @@
         height: 100%;
         line-height: 1.8;
         position: relative;
+        @mixin one-line horzin {};
+        &::before{
+          width: 1px;
+          height:px2rem(80);
+          transform:rotate(28deg);
+          -o-transform:rotate(28deg);
+          -moz-transform:rotate(28deg);
+          -webkit-transform:rotate(28deg);
+          position: absolute;
+          top: 0;
+          left: -20%;
+        }
 
         .icon_arrow{
           color: #b2943e;
           font-size:px2rem(16);
           position: absolute;
           top: 25%;
-          right: 14%;
+          right: 0;
         }
       }
     }
-
     .hotel_info{
       padding: 0 px2rem(30);
       &_title{
@@ -220,8 +246,19 @@
       }
 
       &_room{
+        .hotel_info_room_item{
+          margin-top: px2rem(40);
+        }
         & .room_pic{
-          position: relative;
+          @mixin one-line horzin {};
+          position:relative;
+          &::before {
+            width: 100%;
+            height: px2rem(300);
+            position: absolute;
+            bottom: px2rem(-70);
+            left: 0;
+          }
           img{
             height: px2rem(370);
             border-radius: 5px;
@@ -260,6 +297,20 @@
             }
           }
         }
+        .chooseIce{
+          position: relative;
+          &::after{
+            background-image: background-image(/free_choice.png);
+            background-size: 100% 100%;
+            content: "";
+            width: 4.2rem;
+            height: 4.825rem;
+            left: -0.48rem;
+            top: -0.55rem;
+            display: block;
+            position: absolute;
+          }
+        }
         padding-bottom: px2rem(40);
         @mixin one-line horzin {};
         position:relative;
@@ -270,7 +321,6 @@
         }
       }
     }
-
     .hotel_info_room_price{
       height: px2rem(60);
       line-height: px2rem(60);
@@ -285,6 +335,14 @@
            left: 0;
           }
         }
+        .chooseBtn{
+          float: right;
+          width: 18%;
+          height: 1.875rem;
+          line-height: 1.875rem;
+          position: relative;
+          text-align: center;
+        }
       }
       & .shBtn{
         float:right;
@@ -293,15 +351,14 @@
         }
         & .ishide{
             margin-right: px2rem(10);
-            display: inline-block; 
+            display: inline-block;
             transform: rotate(180deg);
             -o-transform: rotate(180deg);
             -moz-transform: rotate(180deg);
             -webkit-transform: rotate(180deg);
         }
       }
-    } 
-
+    }
     .room_price_ul_container{
       padding: 0 px2rem(30);
       position: relative;
@@ -320,7 +377,7 @@
         margin-top: px2rem(40);
         overflow: hidden;
         li{
-            height: px2rem(140);
+            //height: px2rem(140);
             position: relative;
             line-height: px2rem(140);
             @mixin one-line horzin {};
@@ -364,7 +421,40 @@
               width: 18%;
               height: px2rem(60);
               line-height: px2rem(60);
-
+              position: relative;
+              .topWord{
+                position: absolute;
+                top: px2rem(-18);
+                left: 50%;
+                width: 100%;
+                transform: translateX(-50%);
+              }
+              .needpaybefore{
+                position: absolute;
+                font-size: px2rem(10);
+                bottom: px2rem(-15);
+                -moz-transform:scale(.8,.8);
+                -webkit-transform:scale(.8,.8);
+                -o-transform:scale(.8,.8);
+                width: 100%;
+                left: 0;
+                letter-spacing: 3px;
+              }
+              .ft-18{
+                font-size: px2rem(18);
+              }
+            }
+            .hasline{
+              position: relative;
+              @mixin one-line horzin {};
+              position:relative;
+              &::before {
+                width: 100%;
+                position: absolute;
+                bottom: 48%;
+                left: 50%;
+                transform: translateX(-50%);
+              }
             }
         }
 
@@ -375,7 +465,6 @@
         }
       }
     }
-
     .ht_int{
       padding: 0 px2rem(30);
       .title{
@@ -395,6 +484,157 @@
         text-align: left;
         word-break: break-all;
         padding: 0 px2rem(60);
+      }
+    }
+    .room_desc{
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      z-index: 9999;
+      width: 100%;
+      .room_mask{
+        width: 90%;
+        height: 94%;
+        margin-left: 5%;
+        margin-top: 5%;
+        overflow-y: scroll;
+      }
+      .banner_img{
+        width: 100%;
+        height: px2rem(370);
+        margin-bottom: px2rem(20);
+        position: relative;
+        img{
+          width: 100%;
+          height: 100%;
+        }
+        & .icon_close{
+          position: absolute;
+          top: 0;
+          right: 0;
+          width:px2rem(60);
+          height: px2rem(60);
+          line-height: px2rem(60);
+          text-align: center;
+        }
+      }
+      .room_desc_ul_container{
+        padding: 0 px2rem(30);
+        .room_desc_ul{
+          height: auto;
+          overflow: hidden;
+          padding-bottom: px2rem(60);
+          padding-top: px2rem(30);
+          @mixin one-line horzin {};
+          position:relative;
+          &::before {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+          }
+          & li{
+            text-align: center;
+            float: left;
+            width: 33%;
+            height: px2rem(48);
+            margin-bottom: px2rem(30);
+
+            & i {
+              margin-right: px2rem(6);
+            }
+          }
+        }
+      }
+      .room_detail{
+        padding: px2rem(30);
+        & p{
+          margin-bottom: px2rem(30);
+        }
+      }
+    }
+    .package_desc{
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      z-index: 9999;
+      width: 100%;
+      .swich_bar{
+        width: 100%;
+        margin-top: px2rem(20);
+        margin-bottom: px2rem(40);
+        span{
+          width: 49%;
+          display: inline-block;
+          height: px2rem(80);
+          line-height: px2rem(80);
+          text-align: center;
+        }
+      }
+      .package_mask{
+        width: 90%;
+        height: 94%;
+        margin-left: 5%;
+        margin-top: 5%;
+        overflow-y: scroll;
+        background: #fff;
+      }
+      .package_mask2{
+        padding: px2rem(30);
+        padding-top: 0;
+      }
+      & .icon_close{
+        position: absolute;
+        top: px2rem(40);
+        right: px2rem(40);
+        width:px2rem(60);
+        height: px2rem(60);
+        line-height: px2rem(60);
+        text-align: center;
+      }
+      .banner_img{
+        width: 100%;
+        height: px2rem(370);
+        margin-bottom: px2rem(20);
+        position: relative;
+        img{
+          width: 100%;
+          height: 100%;
+        }
+      }
+      .package_desc_ul_container{
+        padding: 0 px2rem(30);
+        .package_desc_ul{
+          height: auto;
+          overflow: hidden;
+          padding-bottom: px2rem(60);
+          padding-top: px2rem(30);
+          @mixin one-line horzin {};
+          position:relative;
+          &::before {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+          }
+          & li{
+            text-align: center;
+            float: left;
+            width: 33%;
+            height: px2rem(48);
+            margin-bottom: px2rem(30);
+
+            & i {
+              margin-right: px2rem(6);
+            }
+          }
+        }
+      }
+      .package_detail{
+        padding: px2rem(30);
+        & p{
+          margin-bottom: px2rem(30);
+        }
       }
     }
 }

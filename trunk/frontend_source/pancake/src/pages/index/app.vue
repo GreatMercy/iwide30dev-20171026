@@ -15,13 +15,15 @@
     </div>
     <div class="jfk-pages__body">
       <div class="game-info">
-        <a href="javascript:;" class="font-size--24 font-color-extra-light-gray game-info__item game-raiders" @click="stopGame">秘籍</a>
+        <a href="javascript:;" class="font-size--24 font-color-extra-light-gray game-info__item game-raiders" @click="handleShowRaider">秘籍</a>
         <a href="javascript:;" class="font-size--24 font-color-extra-light-gray game-info__item game-desc" @click="handleShowDesc">说明</a>
       </div>
-      <div class="game-music">
-        <i class="jfk-font font-size--50 font-color-extra-light-gray icon-bobing_icon_music_no"></i>
+      <div class="game-music  font-color-extra-light-gray" @click="handleMusic" :class="{'is-closed': musicIsClosed, 'is-playing': !musicIsClosed && playStatus === 1}">
+        <i class="jfk-font font-size--50 icon-bobing_icon_music_no"></i>
+        <audio ref="audio" loop="true" perload="metadata" :src="diceSource"></audio>
       </div>
-      <div class="game-cont jfk-pb-30">
+      <div class="game-cont">
+        <div class="bowl-box">
         <div class="bowl">
           <div class="bowl-area  font-size--36" ref="bowl">
             <div class="dice-box"
@@ -79,9 +81,10 @@
             </div>
           </div>
         </div>
-        <div class="tip font-color-light-gray font-size--24">免费可玩<i class="color-golden">{{remainFreeTimes}}</i>局，获得分享奖励<i class="color-golden">{{remainRewardTimes}}</i>局</div>
+        </div>
+        <div class="tip font-color-light-gray font-size--30">免费可玩<i class="color-golden">{{remainFreeTimes}}</i>局，获得分享奖励<i class="color-golden">{{remainRewardTimes}}</i>局</div>
         <div class="btn">
-          <a href="javascript:;" @click="handlePlayGame" class="jfk-button font-size--34 jfk-button--primary jfk-button--free">
+          <a href="javascript:;" @click="handlePlayGame" class="jfk-button font-size--34 jfk-button--primary jfk-button--free" :class="{'is-disabled': gameNotRight}">
             <template v-if="!hasDeviceMotion">开始游戏</template>
             <template v-else>
               <i class="jfk-font icon-bobing_icon_shake"></i>
@@ -124,7 +127,7 @@
           <div class="img">
             <div class="prize-name" :class="'prize-name-' + prizeType"></div>
           </div>
-          <div class="tip font-color-white font-size--30">恭喜您获得了{{prizeContent}}</div>
+          <div class="tip font-color-white font-size--30">{{prizeContent ? '恭喜您获得了' + prizeContent : '你来晚啦，奖品领光啦'}}</div>
         </div>
         <div class="btns" :class="'btns-' + (isPrizeEnough ? 2 : 1)">
           <a href="javascript:;" class="jfk-button jfk-button--free jfk-button--primary is-plain" @click="handleCloseResult(true)">再来一把</a>
@@ -149,14 +152,27 @@
           <section class="prizes">
             <h5 class="title font-size--32 font-color-extra-light-gray"><span>奖品说明</span></h5>
             <p class="desc-tip font-size--24 font-color-light-gray" v-html="prizeDescription"></p>
+            <p class="desc-img" v-if="prizeDescImg">
+              <img :src="prizeDescImg" width="100%"/>
+            </p>
           </section>
         </div>
+      </div>
+    </jfk-popup>
+    <jfk-popup
+      v-model="raiderVisible"
+      :showCloseButton="true"
+      class="jfk-popup__pancake">
+      <div class="popup-cont">
+        <div class="title font-color-white font-size--30 jfk-ta-c">博饼秘籍</div>
+        <div class="cont font-color-light-gray font-size--24">由于每日的投掷次数有限，您若想获得更多投掷机会，赢取更多奖励，分享到群，随机获得奖励机会，单次最多可获5次投掷机会，分享多多，机会多多。</div>
       </div>
     </jfk-popup>
   </div>
 </template>
 <script>
   import pancakeTabbar from '@/components/tabbar'
+  import diceSource from '@/assets/music/dice.mp3'
   import formatUrlParams from 'jfk-ui/lib/format-urlparams.js'
   import { getPancakeGameRoll, getPancakeGameParam, getPancakeGameShare } from '@/service/http'
   import parseTextareaValue from '@/utils/parseTextareaValue'
@@ -165,7 +181,9 @@
   import Vue from 'vue'
   Vue.use(VueCookie)
   // 检测是否有
-  const shakeEvent = new Shake()
+  const shakeEvent = new Shake({
+    timeout: 500
+  })
   let jfkConfig = window.jfkConfig
   if (process.env.NODE_ENV === 'development') {
     jfkConfig = {
@@ -183,6 +201,7 @@
       this.maxHeight = document.documentElement.clientHeight - 30 - 35 - 33 + 'px'
       this.hasDeviceMotion = shakeEvent.hasDeviceMotion
       this.isNewPlayer = !this.$cookie.get('pancake-user-id')
+      this.diceSource = diceSource
     },
     created () {
       let vm = this
@@ -190,13 +209,18 @@
         act_num: this.actNum,
         url: location.href
       }).then(function (res) {
+        vm.gameNotRight = false
         vm.remainFreeTimes = res.web_data.remain_free_times
         vm.remainRewardTimes = res.web_data.remain_reward_times
         vm.prizeDescription = parseTextareaValue(res.web_data.prize_description)
+        vm.prizeDescImg = res.web_data.prize_img
         vm.howToPlay = parseTextareaValue(res.web_data.how_to_play)
         vm.playImg = res.web_data.play_img
         vm.timeStamp = Date.now()
         vm.startClock()
+      }).catch(function () {
+        vm.gameNotRight = true
+        vm.isNewPlayer = false
       })
     },
     data () {
@@ -207,6 +231,9 @@
         winVisible: false,
         descVisible: false,
         timesVisible: false,
+        musicIsClosed: false,
+        raiderVisible: false,
+        gameNotRight: true,
         popup: {
           title: '测试',
           cont: '测试',
@@ -222,6 +249,7 @@
         prizeName: '',
         prizeContent: '',
         prizeDescription: '',
+        prizeDescImg: '',
         howToPlay: '',
         isPrizeEnough: false,
         prizeId: -1,
@@ -239,7 +267,7 @@
     },
     computed: {
       diceTimes () {
-        return 5 * this.diceDuration
+        return 3 * this.diceDuration
       }
     },
     methods: {
@@ -248,11 +276,20 @@
         let timer = setInterval(function () {
           vm.clockTime = vm.clockTime - 1
           if (vm.clockTime === 0) {
-            vm.$cookie.set('pancake-user-id', Date.now)
+            vm.$cookie.set('pancake-user-id', Date.now())
             vm.isNewPlayer = false
             clearInterval(timer)
           }
         }, 1000)
+      },
+      handleMusic () {
+        this.musicIsClosed = !this.musicIsClosed
+        if (this.playStatus === 1) {
+          this.$refs.audio[this.musicIsClosed ? 'pause' : 'play']()
+        }
+      },
+      handleShowRaider () {
+        this.raiderVisible = true
       },
       handleShowDesc () {
         this.descVisible = true
@@ -263,10 +300,22 @@
         } else {
           this.notWinVisible = false
         }
+        this.startShake()
       },
       playGame () {
         let vm = this
-        vm.stopShake()
+        if (this.playStatus === 1) {
+          return
+        }
+        this.prizeType = -1
+        this.playTimeStamp = Date.now()
+        this.diceBoxAnimationName = 'rotate'
+        this.diceAnimationName = 'spin-duplicate'
+        this.playStatus = 1
+        this.stopShake()
+        if (!this.musicIsClosed) {
+          this.$refs.audio.play()
+        }
         getPancakeGameRoll({
           act_num: this.actNum
         }).then(function (res) {
@@ -312,14 +361,15 @@
         } else {
           vm.stopGame()
           showDiceResult && vm.showDiceResult()
-          // vm.notWinVisible = true
         }
-        vm.startShake()
       },
       stopGame () {
         this.diceBoxAnimationName = 'empty'
         this.diceAnimationName = 'empty'
         this.playStatus = 0
+        if (!this.musicIsClosed) {
+          this.$refs.audio.pause()
+        }
       },
       showDiceResult () {
         if (this.prizeType === 0) {
@@ -329,17 +379,6 @@
         }
       },
       readyPlayGame () {
-        if (this.playStatus === 1) {
-          return
-        }
-        this.prizeType = -1
-        this.playTimeStamp = Date.now()
-        this.diceBoxAnimationName = 'rotate'
-        this.diceAnimationName = 'spin-duplicate'
-        this.playStatus = 1
-        this.playGame()
-      },
-      shakeEvent () {
         if (this.remainFreeTimes || this.remainRewardTimes) {
           this.playGame()
         } else {
@@ -348,7 +387,7 @@
       },
       startShake () {
         shakeEvent.start()
-        window.addEventListener('shake', this.shakeEvent, false)
+        window.addEventListener('shake', this.readyPlayGame, false)
       },
       stopShake () {
         window.removeEventListener('shake', this.shakeEvent, false)

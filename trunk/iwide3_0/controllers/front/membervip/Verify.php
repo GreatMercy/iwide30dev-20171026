@@ -322,6 +322,7 @@ class Verify extends MY_Front_Member
 
     public function member_witch()
     {
+        $this->create_member_info($this->inter_id, $this->openid);
         $this->template_show('member', $this->_template, 'member_witch');
     }
 
@@ -345,15 +346,15 @@ class Verify extends MY_Front_Member
     /*protected function member_template( $inter_id ){
         
     }*/
-    protected function get_Token(){
+//     protected function get_Token(){
         
-    }
-     protected function create_member_info($inter_id , $openid){
+//     }
+//      protected function create_member_info($inter_id , $openid){
          
-     }
-     protected function updateWxInfo( $inter_id , $openid ){
+//      }
+//      protected function updateWxInfo( $inter_id , $openid ){
          
-     }
+//      }
      
 }
 

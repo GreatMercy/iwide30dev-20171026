@@ -337,7 +337,7 @@ class Api extends MY_Front_Soma {
     	        print_r($result);
     	        
     	    } else {
-         	    $result= $api->conpon_sign(7, $get['openid'], rand(0,99));
+         	    $result= $api->conpon_sign(7, $get['openid'], $api->uuCode());
     	        die('请求成功，查看列表：http://domain/index.php/soma/api/get_card_testing?openid=xxxxxxxxxxxxx&step=list');
     	    }
         }
@@ -359,7 +359,7 @@ class Api extends MY_Front_Soma {
     	    $result= $api->get_token();
     	    $api->set_token($result['data']);
     	    
-    	    $uu_code= rand(1000, 9999);
+    	    $uu_code = $api->uuCode();
          	$result= $api->package_use_batch( $get['openid'], $get['pid'], $uu_code, 3 );
          	var_dump( $result );
         }
@@ -425,15 +425,15 @@ class Api extends MY_Front_Soma {
         
         $card_id= array( 1000178, 1000179, 1000180 );
         foreach ($card_id as $k=>$v){
-            $result= $api->conpon_sign($v, 'o9Vbtw1W0ke-eb0g6kE4SD1eh6qU', rand(1000,9999));
-            $result= $api->conpon_sign($v, 'o9Vbtw5bgFCel1nuSugUG4uVVZ3k', rand(1000,9999));
-            $result= $api->conpon_sign($v, 'o9Vbtw3ELLZaarxtyw5UXV_MexFk', rand(1000,9999));
-            $result= $api->conpon_sign($v, 'o9Vbtw4CiTD2DvKlxy01nYhjaLdM', rand(1000,9999));
-            $result= $api->conpon_sign($v, 'o9Vbtwyb5OKXrnFJ3hF9qzYKKbJ8', rand(1000,9999));
-            $result= $api->conpon_sign($v, 'o9Vbtw8ikhTrqYVxoBsEFcPw6w7M', rand(1000,9999));
-            $result= $api->conpon_sign($v, 'o9Vbtw30wn-MHB5TLqac2jJNvha4', rand(1000,9999));
-            $result= $api->conpon_sign($v, 'o9Vbtwx75kuo8lfQUP9Lebriv7pk', rand(1000,9999));
-            $result= $api->conpon_sign($v, 'o9Vbtw3XG3Skjll1MQtXzrcAYH_4', rand(1000,9999));
+            $result= $api->conpon_sign($v, 'o9Vbtw1W0ke-eb0g6kE4SD1eh6qU', $api->uuCode());
+            $result= $api->conpon_sign($v, 'o9Vbtw5bgFCel1nuSugUG4uVVZ3k', $api->uuCode());
+            $result= $api->conpon_sign($v, 'o9Vbtw3ELLZaarxtyw5UXV_MexFk', $api->uuCode());
+            $result= $api->conpon_sign($v, 'o9Vbtw4CiTD2DvKlxy01nYhjaLdM', $api->uuCode());
+            $result= $api->conpon_sign($v, 'o9Vbtwyb5OKXrnFJ3hF9qzYKKbJ8', $api->uuCode());
+            $result= $api->conpon_sign($v, 'o9Vbtw8ikhTrqYVxoBsEFcPw6w7M', $api->uuCode());
+            $result= $api->conpon_sign($v, 'o9Vbtw30wn-MHB5TLqac2jJNvha4', $api->uuCode());
+            $result= $api->conpon_sign($v, 'o9Vbtwx75kuo8lfQUP9Lebriv7pk', $api->uuCode());
+            $result= $api->conpon_sign($v, 'o9Vbtw3XG3Skjll1MQtXzrcAYH_4', $api->uuCode());
 	        var_dump($result);
         }
         

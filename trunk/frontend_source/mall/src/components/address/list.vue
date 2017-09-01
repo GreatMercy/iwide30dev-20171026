@@ -1,14 +1,16 @@
 <template>
-    <jfk-picker :rotate-effect="true" v-if="slots.length" class="font-size--28 jfk-picker__address" :showToolbar="true" :valueKey="pickValueKey" :slots="slots" @change="onValuesChange">
-      <div class="jfk-flex is-justify-space-between font-size--32">
-        <span class="font-color-extra-light-gray" @click="handleCancelArea">取消</span>
-        <span class="color-golden" @click="handleSaveArea">完成</span>
-      </div>
-    </jfk-picker>
+  <jfk-picker :rotate-effect="true" v-if="slots.length" class="font-size--28 jfk-picker__address" :showToolbar="true"
+              :valueKey="pickValueKey" :slots="slots" @change="onValuesChange">
+    <div class="jfk-flex is-justify-space-between font-size--32">
+      <span class="font-color-extra-light-gray" @click="handleCancelArea">取消</span>
+      <span class="color-golden" @click="handleSaveArea">完成</span>
+    </div>
+  </jfk-picker>
 </template>
 <script>
   import { findIndex } from '@/utils/utils'
   import { getExpressTree } from '@/service/http'
+  // import jfkPicker from '../../../../common/components/src/packages/jfk-picker/src/main.vue'
   const getAddressSlots = function (data, ids) {
     let result = []
     if (data.length) {
@@ -71,6 +73,9 @@
         slots: []
       }
     },
+    components: {
+      // jfkPicker
+    },
     created () {
       let that = this
       getExpressTree().then(function (res) {
@@ -107,7 +112,6 @@
     },
     watch: {
       ids (val) {
-        console.log(val)
         let newSlots = getAddressSlots(this.addressData, val)
         let picker = this.$children[0]
         if (picker) {

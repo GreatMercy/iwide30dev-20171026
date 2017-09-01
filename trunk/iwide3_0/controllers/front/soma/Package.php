@@ -3668,9 +3668,16 @@ class Package extends MY_Front_Soma
 
 
     public function distribute_products(){
+
+        $redis = $this->get_redis_instance();
+        $redis->set('theme_config_distribute', json_encode($this->themeConfig), 3600 * 24 * 100);
+        //新版商城尚未做此页面，为防止切换皮肤导致页面异常，故写死
         $this->theme = 'default';
-        $this->_view('header', ['title' => '奖励商品列表']);
-        $this->_view('distribute_products');
+        if(!$this->isNewTheme()){
+            $this->_view('header', ['title' => '奖励商品列表']);
+            $this->_view('distribute_products');
+        }
+
     }
 
 }

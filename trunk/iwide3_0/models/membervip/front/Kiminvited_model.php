@@ -772,7 +772,7 @@ class Kiminvited_model extends MY_Model_Member {
      * 运行日志记录
      * @param String $content
      */
-    protected function _write_log($content,$type,$dir_path='Kiminvited_model') {
+    public function _write_log($content,$type,$dir_path='Kiminvited_model') {
         if(is_array($content) || is_object($content))
             $content = json_encode($content);
         $file= date('Y-m-d_H'). '.txt';

@@ -1,0 +1,117 @@
+.jfk-pages__logistics-detail {
+
+  .logistics-detail-state {
+    &::after {
+      width: px2rem(4);
+      height: px2rem(28);
+      background-color: var(--color-golden);
+    }
+  }
+
+  .logistics-detail-info {
+    &__card {
+      background-color: var(--color-white);
+      box-shadow: 0 0 1em rgba(178, 148, 94, 0.15);
+    }
+
+    &__product {
+      &::before {
+        background-color: var(--line-color-extra-light-silver);
+      }
+
+      &--content {
+        .name {
+          color: var(--font-color-white);
+        }
+
+        .price {
+          .jfk-price {
+            color: var(--color-golden);
+          }
+
+          .number {
+            color: var(--font-color-extra-light-gray);
+          }
+        }
+      }
+    }
+
+    &__user {
+
+      .title {
+        color: var(--font-color-extra-light-gray);
+      }
+
+      &--name {
+        margin-bottom: px2rem(36);
+      }
+
+      p {
+        i {
+          color: var(--font-color-white);
+        }
+      }
+    }
+  }
+
+  .logistics-status {
+    &__title {
+      color: var(--font-color-extra-light-gray);
+    }
+
+    &__no-info {
+      color: var(--font-color-light-gray);
+    }
+
+    &__item {
+      &--logo {
+      }
+
+      &--start {
+        background-image: background-image(/refund_detail/start.png, theme);
+        background-size: px2rem(20) px2rem(20);
+      }
+
+      &--default {
+        background-image: background-image(/refund_detail/step.png, theme);
+        background-size: px2rem(12) px2rem(12);
+      }
+
+      &--finish {
+        background-image: background-image(/refund_detail/finish.png, theme);
+        background-size: px2rem(56) px2rem(56);
+      }
+
+      &--end {
+        background-image: background-image(/refund_detail/end.png, theme);
+        background-size: px2rem(68) px2rem(68);
+      }
+
+      &--line {
+        &::after {
+          background-color: var(--font-color-light-silver);
+        }
+      }
+
+      &--text {
+        &.is-active {
+          p:first-child {
+            color: var(--font-color-white);
+          }
+
+          p:last-child {
+            color: var(--font-color-extra-light-gray);
+          }
+        }
+
+        p {
+          color: var(--font-color-light-gray);
+        }
+
+      }
+
+    }
+
+  }
+
+}

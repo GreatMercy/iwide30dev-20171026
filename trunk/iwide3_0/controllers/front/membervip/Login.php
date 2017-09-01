@@ -11,6 +11,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 */
 class Login extends MY_Front_Member
 {
+    //微信方式登录
+    public function dowxlogin(){
+        LoginService::getInstance()->wxlogin($this->inter_id,$this->openid);
+        redirect('membervip/center?id='.$this->inter_id);
+    }
+
 	//会员卡登录页面
 	public function index(){
         $member_result = LoginService::getInstance()->check_member_card_ogin($this->inter_id,$this->openid);

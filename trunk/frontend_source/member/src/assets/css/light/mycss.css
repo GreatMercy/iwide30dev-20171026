@@ -276,7 +276,7 @@
 .lint_title:after{content: '';position: absolute;left: 0px;top:10px;width: 37%;height: 1px;background-color:#363636; }
 .lint_title:before{content: '';position: absolute;right: 0px;top:10px;width: 37%;height: 1px;background-color:#363636;}
 .cardinfo-word{line-height:25px;display: inline-block;}
-
+.jfk-cardinfo-title{padding-top: 0; margin-top: 30px;color: #b2945e}
 .icon-user_icon_fail_norma:after{content: "\e626";}
 .icon-radio_icon_selected_default:before { content: "\e676"; }
 .jfk-msgbox__icon{ padding-top: 3.375rem; padding-bottom: 2rem;}

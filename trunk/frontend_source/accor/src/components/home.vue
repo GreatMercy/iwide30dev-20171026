@@ -2,29 +2,59 @@
   <div class="page_home">
     <div class="topbanner">
       <swiper :options="swiperOption" >
-          <swiper-slide v-for="slide in banners">
+          <swiper-slide >
             <a>
-              <img :src="slide"></img>
+              <img src="../assets/swiper_banner.jpg"></img>
             </a>
           </swiper-slide>
+          <swiper-slide >
+            <a>
+              <img src="../assets/swiper_banner.jpg"></img>
+            </a>
+          </swiper-slide>          
+          
       </swiper>
       <div class="swiper-pagination swiper-pagination-fraction">
-        <span class="swiper-pagination-current ">{{productGalleryIndex}}</span> / <span class="swiper-pagination-total">{{banners.length}}</span>
+        <span class="swiper-pagination-current ">{{productGalleryIndex}}</span> / <span class="swiper-pagination-total">2</span>
       </div>      
     </div>
     <h2 class="subtitle">精选目的地</h2>
     <div class="bestPlace">
       <swiper :options="swiperOption2" >
-          <swiper-slide v-for="slide in bestPlace">
-            <router-link to="/list">
-              <img :src="slide"></img>
+          <swiper-slide >
+            <router-link to="/list?city=beijing">
+              <img src="../assets/beijing.jpg"></img>
               <p class="tab"><i></i>北京<span>Beijing</span></p>
             </router-link>
           </swiper-slide>
+          <swiper-slide >
+            <router-link to="/list?city=shanghai">
+              <img src="../assets/shanghai.jpg"></img>
+              <p class="tab"><i></i>上海<span>Shanghai</span></p>
+            </router-link>
+          </swiper-slide>   
+          <swiper-slide >
+            <router-link to="/list?city=guangzhou">
+              <img src="../assets/guangzhou.jpg"></img>
+              <p class="tab"><i></i>广州<span>Guangzhou</span></p>
+            </router-link>
+          </swiper-slide> 
+          <swiper-slide >
+            <router-link to="/list?city=nanjing">
+              <img src="../assets/nanjing.jpg"></img>
+              <p class="tab"><i></i>南京<span>Nanjing</span></p>
+            </router-link>
+          </swiper-slide> 
+          <swiper-slide >
+            <router-link to="/list?city=xian">
+              <img src="../assets/xian.jpg"></img>
+              <p class="tab"><i></i>西安<span>Xian</span></p>
+            </router-link>
+          </swiper-slide>                                         
           <swiper-slide class="seemore">
-            <a>
-              <img src="../assets/seemore.jpg"></img>
-            </a>
+            <router-link to="/list">
+                <img src="../assets/seemore.jpg"></img>
+            </router-link>
           </swiper-slide>
       </swiper>
     </div>

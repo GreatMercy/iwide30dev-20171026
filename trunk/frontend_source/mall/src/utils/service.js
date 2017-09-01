@@ -23,7 +23,7 @@ export default {
   can_gift: {
     label: '赠送好友',
     desc: '该商品随时可以通过微信转赠给您的好友',
-    icon: 'icon-user_icon_Polite_nor',
+    icon: 'icon-mall_icon_orderDetai_gift',
     key: 'can_gift'
   },
   can_pickup: {

@@ -10,12 +10,6 @@ if (process.env.NODE_ENV === 'development') {
 // 默认一分钟超时
 axios.defaults.timeout = 60000
 axios.interceptors.request.use(function (config) {
-  // 生产环境默认增加token
-  if (process.env.NODE_ENV === 'production') {
-    if (config.method === 'post' || config.method === 'put') {
-      addCSRFTOKEN(config.data)
-    }
-  }
   return config
 }, function (err) {
   return Promise.reject(err)
@@ -26,13 +20,7 @@ axios.interceptors.response.use(function (response) {
 }, function (error) {
   return Promise.resolve(error.response)
 })
-const addCSRFTOKEN = function (data) {
-  const token = window.jfkConfig.token
-  const {name, value} = token
-  if (data[name] === undefined) {
-    data[name] = value
-  }
-}
+
 const checkStatus = function (response) {
   if (response) {
     const {REJECTERRORCONFIG = {}} = response.config

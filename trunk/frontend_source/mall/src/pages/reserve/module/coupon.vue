@@ -14,7 +14,7 @@
                 <i class="jfk-font-number discount-number">{{item.discount}}</i>
                 <i class="jfk-font discount-word icon-font_zh_zhe_qkbys"></i>
               </span>
-              <span class="offset color-golden" :class="'offset--length-' + item.discount.length" v-else-if="item.card_type === '1'">
+              <span class="offset color-golden" :class="'offset--length-' + item.reduce_cost.length" v-else-if="item.card_type === '1'">
                 <i class="offset__currency jfk-font-number">￥</i>
                 <i class="offset__number jfk-font-number">{{item.reduce_cost}}</i>
               </span>

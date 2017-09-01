@@ -1972,16 +1972,23 @@ class OrderService extends BaseService
             foreach ($hotelInfoList as $val){
                 if(!empty($val['room_ids'])){
                     foreach ($val['room_ids'] as $vale){
-                        $result[] = [
-                            'id' => $val['inter_id'],
-                            'name' => $val['name'],
-                            'address' => $val['address'],
-                            'latitude' => $val['latitude'],
-                            'longitude' => $val['longitude'],
-                            'room_name' => $vale['name'],
-                            'room_cover' => $vale['room_img'],
-                            'link' => site_url('soma/booking/select_hotel_time').'?id='.$val['inter_id'].'&bsn=package&hid='.$val['hotel_id'].'&aiid='.$aiid.'&oid='.$oid.'&rmid='.$vale['room_id'].'&cdid='
-                        ];
+                        if(!empty($vale['price_codes'])){
+                            foreach ($vale['price_codes'] as $value){
+                                $result[] = [
+                                    'id' => $val['inter_id'],
+                                    'name' => $val['name'],
+                                    'address' => $val['address'],
+                                    'latitude' => $val['latitude'],
+                                    'longitude' => $val['longitude'],
+                                    'room_name' => $vale['name'],
+                                    'room_cover' => $vale['room_img'],
+                                    'room_price_code' => $value['price_code'],
+                                    'room_price_name' => $value['price_name'],
+                                    'link' => site_url('soma/booking/select_hotel_time').'?id='.$val['inter_id'].'&bsn=package&hid='.$val['hotel_id'].'&aiid='.$aiid.'&oid='.$oid.'&rmid='.$vale['room_id'].'&cdid='.$value['price_code'].'&code_id='
+                                ];
+                            }
+                        }
+
                     }
                 }
             }
@@ -2034,7 +2041,7 @@ class OrderService extends BaseService
         $somaHotelModel = $this->getCI()->somaHotelModel;
         $hotelInfo = $somaHotelModel->get_hotel_detail($interId, $hotelId);
 
-        $return['hotel'] = [];
+        $return['hotel'] = ['name' => null, 'hotel_id' => null];
         if ($hotelInfo) {
             $return['hotel']['name'] = $hotelInfo['name'];
             $return['hotel']['hotel_id'] = $hotelInfo['hotel_id'];
@@ -2044,10 +2051,14 @@ class OrderService extends BaseService
         $this->getCI()->load->model('hotel/Rooms_model', 'Rooms_model');
         /** @var \Rooms_model $Rooms_model */
         $Rooms_model = $this->getCI()->Rooms_model;
-        $return['room'] = $Rooms_model->find([
+        $room = $Rooms_model->find([
             'room_id' => $roomId,
             'inter_id' => $interId
         ], '*');
+        if(empty($room)){
+            return $callback_func($return, Result::STATUS_FAIL, '房间不存在');
+        }
+        $return['room'] = $room;
 
         // 获取价格代码名称
         $this->getCI()->load->model('hotel/Price_code_model', 'Price_code_model');
@@ -2059,6 +2070,57 @@ class OrderService extends BaseService
             $return['price_code']['price_name'] = $price_code[0]['price_name'];
             $return['price_code']['price_code'] = $price_code[0]['price_code'];
         }
+
+        $orderId = null;
+        $begin_date = null;
+        $end_date = null;
+        $consumer_code = null;
+
+        //获取订单信息
+        $codeInfo = $CodeModel->get(['asset_item_id'], [$assetItemId]);
+        if($codeInfo){
+            $this->getCI()->load->model('soma/Sales_item_package_model', 'orderItemModel');
+            $orderItemModel = $this->getCI()->orderItemModel;
+            $orderId = $codeInfo[0]['order_id'];
+            $orderItemInfo = $orderItemModel->get(['order_id'], $orderId);
+            if($orderItemInfo){
+                $begin_date = date('Y/m/d', strtotime($orderItemInfo[0]['validity_date']));
+                $end_date = date('Y/m/d', strtotime($orderItemInfo[0]['expiration_date']));
+            }
+        }
+
+        //房价码
+        $this->getCI()->load->model('soma/Consumer_code_model', 'consumerCodeModel');
+        $consumerCodeModel = $this->getCI()->consumerCodeModel;
+        $consumerItem = $consumerCodeModel->get(['order_id'], [$orderId]);
+        if(empty($consumerItem)){
+            return $callback_func($return, Result::STATUS_FAIL, '券码不存在');
+        }
+        $consumer_code = $consumerItem[0]['code'];
+
+        //附加参数
+        $return['attach'] = [
+            'current_date' => time(),
+            'code_use_date' => [
+                'begin_date' => $begin_date,
+                'end_date' => $end_date
+            ],
+            'order_params' => [
+                'post_hotel_id' => $hotelId,
+                'post_room_id' => $roomId,
+                'post_price_code' => $priceCode,
+                'post_name' => null,
+                'post_phone' => null,
+                'post_start' => null,
+                'post_end' => null,
+                'post_room_name' => $price_code[0]['price_name'],
+                'post_code_name' => $price_code[0]['price_code'],
+                'post_num' => 1,
+                'post_order_id' => $orderId,
+                'aiid' => $assetItemId,
+                'post_code' => $consumer_code
+            ]
+        ];
 
         return $callback_func($return);
     }
@@ -2250,8 +2312,8 @@ class OrderService extends BaseService
             $item['inter_id'] != $interId
             || $item['openid'] != $openid
             || $item['order_id'] != $orderId
-            || $item['qty'] <= 0
-            || $item['expiration_date'] < $nowTime
+            || (int)$item['qty'] <= 0
+            || strtotime($item['expiration_date']) < strtotime($nowTime)
         ) {
             return new Result(Result::STATUS_FAIL, '资产信息有误,回跳前页面');
         }

@@ -137,7 +137,7 @@
   const btnsMap = {
     reserve: '<i class="jfk-font icon-user_icon_Checkin_normal"></i>',
     mail: '<i class="jfk-font icon-mall_icon_orderDetail_post"></i>',
-    gift: '<i class="jfk-font icon-user_icon_Polite_nor"></i>',
+    gift: '<i class="jfk-font icon-mall_icon_orderDetai_gift"></i>',
     pickup: '<i class="jfk-font icon-mall_icon_orderDetail_verify"></i>',
     wx_booking: '<i class="jfk-font icon-user_icon_Reservatio"></i>'
   }
@@ -199,9 +199,7 @@
         that.gift = res.web_data.item
         that.headTitleMsg = '该商品由' + that.gift.hotel_name + '提供'
         res.web_data.btn.forEach(function (item) {
-          if (item.type !== 'mail' && item.type !== 'wx_booking') {
-            that.btn.push({'btnicon': btnsMap[item.type], 'btnurl': item.url, 'btnMsg': btnsMsg[item.type]})
-          }
+          that.btn.push({'btnicon': btnsMap[item.type], 'btnurl': item.url, 'btnMsg': btnsMsg[item.type]})
         })
       })
     },

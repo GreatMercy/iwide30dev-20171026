@@ -40,8 +40,8 @@
         </div>
       </div>
       <div class="mail-gift jfk-ml-30 jfk-mr-30 font-size--28" v-if="addressPosition === 3">
-        <p class="use-type-tip font-size--24 font-color-light-gray">使用方式</p>
-        <div class="item item-address card jfk-mb-30" :class="{'is-checked': useType === '1', 'font-color-light-gray no-checked': useType === '2'}">
+        <p class="use-type-tip font-size--24 font-color-light-gray-common">使用方式</p>
+        <div class="item item-address card jfk-mb-30" :class="{'is-checked': useType === '1', 'font-color-light-gray-common no-checked': useType === '2'}">
           <div :class="{'font-color-white': useType === '1'}" class="title jfk-flex is-align-middle" @click="handleChangeUseType('1')">
             <div class="jfk-flex cont is-justify-space-between">
               <span>
@@ -84,11 +84,11 @@
             </div>
           </transition>
         </div>
-        <div class="item item-gift card" :class="{'is-checked': useType === '2', 'font-color-light-gray  no-checked': useType === '1'}">
+        <div class="item item-gift card" :class="{'is-checked': useType === '2', 'font-color-light-gray-common  no-checked': useType === '1'}">
           <div :class="{'font-color-white': useType === '2'}" class="title jfk-flex is-align-middle" @click="handleChangeUseType('2')">
             <div class="jfk-flex cont is-justify-space-between">
               <span>
-                <i class="jfk-font icon-user_icon_Polite_nor icon" :class="{'color-golden': useType === '2'}"></i>赠送他人</span>
+                <i class="jfk-font icon-mall_icon_orderDetai_gift icon" :class="{'color-golden': useType === '2'}"></i>赠送他人</span>
               <span class="jfk-radio jfk-radio--shape-circle color-golden">
                 <label class="jfk-radio__label">
                   <input type="radio" name="type" value="2" :checked="useType === '2'" v-model="useType" />
@@ -146,13 +146,13 @@
             <span class="form-item__label  font-color-extra-light-gray">联系方式</span>
             <div class="form-item__body">
               <input type="text" class="font-color-white" v-model="customerInfo.phone" placeholder="请输入购买人手机" />
-                <div class="form-item__status is-error" v-show="validResult.phone.show" @click="handleHiddenError('phone')">
-                  <i class="form-item__status-icon jfk-font icon-msg_icon_error_norma"></i>
-                  <span class="form-item__status-tip">
+              <div class="form-item__status is-error" v-show="validResult.phone.show" @click="handleHiddenError('phone')">
+                <i class="form-item__status-icon jfk-font icon-msg_icon_error_norma"></i>
+                <span class="form-item__status-tip">
                     <i class="form-item__status-cont">{{validResult.phone.message}}</i>
                     <i class="form-item__status-trigger">重新输入</i>
                   </span>
-                </div>
+              </div>
             </div>
           </div>
           <div class="form-item form-item__select" v-if="!couponDisabled">
@@ -187,10 +187,10 @@
         </form>
       </div>
       <div class="reserve-tip font-size--24 jfk-pl-30 jfk-pr-30">
-        <div class="tip-title font-color-extra-light-gray"><i class="jfk-font icon-msg_icon_prompt_default font-size--28"></i>说明</div>
-        <div class="tip-cont font-color-light-gray">商品超过有效期不能使用也不能退款</div>
+        <div class="tip-title font-color-extra-light-gray-common"><i class="jfk-font icon-msg_icon_prompt_default font-size--28"></i>说明</div>
+        <div class="tip-cont font-color-light-gray-common">商品超过有效期不能使用也不能退款</div>
       </div>
-      <footer class="footer jfk-clearfix">
+      <footer class="footer jfk-footer jfk-clearfix">
         <div class="order-detail jfk-fl-l" :class="{'is-open': priceOrderVisible}" @click="handleShowOrderDetail">
           <span class="price color-golden">
             <i class="price__currency font-size--24" v-if="!isIntegral">¥</i>
@@ -295,8 +295,7 @@
         btype: this.orderParams.business,
         psp_id: this.settingId,
         token: this.tokenId,
-        common: this.common,
-        openid: 1224921316
+        common: this.common
       }).then(function (res) {
         that.toast.close()
         const { count, psp_setting, product, countdown, address, public_info, customer_info = {}, create_order_params = {}, point, balance } = res.web_data
@@ -459,10 +458,10 @@
           limit = '<span class="jfk-d-ib color-golden limit-tag font-size--22"><i>限购' + this.max + '份</i></span>'
         }
         if (this.publicInfo.name) {
-          result = '<div class="provide' + (limit && ' limit' || '') + '"><span class="jfk-d-ib font-color-light-gray">' + this.publicInfo.name + '提供</span>' + (limit || '') + '</div>'
+          result = '<div class="provide' + (limit && ' limit' || '') + '"><span class="jfk-d-ib font-color-light-gray-common">' + this.publicInfo.name + '提供</span>' + (limit || '') + '</div>'
         }
         if (this.pspSetting.length) {
-          result += '<div class="spec' + (!result && limit && ' limit' || '') + '"><span class="font-color-light-gray jfk-d-ib">' + this.pspSetting[0].spec_name.join('<i class="line">|</i>') + '</span>' + (!result && limit || '') + '</div>'
+          result += '<div class="spec' + (!result && limit && ' limit' || '') + '"><span class="font-color-light-gray-common jfk-d-ib">' + this.pspSetting[0].spec_name.join('<i class="line">|</i>') + '</span>' + (!result && limit || '') + '</div>'
         }
         if (!result && limit) {
           result += '<div class="limit">' + limit + '</div>'

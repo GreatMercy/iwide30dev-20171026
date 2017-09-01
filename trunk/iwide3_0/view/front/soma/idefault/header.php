@@ -11,7 +11,9 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0">
     <link rel="stylesheet" type="text/css" href="<?php echo refer_res('app.css', 'SOMA') ?>"/>
-    <link rel="stylesheet" type="text/css" href="<?php echo refer_res('dark.css', 'SOMA') ?>"/>
+    <link rel="stylesheet" type="text/css" href="<?php
+          echo $style == 1 ? refer_res('light.css', 'SOMA') : refer_res('dark.css', 'SOMA');
+    ?>"/>
     <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
     <title><?php echo $title;?></title>
 </head>

@@ -14,6 +14,7 @@
     .category {
       &__item {
         &.is-selected {
+          color:var(--color-golden);
           .category__label {
             @mixin line-down default, default, inside;
           }
@@ -28,11 +29,30 @@
           &__item {
             .product {
               &-info {
-                box-shadow: 0px 3px 21px 0px rgba(102, 102, 102, 0.15);
+                box-shadow: 0 calc(3 / 32)em calc(21 / 32)em 0 color(#666 a(15%));
                 background-color: #fff;
                 &:before{
                   background-color: #fff;
-                  box-shadow: -21px 18px 50px -20px rgba(102, 102, 102, 0.15);
+                  box-shadow: 0 calc(3 / 32)em calc(21 / 32)em 0 color(#666 a(15%));
+                }
+                &:after {
+                  content: '';
+                  width: calc(138 / 400 * 100%);
+                  background: #fff;
+                  top: 0;
+                  left: 0;
+                  height: 100%;
+                  position: absolute;
+                  z-index: -1;
+                }
+              }
+              &-image {
+                &-cont {
+                  &[lazy="loaded"] {
+                    &:before {
+                      opacity: 0;
+                    }
+                  }
                 }
               }
             }
@@ -78,7 +98,6 @@
     }
   }
   .jfk-tabbar{
-    background-color: #fff;
-    box-shadow: 0px 2px 12px 1px rgba(191, 191, 191, 0.15);
+    background-color: var(--good-tag-color);
   }
 }

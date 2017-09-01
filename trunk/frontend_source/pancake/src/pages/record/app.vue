@@ -2,13 +2,16 @@
   <div class="jfk-pages jfk-pages__record">
     <div class="jfk-pages__theme is-default"></div>
     <div class="jfk-pages__body">
-    <div class="user font-size--30">
+    <div class="user font-size--30 jfk-ml-30 jfk-mr-30">
       <div v-show="userAvatar" class="avatar">
         <img :src="userAvatar"/>
       </div>
       <div v-show="!userAvatar" class="avatar is-default">
       </div>
       <div class="name font-color-white">{{useName}}</div>
+      <a href="javascript:;" @click="handleReceivePrize()" class="coupon-enter font-color-white font-size--24">
+        领奖<i class="font-color-extra-light-gray">></i>
+      </a>
     </div>
     <div class="times font-size--30 font-color-extra-light-gray jfk-ml-30 jfk-mr-30">
       <span class="throw-times">投掷<i class="color-golden font-size--48">{{throwTimes}}</i>次</span>
@@ -33,9 +36,7 @@
             </div>
           </li>
         </ul>
-        <div class="empty font-color-light-gray jfk-ta-c font-size--24" v-else>
-          今日暂未进行游戏
-        </div>
+        <div class="empty font-color-light-gray jfk-ta-c font-size--24" v-else>今日暂未中奖</div>
       </div>
     </div>
     </div>
@@ -43,6 +44,12 @@
   </div>
 </template>
 <script>
+  let jfkConfig = window.jfkConfig
+  if (process.env.NODE_ENV === 'development') {
+    jfkConfig = {
+      couponUrl: '/coupon?a=b'
+    }
+  }
   import formatUrlParams from 'jfk-ui/lib/format-urlparams.js'
   import { getPancakeGameMyPrize } from '@/service/http'
   import pancakeTabbar from '@/components/tabbar'
@@ -80,10 +87,13 @@
     },
     methods: {
       handleReceivePrize (obj) {
-        if (obj.is_available) {
-          if (process.env.NODE_ENV === 'development') {
-            location.href = '/coupon?prize_type=' + obj.prize_type
+        console.log(obj)
+        if (obj) {
+          if (obj.is_available) {
+            location.href = jfkConfig.couponUrl + '&prize_type=' + obj.prize_type
           }
+        } else {
+          location.href = jfkConfig.couponUrl
         }
       }
     }

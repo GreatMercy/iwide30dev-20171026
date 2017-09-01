@@ -131,7 +131,7 @@ class MY_Front_Soma_Iapi extends MY_Front_Iapi
                 ]),
 
             //退款首页
-            'refund_index' => site_url('soma/refund/index') . "?id=" . $this->inter_id . '&oid=',
+            'refund_index' => site_url('soma/refund/apply') . "?id=" . $this->inter_id . '&oid=',
             //退款详情 //http://credit.iwide.cn/index.php/soma/refund/detail?&oid=1000013037&saler=35
             'refund_detail' => site_url('soma/refund/detail') . "?id=" . $this->inter_id .'&bsn=package',
         );

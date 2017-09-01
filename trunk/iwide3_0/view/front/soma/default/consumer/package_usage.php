@@ -67,10 +67,10 @@ wx.ready(function(){
             <li><em>3</em><p><?php echo $lang->line('offer_qr_code'); ?></p></li>
             <li><em>4</em><p><?php echo $lang->line('check_in_use'); ?></p></li>
         <?php else: ?>
-            <li><em>1</em><p>抵达<br>酒店</p></li>
+            <li><em>1</em><p>抵达<br>商家</p></li>
             <li><em>2</em><p>询问<br>前台</p></li>
             <li><em>3</em><p>提供劵码<br>或二维码</p></li>
-            <li><em>4</em><p>入住<br>使用</p></li>
+            <li><em>4</em><p>核销<br>使用</p></li>
         <?php endif; ?>
     </ul>
 </div>

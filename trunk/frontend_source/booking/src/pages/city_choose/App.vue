@@ -9,7 +9,7 @@
       <!--<p class="color-golden" v-show="isLoadProduct">loading</p>-->
       <!--<JfkSupport v-once></JfkSupport>-->
       <div class="search_city font-size--38 jfk-pl-30 jfk-pr-30">
-        <input type="text" placeholder="搜索城市/关键字/位置" class="font-size--38" v-on:blur="searchPlace" v-model="searchInputVal" v-on:input="inputSearch" id="searchVal">
+        <input type="text" placeholder="搜索城市/关键字/位置" class="font-size--38" :blur="searchPlace" v-model="searchInputVal" :input="inputSearch" id="searchVal">
         <i class="booking_icon_font font-size--24 icon-icon_search"></i>
         <i class="jfk-font jfk-button__text-item icon-icon_close icon-icon_delete" v-show="showDeleteIcon" @click="clearInput"></i>
       </div>
@@ -106,8 +106,8 @@ export default {
   data () {
     return {
       // 模拟id，后期由后台加上
-      id: 'a429262687',
-      openid: 'oX3WojhfNUD4JzmlwTzuKba1MywY',
+      id: '',
+      openid: '',
       // 显示热门搜索
       showHotSearch: true,
       // 历史搜索
@@ -120,32 +120,49 @@ export default {
       citys: [],
       // input 删除按钮
       showDeleteIcon: false,
-      searchInputVal: ''
+      searchInputVal: '',
+      page_resource: {
+        'SRESULT': 'nearby?theme=1&id=a429262687'
+      }
     }
   },
   methods: {
     loadPackages () {
       let that = this
+      let loading
+      loading = this.$jfkToast({
+        iconClass: 'jfk-loading__snake ',
+        duration: -1,
+        isLoading: true
+      })
       let args = {
-        id: this.id,
-        openid: this.openid
+        id: that.getUrlParams('id'),
+        openid: that.getUrlParams('openid')
       }
       that.isLoadProduct = true
       getBannerList(args).then(function (res) {
+        if (loading) {
+          loading.close()
+        }
         that.allData = res
         that.hotCityData = res.web_data.hot_city
         that.lastorderData = res.web_data.last_orders
-        that.isLoadProduct = false
         that.citys = res.web_data.citys
+        if (process.env.NODE_ENV !== 'development') {
+          that.page_resource = res.web_data.page_resource.links
+        }
+        that.logJSON(res)
         console.log(res.web_data.citys)
       }).catch(function (e) {
-        that.isLoadProduct = false
+        if (loading) {
+          loading.close()
+        }
         console.log(e)
       })
     },
     // 跳转到附近酒店
     hrefTosresult () {
-      window.location.href = 'nearby?theme=1'
+      window.location.href = this.page_resource.SRESULT + '&startDate=' + this.handleStartDate + '&endDate=' + this.handleEndDate
     },
     // 输出专用
     logJSON (data) {
@@ -223,9 +240,27 @@ export default {
         //   that.detailUrl = detail
         //   that.indexUrl = home
         // })
+    },
+    // 获取url 参数
+    getUrlParams (urlName) {
+      let url = location.href
+      let paraString = url.substring(url.indexOf('?') + 1, url.length).split('&')
+      let returnValue
+      for (let i = 0; i < paraString.length; i++) {
+        let tempParas = paraString[i].split('=')[0]
+        let parasValue = paraString[i].split('=')[1]
+        if (tempParas === urlName) returnValue = parasValue
+      }
+      if (typeof (returnValue) === 'undefined') {
+        return ''
+      } else {
+        return returnValue
+      }
     }
   },
   props: {
+    handleStartDate: String,
+    handleEndDate: String
   }
 }
 </script>

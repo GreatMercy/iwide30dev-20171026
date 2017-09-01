@@ -2,7 +2,7 @@
   <div class="jfk-pages jfk-pages__submitOrder">
     <div class="jfk-pages__theme"></div>
     <div class="submit_order_top">
-      <div class="submit_order_top_title">
+      <div class="submit_order_top_title" style="display:none;">
           <span class="word font-size--28">登陆后享受 <span class="font-size--36">更低优惠</span></span>
           <span class="if goldColor">
             <i class="booking_icon_font font-size--34 icon-font_zh_li_qkbys"></i><i class="booking_icon_font font-size--34 icon-font_zh_ji_qkbys"></i><i class="booking_icon_font font-size--34 icon-font_zh_deng_qkbys"></i><i class="booking_icon_font font-size--34 icon-font_zh_lu_qkbys"></i><i class="booking_icon_font font-size--28 icon-booking_icon_right_normal"></i>
@@ -14,7 +14,7 @@
         <span class="in">入住 <span class="date">03/32</span></span>
         <span class="left">离店 <span class="date">03/32</span></span>
         <span class="time">共1晚</span>
-      </p> 
+      </p>
 
       <p class="room_del font-size--24">大床房</p>
       <p class="room_other font-size--24">温泉门票+双人自助餐</p>
@@ -146,16 +146,16 @@
         <div class="control jfk-fl-l">
           <button href="javascript:;" class="jfk-button font-size--34 jfk-button--higher jfk-button--free jfk-button--primary">
             <span class="jfk-button__text">
-              <i class="booking_icon_font jfk-button__text-item icon-font_zh_li_qkbys"></i> 
-              <i class="booking_icon_font jfk-button__text-item icon-font_zh_ji_qkbys"></i> 
-              <i class="jfk-font jfk-button__text-item icon-font_zh_zh_qkbys"></i> 
+              <i class="booking_icon_font jfk-button__text-item icon-font_zh_li_qkbys"></i>
+              <i class="booking_icon_font jfk-button__text-item icon-font_zh_ji_qkbys"></i>
+              <i class="jfk-font jfk-button__text-item icon-font_zh_zh_qkbys"></i>
               <i class="jfk-font jfk-button__text-item icon-font_zh_fu_qkbys"></i>
             </span>
           </button>
         </div>
     </footer>
     <!-- 遮罩层 -->
-    <div class="order_detail" v-show="false">
+    <div class="order_detail" v-show="true">
       <div class="order_detail_content">
         <div class="room_cost jfk-pl-30 jfk-pr-30 font-size--26 grayColor80">
           <p class="title font-size--28 font-color-dark-white">
@@ -211,12 +211,12 @@
     </div>
 
     <!-- 使用优惠券 -->
-    <div class="choose_coupon font-size--28">
+    <div class="choose_coupon font-size--28" style="display:none;">
       <div class="choose_coupon_top jfk-pl-30 jfk-pr-30">
         <p class="title font-size--24 grayColor80">温馨提示</p>
         <p class="choose_coupon_item">
           1、每个间夜仅可使用1张优惠劵
-        </p> 
+        </p>
         <p class="choose_coupon_item">
           2、优惠劵不找零，不兑换，使用后不可取消，请谨慎使用
         </p>
@@ -251,25 +251,13 @@
       <div class="btn_submit font-size--32">
         确   认
       </div>
-      
-
     </div>
-
-    <!--<p class="color-golden" v-show="isLoadProduct">loading</p>-->
     <JfkSupport v-once></JfkSupport>
   </div>
 </template>
 <script>
-  import { getPackageLists } from '@/service/http'
   export default {
-    watch: {},
-    components: {
-    },
-    beforeCreate () {
-    },
     created () {
-//    加载swiper
-      this.loadPackages()
     },
     data () {
       return {
@@ -327,30 +315,6 @@
       }
     },
     methods: {
-      loadPackages (resetProducts) {
-        let that = this
-        let args = {
-          page: that.page,
-          show_ads_cat: that.showAdsCat,
-          page_size: that.pageSize
-        }
-        if (that.fcid > 0) {
-          args.fcid = that.fcid
-        }
-        that.isLoadProduct = true
-        getPackageLists(args).then(function (res) {
-          that.isLoadProduct = false
-          const {advs} = res.web_data
-          /* eslint camelcase: 0 */
-          if (that.showAdsCat === 1) {
-            that.showAdsCat = 2
-            that.advs = advs
-          }
-        }).catch(function (e) {
-          that.isLoadProduct = false
-          console.log(e)
-        })
-      }
     }
   }
 </script>

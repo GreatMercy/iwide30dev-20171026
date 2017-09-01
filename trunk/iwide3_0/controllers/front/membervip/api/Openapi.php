@@ -324,7 +324,49 @@ class Openapi extends MY_Controller{
             $this->return_json('系统繁忙',-1);
         }
     }
-    
+
+    public function send_template_su8()
+    {
+    /**开放给速八使用的定制模板消息api
+        *   写死模板ID
+        *   根据POST过来的数据进行组装模板消息
+        */
+        $this->_check_access();
+        if(empty($this->vars['member_num'])) $this->return_json('会员卡号member_num不能为空','49003');
+        if(empty($this->vars['telephone'])) $this->return_json('手机号telephone不能为空','49005');
+        if(empty($this->vars['name'])) $this->return_json('会员名name不能为空','49006');
+        if(empty($this->vars['openid'])) $this->return_json('用户标识openid不能为空','49006');
+        $inter_id = 'a455510007 ';
+        $data['template_id'] = 'vMFuRNeIsgBxzkfn9J3Ac6Vy_vdWyGPa7FMrNZkouzs';
+        
+        $data['url'] = "http://super8.iwide.cn/index.php/member/center/?id=a455510007";
+        $data['data'] = [
+            'first' => [
+                'value' => '您已成功注册为速8会员。',
+                'size' => '3',
+                "color" => "#000000"
+            ],
+            'keyword1' => [
+                'value' => $this->vars['member_num'],
+                "color" => "#000000"
+            ],
+            'keyword2' => [
+                'value' =>$this->vars['name'],
+                "color" => "#000000"
+            ],
+            'keyword3' => [
+                'value' => $this->vars['telephone'],
+                "color" => "#000000"
+            ],
+            'remark' => [
+                'value' => '点击详情，马上领取微信会员卡。',
+                "color" => "#0000FF"
+            ]
+        ];
+        $data['touser'] = "o4F21jmafoE_RIDJMvuZlhQMks54";
+        $json_data = json_encode($data);
+        $sendResult = $this->request_send_template($inter_id, $json_data);
+    }
     
     
     /**

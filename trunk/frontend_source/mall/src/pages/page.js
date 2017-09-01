@@ -151,6 +151,20 @@ const reservation = (r) => {
     r(reservation.default)
   }, showLoadError, 'reservation')
 }
+// 物流详情
+const logisticsDetail = (r) => {
+  require.ensure([], function (require) {
+    let logisticsDetail = require('./logistics_detail/index')
+    r(logisticsDetail.default)
+  }, showLoadError, 'logisticsDetail')
+}
+// 邮寄后置
+const post = (r) => {
+  require.ensure([], function (require) {
+    let post = require('./post/index')
+    r(post.default)
+  }, showLoadError, 'post')
+}
 export default {
   index,
   detail,
@@ -172,5 +186,7 @@ export default {
   refundDetail,
   invoice,
   reservation,
-  reservationList
+  reservationList,
+  logisticsDetail,
+  post
 }

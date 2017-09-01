@@ -62,8 +62,10 @@ function referurl($type,$name,$location=2,$media_path=''){
 function refer_res($name, $path = 'ADMIN', $filename = 'manifest.json') {
     $paths = array (
             'ADMIN' => 'public/admin/',
-			'SOMA' => 'public/soma/vue/'
+			'SOMA' => 'public/soma/vue/',
+            'SOMAOLD' => 'public/soma/vueold/'
     );
+
     $config = & get_config ();
     $res_domain = '';
     if (WEB_AREA == 'front') {
@@ -76,11 +78,13 @@ function refer_res($name, $path = 'ADMIN', $filename = 'manifest.json') {
         }
     }
     $filename = isset ( $paths [$path] ) ? $paths [$path] . $filename : $path . '/' . $filename;
+
     if (file_exists ( $filename )) {
         $file = file_get_contents ( $filename );
         $manifest = json_decode ( $file, TRUE );
         return isset ( $manifest [$name] ) ? $res_domain . $manifest [$name] : $res_domain . $name;
     }
+
     return $name;
 }
 /**

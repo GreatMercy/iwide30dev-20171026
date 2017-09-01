@@ -274,11 +274,9 @@ $user['admin_profile']['type'] = 2;
         }
 
 
-//$post_data['role_authority'] = '[{"name":"modules[]","value":"app"},{"name":"modules[]","value":"club"},{"name":"controllers_app[]","value":"2"},{"name":"controllers_app[]","value":"1"},{"name":"controllers_club[]","value":"96"},{"name":"controllers_club[]","value":"97"},{"name":"controllers_club[]","value":"98"},{"name":"funcs_96[]","value":"586"},{"name":"funcs_96[]","value":"587"},{"name":"funcs_96[]","value":"588"},{"name":"funcs_97[]","value":"590"},{"name":"funcs_97[]","value":"595"},{"name":"funcs_97[]","value":"596"},{"name":"funcs_97[]","value":"599"},{"name":"funcs_97[]","value":"603"},{"name":"funcs_98[]","value":"604"},{"name":"funcs_98[]","value":"605"},{"name":"funcs_98[]","value":"607"},{"name":"funcs_98[]","value":"608"},{"name":"funcs_98[]","value":"612"}]';
-
+        $authorities = array();
         if(!empty($temp_post_data['role_authority'])){
             $post_authorities=jqjson2arr($temp_post_data['role_authority']);
-            $authorities = array();
             if(!empty($post_authorities['modules'])){
                 foreach($post_authorities['modules'] as $temp_modules){
                     if(!isset($authorities[$temp_modules]))$authorities[$temp_modules] = array();
@@ -301,16 +299,72 @@ $user['admin_profile']['type'] = 2;
                     }
                 }
             }
-            print_r($authorities);
-            if(empty($post_data['related_role_id'])){
-                $post_data['role_authority'] = $authorities;
-            }else{
-                $related_role = $this->Roles_model->getRoleById('fullaccess',$post_data['related_role_id']);
-
-            }
-            print_r(unserialize($related_role['role_authority']));exit;
         }
 
+//$post_data['role_authority'] = '[{"name":"modules[]","value":"app"},{"name":"modules[]","value":"club"},{"name":"controllers_app[]","value":"2"},{"name":"controllers_app[]","value":"1"},{"name":"controllers_club[]","value":"96"},{"name":"controllers_club[]","value":"97"},{"name":"controllers_club[]","value":"98"},{"name":"funcs_96[]","value":"586"},{"name":"funcs_96[]","value":"587"},{"name":"funcs_96[]","value":"588"},{"name":"funcs_97[]","value":"590"},{"name":"funcs_97[]","value":"595"},{"name":"funcs_97[]","value":"596"},{"name":"funcs_97[]","value":"599"},{"name":"funcs_97[]","value":"603"},{"name":"funcs_98[]","value":"604"},{"name":"funcs_98[]","value":"605"},{"name":"funcs_98[]","value":"607"},{"name":"funcs_98[]","value":"608"},{"name":"funcs_98[]","value":"612"}]';
+
+        if(!empty($post_data['related_role_id'])){
+            $extra_authorities = array();
+            $related_role = $this->Roles_model->getRoleById('fullaccess',$post_data['related_role_id']);
+            if(!empty($authorities)){
+                if(!empty($related_role['role_authority'])){
+                    $reduce = array();
+                    $related_authorities = unserialize($related_role['role_authority']);
+                    foreach($related_authorities as $m_key => $temp_ra){
+                        if(!isset($authorities[$m_key]))$reduce[$m_key]['all_private'] = isset($temp_ra['all_private'])?$temp_ra['all_private']:2;
+                        if(!empty($temp_ra['controllers'])){
+                            foreach($temp_ra['controllers'] as $c_key => $temp_c){
+                                if(!isset($authorities[$m_key]['controllers'][$c_key]))$reduce[$m_key]['controllers'][$c_key]['all_private'] = isset($temp_c['all_private'])?$temp_c['all_private']:2;
+                                if(!empty($temp_c['funcs'])){
+                                    foreach($temp_c['funcs'] as $f_key => $temp_f){
+                                        if(!isset($authorities[$m_key]['controllers'][$c_key]['funcs'][$f_key]))$reduce[$m_key]['controllers'][$c_key]['funcs'][$f_key] = array();
+//                                        if(!empty($temp_f['operations'])){
+//                                            foreach($temp_f['operations'] as $o_key => $temp_o){
+//
+//                                            }
+//                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    $plus = array();
+                    foreach($authorities as $m_key => $temp_auth){
+                        if(!isset($related_authorities[$m_key]))$plus[$m_key]['all_private'] = isset($temp_auth['all_private'])?$temp_auth['all_private']:2;
+                        if(!empty($temp_auth['controllers'])){
+                            foreach($temp_auth['controllers'] as $c_key => $temp_c){
+                                if(!isset($related_authorities[$m_key]['controllers'][$c_key]))$plus[$m_key]['controllers'][$c_key]['all_private'] = isset($temp_c['all_private'])?$temp_c['all_private']:2;
+                                if(!empty($temp_c['funcs'])){
+                                    foreach($temp_c['funcs'] as $f_key => $temp_f){
+                                        if(!isset($related_authorities[$m_key]['controllers'][$c_key]['funcs'][$f_key]))$plus[$m_key]['controllers'][$c_key]['funcs'][$f_key] = array();
+//                                        if(!empty($temp_f['operations'])){
+//                                            foreach($temp_f['operations'] as $o_key => $temp_o){
+//
+//                                            }
+//                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                }else{
+                    $extra_authorities = array('plus'=>$authorities);
+                }
+
+            }else{
+                $reduce = $related_role['role_authority'];
+            }
+
+            if(!empty($plus))$extra_authorities['plus'] = $plus;
+            if(!empty($reduce))$extra_authorities['reduce'] = $reduce;
+
+            $post_data['extra_authorities'] = !empty($extra_authorities)?serialize($extra_authorities):'';
+
+        }else{
+            $post_data['role_authority'] = !empty($authorities)?serialize($authorities):'';
+        }
 
         if(!empty($role_id)){
             $params = array(

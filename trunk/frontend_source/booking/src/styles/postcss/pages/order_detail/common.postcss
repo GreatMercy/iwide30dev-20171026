@@ -1,178 +1,188 @@
-  .jfk-pages__orderDetail{
-    margin-bottom: px2rem(90);
-    .font-size--60{
-      font-size: px2rem(60);
-    }
-
-    .order_status{
-      padding: 0 px2rem(30) px2rem(80) px2rem(70);
-      padding-top: px2rem(80);
-      & .status{
-        margin-bottom: px2rem(40);
-        @mixin one-line vertical {};
-        position:relative;
-        &::before {
-          width: 3px;
-          height: 50%;
-          position: absolute;
-          top: 20%;
-          left: px2rem(-30);
-        }
-      }
-
-      & .desc{
-        margin-bottom: px2rem(50);
-      }
-
-      & .order_btn{
-        span{
-          width: px2rem(470);
-          height: px2rem(90);
-          line-height: px2rem(90);
-          text-align:center;
-          display: inline-block;
-        }
-      }
-    }
-
-    .ht_del{
-      padding:px2rem(30) px2rem(30) 0 px2rem(30);
-      &_info{
-        height: px2rem(200);
-        background-image: background-image(/detail_map_white.jpg);
-        background-size: 100% 100%;
-        padding: px2rem(70) px2rem(40) 0 px2rem(40);
-        position: relative;
-        & .info_title{
-          margin-bottom: px2rem(40);
-          @mixin ellipsis 1;
-          width: px2rem(420);
-        }
-
-        & .info_place{
-          width: px2rem(420);
-        }
-
-        & .icon_dh{
-          position: absolute;
-          right: px2rem(60);
-          bottom: px2rem(80);
-          i{
-            margin-left: px2rem(8);
-          }
-        }
-      }
-      .bottom_container{
-        padding:0 px2rem(30);
-        & .hotel_room_info{
-          height: px2rem(140);
-          line-height: px2rem(140);
-          position: relative;
-          @mixin one-line horzin {};
-          &::before {
-            width: 100%;
-            position: absolute;
-            bottom: 0;
-            left: 0;
-          }
-          & span{
-            display: inline-block;
-          }
-          & span:nth-child(2){
-            float: right;
-          }
-        }
-
-        .live_time{
-          padding: px2rem(50) 0;
-          @mixin one-line vertical {};
-          position:relative;
-          &::before {
-            width: 1px;
-            height: px2rem(80);
-            position: absolute;
-            top: 40%;
-            left: 40%;
-            transform:rotate(30deg);
-            -ms-transform:rotate(30deg);
-            -moz-transform:rotate(30deg);
-            -webkit-transform:rotate(30deg);
-            -o-transform:rotate(30deg);
-          }
-          .left,.right{
-            display: inline-block;
-            width: 42%;
-            & span:first-child{
-              display: inline-block;
-              margin-bottom: px2rem(20);
-            }
-          }
-        }
-        .right{
-          padding-left: 10%;
-        }
-
-        .name{
-          height: px2rem(180);
-          line-height: px2rem(180);
-          @mixin one-line horzin {};
-          position:relative;
-          &::before {
-            width: 100%;
-            position: absolute;
-            top: 0;
-            left: 0;
-          }
-        }
-      }
-    }
-    .order_info{
-      padding: 0 px2rem(30);
-      margin-top: px2rem(80);
-      overflow: hidden;
-      & p{
-        margin-bottom: px2rem(50);
-      }
-      &_item{
-        word-break: break-all;
-        span{
-          width: 5em;
-          display: inline-block;
-          letter-spacing: .1em;
-          text-align:left;
-        }
-      }
-      &_item:last-child{
-        margin-bottom: px2rem(70);
-        @mixin one-line horzin {};
-        position:relative;
-          &::before {
-            width: 100%;
-            position: absolute;
-            bottom: px2rem(-70);
-            left: 0;
-          }
-      }
-    }
-
-    .booking_desc{
-      padding: px2rem(70) px2rem(30);
-      .icon_desc{
-        margin-right: px2rem(15);
-      }
-      & .desc{
-        padding-left: px2rem(40);
-      }
-    }
-
-    .recommendation .tip {
-      padding-top: 1.875rem;
-      padding-bottom: 1.46875rem;
-    }
-
-
-
+.jfk-pages__orderDetail {
+  margin-bottom: px2rem(90);
+  .font-size--60 {
+    font-size: px2rem(60);
   }
+
+  .order_status {
+    padding: 0 px2rem(30) px2rem(80) px2rem(70);
+    padding-top: px2rem(80);
+    & .status {
+      margin-bottom: px2rem(40);
+      @mixin one-line vertical {
+      };
+      position: relative;
+      &::before {
+        width: 3px;
+        height: 50%;
+        position: absolute;
+        top: 20%;
+        left: px2rem(-30);
+      }
+    }
+
+    & .desc {
+      margin-bottom: px2rem(50);
+    }
+
+    & .order_btn {
+      span {
+        width: px2rem(470);
+        height: px2rem(90);
+        line-height: px2rem(90);
+        margin-bottom: px2rem(80);
+        text-align: center;
+        display: inline-block;
+      }
+    }
+  }
+
+  .ht_del {
+    padding: px2rem(30) px2rem(30) 0 px2rem(30);
+    &_info {
+      height: px2rem(200);
+      background-image: background-image(/detail_map_white.jpg);
+      background-size: 100% 100%;
+      padding: px2rem(70) px2rem(40) 0 px2rem(40);
+      position: relative;
+      & .info_title {
+        margin-bottom: px2rem(40);
+        @mixin ellipsis 1;
+        width: px2rem(420);
+      }
+
+      & .info_place {
+        width: px2rem(420);
+      }
+
+      & .icon_dh {
+        position: absolute;
+        right: px2rem(60);
+        bottom: px2rem(80);
+        i {
+          margin-left: px2rem(8);
+        }
+      }
+    }
+    .bottom_container {
+      padding: 0 px2rem(30);
+      & .hotel_room_info {
+        height: px2rem(140);
+        line-height: px2rem(140);
+        position: relative;
+        @mixin one-line horzin {
+        };
+        &::before {
+          width: 100%;
+          position: absolute;
+          bottom: 0;
+          left: 0;
+        }
+        & span {
+          display: inline-block;
+        }
+        & span:nth-child(2) {
+          float: right;
+        }
+      }
+      .live_time {
+        padding: px2rem(50) 0;
+        @mixin one-line vertical {
+        };
+        position: relative;
+        &::before {
+          width: 1px;
+          height: px2rem(80);
+          position: absolute;
+          top: 40%;
+          left: 40%;
+          transform: rotate(30deg);
+          -ms-transform: rotate(30deg);
+          -moz-transform: rotate(30deg);
+          -webkit-transform: rotate(30deg);
+          -o-transform: rotate(30deg);
+        }
+        .left, .right {
+          display: inline-block;
+          width: 42%;
+          & span:nth-child(1) {
+            display: block;
+            margin-bottom: px2rem(20);
+          }
+          & span:nth-child(2) {
+            display: block;
+            margin-bottom: px2rem(10);
+          }
+        }
+      }
+      .right {
+        padding-left: 10%;
+      }
+
+      .name {
+        padding: px2rem(60) 0 px2rem(100) 0;
+        @mixin one-line horzin {
+        };
+        position: relative;
+        &::before {
+          width: 100%;
+          position: absolute;
+          top: 0;
+          left: 0;
+        }
+      }
+    }
+  }
+  .order_info {
+    padding: 0 px2rem(30);
+    margin-top: px2rem(80);
+    overflow: hidden;
+    & p {
+      margin-bottom: px2rem(50);
+    }
+    &_item {
+      word-break: break-all;
+      span {
+        display: inline-block;
+        letter-spacing: .1em;
+        text-align: left;
+        margin-right: px2rem(50);
+      }
+    }
+    &_item:last-child {
+      margin-bottom: px2rem(70);
+      @mixin one-line horzin {
+      };
+      position: relative;
+      &::before {
+        width: 100%;
+        position: absolute;
+        bottom: px2rem(-70);
+        left: 0;
+      }
+    }
+  }
+
+  .booking_desc {
+    padding: px2rem(70) px2rem(30);
+    .title {
+      margin-bottom: px2rem(20);
+    }
+    .icon_desc {
+      margin-right: px2rem(15);
+    }
+    & .desc {
+      padding-left: px2rem(40);
+      line-height: px2rem(44);
+    }
+  }
+
+  .recommendation .tip {
+    padding-top: 1.875rem;
+    padding-bottom: 1.46875rem;
+  }
+
+}
 
 
 

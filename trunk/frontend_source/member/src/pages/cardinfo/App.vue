@@ -1,6 +1,6 @@
 <template>
   <div class="gradient_bg padding_30 padding_0_15">
-    <div class="layer_bg radius_3 padding_16 padding_0_15 overflow mar_b30 flex" v-if="dataList.public">
+    <div class="white_bg radius_3 padding_16 padding_0_15 overflow mar_b30 flex" v-if="dataList.public">
       <img :src="dataList.public.logo" class="card_logo">
       <p class="card_name font_14 flex_1">{{dataList.public.name}}</p>
     </div>
@@ -8,14 +8,14 @@
         <div class="margin_right_30 relative padding_left_35">
           <div class="line_left absolute"><img class="line_height65" src="../../assets/image/line_03.png" alt=""></div>
         </div>
-        <p class="padding_0_20 padding_21 color_fff font_19 pclight">{{dataList.card_info.title}}</p>
+        <p class="padding_0_20 padding_21 color_fff font_19 pclight jfk-cardinfo-title">{{dataList.card_info.title}}</p>
         <p class="padding_0_20 font_12 font_spacing_4 color3">{{dataList.card_info.notice}}</p>
       </div>
       <div class="mar_t60 mar_b20" v-if="dataList.card_info.is_giving === 'f'">
         <div v-if="dataList.card_info.is_online === '2' || dataList.card_info.is_online === '3'">
           <p class="mar_b30"><span class="color2 mar_r20 h24">线下使用方式</span><span class="color3 h24">(请选择以下任意一种方式使用)</span></p>
-          <div class="clearfix layer_bg pad_tb40 pad_lr40 border_radius mar_b30">
-              <p class="h28">方式一 :&nbsp;&nbsp;向商家出示二维码/券码</p>
+          <div class="clearfix layer_bg pad_tb40 pad_lr40 border_radius mar_b30 white_bg box_shadowb">
+              <p class="h28 color3">方式一 :&nbsp;&nbsp;向商家出示二维码/券码</p>
               <p class="color1 margin_top_20 center h34 spacing" v-html="this.couponHtml"></p>
               <div class="erweima_img center margin_top_20">
                   <div>
@@ -23,8 +23,8 @@
                   </div>
               </div>
           </div>
-          <div class="clearfix layer_bg pad_tb40 pad_lr40 border_radius">
-              <p class="h28">方式二 :&nbsp;&nbsp;商家输入核销码</p>
+          <div class="clearfix layer_bg pad_tb40 pad_lr40 border_radius white_bg box_shadowb">
+              <p class="h28 color3">方式二 :&nbsp;&nbsp;商家输入核销码</p>
               <div class="bd_bottom mar_t80 pad_b20">
                   <input v-model="write" id="writeoffcode" class="color1 h30 w80" type="password" placeholder="请商家输入核销码">
               </div>
@@ -34,7 +34,7 @@
           </div>
         </div>
       </div>
-      <div class="mar_t40 bd_bottom pad_t40 pad_b80">
+      <div class="mar_t40 bd_bottom pad_t40 pad_b80 card-info-item">
         <p>
           <span class="font_12 width_60 inblock mar_r20">
             <p class="flex between">
@@ -68,9 +68,9 @@
         </p>
       </div>
       <div class="webkitbox webkittop color3 mar_t60 mar_b40">
-          <div class="jfk-font font_12 mar_r10">&#xe642;</div>
+          <div class="jfk-font font_12 mar_r10 cardinfo-word-ico">&#xe642;</div>
           <div style="width: calc(100% - 20px);">
-              <div class="color2 font_12 mar_b30">使用说明</div>
+              <div class="color2 font_12 mar_b30 cardinfo-word-title">使用说明</div>
               <div class="font_12 cardinfo-word" v-html="dataList.card_info.description"></div>
           </div>
       </div>

@@ -16,23 +16,28 @@
     <div class="date_container">
       <div class="left_date" @click="goCalendar()">
         <span class="left_date_style">入 住</span>
-        <span class="live_date jfk-font-number jfk-price__number"><i class="booking_icon_font icon_arrow icon-booking_icon_dropdown_normal"></i>14</span>
-        <span class="live_year">2014/03</span>
+        <span class="live_date jfk-font-number jfk-price__number"><i class="booking_icon_font icon_arrow icon-booking_icon_dropdown_normal"></i>{{startDate}}</span>
+        <span class="live_year">{{startMonth}}</span>
       </div>
       <span class="center_line"></span>
       <div class="right_date" @click="goCalendar()">
         <span class="left_date_style">离 开</span>
         <span class="live_date jfk-font-number jfk-price__number"><i class="booking_icon_font icon_arrow icon-booking_icon_dropdown_normal"></i>
-        15</span>
-        <span class="live_year">2014/03</span>
+        {{endDate}}</span>
+        <span class="live_year">{{endMonth}}</span>
       </div>
     </div>
-    <div class="checkBtn">查 询 酒 店</div>
+    <div class="checkBtn">
+      <a :href="page_resource.SRESULT + '&startDate=' + handleStartDate + '&endDate=' + handleEndDate">查 询 酒 店</a>
+    </div>
     <!-- <p class="color-golden" v-show="isLoadProduct">loading</p> -->
-    <div class="search_info" v-show="false">
+    <div class="search_info"
+         v-show="allData.web_data.last_orders"
+         v-if="allData != ''">
       <p class="search_info_title">最近搜索</p>
-      <p class="search_info_item item_first">广州  10月14日-10月15日  石牌桥</p>
-      <p class="search_info_item item_second">广州  10月14日-10月15日  石牌桥</p>
+      <p class="search_info_item item_first"
+         v-for="(item, index) in allData.web_data.last_orders">
+        {{item.hcity}}  {{item.hname}}</p>
     </div>
     <div class="webkitbox others center boxflex pad_lr30 box_container">
       <a class="layer_bg color2 j_whole_show always" @click="showBottomTip(0)">
@@ -60,32 +65,46 @@
     </div>
     <JfkSupport v-once></JfkSupport>
     <div class="choose_date_calendar" v-show="showCalendar">
-      <jfk-calendar ref="jfkCalendar" format="yyyy/MM/dd" class="font-size--28" @date-click="handleDateClick"></jfk-calendar>
+      <div class="jfk-pl-30 jfk-pr-30">
+        <jfk-calendar ref="jfkCalendar"
+                      class="font-size--28"
+                      format="yyyy/MM/dd"
+                      @date-pick="handleDateClick"
+                      :minDate="min"
+                      :maxDate="max"
+                      :range="true">
+        </jfk-calendar>
+      </div>
        <!-- :minDate="min" :maxDate="max" :defaultValue="defaultValue" :dateCellRender="dateCellRender" :disabledDate="disabledDate" @date-click="handleDateClick"  -->
     </div>
     <!-- 我的收藏 && 常住酒店模块 -->
     <div class="my_collection" v-show="showCollection">
-      <div class="collection_mask">
-        <span class="closeBtn" @click="showCollection = false">
-          <i class="jfk-font font-size--24 icon-icon_close"></i>
-        </span>
-        <p class="title font-size--28">{{bottomTitle}}</p>
-        <ul v-show="showTipData.length != 0">
-          <li v-for="(item, index) in showTipData">
-            <a :href="item.link" class="font-size--24" v-if="item.mark_title">{{item.mark_title}}</a>
-            <a :href="item.link" class="font-size--24" v-else>{{item.hname}}</a>
-          </li>
-        </ul>
-        <a class="font-size--24" v-show="showTipData.length == 0">无</a>
-        <span class="sure font-size--24" @click="showCollection = false">
-          <i class="booking_icon_font font-size--24 icon-font_zh_que_qkbys"></i>
-          <i class="booking_icon_font font-size--24 icon-font_zh_ding__qkbys"></i>
-        </span>
+      <div class="jfk-pl-30 jfk-pr-30">
+        <div class="collection_mask">
+          <span class="closeBtn" @click="showCollection = false">
+            <i class="jfk-font font-size--24 icon-icon_close"></i>
+          </span>
+          <p class="title font-size--32">{{bottomTitle}}</p>
+          <ul v-show="showTipData.length != 0">
+            <li v-for="(item, index) in showTipData">
+              <a :href="item.link" class="font-size--32" v-if="item.mark_title">{{item.mark_title}}</a>
+              <a :href="item.link" class="font-size--32" v-else>{{item.hname}}</a>
+            </li>
+          </ul>
+          <a class="font-size--24" v-show="showTipData.length == 0">无</a>
+          <span class="sure font-size--24" @click="showCollection = false">
+            <i class="booking_icon_font font-size--32 icon-font_zh_que_qkbys"></i>
+            <i class="booking_icon_font font-size--32 icon-font_zh_ding__qkbys"></i>
+          </span>
+        </div>
       </div>
     </div>
     </div>
-    <city-choose v-show="showCityChoose"></city-choose>
-  </div> 
+  <city-choose v-show="showCityChoose"
+               :handleStartDate="handleStartDate"
+               :handleEndDate="handleEndDate">
+  </city-choose>
+  </div>
   </div>
 </template>
 <script>
@@ -100,16 +119,23 @@ export default {
   beforeCreate () {
   },
   created () {
+    console.log(process.env.NODE_ENV)
+//    计算日期
+    this.getDate()
     // 加载swiper
     this.loadPackages()
+//    使用日历
+    this.setCalendar()
+  },
+  computed: {
   },
   data () {
     return {
       // 所有数据
       allData: [],
       // 模拟id，后期由后台加上
-      id: 'a429262687',
-      openid: 'oX3WojhfNUD4JzmlwTzuKba1MywY',
+      id: '',
+      openid: '',
       advs: [],
       // 我的收藏
       hotelCollectionData: [],
@@ -134,39 +160,70 @@ export default {
       },
       // 日历显示
       showCalendar: false,
+      startDate: '',
+      endDate: '',
+      startMonth: '',
+      endMonth: '',
       // 搜索框显示的字
       searchVal: '搜索城市 / 关键字 / 位置',
       showCityChoose: false,
       // 显示热搜
-      showHotSearch: false
+      showHotSearch: false,
       // 日历最小日期
-      // min: '2017/04/21',
+      min: null,
       // 日历最大日期
-      // max: '2017/08/21',
-      // 今天
-      // defaultValue: null
+      max: null,
+      page_resource: {
+        'SRESULT': 'nearby?theme=1&id=a429262687'
+      },
+      handleStartDate: '',
+      handleEndDate: ''
     }
   },
   methods: {
+    getDate () {
+      let year = new Date().getFullYear()
+      let month = new Date().getMonth() + 1
+      month = (month < 10 ? '0' + month : month)
+      let today = new Date().getDate()
+      this.startMonth = year + '/' + month
+      this.endMonth = year + '/' + month
+      this.startDate = today
+      this.endDate = today + 1
+      this.handleStartDate = year + '/' + month + '/' + today
+      this.handleEndDate = year + '/' + month + '/' + this.endDate
+    },
     loadPackages () {
       let that = this
+      let loading
+      loading = this.$jfkToast({
+        iconClass: 'jfk-loading__snake ',
+        duration: -1,
+        isLoading: true
+      })
       let args = {
-        id: this.id,
-        openid: this.openid
+        id: this.getUrlParams('id'),
+        openid: this.getUrlParams('openid')
       }
-      that.isLoadProduct = true
       getBannerList(args).then(function (res) {
+        if (loading) {
+          loading.close()
+        }
         that.allData = res
-        that.isLoadProduct = false
         for (let i = 0; i < res.web_data.pubimgs.length; i++) {
           res.web_data.pubimgs[i].logo = res.web_data.pubimgs[i].image_url
         }
         that.advs = res.web_data.pubimgs
         that.hotelCollectionData = res.web_data.hotel_collection
         that.lastOrderData = res.web_data.last_orders
+        if (process.env.NODE_ENV !== 'development') {
+          that.page_resource = res.web_data.page_resource.links
+        }
         that.logJSON(res)
       }).catch(function (e) {
-        that.isLoadProduct = false
+        if (loading) {
+          loading.close()
+        }
         console.log(e)
       })
     },
@@ -188,8 +245,28 @@ export default {
       }
       showFullLayer(null, '选择日期', location.href, cb)
     },
-    handleDateClick () {
-      this.showCalendar = false
+    handleDateClick (result) {
+      let _self = this
+      _self.handleStartDate = result[0]
+      _self.handleEndDate = result[1]
+      _self.startDate = _self.changeDay(result[0])
+      _self.endDate = _self.changeDay(result[1])
+      _self.startMonth = _self.changeMonth(result[0])
+      _self.endMonth = _self.changeMonth(result[1])
+      setTimeout(function () {
+        _self.showCalendar = false
+      }, 500)
+    },
+    // change day
+    changeDay (result) {
+      let day = result.lastIndexOf('/')
+      day = result.substring(day + 1, result.length)
+      return day
+    },
+    // change day
+    changeMonth (result) {
+      result = result.substring(0, result.length - 3)
+      return result
     },
     // 显示tip
     showBottomTip (type) {
@@ -197,6 +274,41 @@ export default {
       type ? _self.bottomTitle = '我的收藏' : _self.bottomTitle = '常住酒店'
       type ? _self.showTipData = _self.hotelCollectionData : _self.showTipData = _self.lastOrderData
       _self.showCollection = true
+    },
+    setCalendar () {
+      let _self = this
+      let today = new Date()
+      _self.min = today
+      _self.max = _self.setDateMonth()
+    },
+    //  设置日期+3
+    setDateMonth () {
+      var d = new Date()
+      var month = d.getMonth()
+      if (month === 11) {
+        var year = d.getFullYear()
+        d.setMonth(0)
+        d.setFullYear(year + 1)
+      } else {
+        d.setMonth(month + 3)
+      }
+      return d
+    },
+    // 获取url 参数
+    getUrlParams (urlName) {
+      let url = location.href
+      let paraString = url.substring(url.indexOf('?') + 1, url.length).split('&')
+      let returnValue
+      for (let i = 0; i < paraString.length; i++) {
+        let tempParas = paraString[i].split('=')[0]
+        let parasValue = paraString[i].split('=')[1]
+        if (tempParas === urlName) returnValue = parasValue
+      }
+      if (typeof (returnValue) === 'undefined') {
+        return ''
+      } else {
+        return returnValue
+      }
     },
     // 输出专用
     logJSON (data) {

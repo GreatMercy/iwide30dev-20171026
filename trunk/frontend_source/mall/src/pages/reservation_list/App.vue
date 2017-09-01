@@ -17,16 +17,22 @@
 
     <ul class="reservation-list jfk-pl-30 jfk-pr-30" v-if="list.length > 0">
       <li v-for="(item, index) in list">
-        <a class="jfk-pl-30 jfk-pr-30">
-          <div v-lazy:background-image=""
-               class="reservation-list__image jfk-image__lazy--3-3 jfk-image__lazy--background-image">
+        <a class="jfk-pl-30 jfk-pr-30" :href="item.link + codeId">
+          <div v-lazy:background-image="item.room_cover"
+               class="reservation-list__image jfk-image__lazy--3-3 jfk-image__lazy--background-image"
+               v-if="item.room_cover">
           </div>
 
-          <div class="reservation-list__name font-size-38">高级大床房－套票价</div>
+          <div
+            class="reservation-list__image jfk-image__lazy--preload  jfk-image__lazy--3-3 jfk-image__lazy--background-image"
+            v-else>
+          </div>
+
+          <div class="reservation-list__name font-size-38" v-text="item.room_name"></div>
           <div class="jfk-flex reservation-list__info">
 
             <div class="reservation-list__left">
-              <p class="reservation-list__hotel font-size--30">金房卡大酒店岗顶店</p>
+              <p class="reservation-list__hotel font-size--30" v-text="item.name"></p>
               <p class="reservation-list__location">
                 <i class="jfk-font icon-icon_location"></i><span class="font-size--24" v-text="item.address"></span>
               </p>
@@ -94,6 +100,7 @@
     created () {
       this.searchValue = ''
       this.getData('page')
+      this.codeId = params['code_id']
     },
     watch: {},
     methods: {
@@ -108,17 +115,23 @@
             'search': this.searchValue || ''
           }).then((res) => {
             if (operation === 'page') {
-              this.allList = this.list = res['web_data']['products']['wx_booking_config']
+              this.allList = this.list = res['web_data']['room_list']
               this.canLoad = false
             } else {
-              this.list = res['web_data']['products']['wx_booking_config']
+              this.list = res['web_data']['room_list']
             }
             if (process.env.NODE_ENV === 'development') {
-              console.log('reservation')
+              const changeLink = (item) => {
+                let urlParams = formatUrlParams.default(item['link'])
+                item['link'] = `/reservation?id=${urlParams.id}&bsn=${urlParams.bsn}&cdid=${urlParams.cdid}&hid=${urlParams.hid}&oid=${urlParams.oid}&rmid=${urlParams.rmid}&aiid=${urlParams.aiid}&cdid=${urlParams.cdid}&code_id=`
+              }
+
+              for (let i = 0; i < this.list.length; i++) {
+                changeLink(this.list[i])
+              }
             }
             this.loadingList = false
             this.operation = operation
-            console.log(this.list)
           }).catch(() => {
             this.loadingList = false
           })
@@ -146,6 +159,7 @@
       return {
         searchValue: '',
         loadingList: false,
+        codeId: '',
         list: [],
         allList: [],
         operation: '',

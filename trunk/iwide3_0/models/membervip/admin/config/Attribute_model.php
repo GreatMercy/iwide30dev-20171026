@@ -178,7 +178,8 @@ class Attribute_model
                     'membership_number',
                     'amount',
                     'note',
-                    'createtime'
+                    'createtime',
+                    'order_id'
                 ];
                 break;
             case 11:
@@ -399,6 +400,7 @@ class Attribute_model
                     'amount' => '积分变更',
                     'note' => '来源',
                     'createtime' => '记录时间',
+                    'order_id' => '订单号'
                 );
                 break;
             case 11:
@@ -1091,6 +1093,11 @@ class Attribute_model
                         'grid_width' => '5%',
                         'type' => 'text',
                         'grid_function' => '_parsedatetime'
+                    ],
+                    'order_id' => [
+                        'grid_ui' => '',
+                        'grid_width' => '6%',
+                        'type' => 'text'
                     ]
                 ];
                 break;

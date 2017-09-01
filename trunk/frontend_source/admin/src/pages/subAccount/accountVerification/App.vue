@@ -126,7 +126,7 @@
         <el-pagination
           @current-change="handleCurrentChange"
           :current-page="pageInfo.current"
-          :page-size="10"
+          :page-size="pageInfo.page_size"
           layout="total, prev, pager, next, jumper"
           :total="pageInfo.total">
         </el-pagination>
@@ -204,7 +204,7 @@
           start_time: this.formatStart || '',
           end_time: this.formatEnd || '',
           offset: offset,
-          limit: 10
+          limit: ''
         }
         // if (process.env.NODE_ENV === 'development') {
         //   params.inter_id = ''
@@ -227,8 +227,11 @@
             'csrf_token': this.csrf_token
           }
           postCheckAccount(qs.stringify(param), {headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then((res) => {
-            this.tableData[idx].status_name = '验证成功'
-            this.tableData[idx].status = 1
+            this.tableData[idx].status_name = res.data.status_name
+            this.tableData[idx].status = res.data.status
+            this.tableData[idx].remark = res.data.remark
+            this.tableData[idx].amount = res.data.amount
+            this.tableData[idx].add_time = res.data.add_time
             this.sendAjax = false
             this.$notify({
               title: '',
@@ -236,14 +239,12 @@
               type: 'success'
             })
           }).catch((err) => {
-            if (err.status === '1010') {
-              this.tableData[idx].status_name = '验证失败'
-              this.tableData[idx].status = 2
-            }
             if (err.status === '1012') {
-              this.tableData[idx].status_name = '验证失败'
-              this.tableData[idx].status = 2
-              this.tableData[idx].remark = err.msg
+              this.tableData[idx].status_name = err.data.status_name
+              this.tableData[idx].status = err.data.status
+              this.tableData[idx].remark = err.data.remark
+              this.tableData[idx].amount = err.data.amount
+              this.tableData[idx].add_time = err.data.add_time
             }
             this.sendAjax = false
           })

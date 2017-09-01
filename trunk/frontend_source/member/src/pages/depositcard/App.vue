@@ -1,7 +1,7 @@
 <template>
   <div class="gradient_bg">
   <section class="padding_0_15 padding_15">
-    <div v-for="(value,key) in dataList.card_list" class="block radius_3 layer_bg card_item margin_top_15">
+    <div v-for="(value,key) in dataList.card_list" class="block radius_3 layer_bg white_bg card_item margin_top_15 box_shadowb">
       <div class="flex between">
         <div class="relative width_75_1">
           <div>
@@ -9,14 +9,14 @@
             <span class="margin_right_10 font_19 color1 font_spacing_3 pclight">{{value.title}}</span>
             <!-- <span class="font_12">{{value.brand_name}}</span> -->
           </div>
-          <div class="font_12 mar_t20 color3 minheight_17 text_hide">{{value.notice}}</div>
+          <div class="font_12 mar_t20 color3 minheight_17 text_hide desp-notice">{{value.notice}}</div>
         </div>
         <div class="font_12 width_100 txt_r margin_top_20f"><a :href="dataList.page_resource.links.info + '&cardId=' +value.deposit_card_id"><span class="margin_right_6 color1">查看详情</span><em class="jfk-font color1">&#xe61c;</em></a></div>
       </div>
       <p class="relative border_bottom margin_top_15 height_1"></p>
       <div class="flex between margin_top_13">
         <div class="main_color1 font_12"><font class="jfk-font margin_right_2 font_21">&#xe643;</font><em class="iconfonts font_25">{{value.money}}</em></div>
-        <div class="font_15 color1 border_1 width_100 center padding_6 relative border_b2945e" @click="bucard(value.deposit_card_id)">立即购买</div>
+        <div class="font_15 color1 border_1 width_100 center padding_6 relative border_b2945e desp-btn" @click="bucard(value.deposit_card_id)">立即购买</div>
       </div>
     </div>
   </section>

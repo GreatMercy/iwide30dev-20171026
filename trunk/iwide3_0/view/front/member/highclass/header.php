@@ -24,3 +24,6 @@
 </head>
 <?php include 'wxheader.php' ?>
 <link rel="stylesheet" href="<?php echo refer_res('app.css','public/user') ?>">
+<script type="text/javascript">
+var skin_theme='<?php echo isset($_skin_theme)?$_skin_theme:''; ?>';
+</script>

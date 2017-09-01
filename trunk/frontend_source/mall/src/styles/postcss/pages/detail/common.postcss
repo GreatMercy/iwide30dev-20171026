@@ -1,5 +1,6 @@
 .jfk-pages__detail {
   .banners{
+    position: relative;
     .jfk-swiper__item-box{
       padding-bottom: 100%;
     }
@@ -69,6 +70,7 @@
     right: 0;
     width: 100%;
     height: 100%;
+    border-radius: px2rem(var(--border-radius-big));
     &-box {
       width: calc(595 / 750 * 100%);
       padding-bottom: calc(242 / 750 * 100%);
@@ -89,8 +91,10 @@
       width: 100%;
     }
     .time {
-      padding-bottom: calc(30 / 24)em;
+      padding-bottom: calc(10 / 24)em;
       .tip {
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
         line-height: calc(34 / 24);
         width: 2em;
         vertical-align: middle;
@@ -98,9 +102,15 @@
       }
       .clock{
         vertical-align: middle;
-        letter-spacing: -.2em;
+        line-height: 1;
         i {
           vertical-align: bottom;
+        }
+        .unit {
+          transform-origin: bottom center;
+          margin-left: -0.35em;
+          margin-right: -0.35em;
+          vertical-align: 0.2em;
         }
         .num {
           letter-spacing: normal;
@@ -112,49 +122,64 @@
         }
       }
     }
-    .process{
-      height: px2rem(26);
-      padding: 0 px2rem(8);
-      max-width: calc((407 - 33) / 490 * 100%);
+    .process {
+      height: px2rem(48);
+      width: calc(402 / 490 * 100%);
       position: relative;
-      overflow: hidden;
+      background: {
+        repeat: no-repeat;
+        size: 100%;
+        position: center;
+      }
       .line {
-        height: 100%;
         position: absolute;
-        top: 0;
-        right: 0;
-        width: 100%;
-        box-sizing: border-box;
-        padding-right: px2rem(50);
-        transition: width 0.3s ease;
-        &:before {
-          content: '';
+        right: px2rem(54);
+        top:0;
+        left: 0;
+        z-index: 10;
+        height: 100%;
+        &-cont {
           position: absolute;
-          left: px2rem(52);
-          right: 0;
+          top: 0;
+          right:0;
           height: 100%;
+          &:before {
+            width: px2rem(54);
+            height: px2rem(48);
+            content: '';
+            position: absolute;
+            left: px2rem(-5);
+            top: 0;
+            background: {
+              size: px2rem(54) px2rem(48);
+              repeat: no-repeat;
+              position: left center;
+            }
+            z-index: 11;
+          }
+          &:after {
+            content: '';
+            position: absolute;
+            left: px2rem(42);
+            right: px2rem(-54);
+            top: 0;
+            height: 100%;
+            z-index: 9;
+          }
         }
-        &:after {
-          content: '';
-          position: absolute;
-          left: px2rem(52);
+        &-line {
+          left: px2rem(42);
+          right: px2rem(-42);
+          top: px2rem(24);
           height: px2rem(2);
-          right: 0;
-          top: px2rem(12);
+          position: absolute;
+          z-index: 10;
         }
       }
     }
     .number {
-      padding-top: calc(10 / 24)em;
       span {
-        vertical-align: middle;
-      }
-      .tip {
-        text-indent: -1.3em;
-        margin-right: -.8em;
-      }
-      .total{
-        margin-left: -0.4em;
+        vertical-align: bottom;
       }
     }
     .mask {
@@ -436,6 +461,7 @@
         }
         &__content{
           height: calc((15 + 14) / 14)em;
+          overflow: hidden;
           .price {
             line-height: calc((6 * 2 + 18) / 18)em;
             margin-top: calc(-6 / 18)em;
@@ -550,7 +576,6 @@
       display: inline-block;
       margin-right: calc(14 / 24)em;
       color: #fff;
-      text-shadow: 0px 0px 7px rgba(41, 33, 20, 0.81);
       letter-spacing: -.1em;
       padding: 0 calc(10 / 24)em;
       line-height: calc(36 / 24);
@@ -591,12 +616,6 @@
   }
   /*底部*/
   .footer{
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    z-index: 1000;
-    width: 100%;
-
     .links{
       width: calc(340 / 750 * 100%);
       .jfk-flex{

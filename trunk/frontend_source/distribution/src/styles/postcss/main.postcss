@@ -1,0 +1,327 @@
+*{
+  box-sizing: initial;
+}
+/*文字显示省略号*/
+@define-mixin ellipsis $row: 1, $width: 100% {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  @if ($row == 1) {
+    white-space: nowrap;
+  } @else {
+    display: -webkit-box;
+    -webkit-line-clamp: $(row);
+    -webkit-box-orient: vertical;
+  }
+}
+@define-mixin one-line-base $direction, $size{
+  content: '';
+  position: absolute;
+  @if $direction == vertical {
+    height: $(size);
+    width: 1px;
+    transform: scale(0.5, 1);
+  } @else {
+    width: $(size);
+    height: 1px;
+    transform: scale(1, 0.5);
+  }
+}
+/* 1px线 */
+@define-mixin one-line $direction: vertical, $size: 100%, $pseudo: before {
+  @if $pseudo == null {
+    @mixin one-line-base $(direction), $(size);
+    @mixin-content;
+  } @else {
+    position: relative;
+    &::$(pseudo) {
+      @mixin one-line-base $(direction), $(size);
+      @mixin-content;
+    }
+  }
+}
+:root{
+  --size-queue: 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 44, 46, 48, 50, 54, 60, 65, 68, 80, 120;
+}
+@each $size in var(--size-queue) {
+  .font-size--$(size) {
+    font-size: px2rem($size)
+  }
+}
+/* font-size */
+@each $size in var(--size-queue) {
+  .font-size--$(size) {
+    @if $(size) < 24 {
+      font-size: px2rem($(size) * 2);
+      transform: scale(.5);
+      @media screen and (min-width: 414px) {
+        font-size: px2rem(($(size) + 2) * 2);
+      }
+    } @else {
+      font-size: px2rem($size);
+      @media screen and (min-width: 414px) {
+        font-size: px2rem($(size) + 2);
+      }
+    }
+  }
+}
+.Ltac{
+  text-align: center;
+}
+.Ldn{
+  display: none;
+}
+html,body{
+  background-color: #f8f8f8;
+  font-family: Helvetica Neue,sans-serif;
+}
+.filter-menu-box{
+  position: fixed;
+  width: 100%;
+  left: 0;
+  top: 0;  
+  z-index: 10; 
+  &.showgraybg{
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);     
+  } 
+}
+.filter-menu{
+  line-height: 15px;
+  padding: 12px 0;
+  color: #333333;
+  background-color: #fff;
+  @mixin one-line 1 {
+    background-color: #e4e4e4;
+    left: 0;
+    bottom: 0;
+  }
+  .arrow{
+    color: #888888;
+  }
+  &.color_main{
+    .arrow{
+      transform: rotate(180deg);
+      display: inline-block;
+    }
+  }
+}
+.selectlist{
+  padding: 0 15px;
+  background-color: #fff;
+  .item{
+    text-align: left;
+    padding: 11px 0;
+    color: #333;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    @mixin one-line 1 {
+      background-color: #e4e4e4;
+      left: 0;
+      bottom: 0;
+    }    
+    .selectBtn{
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      border: 1px solid #888888;
+      border-radius: 30px;
+      vertical-align: middle;
+    }
+    &:last-child{
+      &:before{
+        display: none;
+      }
+    }
+    &.color_main{
+      .selectBtn{
+        border: none;
+        width: 16px;
+        height: 16px;
+        color: #fff;
+        text-align: center;
+        position: relative;
+        i{
+          font-size: 10px;
+          line-height: 16px;
+          position: absolute;
+          top: 1px;
+          left: 3px;
+          // line-height: 14px;
+          // display: inline-block;
+        }
+      }
+    }
+  }
+}
+.list-box{
+  margin-top: 50px;
+  .item{
+    padding: 0 15px;
+    margin-bottom: 10px;
+    background-color: #ffffff;
+    .goods-info{
+      position: relative;
+      padding: 20px 0;
+      @mixin one-line 1 {
+        background-color: #e4e4e4;
+        left: 0;
+        bottom: 0;
+      }       
+      img{
+        position: absolute;
+        display: block;
+        width: 65px;
+        height: 65px;
+        left: 0;
+        top: 20px;
+      }
+      .intro{
+        padding-left: 80px;
+        h3{
+          color: #333;
+          font-weight: normal;
+          line-height: 20px;
+          height: 40px;
+          word-wrap:break-word;
+          @mixin ellipsis 2 {
+          }
+        }
+        .saleinfo{
+          color: #888888;
+          margin-top: 8px;
+          line-height: 15px;
+          .num{
+            margin-left: 6px;
+          }
+          .price{
+            float: right;
+            color: #e32525;
+          }
+        }
+      }
+    }
+    .buy-info{
+      display: flex;
+      justify-content: space-between;
+      padding: 13px 0;
+      .rewardNum{
+        color: #555555;
+        line-height: 27px;
+        span{
+          color: #333333;
+          margin-left: 4px;
+        }
+      }
+      .buybtn{
+        color: #fff;
+        padding: 6px 10px;
+        border-radius: 2px;
+
+        i{
+          margin-right: 6px;
+          vertical-align: -1px;
+        }
+        span{
+          line-height: 1px;
+        }
+      }
+    }
+  }
+}
+.popWindow{
+  background-color: rgba(0,0,0,0.5);
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  z-index: 200;
+  .mainbox{
+    display: flex;
+    align-items: center;
+    height: 100%;
+    padding: 0 15px;
+    .cardmain{
+      width: 100%;
+      background-color: #fff;
+      text-align: center;
+      padding: 15px 15px 20px ;
+      border-radius: 3px;      
+      .close{
+        text-align: right;
+        color: #bfbfbf;
+      }
+      h2{
+        color: #808080;
+        margin-bottom: 15px;
+        letter-spacing: 5px;
+      }
+      img{
+        width: 88%;
+      }
+      .codetitle{
+        width: 79%;
+      }
+    }
+  }
+}
+.none{
+  display: flex;
+  align-items: center; 
+  height: 100%; 
+  position: fixed;
+  width: 100%;
+  left: 0;
+  top: 0;
+  background-color: #fff;
+  z-index: 100;
+  .main{
+    text-align: center;
+    width: 100%;
+    padding-bottom: 20px;
+    .icon-mall_icon_reward{
+      color: #bfbfbf;
+    }
+    .tip1{
+      color: #bfbfbf;
+      margin-top: 30px;
+    }
+    .tip2{
+      color: #888888;
+      margin-top: 25px;
+    }
+    .buybtn{
+      display: inline-block;
+      color: #fff;
+      padding: 9px 25px;
+      border-radius: 2px;
+      line-height: 14px;
+      margin-top: 20px;
+    }
+  }
+}
+.products-list__loading {
+  text-align: center;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  display: block;
+}
+
+.jfk-toast{
+  text-align: center;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #fff;
+  z-index: 100;
+  i{
+    color: #ff9900;
+    font-size: 30px;
+  }
+}

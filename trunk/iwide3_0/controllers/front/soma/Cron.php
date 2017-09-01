@@ -2027,6 +2027,154 @@ class Cron extends MY_Controller
     }
 
 
+    /**
+     * 手动模拟微信支付回调
+     * @author liguanglong  <liguanglong@mofly.cn>
+     */
+    public function order(){
+
+
+//        $list = '[{"inter_id":"a493195389","orderid":"1000371431","transaction_id":"4000492001201708309061014865","state":"SUCCESS"},{"inter_id":"a493195389","orderid":"1000371433","transaction_id":"4001912001201708309061045767","state":"SUCCESS"},{"inter_id":"a493195389","orderid":"1000371435","transaction_id":"4001912001201708309059738914","state":"SUCCESS"},{"inter_id":"a497858474","orderid":"1000371459","transaction_id":"4006282001201708309061832909","state":"SUCCESS"},{"inter_id":"a497858474","orderid":"1000371464","transaction_id":"4006362001201708309064751396","state":"SUCCESS"},{"inter_id":"a497858474","orderid":"1000371484","transaction_id":"4002892001201708309066807965","state":"SUCCESS"},{"inter_id":"a496803399","orderid":"1000371551","transaction_id":"4004442001201708309070786809","state":"SUCCESS"},{"inter_id":"a495012935","orderid":"1000371585","transaction_id":"4008182001201708309067843837","state":"SUCCESS"},{"inter_id":"a496803399","orderid":"1000371587","transaction_id":"4000252001201708309067790373","state":"SUCCESS"},{"inter_id":"a497858474","orderid":"1000371600","transaction_id":"4002402001201708309072373868","state":"SUCCESS"},{"inter_id":"a495782075","orderid":"1000371618","transaction_id":"4002132001201708309069636151","state":"SUCCESS"},{"inter_id":"a495782075","orderid":"1000371624","transaction_id":"4001222001201708309071471740","state":"SUCCESS"},{"inter_id":"a496803399","orderid":"1000371635","transaction_id":"4007512001201708309071591994","state":"SUCCESS"},{"inter_id":"a496803399","orderid":"1000371649","transaction_id":"4007512001201708309074586804","state":"SUCCESS"},{"inter_id":"a496803399","orderid":"1000371657","transaction_id":"4004492001201708309073255367","state":"SUCCESS"},{"inter_id":"a496803399","orderid":"1000371663","transaction_id":"4006342001201708309076411353","state":"SUCCESS"},{"inter_id":"a496803399","orderid":"1000371664","transaction_id":"4004492001201708309074871514","state":"SUCCESS"},{"inter_id":"a493195389","orderid":"1000371691","transaction_id":"4007372001201708309075145736","state":"SUCCESS"},{"inter_id":"a494902849","orderid":"1000371723","transaction_id":"4001412001201708309074256452","state":"SUCCESS"},{"inter_id":"a494902849","orderid":"1000371724","transaction_id":"4004802001201708309077262580","state":"SUCCESS"},{"inter_id":"a494902849","orderid":"1000371725","transaction_id":"4008562001201708309075763920","state":"SUCCESS"},{"inter_id":"a494902849","orderid":"1000371726","transaction_id":"4006562001201708309075281885","state":"SUCCESS"},{"inter_id":"a494902849","orderid":"1000371727","transaction_id":"4004592001201708309079033782","state":"SUCCESS"},{"inter_id":"a494902849","orderid":"1000371728","transaction_id":"4009602001201708309077338424","state":"SUCCESS"},{"inter_id":"a494902849","orderid":"1000371729","transaction_id":"4000222001201708309079097819","state":"SUCCESS"},{"inter_id":"a490321436","orderid":"1000371732","transaction_id":"4008482001201708309079111839","state":"SUCCESS"},{"inter_id":"a494902849","orderid":"1000371737","transaction_id":"4000282001201708309075871094","state":"SUCCESS"},{"inter_id":"a494902849","orderid":"1000371741","transaction_id":"4008492001201708309075916067","state":"SUCCESS"},{"inter_id":"a494902849","orderid":"1000371757","transaction_id":"4000972001201708309077639046","state":"SUCCESS"},{"inter_id":"a493195389","orderid":"1000371763","transaction_id":"4004942001201708309077748297","state":"SUCCESS"},{"inter_id":"a494902849","orderid":"1000371766","transaction_id":"4008572001201708309077774837","state":"SUCCESS"},{"inter_id":"a494902849","orderid":"1000371768","transaction_id":"4004552001201708309082390711","state":"SUCCESS"},{"inter_id":"a495012935","orderid":"1000371773","transaction_id":"4001962001201708309079658292","state":"SUCCESS"},{"inter_id":"a494902849","orderid":"1000371776","transaction_id":"4005312001201708309080866314","state":"SUCCESS"},{"inter_id":"a494902849","orderid":"1000371780","transaction_id":"4001892001201708309079787808","state":"SUCCESS"},{"inter_id":"a494902849","orderid":"1000371786","transaction_id":"4000082001201708309078112226","state":"SUCCESS"},{"inter_id":"a494902849","orderid":"1000371803","transaction_id":"4008122001201708309081359579","state":"SUCCESS"},{"inter_id":"a493717254","orderid":"1000371814","transaction_id":"4004812001201708309084513967","state":"SUCCESS"},{"inter_id":"a483687344","orderid":"1000371820","transaction_id":"4009332001201708309084661605","state":"SUCCESS"},{"inter_id":"a494902849","orderid":"1000371822","transaction_id":"4006712001201708309083178000","state":"SUCCESS"},{"inter_id":"a494902849","orderid":"1000371825","transaction_id":"4008942001201708309081524296","state":"SUCCESS"},{"inter_id":"a493717254","orderid":"1000371827","transaction_id":"4004772001201708309081546744","state":"SUCCESS"},{"inter_id":"a494902849","orderid":"1000371828","transaction_id":"4008912001201708309083219240","state":"SUCCESS"},{"inter_id":"a497339744","orderid":"1000371839","transaction_id":"4009672001201708309084869785","state":"SUCCESS"},{"inter_id":"a494902849","orderid":"1000371861","transaction_id":"4002552001201708309085179208","state":"SUCCESS"},{"inter_id":"a494902849","orderid":"1000371874","transaction_id":"4009282001201708309087055300","state":"SUCCESS"},{"inter_id":"a494902849","orderid":"1000371884","transaction_id":"4007552001201708309085481388","state":"SUCCESS"},{"inter_id":"a488187132","orderid":"1000371897","transaction_id":"4009562001201708309088458611","state":"SUCCESS"},{"inter_id":"a488187132","orderid":"1000371906","transaction_id":"4003872001201708309085726342","state":"SUCCESS"},{"inter_id":"a493717254","orderid":"1000371936","transaction_id":"4001702001201708309087822274","state":"SUCCESS"},{"inter_id":"a483687344","orderid":"1000371944","transaction_id":"4000932001201708309087964728","state":"SUCCESS"},{"inter_id":"a494902849","orderid":"1000371948","transaction_id":"4006562001201708309089094102","state":"SUCCESS"},{"inter_id":"a491466008","orderid":"1000371949","transaction_id":"4005602001201708309090783964","state":"SUCCESS"},{"inter_id":"a483687344","orderid":"1000371954","transaction_id":"4006722001201708309090891139","state":"SUCCESS"},{"inter_id":"a493195389","orderid":"1000371966","transaction_id":"4001692001201708309089347399","state":"SUCCESS"},{"inter_id":"a493195389","orderid":"1000371970","transaction_id":"4001332001201708309089416896","state":"SUCCESS"},{"inter_id":"a483687344","orderid":"1000372007","transaction_id":"4001862001201708309091796957","state":"SUCCESS"},{"inter_id":"a494902849","orderid":"1000372015","transaction_id":"4001322001201708309090112975","state":"SUCCESS"},{"inter_id":"a493195389","orderid":"1000372016","transaction_id":"4007372001201708309090127917","state":"SUCCESS"},{"inter_id":"a494902849","orderid":"1000372020","transaction_id":"4001482001201708309090190123","state":"SUCCESS"},{"inter_id":"a493195389","orderid":"1000372029","transaction_id":"4007372001201708309093617018","state":"SUCCESS"},{"inter_id":"a483687344","orderid":"1000372032","transaction_id":"4002522001201708309093676510","state":"SUCCESS"},{"inter_id":"a498529802","orderid":"1000372042","transaction_id":"4009562001201708309096569235","state":"SUCCESS"},{"inter_id":"a493195389","orderid":"1000372043","transaction_id":"4005092001201708309093867630","state":"SUCCESS"},{"inter_id":"a494902849","orderid":"1000372067","transaction_id":"4007852001201708309096877998","state":"SUCCESS"},{"inter_id":"a493195389","orderid":"1000372070","transaction_id":"4004532001201708309096973668","state":"SUCCESS"},{"inter_id":"a483687344","orderid":"1000372084","transaction_id":"4005642001201708309096196811","state":"SUCCESS"},{"inter_id":"a493195389","orderid":"1000372085","transaction_id":"4007342001201708309100537424","state":"SUCCESS"},{"inter_id":"a483687344","orderid":"1000372095","transaction_id":"4008212001201708309102599123","state":"SUCCESS"},{"inter_id":"a499321368","orderid":"1000372135","transaction_id":"4009202001201708309099851876","state":"SUCCESS"}]';
+
+
+//        $list = '[{"inter_id":"a493195389","orderid":"1000371431","transaction_id":"4000492001201708309061014865","state":"SUCCESS"},{"inter_id":"a493195389","orderid":"1000371433","transaction_id":"4001912001201708309061045767","state":"SUCCESS"}]';
+
+//        $list = '[{"inter_id":"a493195389","orderid":"1000371435","transaction_id":"4001912001201708309059738914","state":"SUCCESS"},{"inter_id":"a497858474","orderid":"1000371459","transaction_id":"4006282001201708309061832909","state":"SUCCESS"},{"inter_id":"a497858474","orderid":"1000371464","transaction_id":"4006362001201708309064751396","state":"SUCCESS"}]';
+
+//          $list = '[{"inter_id":"a497858474","orderid":"1000371484","transaction_id":"4002892001201708309066807965","state":"SUCCESS"},{"inter_id":"a496803399","orderid":"1000371551","transaction_id":"4004442001201708309070786809","state":"SUCCESS"},{"inter_id":"a495012935","orderid":"1000371585","transaction_id":"4008182001201708309067843837","state":"SUCCESS"},{"inter_id":"a496803399","orderid":"1000371587","transaction_id":"4000252001201708309067790373","state":"SUCCESS"},{"inter_id":"a497858474","orderid":"1000371600","transaction_id":"4002402001201708309072373868","state":"SUCCESS"},{"inter_id":"a495782075","orderid":"1000371618","transaction_id":"4002132001201708309069636151","state":"SUCCESS"},{"inter_id":"a495782075","orderid":"1000371624","transaction_id":"4001222001201708309071471740","state":"SUCCESS"},{"inter_id":"a496803399","orderid":"1000371635","transaction_id":"4007512001201708309071591994","state":"SUCCESS"},{"inter_id":"a496803399","orderid":"1000371649","transaction_id":"4007512001201708309074586804","state":"SUCCESS"},{"inter_id":"a496803399","orderid":"1000371657","transaction_id":"4004492001201708309073255367","state":"SUCCESS"},{"inter_id":"a496803399","orderid":"1000371663","transaction_id":"4006342001201708309076411353","state":"SUCCESS"},{"inter_id":"a496803399","orderid":"1000371664","transaction_id":"4004492001201708309074871514","state":"SUCCESS"},{"inter_id":"a493195389","orderid":"1000371691","transaction_id":"4007372001201708309075145736","state":"SUCCESS"},{"inter_id":"a494902849","orderid":"1000371723","transaction_id":"4001412001201708309074256452","state":"SUCCESS"},{"inter_id":"a494902849","orderid":"1000371724","transaction_id":"4004802001201708309077262580","state":"SUCCESS"},{"inter_id":"a494902849","orderid":"1000371725","transaction_id":"4008562001201708309075763920","state":"SUCCESS"},{"inter_id":"a494902849","orderid":"1000371726","transaction_id":"4006562001201708309075281885","state":"SUCCESS"},{"inter_id":"a494902849","orderid":"1000371727","transaction_id":"4004592001201708309079033782","state":"SUCCESS"},{"inter_id":"a494902849","orderid":"1000371728","transaction_id":"4009602001201708309077338424","state":"SUCCESS"},{"inter_id":"a494902849","orderid":"1000371729","transaction_id":"4000222001201708309079097819","state":"SUCCESS"},{"inter_id":"a490321436","orderid":"1000371732","transaction_id":"4008482001201708309079111839","state":"SUCCESS"},{"inter_id":"a494902849","orderid":"1000371737","transaction_id":"4000282001201708309075871094","state":"SUCCESS"},{"inter_id":"a494902849","orderid":"1000371741","transaction_id":"4008492001201708309075916067","state":"SUCCESS"},{"inter_id":"a494902849","orderid":"1000371757","transaction_id":"4000972001201708309077639046","state":"SUCCESS"},{"inter_id":"a493195389","orderid":"1000371763","transaction_id":"4004942001201708309077748297","state":"SUCCESS"},{"inter_id":"a494902849","orderid":"1000371766","transaction_id":"4008572001201708309077774837","state":"SUCCESS"},{"inter_id":"a494902849","orderid":"1000371768","transaction_id":"4004552001201708309082390711","state":"SUCCESS"},{"inter_id":"a495012935","orderid":"1000371773","transaction_id":"4001962001201708309079658292","state":"SUCCESS"},{"inter_id":"a494902849","orderid":"1000371776","transaction_id":"4005312001201708309080866314","state":"SUCCESS"},{"inter_id":"a494902849","orderid":"1000371780","transaction_id":"4001892001201708309079787808","state":"SUCCESS"},{"inter_id":"a494902849","orderid":"1000371786","transaction_id":"4000082001201708309078112226","state":"SUCCESS"},{"inter_id":"a494902849","orderid":"1000371803","transaction_id":"4008122001201708309081359579","state":"SUCCESS"},{"inter_id":"a493717254","orderid":"1000371814","transaction_id":"4004812001201708309084513967","state":"SUCCESS"},{"inter_id":"a483687344","orderid":"1000371820","transaction_id":"4009332001201708309084661605","state":"SUCCESS"},{"inter_id":"a494902849","orderid":"1000371822","transaction_id":"4006712001201708309083178000","state":"SUCCESS"},{"inter_id":"a494902849","orderid":"1000371825","transaction_id":"4008942001201708309081524296","state":"SUCCESS"},{"inter_id":"a493717254","orderid":"1000371827","transaction_id":"4004772001201708309081546744","state":"SUCCESS"},{"inter_id":"a494902849","orderid":"1000371828","transaction_id":"4008912001201708309083219240","state":"SUCCESS"},{"inter_id":"a497339744","orderid":"1000371839","transaction_id":"4009672001201708309084869785","state":"SUCCESS"},{"inter_id":"a494902849","orderid":"1000371861","transaction_id":"4002552001201708309085179208","state":"SUCCESS"},{"inter_id":"a494902849","orderid":"1000371874","transaction_id":"4009282001201708309087055300","state":"SUCCESS"},{"inter_id":"a494902849","orderid":"1000371884","transaction_id":"4007552001201708309085481388","state":"SUCCESS"},{"inter_id":"a488187132","orderid":"1000371897","transaction_id":"4009562001201708309088458611","state":"SUCCESS"},{"inter_id":"a488187132","orderid":"1000371906","transaction_id":"4003872001201708309085726342","state":"SUCCESS"},{"inter_id":"a493717254","orderid":"1000371936","transaction_id":"4001702001201708309087822274","state":"SUCCESS"},{"inter_id":"a483687344","orderid":"1000371944","transaction_id":"4000932001201708309087964728","state":"SUCCESS"},{"inter_id":"a494902849","orderid":"1000371948","transaction_id":"4006562001201708309089094102","state":"SUCCESS"},{"inter_id":"a491466008","orderid":"1000371949","transaction_id":"4005602001201708309090783964","state":"SUCCESS"},{"inter_id":"a483687344","orderid":"1000371954","transaction_id":"4006722001201708309090891139","state":"SUCCESS"},{"inter_id":"a493195389","orderid":"1000371966","transaction_id":"4001692001201708309089347399","state":"SUCCESS"},{"inter_id":"a493195389","orderid":"1000371970","transaction_id":"4001332001201708309089416896","state":"SUCCESS"},{"inter_id":"a483687344","orderid":"1000372007","transaction_id":"4001862001201708309091796957","state":"SUCCESS"},{"inter_id":"a494902849","orderid":"1000372015","transaction_id":"4001322001201708309090112975","state":"SUCCESS"},{"inter_id":"a493195389","orderid":"1000372016","transaction_id":"4007372001201708309090127917","state":"SUCCESS"},{"inter_id":"a494902849","orderid":"1000372020","transaction_id":"4001482001201708309090190123","state":"SUCCESS"},{"inter_id":"a493195389","orderid":"1000372029","transaction_id":"4007372001201708309093617018","state":"SUCCESS"},{"inter_id":"a483687344","orderid":"1000372032","transaction_id":"4002522001201708309093676510","state":"SUCCESS"},{"inter_id":"a498529802","orderid":"1000372042","transaction_id":"4009562001201708309096569235","state":"SUCCESS"},{"inter_id":"a493195389","orderid":"1000372043","transaction_id":"4005092001201708309093867630","state":"SUCCESS"},{"inter_id":"a494902849","orderid":"1000372067","transaction_id":"4007852001201708309096877998","state":"SUCCESS"},{"inter_id":"a493195389","orderid":"1000372070","transaction_id":"4004532001201708309096973668","state":"SUCCESS"},{"inter_id":"a483687344","orderid":"1000372084","transaction_id":"4005642001201708309096196811","state":"SUCCESS"},{"inter_id":"a493195389","orderid":"1000372085","transaction_id":"4007342001201708309100537424","state":"SUCCESS"},{"inter_id":"a483687344","orderid":"1000372095","transaction_id":"4008212001201708309102599123","state":"SUCCESS"},{"inter_id":"a499321368","orderid":"1000372135","transaction_id":"4009202001201708309099851876","state":"SUCCESS"},{"inter_id":"a499321368","orderid":"1000372135","transaction_id":"4009202001201708309099851876","state":"SUCCESS"}]';
+
+        $list = [];
+
+        $list = json_decode($list, true);
+
+        $combineList = [];
+
+        foreach ($list as $key => $val){
+            $combineList[$val['orderid']] = ['transaction_id' => $val['transaction_id']];
+        }
+
+
+        $db = $this->load->database('iwide_soma_r', TRUE);
+        $table = $db->dbprefix('soma_shard_link');
+        $interIdArr = $db->select('inter_id')
+                         ->group_by('inter_id')
+                         ->get($table)
+                         ->result_array();
+
+        //遍历订单
+        foreach ($combineList as $items => $values){
+
+            foreach($interIdArr as $v){
+
+                $inter_id = $v['inter_id'];
+                if( $inter_id )
+                {
+                    //初始化数据库分片配置，微信接口关闭订单需要初始化shard_id
+                    $this->load->model('soma/shard_config_model', 'model_shard_config');
+                    $this->current_inter_id= $v['inter_id'];
+                    $this->db_shard_config= $this->model_shard_config->build_shard_config( $v['inter_id'] );
+                }
+
+                $this->load->model('soma/Sales_order_model','somaSalesOrderModel');
+                $somaSalesOrderModel = $this->somaSalesOrderModel;
+
+                /**
+                 * @var Sales_order_model $somaSalesOrderModel
+                 */
+                $db = $somaSalesOrderModel->_shard_db_r('iwide_soma_r');
+                $table = $somaSalesOrderModel->table_name($inter_id);
+
+                $orderList = [];
+                foreach ($combineList as $val){
+                    $orderList = $db->where( 'order_id', $items )
+                                    ->select( '*' )
+                                    ->get( $table )
+                                    ->result_array();
+                }
+
+                if(!empty($orderList)){
+
+                    $orderIDs = array_column($orderList, 'order_id');
+
+                    //明细
+                    $this->load->model('soma/Sales_item_package_model', 'salesItemPackageModel');
+                    $salesItemPackageModel = $this->salesItemPackageModel;
+                    $orderItemList = $salesItemPackageModel->get(['order_id'], [$orderIDs], ['limit' => null]);
+
+                    //支付成功
+                    foreach ($orderList as $val){
+
+                        $this->load->model('soma/sales_payment_model');
+                        $paymentModel= $this->sales_payment_model;
+
+                        //主单
+                        $this->load->model('soma/Sales_order_model', 'salesOrderModel');
+                        $salesOrderModel = $this->salesOrderModel;
+
+                        //初始化
+                        $salesOrderModel->load($val['order_id']);
+
+                        //细单
+                        if(!empty($orderItemList)){
+                            foreach ($orderItemList as $vale){
+                                if($vale['order_id'] == $val['order_id']){
+                                    $salesOrderModel->item = [$vale];
+                                    break;
+                                }
+                            }
+                        }
+                        if(!$salesOrderModel->item){
+                            $this->_write_log('手工支付失败，原因：没有订单明细。订单号：'.$val['order_id']."\r\n");
+                            continue;
+                        }
+
+                        //微信订单号
+                        $transactionId = null;
+                        foreach ($combineList as $item => $vale){
+                            if($item == $val['order_id']){
+                                $transactionId = $vale['transaction_id'];
+                                break;
+                            }
+                        }
+                        if(!$transactionId){
+                            $this->_write_log('手工支付失败，原因：没有微信订单号。订单号：'.$val['order_id']."\r\n");
+                            continue;
+                        }
+
+                        $log_data['paid_ip'] = '0.0.0.0';
+                        $log_data['paid_type'] = $paymentModel::PAY_TYPE_WX;
+                        $log_data['order_id'] = $val['order_id'];
+                        $log_data['openid'] = $val['openid'];
+                        $log_data['business'] = $val['business'];
+                        $log_data['settlement'] = $val['settlement'];
+                        $log_data['inter_id'] = $val['inter_id'];
+                        $log_data['hotel_id'] = $val['hotel_id'];
+                        $log_data['grand_total'] = $val['grand_total'];
+                        $log_data['transaction_id'] = $transactionId;
+
+                        print_r($log_data);
+
+                        //保存
+                        $salesOrderModel->order_payment($log_data);
+                        $salesOrderModel->order_payment_post();
+                        $paymentModel->save_payment($log_data, NULL);
+
+                    }
+
+                    echo('成功，订单号：'.$items."\r\n");
+                    break;
+                }
+                else{
+                    echo('失败，订单号：'.$items."\r\n");
+                }
+
+            }
+
+        }
+
+        exit('结束');
+
+    }
 
 
 }

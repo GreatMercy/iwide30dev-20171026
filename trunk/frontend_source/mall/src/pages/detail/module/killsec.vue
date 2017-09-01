@@ -9,23 +9,26 @@
           <span class="tip jfk-d-ib color-golden font-size--24">距离{{killsecParams.process === 1 ? '开始' : '结束'}}</span>
           <span class="clock jfk-d-ib">
             <i :class="numClass" class="num jfk-d-ib font-color-white date" v-show="killsecParams.dates > 0">{{killsecParams.dates}}</i>
-            <i class="unit font-size--20 jfk-d-ib font-color-light-gray" v-show="killsecParams.dates > 0">天</i>
+            <i class="unit font-size--22 jfk-d-ib font-color-light-gray" v-show="killsecParams.dates > 0">天</i>
             <i :class="numClass" class="num jfk-d-ib font-color-white">{{killsecParams.hours}}</i>
-            <i class="unit font-size--20 jfk-d-ib font-color-light-gray">时</i>
+            <i class="unit font-size--22 jfk-d-ib font-color-light-gray">时</i>
             <i :class="numClass" class="num jfk-d-ib font-color-white">{{killsecParams.minutes}}</i>
-            <i class="unit font-size--20 jfk-d-ib font-color-light-gray">分</i>
+            <i class="unit font-size--22 jfk-d-ib font-color-light-gray">分</i>
             <i :class="numClass" class="num jfk-d-ib font-color-white">{{killsecParams.seconds}}</i>
-            <i class="unit font-size--20 jfk-d-ib font-color-light-gray">秒</i>
+            <i class="unit font-size--22 jfk-d-ib font-color-light-gray">秒</i>
           </span>
         </div>
         <div class="process">
-          <div class="line" :style="{'width': killsecPercent}">
+          <div class="line">
+            <div class="line-cont" :style="{'width': killsecPercent}">
+              <div class="line-line"></div>
+            </div>
           </div>
         </div>
-        <div class="number font-size--24 font-color-light-gray">
-          <span class="tip jfk-d-ib font-size--22">剩余库存</span>
-          <span class="stock jfk-d-ib">{{killsecStock}}/</span>
-          <span class="total jfk-d-ib font-size--20">{{killsecTotal}}</span>
+        <div class="number font-color-light-gray">
+          <span class="tip jfk-d-ib font-size--24">剩余库存</span>
+          <span class="stock jfk-d-ib font-size--28">{{killsecStock}} /</span>
+          <span class="total jfk-d-ib font-size--24">{{killsecTotal}}</span>
         </div>
       </div>
     </div>
@@ -61,7 +64,7 @@
     },
     computed: {
       numClass () {
-        return this.killsecParams.dates < 10 ? 'font-size--48' : 'font-size--38'
+        return this.killsecParams.dates < 10 ? 'font-size--48' : 'font-size--44'
       }
     },
     methods: {

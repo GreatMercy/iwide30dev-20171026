@@ -1,5 +1,5 @@
 <template>
-  <div v-if="item.re_pay === 1 " class="count_down grayColorbf">
+  <div v-if="item.re_pay === 1 && timeShow" class="count_down grayColorbf">
     支付倒计时
     <span class="goldColor font-size--28">{{time}}</span>
   </div>
@@ -13,7 +13,8 @@
     },
     data () {
       return {
-        time: ''
+        time: '',
+        timeShow: true
       }
     },
     methods: {
@@ -36,6 +37,7 @@
         }
         if (hour <= 0 && min <= 0 && afterMin <= 0) {
           clearTimeout()
+          this.timeShow = false
         }
         // 补0
         if (hour >= 0 && hour <= 9) {

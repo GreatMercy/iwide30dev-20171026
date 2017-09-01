@@ -195,12 +195,22 @@ class Express extends MY_Front_Soma_Iapi
      *              ),
      *              @SWG\Property(
      *                  property="count",
-     *                  description="邮寄数量",
+     *                  description="共拥有份数",
      *                  type = "integer",
      *               ),
      *              @SWG\Property(
      *                  property="address",
      *                  description="邮寄地址",
+     *                  type = "string",
+     *              ),
+     *              @SWG\Property(
+     *                  property="contact",
+     *                  description="联系人",
+     *                  type = "string",
+     *              ),
+     *              @SWG\Property(
+     *                  property="phone",
+     *                  description="电话",
      *                  type = "string",
      *              ),
      *              @SWG\Property(
@@ -211,6 +221,11 @@ class Express extends MY_Front_Soma_Iapi
      *              @SWG\Property(
      *                  property="aiid",
      *                  description="资产id",
+     *                  type = "string",
+     *              ),
+     *              @SWG\Property(
+     *                  property="wechat_name",
+     *                  description="公众号名称",
      *                  type = "string",
      *              )
      *         )
@@ -315,6 +330,7 @@ class Express extends MY_Front_Soma_Iapi
 
         $page_data = array();
         $items = $detail['items'];
+
         $count = 0;
         foreach ($items as $k => $v) {
             $count += $v['qty'];
@@ -326,7 +342,7 @@ class Express extends MY_Front_Soma_Iapi
             return;
         }
 
-        //获取最新的消费地址
+        //获取最新的消费地址 消费人 电话
         $this->load->model('soma/Customer_address_model', 'CustomerAddressModel');
         $CustomerAddressModel = $this->CustomerAddressModel;
 
@@ -336,10 +352,14 @@ class Express extends MY_Front_Soma_Iapi
             'limit' => null,
             'orderBy' => 'updated_at desc'
         );
-        $address = $CustomerAddressModel->get($field, $field_value, 'address_id,address', $option);
+        $address = $CustomerAddressModel->get($field, $field_value, 'address_id,address,contact,phone', $option);
 
+        $consumer_name = '';
+        $consumer_phone = '';
         $address_detail = '';
         if (!empty($address)) {
+            $consumer_name = $address[0]['contact'];
+            $consumer_phone = $address[0]['phone'];
             $region_list = ExpressService::getInstance()->getRegion($this->openid, $this->inter_id, $address[0]['address_id']);
             if (!empty($region_list)) {
                 $address_detail = $region_list[0].$region_list[1].$region_list[2].$address[0]['address'];
@@ -359,8 +379,11 @@ class Express extends MY_Front_Soma_Iapi
             'product' => $page_data['product'],
             'count' => $count,
             'address' => $address_detail,
-            'arid' => $address[0]['address_id'],
-            'aiid' => $item_id
+            'contact' => $consumer_name,
+            'phone' => $consumer_phone,
+            'arid' => isset($address[0]['address_id'])?$address[0]['address_id']:'',
+            'aiid' => $item_id,
+            'wechat_name' => $this->public['wechat_name']
         );
         //todo 先留着防止以后需求改变
 //        if (isset($page_data['shipping_product'])) {
@@ -492,22 +515,22 @@ class Express extends MY_Front_Soma_Iapi
         }
 
         $page_data['orders'] = $orders;
-
         $res = [
             'product' => [
                 'name' => $page_data['orders']['name'],
                 'qty' => $page_data['orders']['qty'],
                 'price_package' => $items[0]['price_package'],
+                'face_img' => $items[0]['face_img']
             ],
             'contact' => [
                 'contact' => $page_data['orders']['contacts'],
                 'phone' => $page_data['orders']['phone'],
                 'address' => $page_data['orders']['address']
             ],
-            'shipping_track' => $page_data['shippingTrack'],
+            'shipping_track' => isset($page_data['shippingTrack'])?array_reverse(array_reverse($page_data['shippingTrack'])):[],
             'status' => $page_data['orders']['status']
         ];
-
+        
         $this->json(BaseConst::OPER_STATUS_SUCCESS, '', $res);
 
     }
@@ -557,6 +580,11 @@ class Express extends MY_Front_Soma_Iapi
      *                      property="shipping_id",
      *                      description="邮寄id",
      *                      type="integer",
+     *                  ),
+     *                  @SWG\Property(
+     *                      property="detail_url",
+     *                      description="详情链接",
+     *                      type="string",
      *                  )
      *              )
      *         )
@@ -578,7 +606,11 @@ class Express extends MY_Front_Soma_Iapi
         $result = $ConsumerOrderModel->mail_consumer( $request_param, $this->openid, $this->inter_id, $business);
         if ( isset( $result['status'] ) && $result['status'] == Soma_base::STATUS_TRUE ) {
             $shipping_id = $this->session->userdata('spid');
-            $this->json(BaseConst::OPER_STATUS_SUCCESS, '', ['shipping_id' => $shipping_id]);
+            $res = [
+                'shipping_id' => $shipping_id,
+                'detail_url' => $this->link['shipping_detail'].'&spid='.$shipping_id
+            ];
+            $this->json(BaseConst::OPER_STATUS_SUCCESS, '', $res);
         } else {
             $this->json(BaseConst::OPER_STATUS_FAIL_TOAST, $result['message']);
         }
@@ -611,6 +643,23 @@ class Express extends MY_Front_Soma_Iapi
         $filter['openid'] = $this->openid;
         $filter['inter_id'] = $this->inter_id;
         $address = $CustomerAddressModel->get_addresses($this->openid, $filter, 0);
+        $map = [];
+        foreach ($address as $v) {
+            $region_detail = ExpressService::getInstance()->getRegion($this->openid, $this->inter_id, $v['address_id']);
+            if (!empty($region_detail)) {
+                $map[$v['address_id']] = $region_detail;
+            }
+        }
+
+        foreach ($address as &$val) {
+            if (isset($map[$val['address_id']])) {
+                $val['province_name'] = $map[$val['address_id']][0];
+                $val['city_name'] = $map[$val['address_id']][1];
+                $val['region_name'] = $map[$val['address_id']][2];
+            }
+        }
+        unset($val);
+
         $this->json(BaseConst::OPER_STATUS_SUCCESS, '', $address);
 
     }

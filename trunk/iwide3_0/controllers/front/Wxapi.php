@@ -214,6 +214,20 @@ class Wxapi extends My_Controller {
                             return array($arr, $type);
                         }
                     }
+                    //商城：scene_id以43开头的将被拦截，跳至商城首页
+                    if(substr($qrcode_id, 0, 2) == (int)\App\services\soma\WxService::QR_CODE_SOMA_INDEX){
+                        $arr = array();
+                        $type = 'news';
+                        array_push($arr,
+                            array(
+                                'Title' => '商城',
+                                'Description' => '点击进入商城',
+                                'PicUrl' => '',
+                                'Url' => site_url('soma/package/index?id='.$inter_id)
+                            )
+                        );
+                        return array($arr, $type);
+                    }
 
 					//社群客
 					$this->load->model('distribute/fans_model');

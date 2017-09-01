@@ -433,7 +433,7 @@ class Sales_order_discount_model extends MY_Model_Soma {
                 $api= new Api_member($discount['inter_id']);
                 $result= $api->get_token();
                 $api->set_token($result['data']);
-                $uu_code= rand(1000, 9999);
+                $uu_code= $api->uuCode();
                 
                 if( $type==self::TYPE_BALENCE && $customer->openid ){
                     //处理储值逻辑，前面已经做分数验证、优先级排序（包含时间排除+个人账户查询+扣减比例判断）

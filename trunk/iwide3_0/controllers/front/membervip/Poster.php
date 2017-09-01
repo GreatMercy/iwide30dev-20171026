@@ -144,7 +144,7 @@ class Poster extends MY_Front_Member
         }
         $data['js_menu_hide']= substr($menu_hide_list, 0, -1);
 
-        $data['js_share_config']['title'] = '第三季馅饼侠终极招募，余额已不足5%，你若错过便是一年';
+        $data['js_share_config']['title'] = '第三季馅饼侠活动已成功招募10000，完美收官！';
         $data['js_share_config']['link'] = EA_const_url::inst()->get_url('*/*/mineposter',array('id'=>$this->inter_id));
         $data['js_share_config']['imgUrl'] = !empty($info['headimgurl']) ? $info['headimgurl'] : '#';
         $data['js_share_config']['desc'] = "这是我的馅饼侠海报，快点进来看看吧！";
@@ -157,8 +157,10 @@ class Poster extends MY_Front_Member
         $data['identity'] = $identity;
         $data['identity2'] = $identity2;
         $data['lvl_name'] = $lvl_name;
-        $data['stock'] = $stock;
-        $data['sales'] = $sales;
+       // $data['stock'] = $stock;
+        $data['stock'] = 0;
+        //$data['sales'] = $sales;
+        $data['sales'] = 10000;
         if($this->input->get('debug') == 'on'){
             echo '<pre>';
             print_r($data);

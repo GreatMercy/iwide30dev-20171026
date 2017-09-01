@@ -279,6 +279,25 @@ class Distribute_model extends MY_Model {
 	{
 	    return array('field'=>'id', 'sort'=>'desc');
 	}
+	function get_distribute_config_data($inter_id,$code='distribute_time_limit'){
+		$this->_db('iwide_r1')->where(array('inter_id'=>$inter_id,'code'=>$code));
+		return $this->_db('iwide_r1')->get('distribute_config_data');
+	}
+	function save_distribute_config_data($inter_id,$data,$code='distribute_time_limit'){
+		$this->_db('iwide_rw')->where(array('inter_id'=>$inter_id,'code'=>$code));
+		$res = $this->_db('iwide_rw')->get('distribute_config_data')->row_array();
+		if(!empty($res)){//存在数据
+			$dis_value = !empty($res['value'])?unserialize($res['value']):array();
+			if(isset($dis_value['distribute_status']) && $dis_value['distribute_status']==1){//开启了，就不允许更新
+				return false;
+			}else{
+				$this->_db('iwide_rw')->where(array('inter_id'=>$inter_id,'code'=>$code));
+				return $this->_db('iwide_rw')->update('distribute_config_data',$data) > 0;
+			}
+		}else{
+			return $this->_db('iwide_rw')->insert('distribute_config_data',$data) > 0;
+		}
+	}
 	function get_hotel_config($inter_id){
 		$this->_db('iwide_r1')->where(array('inter_id'=>$inter_id));
 		return $this->_db('iwide_r1')->get('distribute_config');
@@ -955,6 +974,96 @@ INNER JOIN (SELECT * FROM iwide_hotel_staff WHERE inter_id=?) h ON h.inter_id=s.
 		 $this->_db('iwide_rw')->query ( $sql, array ( date ( 'Y-m-d 23:59:59', strtotime ( '-60 day', time () ) ) ) );
 		 echo $this->_db('iwide_rw')->last_query();
 	}
+	
+	/**
+	 * 取分销保护状态配置
+	 * @param string $inter_id
+	 * @return Object status->CLOSED|OPENED
+	 */
+	public function get_distribution_protection_config($inter_id){
+		$res = $this->get_redis_key_status($this->_distribution_protection_key_prefix.$inter_id);
+		return empty($res) ? json_decode('{"status":"CLOSED","protection_time":0}') : json_decode($res);
+	}
+	/**
+	 * 保存分销保护配置信息
+	 * @param string $inter_id        	
+	 * @param string $status        	
+	 * @param int $protection_time        	
+	 * @return Object
+	 */
+	public function save_distribution_protection_config($inter_id, $status, $protection_time = 86400) {
+		return $this->set_redis_key_status ( $this->_distribution_protection_key_prefix.$inter_id, json_encode ( [ 'status' => $status, 'protection_time' => $protection_time ] ) );
+	}
+	/**
+	 * 查询受保护的分销员
+	 * @param string $openid 用户openid        	
+	 * @param string $inter_id        	
+	 * @return int 查询到受保护的分销员时返回分销员的分销号，查询没有结果则返回0
+	 */
+	public function get_protection_saler($openid, $inter_id = '') {
+		$where = [ 'openid' => $openid, 'protect_to >= ' => time () ];
+		if (! empty ( $inter_id )) {
+			$where ['inter_id'] = $inter_id;
+		}
+		$res = $this->_db ( 'iwide_r1' )->limit ( 1 )->where ( $where )->order_by ( 'id desc' )->get ( 'distribution_protection' )->row ();
+		return empty ( $res->saler ) ? 0 : $res->saler;
+	}
+	/**
+	 * 保存分销员分销保护源信息
+	 * 
+	 * @param string $inter_id        	
+	 * @param string $source_openid
+	 *        	来源用户openid
+	 * @param string $source
+	 *        	来源链接
+	 * @param int $saler
+	 *        	分销号
+	 * @param int $current_time
+	 *        	受保护开始时间戳，默认当前时间戳
+	 * @param string $module
+	 *        	模块名称，默认为空
+	 * @return boolean
+	 */
+	public function save_saler_protection_info($inter_id, $source_openid, $source, $saler, $current_time = '', $module = '') {
+		if (empty ( $source ) || empty ( $source_openid ) || empty ( $saler ))
+			return FALSE;
+		if (empty ( $current_time ))
+			$current_time = time();
+		$protection_info = $this->get_distribution_protection_config ( $inter_id );
+		if (! $protection_info){
+			$current_time = time();
+		}else {
+			$current_time += intval ( $protection_info->protection_time );
+		}
+		if (empty ( $module ))
+			$module = $this->get_module_name_from_url ( $source );
+		$sql = 'INSERT IGNORE INTO iwide_distribution_protection (`inter_id`,`openid`,`protect_to`,`created_time`,`saler`,`module`,`slink`) VALUES (?,?,?,?,?,?,?)';
+		$this->_db('iwide_rw')->query($sql,[$inter_id,$source_openid,$current_time,date('Y-m-d H:i:s'),$saler,$module,$source]);
+		// $this->_db ( 'iwide_rw' )->insert ( 'distribution_protection', [ 
+		// 		'inter_id'     => $inter_id,
+		// 		'openid'       => $source_openid,
+		// 		'protect_to'   => $current_time,
+		// 		'created_time' => date ( 'Y-m-d H:i:s' ),
+		// 		'saler'        => $saler,
+		// 		'module'       => $module,
+		// 		'slink'        => $source 
+		// ] );
+		return $this->_db ( 'iwide_rw' )->affected_rows () > 0;
+	}
+	
+	/**
+	 *
+	 * @param string $url        	
+	 */
+	private function get_module_name_from_url($url) {
+		if (empty ( $url ))
+			return '';
+		$url = str_ireplace ( 'http://', '', $url );
+		$url = str_ireplace ( 'https://', '', $url );
+		$parts = explode ( '/', $url );
+		return isset ( $parts [1] ) ? $parts [1] : '';
+	}
+	
 	protected function _load_cache( $name='Cache' ){
 		if(!$name || $name=='cache')
 			$name='Cache';

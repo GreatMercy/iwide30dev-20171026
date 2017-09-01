@@ -298,15 +298,16 @@ class Report_member_model extends MY_Model_Member {
 
         $table= 'iwide_member_info';
         $btable='iwide_member_lvl';
-        $select= array('a.member_info_id','a.nickname','a.member_mode','a.name','a.birth','a.membership_number','a.telephone','a.cellphone','a.email','a.lvl_pms_code','b.lvl_name','a.credit','a.balance','a.is_active','a.is_login','a.createtime');
+        $select= array('a.member_info_id','a.open_id','a.nickname','a.member_mode','a.name','a.birth','a.membership_number','a.telephone','a.cellphone','a.email','a.lvl_pms_code','b.lvl_name','a.credit','a.balance','a.is_active','a.is_login','a.createtime');
         $select= implode(',', $select);
-        $_sql = '';
-        if(!empty($startime)) $_sql.=" AND a.createtime > $startime";
-        if(!empty($endtime)) $_sql.=" AND a.createtime <= $endtime";
-        $sql = "SELECT $select FROM $table a LEFT JOIN $btable b ON b.member_lvl_id=a.member_lvl_id WHERE a.inter_id=? $_sql ORDER BY a.createtime DESC";
+        $_sql = "";
+        if(!empty($startime)) $_sql .= " AND a.createtime > {$startime}";
+        if(!empty($endtime)) $_sql .= " AND a.createtime <= {$endtime}";
+        $sql = "SELECT {$select} FROM {$table} a LEFT JOIN {$btable} b ON b.member_lvl_id = a.member_lvl_id WHERE a.inter_id = ? {$_sql} ORDER BY a.createtime DESC";
         $result = $this->_shard_db()->query($sql, array($params['inter_id']))->result_array();
         if(!empty($result)){
-            foreach ($result as $key=>$vo){
+            foreach ($result as $key => $vo){
+                $result[$key]['member_mode_ext'] = $vo['member_mode'];
                 $result[$key]['member_card_count'] = isset($member_card[$vo['member_info_id']]['count'])?$member_card[$vo['member_info_id']]['count']:0;
                 $member_mode = ' -- ';
                 if(empty($vo['cellphone'])){
@@ -331,7 +332,66 @@ class Report_member_model extends MY_Model_Member {
                 }
                 $result[$key]['is_login'] = $is_login;
             }
+        }else{
+            return array();
         }
+
+        //取得注册分销信息
+        $this->load->model('membervip/common/Public_model','Public_model');
+        $where = array(
+            'inter_id' => $params['inter_id'],
+            'sales_id !=' => NULL,
+            'sales_id <>' => '',
+            'open_id !=' => '',
+            'type' => 'reg'
+        );
+
+        $distribution_record_ext = $this->Public_model->get_list($where,'distribution_record','open_id,sales_id,sales_hotel',5000);
+        if($this->input->get('pr_debug')==1){
+            echo $this->_shard_db()->last_query();
+            echo '<pre>';
+            print_r($distribution_record_ext);
+            echo '</pre>';
+        }
+        if(!empty($distribution_record_ext)){
+            $distribution_record = array();
+            foreach ($distribution_record_ext as $key => $item){
+                $distribution_record[$item['open_id']] = $item;
+            }
+
+            $qrcode_ids = array();
+            foreach ($distribution_record as $_record){
+                $qrcode_ids[] = $_record['sales_id'];
+            }
+
+            $where = array(
+                'inter_id' => $params['inter_id'],
+                'openid !=' => NULL,
+                'openid <>' => ''
+            );
+            $staff = $this->master_db('iwide_r1')->select('qrcode_id,master_dept,hotel_name')->where($where)->where_in('qrcode_id', $qrcode_ids)->get('hotel_staff')->result_array();
+            if($this->input->get('pr_debug')==1){
+                echo $this->_shard_db()->last_query();
+                echo '<pre>';
+                print_r($staff);
+                echo '</pre>';
+            }
+            if(!empty($staff)){
+                $staffs = array();
+                foreach ($staff as $sta){
+                    $staffs[$sta['qrcode_id']] = $sta;
+                }
+            }
+
+            foreach ($result as &$res){
+                if(!empty($distribution_record[$res['open_id']]['sales_id']) && $res['member_mode_ext'] == 2) {
+                    $res['sales_id'] = $distribution_record[$res['open_id']]['sales_id']; //所属分销员ID
+                    if(!empty($staffs[$res['sales_id']]['hotel_name'])) $res['hotel_name'] = $staffs[$res['sales_id']]['hotel_name']; //分销员所属酒店
+                    if(!empty($staffs[$res['sales_id']]['master_dept'])) $res['master_dept'] = $staffs[$res['sales_id']]['master_dept']; //分销员所属部门
+                }
+            }
+        }
+
         return $result;
     }
 

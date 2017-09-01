@@ -200,9 +200,10 @@
 .banner_img{height:2.857rem;}
 .banner_img img{width:100%;height:100%;}
 .banner_txt{top:0px;left:0px;width:100%;height:100%;line-height:2.857rem;}
-
+.jfk-title-login{display: none;}
 /*表单*/
 .form_item select,.form_item input{width:100%;height:100%;font-size:0.875rem;}
+.form_item .between{min-width: 55px;}
 .entry_btn{border:0.5px solid #b2945e;}
 .btn_height{height: 45px;line-height: 44px;color: white;}
 .verification{padding:0.1rem 0.572rem;line-height: 20px;color:#808080;margin-left: 5px;border: .5px solid #808080;border-radius: 3px;}
@@ -217,6 +218,7 @@
 
 
 /**/
+.balance_pad{padding-left:0.857rem;padding-right:0.857rem;}
 .right_line{border-left:.5px solid #3a3a3a;}
 .shadow_b{position:absolute;bottom:-10px;left:0px;height:7px;width:100%;background:url("../image/line_02.png") no-repeat;background-size:100% 100%;display:none}
 .recharge div:after{content: '';position:absolute;right:0px;top:30%;border-left: .5px solid #3a3a3a;height:0.507rem;}
@@ -250,6 +252,8 @@
 .banners{padding:2rem;}
 .banners img{width:100%;height:auto;display:block;}
 .number_list .active{color:#fff;}
+.number_list > div{padding-top: 18px}
+.number_list .main_tab_line{margin-top: 18px}
 .number_list .active .shadow_b{display:block;}
 .content_list{padding:1.571rem 0.857rem;}
 .card_content{padding:1.257rem 0.571rem;}
@@ -260,8 +264,8 @@
 .coupon_img_wrap_zhe{content: "";position: absolute;top: -0.8rem;right: -30%;width: 42%;height: 12rem;background-color: #1f1f1f;-webkit-transform: rotate(15deg);transform: rotate(15deg);}
 .coupon_img_content{float: right;padding-right:10px;width: calc(100% - 140px);margin-left: 0%;position: relative;}
 .coupon_details_ico{position: relative;padding-top: 1.1rem;;display: inline-block;margin-left: -30px;}
-.select_coupon_bg{width: 148px;height: 132px;text-align: center;padding-right: 2rem;overflow: hidden;}
-.select_coupon_bg > div{height: 132px;line-height: 132px;}
+.select_coupon_bg{width: 148px;height: 132px;text-align: center;overflow: hidden;min-height:100%; background: -webkit-radial-gradient(#383838, #292929, #1d1d1d); background: radial-gradient(#383838, #292929, #1d1d1d)}
+.select_coupon_bg > div{height: 132px;line-height: 132px;padding-right: 2rem; }
 .coupon_state{position: absolute;top: 10px;right: 10px;}
 .color_dui{color: #687f6d;}
 .color_zhe{color: #767d9a}

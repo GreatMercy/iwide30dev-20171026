@@ -59,6 +59,31 @@
         }
       }
     }
+    &-music {
+      border-radius: 50%;
+      animation-duration: 1s;
+      animation-iteration-count: infinite;
+      overflow: hidden;
+      audio {
+        display: none
+      }
+      &.is-playing {
+        animation-name: rotate;
+        animation-play-state: running;
+      }
+      &.is-closed {
+        animation-name: empty;
+        &:before {
+          height: 1px;
+          content: '';
+          position: absolute;
+          transform: scale(0.5) rotate(45deg);
+          top: 50%;
+          left: -35%;
+          right: -35%;
+        }
+      }
+    }
     &-raiders {
       background-image: background-image(/raider.png);
     }
@@ -73,17 +98,12 @@
     }
     /*碗*/
     &-cont {
-      padding-top: px2rem(190);
+      padding-top: px2rem(156);
+      padding-bottom: px2rem(70);
       .bowl {
-        width: calc(724 / 750 * 100%);
+        width: 100%;
         position: relative;
-        margin:{
-          top: 0;
-          right: auto;
-          bottom: 0;
-          left: calc(38 / 750 * 100%);
-        };
-        padding-bottom: calc(750 / 724 * 100%);
+        padding-bottom: 100%;
         height: 0;
         overflow: hidden;
         background: {
@@ -96,7 +116,7 @@
           position: absolute;
           top: calc(128 / 750 * 100%);
           bottom: calc(172 / 750 * 100%);
-          left: calc(120 / 750 * 100%);
+          left: calc(157 / 750 * 100%);
           right: calc(140 / 750 * 100%);
           border-radius: 100%;
           perspective: calc(var(--dice-size) * 4200 / 200 / 36)em;
@@ -112,8 +132,8 @@
           transform-style: preserve-3d;
           animation-fill-mode: forwards;
           animation-play-state: running;
+          box-shadow: 0 -1em 2em color(#96241a a(50%));
           .dice {
-            box-shadow: 0 -1em 2em color(#96241a a(50%));
             animation-name: spin-duplicate;
             animation-duration: 1.6s;
             animation-timing-function: linear;
@@ -254,8 +274,8 @@
       padding-bottom: px2rem(70);
     }
     .desc-box {
-      overflow-y: auto;
-      overflow-x: hidden;
+      overflow: auto;
+      -webkit-overflow-scrolling: touch;
     }
     .dice {
       position: relative;
@@ -272,6 +292,9 @@
       line-height: calc(46 / 24)em;
       padding-top: px2rem(20);
       padding-bottom: px2rem(42);
+    }
+    .desc-img {
+      padding-top: px2rem(6);
     }
     .desc {
       .item {
@@ -319,7 +342,8 @@
   83% { transform: translateZ(calc(var(--dice-size) * -100 / 200 / 36)em) rotateX(270deg) rotateY(180deg) rotateZ(180deg); }
   100% { transform: translateZ(calc(var(--dice-size) * -100 / 200 / 36)em) rotateX(360deg) rotateY(360deg) rotateZ(360deg); }
 }
-@keyframes empty {}
+@keyframes empty {
+}
 @keyframes rotate {
   0% {
     transform: translateX(0) translateY(0) rotate(0deg);

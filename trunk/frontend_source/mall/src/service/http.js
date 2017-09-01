@@ -437,11 +437,74 @@ const getHotelInfo = (data, config, version = 'v1') => {
   return ajax.get(url, data, config)
 }
 /**
- * 微信订房 - 价格日历 - 日历可预订时间 GET_HOTEL_TIME
+ * 微信订房 - 价格日历 - 日历可预订时间
+ * @param {String} data.id 公众号ID
+ * @param {String} data.oid 订单ID
+ * @param {String} data.hid 酒店ID
+ * @param {String} data.rmid 房间号ID
+ * @param {String} data.cdid 价格ID
+ * @param {String} data.year 年份
+ * @param {String} data.month 月份
  */
+const getHotelTime = (data, config, version = 'v1') => {
+  let url = apiConfig[version] && apiConfig[version].GET_HOTEL_TIME || apiConfig.v1.GET_HOTEL_TIME
+  return ajax.get(url, data, config)
+}
 /**
- * 微信订房 - 下单 POST_HOTEL_BOOKING
+ * 微信订房 - 下单
+ * @param {String} data.post_order_id 订单ID
+ * @param {String} data.post_hotel_id 酒店ID
+ * @param {String} data.post_room_id 房间ID
+ * @param {String} data.post_price_code 价格ID
+ * @param {String} data.post_code 卷码
+ * @param {String} data.post_name 预订人名字
+ * @param {String} data.post_phone 预订人手机号
+ * @param {String} data.post_start 订房开始时间
+ * @param {String} data.post_end 订房结束时间
+ * @param {String} data.post_room_name 房型名称
+ * @param {String} data.post_code_name 价格代码名称
+ * @param {String} data.aiid 资产ID
+ * @param {String} data.post_num 下单房间数
  */
+const postHotelBooking = (data, config, version = 'v1') => {
+  let url = apiConfig[version] && apiConfig[version].POST_HOTEL_BOOKING || apiConfig.v1.POST_HOTEL_BOOKING
+  return ajax.post(url, data, config)
+}
+/**
+ * 获取邮寄内容
+ * @param {String} data.oid 订单ID
+ * @param {String} data.gid 礼物ID
+ */
+const getExpressIndex = (data, config, version = 'v1') => {
+  let url = apiConfig[version] && apiConfig[version].GET_EXPRESS_INDEX || apiConfig.v1.GET_EXPRESS_INDEX
+  return ajax.get(url, data, config)
+}
+/**
+ * 申请发货
+ * @param {String} data.aiid 资产ID
+ * @param {Number} data.num 邮寄数量
+ * @param {String} data.arid 地址ID
+ * @param {String} data.product_id 商品ID
+ */
+const posExpressCommit = (data, config, version = 'v1') => {
+  let url = apiConfig[version] && apiConfig[version].POST_EXPRESS_COMMIT || apiConfig.v1.POST_EXPRESS_COMMIT
+  return ajax.post(url, data, config)
+}
+/**
+ * 获取收货地址
+ */
+const getExpressAddress = (data, config, version = 'v1') => {
+  let url = apiConfig[version] && apiConfig[version].GET_EXPRESS_ADDRESS || apiConfig.v1.GET_EXPRESS_ADDRESS
+  return ajax.get(url, data, config)
+}
+/**
+ * 获取物流详情
+ * @param {String} data.spid 邮寄ID
+ */
+const getExpressDetail = (data, config, version = 'v1') => {
+  let url = apiConfig[version] && apiConfig[version].GET_EXPRESS_DETAIL || apiConfig.v1.GET_EXPRESS_DETAIL
+  return ajax.get(url, data, config)
+}
 export {
   getPackageLists,
   getPackageInfo,
@@ -478,5 +541,11 @@ export {
   postRefundApply,
   getRefundDetail,
   getHotelList,
-  getHotelInfo
+  getHotelInfo,
+  getHotelTime,
+  postHotelBooking,
+  getExpressIndex,
+  posExpressCommit,
+  getExpressAddress,
+  getExpressDetail
 }

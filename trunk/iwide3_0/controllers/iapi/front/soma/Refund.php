@@ -408,8 +408,8 @@ class Refund extends MY_Front_Soma_Iapi
 
         //查找退款主单信息
         $refund_info = $sales_refund_model->get_refund_order_detail_byOrderId($order_id, $this->inter_id);
-        if (!$refund_info) {
-            show_404();
+        if (empty($refund_info)) {
+            $this->json(BaseConst::OPER_STATUS_FAIL_TOAST, '没有退款主单');
         }
 
         //校验是不是自己单

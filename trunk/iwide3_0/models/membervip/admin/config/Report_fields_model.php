@@ -207,6 +207,18 @@ class Report_fields_model {
                             'name'=>'注册时间',
                             'field'=>'createtime',
                             'func'=>'_parse_datetime'
+                        ),
+                        array(
+                            'name'=>'所属分销员ID',
+                            'field'=>'sales_id',
+                        ),
+                        array(
+                            'name'=>'所属酒店',
+                            'field'=>'hotel_name',
+                        ),
+                        array(
+                            'name'=>'所属部门',
+                            'field'=>'master_dept',
                         )
                     )
                 );
@@ -349,6 +361,10 @@ class Report_fields_model {
                             'name'=>'记录时间',
                             'field'=>'createtime',
                             'func'=>'_parse_datetime'
+                        ],
+                        [
+                            'name'=>'订单号',
+                            'field'=>'order_id',
                         ]
                     ]
                 ];

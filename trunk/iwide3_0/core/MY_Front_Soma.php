@@ -8,6 +8,7 @@ use App\libraries\Support\Url;
  *
  * @property  Openid_rel_model $sc_openid_rel_model
  * @property Theme_config_model $Theme_config_model
+ * @property Idistribute_model $Idistribute_model
  */
 class MY_Front_Soma extends MY_Front
 {
@@ -93,7 +94,7 @@ class MY_Front_Soma extends MY_Front
      * 分销特殊处理公众号  a490782373
      * @var array
      */
-    protected $idistributInterId = [''];
+    protected $idistributInterId = ['a450089706'];
 
 
     //不显示退款
@@ -259,8 +260,19 @@ EOF;
         if(in_array($this->inter_id, $this->cannotRefundInterId)){
             $this->datas['refund'] = false;
         }
-
     }
+
+    public function url_set_value($url, $key, $value)
+    {
+        $a = explode('?', $url);
+        $url_f = $a[0];
+        $query = $a[1];
+        parse_str($query, $arr);
+        $arr[$key] = $value;
+        return $url_f.'?'.http_build_query($arr);
+    }
+
+
 
     /**
      *
@@ -288,18 +300,38 @@ EOF;
         $saler_id = $this->input->get('saler', null, 0);
         if($saler_id) {
             $this->session->set_tempdata('saler', $saler_id, $ttl);
+        } else{
+            $this->session->set_tempdata('saler');
         }
 
         //粉丝ID
         $fans_id = $this->input->get('fans', null, 0);
         if($fans_id) {
             $this->session->set_tempdata('fans', $fans_id, $ttl);
+        } else{
+            $this->session->set_tempdata('fans');
         }
+
+        /* add by chencong 20170829 分销保护期 start */
+        if(!$saler_id && !$fans_id){
+            $this->load->model('distribute/Idistribute_model');
+            $trueSaler = $this->Idistribute_model->get_protection_saler($this->openid, $this->inter_id);
+            if($trueSaler){
+                if($trueSaler >= 10000000){// 泛分销10000000起的
+                    $this->session->set_tempdata('fans', $trueSaler, $ttl);
+                }else{
+                    $this->session->set_tempdata('saler', $trueSaler, $ttl);
+                }
+            }
+        }
+        /* add by chencong 20170829 分销保护期 end */
 
         //泛分销粉丝ID
         $fans_saler_id = $this->input->get('fans_saler', null, 0);
         if($fans_saler_id) {
             $this->session->set_tempdata('fans_saler', $fans_saler_id, $ttl);
+        } else{
+            $this->session->set_tempdata('fans_saler');
         }
 
         $ttl = 3600;
@@ -333,10 +365,20 @@ EOF;
             $this->session->set_tempdata('rel_res', $rel_res, $ttl);
         }
 
+        //css：[默认：黑版、1：白版]
+        $style = $this->input->get('style', null, '');
+        if($style){
+            $this->session->set_tempdata('style', $style, $ttl);
+        }
+
+        //布局：[默认、1]
+        $layout = $this->input->get('layout', null, '');
+        if($layout){
+            $this->session->set_tempdata('layout', $style, $ttl);
+        }
     }
 
     /**
-     * 加载语言包
      * @author renshuai  <renshuai@mofly.cn>
      */
     private function _load_lang()
@@ -1397,6 +1439,8 @@ var _hmt = _hmt || [];
 
         $this->footerDatas = $datas;
         $datas['title'] = isset($this->headerDatas['title']) ? $this->headerDatas['title'] : '商城';
+        $datas['style'] = $this->session->tempdata('style');
+        $datas['layout'] = $this->session->tempdata('layout');
         $this->headerDatas = $datas;
     }
 

@@ -1,0 +1,210 @@
+.jfk-pages__logistics-detail {
+
+  .logistics-detail-state {
+    position: relative;
+    height: px2rem(240);
+    line-height: px2rem(240);
+    padding-left: px2rem(96);
+    .jfk-button__text {
+      letter-spacing: calc(-10 / 60)em;
+    }
+    &::after {
+      content: '';
+      position: absolute;
+      background-repeat: no-repeat;
+      background-size: contain;
+      width: px2rem(21);
+      height: px2rem(129);
+      top: 50%;
+      left: px2rem(30);
+      transform: translate(0, -50%);
+    }
+  }
+
+  .logistics-detail-info {
+    &__card {
+      padding: px2rem(65) px2rem(40) px2rem(62);
+      border-radius: px2rem(var(--border-radius-big));
+    }
+
+    &__product {
+      display: -webkit-box;
+      padding-bottom: px2rem(54);
+      position: relative;
+      @mixin one-line horizontal {
+      }
+      &::before {
+        left: 0;
+        bottom: 0;
+      }
+      &--img {
+        position: relative;
+        width: px2rem(160);
+        height: px2rem(160);
+        border-radius: px2rem(var(--border-radius-big));
+        overflow: hidden;
+        margin-right: px2rem(36);
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center center;
+      }
+
+      &--content {
+        -webkit-box-flex: 1;
+        p {
+          width: 100%;
+        }
+        .name {
+          margin-top: px2rem(7);
+          @mixin ellipsis {
+          }
+        }
+
+        .price {
+          margin-top: px2rem(20);
+        }
+
+        .number {
+          margin-left: px2rem(30);
+        }
+      }
+    }
+
+    &__user {
+      padding-top: px2rem(62);
+
+      .title {
+        display: block;
+        width: calc(100 / 24)em;
+        margin-right: px2rem(60);
+        font-size: 1em;
+      }
+
+      &--name {
+        margin-bottom: px2rem(36);
+        .title {
+          small {
+            margin: 0 0.5em;
+          }
+        }
+        i {
+          small {
+            margin-right: px2rem(26);
+          }
+        }
+      }
+      p {
+        i {
+          flex: 1;
+          display: block;
+          @mixin ellipsis {
+          }
+        }
+      }
+    }
+  }
+
+  .logistics-status {
+
+    &__title {
+      margin-top: px2rem(76);
+      margin-bottom: px2rem(46);
+    }
+
+    &__no-info {
+    }
+
+    &__step {
+      position: relative;
+    }
+
+    &__item {
+      height: px2rem(150);
+      display: -webkit-box;
+
+      &:first-child {
+       .logistics-status__item--logo .logistics-status__item--line {
+          &::after {
+            width: 0;
+          }
+       }
+      }
+
+      &--logo {
+        width: px2rem(74);
+        margin-right: px2rem(13);
+        position: relative;
+        span {
+          background-repeat: no-repeat;
+          display: block;
+          margin: 0 auto;
+          position: relative;
+          z-index: 9;
+        }
+      }
+
+      &--start {
+        height: 1em;
+        background-position: center center;
+        &::after {
+          top: px2rem(-120);
+        }
+      }
+
+      &--default {
+        height: 1em;
+        background-position: center center;
+        &::after {
+          top: px2rem(-120);
+        }
+      }
+
+      &--finish {
+        height: calc(56 / 30)em;
+        background-position: center calc(-11 / 30)em;
+        &::after {
+          top: px2rem(-120);
+        }
+      }
+
+      &--end {
+        height: calc(68 / 30)em;
+        background-position: center calc(-17 / 30)em;
+        &::after {
+
+          top: px2rem(-120);
+        }
+      }
+
+      &--line {
+        &::after {
+          position: absolute;
+          content: "";
+          width: 1px;
+          left: 50%;
+          height: px2rem(120);
+          transform: translate(-50%, 0) scale(0.5, 1);
+          z-index: 8;
+        }
+      }
+
+      &--text {
+        -webkit-box-flex: 1;
+        p {
+          line-height: 1.2;
+        }
+
+        p:first-child {
+          margin-bottom: px2rem(20);
+        }
+
+        p:last-child {
+
+        }
+      }
+
+    }
+
+  }
+
+}

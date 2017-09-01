@@ -8,7 +8,6 @@ if (! defined ( 'BASEPATH' ))
 class CheckService extends HotelBaseService {
 	public $common_data;
 	public $module;
-	public $share;
 	/**
      * 获取服务实例方法
      * @return HotelService
@@ -28,25 +27,12 @@ class CheckService extends HotelBaseService {
 			$this->member_no = $this->getCI()->member_info->mem_card_no;
 			$this->member_lv = $this->getCI()->member_info->level;
 		}
-		$this->getCI()->load->model ( 'wx/Access_token_model' );
-		$this->common_data ['signPackage'] = $this->getCI()->Access_token_model->getSignPackage ( $this->getCI()->inter_id );
-		$this->common_data ['pagetitle'] = $this->getCI()->public ['name'];
+		
 		$this->common_data ['member'] = $this->getCI()->member_info;
 		$this->common_data ['inter_id'] = $this->getCI()->inter_id;
 		$this->common_data ['csrf_token'] = $this->getCI()->security->get_csrf_token_name ();
 		$this->common_data ['csrf_value'] = $this->getCI()->security->get_csrf_hash ();
-		$this->share ['title'] = $this->getCI()->public ['name'] . '-微信订房';
-		$slink = $_SERVER ['HTTP_HOST'] . $_SERVER ['REQUEST_URI'];
-		if (strpos ( $slink, '?' ))
-			$slink = $slink . "&id=" . $this->getCI()->inter_id;
-		else
-			$slink = $slink . "?id=" . $this->getCI()->inter_id;
-		$this->share ['link'] = $slink;
-		$this->share ['imgUrl'] = 'http://7n.cdn.iwide.cn/public/uploads/201609/qf051934149038.jpg';
-		$this->share ['desc'] = $this->getCI()->public ['name'] . '欢迎您使用微信订房,享受快捷服务...';
-		$this->share ['type'] = '';
-		$this->share ['dataUrl'] = '';
-		$this->common_data ['share'] = $this->share;
+		
 		
 		$this->common_data ['index_url'] = $this->getCI()->public ['is_multy'] == 1 ?\Hotel_base::inst()->get_url('INDEX') : \Hotel_base::inst()->get_url('SEARCH');;
 		
@@ -96,7 +82,6 @@ class CheckService extends HotelBaseService {
 	}
 	function my_collection() {
 		$data = $this->common_data;
-		$data ['pagetitle'] = '我的收藏';
 		$data ['mark_type'] = intval ( $this->getCI()->input->get ( 'mt' ) );
 		$data ['mark_type'] = 1;
 		$this->getCI()->load->model ( 'hotel/Hotel_model' );

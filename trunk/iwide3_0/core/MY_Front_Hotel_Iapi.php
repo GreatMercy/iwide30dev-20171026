@@ -132,7 +132,12 @@ class MY_Front_Hotel_Iapi extends MY_Front_Iapi {
 						'hotel/sresult' => array (
 								'no_hotel_list' => 1
 						)
-				)
+				),
+				'highclass' => array (
+                        'hotel/hotel_photo'=>array(
+                            'all_photo' => 1
+                        )
+				),
 		);
 		return empty ( $config [$skin_name] [$fun] ) ? array () : $config [$skin_name] [$fun];
 	}

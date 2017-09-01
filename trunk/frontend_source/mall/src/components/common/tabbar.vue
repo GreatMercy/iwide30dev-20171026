@@ -1,5 +1,5 @@
 <template>
-  <div class="jfk-tabbar">
+  <div class="jfk-tabbar jfk-footer">
     <a v-for="(item, index) in tabbarItems" :key="index" :href="item.link" class="jfk-tabbar__item font-color-white" :class="{'is-selected': index === selected}">
       <div class="jfk-tabbar__cont">
         <i class="jfk-font jfk-tabbar__icon" :class="item.icon"></i>

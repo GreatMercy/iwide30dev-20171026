@@ -1,10 +1,18 @@
 .jfk-pages__reservation {
 
+  .reservation__opacity {
+    opacity: 0;
+  }
+
+  .jfk-form .form-item__status {
+    z-index: 99;
+  }
+
   .reservation-check-in__arrow {
     position: absolute;
     right: 0;
     top: 50%;
-    transform:translate(0, -50%);
+    transform: translate(0, -50%);
   }
 
   .reservation-base-info {
@@ -15,7 +23,7 @@
       position: absolute;
       left: px2rem(-48);
       top: 50%;
-      transform:translate(0, -50%);
+      transform: translate(0, -50%);
       background-repeat: no-repeat;
       background-size: contain;
     }
@@ -31,7 +39,6 @@
   .reservation-form {
     margin-top: px2rem(90);
   }
-
 
   .reservation-order {
     margin-top: px2rem(82);
@@ -79,7 +86,5 @@
   .reservation-calendar {
     padding-top: px2rem(116);
   }
-
-
 
 }

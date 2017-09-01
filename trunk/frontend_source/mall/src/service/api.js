@@ -85,6 +85,14 @@ const v1 = {
   POST_EXPRESS_SAVE: `${API_EXPRESS_V1}/save`,
   // 获取地址数据
   GET_EXPRESS_TREE: `${API_EXPRESS_V1}/tree`,
+  // 获取邮寄后置 邮寄内容
+  GET_EXPRESS_INDEX: `${API_EXPRESS_V1}/index`,
+  // 申请发货
+  POST_EXPRESS_COMMIT: `${API_EXPRESS_V1}/commit`,
+  // 获取收获地址
+  GET_EXPRESS_ADDRESS: `${API_EXPRESS_V1}/address`,
+  // 获取邮寄物流详情
+  GET_EXPRESS_DETAIL: `${API_EXPRESS_V1}/detail`,
   // 请求客房预定信息
   GET_ORDER_PACKAGE_BOOKING: `${API_ORDER_V1}/package_booking`,
   // 请求到店用卷信息

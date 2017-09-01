@@ -35,6 +35,8 @@ class Order extends MY_Front_Soma {
 
         $this->controllerLogHandler(__CLASS__);
     }
+
+
     /**
      * 订单列表
      */
@@ -613,6 +615,20 @@ class Order extends MY_Front_Soma {
             echo json_encode($result);
             return;
         }
+
+        /* add by chencong 20170826 分销保护期 start */
+        if(empty($posts['saler']) && empty($posts['fans_saler'])){
+            $this->load->model('distribute/Idistribute_model');
+            $trueSaler = $this->Idistribute_model->get_protection_saler($this->openid, $this->inter_id);
+            if($trueSaler){
+                if($trueSaler >= 10000000){// 泛分销10000000起的
+                    $posts['fans_saler'] = $trueSaler;
+                }else{
+                    $posts['saler'] = $trueSaler;
+                }
+            }
+        }
+        /* add by chencong 20170826 分销保护期 end */
 
         // 查询分销员分组信息，查询分销员酒店信息
         $posts['saler_group'] = '';
@@ -1292,7 +1308,7 @@ class Order extends MY_Front_Soma {
 
                 $scale= $api->balence_scale( $open_id );
                 $pay_total = $api->balence_scale_convert($scale, $order->m_get('grand_total'), FALSE);
-                $uu_code = rand(1000, 9999);    
+                $uu_code = $api->uuCode();
 
                 $use_result['err'] = 1; // 默认调用失败
                 $yinju_inter_ids = array('a457946152', 'a471258436');
@@ -1332,7 +1348,7 @@ class Order extends MY_Front_Soma {
                 return array('status' => Soma_base::STATUS_FALSE, 'message' => '积分余额不足！');
             }
 
-            $uu_code = rand(1000, 9999);
+            $uu_code = $api->uuCode();
             // 积分支付必须是整数，上取整
             $pay_total = ceil($order->m_get('grand_total'));
             $pay_res = $api->point_use($pay_total, $open_id, $uu_code, $order_id, $order);

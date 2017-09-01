@@ -16,6 +16,97 @@ class TimingTask extends MY_Controller {
         parent::__construct();
     }
 
+    public function member_sales(){
+        ini_set('memory_limit',-1); //无内存限制
+        set_time_limit(0); //无时间限制
+        $this->load->model('membervip/common/Public_model','public_model');
+        $where = array(
+            'inter_id' => 'a492669988',
+            'member_mode' => 2,
+            'createtime >' => 1502812800
+        );
+        $info = $this->public_model->get_list($where,'member_info','member_info_id,open_id',5000);
+        if(!empty($info)){
+            $this->load->model ( 'distribute/Fans_model' );
+            $qrcode_ids = array();
+            foreach ($info as &$item){
+                $fan = $this->Fans_model->get_fans_beloning('a492669988',$item['open_id']);
+                if(!empty($fan) && $fan->source > 0) {
+                    $saler_id = $fan->source;
+                    $qrcode_ids[] = $saler_id;
+                    $item['sales_id'] = $saler_id;
+                }
+            }
+
+            $where = array(
+                'inter_id' => 'a492669988',
+                'openid !=' => NULL,
+                'openid <>' => ''
+            );
+            $staff = $this->public_model->master_db('iwide_r1')->select('qrcode_id,master_dept,hotel_name')->where($where)->where_in('qrcode_id', $qrcode_ids)->get('hotel_staff')->result_array();
+
+            if(!empty($staff)){
+                $staffs = array();
+                foreach ($staff as $sta){
+                    $staffs[$sta['qrcode_id']] = $sta;
+                }
+            }
+
+
+            foreach ($info as &$res){
+                if(!empty($res['sales_id'])) {
+                    if(!empty($staffs[$res['sales_id']]['hotel_name'])) $res['hotel_name'] = $staffs[$res['sales_id']]['hotel_name']; //分销员所属酒店
+                    if(!empty($staffs[$res['sales_id']]['master_dept'])) $res['master_dept'] = $staffs[$res['sales_id']]['master_dept']; //分销员所属部门
+                }
+            }
+
+            $csvData = array(
+                array(
+                    '会员ID',
+                    '所属分销员ID',
+                    '所属酒店',
+                    '所属部门'
+                )
+            );
+
+            $row = 1;
+            foreach ($info as $item){
+                $csvData[$row][] = $item['member_info_id'];
+                $csvData[$row][] = !empty($item['sales_id']) ? $item['sales_id'] : ' -- ';
+                $csvData[$row][] = !empty($item['hotel_name']) ? $item['hotel_name'] : ' -- ';
+                $csvData[$row][] = !empty($item['master_dept']) ? $item['master_dept'] : ' -- ';
+                $row++;
+            }
+
+            if($this->input->get('debug')==1){
+                echo '<pre>';
+                print_r($csvData);
+                echo '</pre>';
+            }
+
+            // 导出
+            $filename = "会员分销信息【a492669988】".date ('YmdHis').".csv";
+            header('Content-Type: text/csv');
+            header("Content-Type:text/html; charset=utf-8");
+            header("Content-Disposition: attachment;filename={$filename}");
+            $fp = fopen('php://output', 'w');
+            fwrite($fp, chr(0xEF) . chr(0xBB) . chr(0xBF));
+            if(!empty($csvData)){
+                foreach ($csvData as &$rows){
+                    foreach ($rows as &$v){
+                        if(is_numeric($v) && strlen($v) > 15){
+                            $v = "\t\t{$v}";
+                        }
+                    }
+                    fputcsv($fp, $rows);
+                }
+            }
+            fclose($fp);
+        }else{
+            echo "No data found\n";
+        }
+    }
+
     public function sendPackageToWx(){
         $this->load->helper('common_helper');
         $args = get_args();
@@ -294,7 +385,7 @@ class TimingTask extends MY_Controller {
                     $distribute_arr[ 'product'] = "会员注册奖励";
                     $distribute_arr[ 'order_amount'] = 0 ;
                 }
-
+               if(isset($record['sales_id']) && $record['sales_id'] > 0 )  $distribute_arr['saler']  = $record['sales_id'];
 
                 MYLOG::w("Distribution Record Insert :".json_encode($record)." | Dis_record Result : ".$record_id ." apply data : " .json_encode($distribute_arr),'distribution_record/task');
                 $distribute_result = $this->idistribute->create_dist( $distribute_arr );

@@ -3,6 +3,7 @@
 import Vue from 'vue'
 import JfkUi from 'jfk-ui/lib/jfk-ui.js'
 Vue.use(JfkUi)
+import '@/assets/fonts/iconfont.css'
 import Promise from 'promise-polyfill'
 import '@/styles/postcss/reset.postcss'
 import '@/styles/postcss/common.postcss'

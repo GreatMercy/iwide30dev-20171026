@@ -306,6 +306,47 @@ class Activity_killsec extends \MY_Model_Soma
         );
     }
 
+
+    /**
+     * 后台显示秒杀列表
+     * @param $interID
+     * @param $status
+     * @param int $page
+     * @param int $limit
+     * @param string $orderBy
+     * @return array|string
+     * @author luguihong  <luguihong@jperation.com>
+     */
+    public function getKillsecListByPids($interID, $pids = [])
+    {
+
+        $fieldArr = array(
+            'inter_id',
+        );
+        $valueArr = array(
+            $interID,
+        );
+
+        $nowTime = date('Y-m-d H:i:s');
+        $fieldArr[] = 'start_time < ';
+        $valueArr[] = $nowTime;
+        $fieldArr[] = 'killsec_time > ';
+        $valueArr[] = $nowTime;
+        $fieldArr[] = 'product_id';
+        $valueArr[] = $pids;
+
+        return $this->get(
+            $fieldArr,
+            $valueArr,
+            '*',
+            array(
+                'limit' => null,
+                'debug' => false
+            )
+        );
+    }
+
+
     /**
      * 搜索秒杀列表
      * @param $interID

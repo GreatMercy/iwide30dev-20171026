@@ -5,8 +5,6 @@
  * User: ibuki
  * Date: 16/7/26
  * Time: 下午7:07
- * @property Member_model $m_model
- * @property CI_Input $input
  */
 
 class Couponmsg extends MY_Controller {

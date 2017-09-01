@@ -9,7 +9,7 @@
           <span v-if="salerBanner[1]" class="number jfk-font-number font-size--48">{{salerBanner[1]}}</span>
           <span v-if="salerBanner[2]" class="unit">{{salerBanner[2]}}</span>{{salerBanner[3]}}</div>
       </div>
-      <div class="detail-top">
+      <div class="detail-top" :class="{'is-default': productGalleryIsDefault}">
         <div class="banners">
           <swiper :options="bannerSwiperOptions" class="jfk-swiper">
             <swiper-slide v-for="(item, index) in productInfo.gallery" :key="item.gry_id" class="jfk-swiper__item" :class="{'swiper-no-swiping': productInfo.gallery.length === 1}">
@@ -58,12 +58,12 @@
         <ul class="service-list font-size--24" :class="'service-list--' + (serviceItems.length < 5 ? 'single' : 'multiple')" @click="handleService">
           <li class="service-item" v-for="item in serviceItems" :key="item.key">
             <p class="icon">
-              <i class="jfk-font" :class="item.icon"></i>
+              <i class="jfk-font font-color-light-gray-common" :class="item.icon"></i>
             </p>
-            <p class="label">{{item.label}}</p>
+            <p class="label font-color-extra-light-gray">{{item.label}}</p>
           </li>
           <li class="more jfk-flex is-align-middle" v-if="serviceItems.length > 4">
-            <p class="icon">
+            <p class="icon font-color-extra-light-gray">
               <i></i>
             </p>
           </li>
@@ -130,7 +130,7 @@
       </div>
     </div>
     <JfkSupport v-once></JfkSupport>
-    <footer class="footer jfk-clearfix">
+    <footer class="footer jfk-footer jfk-clearfix">
       <div class="links jfk-fl-l">
         <div class="jfk-flex is-justify--center is-align-middle">
           <a :href="indexUrl" class="link font-color-white">
@@ -252,6 +252,7 @@
         that.toast.close()
         if (!product_info.gallery || !product_info.gallery.length) {
           product_info.gallery = [defaultGallery]
+          that.productGalleryIsDefault = true
         }
         that.productInfo = Object.assign({}, that.productInfo, product_info)
         that.tag = that.productInfo.tag
@@ -306,6 +307,8 @@
         salerBanner: [],
         settingId: '-1',
         productGalleryIndex: 1,
+        // 无gallery图片，添加默认图片
+        productGalleryIsDefault: false,
         bannerSwiperOptions: {
           autoplay: 3000,
           lazyLoading: true,

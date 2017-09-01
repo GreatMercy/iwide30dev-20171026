@@ -29,8 +29,64 @@
     &.is-selected {
       .jfk-calendar{
         &__value {
+          &:after {
+            content: '';
+            width: calc(76 / 30)em;
+            height: calc(76 / 30)em;
+            position: absolute;
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            opacity: 0.5;
+            margin-top: calc(-38 / 30)em;
+            margin-left: calc(-38 / 30)em;
+            z-index: -1;
+            box-shadow: 0 0 calc(40 / 30)em currentColor;
+          }
           .date {
             color: #383936;
+          }
+        }
+      }
+    }
+    &.is-range {
+      .jfk-calendar {
+        &__date {
+          &:after {
+            content: '';
+            width: 100%;
+            height: calc(76 / 28)em;
+            position: absolute;
+            background-color: currentColor;
+            top: 50%;
+            left: 0;
+            opacity: 0.5;
+            margin-top: calc(-38 / 28)em;
+            z-index: -1;
+            box-shadow: 0 0 calc(40 / 30)em currentColor;
+          }
+        }
+        &__value {
+          .date {
+            color: #383936;
+          }
+        }
+      }
+      &.is-start {
+        .jfk-calendar__date {
+          &:after {
+            width: 50%;
+            left: 50%;
+          }
+        }
+      }
+      &.is-end {
+        .jfk-calendar {
+          &__date {
+            &:after {
+              width: 50%;
+              right: 50%;
+            }
           }
         }
       }

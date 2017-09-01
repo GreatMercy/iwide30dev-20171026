@@ -281,6 +281,23 @@ Class Idistribute_model extends CI_Model{
 	}
 	
 	/**
+	 * 取得一个全员分销绩效项的基础信息
+	 * @param string $inter_id
+	 * @param string $grade_id
+	 * @param string $grade_table
+	 * @param string $grade_typ
+	 * @return boolean
+	 */
+	public function is_grades_exist($inter_id,$grade_id,$grade_table,$grade_typ,$return_row_info = FALSE){
+		try {
+			return $this->get_distribute_ext_model()->is_grades_exist($inter_id,$grade_id,$grade_table,$grade_typ,$return_row_info);
+		} catch (Exception $e) {
+			log_message('error',$e->getMessage());
+		}
+		return false;
+	}
+
+	/**
 	 * 检索指定OPENID的分销身份信息
 	 * @todo 全民分销检索指定OPENID的分销身份信息
 	 * @param string $inter_id 公众号唯一识别编号
@@ -297,6 +314,64 @@ Class Idistribute_model extends CI_Model{
 		}
 		return false;
 	}
+	
+	/**
+	 * 取分销保护状态配置
+	 * @param string $inter_id 公众号inter_id
+	 * @return Object <code>status->CLOSED|OPEN</code>
+	 * <pre>
+	 * 状态关闭时返回object(stdClass)[32]
+	 *	  public 'status' => string 'CLOSED' (length=6)
+	 *	  public 'protection_time' => int 0
+	 * 状态开启时返回object(stdClass)[32]
+	 *	  public 'status' => string 'OPEN' (length=6)
+	 *	  public 'protection_time' => int 1503480263
+	 * </pre>
+	 */
+	public function get_distribution_protection_config($inter_id){
+		try {
+			return $this->get_distribution_model()->get_distribution_protection_config($inter_id);
+		}catch (Exception $e){
+			log_message('error',$e->getMessage());
+		}
+	}
+	/**
+	 * 查询受保护的分销员
+	 * @param string $openid 用户openid
+	 * @param string $inter_id 公众号inter_id
+	 * @return int 查询到受保护的分销员时返回分销员的分销号，查询没有结果则返回0
+	 */
+	public function get_protection_saler($openid,$inter_id = ''){
+		try {
+			return $this->get_distribution_model()->get_protection_saler($openid,$inter_id);
+		}catch (Exception $e){
+			log_message('error',$e->getMessage());
+		}
+	}
+	/**
+	 * 保存分销员分销保护源信息
+	 *
+	 * @param string $inter_id 公众号inter_id
+	 * @param string $source_openid
+	 *        	来源用户openid
+	 * @param string $source
+	 *        	来源链接
+	 * @param int $saler
+	 *        	分销号
+	 * @param int $current_time
+	 *        	受保护开始时间戳，默认当前时间戳
+	 * @param string $module
+	 *        	模块名称，默认为空
+	 * @return boolean true|false
+	 */
+	public function save_saler_protection_info($inter_id, $source_openid, $source, $saler, $current_time = '', $module = ''){
+		try {
+			return $this->get_distribution_model()->save_saler_protection_info($inter_id,$source_openid,$source,$saler,$current_time,$module);
+		}catch (Exception $e){
+			log_message('error',$e->getMessage());
+		}
+	}
+	
 	private function get_distribute_model(){
 		if(!isset($this->_model)){
 			$this->load->model('distribute/grades_model');
@@ -310,6 +385,13 @@ Class Idistribute_model extends CI_Model{
 			$this->_grades_ext_model = $this->distribute_ext_model;
 		}
 		return $this->_grades_ext_model;
+	}
+	private function get_distribution_model(){
+		if(!isset($this->_distribution_model)){
+			$this->load->model('distribute/distribute_model');
+			$this->_distribution_model = $this->distribute_model;
+		}
+		return $this->_distribution_model;
 	}
 	private function get_dist_notice_model(){
 		if(!isset($this->_notice_model)){

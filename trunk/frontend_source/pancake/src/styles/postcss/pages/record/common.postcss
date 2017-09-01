@@ -21,8 +21,17 @@
     text-align: center;
     padding-top: calc(38 / 30)em;
     padding-bottom: calc(4 / 30)em;
+    position: relative;
     .name {
       line-height: calc((22 + 22 + 38) / 30);
+    }
+    .coupon-enter {
+      position: absolute;
+      top: calc(38 / 24)em;
+      right: 0;
+      i {
+        padding-left: calc(10 / 24)em;
+      }
     }
   }
   .times {
@@ -60,6 +69,9 @@
       }
       .prize-btns {
         width: calc(177 / 690 * 100%);
+        @media screen and (max-width: 320px) {
+          width: calc(200 / 690 * 100%);
+        }
         @mixin clearfix;
         .btn {
           display: inline-block;

@@ -53,6 +53,7 @@ class Order_check_model extends CI_Model {
 		        2,3
 		);
 		$status_tips_arr=array(
+		      '0'=>'订单已提交，前台会尽快确认您的订单，请耐心等待',
 		      '1'=>'酒店已确认订单',
 		      '2'=>'祝您入住愉快',
 		      '3'=>'您已离店，欢迎再次光临',

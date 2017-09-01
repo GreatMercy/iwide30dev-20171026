@@ -1,6 +1,19 @@
   .jfk-pages__bookingHotel{
-    margin-bottom:10rem;
-  .title_info_container{
+    .jfk-pages__theme{
+      background: var(--color-white);
+    }
+    .goldColor{
+      color: var(--color-golden);
+    }
+    .banners__item-box div{
+      &::before {
+        background: -webkit-linear-gradient(bottom, var(--color-deep-yellow), rgba(0,0,0,0));
+        background: -o-linear-gradient(top, var(--color-deep-yellow), rgba(0,0,0,0));
+        background: -moz-linear-gradient(top,var(--color-deep-yellow), rgba(0,0,0,0));
+        background: linear-gradient(to top, var(--color-deep-yellow), rgba(0,0,0,0));
+      }
+    }
+    .title_info_container{
     & .title_info{
        &::before {
          background-color: var(--font-color-light-gray);
@@ -21,15 +34,13 @@
         &::before {
           background-color: var(--font-color-light-gray);
         }
-
       }
-      .center_line{
-        &::before {
+      .live_date{
+        &::before{
           background-color: var(--font-color-light-gray);
         }
       }
     }
-
     .hotel_info{
       &_room{
         &::before{
@@ -44,7 +55,6 @@
             }
           }
         }
-
         color: var(--font-color-extra-light-gray);
         &_item.active{
           color: var(--color-golden);
@@ -55,15 +65,19 @@
 
       }
     }
-
     .hotel_info_room{
       & .room_pic{
+        &::before{
+          background: -webkit-linear-gradient(bottom, var(--color-deep-yellow), rgba(0,0,0,0));
+          background: -o-linear-gradient(top, var(--color-deep-yellow), rgba(0,0,0,0));
+          background: -moz-linear-gradient(top,var(--color-deep-yellow), rgba(0,0,0,0));
+          background: linear-gradient(to top, var(--color-deep-yellow), rgba(0,0,0,0));
+        }
         &_info{
           & .room_type{
-            color: #fff;
+            color: var(--color-white);
           }
           & .room_type_ul{
-
             li{
               color: #928d89;
             }
@@ -71,10 +85,13 @@
         }
       }
     }
-    
     .hotel_info_room_price{
       color: var(--font-color-light-gray);
       & .price{
+        .chooseBtn{
+          background-color: var(--button-default-color);
+          color: var(--color-white);
+        }
         & .sFont{
           &::before{
             background-color: var(--font-color-light-gray);
@@ -82,7 +99,6 @@
         }
       }
     }
-
     .room_price_ul_container{
       color: var(--font-color-extra-light-gray);
       background-color: var(--color-light-black);
@@ -107,13 +123,24 @@
           }
           .pay_btn{
             background-color: var(--button-default-color);
-            color: var(--color-white)
+            color: var(--color-white);
+            .needpaybefore{
+              color: #9e9e9e;
+            }
+          }
+          .hasline{
+            &::before {
+              //background-color: #9e9e9e;
+              background: -webkit-linear-gradient(left, var(--color-deep-yellow), var(--color-white), var(--color-deep-yellow));
+              background: -o-linear-gradient(right, var(--color-deep-yellow), var(--color-white), var(--color-deep-yellow));
+              background: -moz-linear-gradient(right,var(--color-deep-yellow), var(--color-white), var(--color-deep-yellow));
+              background: linear-gradient(to right, var(--color-deep-yellow), var(--color-white), var(--color-deep-yellow));
+            }
           }
         }
 
       }
     }
-
     .ht_int{
       .title{
         &::before{
@@ -124,5 +151,45 @@
         color: var(--font-color-light-gray);
       }
     }
-
+    .choose_date_calendar{
+      background: var(--color-white);
+    }
+    .room_desc{
+        background-color: rgba(0,0,0,.8);
+      .room_mask{
+        background-color: var(--color-white);
+        .icon_close{
+          color: var(--color-white);
+        }
+      }
+      .room_desc_ul_container{
+        .room_desc_ul{
+          &::before {
+            background-color: var(--line-color-extra-light-silver);
+          }
+        }
+      }
+    }
+    .package_desc{
+      .swich_bar{
+        span.active{
+          color: var(--color-golden);
+          border-bottom: 1px solid var(--color-golden);
+        }
+      }
+      background-color: rgba(0,0,0,.8);
+      .package_mask{
+        background-color: var(--color-white);
+        .icon_close{
+          color: var(--button-primary-plain-color);
+        }
+      }
+      .package_desc_ul_container{
+        .package_desc_ul{
+          &::before {
+            background-color: var(--line-color-extra-light-silver);
+          }
+        }
+      }
+    }
 }

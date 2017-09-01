@@ -7,17 +7,17 @@
     <p class="jfk-font center color1 mar_t40 font_21 txt_show5">支付成功!</p>
     <div class="pad_tb40 center">
       <p class="inblock font_12 color3">恭喜您成功购买了会员卡，请在会员中心查看</p>
-      <div class="inblock pad_lr30 pad_tb5  center relative border_1_bcbcbc radius_3 color3 font_14"><a :href="dataList.page_resource.links.jump_url">会员中心</a></div>
+      <div class="inblock pad_lr30 pad_tb5  center relative border_1_bcbcbc radius_3 color3 font_14 pay_look"><a :href="dataList.page_resource.links.jump_url">会员中心</a></div>
     </div>
   </section>
-  <section v-if="info.name === '' || info.cellphone === '' || info.id_card_no === ''">
-    <div class="font_12 padding_left_20 pad_t20">
+  <section v-if="info.name === '' || info.cellphone === '' || info.id_card_no === ''" class="white_bg padding_0_15 mar_t30">
+    <div class="font_12 padding_left_20 pad_t40">
       <p class="main_color1 relative" style="padding-left:10px;">
         <em class="jfk-font absolute prompt">
-        <img src="../../assets/image/gantan.png" alt="" style="width:16px;"></em>我们检测到您还未进行实名认证,为保障您的资金安全,请填写个人信息进行认证
+        <img src="../../assets/image/gantan.png" alt="" style="width:16px;margin-top:2px;"></em>我们检测到您还未进行实名认证,为保障您的资金安全,请填写个人信息进行认证
       </p>
     </div>
-    <div class="layer_bg radius_3 padding_20 mar_t30 padding_0_15">
+    <div class="layer_bg radius_3 padding_20 mar_t10">
       <form class="form_list font_14" ref="form">
           <div class="flex form_item bd_bottom padding_18">
             <div class="margin_right_22 width_120">

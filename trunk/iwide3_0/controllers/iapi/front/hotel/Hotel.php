@@ -83,7 +83,7 @@ class Hotel extends MY_Front_Hotel_Iapi {
 		$ext['links']['RETURN_USABLE_COUPON'] = Hotel_base::inst()->get_url("RETURN_USABLE_COUPON");
 		$ext['links']['RETURN_POINT_SET'] = Hotel_base::inst()->get_url("RETURN_POINT_SET");
 		$ext['links']['RETURN_POINTPAY_SET'] = Hotel_base::inst()->get_url("RETURN_POINTPAY_SET");
-
+		$data['days'] = round(strtotime($data['enddate'])-strtotime($data['startdate']))/86400;
         $this->out_put_msg(1,'',$data,'hotel/hotel/bookroom',$ext);
 
 	}

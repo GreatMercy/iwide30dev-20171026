@@ -1,153 +1,201 @@
 .jfk-pages__commentContent {
-  
-  .comment_top{
-    & .container{
+  .jfk-pages__theme {
+    background-color: #fff;
+  }
+  .comment_top {
+    @mixin one-line horzin {
+    };
+    margin: 0 px2rem(30);
+    &::before {
+      width: 100%;
+      height: 1px;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+    }
+    & .container {
       padding-bottom: px2rem(70);
       padding-left: px2rem(100);
-      @mixin one-line horzin {};
-      position:relative;
+      @mixin one-line horzin {
+      };
+      position: relative;
       &::before {
-        width: 100%;
+        width: 3px;
+        height: px2rem(56);
         position: absolute;
-        bottom: 0;
+        top: px2rem(26);
         left: 0;
       }
     }
-    & .score{
+    & .score {
       margin-top: px2rem(70);
-      .font-size--80{
+      .font-size--80 {
         font-size: px2rem(80);
       }
-      .font-size--70{
-        font-size: px2rem(70);
+      .font-size--64 {
+        font-size: px2rem(64);
+      }
+      .font-size--38 {
+        font-size: px2rem(38);
       }
     }
-    .jfk-rater{
+    .jfk-rater {
       margin-top: px2rem(30);
-      & a{
-        margin-right: px2rem(50)!important;
+      & a {
+        margin-right: px2rem(40) !important;
+        &:last-child {
+          margin-right: 0 !important;
+        }
       }
     }
 
-    .pregress_list{
+    .pregress_list {
       margin-top: px2rem(80);
-        & .pregress_item{
-          line-height: 0;
-          margin-top: px2rem(40);
+      & .pregress_item {
+        line-height: 1;
+        margin-top: px2rem(30);
 
-          .pregress{
-            width: px2rem(380);
+        .pregress {
+          width: px2rem(380);
+          display: inline-block;
+          height: px2rem(8);
+          .bar {
             display: inline-block;
-            height:px2rem(8);
-            .bar{
-              display: inline-block;
-              height:px2rem(8);
-              border-top-right-radius: 50%;
-              border-radius: px2rem(20);
-            }
+            height: px2rem(8);
+            border-top-right-radius: 50%;
+            border-radius: px2rem(20);
+            position: relative;
+            top: -2px;
           }
         }
+      }
     }
   }
-  
-  .talk{
+
+  .talk {
+    margin: 0 px2rem(30);
     padding-top: px2rem(50);
-    ul{
+    .title {
+      margin-bottom: px2rem(30);
+    }
+    ul {
       overflow: hidden;
       z-index: 9999;
-      padding-bottom: px2rem(50);
-      @mixin one-line horzin {};
-      position:relative;
+      padding-bottom: px2rem(30);
+      @mixin one-line horzin {
+      };
+      position: relative;
       &::before {
         width: 100%;
         position: absolute;
         bottom: 0;
         left: 0;
       }
-      li{
+      li {
         padding: px2rem(10) px2rem(20);
         float: left;
         margin-right: px2rem(20);
-        margin-top: px2rem(20);
-        border-radius: px2rem(10);
+        margin-bottom: px2rem(24);
+        border-radius: px2rem(6);
       }
     }
   }
 
-  .content{
-    & .contitle_info{
+  .content {
+    & .contitle_info {
       position: relative;
-      margin-top: px2rem(50);
-      .head_img{
-        width:px2rem(70);
-        height:px2rem(70);
-        border-radius: 50%;
+      margin-top: px2rem(65);
+      height: px2rem(72);
+      .head_img {
+        width: px2rem(72);
+        height: px2rem(72);
+        border-radius: 100%;
       }
-      .name{
+      .name {
         position: absolute;
         top: 0;
-        left: px2rem(90);
+        left: px2rem(102);
       }
-      .date{
+      .date {
         position: absolute;
-        top: px2rem(40);
-        left: px2rem(90);
+        top: px2rem(47);
+        left: px2rem(102);
       }
-      .score{
+      .score {
         position: absolute;
         right: px2rem(30);
+        top: px2rem(22);
+        .score-text {
+          margin-left: px2rem(10);
+        }
+      }
+      .font-size--18 {
+        font-size: px2rem(18);
       }
     }
 
-    .comment{
-      margin: px2rem(40) 0;
+    .comment {
+      margin-top: px2rem(35);
+      margin-bottom: px2rem(25);
+      line-height: px2rem(48);
     }
 
-    .show_all{
-      margin: px2rem(30) 0;
+    .show_all {
+      margin-bottom: px2rem(60);
     }
 
-    .file{
-      & .one_img{
+    .file {
+      & .one_img {
         width: px2rem(390);
         height: px2rem(380);
         border-radius: px2rem(10);
       }
-      & .recommendations-list{
-        & .swiper-slide{
+      & .recommendations-list {
+        & .swiper-slide {
           width: px2rem(260) !important;
-          margin-right: px2rem(20)!important;
-          img{
+          margin-right: px2rem(20) !important;
+          img {
             width: px2rem(260);
             height: px2rem(270);
           }
         }
       }
     }
-  
-    .check_repeat{
-      margin: px2rem(60) 0 px2rem(30) 0;
-      .show_icon{
+
+    .check_repeat {
+      margin: 0 0 px2rem(30) 0;
+      .show_icon {
         display: inline-block;
         width: px2rem(40);
         height: px2rem(40);
         line-height: px2rem(40);
         margin-left: px2rem(-10);
-        transform:rotate(180deg);
-        -ms-transform:rotate(180deg);
-        -moz-transform:rotate(180deg);
-        -webkit-transform:rotate(180deg);
-        -o-transform:rotate(180deg);
+        transform: rotate(180deg);
+        -ms-transform: rotate(180deg);
+        -moz-transform: rotate(180deg);
+        -webkit-transform: rotate(180deg);
+        -o-transform: rotate(180deg);
       }
     }
 
-    .repeat_content{
-      padding: px2rem(40) px2rem(50);
-      border-radius: px2rem(5);
+    .repeat_content {
+      padding: px2rem(30) px2rem(50);
+      border-radius: px2rem(6);
+      line-height: px2rem(48);
+      @mixin one-line horzin {
+      };
+      &::before {
+        width: 100%;
+        height: 1px;
+        background-color: #eeeae9;
+        position: absolute;
+        bottom: px2rem(-30);
+        left: 0;
+      }
     }
 
   }
-  .booking_now{
+  .booking_now {
     width: 100%;
     height: px2rem(100);
     line-height: px2rem(100);
@@ -158,13 +206,6 @@
     border: none;
     z-index: 999;
   }
-  
-
-
-
-
-
-
 
 }
 

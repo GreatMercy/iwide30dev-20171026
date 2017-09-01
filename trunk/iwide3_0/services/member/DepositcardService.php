@@ -307,6 +307,15 @@ class DepositcardService extends MemberBaseService
 
         $cardId = isset($_GET['cardId']) ? (int)$_GET['cardId'] : 0;
         $pay_type = isset($_GET['pay']) ? $_GET['pay'] : 'wechat';
+        $deposit_card = $this->getCI()->p_model->get_info(array('deposit_card_id' => $cardId), 'deposit_card', 'pay_type');
+        if (!empty($deposit_card)) {
+            $pay_types = explode(',', $deposit_card['pay_type']);
+            if(!in_array($pay_type,$pay_types)){
+                $pay_type = $pay_types[0];
+            }
+        }else{
+            return array('err' => 40003, 'msg' => '此卡暂不能购买!');
+        }
         //创建支付订单
         $saler_id = \App\services\member\SupportService::getInstance()->check_set_saler($inter_id, $openid, $this->saler_id); //分销保护
         if (!empty($saler_id) && $saler_id > 0) $distribution_num = $saler_id;

@@ -1351,6 +1351,8 @@ class Package extends MY_Front_Soma_Iapi
         ];
         $result = [
             'product_info' => $product_info['products'],
+            'theme' => $product_info['theme'],
+            'attach' => $product_info['attach'],
             'page_resource' => $page_resource
         ];
         $this->json(BaseConst::OPER_STATUS_SUCCESS, '', $result);

@@ -1,11 +1,26 @@
 import JfkDate from './date'
 import { getWeeksInMonth, getDatesInPrevMonth, getDatesInNextMonth, getDatesInMonth, parseDate, dateKeyFormat, formatDate } from './util'
 const weekTitles = ['日', '一', '二', '三', '四', '五', '六']
+const dateClass = function (o, select) {
+  let result = ['jfk-calendar__row']
+  o.today && result.push('is-today')
+  o.disabled && result.push('is-disabled')
+  o.selected && result.push('is-selected')
+  if (o.today || o.selected || o.range !== '') {
+    result.push('color-golden')
+  }
+  if (select.length === 2) {
+    o.range !== '' && result.push('is-range')
+    o.range === '1' && result.push('is-end')
+    o.range === '-1' && result.push('is-start')
+  }
+  return result.join(' ')
+}
 export default {
   name: 'jfkCalendar',
   render (h) {
     let weekTitleItems
-    const { showWeekTitle, showOtherMonthDates, weekTitles, dates, year, month, handleDateClick, prevMonthDisabled, nextMonthDisabled, prevMonth, nextMonth } = this
+    const { showWeekTitle, showOtherMonthDates, weekTitles, dates, year, month, handleDateClick, prevMonthDisabled, nextMonthDisabled, prevMonth, nextMonth, select } = this
     if (showWeekTitle) {
       weekTitleItems = <div class="jfk-calendar__thead font-color-light-silver">
         <table class="jfk-calendar__weeks">
@@ -29,12 +44,12 @@ export default {
         let key = i * 7 + j
         let o = dates[key]
         let d
-        let className = ['jfk-calendar__row']
         if (showOtherMonthDates || (!showOtherMonthDates && o.current === 0)) {
           d = <jfk-date value={o.date} selected={o.selected} text={o.text} content={o.content}></jfk-date>
         }
+        let className = dateClass(o, select)
         _dateItems.push(
-          <td title={o.key} onClick={handleDateClick(key)} class={{'jfk-calendar__row': true, 'is-today': o.today, 'color-golden': o.today || o.selected || o.range !== undefined , 'is-disabled': o.disabled, 'is-selected': o.selected, 'is-range': o.range !== undefined, 'is-start': o.range === '-1', 'is-end': o.range === '1'}} key={o.key}>{d}</td>
+          <td title={o.key} onClick={handleDateClick(key)} class={className} key={o.key}>{d}</td>
         )
       }
       dateItems.push(<tr class="jfk-calendar__cell" key={'row_' + i}>{_dateItems}</tr>)
@@ -277,7 +292,7 @@ export default {
           if (range) {
             if (selected !== '1') {
               if (select.length === 2) {
-                that.select = []
+                that.select = [key]
               } else if (select.length === 1) {
                 if (key > select) {
                   that.select.push(key)

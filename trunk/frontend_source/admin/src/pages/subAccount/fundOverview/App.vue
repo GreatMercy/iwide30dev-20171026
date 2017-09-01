@@ -137,7 +137,7 @@
         <el-pagination
           @current-change="handleCurrentChange"
           :current-page="pageInfo.current"
-          :page-size="10"
+          :page-size="pageInfo.page_size"
           layout="total, prev, pager, next, jumper"
           :total="pageInfo.total">
         </el-pagination>
@@ -208,7 +208,7 @@
         let params = {
           inter_id: this.selectedPublic || '',
           hotel_id: this.selectedHotel || '',
-          limit: 10,
+          limit: '',
           offset: offset,
           start_time: this.formatStart || '',
           end_time: this.formatEnd || ''

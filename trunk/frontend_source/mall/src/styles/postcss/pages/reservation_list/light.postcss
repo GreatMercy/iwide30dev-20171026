@@ -1,0 +1,56 @@
+.jfk-pages__reservation-list {
+  .jfk-pages__theme {
+    background-color: var(--color-white);
+  }
+  .reservation-search {
+    &::before {
+      left: 0;
+      bottom: 0;
+      background-color: var(--line-color-light-silver);
+    }
+
+    &__icon {
+      color: var(--font-color-silver);
+    }
+
+    &__input {
+      color: var(--font-color-white);
+      &::-webkit-input-placeholder {
+        color: var(--font-color-light-gray);
+      }
+    }
+
+    &__close {
+      background-color: var(--font-color-silver);
+      color: var(--color-white);
+    }
+  }
+
+  .reservation-no-data {
+    color: var(--font-color-light-gray);
+  }
+
+
+  .reservation-list {
+    &__name {
+      color: var(--color-white);
+    }
+
+    &__hotel {
+      color: var(--font-color-silver);
+    }
+
+    &__location {
+      color: var(--font-color-silver);
+    }
+  }
+
+  .jfk-button--primary.is-plain {
+    border-color: var(--color-golden);
+    .jfk-font {
+      color: var(--color-white);
+    }
+  }
+
+
+}

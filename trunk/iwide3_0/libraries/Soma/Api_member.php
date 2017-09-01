@@ -26,6 +26,11 @@ class Api_member extends Soma_base
         return parent::__construct();
     }
 
+    public function uuCode(){
+        return time().mt_rand(1000, 9999);
+    }
+
+
     /**
      * Sets the inter identifier.
      * 

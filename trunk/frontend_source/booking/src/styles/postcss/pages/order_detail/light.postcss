@@ -1,85 +1,84 @@
-  .jfk-pages__orderDetail{
-    .grayColor80{
-      color: var(--font-color-extra-light-gray);
-    }
-    .grayColorbf{
-      color: var(--font-color-light-gray);
-    }
-    .goldColor{
-      color: var(--color-golden);
-    }
-    .info_place{
-    	color: var(--font-color-extra-light-gray);
-    }
-	
-  	.icon_dh{
-  		color: var(--color-golden);
-  	}
+.jfk-pages__orderDetail {
+  & .jfk-pages__theme {
+    background-color: #f6f7f7;
+  }
+  .grayColor80 {
+    color: var(--font-color-extra-light-gray);
+  }
+  .grayColorbf {
+    color: var(--font-color-light-gray);
+  }
+  .goldColor {
+    color: var(--color-golden);
+  }
+  .darkColor333 {
+    color: var(--font-color-dark-white);
+  }
+  .info_place {
+    color: var(--font-color-extra-light-gray);
+  }
 
-  .order_status{
+  .icon_dh {
+    color: var(--color-golden);
+  }
+
+  .order_status {
     background-color: var(--color-white);
-    & .status{
+    & .status {
       &::before {
         background-color: var(--color-golden);
       }
     }
 
-    & .order_btn{
-      span{
+    & .order_btn {
+      span {
         color: var(--font-color-dark-white);
-        border:1px solid var(--font-color-dark-white);
+        border: 1px solid var(--font-color-dark-white);
       }
     }
   }
-  .bottom_container{
+  .bottom_container {
     background: var(--color-white);
     box-shadow: 0 px2rem(-10) px2rem(60) #bebebe;
-
+    .name {
+      color: var(--font-color-light-silver);
+    }
   }
-	& .hotel_room_info{
+  & .hotel_room_info {
     background-color: var(--color-white);
     &::before {
-       background-color: var(--line-color-light-silver);
+      background-color: var(--line-color-light-silver);
     }
-    & span{
-        &::before {
-         background-color: var(--font-color-extra-light-gray);
+    & span {
+      &::before {
+        background-color: var(--font-color-extra-light-gray);
       }
     }
-    & span:nth-child(2){
+    & span:nth-child(2) {
       color: #959595;
     }
   }
-  .live_time{
+  .live_time {
     &::before {
       background-color: var(--line-color-light-silver);;
     }
   }
 
-  .name{
+  .name {
     &::before {
       background-color: var(--line-color-light-silver);
     }
   }
 
-  .order_info{
-    &_item{
-      span{
-        color: var(--font-color-extra-light-gray);
-      }
-    }
-    &_item:last-child{
-      &::before{
+  .order_info {
+    &_item:last-child {
+      &::before {
         background-color: var(--line-color-light-silver);
       }
     }
   }
 
-	
-
-
-
-  }
+}
 
 
 

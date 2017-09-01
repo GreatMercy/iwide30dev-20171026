@@ -21,7 +21,7 @@
         <div v-if="key === 'phonesms'" @click="smsSend" class="relative verification" :class="{verification_active:sms}">{{smsTitle}}</div>
 			</div>
 			<div class="margin_top_75 font_17">
-				<div class="block width_85 center btn_height auto jfk-font entry_btn register" @click="submit()">注&ensp;册</div>
+				<div class="block width_85 center btn_height entry_btn auto jfk-font gray_btn register" @click="submit()">注&ensp;册</div>
 			</div>
 			<div class="center margin_top_30 font_12 color3">已有账号？<span class="mar_l20"><a class="main_color1" :href="links.login">马上登录</a></span><em class="color3 mar_l10 jfk-font xx-small">&#xe61c;</em></a>
 			</div>

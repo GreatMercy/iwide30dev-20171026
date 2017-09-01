@@ -6,7 +6,7 @@
     </div>
     <p class="jfk-font center color1 mar_t40 font_23 txt_show5">支付失败!</p>
     <p class="font_13 color3 center margin_top_40 padding_bottom_70">很抱歉，您没有支付成功，请重新下单支付!</p>
-    <a :href="dataList.page_resource.links.restarturl" class="block width_85 color1 center btn_height auto jfk-font entry_btn reset" style="border-top:1px solid #b2945e">重新支付</a>
+    <a :href="dataList.page_resource.links.restarturl" class="block width_85 center btn_height auto jfk-font entry_btn reset" style="border-top:1px solid #b2945e">重新支付</a>
   </section>
   <JfkSupport v-once></JfkSupport>
 </div>

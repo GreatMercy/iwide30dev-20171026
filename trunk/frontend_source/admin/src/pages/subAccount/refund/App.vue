@@ -16,7 +16,6 @@
       </el-row>
       <el-table
         :data="tableData"
-        border
         style="width: 100%" v-if="showRefundOrder">
         <el-table-column
           prop="add_time"
@@ -171,10 +170,8 @@
         this.$confirm('确认退款后，系统将自动完成退款且无法撤回', '温馨提示', {})
         .then((res) => {
           postrefund(qs.stringify(param), {headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then((res) => {
-            let intTrimRefundVal = parseInt(trimRefundVal * 100)
-            let intCanRefund = parseInt(this.popItem.refund_amount * 100)
-            if (intTrimRefundVal < intCanRefund) {
-              this.tableData[this.listIndex].refund_amount = Math.ceil(intCanRefund - intTrimRefundVal) / 100
+            if (res.data.amount > 0) {
+              this.tableData[this.listIndex].refund_amount = res.data.amount
               this.sendAjax = false
             } else {
               this.tableData[this.listIndex].refund_amount = 0
@@ -185,7 +182,10 @@
               message: '退款成功',
               type: 'success'
             })
-          }).catch(() => {
+          }).catch((err) => {
+            if (err.status === '1012') {
+              this.tableData[this.listIndex].refund_amount = err.data.amount
+            }
             this.sendAjax = false
           })
         }).catch(() => {

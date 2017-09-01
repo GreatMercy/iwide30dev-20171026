@@ -17,7 +17,7 @@
               <span class="jfk-price product-price-package color-golden font-size--54" v-html="pricePackage" v-once></span>
               <span class="jfk-price__original product-price-market font-size--24 font-color-light-gray" :class="{'is-integral': product.tag === 7}" v-once>{{priceMarket}}</span>
             </div>
-            <p class="font-size--24 product-number font-color-light-gray" v-html="productNumber"></p>
+            <p class="font-size--24 product-number font-color-light-gray-common" v-html="productNumber"></p>
             <div class="product-button-box jfk-d-ib" @click.prevent="handleButtonClick" v-if="buttonText" v-html="buttonText"></div>
           </div>
         </div>

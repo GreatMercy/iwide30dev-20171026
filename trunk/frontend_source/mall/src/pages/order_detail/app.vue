@@ -3,9 +3,9 @@
     <div class="jfk-pages__theme"></div>
     <orderStatus  :showtip="showtip"/>
     <div class="orderDetail__gift">
-      <ordergiftinfo  :giftinfo="giftinfo"/> 
+      <ordergiftinfo  :giftinfo="giftinfo"/>
       <div class="orderDetail__gift__btn"><button class="jfk-button  jfk-button--primary is-plain jfk-button--free ">放入自己卡包</button></div>
-      
+
     </div>
     <div class="orderDetail__giftcontent jfk-pl-30 jfk-pr-30">
       <div class="giftcontent_title font-size--28 jfk-ta-c">礼包内容</div>
@@ -27,10 +27,10 @@
   </div>
 </template>
 <script>
-  import orderStatus from '../../components/orderDetail/orderStatus.vue'
-  import ordergiftinfo from '../../components/orderDetail/orderGiftinfo.vue'
-  import orderInfo from '../../components/orderDetail/orderInfo.vue'
-  import orderGiftCard from '../../components/orderDetail/orderGiftCard.vue'
+  import orderStatus from '@/components/orderDetail/orderStatus.vue'
+  import ordergiftinfo from '@/components/orderDetail/orderGiftinfo.vue'
+  import orderInfo from '@/components/orderDetail/orderInfo.vue'
+  import orderGiftCard from '@/components/orderDetail/orderGiftCard.vue'
   export default {
     name: 'orderDetails',
     components: {

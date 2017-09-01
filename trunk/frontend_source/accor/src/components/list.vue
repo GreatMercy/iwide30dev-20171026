@@ -3,7 +3,6 @@
     <div class="main">
       <div class="leftmenu">
         <ul class="list">
-    
           <li class="active">北京</li>
           <li>北京</li>
           <li >北京</li>
@@ -114,7 +113,7 @@
 
 <script>
 import accor from '@/accorfile/accor.json'
-console.log(accor)
+// console.log(accor)
 export default {
   name: 'list',
   data () {
@@ -124,8 +123,9 @@ export default {
     }
   },
   created () {
+    this.handleAccordata()
   },
-  computed: {
+  methods: {
     handleAccordata () {
       const data = this.accor
       let result = []
@@ -139,16 +139,26 @@ export default {
             brand: item.brand
           })
           map[item.city] = item
+          console.log('hha')
         } else {
           for (let j in result) {
             let itemj = result[j]
             if (itemj.city === item.city) {
+              console.log('nihao')
+              itemj.push({
+                data: []
+              })
+              itemj.data.push(item)
+              break
             }
           }
         }
       }
-      return result
+      // return result
+      // console.log(result, 'ni')
     }
+  },
+  computed: {
   }
 }
 </script>

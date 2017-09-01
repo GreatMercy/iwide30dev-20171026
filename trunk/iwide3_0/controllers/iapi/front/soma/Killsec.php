@@ -102,7 +102,7 @@ class Killsec extends MY_Front_Soma_Iapi
 
         $res = array('data' => $return['data']);
 
-        $this->json(FrontConst::OPER_STATUS_SUCCESS, '', $res);
+        $this->json(FrontConst::OPER_STATUS_SUCCESS, '订阅成功，我们将在活动开始前10分钟内通知您', $res);
     }
 
 

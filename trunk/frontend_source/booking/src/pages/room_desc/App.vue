@@ -3,9 +3,9 @@
     <div class="jfk-pages__theme"></div>
     <div class="banner_img">
       <img src="http://30.iwide.cn:821/public/media/a450089706/adv/logo/20160613171158.jpg" alt="">
-      <i class="booking_icon_font icon-booking_icon_collect1 icon_close font-size--28"></i>
+      <i class="jfk-font icon-icon_close icon_close font-size--28 color-white"></i>
     </div>
-  
+
     <div class="room_desc_ul_container">
       <ul class="room_desc_ul">
         <li><i class="booking_icon_font icon-booking_icon_collect1 icon_close font-size--30"></i>免费WiFi</li>

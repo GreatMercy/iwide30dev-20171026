@@ -26,7 +26,7 @@
         <el-col :span="12">
           <el-form-item label="规则模块">
             <el-select v-model="storeState.form.module" filterable :disabled="storeState.rule_id !== null">
-              <el-option v-for="item in storeState.module" :key="item.value" :label="item.name" :value="storeState.form.module" :disabled="item.status !== '1'" @change="handleModuleSelect(item.value)"></el-option>
+              <el-option v-for="item in storeState.module" :key="item.value" :label="item.name" :value="item.value" :disabled="item.status !== '1'" @change="handleModuleSelect(item.value)"></el-option>
             </el-select>
           </el-form-item>
         </el-col>
@@ -238,7 +238,7 @@
                 'regular_group': regularJfkGroup,
                 'regular_hotel': regularJfkHotel
               },
-              'regular_base': this.regularBaseNum || ''
+              'regular_base': this.storeState.form.regular_base || ''
             }
             store.putSaveRule(send, function (e) {
               this.$notify({

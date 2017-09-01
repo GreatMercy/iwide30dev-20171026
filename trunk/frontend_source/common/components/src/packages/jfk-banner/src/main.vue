@@ -2,7 +2,7 @@
   <div class="jfk-banner">
     <div v-if="items.length === 1" v-once class="jfk-banner__item">
       <a :href="hrefMethod(items[0])" class="jfk-swiper__item-box">
-        <div v-lazy:background-image="imgUrlMethod(items[0])" class="jfk-swiper__item-bg jfk-banner__item-content jfk-image__lazy jfk-image__lazy--3-3 jfk-swiper__slide-content jfk-image__lazy-background-image">
+        <div v-lazy:background-image="imgUrlMethod(items[0])" class="jfk-swiper__item-bg jfk-banner__item-content jfk-image__lazy jfk-image__lazy--4-2 jfk-swiper__slide-content jfk-image__lazy-background-image">
           <div class="jfk-banner__item-mask"></div>
         </div>
       </a>
@@ -11,7 +11,7 @@
       <swiper-slide class="jfk-swiper__item" v-for="(item, index) in items" :key="index">
         <a :href="hrefMethod(item)" class="jfk-swiper__item-box">
           <div :data-background="imgUrlMethod(item)" class="jfk-banner__item-content jfk-swiper__item-bg swiper-lazy">
-            <div class="jfk-image__lazy--preload jfk-image__lazy jfk-image__lazy--3-3 jfk-image__lazy--background-image"></div>
+            <div class="jfk-image__lazy--preload jfk-image__lazy jfk-image__lazy--4-2 jfk-image__lazy--background-image"></div>
             <div class="jfk-banner__item-mask"></div>
           </div>
         </a>

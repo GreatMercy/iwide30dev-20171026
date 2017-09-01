@@ -3284,11 +3284,16 @@ class Distri_report extends MY_Admin {
                     }
                 }
 
-                if($arr['dis_status']==1 || $arr['dis_status']==2 || $arr['dis_status']==5 ){
-                    $res[$key]['dis_status']='已核定';
+                if($arr['dis_status']==1){
+                    $res[$key]['dis_status']='核定发放仲';
+                }elseif($arr['dis_status']==2){
+                    $res[$key]['dis_status']='核定已发放';
+                }elseif($arr['dis_status']==5){
+                    $res[$key]['dis_status']='核定取消';
                 }else{
                     $res[$key]['dis_status']='未核定';
                 }
+
             }
         }
         $view_params= array(
@@ -3336,7 +3341,7 @@ class Distri_report extends MY_Admin {
             $avgs['order_id'] = $keys[3];
         }
         if(!empty($keys[4])){
-            $avgs['saler_name'] = $keys[4];
+            $avgs['saler_name'] = urldecode($keys[4]);
         }
         if(!empty($keys[5])){
             $avgs['saler_no'] = $keys[5];
@@ -3390,8 +3395,12 @@ class Distri_report extends MY_Admin {
                     }
                 }
 
-                if($arr['dis_status']==1 || $arr['dis_status']==2 || $arr['dis_status']==5 ){
-                    $res[$key]['dis_status']='已核定';
+                if($arr['dis_status']==1){
+                    $res[$key]['dis_status']='核定发放仲';
+                }elseif($arr['dis_status']==2){
+                    $res[$key]['dis_status']='核定已发放';
+                }elseif($arr['dis_status']==5){
+                    $res[$key]['dis_status']='核定取消';
                 }else{
                     $res[$key]['dis_status']='未核定';
                 }
@@ -3445,7 +3454,7 @@ class Distri_report extends MY_Admin {
             }
             $objPHPExcel->getActiveSheet ()->setCellValueByColumnAndRow ( 0 + $index, $row, $item ['orderid'] );
             $objPHPExcel->getActiveSheet ()->setCellValueByColumnAndRow ( 1 + $index, $row, $item ['oiid'] );
-            $index = 7;
+            $index = 2 + $index;
             if (in_array ( 'web_orderid', $fields )) {
                 $objPHPExcel->getActiveSheet ()->setCellValueByColumnAndRow ( $index, $row, $item ['web_orderid'] );
                 $index ++;
@@ -3462,22 +3471,11 @@ class Distri_report extends MY_Admin {
                 $objPHPExcel->getActiveSheet ()->setCellValueByColumnAndRow ( $index, $row, $item ['name'] );
                 $index ++;
             }
-            if (in_array ( 'in_hotel_id', $fields )) {
-                $objPHPExcel->getActiveSheet ()->setCellValueByColumnAndRow ( $index, $row, isset($hotels [$item ['order_hotel']]) ? $hotels [$item ['order_hotel']] : '--' );
-                $index ++;
-            }
-            if (in_array ( 'roomname', $fields )) {
-                $objPHPExcel->getActiveSheet ()->setCellValueByColumnAndRow ( $index, $row, $item ['roomname'] );
-                $index ++;
-            }
-            if (in_array ( 'startdate', $fields )) {
-                $objPHPExcel->getActiveSheet ()->setCellValueByColumnAndRow ( $index, $row, $item ['startdate'] );
-                $index ++;
-            }
-            if (in_array ( 'enddate', $fields )) {
-                $objPHPExcel->getActiveSheet ()->setCellValueByColumnAndRow ( $index, $row, $item ['enddate'] );
-                $index ++;
-            }
+            $objPHPExcel->getActiveSheet ()->setCellValueByColumnAndRow ( 0 +$index, $row, isset($hotels [$item ['order_hotel']]) ? $hotels [$item ['order_hotel']] : '--' );
+            $objPHPExcel->getActiveSheet ()->setCellValueByColumnAndRow ( 1 +$index, $row, $item ['roomname'] );
+            $objPHPExcel->getActiveSheet ()->setCellValueByColumnAndRow ( 2 +$index, $row, $item ['startdate'] );
+            $objPHPExcel->getActiveSheet ()->setCellValueByColumnAndRow ( 3 +$index, $row, $item ['enddate'] );
+            $index = 4 +$index;
             if (in_array ( 'grade_time', $fields )) {
                 $objPHPExcel->getActiveSheet ()->setCellValueByColumnAndRow ( $index, $row, $item ['grade_time'] );
                 $index ++;
@@ -3498,24 +3496,16 @@ class Distri_report extends MY_Admin {
                 $objPHPExcel->getActiveSheet ()->setCellValueByColumnAndRow ( $index, $row, isset ( $paytype [$item ['paytype']] ) ? $paytype [$item ['paytype']] : '到付' );
                 $index ++;
             }
-            if (in_array ( 'iprice', $fields )) {
-                $objPHPExcel->getActiveSheet ()->setCellValueByColumnAndRow ( $index, $row, $item ['iprice'] );
-                $index ++;
-            }
-            if (in_array ( 'staff_name', $fields )) {
-                $objPHPExcel->getActiveSheet ()->setCellValueByColumnAndRow ( $index, $row, isset ( $item ['staff_name'] ) ? $item ['staff_name'] : '-' );
-                $index ++;
-            }
-            if (in_array ( 'saler', $fields )) {
-                $objPHPExcel->getActiveSheet ()->setCellValueByColumnAndRow ( $index, $row, isset ( $item ['saler'] ) ? $item ['saler'] : '-' );
-                $index ++;
-            }
+            $objPHPExcel->getActiveSheet ()->setCellValueByColumnAndRow ( 0 +$index, $row, $item ['iprice'] );
+            $objPHPExcel->getActiveSheet ()->setCellValueByColumnAndRow ( 1 +$index, $row, isset ( $item ['staff_name'] ) ? $item ['staff_name'] : '-' );
+            $objPHPExcel->getActiveSheet ()->setCellValueByColumnAndRow ( 2 +$index, $row, isset ( $item ['saler'] ) ? $item ['saler'] : '-' );
+            $index = 3 +$index;
             if (in_array ( 'saler_hotel_name', $fields )) {
                 $objPHPExcel->getActiveSheet ()->setCellValueByColumnAndRow ( $index, $row, isset($hotels [$item ['hotel_id']]) ? $hotels [$item ['hotel_id']] : '--' );
                 $index ++;
             }
             if (in_array ( 'grade_total', $fields )) {
-                $objPHPExcel->getActiveSheet ()->setCellValueByColumnAndRow ( $index, $row, isset ( $item ['grade_total'] ) ? $item ['grade_total'] : '-' );
+                $objPHPExcel->getActiveSheet ()->setCellValueByColumnAndRow ( $index, $row, (isset ( $item ['grade_total'] ) && isset($item ['dis_status']) && $item ['dis_status'] !=5) ? $item ['grade_total'] : '-' );
                 $index ++;
             }
             if (in_array ( 'send_time', $fields )) {

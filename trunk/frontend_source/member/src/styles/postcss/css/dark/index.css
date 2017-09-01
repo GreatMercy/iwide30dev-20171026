@@ -346,11 +346,11 @@ body,input,button,textarea{font-size:1rem;}
 /*阿里字体*/
 @font-face {
   font-family: 'jfk-font';  /* project id 322166 */
-  src: url('//at.alicdn.com/t/font_322166_ticvezam036m9529.eot');
-  src: url('//at.alicdn.com/t/font_322166_ticvezam036m9529.eot?#iefix') format('embedded-opentype'),
-  url('//at.alicdn.com/t/font_322166_ticvezam036m9529.woff') format('woff'),
-  url('//at.alicdn.com/t/font_322166_ticvezam036m9529.ttf') format('truetype'),
-  url('//at.alicdn.com/t/font_322166_ticvezam036m9529.svg#jfk-font') format('svg');
+  src: url('//at.alicdn.com/t/font_322166_f1bw9i6i6b3mcxr.eot');
+  src: url('//at.alicdn.com/t/font_322166_f1bw9i6i6b3mcxr.eot?#iefix') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_322166_f1bw9i6i6b3mcxr.woff') format('woff'),
+  url('//at.alicdn.com/t/font_322166_f1bw9i6i6b3mcxr.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_322166_f1bw9i6i6b3mcxr.svg#jfk-font') format('svg');
 }
 .jfk-font{font-family:"jfk-font";font-style:normal;}
 @media (device-height:568px) and (-webkit-min-device-pixel-ratio:2){/* 兼容iphone5 */

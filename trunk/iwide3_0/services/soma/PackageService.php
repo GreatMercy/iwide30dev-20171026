@@ -2,6 +2,7 @@
 
 namespace App\services\soma;
 
+use App\models\soma\Activity_killsec;
 use App\services\BaseService;
 use Api_member;
 
@@ -697,52 +698,56 @@ class PackageService extends BaseService
     //获取设置绩效商品列表
     public function getDistributeProducts($page = 1, $pageSize = 10, $sort = 1){
 
-//        $redisKey = "DistributeProducts_".$this->getCI()->inter_id;
-//        $redis = $this->getCI()->get_redis_instance();
-//        if(!empty($redis)) {
-//            $result = $redis->get($redisKey);
-//            if($result){
-//                return json_decode($result, true);
-//            }
-//        }
-
+        //缓存
+        $redis = $this->getCI()->get_redis_instance();
+        $themeConfig = $redis->get('theme_config_distribute');
+        $redisKey = 'get_distribute_products_'.$this->getCI()->inter_id.'_page_'.$page.'_pagesize_'.$pageSize.'_sort_'.$sort;
+        if(!empty($redis->get($redisKey))){
+            return json_decode($redis->get($redisKey), true);
+        }
 
         $productIds = [];
 
         //绩效商品
+        $all = false;
+        $nowTime = date('Y-m-d H:i:s');
         $this->getCI()->load->model('soma/Reward_rule_model', 'rewardRuleModel');
         $rewardRuleModel = $this->getCI()->rewardRuleModel;
         $rewardRuleList = $rewardRuleModel->get(
-            ['inter_id', 'status'],
-            [$this->getCI()->inter_id, $rewardRuleModel::STATUS_ACTIVE],
+            ['inter_id', 'status', 'start_time <= ', 'end_time >='],
+            [$this->getCI()->inter_id, $rewardRuleModel::STATUS_ACTIVE, $nowTime, $nowTime],
             ['product_ids', 'reward_rate', 'sort', 'reward_type'],
             ['limit' => null, 'orderBy' => 'sort desc']
         );
-
         if(count($rewardRuleList)){
             foreach ($rewardRuleList as $key => $val){
-                $pid = explode(',', $val['product_ids']);
-                if($pid){
-                    foreach ($pid as $vale){
-                        array_push($productIds, $vale);
-                    }
+                if(!$val['product_ids']){
+                    $all = true;
+                    break;
                 }
             }
-            $productIds = array_values(array_unique(array_values(array_filter($productIds))));
+            if(!$all){
+                foreach ($rewardRuleList as $key => $val){
+                    $pid = explode(',', $val['product_ids']);
+                    $productIds = array_merge($productIds, $pid);
+                }
+                $productIds = array_values(array_unique(array_values(array_filter($productIds))));
+            }
         }
 
         //商品
         $this->getCI()->load->model('soma/Product_package_model', 'productPackageModel');
         $productPackageModel = $this->getCI()->productPackageModel;
-        $nowTime = date('Y-m-d H:i:s');
         $where = [
             'inter_id'         => $this->getCI()->inter_id,
             'status'           => $productPackageModel::STATUS_ACTIVE,
             'validity_date <= '    => $nowTime,
             'un_validity_date >= ' => $nowTime,
-            'expiration_date >= '  => $nowTime,
-            'product_id' => $productIds
+            'expiration_date >= '  => $nowTime
         ];
+        if(!$all){
+            $where['product_ids'] = $productIds;
+        }
         $select = [
             'product_id', 'inter_id', 'goods_type', 'face_img', 'name', 'hotel_id',
             'price_market','price_package', 'stock', 'validity_date',
@@ -752,44 +757,159 @@ class PackageService extends BaseService
             'limit' => null,
             'orderBy' => 'sales_cnt desc'
         ];
-        $productsList = $productPackageModel->get(array_keys($where), array_values($where), $select, $options);
-        $productsList = $this->composePackage($productsList, $this->getCI()->inter_id, $this->getCI()->openid);
+        $products = $productPackageModel->get(array_keys($where), array_values($where), $select, $options);
+
+
+        //商品处理
+        $productsList = [];
+        if(is_array($products) && !empty($products)){
+
+            //给商品追加用户对应的专属价格
+            ScopeDiscountService::getInstance()->appendScopeDiscount($products, $this->getCI()->inter_id, $this->getCI()->openid, false);
+
+            //实例化
+            $this->getCI()->load->model('soma/product_package_model', 'productPackageModel');
+            $this->getCI()->load->model('soma/Product_specification_setting_model', 'pspModel');
+            $productModel = $this->getCI()->productPackageModel;
+            $pspModel = $this->getCI()->pspModel;
+
+            //多规格价格
+            $productIds = array_column($products, 'product_id');
+            $pspSetting = $pspModel->get_inter_product_spec_setting($this->getCI()->inter_id, $productIds);
+            $settingPrice = [];
+            if (!empty($pspSetting)) {
+                $settingPrice = $this->getSettingInfo($pspSetting);
+            }
+
+            //秒杀商品
+            $killsecModel = new Activity_killsec();
+            $killsecList = $killsecModel->getKillsecListByPids($this->getCI()->inter_id, $productIds);
+
+            foreach($products as $key => &$val){
+
+                //去掉名称的标签
+                $val['name'] = strip_tags($val['name']);
+
+                //秒杀
+                $killsec = [];
+                foreach ($killsecList as $vale){
+                    if($vale['product_id'] == $val['product_id']){
+                        $killsec = $vale;
+                        break;
+                    }
+                }
+                if(!empty($killsec)){
+                    if(!isset($attach['common']) || $attach['common'] != 1){
+                        $val['price_market'] = $val['price_package'];
+                        $val['price_package'] = $killsec['killsec_price'];
+                    }
+                }
+                //如果是积分商品，去掉小数点，向上取整
+                if($val['type'] == $productModel::PRODUCT_TYPE_POINT) {
+                    $val['price_package'] = ceil($val['price_package']);
+                    $val['price_market'] = ceil($val['price_market']);
+                    if($killsec) {
+                        if(!isset($attach['common']) || $attach['common'] != 1){
+                            $val['price_package'] = ceil($killsec['killsec_price']);
+                        }
+                    }
+                }
+                //专属价
+                if(!empty($val['scopes'])){
+                    $val['price_package'] = $val['scopes'][0]['price'];
+                }
+
+                //多规格价
+                if (isset($settingPrice[$val['product_id']])) {
+                    $val['price_package'] = $settingPrice[$val['product_id']][0]['spec_price'];
+                }
+
+                //整型去掉小数点
+                $val['price_market'] = $this->progressNumber($val['price_market']);
+                $val['price_package'] = $this->progressNumber($val['price_package']);
+
+                //商品类型 标签 返回值 1：专属 2：秒杀 3：拼团 4：满减 5：组合 6：储值 7：积分
+                $val['tag'] = 0;
+                if($val['goods_type'] == $productModel::SPEC_TYPE_COMBINE) {
+                    //组合标签
+                    $val['tag'] = $productModel::PRODUCT_TAG_COMBINED;
+                } else {
+                    if($val['type'] == $productModel::PRODUCT_TYPE_BALANCE) {
+                        //储值标签
+                        $val['tag'] = $productModel::PRODUCT_TAG_BALANCE;
+                    }
+                    if($val['type'] == $productModel::PRODUCT_TYPE_POINT) {
+                        //积分标签
+                        $val['tag'] = $productModel::PRODUCT_TAG_POINT;
+                    }
+                }
+                if(!empty($val['auto_rule'])){
+                    //满减
+                    $val['tag'] = $productModel::PRODUCT_TAG_REDUCED;
+                }
+                if(!empty($killsec)){
+                    //秒杀标签
+                    if(!isset($attach['common']) || $attach['common'] != 1){
+                        $val['tag'] = $productModel::PRODUCT_TAG_KILLSEC;
+                    }
+                }
+                if(!empty($val['scopes'])){
+                    //专属标签
+                    $val['tag'] = $productModel::PRODUCT_TAG_EXCLUSIVE;
+                }
+
+                //商品有效期
+                $val['is_expire'] = false;
+                if($val['goods_type'] != $productModel::SPEC_TYPE_TICKET && $val['date_type'] == $productModel::DATE_TYPE_STATIC) {
+                    $time = time();
+                    $expireTime = isset($val['expiration_date']) ? strtotime($val['expiration_date']) : null;
+                    if($expireTime && $expireTime < $time) {
+                        $val['is_expire'] = true;
+                    }
+                }
+
+                $productsList[$val['product_id']] = $val;
+            }
+
+        }
 
         //列表
         $result = [];
         if(count($productsList) && count($rewardRuleList)){
-            $hotelIds = array_column($productsList, 'hotel_id');
             foreach ($rewardRuleList as $key => $val){
-                $pid = explode(',', $val['product_ids']);
-                if($pid){
-                    foreach ($pid as $k => $v){
-                        foreach ($productsList as $item => &$vale){
-                            if($vale['product_id'] == $v){
-                                $reward_money = (double)$val['reward_rate'];
-                                $reward_sort = (int)$val['sort'];
-                                if($val['reward_type'] == $rewardRuleModel::REWARD_TYPE_PERCENT){
-                                    $reward_money *= (double)$vale['price_package'];
-                                }
-                                $vale['sales_cnt'] = (int)$vale['sales_cnt'];
-                                $vale['reward_type'] = $val['reward_type'];
-                                $vale['reward_percent'] = $reward_money;
-                                $vale['qrcode_detail'] = WxService::getInstance()->getQrcode(WxService::QR_CODE_PRODUCT_DETAIL.$v)->getData();
-                                if(!isset($result[$v])){
-                                    $vale['reward_money'] = $reward_money;
-                                    $vale['reward_sort'] = $reward_sort;
-                                    $result[$v] = $vale;
-                                }
-                                else{
-                                    if($result[$v]['reward_sort'] < $reward_sort){
-                                        $result[$v] = $vale;
-                                    }
-                                }
+                if($productIds){
+                    foreach ($productIds as $k => $v){
+                        if(isset($productsList[$v])){
+                            $reward_money = (double)$val['reward_rate'];
+                            $reward_sort = (int)$val['sort'];
+                            $reward_type = $val['reward_type'];
+                            if($val['reward_type'] == $rewardRuleModel::REWARD_TYPE_PERCENT){
+                                $reward_money *= (double)$productsList[$v]['price_package'];
                             }
+                            $product_sales_cnt = (int)$productsList[$v]['sales_cnt'];
+                            $qrcode_detail = WxService::getInstance()->getQrcode(WxService::QR_CODE_PRODUCT_DETAIL.$v)->getData();
+
+                            if(isset($productsList[$v]['reward_sort']) && $reward_sort > $productsList[$v]['reward_sort']){
+                                $productsList[$v]['sales_cnt'] = $product_sales_cnt;
+                                $productsList[$v]['reward_type'] = $reward_type;
+                                $productsList[$v]['reward_percent'] = $reward_money;
+                                $productsList[$v]['qrcode_detail'] = $qrcode_detail;
+                                $productsList[$v]['reward_money'] = $reward_money;
+                                $productsList[$v]['reward_sort'] = $reward_sort;
+                                continue;
+                            }
+
+                            $productsList[$v]['sales_cnt'] = $product_sales_cnt;
+                            $productsList[$v]['reward_type'] = $reward_type;
+                            $productsList[$v]['reward_percent'] = $reward_money;
+                            $productsList[$v]['qrcode_detail'] = $qrcode_detail;
+                            $productsList[$v]['reward_money'] = $reward_money;
+                            $productsList[$v]['reward_sort'] = $reward_sort;
                         }
                     }
                 }
             }
-            $result = array_values($result);
+            $result = array_values($productsList);
         }
 
         //销量
@@ -823,16 +943,23 @@ class PackageService extends BaseService
                     }
                 }
             }
-            $result = $temp;
 
+            $result = $temp;
         }
 
-        //
+        $result =  [
+            'products' => $result,
+            'total' => count($productsList),
+            'theme' => json_decode($themeConfig, true),
+            'attach' => [
+                'qrcode_index' => WxService::getInstance()->getQrcode(WxService::QR_CODE_SOMA_INDEX)->getData()
+            ]
+        ];
 
-        //$redis->set($redisKey, json_encode($result));
-        //$redis->expire($redisKey, 3600);
+        $redis->set($redisKey, json_encode($result), 3600);
 
-        return ['products' => $result, 'total' => count($productsList)];
+        return $result;
+
     }
 
 

@@ -1,19 +1,19 @@
 <template>
   <div class="gradient_bg">
-  <section class="padding_0_15">
+  <section class="balance_pad">
     <div class="center padding_top_48 main_color1">
         <em class="iconfonts font_30">{{dataList.total_credit}}</em>
         <p class="color3 font_14 margin_top_15">账户{{dataList.filed_name.credit_name}}</p>
     </div>
-    <section>
+    <section class="balance_content">
       <div class="flex font_16 centers margin_top_42 bd_bottom padding_bottom_35 recharge color2 padding_top_15">
-        <div class="flex_1 center relative" @click="bouns = true, dataList = bounsList" :class="{ active: bouns}">
+        <div class="flex_1 center relative balance_choose" @click="bouns = true, dataList = bounsList" :class="{ active: bouns}">
           <span class="relative padding_0_26 padding_bottom_5">
               获取记录
               <em class="shadow_b"></em>
           </span>
         </div>
-        <div class="flex_1 center relative"  @click="bouns = false, dataList = rechargeList" :class="{ active: !bouns}">
+        <div class="flex_1 center relative balance_choose"  @click="bouns = false, dataList = rechargeList" :class="{ active: !bouns}">
           <span class="relative padding_0_26 padding_bottom_5">
               消费记录
               <em class="shadow_b"></em>

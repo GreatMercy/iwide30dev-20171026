@@ -92,7 +92,7 @@
                     size="small"
                     class="jfk-color--danger" v-if="tableData[scope.$index].status == '2'" 
                     @click="getSingleSendFunc('re_send ', scope.$index)" :disabled="sendAjax">
-                    重新验证
+                    重新转账
                   </el-button>
                   <a :href="tableData[scope.$index].ext_url" >
                     <el-button
@@ -109,7 +109,7 @@
         <el-pagination
           @current-change="handleCurrentChange"
           :current-page="currentPage"
-          :page-size="10"
+          :page-size="pageInfo.page_size"
           layout="total, prev, pager, next, jumper"
           :total="pageInfo.total">
         </el-pagination>
@@ -171,12 +171,12 @@
           start_time: this.formatStart || '',
           end_time: this.formatEnd || '',
           offset: offset,
-          limit: 10
+          limit: ''
         }
-        // if (process.env.NODE_ENV === 'development') {
-        //   params.inter_id = ''
-        //   params.status = '-1'
-        // }
+        if (process.env.NODE_ENV === 'development') {
+          params.inter_id = ''
+          params.status = '-1'
+        }
         getTransferAccounts(params).then((res) => {
           this.tableData = res.data.list
           this.pageInfo = res.data.page
@@ -196,8 +196,10 @@
             param.inter_id = null
           }
           getSingleSend(param).then((res) => {
-            this.tableData[idx].status_name = '转账成功'
-            this.tableData[idx].status = 1
+            this.tableData[idx].status_name = res.data.status_name
+            this.tableData[idx].status = res.data.status
+            this.tableData[idx].update_time = res.data.update_time
+            this.tableData[idx].remark = res.data.remark
             this.sendAjax = false
             this.$notify({
               title: '',
@@ -206,7 +208,10 @@
             })
           }).catch((err) => {
             if (err.status === '1012') {
-              this.tableData[idx].remark = err.msg
+              this.tableData[idx].remark = err.data.remark
+              this.tableData[idx].status_name = err.data.status_name
+              this.tableData[idx].update_time = err.data.update_time
+              this.tableData[idx].status = err.data.status
             }
             this.sendAjax = false
           })

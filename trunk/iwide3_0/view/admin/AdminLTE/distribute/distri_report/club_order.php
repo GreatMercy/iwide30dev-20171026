@@ -51,7 +51,7 @@ echo $block_left;
       <div class="content-wrapper">
         <!-- Content Header (Page header) -->
         <section class="content-header">
-          <h1>订房分销报表
+          <h1>社群客绩效报表
             <small></small>
           </h1>
           <ol class="breadcrumb"><?php echo $breadcrumb_html; ?></ol>
@@ -259,7 +259,7 @@ echo $block_left;
                     	}
                     	if (in_array ( 'grade_total', $fields )) {
                     		?>
-                    	<td><?php if(isset( $item ['grade_total'] )):echo $item ['grade_total'];else:echo '-';endif;?></td>
+                    	<td><?php if(isset( $item ['grade_total'] ) && isset($item['dis_status']) && $item['dis_status']!=5):echo $item ['grade_total'];else:echo '-';endif;?></td>
                     	<?php
                     	}
                     	if (in_array ( 'send_time', $fields )) {

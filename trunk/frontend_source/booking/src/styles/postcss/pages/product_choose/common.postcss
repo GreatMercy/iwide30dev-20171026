@@ -1,5 +1,22 @@
   /* 首页 */
 .jfk-pages__productChoose {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 999;
+  height: 100%;
+  overflow-y: scroll;
+  .mt30{
+    margin-top: px2rem(30);
+  }
+  .rotate{
+    transform:rotate(180deg);
+    -ms-transform:rotate(180deg); 	/* IE 9 */
+    -moz-transform:rotate(180deg); 	/* Firefox */
+    -webkit-transform:rotate(180deg); /* Safari 和 Chrome */
+    -o-transform:rotate(180deg);
+  }
   .products {
     &-list {
       &__item {
@@ -231,7 +248,7 @@
       @mixin ellipsis 1;
       padding-left: px2rem(80);
     }
-    
+
     &_item1{
       @mixin one-line vertical {};
       position:relative;
@@ -248,26 +265,18 @@
 
   .product-info{
     .room_check{
-     /*  position: absolute;
-      right: 10px;
-      top: 10px;
-      z-index: 10;
-      width: 1.1rem;
-      height: 1.1rem;
-      font-style: normal;
-      display: inline-block; */
       margin-left: 78%;
       margin-top: px2rem(20);
     }
     .check input[type=checkbox] {
-      /* display: none; */
       width: 1rem;
       height: 1rem;
       display: inline-block;
       border-radius: 50%;
     }
     .check input:checked{
-      background: red;
+      background-image: background-image(/icon_checked.png);
+      background-size: 100% 100%;
     }
     &-cont{
     position: relative;
@@ -318,6 +327,7 @@
     left: 0;
     display: block;
     overflow: hidden;
+    z-index: 9999;
 
     & .money{
       margin-left: px2rem(80);

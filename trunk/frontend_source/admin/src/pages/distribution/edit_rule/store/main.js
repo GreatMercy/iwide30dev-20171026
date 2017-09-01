@@ -41,7 +41,7 @@ export default {
       this.state.inter_name = res.data.rule.inter_name
       this.state.hotel_id = res.data.rule.hotel_id
       this.state.rule_id = res.data.rule.rule_id
-      this.state.form.module = res.data.rule.module
+      this.state.form.module = 'ticket'
       this.state.form.regular_jfk_cost = res.data.rule.regular_jfk_cost.value
       this.state.form.regular_jfk = res.data.rule.regular_jfk.value
       this.state.form.regular_group = res.data.rule.regular_group.value === '-1' ? '' : res.data.rule.regular_group.value

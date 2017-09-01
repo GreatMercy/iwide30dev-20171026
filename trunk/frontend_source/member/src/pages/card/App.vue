@@ -1,7 +1,7 @@
 <template>
-  <div class="gradient_bg pad_t60">
+  <div class="gradient_bg">
     <section class="number_content">
-      <div class="flex between font_18 centers color2 number_list ">
+      <div class="flex between font_18 centers color2 number_list">
         <div @click="list = 1" class="flex_1 center relative" :class="{ active: list === 1}">
           未使用
           <span class="shadow_b"></span>
@@ -17,23 +17,23 @@
           <span class="shadow_b"></span>
         </div>
       </div>
-      <div v-show="list === 1" class="padding_0_15 margin_top_42">
+      <div v-show="list === 1" class="padding_0_15 margin_top_25">
         <div v-for='(value,key) in dataList.usableCardLists' class="coupon_rows border_radius layer_bg mar_b30">
           <a :href="value.cardinfo_url">
             <div class="coupon_img_wrap">
-              <div class="select_coupon_bg gradient_radial_bg main_color1">
-                <div v-if="value.card_type === '1'">
+              <div class="select_coupon_bg main_color1">
+                <div v-if="value.card_type === '1'" class="gradient_gold_bg">
                   <span class="font_22 select_coupon_ico iconfonts">&#xFFE5;</span>
                   <span class="iconfonts select_coupon_money font_40">{{value.reduce_cost}}</span>
                 </div>
-                <div v-else-if="value.card_type === '2'" class="color_zhe">
+                <div v-else-if="value.card_type === '2'" class="color_zhe gradient_blue_bg">
                   <span class="iconfonts select_coupon_money font_40">{{value.discount}}</span>
                   <span class="font_19 jfk-font">折</span>
                 </div>
-                <div v-else-if="value.card_type === '3'" class="color_dui">
+                <div v-else-if="value.card_type === '3'" class="color_dui gradient_green_bg">
                   <span class="iconfonts select_coupon_money font_40">{{value.card_type_name}}</span>
                 </div>
-                <div v-else-if="value.card_type === '4'">
+                <div v-else-if="value.card_type === '4'"  class="gradient_gold_bg">
                   <span class="font_22 select_coupon_ico iconfonts">&#xFFE5;</span>
                   <span class="iconfonts select_coupon_money font_40">{{value.money}}</span>
                 </div>
@@ -58,21 +58,21 @@
         <div v-for='(value,key) in dataList.unusedCardLists' class="coupon_rows border_radius layer_bg mar_b30">
           <div class="coupon_img_wrap">
             <div class="select_coupon_bg gradient_radial_bg" :class="{ 'main_color1': value.is_use === 't' && value.is_useofff === 't', 'main_color1': value.is_use === 't' && value.is_useofff === 'f', 'color3': value.is_use === 't' && value.is_useofff !== 'f','color3': is_useofff ==='t', 'color_dui': value.is_giving === 't'}">
-              <div v-if="value.card_type === '1'">
-                <span class="font_22 select_coupon_ico iconfonts">&#xFFE5;</span>
-                <span class="iconfonts select_coupon_money font_45">{{value.reduce_cost}}</span>
-              </div>
-              <div v-else-if="value.card_type === '2'" class="color_zhe">
-                <span class="iconfonts select_coupon_money font_45">{{value.discount}}</span>
-                <span class="font_19 jfk-font">折</span>
-              </div>
-              <div v-else-if="value.card_type === '3'" class="color_dui">
-                <span class="iconfonts select_coupon_money font_40">{{value.card_type_name}}</span>
-              </div>
-              <div v-else-if="value.card_type === '4'">
-                <span class="font_22 select_coupon_ico iconfonts">&#xFFE5;</span>
-                <span class="iconfonts select_coupon_money font_45">{{value.money}}</span>
-              </div>
+              <div v-if="value.card_type === '1'" class="gradient_gold_bg">
+                  <span class="font_22 select_coupon_ico iconfonts">&#xFFE5;</span>
+                  <span class="iconfonts select_coupon_money font_40">{{value.reduce_cost}}</span>
+                </div>
+                <div v-else-if="value.card_type === '2'" class="color_zhe gradient_blue_bg">
+                  <span class="iconfonts select_coupon_money font_40">{{value.discount}}</span>
+                  <span class="font_19 jfk-font">折</span>
+                </div>
+                <div v-else-if="value.card_type === '3'" class="color_dui gradient_green_bg">
+                  <span class="iconfonts select_coupon_money font_40">{{value.card_type_name}}</span>
+                </div>
+                <div v-else-if="value.card_type === '4'"  class="gradient_gold_bg">
+                  <span class="font_22 select_coupon_ico iconfonts">&#xFFE5;</span>
+                  <span class="iconfonts select_coupon_money font_40">{{value.money}}</span>
+                </div>
             </div>
             <div class="coupon_img_wrap_zhe"></div>
           </div>
@@ -97,21 +97,21 @@
         <div v-for='(value,key) in dataList.expiredCardLists' class="coupon_rows border_radius layer_bg mar_b30">
           <div class="coupon_img_wrap">
             <div class="select_coupon_bg gradient_radial_bg color3">
-              <div v-if="value.card_type === '1'" class="overflow">
-                <span class="font_22 select_coupon_ico iconfonts">&#xFFE5;</span>
-                <span class="iconfonts select_coupon_money font_45">{{value.reduce_cost}}</span>
-              </div>
-              <div v-else-if="value.card_type === '2'">
-                <span class="iconfonts select_coupon_money font_45">{{value.discount}}</span>
-                <span class="font_19 jfk-font">折</span>
-              </div>
-              <div v-else-if="value.card_type === '3'">
-                <span class="select_coupon_money iconfonts font_40">{{value.card_type_name}}</span>
-              </div>
-              <div v-else-if="value.card_type === '4'">
-                <span class="font_22 select_coupon_ico iconfonts">&#xFFE5;</span>
-                <span class="iconfonts select_coupon_money font_45">{{value.money}}</span>
-              </div>
+              <div v-if="value.card_type === '1'" class="gradient_gold_bg">
+                  <span class="font_22 select_coupon_ico iconfonts">&#xFFE5;</span>
+                  <span class="iconfonts select_coupon_money font_40">{{value.reduce_cost}}</span>
+                </div>
+                <div v-else-if="value.card_type === '2'" class="color_zhe gradient_blue_bg">
+                  <span class="iconfonts select_coupon_money font_40">{{value.discount}}</span>
+                  <span class="font_19 jfk-font">折</span>
+                </div>
+                <div v-else-if="value.card_type === '3'" class="color_dui gradient_green_bg">
+                  <span class="iconfonts select_coupon_money font_40">{{value.card_type_name}}</span>
+                </div>
+                <div v-else-if="value.card_type === '4'"  class="gradient_gold_bg">
+                  <span class="font_22 select_coupon_ico iconfonts">&#xFFE5;</span>
+                  <span class="iconfonts select_coupon_money font_40">{{value.money}}</span>
+                </div>
             </div>
             <div class="coupon_img_wrap_zhe"></div>
           </div>

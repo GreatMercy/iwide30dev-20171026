@@ -73,6 +73,10 @@
       }
     }
   }
+  &__date {
+    position: relative;
+    color: inherit;
+  }
   &__number{
     line-height: calc(78 / 30)em;
   }
@@ -106,6 +110,41 @@
             margin-top: calc(-38 / 30)em;
             margin-left: calc(-38 / 30)em;
             z-index: -1;
+          }
+        }
+      }
+    }
+    &.is-range {
+      .jfk-calendar {
+        &__date {
+          &:before {
+            content: '';
+            width: 100%;
+            height: calc(76 / 28)em;
+            position: absolute;
+            background-color: currentColor;
+            top: 50%;
+            left: 0;
+            margin-top: calc(-38 / 28)em;
+            z-index: -1;
+          }
+        }
+      }
+      &.is-start {
+        .jfk-calendar__date {
+          &:before {
+            width: 50%;
+            left: 50%;
+          }
+        }
+      }
+      &.is-end {
+        .jfk-calendar {
+          &__date {
+            &:before {
+              width: 50%;
+              right: 50%;
+            }
           }
         }
       }

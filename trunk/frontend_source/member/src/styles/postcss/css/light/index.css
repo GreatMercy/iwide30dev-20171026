@@ -3,7 +3,7 @@
 
 *{margin:0;padding:0;-webkit-tap-highlight-color: rgba(0,0,0,0);-webkit-text-size-adjust:none;-webkit-text-size-adjust:100%;font-family:PingFang SC Regular,Heiti SC,Helvetica Neue,sans-serif;outline:0; box-sizing:border-box; background-clip:padding-box; /* Safari and Chrome */}
 
-input,select,textarea,button,a{ border:none; font-weight:normal; resize:none; background:none;-webkit-appearance:none; color:#ffffff;}
+input,select,textarea,button,a{ border:none; font-weight:normal; resize:none; background:none;-webkit-appearance:none; color:#333333;}
 
 img{border:0; width:100%;}
 del{text-decoration:none; position:relative}
@@ -15,14 +15,14 @@ abbr,acronym{border:0;font-variant:normal}
 address,caption,cite,code,dfn,em,th,var{font-style:normal;font-weight:500}
 ol,ul{list-style:none}
 div,p{line-height:1.4}
-input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {color: #808080; } 
-input:-ms-input-placeholder, textarea:-ms-input-placeholder {color: #808080; }
+input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {color: #bfbfbf; } 
+input:-ms-input-placeholder, textarea:-ms-input-placeholder {color: #bfbfbf; }
 a,a:active,a:visited{text-decoration: none;}
 hr{padding:0; height:0.5px; border:none;
   background: -webkit-linear-gradient(right,rgba(126,107,72,0.0),rgba(126,107,72,1),rgba(126,107,72,0.0));
   background: linear-gradient(right, rgba(126,107,72,0.0) ,rgba(126,107,72,1),rgba(126,107,72,0.0)); }
-input:disabled {color: #808080; opacity: 1; -webkit-text-fill-color: #808080;}
-select:disabled {color: #808080; opacity: 1; -webkit-text-fill-color: #808080;}
+input:disabled {color: #bfbfbf; opacity: 1; -webkit-text-fill-color: #bfbfbf;}
+select:disabled {color: #bfbfbf; opacity: 1; -webkit-text-fill-color: #bfbfbf;}
 .pclight{font-family: 'PingFangSC-Light',Arial,Helvetica,sans-serif;}
 .scroll{overflow:auto;-webkit-overflow-scrolling:touch}
 .logo{text-align: center;padding-bottom: 1.75rem;margin-top: 4.562rem;}
@@ -209,8 +209,8 @@ background:url(../../image/loading.gif) no-repeat rgba(0,0,0,0.5) center center;
 .iconload{background:url(../../image/loading.gif) no-repeat; background-size:100%; display:inline-block; width:24px; height:24px; margin-left:5px;}
 */
 /*  按钮 */
-.button,.button2{color:#fff;text-align:center;min-width:7.32rem;display:block;position: relative;height: 45px;line-height:  41px;padding-top: 0.15rem;}
-.button:after,.button2:after{content: ''; width: 200%; height: 200%; position: absolute; top: 0; left: 0; border: 1px solid #b2945e; -webkit-transform: scale(0.5,0.5); transform: scale(0.5,0.5); -webkit-transform-origin: top left;}
+.button,.button2{color:#333333;text-align:center;min-width:7.32rem;display:block;position: relative;height: 45px;line-height:  41px;padding-top: 0.15rem;}
+.button:after,.button2:after{content: ''; width: 200%; height: 200%; position: absolute; top: 0; left: 0; border: 1px solid #808080; -webkit-transform: scale(0.5,0.5); transform: scale(0.5,0.5); -webkit-transform-origin: top left;}
 .button.xs,.button2{display:inline-block;padding:0.48rem 0;letter-spacing:normal;height: auto;line-height: inherit;}
 .button2{border-color:transparent; background:#b2945e;}
 .button[disabled],.button.disabled,.button2.disabled,.button2[disabled]{ background:#333; color:#808080; border-color:#333}
@@ -220,10 +220,10 @@ background:url(../../image/loading.gif) no-repeat rgba(0,0,0,0.5) center center;
 /*.bd_all,*/
 .bd,.bd_top,.bd_bottom,.bd_left,.bd_right,.bd_border{ position:relative;}
 .bd:after,.bd_bottom:after,.bd:before,.bd_top:before,.bd_left:before,.bd_right:after{content: "";position: absolute;z-index:10}
-.bd:after,.bd_bottom:after,.bd:before,.bd_top:before{border-top:1px solid #363636;left: 0;width: 100%; height:0; -webkit-transform: scaleY(.5); transform: scaleY(.5); }
+.bd:after,.bd_bottom:after,.bd:before,.bd_top:before{border-top:1px solid #EBEBEB;left: 0;width: 100%; height:0; -webkit-transform: scaleY(.5); transform: scaleY(.5); }
 .bd_left:before,.bd_right:after{border-left:1px solid #363636;top: 0;width: 0; height:100%; -webkit-transform: scaleX(.5); transform: scaleX(.5); }
 .bd_border:after{content: ''; width: 200%; height: 200%; position: absolute; top: 0; left: 0; border: 1px solid ; border-radius: 4px; -webkit-transform: scale(0.5,0.5); transform: scale(0.5,0.5); -webkit-transform-origin: top left;}
-.bd_color1:after,.bd_color1:before{ border-color:#363636;}
+.bd_color1:after,.bd_color1:before{ border-color:#EBEBEB;}
 .bd_color2:after,.bd_color2:before{ border-color:#3a3a3a;}
 .bd_color3:after,.bd_color3:before{ border-color:#505050;}
 .bd0:after{border: 0px!important;}
@@ -235,11 +235,11 @@ background:url(../../image/loading.gif) no-repeat rgba(0,0,0,0.5) center center;
 .bd_clear{border: 0px!important;}
 /*条件选择*/
 .condition{text-align: left;}
-.condition > div{    display: inline-block; position: relative; width: 31.1%; margin-right: 1.1%; margin-left: 1.1%;margin-bottom: 10px; border-radius: 4px; padding: 1.51rem 0; text-align: center; background-color: #1f1f1f; color: #c5c5c5;}
+.condition > div{    display: inline-block; position: relative; width: 31.1%; margin-right: 1.1%; margin-left: 1.1%;margin-bottom: 10px; border-radius: 4px; padding: 1.51rem 0; text-align: center; background-color: white; color: #808080;}
 .condition > div:after{content: ''; width: 200%; height: 200%; position: absolute; top: 0; left: 0; border: 0px solid #1f1f1f; border-radius: 4px; -webkit-transform: scale(0.5,0.5); transform: scale(0.5,0.5); -webkit-transform-origin: top left;}
 .condition span{display: none;position: absolute;top: -.5%;right: -.5%;width: 25px;height: 25px;z-index: 3}
 .condition .active:after{border:1px solid #b2945e;}
-.condition .active{background-color: transparent;color:white;}
+.condition .active{color: #b2945e;box-shadow: 0 0 20px rgba(178,148,94,.3);}
 .condition .active span{display: inline-block;}
 /* 背景色 */
 body,html{width:100%; height:100%; background:#2d3132;/*微信网页背景色*/}
@@ -259,10 +259,10 @@ body,html{width:100%; height:100%; background:#2d3132;/*微信网页背景色*/}
 .color4_bg{background-color: #333333;}
 .color5_bg{background-color: #d6bf95;}
 .color5_bg_gradient{background:-webkit-linear-gradient(right,#b3955f,#bca06d,#c9b082,#d5be94);}
-.layer_bg{ background-color: #1f1f1f;}
+/*.layer_bg{ background-color: #1f1f1f;}*/
 
 /*主色系*/
-.main_bg1{ background-color: #b2945e}
+.main_bg1{ background-color: #1f1f1f;color: white}
 .main_bg2{ background-color: #dbc576}
 .main_bg3{ background-color: #8b734f}
 .main_bg4{ background-color: #000000}
@@ -298,6 +298,7 @@ body,html,a{color:#bfbfbf;}
 .color_555,a.color_555{color:#555;}
 .color_000,a.color_000{color:#000;}
 .color_707070,a.color_707070{color:#727272;}
+.color_80{color: #808080;}
 /*辅助色系*/
 .color1,a.color1{color: #333333;}
 .color2,a.color2{color: #bfbfbf;}
@@ -335,6 +336,11 @@ body,input,button,textarea{font-size:1rem;}
 .h18{font-size:0.548rem}
 .h16{font-size:0.462rem}
 .search_bg{background-color:white;background-size: 100% 100%;}
+.white_search_bg{background:url("../image/search_bg.jpg") no-repeat;background-size: 100% 100%;}
+.white_search_bg .line_left{display: none;}
+.white_search_bg .line_center{display: none;}
+.white_search_bg .around{padding-bottom: 30px;}
+.white_search_bg .bd_bottom:after{border: 0px}
 .xx-small{font-size: xx-small;}
 /*自作字体*/
 @font-face {font-family: 'iconfonts';
@@ -345,11 +351,11 @@ body,input,button,textarea{font-size:1rem;}
 /*阿里字体*/
 @font-face {
   font-family: 'jfk-font';  /* project id 322166 */
-  src: url('//at.alicdn.com/t/font_322166_ticvezam036m9529.eot');
-  src: url('//at.alicdn.com/t/font_322166_ticvezam036m9529.eot?#iefix') format('embedded-opentype'),
-  url('//at.alicdn.com/t/font_322166_ticvezam036m9529.woff') format('woff'),
-  url('//at.alicdn.com/t/font_322166_ticvezam036m9529.ttf') format('truetype'),
-  url('//at.alicdn.com/t/font_322166_ticvezam036m9529.svg#jfk-font') format('svg');
+  src: url('//at.alicdn.com/t/font_322166_f1bw9i6i6b3mcxr.eot');
+  src: url('//at.alicdn.com/t/font_322166_f1bw9i6i6b3mcxr.eot?#iefix') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_322166_f1bw9i6i6b3mcxr.woff') format('woff'),
+  url('//at.alicdn.com/t/font_322166_f1bw9i6i6b3mcxr.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_322166_f1bw9i6i6b3mcxr.svg#jfk-font') format('svg');
 }
 .jfk-font{font-family:"jfk-font";font-style:normal;}
 @media (device-height:568px) and (-webkit-min-device-pixel-ratio:2){/* 兼容iphone5 */

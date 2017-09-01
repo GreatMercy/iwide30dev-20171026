@@ -2,7 +2,7 @@
   <div class="jfk-pages jfk-pages__coupon">
     <div class="jfk-pages__theme is-default"></div>
     <div class="coupon-box jfk-coupons jfk-ml-30 jfk-mt-30 jfk-mr-30">
-      <ul class="jfk-coupons__list font-size--24">
+      <ul class="jfk-coupons__list font-size--24" v-if="items.length">
         <li
           v-for="(item, index) in items"
           :key="item.prize_type">
@@ -37,20 +37,28 @@
           </div>
         </li>
       </ul>
+      <div class="empty  font-color-light-gray" v-else>
+        <div class="empty-cont">
+          <div class="icon">
+            <i class="jfk-font icon-blankpage_icon_noorder_bg"></i>
+          </div>
+          <div class="empty-tip font-size--24">暂无可领取奖品</div>
+        </div>
+      </div>
     </div>
     <footer class="coupon-footer jfk-clearfix">
       <div class="select  font-size--26 jfk-fl-l" @click="handleCheckAllCoupon">
-        <div class="jfk-radio jfk-radio--shape-circle color-golden" :class="{'is-checked': couponAllChecked}">
+        <div class="jfk-radio jfk-radio--shape-circle color-golden" :class="{'is-checked': couponAllChecked, 'is-disabled': !items.length}">
         <label class="jfk-radio__label">
           <span class="jfk-radio__icon">
             <i class="jfk-font icon-radio_icon_selected_default jfk-radio__icon-icon"></i>
           </span>
-          <span class="jfk-radio__text font-color-white">全选可领取的奖品</span>
+          <span class="jfk-radio__text" :class="{'font-color-white': items.length, 'font-color-light-gray': !items.length}">全选可领取的奖品</span>
         </label>
         </div>
       </div>
       <div @click="handleReceiveCoupons" class="control jfk-fl-l">
-        <button class="jfk-button font-size--34 jfk-button--higher jfk-button--free jfk-button--primary">立即领取</button>
+        <button :disabled="!items.length" class="jfk-button font-size--34 jfk-button--higher jfk-button--free jfk-button--primary">立即领取</button>
       </div>
     </footer>
     <jfk-popup
@@ -83,9 +91,9 @@
     </jfk-popup>
     <jfk-popup
       class="jfk-popup__pancake"
-      :showCloseButton="true"
       :onClose="handleIndex"
       v-model="successVisible">
+      <i class="jfk-popup__close font-size--30 jfk-font icon-icon_close" @click="handleClose"></i>
       <div class="popup-cont">
         <div class="title font-color-white font-size--30 jfk-ta-c">您已成功领取奖品</div>
         <div class="cont font-color-light-gray font-size--24">
@@ -115,6 +123,11 @@
       let urlParams = formatUrlParams(location.href)
       this.actNum = urlParams.act_num || ''
       this.prizeType = urlParams.prize_type || ''
+      this.toast = this.$jfkToast({
+        duration: -1,
+        iconClass: 'jfk-loading__snake',
+        isLoading: true
+      })
     },
     created () {
       let vm = this
@@ -122,6 +135,7 @@
         act_num: this.actNum,
         prize_type: this.prizeType
       }).then(function (res) {
+        vm.toast.close()
         const { list, follow_qrcode: qrcode, subscribe } = res.web_data
         let result = {}
         list.forEach(function (item, index) {
@@ -133,6 +147,8 @@
         vm.couponChecked = Object.assign({}, vm.couponChecked, result)
         vm.subscribe = subscribe
         vm.qrcode = qrcode
+      }).catch(function () {
+        vm.toast.close()
       })
     },
     data () {
@@ -149,12 +165,12 @@
           1: '一秀',
           2: '二举',
           3: '四进',
-          4: '探花',
-          5: '榜眼',
+          4: '三红',
+          5: '对堂',
           11: '四点红',
           12: '五子登科',
-          13: '五王',
-          14: '六杯黑',
+          13: '五红',
+          14: '黑六勃',
           15: '遍地锦',
           16: '六杯红',
           18: '状元插金花'
@@ -206,6 +222,9 @@
       },
       handleReceiveCoupons () {
         let vm = this
+        if (!vm.items.length) {
+          return
+        }
         let checked = this.couponChecked
         let ids = []
         for (let i in checked) {
@@ -217,7 +236,7 @@
           }
         }
         if (ids.length) {
-          postPancakeGameReceivePrize(`act_num=${this.actNum}&prize_id=${ids.join(',')}&is_all_received=false`, {
+          postPancakeGameReceivePrize(`act_num=${this.actNum}&prize_id=${ids.join(',')}&is_all_received=0`, {
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded'
             }
@@ -227,6 +246,16 @@
             } else {
               vm.qrcodeVisible = true
             }
+          }).catch(function (err) {
+            // 部分领取成功，需要刷新当前页面
+            if (err.status === 1002) {
+              if (err.$msgbox) {
+                err.$msgbox.then(function () {
+                  location.reload()
+                })
+              }
+            }
+            console.log(err)
           })
         } else {
           this.$jfkToast({
@@ -236,6 +265,9 @@
         }
       },
       handleCheckAllCoupon () {
+        if (!this.items.length) {
+          return
+        }
         let isChecked = this.couponAllChecked
         if (isChecked) {
           // 取消全部选择
@@ -279,6 +311,9 @@
       },
       qrcodeClose () {
         this.rejectVisible = true
+      },
+      handleClose () {
+        location.reload()
       },
       handleIndex () {
         location.href = jfkConfig.indexUrl

@@ -17,8 +17,9 @@
     &.is-sub {
       left: 0;
       &:before {
-        width: calc(15 / 32)em;
-        height: calc(3 / 32)em;
+        width: calc(30 / 32)em;
+        height: 1px;
+        transform: scale(0.5);
         content: '';
         position: absolute;
         top: 50%;
@@ -27,10 +28,9 @@
     }
     &.is-add {
       right: 0;
-      text-align: center;
       display: flex;
       align-items: center;
-      justify-content: center;
+      text-align: left;
       i {
         font-size: 1em;
         transform: scale(0.5);

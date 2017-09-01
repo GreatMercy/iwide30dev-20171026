@@ -2,8 +2,18 @@
   .hotel-staff {
     background-color: #27282d;
   }
-  .footer{
-    background-color: #fff;
+  .detail-top {
+    .banners {
+      &:after {
+        content: '';
+        bottom: 0;
+        width: 100%;
+        position: absolute;
+        height: calc(180 / 750 * 100%);
+        background-image: linear-gradient(to top, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0));
+        z-index: 2
+      }
+    }
   }
   .info {
     background-color: #fff;
@@ -17,6 +27,12 @@
         bottom: .5em;
       }
     }
+    .price-tag {
+      text-shadow: 0px 0px 7px color(#74674e a(22%));
+      .mask {
+        background-image: linear-gradient(-164deg, #c3ae85, #d7c7a4);
+      }
+    }
     .triangle {
       color: #bfbfbf;
     }
@@ -27,9 +43,25 @@
     &-box {
       margin-top: px2rem(48);
     }
+    .time {
+      .tip {
+        background-image: linear-gradient(to right, #b2945e 1%, #c3ab7b 67%, #d6bf95)
+      }
+    }
     .process {
+      background-image: background-image(/detail_killsec_process_line_white.png, theme);
       .line {
-        background-color: #bfbfbf;
+        &-cont {
+          &:before {
+            background-image: background-image(/detail_killsec_process_begin_white.png, theme);
+          }
+          &:after {
+            background: #fff;
+          }
+        }
+        &-line {
+          background: #dfdfdf;
+        }
       }
     }
     .layer {
@@ -96,15 +128,6 @@
   .good-spec__footer {
     background-color: #fff;
   }
-  /*服务*/
-  .service {
-    .icon {
-      color: #666;
-    }
-    .label {
-      color: #666;
-    }
-  }
   .jfk-popup__service {
     .popup-service-item {
       color: #808080;
@@ -126,6 +149,9 @@
       background: {
         image: background-image(/detail_map_white.jpg, theme);
       }
+    }
+    .qrcode {
+      box-shadow: 0 0 1em color(#d8c67c a(19%));
     }
   }
 }

@@ -11,23 +11,31 @@
     </div>
     <div class="orderCoupon jfk-pl-30 jfk-pr-30">
       <div class="orderCoupon__main">
-        <ordergiftinfo :giftinfo="giftinfo"/>
-        <div class="jfk-menuList" v-if="validCoupon.status === '2'&&!used&&!overdue&&!refunded&&menuListBtnShow">
+        <ordergiftinfo :giftinfo="giftinfo"></ordergiftinfo>
+        <div class="jfk-menuList" v-if="validCoupon.status === '2'&& !used && !overdue && !refunded && menuListBtnShow">
           <div class="menu-inn jfk-clearfix">
             <div class="item" v-if="menuList.canReserve"><a
-              :href="pageResource.package_booking+'&aiid='+validCoupon.asset_item_id+'&code_id='+validCoupon.code_id"><i
+              :href="pageResource.package_booking + '&code_id='+validCoupon.code_id + '&oid=' + product.order_id"><i
               class="jfk-font icon-user_icon_Checkin_normal"></i>
               <p class="font-size--24">预约</p></a></div>
             <div class="item" v-if="menuList.canCheck"><a
               :href="pageResource.package_usage+'&aiid='+validCoupon.asset_item_id+'&code_id='+validCoupon.code_id"><i
               class="jfk-font icon-mall_icon_orderDetail_verify"></i>
               <p class="font-size--24">验券</p></a></div>
-            <!-- <div class="item" v-if="menuList.canPost"><a :href="pageResource.show_shipping_info+'&oid='+validCoupon.order_id"><i class="jfk-font icon-mall_icon_orderDetail_post"></i><p class="font-size--24">邮寄</p></a></div> -->
+            <div class="item" v-if="menuList.canPost"><a
+              :href="pageResource.show_shipping_info+'&oid='+validCoupon.order_id">
+              <i class="jfk-font icon-mall_icon_orderDetail_post"></i>
+              <p class="font-size--24">邮寄</p></a>
+            </div>
+            <div class="item" v-if="menuList.canWxBooking"><a 
+            :href="pageResource.wx_select_hotel+'&oid='+validCoupon.order_id+'&aiid='+validCoupon.asset_item_id">
+              <i class="jfk-font icon-user_icon_Reservatio"></i>
+              <p class="font-size--24">订房</p></a>
+            </div>            
             <div class="item" v-if="menuList.canSend"><a
               :href="pageResource.package_send+'&aiid='+validCoupon.asset_item_id+'&oid='+validCoupon.order_id"><i
-              class="jfk-font icon-user_icon_Polite_nor"></i>
+              class="jfk-font icon-mall_icon_orderDetai_gift"></i>
               <p class="font-size--24">转赠</p></a></div>
-
           </div>
         </div>
       </div>
@@ -35,7 +43,7 @@
         <h3 class="coupon__detail__title font-size--24">包含券码</h3>
         <div class="coupon__inn">
           <div class="coupon__detail__list">
-            <template v-for="item ,idx in coupons">
+            <template v-for="(item ,idx) in coupons">
               <div class="item jfk-flex"
                    :class="{ item__invalid : item.status=='3'&&item.shipping_id=='0',item__post: item.status=='3'&&item.shipping_id!='0',item__send: item.status=='4'}"
                    v-if='idx==0'>
@@ -238,7 +246,8 @@
               <template v-if="productDetail">
                 <h3 class="font-size--24">商品内容</h3>
                 <div class="productDetail font-size--28">
-                  <p :key="index" v-for="(item, index) in productDetail"><span>{{item.content}}<i class="num">({{item.num}}份)</i></span>
+                  <p :key="index" v-for="(item, index) in productDetail"><span>{{item.content}}<i
+                    class="num">({{item.num}}份)</i></span>
                   </p>
                 </div>
               </template>
@@ -258,9 +267,9 @@
 <script>
   import formatUrlParams from 'jfk-ui/lib/format-urlparams.js'
   import { getOrderDetail, deleteOrder } from '@/service/http'
-  import headTitle from '../../components/common/headTitle'
-  import orderStatus from '../../components/orderDetail/orderStatus.vue'
-  import ordergiftinfo from '../../components/orderDetail/orderGiftinfo.vue'
+  import headTitle from '@/components/common/headTitle'
+  import orderStatus from '@/components/orderDetail/orderStatus.vue'
+  import ordergiftinfo from '@/components/orderDetail/orderGiftinfo.vue'
   const orderStatusMap = {
     success: '<i class="jfk-font icon-font_zh_gou_qkbys"></i><i class="jfk-font icon-font_zh_mai_qkbys"></i><i class="jfk-font icon-font_zh_cheng_qkbys"></i><i class="jfk-font icon-font_zh_gong_qkbys"></i>',
     refund: '<i class="jfk-font icon-font_zh_yi_qkbys"></i><i class="jfk-font icon-font_zh_tui_qkbys"></i><i class="jfk-font icon-font_zh_kuan_qkbys"></i>',
@@ -268,7 +277,7 @@
     invalid: '<i class="jfk-font icon-font_zh_yi_qkbys"></i><i class="jfk-font icon-font_zh_guo_qkbys"></i><i class="jfk-font icon-font_zh_qi_qkbys"></i>'
   }
   const orderStatusFn = function (type) {
-    return orderStatusMap[type] + '<i class="jfk-font-number">.</i>'
+    return orderStatusMap[type] + '<i class="jfk-font-number"></i>'
   }
   export default {
     name: 'orderDetail',
@@ -326,10 +335,7 @@
     },
     beforeCreate () {
       let params = formatUrlParams(location.href)
-      if (process.env.NODE_ENV === 'development' && !params.oid) {
-        params.oid = '1000012449'
-      }
-      this.oid = params.oid
+      this.oid = params.oid || ''
       this.maxHeight = document.documentElement.clientHeight - 90 + 'px'
       this.toast = this.$jfkToast({
         duration: -1,
@@ -354,6 +360,14 @@
         that.giftinfo.number = product.row_qty
         that.coupons = code
         that.pageResource = res.web_data.page_resource.link
+        console.log(that.pageResource)
+        if (process.env.NODE_ENV === 'development') {
+          let bookingUrl = that.pageResource.package_booking
+          if (that && that.pageResource && bookingUrl) {
+            const bookingParams = formatUrlParams(bookingUrl)
+            that.pageResource.package_booking = `/reservation_list?id=${bookingParams.id}&aiid=${bookingParams.aiid}&aiidi=${bookingParams.aiidi}&bsn=${bookingParams.bsn}`
+          }
+        }
         that.product = product
         that.menuList.canReserve = productPackage.can_reserve === '1' ? 'true' : false
         that.menuList.canCheck = productPackage.can_pickup === '1' ? 'true' : false
@@ -368,6 +382,7 @@
         that.used = product.consume_status === '23' ? 'true' : false
         that.refunded = product.refund_status === '33' ? 'true' : false
         that.compose = productPackage.compose
+
         if (code[0] && code[0].status === '2') {
           that.validCoupon = code[0]
         }
@@ -436,7 +451,7 @@
       handleTradePhoto () {
         this.showTradePhoto = true
       },
-      handleDeleteOrder (link) {
+      handleDeleteOrder () {
         this.$jfkConfirm('确定删除订单？').then(action => {
           if (action === 'confirm') {
             this.toast = this.$jfkToast({

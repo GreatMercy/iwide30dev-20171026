@@ -33,7 +33,6 @@ class Resetpassword extends MY_Front_Member
         if(!$this->is_restful()){
             $data = ResetpasswordService::getInstance()->resetbindpwd($this->inter_id);
         }
-        $data['page_title'] = '储值卡重置密码';
         $this->template_show('member',$this->_template,'resetbindpwd',$data);
     }
 

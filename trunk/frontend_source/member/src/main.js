@@ -22,7 +22,7 @@ if (process.env.NODE_ENV === 'development') {
     }
   })
 } else {
-  require('@/styles/postcss/theme/dark.postcss')
+  require('@/styles/postcss/theme/light.postcss')
 }
 
 if (!window.Promise) {

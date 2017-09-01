@@ -34,6 +34,7 @@ class WxService extends BaseService
      */
     const QR_CODE_SOMA_PUBLIC = '1236321';
 
+    const QR_CODE_SOMA_INDEX = '43';
     const QR_CODE_PRODUCT_DETAIL = '44';
 
     /**

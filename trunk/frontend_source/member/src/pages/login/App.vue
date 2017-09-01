@@ -23,7 +23,7 @@
 		</form>
 		<div class="flex layer_bg padding_14 radius_3 margin_top_70 margin_bottom_40 centers padding_0_23">
 			<div class="margin_right_23"><em class="jfk-font main_color1 txt_show6 font_28">&#xe62a;</em></div>
-			<div class="font_12">注册可获得注册<font class="main_color1">大礼包</font>,享受更多<font class="main_color1">会员优惠</font>!</div>
+			<div class="font_12 color1">注册可获得注册<font class="main_color1">大礼包</font>,享受更多<font class="main_color1">会员优惠</font>!</div>
 		</div>
 	</section>
   <JfkSupport v-once></JfkSupport>

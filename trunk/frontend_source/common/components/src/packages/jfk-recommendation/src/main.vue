@@ -16,13 +16,13 @@
         </div>
         <div class="jfk-swiper__item-info">
           <div class="info-box">
-          <h5 class="title font-size--28 font-color-silver" v-html="item._name"></h5>
+          <h5 class="title font-color-silver-common font-size--28" v-html="item._name"></h5>
           <p class="price" :title="item.type" :class="{'is-integral': item._integral}">
             <span class="jfk-price color-golden font-size--38">
               <i class="jfk-font-number jfk-price__currency" v-if="!item._integral">￥</i>
               <i class="jfk-font-number jfk-price__number">{{item._pricePackage}}</i>
             </span>
-            <span class="jfk-price__original font-size--24 font-color-extra-light-gray"><i v-if="!item._integral">￥</i>{{item._priceMarket}}</span>
+            <span class="jfk-price__original font-color-extra-light-gray-common font-size--24"><i v-if="!item._integral">￥</i>{{item._priceMarket}}</span>
           </p>
           </div>
         </div>
@@ -35,7 +35,7 @@
     name: 'jfk-recommendation',
     data () {
       return  {
-        defaultEmptyHtml: '<div class="jfk-flex is-justify-center is-align-middle"><div class="box"><p class="font-size--28 font-color-extra-light-gray zh">查看更多</p><p class="en font-size--24 font-color-light-gray"><span><i>V</i><i>I</i><i>E</i><i>W</i></span><span><i>M</i><i>O</i><i>R</i><i>E</i></span></p></div></div>',
+        defaultEmptyHtml: '<div class="jfk-flex is-justify-center is-align-middle"><div class="box"><p class="font-size--28 font-color-extra-light-gray zh">查看更多</p><p class="en  font-color-light-gray-common font-size--24"><span><i>V</i><i>I</i><i>E</i><i>W</i></span><span><i>M</i><i>O</i><i>R</i><i>E</i></span></p></div></div>',
         lists: [],
         recommendationSwiperOptions: {
           autoplay: 0,
