@@ -131,13 +131,9 @@ export default {
       }
       //  微信分享配置
       const wx = window.wx
-      const shareConfig = this.dataList.js_share_config
       const that = this
-      if (wx) {
+      if (wx && this.dataList.authentication_give === 1) {
         wx.onMenuShareTimeline({
-          title: shareConfig.title !== '' ? shareConfig.title : '分享到朋友圈',
-          link: shareConfig.link,
-          imgUrl: shareConfig.imgUrl,
           success: function () {
             that.handleShare().then((res) => {
               if (res.status === 1000) {
@@ -160,10 +156,6 @@ export default {
           }
         })
         wx.onMenuShareAppMessage({
-          title: shareConfig.title !== '' ? shareConfig.title : '发送给好友',
-          desc: shareConfig.desc,
-          link: shareConfig.link,
-          imgUrl: shareConfig.imgUrl,
           success: function () {
             that.handleShare().then((res) => {
               if (res.status === 1000) {

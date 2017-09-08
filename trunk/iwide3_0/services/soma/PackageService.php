@@ -725,7 +725,7 @@ class PackageService extends BaseService
         $uploadUrl = $dir.'/www_front/public/soma/qrcode/';
 
         //首页二维码
-        $qrCodeImg = WxService::QR_CODE_SOMA_INDEX.'_'.$saler.'_'.$fansler.'.png';
+        $qrCodeImg = WxService::QR_CODE_SOMA_INDEX.$this->getCI()->inter_id.'_'.$saler.'_'.$fansler.'.png';
         $qrCodeUrl = site_url('soma/package/index?'. http_build_query([
                 'id' => $this->getCI()->inter_id,
                 'saler' => $saler,

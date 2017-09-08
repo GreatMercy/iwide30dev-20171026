@@ -95,8 +95,8 @@ class GiftDelivery extends MY_Front_Soma_Iapi{
         $params = array();
         $params['inter_id'] = $this->input->get('inter_id');
         $params['saler_id'] = $this->input->get('saler_id');
-        $params['inter_id'] = 'a450089706';
-        $params['saler_id'] = '64888';
+//        $params['inter_id'] = 'a450089706';
+//        $params['saler_id'] = '64888';
         $params['page'] = $this->input->get('page');
         $params['page'] = empty($params['page']) ? 0 : intval($params['page'] - 1);
 
@@ -633,7 +633,11 @@ class GiftDelivery extends MY_Front_Soma_Iapi{
         $params['saler_id'] = intval($this->input->get('saler_id'));
         $params['inter_id'] = $this->input->get('inter_id');
         $params['request_token'] = $this->input->get('request_token');
-
+//        $params['id'] = 5;
+//        $params['inter_id'] = 'a450089706';
+//        $params['saler_id'] = '64888';
+//        $params['request_token'] = 'da3086a1badf3c19b0234cebdac741dc'; //校验token
+//        $params['gift_id'] = '34'; 
         $paramsArr = ['id','gift_id','saler_id','inter_id','request_token'];
         foreach($paramsArr as $key=>$val){
             if(empty($params[$val])){

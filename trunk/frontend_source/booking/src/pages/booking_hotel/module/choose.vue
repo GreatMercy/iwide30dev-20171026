@@ -8,7 +8,7 @@
           请勾选你需要的商品
         </p>
         <p class="choose_prt_top_item2 font-size--24">
-          组合已选房型 <span class="other_room">高级大床房</span> 购买更优惠
+          组合已选房型 <span class="other_room">{{item.room_info.name}}</span> 购买更优惠
         </p>
       </div>
       <div class="products-layout jfk-tab__body-item products-layout--card" infinite-scroll-disabled="disableLoadProduct"
@@ -37,10 +37,10 @@
                       <div class="product-price">
                       <span class="jfk-price product-price-package color-golden font-size--54">
                       <i class="jfk-font-number jfk-price__currency">￥</i>
-                      <i class="jfk-font-number jfk-price__number">{{value.oprice}}</i>
+                      <i class="jfk-font-number jfk-price__number">{{value.price}}</i>
                       </span>
                         <span
-                          class="jfk-price__original product-price-market font-size--24 font-color-light-gray is-integral">¥{{value.price}}</span>
+                          class="jfk-price__original product-price-market font-size--24 font-color-light-gray is-integral">¥{{value.oprice}}</span>
                       </div>
                       <div class="show_detail_btn font-size--24">
                       <span @click="setDetailStatus(key)">
@@ -52,7 +52,11 @@
                       </span>
                       </div>
                       <div class="count jfk-d-ib font-size--32 set_num">
-                        <jfk-input-number v-model="value.countNum" :min="minNum" :max="maxNum" @click.native.prevent="handleRoom(item, key)"></jfk-input-number>
+                        <jfk-input-number v-model="value.countNum"
+                                          :min="minNum"
+                                          :max="value.nums"
+                                          @click.native.prevent="handleRoom(item, key)">
+                        </jfk-input-number>
                       </div>
                     </div>
                   </div>
@@ -228,7 +232,7 @@
             const content = this.sendData.select_package[i]
             let goodId = content.goods_id.toString()
             let nums = content.countNum
-            let obj = `"${goodId}":{"gid":"${goodId}","nums":"${nums}"`
+            let obj = `"${goodId}":{"gid":"${goodId}","nums":"${nums}"}`
             goodsItems += obj
           }
         }

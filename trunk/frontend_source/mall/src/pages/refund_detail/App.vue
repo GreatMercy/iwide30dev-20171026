@@ -122,7 +122,7 @@
             <div class="refund-order__title font-size--28">订单总价</div>
             <div class="refund-order__content font-size--30">
             <span class="jfk-price font-size--38">
-              <i class="jfk-font-number jfk-price__currency">¥</i>
+              <i class="jfk-font-number jfk-price__currency">￥</i>
               <i class="jfk-font-number jfk-price__number" v-text="detail.total"></i>
             </span>
             </div>

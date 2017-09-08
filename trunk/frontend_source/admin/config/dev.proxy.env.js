@@ -5,15 +5,13 @@ module.exports = {
     secure: false
   },
   '/index.php/iapi/v1': {
-    // target: 'http://30.iwide.cn',
-    target: 'http://test008.iwide.cn',
-    // target: 'http://www.admin.com',
+    // target: 'http://test008.iwide.cn',
+    target: 'http://30.iwide.cn',
     changeOrigin: true,
     secure: false
   },
   '/index.php/iwidepay/IwidepayApi': {
     target: 'http://30.iwide.cn',
-    // target: 'http://test008.iwide.cn',
     changeOrigin: true,
     secure: false
   },

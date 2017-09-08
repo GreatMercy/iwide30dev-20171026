@@ -279,6 +279,9 @@
         </div>
       </div>
     </div>
+    <div class="inputBuess" v-show="false">
+
+    </div>
     </div>
   </div>
 </template>
@@ -618,7 +621,7 @@
             const content = this.sendData.select_package[i]
             let goodId = content.goods_id.toString()
             let nums = content.countNum
-            let obj = `"${goodId}":{"gid":"${goodId}","nums":"${nums}"`
+            let obj = `"${goodId}":{"gid":"${goodId}","nums":"${nums}"}`
             goodsItems += obj
           }
         }

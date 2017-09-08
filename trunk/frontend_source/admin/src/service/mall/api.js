@@ -7,6 +7,8 @@ let API_URL_SUFFIX_V1 = `${API_URL_SUFFIX}/v1`
 let API_SOMA_V1 = `${API_URL_SUFFIX_V1}/soma`
 // express(快递)相关部分
 let API_EXPRESS_V1 = `${API_URL_SUFFIX_V1}/soma/express`
+// gift_delivery(礼包派送)相关部分
+let API_GIFT_DELIVERY = `${API_URL_SUFFIX_V1}/soma/gift_delivery`
 
 const v1 = {
   // 获取商品套餐列表
@@ -24,7 +26,11 @@ const v1 = {
   // 上传csv
   POST_EXPRESS_UPLOAD: `${API_EXPRESS_V1}/do_upload`,
   // 批量下单至顺丰
-  POST_EXPRESS_BATCH_CREATE_ORDER: `${API_EXPRESS_V1}/batch_create_order`
+  POST_EXPRESS_BATCH_CREATE_ORDER: `${API_EXPRESS_V1}/batch_create_order`,
+  // 获取礼包列表
+  GET_GIFT_DELIVERY_GIFT_LIST: `${API_GIFT_DELIVERY}/getGiftList`,
+  // 获取可添加至礼包的商品列表
+  GET_GIFT_DELIVERY_PRODUCT_IST: `${API_GIFT_DELIVERY}/getProductList`
 }
 
 export {

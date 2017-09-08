@@ -30,7 +30,7 @@
                 </div>
                 <div class="margin_top_8 center relative jfk-index-name">
                   <em class="jfk-font font_19 bold absolute spot color_338b43">&#xe7b0;</em>
-                  <span class="font_12 color1 pclight" v-if="data.centerinfo.lvl_name === '微信粉丝' || data.centerinfo.lvl_name === '微信会员' ">{{data.centerinfo.lvl_name}}</span>
+                  <span class="font_12 color1" v-if="data.centerinfo.lvl_name === '微信粉丝' || data.centerinfo.lvl_name === '微信会员' ">{{data.centerinfo.lvl_name}}</span>
                   <span v-else class="font_12 color1 pclight">{{data.centerinfo.lvl_name}}</span>
                 </div>
               </a>
@@ -86,7 +86,7 @@
               <span class="color3 font_12 jfk-index-name">{{data.assets_bottons.balance_name.name}}</span>
               <span class="index-width"></span>
             </p>
-            <p class="margin_left_8 margin_top_4 jfk-index-num">¥ <span v-if="data.centerinfo.value === 'login' &&  data.centerinfo.member_mode === 1">-</span><span v-else class="font_19 color1 pclight">{{data.centerinfo.balance}}<em class="jfk-font margin_left_4 font_17 color2">&#xe61e;</em></span>
+            <p class="margin_left_8 margin_top_4 jfk-index-num"><span v-if="data.centerinfo.value === 'login' &&  data.centerinfo.member_mode === 1">-</span><span v-else class="font_19 color1"><em class="font_14">¥</em>{{data.centerinfo.balance}}<em class="jfk-font margin_left_4 font_17 color2">&#xe61e;</em></span>
             </p>
           </a>
         </div>
@@ -99,19 +99,19 @@
               <span class="color3 font_12 jfk-index-name">{{data.assets_bottons.coupon_name.name}}</span>
               <span class="index-width"></span>
             </p>
-            <p class="margin_left_8 margin_top_4 jfk-index-num"><span class="font_19 color1 pclight">{{data.centerinfo.card_count}}<em class="jfk-font margin_left_4 font_17 color2">&#xe61e;</em></span></p>
+            <p class="margin_left_8 margin_top_4 jfk-index-num"><span class="font_19 color1">{{data.centerinfo.card_count}}<em class="jfk-font margin_left_4 font_17 color2">&#xe61e;</em></span></p>
           </a>
         </div>
       </section>
     </div>
     <section class="flex padding_0_15">
       <a v-if="data.page_resource.links.shop" :href="data.page_resource.links.shop" class="block flex_1 center index_gradient radius_3 padding_30 box_shadow2">
-        <em class="jfk-font txt_show2 font_19 jfk-big-ico">&#xe62b;</em>
+        <em class="jfk-font txt_show2 font_16 jfk-big-ico">&#xe62b;</em>
         <span class="jfk-font color1 txt_show2 font_18">商城订单</span>
         <em class="jfk-font font_17 jfk-big-xiala">&#xe61e;</em>
       </a>
       <a v-if="data.page_resource.links.hotel" :href="data.page_resource.links.hotel" class="block flex_1 center index_gradient radius_3 padding_30 margin_left_15 box_shadow2">
-        <em class="jfk-font txt_show2 font_19 jfk-big-ico">&#xe62d;</em>
+        <em class="jfk-font txt_show2 font_17 jfk-big-ico">&#xe62d;</em>
         <span class="jfk-font color1 txt_show2 font_18">订房订单</span>
         <em class="jfk-font font_17 jfk-big-xiala">&#xe61e;</em>
       </a>
@@ -144,15 +144,15 @@ export default {
       }
       for (let item in this.data.menu) {
         for (let inItem in this.data.menu[item]) {
-          if (this.data.member_status !== 1 && this.data.centerinfo.value === 'login') {
-            this.data.menu[item][inItem].link = this.data.page_resource.links.login
-          }
+          // if (this.data.member_status !== 1 && this.data.centerinfo.value === 'login') {
+          //   this.data.menu[item][inItem].link = this.data.page_resource.links.login
+          // }
           this.menulist.push(this.data.menu[item][inItem])
         }
       }
-      if (this.data.member_status !== 1 && this.data.centerinfo.value === 'login') {
-        this.data.page_resource.links.perfectinfo = 'javascript:;'
-      }
+      // if (this.data.member_status !== 1 && this.data.centerinfo.value === 'login') {
+      //   this.data.page_resource.links.perfectinfo = 'javascript:;'
+      // }
     })
   },
   methods: {

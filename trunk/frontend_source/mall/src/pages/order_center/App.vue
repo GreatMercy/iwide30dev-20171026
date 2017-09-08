@@ -306,6 +306,7 @@
           if (res['web_data']['products'].length === 0) {
             current['more'] = false
             this.disableLoadList = false
+            this.loading = false
           } else {
             this.disableLoadList = false
             const link = res['web_data']['page_resource']['link']
@@ -315,7 +316,16 @@
               that['order_detail_link'] = this.debug ? `orderDetail?oid=${that['order_id']}` : link['detail'] + that['order_id']
               // 设置再次购买链接
               that['order_product_link'] = this.debug ? `detail?pid=${that['package'][0]['product_id']}` : link['product_link'] + that['package'][0]['product_id']
-              current['data'].push(res['web_data']['products'][i])
+              // 防止重复插入
+              let repeat = false
+              for (let j = 0; j < current['data'].length; j++) {
+                if (current['data'][j]['order_id'] === res['web_data']['products'][i]['order_id']) {
+                  repeat = true
+                }
+              }
+              if (repeat === false) {
+                current['data'].push(res['web_data']['products'][i])
+              }
               if (that && that.code && that.code.use_num) {
                 that.code.use_num = parseInt(that.code.use_num)
               }
@@ -335,6 +345,7 @@
       getRenderData () {
         const current = this.cacheData[this.tabsItems.selected]
         this.disableLoadList = false
+        this.loading = false
         // 如果没有更多了，停止加载数据
         if (current['more'] === false) {
           return false
@@ -360,7 +371,7 @@
             // 请求订单列表
             getOrderList(parameter).then((res) => {
               this.setData(res)
-              this.loading = true
+              this.loading = false
             }).catch(() => {
               this.loading = false
             })

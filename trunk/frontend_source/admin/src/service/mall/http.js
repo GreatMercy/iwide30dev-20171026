@@ -72,6 +72,14 @@ const postExpressBatchCreateOrder = (data, config, version = 'v1') => {
   let url = apiConfig[version] && apiConfig[version].POST_EXPRESS_BATCH_CREATE_ORDER || apiConfig['v1'].POST_EXPRESS_BATCH_CREATE_ORDER
   return ajax.post(url, data, config)
 }
+/**
+ * 获取礼包列表
+ * @param {Number} data.page 分页
+ */
+const getGiftPackagesList = (data, config, version = 'v1') => {
+  let url = apiConfig[version] && apiConfig[version].GET_GIFT_DELIVERY_GIFT_LIST || apiConfig['v1'].GET_GIFT_DELIVERY_GIFT_LIST
+  return ajax.get(url, data, config)
+}
 
 export {
   getPackageListDatas,
@@ -79,5 +87,6 @@ export {
   getExpressOrderList,
   postExpressBatchPost,
   postExpressBatchCreateOrder,
-  getExpressList
+  getExpressList,
+  getGiftPackagesList
 }

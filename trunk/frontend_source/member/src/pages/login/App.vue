@@ -1,16 +1,18 @@
 <template>
   <div class="gradient_bg form-top">
-	<section class="padding_0_15">
+	<section>
 		<form class="form_list font_14" ref=form>
-			<div  v-for="(value,key) in configList" v-if="value.show === 1" :data="value.show" class="flex form_item bd_bottom padding_18">
-				<div class="margin_right_22 width_75">
-					<div class="flex between">
-            <div class="margin_right_22 flex between" v-html="value.namehtml"></div>
-          </div>
-				</div>
-				<div class="flex_1 font_14"><input @keyup="setRemove($event)" :type="value.type" :name="key" :placeholder="value.note" maxlength="20"></div>
-        <div v-if="key === 'phonesms'" @click="smsSend" class="relative verification" :class="{verification_active:sms}">{{smsTitle}}</div>
-			</div>
+      <div class="white_bg padding_0_15">
+  			<div  v-for="(value,key) in configList" v-if="value.show === 1" :data="value.show" class="flex form_item bd_bottom padding_tb_15">
+  				<div class="margin_right_22 width_75">
+  					<div class="flex between">
+              <div class="margin_right_22 flex between" v-html="value.namehtml"></div>
+            </div>
+  				</div>
+  				<div class="flex_1 font_14"><input @keyup="setRemove($event)" :type="value.type" :name="key" :placeholder="value.note" maxlength="20"></div>
+          <div v-if="key === 'phonesms'" @click="smsSend" class="relative verification" :class="{verification_active:sms}">{{smsTitle}}</div>
+  			</div>
+      </div>
 			<div class="pad_top40 font_17">
 				<a class="block width_85 center btn_height auto jfk-font entry_btn land_btn" @click="submit()">登&ensp;录</a>
 			</div>

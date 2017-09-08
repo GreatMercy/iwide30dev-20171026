@@ -38,7 +38,7 @@
 
     </el-form>
 
-    <el-row class="gift-package__table">
+    <el-row class="gift-package__table" v-if="giftPackageList.length > 0">
       <el-table :data="tableData">
         <el-table-column prop="date" label="所属分类" width="180" align="center"></el-table-column>
 
@@ -77,6 +77,7 @@
   </div>
 </template>
 <script>
+  import { getGiftPackagesList } from '@/service/mall/http'
   export default {
     components: {},
     computed: {},
@@ -86,8 +87,10 @@
           startTime: '',
           endTime: ''
         },
+        loading: false,
         dialogTableVisible: false,
         search: '',
+        giftPackageList: [],
         tableData: [{
           date: '2016-05-02',
           name: '王小虎',
@@ -108,6 +111,10 @@
       }
     },
     created () {
+      getGiftPackagesList().then((res) => {
+        console.log(res)
+      }).catch(() => {
+      })
     },
     methods: {
       onSubmit () {
