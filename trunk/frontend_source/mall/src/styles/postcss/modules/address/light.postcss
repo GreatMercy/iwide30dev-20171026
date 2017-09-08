@@ -1,6 +1,15 @@
 .jfk-address {
   &__add {
-    background: #fff;
+    .jfk-address-form {
+      background: #fff;
+    }
+    &-control {
+      .jfk-button--primary.is-plain {
+        border-color: var(--button-primary-color);
+        background-color: var(--button-primary-fill-color);
+        color: var(--button-primary-color);
+      }
+    }
   }
   /*列表*/
   &__list {

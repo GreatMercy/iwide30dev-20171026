@@ -34,11 +34,19 @@ const v1 = {
   // 获取房型信息详情
   GET_HOTEL_DETAIL: `${API_HOTEL_V1}/hotel/return_room_detail`,
   // 填写订单信息页接口
-  GET_BOOKROOM_DETAIL: `${API_HOTEL_V1}/hotel/bookroom`,
+  GET_BOOKROOM_DETAIL: `${API_URL_SUFFIX}/hotel/hotel/bookroom`,
+  // 填写订单优惠券接口
+  GET_BOOKROOM_COUPON: `${API_URL_SUFFIX}/hotel/hotel/return_usable_coupon`,
+  // 填写订单积分接口
+  GET_BOOKROOM_BONUS: `${API_URL_SUFFIX}/hotel/hotel/return_point_set`,
+  // 填写订单判断积分支付接口
+  GET_POINTPAY_SET: `${API_URL_SUFFIX}/hotel/hotel/return_pointpay_set`,
   // 提交订单接口
   POST_SAVE_ORDER: `${API_HOTEL_V1}/hotel/saveorder`,
   // 提交订单接口
-  TO_COMMENT: `${API_HOTEL_V1}/hotel/to_comment`
+  TO_COMMENT: `${API_HOTEL_V1}/hotel/to_comment`,
+  // 提交评论接口
+  NEW_COMMENT_SUB: `${API_HOTEL_V1}/hotel/new_comment_sub`
 }
 export {
   v1

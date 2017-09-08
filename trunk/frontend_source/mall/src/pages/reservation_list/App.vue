@@ -10,8 +10,8 @@
              v-model="searchValue"
              @keyup="search"
       >
-      <span class="reservation-search__close jfk-ta-c" @click="deleteAll" v-if="searchLength">
-        <i class="jfk-font icon-icon_close jfk-d-ib"></i>
+      <span class="reservation-search__close jfk-font icon-mall_icon_booking_cancel" @click="deleteAll"
+            v-if="searchLength">
       </span>
     </div>
 
@@ -40,11 +40,8 @@
 
             <div class="reservation-list__right">
               <button class="jfk-button jfk-button--primary is-plain font-size--30 product-button">
-                <span class="jfk-button__text">
-                <i class="jfk-font jfk-button__text-item icon-font_zh_xian_qkbys"></i>
-                <i class="jfk-font jfk-button__text-item icon-font_zh_zai_qkbys"></i>
-                <i class="jfk-font jfk-button__text-item icon-font_zh_ding_qkbys"></i>
-                <i class="jfk-font jfk-button__text-item icon-font_zh_fang_qkbys"></i>
+                <span>
+                  现在订房
                 </span>
               </button>
             </div>
@@ -100,9 +97,8 @@
     created () {
       this.searchValue = ''
       this.getData('page')
-      this.codeId = params['code_id']
+      this.codeId = params['code_id'] || ''
     },
-    watch: {},
     methods: {
       getData (operation) {
         this.loadingList = true
@@ -153,6 +149,7 @@
       },
       deleteAll () {
         this.searchValue = ''
+        this.search()
       }
     },
     data () {

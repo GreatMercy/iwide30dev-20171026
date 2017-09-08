@@ -1,6 +1,9 @@
 export default {
   updateGiftInfo (state, data) {
-    if (data['qty_origin'] && data['qty']) {
+    if (data && data['price_package']) {
+      data['price_package'] = String(parseFloat(data['price_package']))
+    }
+    if (data && data['qty_origin'] && data['qty']) {
       data['send_out_number'] = parseInt(data['qty_origin']) - parseInt(data['qty'])
       // 剩余的总数量
       data['residue'] = parseInt(data['qty'])

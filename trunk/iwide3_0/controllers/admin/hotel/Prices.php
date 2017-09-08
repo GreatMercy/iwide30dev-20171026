@@ -195,6 +195,15 @@ class Prices extends MY_Admin {
 			$data ['hotels'] = $this->hotel_model->get_all_hotels ( $this->inter_id,1 );
 
 		$data ['fields_config'] = $model->grid_fields ();
+		
+		//判断是否使用pms
+		$this->load->model('common/Pms_model');
+		$pms_set=$this->Pms_model->get_hotel_pms_set($this->inter_id,0);
+		$data['is_pms']=0;
+		if (!empty($pms_set)){
+		    $data['is_pms']=1;
+		}
+		
 		if (! empty ( $data ['hotel_id'] )) {
 			$list = $model->get_room_price_set ( $this->inter_id, $data ['hotel_id'], $data ['room_id'], null, true,$data['type']);
 			$this->load->model ( 'common/Enum_model' );
@@ -381,7 +390,14 @@ class Prices extends MY_Admin {
 					$data ['use_condition'] [$k] = $l;
 				}
 			}
-			
+			if (!empty($data ['use_condition']['s_date_s']) || !empty($data ['use_condition']['s_date_e'])){
+			    $s_date_m = intval($this->input->post ( 's_date_m' ));
+			    $data ['use_condition'] ['s_date_m'] = $s_date_m == 2 ? 2 : 1;
+			}
+			if (!empty($data ['use_condition']['e_date_s']) || !empty($data ['use_condition']['e_date_e'])){
+			    $e_date_m = intval($this->input->post ( 'e_date_m' ));
+			    $data ['use_condition'] ['e_date_m'] = $e_date_m == 2 ? 2 : 1;
+			}
 			//@Editor lGh 2016-7-6 15:10:51 数量与天数限制
 			$max_num=intval($this->input->post ( 'max_num' ));
 			$max_day=intval($this->input->post ( 'max_day' ));
@@ -561,7 +577,7 @@ class Prices extends MY_Admin {
 
 		$this->load->model ( 'common/Skins_model' );
 		$cur_skin = $this->Skins_model->get_skin_set($this->inter_id,'hotel');
-		if (!empty($cur_skin)&& $cur_skin['skin_name'] == 'bigger'){
+		if (!empty($cur_skin)&& ($cur_skin['skin_name'] == 'bigger' || $cur_skin['skin_name'] == 'highclass')){
 			$view = 'code_edit_new';
 		}else{
 			$view = 'code_edit';
@@ -649,6 +665,14 @@ class Prices extends MY_Admin {
 			if (!empty($l)&&strtotime($l)){
 				$data ['use_condition'] [$k] = $l;
 			}
+		}
+		if (!empty($data ['use_condition']['s_date_s']) || !empty($data ['use_condition']['s_date_e'])){
+    		$s_date_m = intval($this->input->post ( 's_date_m' ));
+    		$data ['use_condition'] ['s_date_m'] = $s_date_m == 2 ? 2 : 1;
+		}
+		if (!empty($data ['use_condition']['e_date_s']) || !empty($data ['use_condition']['e_date_e'])){
+		    $e_date_m = intval($this->input->post ( 'e_date_m' ));
+		    $data ['use_condition'] ['e_date_m'] = $e_date_m == 2 ? 2 : 1;
 		}
 		
 		//@Editor lGh 2016-7-6 15:10:51 数量与天数限制

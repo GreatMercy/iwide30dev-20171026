@@ -13,6 +13,63 @@
     width: 100%;
     height: 100%;
     border-radius: px2rem(var(--border-radius-big));
+    /* 折扣 */
+    &.is-discount {
+      .jfk-coupons__money {
+        &-number {
+          font-size: calc(158 / 24)em;
+          display: inline-block;
+        }
+        &-unit {
+          font-size: calc(30 / 24)em;
+          display: inline-block;
+          vertical-align: 1em;
+        }
+      }
+    }
+      /*抵用券*/
+    &.is-offset {
+      .jfk-coupons__money {
+        &-num {
+          letter-spacing: -0.31em;
+          &--length {
+            &-1 {
+              font-size: calc(158 / 24)em;
+            }
+            &-2,&-3 {
+              font-size: calc(120 / 24)em;
+            }
+            &-4 {
+              font-size: calc(80 / 24)em;
+            }
+            &-5 {
+              font-size: calc(84 / 24)em;
+            }
+            &-6 {
+              font-size: calc(68 / 24)em;
+            }
+          }
+        }
+        &-number {
+          font-size: 1em;
+          display: inline-block;
+          letter-spacing: 0.0741em;
+        }
+        &-currency {
+          font-size: 0.5185em;
+          display: inline-block;
+          vertical-align: 0.2em;
+          letter-spacing: normal;
+          padding-right: 0.1666em;
+        }
+      }
+    }
+    /*兑换券*/
+    &.is-exchange,&.is-default{
+      .jfk-coupons__money-num {
+        font-size: calc(106 / 24)em;
+      }
+    }
   }
   &__money {
     position: absolute;
@@ -21,58 +78,11 @@
     width: calc(296 / 690 * 100%);
     height: 100%;
     z-index: 1;
+    border-radius: px2rem(var(--border-radius-big)) 0 0 px2rem(var(--border-radius-big));
     &-cont {
       box-sizing: border-box;
       padding: 0 calc(82 / 296 * 100%) 0 px2rem(20);
       height: 100%;
-      /*折扣*/
-      .discount {
-        &-number {
-          font-size: calc(158 / 24)em;
-          display: inline-block;
-        }
-        &-word {
-          font-size: calc(30 / 24)em;
-          display: inline-block;
-        }
-      }
-      /*抵用券*/
-      .offset {
-        letter-spacing: -0.31em;
-        &--length {
-          &-1 {
-            font-size: calc(158 / 24)em;
-          }
-          &-2,&-3 {
-            font-size: calc(120 / 24)em;
-          }
-          &-4 {
-            font-size: calc(80 / 24)em;
-          }
-          &-5 {
-            font-size: calc(84 / 24)em;
-          }
-          &-6 {
-            font-size: calc(68 / 24)em;
-          }
-        }
-        &__number {
-          font-size: 1em;
-          display: inline-block;
-          letter-spacing: 0.0741em;
-        }
-        &__currency {
-          font-size: 0.5185em;
-          display: inline-block;
-          vertical-align: 0.2em;
-          letter-spacing: normal;
-          padding-right: 0.1666em;
-        }
-      }
-      /*兑换券*/
-      .exchange, .zh-word {
-        font-size: calc(106 / 24)em;
-      }
     }
   }
   &__cont {
@@ -84,13 +94,14 @@
     box-sizing: border-box;
     padding-right: px2rem(36);
     padding-top: px2rem(32);
+    border-radius: 0 px2rem(var(--border-radius-big)) px2rem(var(--border-radius-big)) 0;
     z-index: 2;
     &:before {
       content: '';
       position: absolute;
       top: 0;
       left: 0;
-      width: 100%;
+      width: 50%;
       height: 100%;
       transform-origin: top right;
       transform: skew(-16deg, 0deg);

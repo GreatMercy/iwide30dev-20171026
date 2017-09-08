@@ -8,6 +8,9 @@
     .jfk-button__text {
       letter-spacing: calc(-10 / 60)em;
     }
+    .jfk-font {
+      font-size: 1em;
+    }
     &::after {
       content: '';
       position: absolute;
@@ -76,6 +79,8 @@
       .title {
         display: block;
         width: calc(100 / 24)em;
+        height: calc(40 / 24)em;
+        line-height: calc(40 / 24)em;
         margin-right: px2rem(60);
         font-size: 1em;
       }
@@ -97,7 +102,7 @@
         i {
           flex: 1;
           display: block;
-          @mixin ellipsis {
+          @mixin ellipsis 2{
           }
         }
       }
@@ -145,7 +150,6 @@
 
       &--start {
         height: 1em;
-        background-position: center center;
         &::after {
           top: px2rem(-120);
         }
@@ -153,30 +157,32 @@
 
       &--default {
         height: 1em;
-        background-position: center center;
         &::after {
           top: px2rem(-120);
         }
       }
 
       &--finish {
-        height: calc(56 / 30)em;
-        background-position: center calc(-11 / 30)em;
+        height: 1em;
         &::after {
           top: px2rem(-120);
         }
       }
 
       &--end {
-        height: calc(68 / 30)em;
-        background-position: center calc(-17 / 30)em;
+        height: 1em;
         &::after {
-
           top: px2rem(-120);
         }
       }
 
       &--line {
+        i {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+        }
         &::after {
           position: absolute;
           content: "";
@@ -196,6 +202,8 @@
 
         p:first-child {
           margin-bottom: px2rem(20);
+          @mixin ellipsis 2 {
+          }
         }
 
         p:last-child {

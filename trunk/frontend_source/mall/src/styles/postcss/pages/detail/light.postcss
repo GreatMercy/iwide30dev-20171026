@@ -1,6 +1,6 @@
 .jfk-pages__detail{
   .hotel-staff {
-    background-color: #27282d;
+    background-color: #fff;
   }
   .detail-top {
     .banners {
@@ -19,6 +19,8 @@
     background-color: #fff;
     padding-top: px2rem(42);
     .date-norm {
+      color: #333;
+      padding-left: px2rem(112);
       @mixin one-line vertical, calc(144 / 24)em {
         background-color: #bfbfbf;
         transform: scale(1, .5) rotate(15deg);
@@ -56,10 +58,12 @@
             background-image: background-image(/detail_killsec_process_begin_white.png, theme);
           }
           &:after {
+            left: px2rem(35);
             background: #fff;
           }
         }
         &-line {
+          left: px2rem(35);
           background: #dfdfdf;
         }
       }
@@ -77,12 +81,12 @@
         width: calc(82 / 407 * 100%);
         right: 0;
         top: 0;
-        bottom: 2px;
+        bottom: 0px;
         transform: skew(-18deg, 0deg);
         transform-origin: bottom left;
         z-index: 1;
         background-color: #fff;
-        box-shadow: 0 2px px2rem(20) rgba(0,0,0,.15);
+        box-shadow: 0 1px px2rem(20) rgba(0,0,0,.15);
       }
       &:before{
         content: '';
@@ -128,6 +132,9 @@
   .good-spec__footer {
     background-color: #fff;
   }
+  .service {
+    padding: px2rem(44) px2rem(50) px2rem(66) px2rem(44);
+  }
   .jfk-popup__service {
     .popup-service-item {
       color: #808080;
@@ -144,6 +151,34 @@
       background-color: #ebebeb;
     }
   }
+  .graphic,.notice,.detail {
+    .title{
+      span {
+        position: relative;
+        &:before {
+          position: absolute;
+          bottom: 0;
+          width: calc(44 / 32)em;
+          height: px2rem(3);
+          left: 50%;
+          margin-left: calc(-44 / 32 / 2)em;
+          background-color: #e0e0e0;
+          content: '';
+        }
+      }
+    }
+  }
+  /*图文详情 订购须知*/
+  .graphic,.notice {
+    * {
+      color: #333 !important;
+    }
+  }
+  .detail {
+    .item.tr {
+      color: #333;
+    }
+  }
   .hotel {
     .box {
       background: {
@@ -151,7 +186,21 @@
       }
     }
     .qrcode {
-      box-shadow: 0 0 1em color(#d8c67c a(19%));
+      &:after {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #fff;
+        content: '';
+        z-index: -2;
+        border-radius: px2rem(var(--border-radius-big));
+      }
+      &:before {
+        opacity: 0.5;
+      }
+      box-shadow: 0 0 1em color(#333 a(19%));
     }
   }
 }

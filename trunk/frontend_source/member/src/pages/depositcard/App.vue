@@ -13,10 +13,10 @@
         </div>
         <div class="font_12 width_100 txt_r margin_top_20f"><a :href="dataList.page_resource.links.info + '&cardId=' +value.deposit_card_id"><span class="margin_right_6 color1">查看详情</span><em class="jfk-font color1">&#xe61c;</em></a></div>
       </div>
-      <p class="relative border_bottom margin_top_15 height_1"></p>
+      <p class="relative border_bottom margin_top_10 height_1"></p>
       <div class="flex between margin_top_13">
         <div class="main_color1 font_12"><font class="jfk-font margin_right_2 font_21">&#xe643;</font><em class="iconfonts font_25">{{value.money}}</em></div>
-        <div class="font_15 color1 border_1 width_100 center padding_6 relative border_b2945e desp-btn" @click="bucard(value.deposit_card_id)">立即购买</div>
+        <div class="font_15 color1 border_1 width_100 center padding_5 relative border_b2945e desp-btn" @click="bucard(value.deposit_card_id)">立即购买</div>
       </div>
     </div>
   </section>

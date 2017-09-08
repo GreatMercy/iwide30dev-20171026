@@ -1,11 +1,10 @@
 <template>
-  <div class="jfk-pages jfk-page__orderCoupon jfk-page__giftOrder">
+  <div class="jfk-pages jfk-page__orderCoupon jfk-page__giftOrder" :class="pageNamespace">
     <div class="jfk-pages__theme"></div>
     <headTitle :headTitleMsg="headTitleMsg" />
     <div class="orderDetail__state jfk-pl-30 jfk-pr-30 ">
-      <div class="orderDetail__state__main">
-        <img src="../../assets/image/goldlight.png" class="goldlight">
-        <div class="orderDetail__state__type color-golden font-size--60" v-html="orderStatusMsg">
+      <div class="orderDetail__state__main color-golden">
+        <div class="orderDetail__state__type  font-size--60" v-html="orderStatusMsg">
          </div>
       </div>
     </div>
@@ -24,7 +23,7 @@
             </div>
         </div>        
         <div class="jfk-menuList" v-if="btn.length >=1">
-            <div class="menu-inn jfk-clearfix" >
+            <div class="menu-inn jfk-clearfix color-golden" >
               <template v-for="itembtn in btn">
                 <div class="item" ><a :href="itembtn.btnurl"><span v-html="itembtn.btnicon"></span><p class="font-size--24">{{itembtn.btnMsg}}</p></a></div>
               </template>
@@ -166,7 +165,7 @@
           validate: '',
           showValidate: true
         },
-        orderStatusMsg: '<i class="jfk-font icon-font_zh_shou_qkbys"></i><i class="jfk-font icon-font_zh_li_1_qkbys"></i><i class="jfk-font icon-font_zh_cheng_qkbys"></i><i class="jfk-font icon-font_zh_gong_qkbys"></i><i class="jfk-font-number">.</i>',
+        orderStatusMsg: '<i class="jfk-font icon-font_zh_shou_qkbys"></i><i class="jfk-font icon-font_zh_li_1_qkbys"></i><i class="jfk-font icon-font_zh_cheng_qkbys"></i><i class="jfk-font icon-font_zh_gong_qkbys"></i>',
         gift: {},
         webData: {},
         btn: [],
@@ -183,6 +182,7 @@
       }
       this.gid = params.gid
       this.bsn = params.bsn
+      this.$pageNamespace(params)
     },
     created () {
       let that = this

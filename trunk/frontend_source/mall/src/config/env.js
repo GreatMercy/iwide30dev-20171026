@@ -5,8 +5,8 @@ let HOTEL_PRICE_EDIT_PATH = ''
 let HOTEL_PRICE_PATH = ''
 let HOTEL_PRICE_EDIT_URL = ''
 let INTER_ID = 'a450089706'
-// let OPEN_ID = 'o9VbtwwUedrHzhXFSfegtSFMIKtU'
-let OPEN_ID = 'o9Vbtw7A9DRsTE6kU8HluMPPFP_8'
+let OPEN_ID = 'o9VbtwwUedrHzhXFSfegtSFMIKtU'
+// let OPEN_ID = 'o9Vbtw7A9DRsTE6kU8HluMPPFP_8'
 
 if (process.env.NODE_ENV !== 'development') {
   BASE_PATH = '/index.php'

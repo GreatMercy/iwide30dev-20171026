@@ -8,8 +8,9 @@
           <div class="gift-theme-list__item jfk-ta-c">
             <div class="gift-theme-list__box">
               <div class="gift-theme-list__imgbox">
-                <div class="jfk-image__lazy--preload  jfk-image__lazy--3-3 jfk-image__lazy--background-image"></div>
-                <img :data-src="item.theme" class="swiper-lazy">
+                <!-- <div class="jfk-image__lazy--preload  jfk-image__lazy--3-3 jfk-image__lazy--background-image"></div> -->
+                <!-- <img :data-src="item.theme" class="swiper-lazy"> -->
+                <img :src="item.theme">
               </div>
               <div class="gift-theme-list__name jfk-ta-c font-size--36" v-html="item.theme_name"></div>
             </div>
@@ -19,7 +20,7 @@
     </div>
 
     <div class="button-box gift-theme-btn">
-      <a href="javascript:void(0);" class="jfk-button jfk-button--default" @click="choiceTheme">确&nbsp;定</a>
+      <a href="javascript:void(0);" class="jfk-button jfk-button--default jfk-button--primary is-special" @click="choiceTheme">确&nbsp;定</a>
     </div>
 
   </div>
@@ -46,16 +47,15 @@
           initialSlide: 0,
           lazyLoadingInPrevNext: true,
           loop: false,
-          speed: 400,
+          // speed: 200,
           slidesPerView: 'auto',
           centeredSlides: true,
           followFinger: false,
           notNextTick: true,
           lazyPreloaderClass: 'jfk-image__lazy--preload',
           pagination: '.swiper-pagination',
-          lazyLoading: true,
+          lazyLoading: false,
           onSlideChangeEnd: swiper => {
-            console.log(swiper)
           }
         }
       }

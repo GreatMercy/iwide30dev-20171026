@@ -3,9 +3,9 @@
 	<section class="padding_0_15">
 		<div class="flex between padding_45 font_12">
 			<div class="margin_right_30 relative padding_left_35">
-				<div class="line_left absolute top_65"><img class="line_height65" src="../../assets/image/line_03.png" alt=""></div>
+				<div class="line_left absolute top_65"><img class="line_height65" src="../../styles/postcss/image/line_03.png" alt=""></div>
 				<div>
-					<div class="font_30 jfk-font txt_show4 main_color1">马上注册<span class="radius_50">.</span></div>
+					<div class="font_30 jfk-font txt_show4 main_color1">马上注册</div>
 					<div class="margin_top_20 center relative color_888">可获得注册大礼包，享受更多会员优惠</div>
 				</div>
 			</div>
@@ -23,7 +23,7 @@
 			<div class="margin_top_75 font_17">
 				<div class="block width_85 center btn_height entry_btn auto jfk-font gray_btn register" @click="submit()">注&ensp;册</div>
 			</div>
-			<div class="center margin_top_30 font_12 color3">已有账号？<span class="mar_l20"><a class="main_color1" :href="links.login">马上登录</a></span><em class="color3 mar_l10 jfk-font xx-small">&#xe61c;</em></a>
+			<div class="center margin_top_30 font_12 color3">已有账号？<span class="mar_l10"><a class="main_color1" :href="links.login">马上登录</a></span><em class="color3 mar_l10 jfk-font xx-small">&#xe61c;</em></a>
 			</div>
 		</form>
 	</section>

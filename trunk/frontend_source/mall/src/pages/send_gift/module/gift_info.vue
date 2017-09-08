@@ -17,15 +17,15 @@
 
               <div class="font-size--30 goods-info-desc__packname" v-if="giftInfo.name" v-html="giftInfo.name"></div>
 
-              <div class="goods-info-desc__price" v-if="giftInfo.residue === 1 || giftInfo.residue === 1">
+              <div class="goods-info-desc__price jfk-ta-r" v-if="giftInfo.residue === 1 || giftInfo.residue === 1">
                 <span class="jfk-price font-size--54">
-                  <i class="jfk-font-number jfk-price__currency">¥</i>
+                  <i class="jfk-font-number jfk-price__currency">￥</i>
                   <i class="jfk-font-number jfk-price__number" v-html="giftInfo.price_package"></i>
                 </span>
                 <span class="font-size--24 jfk-d-ib goods-info-desc__price-number">1份</span>
               </div>
 
-              <div class="goods-info-desc__goods_number" v-if="giftInfo.residue > 1">
+              <div class="goods-info-desc__goods_number jfk-ta-r" v-if="giftInfo.residue > 1">
                 <span class="goods-info-desc__title font-size--24">送出</span>
                 <span class="goods-info-desc__number font-size--24"
                       v-if="giftInfo.send_out_number >=0 "
@@ -82,10 +82,10 @@
       </ul>
 
       <div class="button-box">
-        <a href="javascript:void(0);" class="jfk-button jfk-button--default" @click="give">确定赠送</a>
+        <button class="jfk-button jfk-button--default jfk-button--primary is-special" @click="give">确定赠送</button>
       </div>
 
-      <a :href="giftInfo.order_list_url || 'javascript:void(0)'" class="jfk-ta-c font-size--28 gift-put-order">
+      <a :href="giftInfo.order_list_url || 'javascript:void(0)'" class="jfk-ta-c font-size--28 gift-put-order" v-if="giftInfo.order_list_url">
         暂不处理，放至订单中心<i class="jfk-d-ib jfk-font icon-user_icon_jump_normal"></i>
       </a>
 

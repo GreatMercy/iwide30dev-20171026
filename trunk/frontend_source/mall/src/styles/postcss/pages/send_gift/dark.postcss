@@ -28,13 +28,13 @@
         color: var(--color-white);
       }
       &__title {
-        color: var(--font-color-extra-light-gray);
-      }
-      &__number {
         color: var(--font-color-light-gray);
       }
+      &__number {
+        color: var(--font-color-extra-light-gray);
+      }
       &__line {
-        background-color: var(--line-color-light-silver);
+        background-color: var(--font-color-light-gray-common);
       }
     }
   }
@@ -53,7 +53,7 @@
 
   .title {
     color: var(--font-color-white);
-    @mixin line-down 8, 30% {
+    @mixin line-down 4, 30% {
     }
     &:before {
       left: 50%;

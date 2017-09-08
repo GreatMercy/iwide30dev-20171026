@@ -19,13 +19,16 @@ class Hotel extends MY_Front_Hotel_Iapi {
 		foreach ($data['hotel_collection'] as $k => $hc){
 			$data['hotel_collection'][$k]['link'] = Hotel_base::inst()->get_url($hc['mark_link'],array(),TRUE);
 		}
-		foreach ($data['homepage_set']['menu'] as $k => $v){
-			if($v['code'] == 'athour') $data['homepage_set']['menu'][$k]['link'] = Hotel_base::inst()->get_url("SEARCH",array('type'=>'athour'));
-			if($v['code'] == 'order') $data['homepage_set']['menu'][$k]['link'] = Hotel_base::inst()->get_url("MYORDER");
-			if($v['code'] == 'ticket') $data['homepage_set']['menu'][$k]['link'] = Hotel_base::inst()->get_url("SEARCH",array('type'=>'ticket'));
+		if(!empty($data['homepage_set']['menu'])){
+			foreach ($data['homepage_set']['menu'] as $k => $v){
+				if($v['code'] == 'athour') $data['homepage_set']['menu'][$k]['link'] = Hotel_base::inst()->get_url("SEARCH",array('type'=>'athour'));
+				if($v['code'] == 'order') $data['homepage_set']['menu'][$k]['link'] = Hotel_base::inst()->get_url("MYORDER");
+				if($v['code'] == 'ticket') $data['homepage_set']['menu'][$k]['link'] = Hotel_base::inst()->get_url("SEARCH",array('type'=>'ticket'));
+			}
 		}
 		
 		$ext['links']['SRESULT'] = Hotel_base::inst()->get_url("SRESULT");
+		$ext['links']['NEARBY'] = Hotel_base::inst()->get_url("SRESULT").'&nearby=1';
 		$ext['links']['AJAX_HOTEL_SEARCH'] = Hotel_base::inst()->get_url("AJAX_HOTEL_SEARCH");
         $this->out_put_msg(1,'',$data,'hotel/hotel/search',$ext);
 	}
@@ -242,7 +245,8 @@ class Hotel extends MY_Front_Hotel_Iapi {
 		unset($data['errmsg']);
 		if($data['s']==1){
 			unset($data['s']);
-        	$this->out_put_msg(1,$msg,$data,'hotel/hotel/new_comment_sub');
+			$ext['links']['HOTEL_COMMENT'] = Hotel_base::inst()->get_url("HOTEL_COMMENT",array('h'=>$data["hotel_id"]));
+        	$this->out_put_msg(1,$msg,$data,'hotel/hotel/new_comment_sub',$ext);
 		}else{
 			unset($data['s']);
         	$this->out_put_msg(2,$msg,$data,'hotel/hotel/new_comment_sub');

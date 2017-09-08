@@ -24,6 +24,13 @@ class Orders extends MY_Admin {
 		$data['t_checkin_num'] = $model->get_today_checkin_num($this->inter_id,$entity_id);
 		$data['order_confirm_two'] = $this->getNumRoom(2);	
 		$data['order_comfirm_num'] = $model->get_order_confirm_num($this->inter_id,$entity_id);
+
+        /* 新增公告 */
+        /** @var Priv_notice $notice_model */
+        $this->load->model('core/priv_notice', 'notice_model');
+        $notice_model = $this->notice_model;
+        $data['notice_model'] = $notice_model->getLast();
+
 		$this->_render_content ( $this->_load_view_file ( 'index_one' ), $data, false );
 	}
 	//获取指定数量的未确认订单数据

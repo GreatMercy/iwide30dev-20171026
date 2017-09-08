@@ -7,7 +7,7 @@ module.exports = {
     env: require('./prod.env'),
     index: path.resolve(__dirname, '../dist/index.html'),
     assetsRoot: path.resolve(__dirname, '../dist'),
-    assetsSubDirectory: 'soma/vue',
+    assetsSubDirectory: process.env.npm_config_interid ? 'soma/vue_' + process.env.npm_config_interid : 'soma/vue',
     assetsPublicPath: (process.env.npm_config_cdn ? `${cdnConf.protocol}//${cdnConf.domain}` : '') + '/public/',
     productionSourceMap: false,
     // Gzip off by default as many popular static hosts such as

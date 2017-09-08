@@ -2,19 +2,19 @@
   <div class="gradient_bg padding_0_15">
   <section class="bd_bottom bg_show pad_b80">
     <div class="jfk-font center pad_t60">
-      <img class="okpay_logo" src="../../assets/image/su_gou.png" alt="">
+      <img class="okpay_logo" src="../../styles/postcss/image/su_gou.png" alt="">
     </div>
     <p class="jfk-font center color1 mar_t40 font_21 txt_show5">支付成功!</p>
     <div class="pad_tb40 center">
       <p class="inblock font_12 color3">恭喜您成功购买了会员卡，请在会员中心查看</p>
-      <div class="inblock pad_lr30 pad_tb5  center relative border_1_bcbcbc radius_3 color3 font_14 pay_look"><a :href="dataList.page_resource.links.jump_url">会员中心</a></div>
+      <div class="inblock pad_lr30 pad_tb5  center relative border_1_bcbcbc radius_3 color3 font_12 pay_look"><a :href="dataList.page_resource.links.jump_url">会员中心</a></div>
     </div>
   </section>
   <section v-if="info.name === '' || info.cellphone === '' || info.id_card_no === ''" class="white_bg padding_0_15 mar_t30">
     <div class="font_12 padding_left_20 pad_t40">
       <p class="main_color1 relative" style="padding-left:10px;">
         <em class="jfk-font absolute prompt">
-        <img src="../../assets/image/gantan.png" alt="" style="width:16px;margin-top:2px;"></em>我们检测到您还未进行实名认证,为保障您的资金安全,请填写个人信息进行认证
+        <img src="../../styles/postcss/image/gantan.png" alt="" style="width:16px;margin-top:2px;"></em>我们检测到您还未进行实名认证,为保障您的资金安全,请填写个人信息进行认证
       </p>
     </div>
     <div class="layer_bg radius_3 padding_20 mar_t10">

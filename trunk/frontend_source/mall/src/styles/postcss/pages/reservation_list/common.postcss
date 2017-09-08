@@ -8,10 +8,10 @@
     &__icon {
       display: block;
       width: px2rem(24);
-      height: px2rem(23);
-      margin-right: px2rem(23);
+      height: px2rem(26);
+      margin-right: px2rem(10);
       vertical-align: top;
-      font-size: px2rem(22);
+      font-size: px2rem(26);
     }
 
     &__input {
@@ -19,10 +19,9 @@
       flex: 1;
       border: none;
       outline: none;
-      height: px2rem(80);
-      line-height: px2rem(80);
       padding-right: px2rem(20);
       background: none;
+      height: calc(44 / 38)em;
     }
 
     &__close {
@@ -33,18 +32,11 @@
       border-radius: 100%;
       top: 50%;
       margin-top: px2rem(-18);
+      font-size: px2rem(36);
+      vertical-align: top;
       i {
-        width: px2rem(18);
-        height: px2rem(18);
-        font-size: px2rem(24);
-        position: relative;
-        &:before {
-          position: absolute;
-          left: 50%;
-          top: px2rem(-10);
-          transform: translate(-50%, 0);
-          vertical-align: top;
-        }
+        vertical-align: top;
+        font-size: 1em;
       }
     }
   }

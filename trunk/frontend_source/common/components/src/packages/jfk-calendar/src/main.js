@@ -57,9 +57,13 @@ export default {
     return (
       <div class="jfk-calendar">
         <div class="jfk-calendar__tools">
-          <a onClick={prevMonth} class={{'is-disabled': prevMonthDisabled, 'is-prev': true, 'switch-month': true, 'color-golden': true}}>&nbsp;</a>
+          <a onClick={prevMonth} class={{'is-disabled': prevMonthDisabled, 'is-prev': true, 'switch-month': true, 'color-golden': true}}>
+            <i class="jfk-font icon-icon_jump_normal"></i>
+          </a>
           <div class="title font-color-white">{year}年{month}月</div>
-          <a onClick={nextMonth} class={{'is-disabled': nextMonthDisabled, 'is-next': true, 'switch-month': true, 'color-golden': true}}>&nbsp;</a>
+          <a onClick={nextMonth} class={{'is-disabled': nextMonthDisabled, 'is-next': true, 'switch-month': true, 'color-golden': true}}>
+            <i class="jfk-font icon-user_icon_jump_normal"></i>
+          </a>
         </div>
         <div class="jfk-calendar__body">
           {weekTitleItems}

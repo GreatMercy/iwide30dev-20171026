@@ -1052,6 +1052,17 @@ class Public_model extends MY_Model_Member {
             "Cache-Control"=>"no-cache",
         );
         $result = doCurlPostRequest($apiurl,$requestString,$extra);
+        if(!empty($result) && $result != 'No Data Found'){
+            $result = explode(',',$result);
+            $arr = array();
+            foreach ($result as $vo){
+                $openid = trim($vo);
+                if(!empty($openid)) $arr[] = $openid;
+            }
+            $result = $arr;
+        }else{
+            $result = array();
+        }
         return $result;
     }
 
@@ -1098,7 +1109,7 @@ class Public_model extends MY_Model_Member {
             curl_exec($ch);
             curl_close($ch);
             $objPHPExcel = IOFactory::load(FD_PUBLIC.'/task_tmp.xlsx');
-            @unlink(FD_PUBLIC.'/task_tmp.xlsx');
+//            @unlink(FD_PUBLIC.'/task_tmp.xlsx');
         }else{
             $objPHPExcel = IOFactory::load($file_path);
         }
@@ -1132,8 +1143,9 @@ class Public_model extends MY_Model_Member {
                     $value = $objWorksheet->getCell($address)->getValue();
                     if(is_object($value))  $value = $value->__toString(); //格式化文本
                     if(substr($value,0,1)=='='){
-                        return array("error"=>0,'message'=>'can not use the formula!');
-                        exit;
+                        $value = '';
+//                        return array("error"=>0,'message'=>'can not use the formula!');
+//                        exit;
                     }
 
                     if(!empty($isMergeCell[$col.$currentRow]) && !empty($isMergeCell[$afCol.$currentRow]) && !empty($value)){
@@ -1150,6 +1162,7 @@ class Public_model extends MY_Model_Member {
             $array[$i]["Content"] = $arr;
             $i++;
         }
+
         return $array;
     }
 

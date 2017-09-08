@@ -105,15 +105,16 @@
       }
     }
   }
-  
+
   .pay_type{
-    margin-top: px2rem(70);
+    margin-top: px2rem(30);
     padding-left: px2rem(30);
     overflow: hidden;
     &_item{
       width: 30%;
       height: px2rem(130);
       padding-top: px2rem(40);
+      margin-top: px2rem(40);
       text-align: center;
       position: relative;
       float: left;
@@ -144,7 +145,7 @@
       line-height: px2rem(40);
     }
   }
-  
+
   /* 底部 */
   .footer {
     height: px2rem(100);
@@ -190,7 +191,7 @@
           -webkit-transform:rotate(180deg);
           -o-transform:rotate(180deg);
           top: 0;
-          right: calc(-30 / 24)em; 
+          right: calc(-30 / 24)em;
         }
       }
        &.is-open {
@@ -269,7 +270,11 @@
       }
     }
   }
-  
+  .coupon_list{
+    position: relative;
+    z-index: 1;
+    padding-bottom: 100px;
+  }
   .choose_coupon{
     padding-top: px2rem(30);
     height: 100%;
@@ -278,8 +283,10 @@
     top: 0;
     left: 0;
     z-index: 9999;
+    overflow-y: scroll;
 
     &_item{
+      margin-bottom: 40px;
       margin-top: px2rem(40);
     }
     & .click_open{
@@ -295,7 +302,7 @@
         -o-transform:rotate(90deg);
       }
     }
-    
+
     & .coupon_num{
       margin-top: px2rem(80);
       text-align:center;
@@ -380,18 +387,48 @@
     .btn_submit{
       width: 99.6%;
       margin-left: .2%;
-      background: #1a1a1a;
       height: px2rem(100);
       line-height: px2rem(100);
       text-align: center;
-      color: #fff;
       position: fixed;
-      bottom: .3%;
+      bottom: 0;
       left: 0;
+      z-index: 10;
     }
   }
 
-
+  .on_checked{
+    position: relative;
+    display: inline-block;
+    vertical-align: top;
+    width: 3.275rem;
+    height: 1.837rem;
+    margin-left: px2rem(30);
+    border-radius: 25px;
+    margin-top: px2rem(-20);
+  }
+  .on_checked:after{
+    content: "";
+    position: absolute;
+    width: 1.7rem;
+    height: 1.7rem;
+    right: 0px;
+    top: 0.07rem;
+    border-radius: 25px;
+  }
+  .off_checked{
+  }
+  .off_checked:after{
+    left: 0px;
+    top: 0.011rem;
+    right: initial;
+  }
+  .disable_checked{
+  }
+  .disable_checked:after{
+    left: 0px;
+    top: 0.011rem;
+  }
 
 
 

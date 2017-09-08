@@ -2,55 +2,25 @@
   <div class="page_home">
     <div class="topbanner">
       <swiper :options="swiperOption" >
-          <swiper-slide >
+          <swiper-slide v-for="item in banners">
             <a>
-              <img src="../assets/swiper_banner.jpg"></img>
+              <img :src="'./static/img/'+item" />
             </a>
           </swiper-slide>
-          <swiper-slide >
-            <a>
-              <img src="../assets/swiper_banner.jpg"></img>
-            </a>
-          </swiper-slide>          
-          
       </swiper>
       <div class="swiper-pagination swiper-pagination-fraction">
-        <span class="swiper-pagination-current ">{{productGalleryIndex}}</span> / <span class="swiper-pagination-total">2</span>
+        <span class="swiper-pagination-current ">{{productGalleryIndex}}</span> / <span class="swiper-pagination-total">{{banners.length}}</span>
       </div>      
     </div>
     <h2 class="subtitle">精选目的地</h2>
     <div class="bestPlace">
       <swiper :options="swiperOption2" >
-          <swiper-slide >
-            <router-link to="/list?city=beijing">
-              <img src="../assets/beijing.jpg"></img>
-              <p class="tab"><i></i>北京<span>Beijing</span></p>
+          <swiper-slide v-for="item in bestPlace">
+            <router-link :to="'/list?city='+item.city">
+              <img :src="'./static/img/hotplace/'+item.img" />
+              <p class="tab"><i></i>{{item.cityname}}<span>{{item.city}}</span></p>
             </router-link>
-          </swiper-slide>
-          <swiper-slide >
-            <router-link to="/list?city=shanghai">
-              <img src="../assets/shanghai.jpg"></img>
-              <p class="tab"><i></i>上海<span>Shanghai</span></p>
-            </router-link>
-          </swiper-slide>   
-          <swiper-slide >
-            <router-link to="/list?city=guangzhou">
-              <img src="../assets/guangzhou.jpg"></img>
-              <p class="tab"><i></i>广州<span>Guangzhou</span></p>
-            </router-link>
-          </swiper-slide> 
-          <swiper-slide >
-            <router-link to="/list?city=nanjing">
-              <img src="../assets/nanjing.jpg"></img>
-              <p class="tab"><i></i>南京<span>Nanjing</span></p>
-            </router-link>
-          </swiper-slide> 
-          <swiper-slide >
-            <router-link to="/list?city=xian">
-              <img src="../assets/xian.jpg"></img>
-              <p class="tab"><i></i>西安<span>Xian</span></p>
-            </router-link>
-          </swiper-slide>                                         
+          </swiper-slide>                                       
           <swiper-slide class="seemore">
             <router-link to="/list">
                 <img src="../assets/seemore.jpg"></img>
@@ -59,54 +29,65 @@
       </swiper>
     </div>
     <div class="ads">
-      <a>
-        <img src="../assets/food.jpg"></img>
-      </a>
-      <a>
-        <img src="../assets/gift.jpg"></img>
-      </a>
-      <a>
-        <img src="../assets/spa.jpg"></img>
+      <a v-for="item in ads">
+        <img :src="'./static/img/'+item" />
       </a>            
     </div>
     <h2 class="subtitle">我们的品牌</h2>
     <div class="brand">
       <swiper :options="swiperOption3" >
           <swiper-slide >
-            <a>
+            <router-link to="/brand?brand=raffles">
+              <img src="../assets/raffles.png"></img>
+            </router-link>
+          </swiper-slide>         
+          <swiper-slide >
+            <router-link to="/brand?brand=fairmont">
+              <img src="../assets/fairmont.png"></img>
+            </router-link>
+          </swiper-slide>
+          <swiper-slide >
+            <router-link to="/brand?brand=sofitel">
+              <img src="../assets/sofitel.png"></img>
+            </router-link>
+          </swiper-slide>
+          <swiper-slide >
+            <router-link to="/brand?brand=pullman">
+              <img src="../assets/pullman.png"></img>
+            </router-link>
+          </swiper-slide>
+          <swiper-slide >
+            <router-link to="/brand?brand=swissotel">
+              <img src="../assets/swisshotel.png"></img>
+            </router-link>
+          </swiper-slide>
+          <swiper-slide >
+            <router-link to="/brand?brand=grand_mercure">
               <img src="../assets/mercure.png"></img>
-            </a>
+            </router-link>
           </swiper-slide>
           <swiper-slide >
-            <a>
-              <img src="../assets/ibis.png"></img>
-            </a>
-          </swiper-slide>
-          <swiper-slide >
-            <a>
-              <img src="../assets/meiju.png"></img>
-            </a>
-          </swiper-slide> 
-          <swiper-slide >
-            <a>
+            <router-link to="/brand?brand=novotel">
               <img src="../assets/novotel.png"></img>
-            </a>
-          </swiper-slide>           
+            </router-link>
+          </swiper-slide>                                                      
+          <swiper-slide >
+            <router-link to="/brand?brand=mercure">
+              <img src="../assets/meiju.png"></img>
+            </router-link>
+          </swiper-slide>                         
           <div class="swiper-button-prev " slot="button-prev"></div>
           <div class="swiper-button-next" slot="button-next"></div>                             
       </swiper>   
 
     </div>
     <h2 class="subtitle">精选必看</h2>
-    <div class="bestSelect">
-      <img src="../assets/bestBanner.jpg" class="bigbanner"></img>
+    <div class="bestSelect" >
+      <img :src="'./static/img/'+item" class="bigbanner" v-for="item in bestbanner"/>
       <div class="twoimg">
-        <a>
-          <img src="../assets/join.jpg"></img>
-        </a>
-        <a>
-          <img src="../assets/downloadapp.jpg"></img>
-        </a>        
+        <a v-for="item in twoimg">
+          <img :src="'./static/img/'+item" />
+        </a>      
       </div>
     </div>
   </div>
@@ -118,25 +99,31 @@ export default {
   data () {
     return {
       msg: 'haha',
-      banners: [ 'http://7n.cdn.iwide.cn/public/uploads/201702/qf271337095540.jpg', 'http://7n.cdn.iwide.cn/public/uploads/201702/qf271337095540.jpg', 'http://7n.cdn.iwide.cn/public/uploads/201702/qf271337095540.jpg' ],
-      bestPlace: ['http://7n.cdn.iwide.cn/public/uploads/201702/qf271337095540.jpg', 'http://7n.cdn.iwide.cn/public/uploads/201702/qf271337095540.jpg', 'http://7n.cdn.iwide.cn/public/uploads/201702/qf271337095540.jpg', 'http://7n.cdn.iwide.cn/public/uploads/201702/qf271337095540.jpg'],
-      productGalleryIndex: 1,
+      banners: [ 'swiper_banner.jpg', 'swiper_banner.jpg' ],
+      bestPlace: [
+        {'img': 'beijing.jpg', 'city': 'Beijing', 'cityname': '北京'},
+        {'img': 'shanghai.jpg', 'city': 'Shanghai', 'cityname': '上海'},
+        {'img': 'guangzhou.jpg', 'city': 'Guangzhou', 'cityname': '广州'},
+        {'img': 'nanjing.jpg', 'city': 'Nanjing', 'cityname': '南京'},
+        {'img': 'xian.jpg', 'city': 'Xian', 'cityname': '西安'}
+      ],
+      twoimg: ['join.jpg', 'downloadapp.jpg'],
+      ads: ['food.jpg', 'gift.jpg', 'spa.jpg'],
+      productGalleryIndex: 0,
       swiperOption: {
-        autoplay: 5000,
-        initialSlide: 1,
+        autoplay: 3000,
+        initialSlide: 0,
         loop: true,
-        productGalleryIndex: 1,
+        productGalleryIndex: 0,
         onSlideChangeEnd: swiper => {
           this.productGalleryIndex = swiper.realIndex + 1
         }
       },
+      bestbanner: ['bestBanner.jpg'],
       swiperOption2: {
         productGalleryIndex: 1,
         spaceBetween: 10,
-        slidesPerView: 1.5,
-        onSlideChangeEnd: swiper => {
-          this.productGalleryIndex = swiper.realIndex + 1
-        }
+        slidesPerView: 1.5
       },
       swiperOption3: {
         prevButton: '.brand .swiper-button-prev ',

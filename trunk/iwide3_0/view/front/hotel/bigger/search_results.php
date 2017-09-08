@@ -61,7 +61,7 @@
 </div>
 <section class="city_wrapper bg_090909" style="display:none;" id="serach_whole">
     <div class="h20 layer_bg whole_eject_content pad_t80 pad_b40 pad_lr30 border_radius scroll" style="height: 96%;margin: 4%;">
-        <!-- <em id="j_close" class="close iconfont color6">&#xE000;</em> -->
+        <em id="j_close" class="close iconfont color6">&#xE000;</em>
         <div class="webkitbox bd_bottom pad_b30 pad_l30">
             <em class="h30 color2 iconfont mar_r20 city_search_ico">&#xE006;</em> 
             <input id="city_search_content" class="h30 flexgrow color1" type="text" placeholder="搜索区域/地址/酒店名/路名等">
@@ -88,6 +88,7 @@
         </div>
     </div>
 </section>
+<div class="back_ico"></div>
 </body>
 <?php echo referurl('js','search_results.js',1,$media_path) ?>
 <?php echo referurl('js','search_public.js',1,$media_path) ?>

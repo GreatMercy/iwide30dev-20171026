@@ -19,3 +19,20 @@ export function showFullLayer (options = {}, title = '', href = location.href, c
     }, 100)
   })
 }
+
+// 时间转换时间
+export function formatDate (time, str) {
+  let timeStr = str !== undefined ? str : '-'
+  let newDate = new Date()
+  newDate.setTime(time * 1000)
+  let newTime = newDate.toLocaleDateString().replace(/\//g, timeStr)
+  let dateArr = newTime.split('-')
+  if (dateArr[1] < 10) {
+    dateArr[1] = '0' + dateArr[1]
+  }
+  if (dateArr[2] < 10) {
+    dateArr[2] = '0' + dateArr[2]
+  }
+  newTime = dateArr.join('-')
+  return newTime
+}

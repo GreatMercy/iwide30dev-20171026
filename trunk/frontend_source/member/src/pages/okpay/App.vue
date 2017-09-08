@@ -2,12 +2,12 @@
   <div class="gradient_bg padding_0_15">
   <section class="bd_bottom bg_show pad_b80">
     <div class="jfk-font center pad_t60">
-      <img class="okpay_logo" src="../../assets/image/su_gou.png" alt="">
+      <img class="okpay_logo" src="../../styles/postcss/image/su_gou.png" alt="">
     </div>
     <p class="jfk-font center color1 mar_t40 font_23 txt_show5">支付成功!</p>
     <div class="pad_tb40 center">
       <p class="inblock font_12 color3">恭喜你充值成功,请在我的{{dataList.filed_name.balance_name}}中查看！</p>
-      <div class="inblock pad_lr30 pad_tb5  center relative border_1_bcbcbc radius_3 color3 font_14 pay_look"><a :href="dataList.page_resource.links.balance">查看{{dataList.filed_name.balance_name}}</a></div>
+      <div class="inblock pad_lr30 pad_tb5  center relative border_1_bcbcbc radius_3 color3 font_12 pay_look"><a :href="dataList.page_resource.links.balance">查看{{dataList.filed_name.balance_name}}</a></div>
     </div>
   </section>
   <JfkSupport v-once></JfkSupport>

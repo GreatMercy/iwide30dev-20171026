@@ -12,13 +12,21 @@
       }
 
       &__start {
-        background-image: background-image(/refund_detail/start.png, theme);
-        background-size: px2rem(20) px2rem(20);
+        i {
+          width: 8px;
+          height: 8px;
+          border: 2px solid #6a5d45;
+          border-radius: 100%;
+        }
       }
 
       &__default {
-        background-image: background-image(/refund_detail/step.png, theme);
-        background-size: px2rem(12) px2rem(12);
+        i {
+          width: px2rem(12);
+          height: px2rem(12);
+          background-color: var(--font-color-light-silver);
+          border-radius: 100%;
+        }
 
         &.refund-detail-step__left {
           &::before {
@@ -35,8 +43,13 @@
       }
 
       &__finish {
-        background-image: background-image(/refund_detail/finish.png, theme);
-        background-size: px2rem(56) px2rem(56);
+        i {
+          width: px2rem(12);
+          height: px2rem(12);
+          background-color: #ad9565;
+          border-radius: 100%;
+          box-shadow: 0 0 10px #ad9565;
+        }
 
         &.refund-detail-step__left {
           &::before {
@@ -53,8 +66,14 @@
       }
 
       &__end {
-        background-image: background-image(/refund_detail/end.png, theme);
-        background-size: px2rem(68) px2rem(68);
+        i {
+          width: px2rem(30);
+          height: px2rem(30);
+          background-image: background-image(/refund_detail/end.png, theme);
+          box-shadow: 0 0 10px #ad9565;
+          border-radius: 100%;
+          background-size: contain;
+        }
         &.refund-detail-step__left {
           &::before {
             left: px2rem(-16);

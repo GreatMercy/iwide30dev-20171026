@@ -4,14 +4,17 @@
     <div class="jfk-pages__theme"></div>
 
     <!-- tab 切换-->
-    <ul class="order-center-tab jfk-flex is-align-middle jfk-pl-30 jfk-pr-30">
-      <li class="order-center-tab__item font-size--32 jfk-ta-c"
-          v-for="(item, index) in tabsItems.list"
-          :class="{'order-center-tab__active' : tabsItems.selected === item.menu_type}"
-          @click="changeTab(item.menu_type)">
-        <i class="jfk-d-ib jfk-font icon-user_icon_Polite_nor" v-if="item.icon"></i><span v-html="item.text"></span>
-      </li>
-    </ul>
+    <div class="tabs">
+      <ul class="order-center-tab jfk-flex is-align-middle jfk-pl-30 jfk-pr-30">
+        <li class="order-center-tab__item font-size--32 jfk-ta-c"
+            v-for="(item, index) in tabsItems.list"
+            :class="{'order-center-tab__active' : tabsItems.selected === item.menu_type}"
+            @click="changeTab(item.menu_type)">
+          <i class="jfk-d-ib jfk-font icon-user_icon_Polite_nor" v-if="item.icon"></i><span v-html="item.text"></span>
+        </li>
+      </ul>
+      <div class="mask"></div>
+    </div>
     <!-- tab 切换-->
 
     <!-- 加载数据 -->
@@ -50,18 +53,14 @@
             <div class="order-list__button jfk-ta-r">
               <button class="jfk-button font-size--24 jfk-button--primary order-list__delete"
                       @click="orderDelete(item.order_id,index)">
-              <span class="jfk-button__text">
-                <i class="jfk-font jfk-button__text-item icon-font_zh_shan_qkbys"></i>
-                <i class="jfk-font jfk-button__text-item icon-font_zh_chu_qkbys"></i>
+              <span>
+                删除
               </span>
               </button>
               <button class="jfk-button jfk-button--primary  font-size--30 is-plain"
                       @click="locationHref(item.order_product_link)">
-              <span class="jfk-button__text">
-                <i class="jfk-font jfk-button__text-item icon-font_zh_zai__qkbys"></i>
-                <i class="jfk-font jfk-button__text-item icon-font_zh_ci_qkbys"></i>
-                <i class="jfk-font jfk-button__text-item icon-font_zh_gou_qkbys"></i>
-                <i class="jfk-font jfk-button__text-item icon-font_zh_mai_qkbys"></i>
+              <span>
+                再次购买
               </span>
               </button>
             </div>
@@ -95,11 +94,8 @@
             <div class="order-list__button jfk-ta-r">
               <button class="jfk-button jfk-button--primary  font-size--30 is-plain"
                       @click="locationHref(item.order_product_link)">
-              <span class="jfk-button__text">
-                <i class="jfk-font jfk-button__text-item icon-font_zh_zai__qkbys"></i>
-                <i class="jfk-font jfk-button__text-item icon-font_zh_ci_qkbys"></i>
-                <i class="jfk-font jfk-button__text-item icon-font_zh_gou_qkbys"></i>
-                <i class="jfk-font jfk-button__text-item icon-font_zh_mai_qkbys"></i>
+              <span>
+                再次购买
               </span>
               </button>
             </div>
@@ -136,11 +132,8 @@
                 <!-- 如果卷码还有可以使用 -->
                 <button class="jfk-button jfk-button--primary  font-size--30"
                         @click="locationHref(item.order_detail_link)">
-                    <span class="jfk-button__text">
-                      <i class="jfk-font jfk-button__text-item icon-font_zh_li_qkbys"></i>
-                      <i class="jfk-font jfk-button__text-item icon-font_zh_ji_qkbys"></i>
-                      <i class="jfk-font jfk-button__text-item icon-font_zh_shi_qkbys"></i>
-                      <i class="jfk-font jfk-button__text-item icon-font_zh_yong_qkbys"></i>
+                    <span>
+                      立即使用
                     </span>
                 </button>
               </template>
@@ -149,11 +142,8 @@
                 <!-- 如果卷码已全部使用完 -->
                 <button class="jfk-button jfk-button--primary  font-size--30"
                         @click="locationHref(item.order_detail_link)">
-                    <span class="jfk-button__text">
-                      <i class="jfk-font jfk-button__text-item icon-font_zh_li_qkbys"></i>
-                      <i class="jfk-font jfk-button__text-item icon-font_zh_ji_qkbys"></i>
-                      <i class="jfk-font jfk-button__text-item icon-font_zh_cha_qkbys"></i>
-                      <i class="jfk-font jfk-button__text-item icon-font_zh_kan_qkbys"></i>
+                    <span>
+                      立即查看
                     </span>
                 </button>
               </template>
@@ -188,18 +178,14 @@
             <div class="order-list__button jfk-ta-r">
               <button class="jfk-button font-size--24 jfk-button--primary order-list__delete"
                       @click="orderDelete(item.order_id,index)">
-              <span class="jfk-button__text">
-                <i class="jfk-font jfk-button__text-item icon-font_zh_shan_qkbys"></i>
-                <i class="jfk-font jfk-button__text-item icon-font_zh_chu_qkbys"></i>
+              <span>
+                删除
               </span>
               </button>
               <button class="jfk-button jfk-button--primary  font-size--30 is-plain"
                       @click="locationHref(item.order_product_link)">
-              <span class="jfk-button__text">
-                <i class="jfk-font jfk-button__text-item icon-font_zh_zai__qkbys"></i>
-                <i class="jfk-font jfk-button__text-item icon-font_zh_ci_qkbys"></i>
-                <i class="jfk-font jfk-button__text-item icon-font_zh_gou_qkbys"></i>
-                <i class="jfk-font jfk-button__text-item icon-font_zh_mai_qkbys"></i>
+              <span>
+               再次购买
               </span>
               </button>
             </div>
@@ -216,8 +202,7 @@
             <div class="jfk-flex is-align-middle order-list__order-info">
               <div class="font-size--28 order-list__order-id" v-html="'赠送编号：' + item.gift_id"></div>
               <div class="font-size--30 jfk-ta-r order-list__status"><i
-                class="jfk-font icon-user_icon_Polite_nor"></i>
-                <span>收礼成功</span>
+                class="jfk-font icon-user_icon_Polite_nor"></i><span>收礼成功</span>
               </div>
             </div>
 
@@ -236,11 +221,8 @@
           <div v-if="item.consume_status === 1 " class="order-list__button jfk-ta-r">
             <button class="jfk-button jfk-button--primary  font-size--30 is-plain"
                     @click="locationHref(item.detail_url)">
-                  <span class="jfk-button__text">
-                    <i class="jfk-font jfk-button__text-item icon-font_zh_dian_qkbys"></i>
-                    <i class="jfk-font jfk-button__text-item icon-font_zh_ji__qkbys"></i>
-                    <i class="jfk-font jfk-button__text-item icon-font_zh_shi_qkbys"></i>
-                    <i class="jfk-font jfk-button__text-item icon-font_zh_yong_qkbys"></i>
+                  <span>
+                    点击查看
                   </span>
             </button>
           </div>
@@ -249,19 +231,15 @@
 
             <button class="jfk-button font-size--24 jfk-button--primary order-list__delete"
                     @click="giftDelete(item.gift_id, index)">
-                  <span class="jfk-button__text">
-                    <i class="jfk-font jfk-button__text-item icon-font_zh_shan_qkbys"></i>
-                    <i class="jfk-font jfk-button__text-item icon-font_zh_chu_qkbys"></i>
+                  <span>
+                   删除
                   </span>
             </button>
 
             <button class="jfk-button jfk-button--primary  font-size--30 is-plain"
                     @click="locationHref(item.detail_url)">
-                  <span class="jfk-button__text">
-                    <i class="jfk-font jfk-button__text-item icon-font_zh_li_qkbys"></i>
-                    <i class="jfk-font jfk-button__text-item icon-font_zh_ji_qkbys"></i>
-                    <i class="jfk-font jfk-button__text-item icon-font_zh_cha_qkbys"></i>
-                    <i class="jfk-font jfk-button__text-item icon-font_zh_kan_qkbys"></i>
+                  <span>
+                   立即查看
                   </span>
             </button>
           </div>
@@ -269,7 +247,7 @@
       </li>
     </ul>
 
-    <div class="order-list__loading font-size--24 jfk-ta-c" v-if="disableLoadList">
+    <div class="order-list__loading font-size--24 jfk-ta-c" v-if="loading">
       <span class="jfk-loading__triple-bounce color-golden font-size--24">
         <i class="jfk-loading__triple-bounce-item"></i>
         <i class="jfk-loading__triple-bounce-item"></i>
@@ -279,7 +257,7 @@
 
     <jfk-support v-if="orderList.length > 0"></jfk-support>
 
-    <template v-if="disableLoadList === false && orderList.length === 0">
+    <template v-if="loading === false && orderList.length === 0">
       <div class="jfk-ta-c order-center__null">
         <div class="order-center__null-content">
           <div class="jfk-font icon-blankpage_icon_noorder_bg"></div>
@@ -303,14 +281,16 @@
     methods: {
       // 切换分类
       changeTab (item) {
+        window.document.documentElement.scrollTop = window.document.body.scrollTop = 0
         this.tabsItems['selected'] = item // 选中的选项
         this.operation = 'tab'
+        this.disableLoadList = false
         this.orderList = []
         this.getOrderData()
       },
       // 加载更多
       loadMore () {
-        this.disableLoadList = true
+        this.disableLoadList = false
         this.getOrderData()
       },
       // 设置新的数据
@@ -327,6 +307,7 @@
             current['more'] = false
             this.disableLoadList = false
           } else {
+            this.disableLoadList = false
             const link = res['web_data']['page_resource']['link']
             for (let i = 0; i < res['web_data']['products'].length; i++) {
               let that = res['web_data']['products'][i]
@@ -339,42 +320,51 @@
                 that.code.use_num = parseInt(that.code.use_num)
               }
             }
-            this.disableLoadList = false
           }
         }
-
         this.orderList = current['data']
         // 增加页数
         this.$nextTick(() => {
+          this.disableLoadList = false
           if (current['more']) {
-            // this.toast.close()
-            current['current'] += 1 // 页数增加
+            current['current'] = current['current'] + 1 // 页数增加
           }
         })
       },
       // 得到需要渲染的数据
       getRenderData () {
         const current = this.cacheData[this.tabsItems.selected]
-        this.disableLoadList = current['more']
+        this.disableLoadList = false
         // 如果没有更多了，停止加载数据
         if (current['more'] === false) {
           return false
         }
         // 判断是否选择了礼物
         if (parseInt(current['type']) === 4) {
+          this.loading = true
           getPresentsMineList().then((res) => {
             this.setData(res)
+            this.loading = false
+          }).catch(() => {
+            this.loading = false
           })
         } else {
-          let parameter = {
-            page: current['current'],
-            page_size: current['pageSize'],
-            type: current['type']
-          }
-          // 请求订单列表
-          getOrderList(parameter).then((res) => {
-            this.setData(res)
-          })
+          clearTimeout(this.timer)
+          this.timer = setTimeout(() => {
+            let parameter = {
+              page: current['current'],
+              page_size: current['pageSize'],
+              type: current['type']
+            }
+            this.loading = true
+            // 请求订单列表
+            getOrderList(parameter).then((res) => {
+              this.setData(res)
+              this.loading = true
+            }).catch(() => {
+              this.loading = false
+            })
+          }, 200)
         }
       },
       // 获取请求的数据
@@ -386,7 +376,9 @@
           this.getRenderData()
         } else if (this.operation === 'tab') {
           this.disableLoadList = false
-          this.operation = 'touch'
+          this.$nextTick(() => {
+            this.operation = 'touch'
+          })
           if (current['more']) {
             if (current['data'].length === 0) {
               this.getRenderData()
@@ -453,6 +445,7 @@
     data () {
       return {
         operation: 'touch',
+        timer: null,
         // tab 列表
         tabsItems: {
           selected: 1, // 当前选中的id
@@ -473,6 +466,7 @@
         },
         disableLoadList: false,
         orderList: [],
+        loading: false,
         cacheData: {
           '1': {
             type: 1, // 订单类型

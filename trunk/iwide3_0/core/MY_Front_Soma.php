@@ -94,7 +94,7 @@ class MY_Front_Soma extends MY_Front
      * 分销特殊处理公众号  a490782373
      * @var array
      */
-    protected $idistributInterId = ['a450089706'];
+    protected $idistributInterId = [''];
 
 
     //不显示退款
@@ -117,9 +117,12 @@ class MY_Front_Soma extends MY_Front
      * @var string
      */
     public $theme = 'default';
+    //白版、黑版
+    public $version = 1;
     public $statis_code = '';
-
     public $sign_update_code = '';
+    //商城读取vue目录
+    public $path = 'SOMA';
 
     /**
      * 例如，雅斯特酒店不叫储值，叫雅币
@@ -133,6 +136,11 @@ class MY_Front_Soma extends MY_Front
      * @var array
      */
     public $public_info = [];
+
+    /**
+     * @var array 新版皮肤控制器列表
+     */
+    protected $idefaultControllers = ['gift_pack'];
 
     /**
      * MY_Front_Soma constructor.
@@ -150,14 +158,24 @@ class MY_Front_Soma extends MY_Front
         unset($this->public);
 
         //theme
-        $this->load->model('soma/Theme_config_model');
-        $themeConfig = $this->Theme_config_model->get_using_theme($this->inter_id);
-        if ($themeConfig) {
-            $this->themeConfig = $themeConfig;
-            $this->theme = $themeConfig['theme_path'];
-
-            //把公众号配置的特殊信息放入配置
-            $this->statis_code = $this->_get_statis_code($this->inter_id, $themeConfig);
+        if(in_array($this->controller, $this->idefaultControllers)){
+            // 专用idefault新版皮肤
+            $this->theme = 'idefault';
+        }else{
+            $this->load->model('soma/Theme_config_model');
+            $themeConfig = $this->Theme_config_model->get_using_theme($this->inter_id);
+            if ($themeConfig) {
+                $this->themeConfig = $themeConfig;
+                $this->theme = $themeConfig['theme_path'];
+                if(isset($themeConfig['theme_id'])){
+                    $themeConfigInfo = $this->Theme_config_model->get(['theme_id'], [$themeConfig['theme_id']]);
+                    if($themeConfigInfo){
+                        $this->version = $themeConfigInfo[0]['version'];
+                    }
+                }
+                //把公众号配置的特殊信息放入配置
+                $this->statis_code = $this->_get_statis_code($this->inter_id, $themeConfig);
+            }
         }
 
         if (ENVIRONMENT != 'production') {
@@ -176,10 +194,13 @@ class MY_Front_Soma extends MY_Front
 
         //新旧主题的逻辑分离
         if ($this->isNewTheme()) {
-
             $this->load->model('soma/shard_config_model', 'model_shard_config');
             $this->db_shard_config = $this->model_shard_config->build_shard_config($this->inter_id);
-
+            //雅高定制版本商城
+            if($this->inter_id == 'a502245149'){
+                $this->version = 2;
+                $this->path = 'SOMAACCOR';
+            }
             $this->saveQueryParams();
             $this->initViewData();
 
@@ -262,17 +283,6 @@ EOF;
         }
     }
 
-    public function url_set_value($url, $key, $value)
-    {
-        $a = explode('?', $url);
-        $url_f = $a[0];
-        $query = $a[1];
-        parse_str($query, $arr);
-        $arr[$key] = $value;
-        return $url_f.'?'.http_build_query($arr);
-    }
-
-
 
     /**
      *
@@ -334,7 +344,6 @@ EOF;
             $this->session->set_tempdata('fans_saler');
         }
 
-        $ttl = 3600;
 
         //渠道来源
         $channel = $this->input->get('channel', null, 0);
@@ -365,16 +374,16 @@ EOF;
             $this->session->set_tempdata('rel_res', $rel_res, $ttl);
         }
 
-        //css：[默认：黑版、1：白版]
-        $style = $this->input->get('style', null, '');
-        if($style){
-            $this->session->set_tempdata('style', $style, $ttl);
+        //tkid
+        $tkid = $this->input->get('tkid', null, '');
+        if($tkid){
+            $this->session->set_tempdata('tkid', $tkid, $ttl);
         }
 
-        //布局：[默认、1]
-        $layout = $this->input->get('layout', null, '');
-        if($layout){
-            $this->session->set_tempdata('layout', $style, $ttl);
+        //brandname
+        $brandname = $this->input->get('brandname', null, '');
+        if($brandname){
+            $this->session->set_tempdata('brandname', $brandname, $ttl);
         }
     }
 
@@ -1437,11 +1446,11 @@ var _hmt = _hmt || [];
             $datas['statistics_js'] =  $this->statis_code."\n";
         }
 
-        $this->footerDatas = $datas;
+        $datas['version'] = $this->version;
+        $datas['path'] = $this->path;
         $datas['title'] = isset($this->headerDatas['title']) ? $this->headerDatas['title'] : '商城';
-        $datas['style'] = $this->session->tempdata('style');
-        $datas['layout'] = $this->session->tempdata('layout');
         $this->headerDatas = $datas;
+        $this->footerDatas = $datas;
     }
 
     /**

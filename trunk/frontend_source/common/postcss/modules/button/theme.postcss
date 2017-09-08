@@ -2,6 +2,7 @@
   border-radius: px2rem(var(--button-border-radius));
   height: px2rem(var(--button-base-height));
   line-height: px2rem(var(--button-base-height) - 4);
+  position: relative;
   &--default {
     @mixin button default;
     &:disabled,&.is-disabled {
@@ -13,6 +14,10 @@
     &:disabled,&.is-disabled {
       @mixin button primary, '', true
     }
+  }
+  &--suspension {
+    @mixin button suspension;
+    border-radius: 0;
   }
   &--ghost {
     @mixin button ghost;
@@ -31,6 +36,11 @@
     &:disabled,&.is-disabled {
       @mixin button primary, true, true
     }
+  }
+  &--primary.is-special {
+    background-color: var(--button-primary-special-fill-color);
+    color: var(--button-primary-special-color);
+    border-color: var(--button-primary-special-border);
   }
   &--higher {
     height: px2rem(var(--button-higher-height));

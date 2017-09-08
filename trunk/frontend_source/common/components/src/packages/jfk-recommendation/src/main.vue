@@ -18,7 +18,7 @@
           <div class="info-box">
           <h5 class="title font-color-silver-common font-size--28" v-html="item._name"></h5>
           <p class="price" :title="item.type" :class="{'is-integral': item._integral}">
-            <span class="jfk-price color-golden font-size--38">
+            <span class="jfk-price color-golden-price font-size--38">
               <i class="jfk-font-number jfk-price__currency" v-if="!item._integral">￥</i>
               <i class="jfk-font-number jfk-price__number">{{item._pricePackage}}</i>
             </span>
@@ -52,12 +52,13 @@
       let that = this
       let num = 3 - that.items.length
       if (num > 0) {
-        let i = 0
-        while (i < num) {
-          that.items.push({
-            _isEmpty: true
+        that.items.push({
+          _isEmpty: true
+        })
+        if (num === 2) {
+          this.recommendationSwiperOptions = Object.assign({}, this.recommendationSwiperOptions, {
+            slidesPerView: 2
           })
-          i++
         }
       }
       _lists = that.items.map(function (item, index) {
@@ -66,6 +67,7 @@
         }
         return that.formatProductInfoInner(item, index)
       })
+      console.log(_lists)
       that.lists = _lists
     },
     methods: {

@@ -183,7 +183,7 @@
               type: 'success'
             })
           }).catch((err) => {
-            if (err.status === '1012') {
+            if (err.status === 1012) {
               this.tableData[this.listIndex].refund_amount = err.data.amount
             }
             this.sendAjax = false

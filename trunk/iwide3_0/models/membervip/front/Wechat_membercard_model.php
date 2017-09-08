@@ -529,7 +529,12 @@ class Wechat_membercard_model extends MY_Model_Member {
             if(!isset($cardConfig['custom_field'.$i]) || ( empty($cardConfig['custom_field'.$i]) || empty($cardConfig['custom_field'.$i]['name']) )) continue;
             switch($cardConfig['custom_field'.$i]['name_type']){
                 case "FIELD_NAME_TYPE_LEVEL":  //等级
-                    $updateUserInfo['custom_field_value'.$i] = $member_info['lvl_name'];
+
+                    if (preg_match("/[\x7f-\xff]/", $member_info['lvl_name']) && strlen($member_info['lvl_name']) > 12) {
+                        $updateUserInfo['custom_field_value'.$i] = '查看';
+                    }else{
+                        $updateUserInfo['custom_field_value'.$i] = $member_info['lvl_name'];
+                    }
                     break;
                 case "FIELD_NAME_TYPE_COUPON":  //优惠券
                     $updateUserInfo['custom_field_value'.$i] = $member_info['card_count'];

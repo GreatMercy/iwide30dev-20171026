@@ -37,6 +37,14 @@
       li{
         border: 1px solid #bfbfbf;
       }
+      li.active{
+        &::before{
+          color: var(--color-golden);
+        }
+        &::after{
+          color: #fff;
+        }
+      }
     }
   }
 

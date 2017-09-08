@@ -34,7 +34,7 @@
       </div>
     </div>
     <div class="recommendation jfk-pl-30" v-if="recommendations.length">
-      <p class="font-size--24 font-color-light-gray tip">其他用户还看了</p>
+      <p class="font-size--24 font-color-light-gray-common tip">其他用户还看了</p>
       <div class="recommendations-list">
         <jfk-recommendation :items="recommendations" :linkPrefix="detailUrl" :emptyLink="indexUrl"></jfk-recommendation>
       </div>

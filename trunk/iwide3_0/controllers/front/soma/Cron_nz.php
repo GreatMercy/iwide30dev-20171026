@@ -1604,4 +1604,184 @@ class Cron_nz extends MY_Controller
         }
         echo 'success';
     }
+    
+    public function qdhsl20170818()
+    {
+        // 1000331591
+        $inter_id = 'a490782373';
+        $template_id = 'xDpGc91llgjAZPxOssP4BkWP1RJBYgBhoVtY8igRehw';
+        $file = $this->_basic_path . 'qdhsl20170818.csv';
+
+        $data['template_id'] = $template_id;
+        $data['url'] = 'http://1.njt3s.com/index.php/soma/package/package_detail?pid=150812&id=a490782373';
+        $data['topcolor'] = '#000000';
+        $subdata['first'] = array(
+            'value' => '本季馅饼侠活动仅剩200余名额！错过本次再等一年！',
+            'color' => '#000000'
+        );
+        $subdata['keyword1'] = array(
+            'value' => '红树林度假世界',
+            'color' => '#000000'
+        );
+        $subdata['keyword2'] = array(
+            'value' => '',
+            'color' => '#000000'
+        );
+        $subdata['keyword3'] = array(
+            'value' => '',
+            'color' => '#000000'
+        );
+        $subdata['keyword4'] = array(
+            'value' => '5000',
+            'color' => '#000000'
+        );
+        $subdata['keyword5'] = array(
+            'value' => '待支付',
+            'color' => '#000000'
+        );
+        
+        $subdata['remark'] = array(
+            'value' => '【终极招募令】第三季馅饼侠活动已成功招募9800人，余量不足200，错过就是1年，速来！点击模版消息进入申请通道→',
+            'color' => '#000000'
+        );
+        $data['data'] = $subdata;
+
+        $openids = $this->get_target_openids_from_csv($inter_id, $file);
+
+        $this->load->model('soma/Message_wxtemp_template_model', 't_model');
+        $base_key = 'Soma_cron_nz:' . date('Y-m-d') . ':' . __FUNCTION__ . ':';
+        foreach ($openids as $openid) {
+            $redis_key = $base_key . $openid;
+            if($this->_redis->exists($redis_key))
+            {
+                continue;
+            }
+            $data['touser'] = $openid;
+            $res = $this->t_model->send_template(json_encode($data), $inter_id);
+            $this->_redis->set($redis_key, json_encode($res));
+        }
+        echo 'success';
+    }
+ /**
+     * Wuqd 2017-09-01
+     * 手动发送微信模板消息
+     * 武汉泛海喜来登
+     */
+    public function fhxld_0901()
+    {
+        // 1000331591//
+        $inter_id = 'a499844461';
+        $template_id = 'qbavjDfEm8CaZeNnpuBBh4Mteln67-nZRotULCa9VDc';
+        $file = $this->_basic_path . 'fhxld_0901.csv';
+
+        $data['template_id'] = $template_id;
+        $data['url'] = 'http://hotels.hfmc99.com/index.php/soma/package/index?id=a499844461';
+        $data['topcolor'] = '#000000';
+        $subdata['first'] = array(
+            'value' => '武汉汉口泛海喜来登大酒店7.20大促商品有效日期到期提醒',
+            'color' => '#000000'
+        );
+        $subdata['keyword1'] = array(
+            'value' => '请在“武汉泛海喜来登大酒店”公众号→“我”→“订单”查询产品到期日期，逾期无效',
+            'color' => '#000000'
+        );
+        $subdata['keyword2'] = array(
+            'value' => '具体到期时间以商品信息为准',
+            'color' => '#000000'
+        );
+        $subdata['remark'] = array(
+            'value' => '温馨提醒：请于产品有效期内使用商品，逾期无效',
+            'color' => '#000000'
+        );
+        $data['data'] = $subdata;
+
+        $openids = $this->get_target_openids_from_csv($inter_id, $file);
+
+        $this->load->model('soma/Message_wxtemp_template_model', 't_model');
+        $base_key = 'Soma_cron_nz:' . date('Y-m-d') . ':' . __FUNCTION__ . ':';
+        foreach ($openids as $openid) {
+            $redis_key = $base_key . $openid;
+            if($this->_redis->exists($redis_key))
+            {
+                continue;
+            }
+            $data['touser'] = $openid;
+            $res = $this->t_model->send_template(json_encode($data), $inter_id);
+            $this->_redis->set($redis_key, json_encode($res));
+        }
+        echo 'success';
+    }
+    
+    public function testcsv(){
+        $file = APPPATH . '..' . DS . 'www_admin' . DS . 'public' . DS . 'import' . DS . 'bgy_reward_hotels.csv';
+        $csv = fopen($file, 'r');
+        $csv_data = array(); 
+        $n = 0; 
+        while ($data = fgetcsv($csv)) { 
+            $num = count($data); 
+            for ($i = 0; $i < $num; $i++) { 
+                $csv_data[$n][$i] = mb_convert_encoding($data[$i], 'utf-8', 'gbk');//$data[$i]; 
+            } 
+            $n++; 
+        }
+
+        $hotels = [];
+        foreach ($csv_data as $row) {
+            $hotels[] = $row[0];
+        }
+        var_dump($hotels);
+    }
+
+
+    /**
+     * Wuqd 2017-09-08
+     * 手动发送微信模板消息
+     * 南昌力高皇冠假日酒店
+     */
+    public function lghgjr_0908()
+    {
+        // 1000331591//
+        $inter_id = 'a501733480';
+        $template_id = 'swxh6IRg24ET70J-un2k0o74MU6yMPX2zhg-ZICZ958';
+        $file = $this->_basic_path . 'lghgjr_0908.csv';
+
+        $data['template_id'] = $template_id;
+        $data['url'] = 'http://assist.iwide.cn/index.php/soma/order/my_order_list?id=a501733480';
+        $data['topcolor'] = '#000000';
+        $subdata['first'] = array(
+            'value' => '您的券即将到期',
+            'color' => '#000000'
+        );
+        $subdata['keyword1'] = array(
+            'value' => '',
+            'color' => '#000000'
+        );
+        $subdata['keyword2'] = array(
+            'value' => '',
+            'color' => '#000000'
+        );
+        $subdata['remark'] = array(
+            'value' => '点击立即使用',
+            'color' => '#000000'
+        );
+        $data['data'] = $subdata;
+
+        $openids = $this->get_target_openids_from_csv($inter_id, $file);
+        $this->load->model('soma/Message_wxtemp_template_model', 't_model');
+        $base_key = 'Soma_cron_nz:' . date('Y-m-d') . ':' . __FUNCTION__ . ':';
+        foreach ($openids as $openid) {
+            $redis_key = $base_key . $openid;
+            if($this->_redis->exists($redis_key))
+            {
+                continue;
+            }
+            $data['touser'] = $openid;
+            $res = $this->t_model->send_template(json_encode($data), $inter_id);
+            $this->_redis->set($redis_key, json_encode($res));
+        }
+        echo 'success';
+    }
+
+
+
 }

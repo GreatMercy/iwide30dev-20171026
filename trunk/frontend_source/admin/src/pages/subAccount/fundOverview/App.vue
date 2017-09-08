@@ -3,7 +3,7 @@
       <el-form ref="search"  label-width="120px">
         <el-row :gutter="20">
           <el-col :span="10">
-            <el-form-item label="结算时间">
+            <el-form-item label="筛选时间">
               <el-col :span="11">
                 <el-form-item>
                   <el-date-picker type="date" placeholder="选择日期"  style="width: 100%;" v-model="startTime"></el-date-picker>
@@ -156,7 +156,7 @@
   export default {
     data () {
       return {
-        startTime: '',
+        startTime: new Date(),
         endTime: new Date(),
         tableData: [],
         capitalOverview: {},
@@ -175,8 +175,7 @@
       getPublics().then((publics) => {
         this.pulbic = publics.data
       })
-      that.getCapitalOverviewFunc()
-      that.getCapitalListFunc()
+      that.filterBankAccount()
     },
     methods: {
       handleSelectPublic () {

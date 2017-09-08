@@ -25,7 +25,7 @@
           <div class="booking-coupon-list__content jfk-flex is-align-middle">
             <span class="font-size--28 booking-coupon-list__left">劵<i></i>码</span>
             <div class="font-size--32 booking-coupon-list__right">
-              <jfk-text-split :text="code" :split="3"></jfk-text-split>
+              <jfk-text-split :text="code" :split="4"></jfk-text-split>
             </div>
           </div>
         </div>

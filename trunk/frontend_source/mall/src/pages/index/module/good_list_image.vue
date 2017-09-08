@@ -16,7 +16,7 @@
             <div class="jfk-fl-l product-info--left">
               <h3 class="product-title font-size--32 font-color-dark-white" v-once>{{product.name}}</h3>
               <div class="product-price"  v-if="product.price_market">
-                <span class="jfk-price product-price-package color-golden font-size--54" v-html="pricePackage" v-once></span>
+                <span class="jfk-price product-price-package color-golden-price font-size--54" v-html="pricePackage" v-once></span>
                 <span class="jfk-price__original product-price-market font-size--24 font-color-extra-light-gray" :class="{'is-integral': product.tag === 7}" v-once>{{priceMarket}}</span>
                 <span class="font-size--24 goods-number font-color-light-gray" v-html="productNumber"></span>
               </div>

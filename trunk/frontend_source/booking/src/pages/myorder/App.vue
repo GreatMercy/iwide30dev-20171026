@@ -8,7 +8,7 @@
         <!--<div @click="toLocationHref('/order_detail?oid='+parseInt(item.id))">-->
         <!--线上环境-->
         <div @click="toLocationHref(item.ORDERDETAIL)">
-          <orderStatus v-bind:orderItem="item"/>
+          <orderStatus :orderItem="item"/>
           <template v-if="item.status === '9' || item.status === '0' || item.status === '1' || item.status_des === '待入住' ||
           item.status ==='2'">
             <div class="title font-size--38 active">
@@ -44,9 +44,9 @@
               <i class="jfk-font-number jfk-price__number font-size--38">{{item.price}}</i>
             </div>
           </template>
-          <orderTime v-bind:item="item"/>
+          <orderTime :item="item"/>
         </div>
-        <orderControl v-bind:item="item"/>
+        <orderControl :item="item"/>
       </div>
     </div>
   </div>
@@ -62,8 +62,6 @@
       orderStatus,
       orderControl,
       orderTime
-    },
-    beforeCreate () {
     },
     created () {
       this.getOrderList()
@@ -81,7 +79,7 @@
           duration: -1,
           isLoading: true
         })
-        getOrderData({id: this.id, openid: this.openid}).then((res) => {
+        getOrderData().then((res) => {
           loading.close()
           this.orderList = res.web_data.orders
         })

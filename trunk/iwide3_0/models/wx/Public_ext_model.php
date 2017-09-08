@@ -48,11 +48,17 @@ class Public_ext_model extends MY_Model {
     		'domain'=> '域名',
     		'is_multy'=> '酒店数量',
     		'token'=>'token',
+    		'is_authed'=> '第三方授权状态',
+    		'auth_time'=> '授权/取消授权时间',
+    		'auth_code'=> '授权码',
+    		'auth_info'=> '授权方的公众号帐号基本信息',
+    		'auth_expire_time'=>'授权过期时间',
     		'follow_page'=> '推荐图文URL',
     		'statis_code'=> '访问统计代码',
     		'white_domains'=>'白名单',
     		'run_status'=>'运行状态',
-    		'arrearage_money'=>'欠费金额'
+    		'arrearage_money'=>'欠费金额',
+			'stop_service_time'=>'停服时间'
 		);
 	}
 
@@ -72,6 +78,8 @@ class Public_ext_model extends MY_Model {
 		'app_secret',
 		'email',
 		'status',
+		'is_authed',
+		'auth_time',
 	    'run_status'
 		);
 	}
@@ -163,7 +171,8 @@ class Public_ext_model extends MY_Model {
 						// 'form_tips'=> '注意事项',
 						// 'form_hide'=> TRUE,
 						// 'function'=> 'show_price_prefix|￥',
-						'type' => 'text' 
+						'type' => 'combobox',
+						'select'=> array('-1'=>'未认证','0'=>'微信认证','1'=>'新浪微博认证','2'=>'腾讯微博认证','3'=>'已资质认证通过但还未通过名称认证','4'=>'已资质认证通过、还未通过名称认证，但通过了新浪微博认证','5'=>'已资质认证通过、还未通过名称认证，但通过了腾讯微博认证') 
 				) // textarea|text|combobox|number|email|url|price
 ,
 				'alipay_id' => array (
@@ -319,6 +328,46 @@ class Public_ext_model extends MY_Model {
 						'type' => 'textarea',
 				)
 ,
+				'is_authed' => array (
+						'grid_ui' => '',
+						'grid_width' => '10%',
+						'form_hide'=> TRUE,
+						'type' => 'combobox',
+						'select' => array('1'=>'非第三方授权','2'=>'第三方授权')
+				) // textarea|text|combobox|number|email|url|price
+,
+				'auth_time' => array (
+						'grid_ui' => '',
+						'grid_width' => '10%',
+						'form_ui'=> ' disabled ',
+						'form_hide'=> TRUE,
+						'type' => 'text',
+				) // textarea|text|combobox|number|email|url|price
+,
+				'auth_code' => array (
+						'grid_ui' => '',
+						'grid_width' => '10%',
+						'form_ui'=> ' disabled ',
+						'form_hide'=> TRUE,
+						'type' => 'text',
+				)
+,
+				'auth_expire_time' => array (
+						'grid_ui' => '',
+						'grid_width' => '10%',
+						'form_ui'=> ' disabled ',
+						'form_hide'=> TRUE,
+						'type' => 'text'
+				)
+,
+				'auth_info' => array (
+						'grid_ui' => '',
+						'grid_width' => '10%',
+						'form_ui'=> ' disabled ',
+						'form_hide'=> TRUE,
+						'type' => 'text'
+				)
+,
 				'white_domains' => array (
 						'grid_ui' => '',
 						'grid_width' => '10%',
@@ -343,6 +392,17 @@ class Public_ext_model extends MY_Model {
 				) // textarea|text|combobox|number|email|url|price
 ,
 				'arrearage_money' => array (
+						'grid_ui' => '',
+						'grid_width' => '10%',
+						'form_ui'=> ' disabled ',
+						// 'form_default'=> '0',
+						// 'form_tips'=> '注意事项',
+						'form_hide'=> TRUE,
+						// 'function'=> 'show_price_prefix|￥',
+						'type' => 'text',
+				) // textarea|text|combobox|number|email|url|price
+,
+				'stop_service_time' => array (
 						'grid_ui' => '',
 						'grid_width' => '10%',
 						'form_ui'=> ' disabled ',

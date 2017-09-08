@@ -206,6 +206,17 @@ class Publics_model extends CI_Model {
 		return $this->db->delete(self::TAB_PUBIMG) > 0;
 	}
 
+    /**
+     * 前后端分离删除轮播图
+     * @param $post
+     * @return bool
+     * @author daikanwu <daikanwu@jperation.com>
+     */
+    function del_focus_new($post){
+        $this->db->where('id', $post['id']);
+        return $this->db->update(self::TAB_PUBIMG, ['status' => 2]) > 0;
+    }
+
     function update_focus(){
     	
     	$link=$this->input->get('link');
@@ -228,6 +239,43 @@ class Publics_model extends CI_Model {
         $this->db->where(array('inter_id'=>$this->input->get('inter_id'),'id'=>$this->input->get('key')));
         $this->db->update ( self::TAB_PUBIMG, $data );
         return true;
+    }
+
+    /**
+     * 前后端分离更新轮播图
+     * @param $post
+     * @return bool
+     * @author daikanwu <daikanwu@jperation.com>
+     */
+    public function update_focus_new($post)
+    {
+        $link = trim($post['link']);
+        if (empty($post['link'])) {
+            $link = '#';
+        } else {
+            if (strpos($post['link'], 'http://') !== 0 && strpos($post['link'], 'https://') !== 0) {
+                $link = 'http://' . $post['link'];
+            }
+        }
+
+        $data = array(
+            'link' => $link
+        );
+        if (!empty($post['sort'])) {
+            $data['sort'] = $post['sort'];
+        }
+
+        $imgurl = trim($post['image_url']);
+        if (!empty($imgurl)) {
+            $data['image_url'] = $imgurl;
+        }
+        if (!empty($post['id'])) {
+            $this->db->where('id', $post['id']);
+            return $this->db->update(self::TAB_PUBIMG, $data) > 0;
+        } else {
+            $data['inter_id'] = $post['inter_id'];
+            return $this->db->insert(self::TAB_PUBIMG, $data) > 0;
+        }
     }
 	
 	/**

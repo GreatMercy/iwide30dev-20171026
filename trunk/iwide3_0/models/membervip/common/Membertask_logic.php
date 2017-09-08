@@ -164,21 +164,15 @@ class Membertask_logic extends MY_Model_Member {
                         'uu_code'=>md5(uniqid($send_data['card_id'].$item['open_id'].$send_data['member_info_id'])).microtime(true),
                         'module'=>'vip',
                         'scene'=>'优惠券批量发放',
-                        'give_count'=>$send_count
+                        'give_count'=>$send_count,
+                        'receive_repeat'=>$task_info['receive_repeat']
                     );
 
-                    if($task_info['receive_repeat']==1){
-                        unset($card_data['give_count']);
-                    }
-
-                    $result = array();
                     $requestString = http_build_query($card_data);
-                    for ($i = 0; $i < $send_count; $i++){
-                        $result = doCurlPostRequest($card_url,$requestString);
-                        MYLOG::w(@json_encode(array($card_url,$result,$card_data)),'membervip/debug-log/membertask','card_url');
-                    }
+                    $result = doCurlPostRequest($card_url,$requestString);
+                    MYLOG::w(@json_encode(array($card_url,$result,$card_data)),'membervip/debug-log/membertask','card_url');
                     $receive_res = @json_decode($result,true);
-                    if((!isset($receive_res['err']) OR $receive_res['err'] == '0') && !empty($receive_res['data'])){
+                    if((isset($receive_res['err']) && $receive_res['err'] == '0') OR (!isset($receive_res['err']) && !empty($receive_res['data']))){
                         $send_status = 1;
                         $this->send_success_num = $this->send_success_num + 1;
                     }else{
@@ -302,6 +296,8 @@ class Membertask_logic extends MY_Model_Member {
         $msg = '';
         if(!empty($receive_res['msg']) && $receive_res['msg'] != 'ok'){
             $msg = $receive_res['msg'];
+        } elseif (!empty($receive_res['data'])){
+            $msg = 'ok';
         }elseif ($state == 2){
             $msg = '未知错误';
         }

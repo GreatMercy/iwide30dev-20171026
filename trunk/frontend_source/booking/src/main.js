@@ -14,6 +14,7 @@ Vue.use(JfkUi)
 
 import Promise from 'promise-polyfill'
 import '../../common/postcss/fonts/number/style.css'
+import 'swiper/dist/css/swiper.css'
 import '@/assets/css/iconfont.css'
 import pages from './pages/page'
 import '@/styles/postcss/reset.postcss'
@@ -30,8 +31,6 @@ if (process.env.NODE_ENV === 'development') {
       require('@/styles/postcss/theme/dark.postcss')
     }
   })
-} else {
-  require('@/styles/postcss/theme/dark.postcss')
 }
 // import '@/styles/postcss/theme/light.postcss'
 

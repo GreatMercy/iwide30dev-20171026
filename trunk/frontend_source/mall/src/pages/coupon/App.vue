@@ -28,7 +28,7 @@
       <div class="coupon-way__qrcode">
         <p class="font-size--28 coupon-way__name">方式一：向商家出示券码／二维码</p>
         <p class="font-size--34 coupon-way__code jfk-ta-c">
-          <jfk-text-split :text="code" :split="3"></jfk-text-split>
+          <jfk-text-split :text="code" :split="4"></jfk-text-split>
         </p>
 
         <div class="coupon-way__img jfk-image__lazy--preload  jfk-image__lazy--3-3 jfk-image__lazy--background-image"
@@ -46,8 +46,7 @@
   const formatUrlParams = require('jfk-ui/lib/format-urlparams.js')
   let params = formatUrlParams.default(location.href)
   export default {
-    components: {
-    },
+    components: {},
     computed: {
       size () {
         return {

@@ -7,7 +7,7 @@
           <ul class="list" :style="{'max-height': maxHeight + 'px'}">
             <li class="item" v-for="(item, index) in spec.spec_type"
               :key="spec.spec_type_id[index]">
-                <div class="title font-size--24 font-color-light-gray">{{item}}</div>
+                <div class="title font-size--24 font-color-light-gray-common">{{item}}</div>
                 <div class="cont">
                   <div class="spec-item jfk-d-ib color-golden font-size--30 jfk-radio jfk-radio--shape-rect"
                     :class="{
@@ -30,14 +30,14 @@
     </jfk-popup>
     <div class="good-spec__footer" v-show="specVisible">
       <div class="jfk-clearfix">
-        <div class="jfk-fl-l price color-golden jfk-flex is-align-middle">
+        <div class="jfk-fl-l price color-golden-price jfk-flex is-align-middle">
           <div class="cont ">
           <span class="jfk-price__currency font-size--24" v-if="!isIntegral">￥</span>
           <span class="jfk-price__number font-size--48">{{pricePackage}}</span>
           </div>
         </div>
         <div class="jfk-fl-r control">
-          <button :disabled="buttonDisabled" @click="handleSubmitSettingId" class="jfk-button jfk-button--free jfk-button--higher jfk-button--primary font-size--34">立即购买</button>
+          <button :disabled="buttonDisabled" @click="handleSubmitSettingId" class="jfk-button jfk-button--free jfk-button--suspension jfk-button--higher font-size--34">立即购买</button>
         </div>
       </div>
     </div>

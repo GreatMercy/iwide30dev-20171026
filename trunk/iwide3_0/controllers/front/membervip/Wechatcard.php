@@ -1,6 +1,5 @@
 <?php
 class Wechatcard extends MY_Front_Member{
-
 	function index(){
 		$package = $this->getSignPackage();
         $inter_id = $this->input->get('id');

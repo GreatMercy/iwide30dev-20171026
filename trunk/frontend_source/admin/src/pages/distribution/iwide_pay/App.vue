@@ -27,6 +27,11 @@
           <el-col :span="2">
             <el-button type="primary" @click="submitForm()">查  询</el-button>
           </el-col>
+          <el-col :span="2">
+            <a :href="storeState.exportData"> 
+            <el-button >导出数据</el-button>
+            </a>
+          </el-col>          
           </el-row>
         </el-form>
       </el-col>

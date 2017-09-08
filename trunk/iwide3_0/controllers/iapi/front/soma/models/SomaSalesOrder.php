@@ -50,9 +50,15 @@ class SomaSalesOrder
 
     /**
      * @var string $refund_status
-     * @SWG\Property(enum={31, 32, 33}, type="string", description="退款标记, 31: 无退款, 32: 部分退款, 33 全部退款")
+     * @SWG\Property(enum={31, 32, 33}, type="string", description="订单退款状态, 31: 无退款, 32: 部分退款, 33 全部退款")
      */
     public $refund_status;
+
+    /**
+     * @var string $refund_info_status
+     * @SWG\Property(enum={0, 1, 2, 3, 4, 5, 6}, type="string", description="订单退款表实时状态, 0: 无退款, 1: 已申请, 2: 已审核, 3: 已退款, 4: 取消, 5: 挂起, 6: 微信退款中")
+     */
+    public $refund_info_status;
 
     /**
      * @var SomaSalesOrderItem[]

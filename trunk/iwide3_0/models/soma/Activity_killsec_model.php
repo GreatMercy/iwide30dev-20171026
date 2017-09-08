@@ -16,7 +16,7 @@ class Activity_killsec_model extends Activity_model {
     const ORDER_WAIT_TIME= 300;  //秒
     const PAYMENT_WAIT_TIME= 300;  //秒
 
-    const PREVIEW_TIME= 1800;  //活动提前多久生成实例，同时作为活动手动结束的时间限制
+    const PREVIEW_TIME= 600;  //活动提前多久生成实例，同时作为活动手动结束的时间限制
     const END_PREVIEW_TIME = 900;  //活动结束后多久才能重新编辑
     const PRESTART_TIME= 1800; // 提前半个小时释放token
 

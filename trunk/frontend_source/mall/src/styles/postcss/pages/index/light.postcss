@@ -1,5 +1,8 @@
 /* 首页商品列表 */
 .jfk-pages__index {
+  .page__header {
+    background-color: #fff;
+  }
   .categories {
     background-color: #fff;
     .swiper-slide {
@@ -14,7 +17,6 @@
     .category {
       &__item {
         &.is-selected {
-          color:var(--color-golden);
           .category__label {
             @mixin line-down default, default, inside;
           }

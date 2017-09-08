@@ -1,9 +1,9 @@
 .jfk-form {
   .form-item {
     &:before {
-      background-color: #ebebeb;
+      background-color: #e0e0e0;
     }
-    input[type="text"] {
+    input[type="text"], input[type="tel"], textarea {
       &::placeholder {
         color: var(--font-color-light-gray);
       }
@@ -11,7 +11,7 @@
     &__status {
       &.is-error {
         background: #faebeb;
-        border: solid 1px #a81c1c;
+        border: solid 1px #ee3e3e;
         color: #e32c2c;
         .form-item__status-icon {
           color: #ee3e3e;

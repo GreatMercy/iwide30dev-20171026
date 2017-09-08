@@ -17,7 +17,7 @@
           <label>
             <span class="form-item__label  font-color-extra-light-gray">入住券码</span>
             <div class="form-item__body">
-              <jfk-text-split :text="detail.code.code" :split="3" v-if="detail && detail.code"></jfk-text-split>
+              <jfk-text-split :text="detail.code.code" :split="4" v-if="detail && detail.code"></jfk-text-split>
             </div>
           </label>
         </div>
@@ -42,7 +42,7 @@
           <label>
             <span class="form-item__label  font-color-extra-light-gray">联系方式</span>
             <div class="form-item__body">
-              <input type="tel" class="font-color-white" placeholder="请输入入住人手机" v-model="form.phone">
+              <input type="tel" class="font-color-white" placeholder="请输入入住人手机" v-model="form.phone" maxlength="11">
               <div class="form-item__status is-error" v-show="validResult.phone.show"
                    @click="handleHiddenError('phone')">
                 <i class="form-item__status-icon jfk-font icon-msg_icon_error_norma"></i>
@@ -123,6 +123,7 @@
 <script>
   import moment from 'moment'
   const formatUrlParams = require('jfk-ui/lib/format-urlparams.js')
+  import stringLengthToTwo from 'jfk-ui/lib/string-length-to-two.js'
   let params = formatUrlParams.default(location.href)
   import { getHotelInfo, getHotelTime, postHotelBooking } from '@/service/http'
   import validator from 'jfk-ui/lib/validator.js'
@@ -142,12 +143,12 @@
     },
     created () {
       getHotelInfo({
-        'aiid': params['aiid'],
-        'id': params['id'],
-        'hid': params['hid'],
-        'rmid': params['rmid'],
-        'code_id': params['code_id'],
-        'cdid': params['cdid']
+        'aiid': params['aiid'] || '',
+        'id': params['id'] || '',
+        'hid': params['hid'] || '',
+        'rmid': params['rmid'] || '',
+        'code_id': params['code_id'] || '',
+        'cdid': params['cdid'] || ''
       }).then((res) => {
         this.detail = res['web_data']
         const attach = res['web_data']['attach']
@@ -179,6 +180,8 @@
           }],
           phone: [{
             required: true, message: '入住人手机为空'
+          }, {
+            max: 11, length: true, message: '手机号码必须是11位'
           }, {
             type: 'phone', message: '入住人手机号码错误'
           }],
@@ -250,17 +253,16 @@
             isLoading: true
           })
           let postParams = Object.assign({}, this.order_params)
-          console.log(this.form)
           this.toast = this.$jfkToast({
             duration: -1,
             iconClass: 'jfk-loading__snake',
             isLoading: true
           })
-          postParams['post_name'] = this.form.name
-          postParams['post_phone'] = this.form.phone
-          postParams['post_end'] = postParams['post_start'] = moment(this.form.checkInDate).format('YYYY-MM-DD')
+          postParams['post_name'] = this.form.name || ''
+          postParams['post_phone'] = this.form.phone || ''
+          postParams['post_start'] = moment(this.form.checkInDate).format('YYYY-MM-DD')
+          postParams['post_end'] = moment(this.form.checkInDate).add(1, 'days').format('YYYY-MM-DD')
           postHotelBooking(postParams).then((res) => {
-            console.log(res)
             window.location.href = res['web_data']['page_resource']['link']['pay_success_stay']
             this.toast.close()
           }).catch(() => {
@@ -278,11 +280,11 @@
         const next = moment(this.currentDate * 1000).add(1, 'month')
         const after = moment(this.currentDate * 1000).add(2, 'month')
         let baseParams = {
-          'id': params['id'],
-          'oid': params['oid'],
-          'hid': params['hid'],
-          'rmid': params['rmid'],
-          'cdid': params['cdid']
+          'id': params['id'] || '',
+          'oid': params['oid'] || '',
+          'hid': params['hid'] || '',
+          'rmid': params['rmid'] || '',
+          'cdid': params['cdid'] || ''
         }
         let currentParams = Object.assign({}, baseParams)
         currentParams['year'] = current.format('YYYY')
@@ -308,7 +310,10 @@
             defaultValue: null,
             today: null
           }
-          calendarDate['today'] = currentParams['year'] + '-' + currentParams['month'] + '-' + String(parseInt(current.format('Do')))
+          calendarDate['today'] = {
+            'key': currentParams['year'] + '-' + currentParams['month'] + '-' + String(parseInt(current.format('Do'))),
+            'all': currentParams['year'] + '-' + currentParams['month'] + '-' + stringLengthToTwo(String(parseInt(current.format('Do'))))
+          }
           calendarDate['min'] = new Date(currentParams['year'] + '/' + currentParams['month'])
           calendarDate['max'] = new Date(afterParams['year'] + '/' + afterParams['month'])
           calendarDate[currentParams['year'] + '-' + currentParams['month']] = res[0]['web_data']['data']

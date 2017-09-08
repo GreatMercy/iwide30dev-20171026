@@ -94,6 +94,25 @@
         border-radius: px2rem(5);
         margin-top: px2rem(30);
       }
+      li.active {
+        position: relative;
+        &::before{
+          position: absolute;
+          right: 0;
+          top: px2rem(-20);
+          content: '◥';
+          font-size: px2rem(50);
+          width: px2rem(50);
+          height: px2rem(50);
+        }
+        &::after{
+          position: absolute;
+          right: 0;
+          top: px2rem(-30);
+          content: '✓';
+          font-size: px2rem(30);
+        }
+      }
     }
   }
 

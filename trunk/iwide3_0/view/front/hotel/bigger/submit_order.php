@@ -95,7 +95,7 @@
             <div class="flex txt_l mar_b40 bd_bottom" style="padding-bottom:1.6rem;">
                 <div class="color3 h24 flexgrow pad10">
                     <a class="color3" href="javascript:;" id="coupon_show">
-                        <div class="main_color1 h32 mar_b20">优 惠 券 <em class="iconfont">&#xe014;</em></div>
+                        <div class="main_color1 h32 mar_b20" id="coupon_title">优 惠 券 <em class="iconfont">&#xe014;</em></div>
 <!--                        <div class="martop">新用户专享优惠券</div>-->
                         <div id="coupon_i">选择优惠券</div>
                         <div style="height:16px;"> </div>
@@ -103,7 +103,7 @@
                 </div>
                 <div class="main_shadow_wrap"  style="margin:0px 0.7rem"></div>
                 <div class="color3 h24 flexgrow pad10 clearfix mar_l10" style="max-width:50%;" bonus="<?php echo $exchange_max_point;?>" id="bonuspay2">
-                    <div class="main_color1 h32 mar_b20">积分抵用</div>
+                    <div class="main_color1 h32 mar_b20" id="bonus_title">积分抵用</div>
                     <div class="float" style="width: calc(100% - 70px);">
                         <div class="martop multiclip" id='max_use_bonus' style="-webkit-line-clamp: 1;">可用<?php echo $exchange_max_point;?><?php echo $point_name;?></div>
                         <div id="max_exchange_bonus">¥<?php echo $exchange_max_point*$point_consum_rate;?></div>
@@ -149,7 +149,15 @@
                     </div>
                 </div>
             <?php }?>
-
+        <div class="webkitbox input_item bd_bottom" id='consume_code' name='consume_code' <?php if($pay_ways[0]->pay_type!='balance'||$banlance_code==0){?>style="display:none"<?php }?>>
+            <div class="flex between">
+                <span class="block">密</span>
+                <span class="block">码</span>
+            </div>
+            <div>
+                <input type="password" id='consume_pwd' name='consume_pwd'  class="color1 h30" placeholder="请输入支付密码" value="" />
+            </div>
+        </div>
         <div class="webkitbox webkittop color3">
             <div class="iconfont h28 mar_r10">&#xe007;</div>
             <div>
@@ -234,7 +242,7 @@ var room_night_use=0;
 var order_use=0;
 var paytype_counts=0;
 var use_flag='';
-var banlance_code=<?php echo $banlance_code?>;
+var balance_code=<?php echo $banlance_code?>;
 var part_bonus_set={};
 <?php if (isset($point_consum_set)){?>
 part_bonus_set=JSON.parse('<?php echo json_encode($point_consum_set);?>');
@@ -263,7 +271,10 @@ var checkindateStr = '<?php echo date("Y-m-d",strtotime($startdate));?>';
 var checkoutdateStr = '<?php echo date("Y-m-d",strtotime($enddate));?>';
 var todayStr = '<?php echo date("Y-m-d");?>';
 var max_room_nums = '3';
+var no_favour = <?php if(isset($no_favour))echo $no_favour;else echo 0;?>;     //多间房没有优惠
 var packages_price =<?php if(isset($packages_price) && !empty($packages_price))echo intval($packages_price);else echo 0; ?>;
+var check_more_room = false;
+var use_coupon_type = 'no_discount';
 var dateOpt= {
     theme:'ios', //设置显示主题
     mode:'scroller', //设置日期选择方式，这里用滚动
@@ -289,7 +300,8 @@ var timeOpt = {
             price_detail();
             //立减
             str=0;
-            if (pay_favour) str=pay_favour;
+            check_more_room = more_room_favour();
+            if (pay_favour && check_more_room == false ) str=pay_favour;
             $('#list_pay_favour').html(str);
         }
 
@@ -323,8 +335,8 @@ var timeOpt = {
         room_nums_change(_num,rid);
     })
 
-$(".reduce_room").on("click",function(){
-
+    $(".reduce_room").on("click",function(){
+        if( $(".add_room").hasClass("off"))$(".add_room").removeClass("off");
         var _num = Number($room_num.html());
         if(_num <= 1){$(this).addClass("off"); return;}
         _num--;
@@ -335,7 +347,14 @@ $(".reduce_room").on("click",function(){
     });
 
     function room_nums_change(_num,rid){
-
+        check_more_room = more_room_favour();
+        if(check_more_room==true){
+            $('#coupon_title').css({color:"gray"});
+            $('#bonus_title').css({color:"gray"});
+        }else{
+            $('#coupon_title').css({color:"#b2945e"});
+            $('#bonus_title').css({color:"#b2945e"});
+        }
         point_favour = 0;
         if($('#pay_type').val()=='weixin'){
             total_favour = pay_favour;
@@ -367,6 +386,10 @@ $(".reduce_room").on("click",function(){
     }
 
     $(".on_checked").on("click",function(){
+        check_more_room = more_room_favour();
+        if(check_more_room==true && $(this).hasClass('off_checked')){
+            return;
+        }
         if($('#bonuspay2').attr('bonus')<=0)return;
         if($(this).hasClass('off_checked')){
             $('#bonus').val( $('#bonuspay2').attr('bonus'));
@@ -408,7 +431,11 @@ $(".reduce_room").on("click",function(){
             }else{
                 if(coupon_amount>0){
                     if(paytype_counts==undefined||paytype_counts==0){
-                        $('#coupon_i').html('已选￥'+coupon_amount);
+                        if(use_coupon_type=='discount'){
+                            $('#coupon_i').html('已减￥'+coupon_amount);
+                        }else{
+                            $('#coupon_i').html('已选￥'+coupon_amount);
+                        }
                     }
                     else if(paytype_counts==1){
                         $('#coupon_i').html('请重新选择优惠券');
@@ -424,7 +451,7 @@ $(".reduce_room").on("click",function(){
                     $('#coupon_i').html('选择优惠券');
                 $('.usevote').removeClass('disable');
             }
-            if($(this).attr('pay_type')=='balance'&&banlance_code==1){
+            if($(this).attr('pay_type')=='balance'&& balance_code==1){
                 $('#consume_code').show();
             }else{
                 $('#consume_code').hide();
@@ -434,7 +461,10 @@ $(".reduce_room").on("click",function(){
 
             total_favour-=pay_favour*1;
             pay_favour=$(this).attr('pfavour')*1;
-            total_favour+=pay_favour*1;
+            check_more_room = more_room_favour();
+            if(check_more_room == false){
+                total_favour+=pay_favour*1;
+            }
             $('.total_price').html( (parseFloat((real_price-total_favour).toFixed(2))+parseFloat(packages_price)).toFixed(2));
             getBonusSet();
             use_vote();
@@ -444,15 +474,24 @@ $(".reduce_room").on("click",function(){
     })
 
     $("#coupon_show").on("click",function(){
-        toshow($("#serach_whole"))
+        check_more_room = more_room_favour();
+        if(check_more_room == true)return;
+        toshow($("#serach_whole"));
          setheight();
         if( $(".select_coupon_word p").height() < 116) $(".select_coupon_open").remove()
     });
     $("#coupon_sure").on("click",function(){
-        if(coupon_amount>0)
-            $('#coupon_i').html('已选￥'+coupon_amount.toFixed(2));
-        else
+        if(coupon_amount>0){
+            if(use_coupon_type=='discount'){
+                $('#coupon_i').html('已减￥'+coupon_amount.toFixed(2));
+            }else{
+                $('#coupon_i').html('已选￥'+coupon_amount.toFixed(2));
+            }
+        }
+        else{
             $('#coupon_i').html('选择优惠券');
+        }
+
         getBonusSet();
         toclose();
     })
@@ -515,12 +554,17 @@ $(".reduce_room").on("click",function(){
         }
         $('#list_total_coupon_price').html(coupon_amount);
 
+        check_more_room = more_room_favour();
         str=0;
+        if(check_more_room == true){
+            $('#bonus').val('');
+            $("#bonuspay2").attr('bonus','');
+        }
         if ($('#bonus').val()!='') str=$('#bonus').val();
         $('#list_total_bonus_price').html(str+point_name);
         //立减
         str=0;
-        if (pay_favour) str=pay_favour;
+        if (pay_favour && check_more_room == false ) str=pay_favour;
         $('#list_pay_favour').html(str);
 
     }
@@ -561,35 +605,69 @@ $(".reduce_room").on("click",function(){
 
                     temp+='<div class="commodity_rows border_radius layer_bg mar_b30"';
                     if(coupons[n.code]!=undefined){
-                        coupon_amount = coupon_amount + parseFloat(n.reduce_cost);
+                        if(n.coupon_type=='discount'){
+                            use_coupon_type = 'discount';
+                            coupon_amount = real_price - n.reduce_cost*real_price;
 //                        temp+=' class="ischeck"';
-                        if(n.hotel_use_num_type=='room_nights' && bool)
-                            max_room_night_use--;
-                        else if(n.hotel_use_num_type=='order' && bool)
-                            max_order_use--;
-                        else if(!bool)max_coupon_use--;
+                            if(n.hotel_use_num_type=='room_nights' && bool)
+                                max_room_night_use--;
+                            else if(n.hotel_use_num_type=='order' && bool)
+                                max_order_use--;
+                            else if(!bool)max_coupon_use--;
+                        }else{
+                            coupon_amount = coupon_amount + parseFloat(n.reduce_cost);
+//                        temp+=' class="ischeck"';
+                            if(n.hotel_use_num_type=='room_nights' && bool)
+                                max_room_night_use--;
+                            else if(n.hotel_use_num_type=='order' && bool)
+                                max_order_use--;
+                            else if(!bool)max_coupon_use--;
+                        }
                     }
-                    temp+=' code='+n.code+' amount="'+n.reduce_cost+'" card_type="'+n.ci_id+'"';
-                    if(bool)temp+=' max_use_num="'+n.hotel_max_use_num+'" use_num_type="'+n.hotel_use_num_type+'"';
+                    if(n.coupon_type==undefined||n.coupon_type==''||n.coupon_type=='voucher'){
+                        temp+=' code='+n.code+' coupon_type='+ n.coupon_type+' amount="'+n.reduce_cost+'" card_type="'+n.ci_id+'"';
+                        if(bool)temp+=' max_use_num="'+n.hotel_max_use_num+'" use_num_type="'+n.hotel_use_num_type+'"';
+                    }else if(n.coupon_type=='discount'){
+                        temp+=' code='+n.code+' coupon_type='+ n.coupon_type+' amount="'+n.reduce_cost+'" card_type="'+n.ci_id+'"';
+                        if(bool)temp+=' max_use_num="1" use_num_type="order"';
+                    }
                     temp+='><label class="check color3 unlabel" data-bol='+bool+'>';
                     if(coupons[n.code]!=undefined){
                         temp+=  '<input type="checkbox" check="ischeck" checked >';
                     }else{
                         temp +='<input type="checkbox"  check="nocheck" >';
                     }
-                    temp += '<em></em></label><div class="commodity_img_wrap"><div class="gradient_radial_bg select_coupon_bg main_color1"><span class="h40 select_coupon_ico iconfont">&#xFFE5</span>';
-                    temp+='<span rebate="'+n.reduce_cost+ '" class="iconfont select_coupon_money">'+(n.reduce_cost).replace('.00','')+'</span></div><div class="commodity_img_wrap_zhe" style="right: -31%;"></div></div>';
+                    temp += '<em></em></label><div class="commodity_img_wrap"><div class="gradient_radial_bg select_coupon_bg main_color1">';
+                    var reduce_cost=n.reduce_cost.toString();
+                    if(n.coupon_type==undefined||n.coupon_type==''||n.coupon_type=='voucher'){
+                        temp+='<span class="h40 select_coupon_ico iconfont">&#xFFE5</span><span rebate="'+reduce_cost+ '" class="iconfont select_coupon_money">'+reduce_cost.replace('.00','')+'</span></div><div class="commodity_img_wrap_zhe" style="right: -31%;"></div></div>';
+                    }else if(n.coupon_type=='discount'){
+                        temp+='<span rebate="'+reduce_cost+ '" class="iconfont select_coupon_money">'+n.reduce_cost*10+'折</span></div><div class="commodity_img_wrap_zhe" style="right: -31%;"></div></div>';
+                    }
                     temp+='<div class="commodity_img_content"><p class="color1 h32 mar_t60">'+n.title+'</p><p class="color3 h24">指定门店专用</p>';
                     temp+='<p class="color3 h24 mar_t60">';
                     if(bool)temp+='有效期至'+getLocalTime(n.date_info_end_timestamp);
                     else temp+='有效期至'+n.valid_date;
                     temp+='</div></div>';
                 });
-                total_favour = coupon_amount + pay_favour;
-                if(coupon_amount>0){
-                    $('#coupon_i').html('已选￥'+coupon_amount.toFixed(2));
+                check_more_room = more_room_favour();
+                if(check_more_room == false){
+                    total_favour = coupon_amount + pay_favour;
                 }else{
-                    $('#coupon_i').html('选择优惠券');
+                    total_favour = coupon_amount;
+                }
+                if(coupon_amount>0){
+                    if(use_coupon_type=='discount'){
+                        $('#coupon_i').html('已减￥'+coupon_amount.toFixed(2));
+                    }else{
+                        $('#coupon_i').html('已选￥'+coupon_amount.toFixed(2));
+                    }
+                }else{
+                    if(check_more_room == false){
+                        $('#coupon_i').html('选择优惠券');
+                    }else{
+                        $('#coupon_i').html('不可用');
+                    }
                 }
             }
             else{
@@ -701,6 +779,11 @@ $(".reduce_room").on("click",function(){
                     $("#max_use_bonus").html('可用0'+point_name);
                     $("#max_exchange_bonus").html("¥0"+'<input type="hidden" id="bonus" name="bonus" value=""/>');
                 }
+                check_more_room = more_room_favour();
+                if(check_more_room==true){
+                    $("#max_use_bonus").html('不可用');
+                    $("#max_exchange_bonus").html('');
+                }
             });
         }
     }
@@ -752,21 +835,36 @@ function getJsonObjLength(jsonObj) {
 function choose_coupon(obj,bool){
     // return false;
     var temp_obj = $(obj).parent().parent();
+    var coupon_val=$(temp_obj).attr('amount')*1;
+    if($(temp_obj).attr('coupon_type')=='discount'){
+        coupon_val=real_price-coupon_val*real_price;
+        coupon_val=coupon_val.toFixed(2)*1;
+    }
     if ( $(obj).attr('check')=='ischeck'){
         $(obj).attr('check','nocheck');
         if(coupons[$(temp_obj).attr('code')]!=undefined){
             delete(coupons[$(temp_obj).attr('code')]);
             if(getJsonObjLength(coupons)==0)use_flag='';
-            coupon_amount-=$(temp_obj).attr('amount')*1;
-            total_favour-=$(temp_obj).attr('amount')*1;
+            coupon_amount-=coupon_val*1;
+            total_favour-=coupon_val*1;
             if($(temp_obj).attr('use_num_type')=='room_nights' && bool == "true")
                 max_room_night_use++;
             else if($(temp_obj).attr('use_num_type')=='order' && bool == "true")
                 max_order_use++;
             else if(bool=='false')max_coupon_use++;
+
+            if($(temp_obj).attr('coupon_type')=='discount'){
+                use_coupon_type = 'no_discount'
+            }
         }
     }
     else{
+        if(use_coupon_type=='discount'){
+            return;
+        }
+        if(getJsonObjLength(coupons) > 0 && $(temp_obj).attr('coupon_type')=='discount'){
+            return;
+        }
         if(bool == "true"){
             if(!use_flag)
                 use_flag=$(temp_obj).attr('use_num_type');
@@ -787,9 +885,13 @@ function choose_coupon(obj,bool){
             else{ return;}
         }
         $(obj).attr('check','ischeck');
-        coupons[$(temp_obj).attr('code')]=$(temp_obj).attr('amount');
-        coupon_amount+=$(temp_obj).attr('amount')*1;
-        total_favour+=$(temp_obj).attr('amount')*1;
+        coupons[$(temp_obj).attr('code')]=coupon_val;
+        coupon_amount+=coupon_val*1;
+        total_favour+=coupon_val*1;
+
+        if($(temp_obj).attr('coupon_type')=='discount'){
+            use_coupon_type = 'discount';
+        }
     }
     $('.total_price').html( (parseFloat((real_price-total_favour).toFixed(2))+parseFloat(packages_price)).toFixed(2));
     if($(obj).is(':checked')){
@@ -806,6 +908,15 @@ $("body").on("click",".unlabel",function(){
     choose_coupon($(this).find("input"),$(this).attr("data-bol"))
     return false;
 });
+
+
+function more_room_favour(){
+    if(no_favour==1 && $('.room_num').html()>1){
+        return true;
+    }
+    return false;
+}
+
 
 </script>
 </html>

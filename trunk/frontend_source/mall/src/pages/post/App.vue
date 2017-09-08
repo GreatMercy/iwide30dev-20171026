@@ -12,7 +12,7 @@
       <div class="invoice-address jfk-pl-30 jfk-pr-30" @click="selectAddress" v-else>
         <div class="invoice-address__content">
           <ul>
-            <li class="jfk-flex font-size--24 is-align-middle">
+            <li class="jfk-flex font-size--24">
               <div class="invoice-address__title invoice-address__word">收件人</div>
               <div class="invoice-address__item-content font-size--28">
                 <i v-text="product.user_name"></i>
@@ -20,7 +20,7 @@
               </div>
             </li>
 
-            <li class="jfk-flex font-size--24 is-align-middle">
+            <li class="jfk-flex font-size--24">
               <div class="invoice-address__title">收件地址</div>
               <div class="invoice-address__item-content font-size--28" v-text="product.address"></div>
             </li>
@@ -41,7 +41,7 @@
       </div>
 
 
-      <div class="jfk-pl-30 jfk-pr-30">
+      <div class="jfk-pl-30 jfk-pr-30 post-number-wrap">
         <div class="post-number is-align-middle jfk-flex">
           <div class="post-number__title font-size--28">邮寄数量</div>
           <div class="font-size--32 post-number__content jfk-ta-r">

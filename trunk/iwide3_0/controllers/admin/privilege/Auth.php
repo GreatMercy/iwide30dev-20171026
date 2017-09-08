@@ -91,8 +91,10 @@ class Auth extends MY_Admin_Priv {
 		            	if (isset($check[$inter_id])){
 		            		$this->session->set_flashdata('is_arreared', 1);
 		            		if($check[$inter_id]['run_status'] == "arrearage"){
-		            			$stop_date = date("Y年m月d日",strtotime($check[$inter_id]['stop_service_time']));
-		            			$msg = "{$check[$inter_id]['name']}，您已欠费{$check[$inter_id]['arrearage_money']}元，将于{$stop_date}停止微信系统服务，为了不影响您的正常业务运作，请及时结算！";
+		            		    $stop_tips='';
+		            		    if (strtotime($check[$inter_id]['stop_service_time']))
+		            			    $stop_tips = '将于'.date("Y年m月d日",strtotime($check[$inter_id]['stop_service_time'])).'停止微信系统服务，';
+		            			$msg = "{$check[$inter_id]['name']}，您已欠费{$check[$inter_id]['arrearage_money']}元，{$stop_tips}为了不影响您的正常业务运作，请及时结算！";
 		            			$this->session->set_flashdata('arrear_tips', $msg);
 		            		}else if($check[$inter_id]['run_status'] == "stop"){
 		            			$msg = "{$check[$inter_id]['name']}，您欠费{$check[$inter_id]['arrearage_money']}元，已经停止微信系统服务。请您及时补缴所欠费用，以便恢复微信系统服务！";
@@ -101,9 +103,16 @@ class Auth extends MY_Admin_Priv {
 		            		
 		            	}
 		            }
-		            
+		            $this->load->model('authority/Valify_tokens_model');
+		            $oauth_code=$this->Valify_tokens_model->tokenAddAdapter(3,array('admin_id'=>$admin->m_get('admin_id'),'app_id'=>'a5cfb5d96b','valify_data'=>array('username'=>$admin->m_get('username'))));
 					if($redirect){
-					    $this->_redirect(urldecode($redirect));
+					    $redirect=urldecode($redirect);
+					    if (strpos ( $redirect, '?' )){
+					        $redirect.='&code='.$oauth_code;
+					    }else {
+					        $redirect.='?code='.$oauth_code;
+					    }
+					    $this->_redirect($redirect);
 					} else {
 					    $this->_redirect(EA_const_url::inst()->get_default_admin());
 					}

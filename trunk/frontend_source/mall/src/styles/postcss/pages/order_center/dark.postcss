@@ -1,7 +1,13 @@
 .jfk-pages__order-center {
+  .tabs {
+    background-image: linear-gradient(to left, #090909, #161616 50%, #090909);
+  }
+  .mask {
+    background-image: linear-gradient(to left, #090909, #161616 50%, #090909);
+  }
   .order-center-tab {
     &__item {
-      color: var(--font-color-light-gray);
+      color: var(--font-color-extra-light-gray);
       &::before {
         background-color: var(--line-color-extra-light-silver);
       }
@@ -9,7 +15,7 @@
 
     &__active {
       color: var(--font-color-white);
-      @mixin line-down 8, 100%, null, after {
+      @mixin line-down 4, 100%, null, after {
       }
       &:after {
         left: 50%;
@@ -54,7 +60,7 @@
     }
 
     &__number {
-      color: var(--color-white);
+      color: var(--button-default-color);
       span {
         color: var(--button-default-color);
       }

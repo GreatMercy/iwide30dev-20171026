@@ -4,7 +4,7 @@
     <div class="padding_0_14 pad_b20">
       <div class="padding_0_9">
         <div class="radius_10 overflow ka relative">
-          <!-- <img src="../../assets/image/platinum.jpg" alt=""> -->
+          <!-- <img src="../../styles/postcss/image/platinum.jpg" alt=""> -->
           <img v-if="dataList.card.logo_url !== ''" :src="dataList.card.logo_url"  alt="">
           <!-- <div class="hotel_logo absolute"><img class="block" :src="dataList.card.logo_url" alt=""/></div> -->
         </div>
@@ -12,29 +12,31 @@
     </div>
     <section class="font_16 mar_t40">
       <div class="overflow">
-        <p class="float font_16 depoinfo-title">{{dataList.card.title}}</p>
-        <p class="floatr main_color1">
+        <p class="float font_15 depoinfo-title">{{dataList.card.title}}</p>
+        <p class="floatr main_color1 deposit-price">
           <em class="jfk-font font_19">&#xe643;</em>
           <span class="iconfonts font_25">{{dataList.card.money}}</span>
         </p>
       </div>
-      <p class="font_15 mar_tb20 color3">{{dataList.card.notice}}</p>
-      <div class="pad_t60">
-        <div class="width_109 center relative auto color_fff">
-          支付方式
-          <span class="shadow_b" style="display:block"></span>
-        </div>
-      </div>
-      <div class="flex margin_top_30 pay_mode">
-        <div v-for="(value,key) in dataList.pay_type" @click="payChoose(key)" class="layer_bg flex_1 center radius_3 pay_mode_item relative mar_lr10 white_bg" :class="{check_item: paytype === key }">
-          <div class="check"><em></em></div>
-          <div>
-            <em v-if="key === 'balance'" class="jfk-font font_22">&#xe640;</em>
-            <em v-else class="jfk-font font_22">&#xe64e;</em>
+      <p class="font_12 deposit-notice color3">{{dataList.card.notice}}</p>
+      <div v-if="this.payNum !== 1">
+        <div class="pad_t60">
+          <div class="width_109 center relative auto color_fff">
+            支付方式
+            <span class="shadow_b" style="display:block"></span>
           </div>
-          <div class="margin_top_15 relative">
-              <font class="font_16 font_spacing_1 depo-pay-title">{{value}}</font>
-              <font v-if="balanceBol && key === 'balance'" class="absolute balance font_12 center color3">余额不足</font>
+        </div>
+        <div class="flex pay_mode">
+          <div v-for="(value,key) in dataList.pay_type" @click="payChoose(key)" class="layer_bg flex_1 center radius_3 pay_mode_item relative mar_lr10 white_bg" :class="{check_item: paytype === key }">
+            <div class="check"><em></em></div>
+            <div>
+              <em v-if="key === 'balance'" class="jfk-font font_22">&#xe640;</em>
+              <em v-else class="jfk-font font_22">&#xe64e;</em>
+            </div>
+            <div class="margin_top_15 relative">
+                <font class="font_16 font_spacing_1 depo-pay-title">{{value}}</font>
+                <font v-if="balanceBol && key === 'balance'" class="absolute balance font_12 center color3">余额不足</font>
+            </div>
           </div>
         </div>
       </div>
@@ -47,7 +49,7 @@
     </section>
   </section>
   <section class="flex layer_bg fixed_btn font_17 color_fff white_bg">
-    <div class="flex_1 padding_left_30"><font class="font_13">¥ </font><em class="font_25">{{dataList.card.money}}</em></div>
+    <div class="flex_1 padding_left_30 depoinfo-total"><font class="font_13">¥ </font><em class="font_25">{{dataList.card.money}}</em></div>
     <div class="jfk-font width_150 center main_bg1 padding_13 font_19" @click="submit()">&#xe63b;&#xe63a;&#xe639;&#xe638;</div>
   </section>
   <JfkSupport v-once></JfkSupport>
@@ -61,7 +63,8 @@ export default {
     return {
       dataList: [],
       paytype: '',
-      balanceBol: false
+      balanceBol: false,
+      payNum: 0
     }
   },
   created () {
@@ -69,12 +72,12 @@ export default {
     let setdata = {'cardId': params.cardId}
     getDepositcardDetail(setdata).then((res) => {
       this.dataList = res.web_data
-      let payNum = 0
+      this.payNum = 0
       for (let item in this.dataList.pay_type) {
-        payNum++
+        this.payNum++
         if (item === 'wechat') {
           this.paytype = 'wechat'
-        } else if (payNum === 1) {
+        } else if (this.payNum === 1) {
           this.paytype = item
         }
       }

@@ -165,6 +165,28 @@ const post = (r) => {
     r(post.default)
   }, showLoadError, 'post')
 }
+// 领取礼包
+const giftPackage = (r) => {
+  require.ensure([], function (require) {
+    let giftPackage = require('./gift_package/index')
+    r(giftPackage.default)
+  }, showLoadError, 'giftPackage')
+}
+// 扫码领取
+const scanReceive = (r) => {
+  require.ensure([], function (require) {
+    let scanReceive = require('./scan_receive/index')
+    r(scanReceive.default)
+  }, showLoadError, 'scanReceive')
+}
+// 礼包列表
+const packageList = (r) => {
+  require.ensure([], function (require) {
+    let packageList = require('./package_list/index')
+    r(packageList.default)
+  }, showLoadError, 'packageList')
+}
+
 export default {
   index,
   detail,
@@ -188,5 +210,8 @@ export default {
   reservation,
   reservationList,
   logisticsDetail,
-  post
+  post,
+  giftPackage,
+  scanReceive,
+  packageList
 }

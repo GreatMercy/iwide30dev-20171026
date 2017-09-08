@@ -44,6 +44,10 @@ var env = process.env.NODE_ENV === 'testing'
   : config.build.env
 
 var webpackConfig = merge(baseWebpackConfig, {
+  entry: {
+    dark: './src/styles/postcss/theme/dark.postcss',
+    light: './src/styles/postcss/theme/light.postcss'
+  },
   module: {
     rules: utils.styleLoaders({
       sourceMap: config.build.productionSourceMap,

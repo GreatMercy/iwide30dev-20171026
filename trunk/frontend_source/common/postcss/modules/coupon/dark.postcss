@@ -2,20 +2,38 @@
   &__item {
     background: #131313;
     &.is-disabled {
-      .discount,.exchange,.offset {
-        color: #505050;
+      &.is-discount,&.is-exchange,&.is-offset,&.is-default {
+        .jfk-coupons__money {
+          &-num {
+            color: #808080;
+          }
+        }
       }
       .jfk-coupons {
         &__name {
-          color: #333;
+          color: #808080;
         }
         &__scope{
-          color: #454444;
+          color: #808080;
         }
         &__status{
           &-text {
-            color: #333;
+            color: #808080;
           }
+        }
+      }
+    }
+    &.is-discount {
+      .jfk-coupons__money {
+        &-num {
+          color: #7d85a6;
+        }
+      }
+    }
+    &.is-exchange {
+      .jfk-coupons__money {
+        &-num {
+          color: #697f6d;
         }
       }
     }
@@ -28,11 +46,5 @@
   }
   &__money {
     background: radial-gradient(#383838,#292929,#1d1d1d);
-    .discount {
-      color: #7d85a6;
-    }
-    .exchange {
-      color: #697f6d;
-    }
   }
 }

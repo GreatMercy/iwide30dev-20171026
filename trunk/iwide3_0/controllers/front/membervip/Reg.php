@@ -23,7 +23,7 @@ class Reg extends MY_Front_Member
         }
         $data = array();
         if(!$this->is_restful()){
-            $data = RegService::getInstance()->index($this->inter_id);
+            $data = RegService::getInstance()->index($this->inter_id,$this->openid);
 		}
         $data['page_title'] = '注册';
 

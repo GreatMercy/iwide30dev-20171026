@@ -1,11 +1,11 @@
 .jfk-pages__coupon {
   .coupon-base-info {
     padding-top: px2rem(150);
-    padding-left: px2rem(78);
+    padding-left: px2rem(104);
     position: relative;
     &__shadow {
       position: absolute;
-      left: px2rem(-48);
+      left: px2rem(-76);
       top: 50%;
       transform:translate(0, -50%);
       background-repeat: no-repeat;
@@ -16,10 +16,12 @@
       flex: 1;
     }
     &__hotel {
-      margin-top: px2rem(28);
+      margin-top: px2rem(18);
+      line-height: 1;
+      @mixin ellipsis {}
     }
     &__service {
-      margin-top: px2rem(36);
+      margin-top: px2rem(28);
       li {
         line-height: calc(36 / 24)em;
       }
@@ -29,7 +31,17 @@
     }
   }
   .coupon-way {
-    margin-top: px2rem(110);
+    margin-top: px2rem(100);
+    &__code {
+      .jfk-text-split {
+        &__item {
+          margin-right: calc(20 / 34)em;
+          &:last-child {
+            margin-right: 0;
+          }
+        }
+      }
+    }
     &__title {
       margin-bottom: px2rem(32);
     }

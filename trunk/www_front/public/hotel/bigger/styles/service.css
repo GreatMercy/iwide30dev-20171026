@@ -101,7 +101,7 @@
 .main_tab_xiala{position: absolute;top: 13px;display: inline-block;}
 .results_wrapper_rows{position: relative;}
 .results_wrapper_rows .squareimg{padding-bottom: 200px;}
-.results_score{color: white;background-color: #9c8459;padding: 1px 6px; border-radius: 3px;margin-top: 0px;height: 1.2rem; line-height: 1.1rem;font-size:0.631rem;}
+.results_score{color: white;background-color: #9c8459;padding: 1px 6.095px;border-radius: 3px;margin-top: 0px;height: 17px;line-height: 15px;font-size:0.631rem;}
 /*.results_score>*:first-child{font-size:0.914rem;}*/
 .results_address{ width: calc(100% - 150px);}
 .results_wrapper_rows .imgtitle{padding: 65px 12px 11px 12px;background: -webkit-linear-gradient(bottom,rgba(31,31,31,0.94) 12%,rgba(31,31,31,0) 100%);background: linear-gradient(bottom, rgba(31,31,31,0.94)  12%,rgba(31,31,31,0) 100%);}
@@ -127,7 +127,7 @@
 .hotel_list_letter{display: block;}
 .hotel_list_letter:first-letter{font-size:0.814rem;display: block;}
 .hotel_list_ico{float: left;margin-top: 16.5px;margin-right: 5px;}
-.hotel_list_qi{    margin-top: 20px; margin-left: 6px; float: right;}
+.hotel_list_qi{    margin-top: 23px; margin-left: 6px; float: right;}
 .sresult_price{float: left; margin-top: 6px;}
 /*选择城市*/
 .city_wrapper{display: none;/*padding: 0 1.375rem 0 0.937rem;*/position: absolute;top: 0px;left: 0px;width: 100%;height: 100%;z-index: 10;}
@@ -193,11 +193,14 @@
 .comment_list_all .comment_list_word{max-height: initial;}
 .comment_hotel_all .comment_hotel_content{display: block;}
 
+.comment_list_img{width: calc(100% + 30px);    margin-left: -15px!important;}
+.comment_list_img .swiper-wrapper{padding-left: 15px;}
 .comment_list_img,.comment_list_bigimg{overflow: hidden;}
 .comment_list_img .squareimg{float: left;padding-bottom: 8.375rem;width: 8.125rem;margin-right: 0.609rem;border-radius: 6px;}
 .comment_list_img .squareimg:last-child{margin-right: 0;}
 .comment_list_bigimg .squareimg{float: left;padding-bottom: 11.875rem;width: 14.285rem;margin-right: 0.6rem;border-radius: 6px;}
 .comment_light_gou{text-shadow: 0 0 2px #b2945e, 0 0 30px #b2945e;}
+.comment_list_img .comment_only{width: 191px;height: 191px;}
 /*#add_publish_comment em{margin-left: 1.75rem; }*/
 #comment_success .whole_eject_small{padding: 2.438rem 1.687rem 2.165rem 1.687rem; }
 /*选择优惠券*/

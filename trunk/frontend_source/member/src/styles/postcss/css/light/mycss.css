@@ -35,7 +35,7 @@
 .padding_30{padding-top:1.714rem;padding-bottom:1.714rem;}
 .padding_32{padding-top:1.828rem;padding-bottom:1.828rem;}
 .padding_35{padding-top:2rem;padding-bottom:2rem;}
-.padding_45{padding-top:2.571rem;padding-bottom:2.571rem;}
+.padding_45{padding-top:45px;padding-bottom:45px;}
 .padding_60{padding-top:3.428rem;padding-bottom:3.428rem;}
 .padding_left_20{padding-left:1.142rem;}
 .padding_left_30{padding-left:1.714rem;}
@@ -52,24 +52,7 @@
 .padding_top_48{padding-top:2.742rem;}
 .padding_top_50{padding-top:2.857rem;}
 .padding_bottom_70{padding-bottom:3.385rem;}
-/*font-size  750px  18px=1rem */
-.font_12{font-size:0.666rem;}
-.font_13{font-size:0.722rem;}
-.font_14{font-size:0.777rem;}
-.font_15{font-size:0.833rem;}
-.font_16{font-size:0.888rem;}
-.font_17{font-size:0.944rem;}
-.font_18{font-size:1rem;}
-.font_19{font-size:1.055rem;}
-.font_21{font-size:1.166rem;}
-.font_22{font-size:1.222rem;}
-.font_23{font-size:1.277rem;}
-.font_25{font-size:1.388rem;}
-.font_28{font-size:1.728rem;}
-.font_30{font-size:2rem;}
-.font_35{font-size:2.572rem;}
-.font_40{font-size:3rem;}
-.font_45{font-size:3.716rem;}
+
 /*字隙*/
 .font_spacing_1{letter-spacing:.8px;}
 .font_spacing_2{letter-spacing:.3px;}
@@ -85,7 +68,7 @@
 .width_60{width:3.428rem;}
 .width_75{width:79px;}
 .width_86{width:4.914rem;}
-.width_100{width:5.714rem;}
+.width_100{width:100px;}
 .width_109{width:6.228rem;}
 .width_120{width:61px;}
 .width_130{width:66px;}
@@ -116,11 +99,11 @@
 .margin_top_20{margin-top:1.142rem;}
 .margin_top_22{margin-top:1.257rem;}
 .margin_top_25{margin-top:1.457rem;}
-.margin_top_30{margin-top:1.714rem;}
+.margin_top_30{margin-top: 30px;}
 .margin_top_32{margin-top:1.857rem;}
 .margin_top_35{margin-top:2rem;}
 .margin_top_37{margin-top:2.114rem;}
-.margin_top_40{margin-top:2.28rem;}
+.margin_top_40{margin-top:40px;}
 .margin_top_42{margin-top:2.4rem;}
 .margin_top_45{margin-top:2.571rem;}
 .margin_top_50{margin-top:2.857rem;}
@@ -134,7 +117,7 @@
 .margin_left_15{margin-left:0.857rem;}
 .margin_right_2{margin-right:0.135rem;}
 .margin_right_5{margin-right:0.285rem;}
-.margin_right_6{margin-right:0.342rem;}
+.margin_right_6{margin-right:6px;}
 .margin_right_7{margin-right:0.4rem;}
 .margin_right_8{margin-right:0.571rem;}
 .margin_right_10{margin-right:0.571rem;}
@@ -162,7 +145,7 @@
 .border_1_808080 > *{position: relative;z-index: 2;}
 .border_1_808080{border: .5px solid #808080}
 .border_1_bcbcbc{border: .5px solid #bcbcbc}
-.border_bottom:after{z-index: 1;content: ''; width: 100%; height:0; position: absolute; bottom: 0px; left: 0; border-bottom: 1px dashed #363636; -webkit-transform: scaleY(0.5); transform: scaleY(0.5); -webkit-transform-origin: bottom left;}
+.border_bottom:after{z-index: 1;content: ''; width: 100%; height:0; position: absolute; bottom: 0px; left: 0; border-bottom: 1px dashed #E0E0E0; -webkit-transform: scaleY(0.5); transform: scaleY(0.5); -webkit-transform-origin: bottom left;}
 .border_1:after{z-index: 1;content: ''; width: 200%; height: 200%; position: absolute; top: -1px; left: 0; border: 1px solid #bfbfbf; -webkit-transform: scaleY(0.5,0.5); transform: scale(0.5,0.5); -webkit-transform-origin: top left;}
 /*border_color*/
 .border_b2945e{border-color:#b2945e;}
@@ -193,43 +176,44 @@
 /*.bg_show{background:url('../image/bg_show.png') no-repeat;background-size:100% auto;background-position:top center;}*/
 .position_x{background-position-x:94%}
 /*会员中心*/
-.jfk-index-name{color: #bfbfbf}
-.jfk-index-num{color: #ffffff;}
+.jfk-index-name{color: #333333}
+.jfk-index-num{color: #333333;}
+.jfk-index-num .color2{color: #808080}
 .jfk-wrap-menu{border-top: 10px solid #f7f7f7; margin-top: 0px;}
 .jfk-index-ico{display: none;}
 .jfk-index-flex{display: block;text-align: center;}
-.jfk-index-flex .color1{color: #fff}
+.jfk-index-flex .color1{color: #333333}
 .jfk-index-name{display: inline-block;}
-.jfk-index-name .color1{color: white;}
+.jfk-index-name .color1{color: black;}
 .jfk-index-interests{display: none;}
-.jfk-index-nkname{    margin-top: 23px; margin-bottom: 11px;}
-.jfk-index-header{padding:36px 0px 0px 0px;}
-.jfk-big-ico{color: #b3945e}
+.jfk-index-nkname{    margin-top: 23px; margin-bottom: 11px;color: #333333;}
+.jfk-index-header{padding:23px 0px 0px 0px;}
+.jfk-big-ico{color: #b2945e}
 .jfk-index-shipnum{color: #808080;}
 .jfk-big-xiala{color: #808080}
-.jfk-modelname{color: #bfbfbf}
-.jfk-login-box{display: none;}
-.jfk-title-login{margin-bottom: 47px;}
+.jfk-modelname{color: #808080}
+/*.jfk-login-box{display: none;}*/
+.jfk-title-login{margin-bottom: 47px;color: #5a5a5a;}
 .white_search_bg .color_fff{color: #fff;}
-.index_gradient{position: relative;}
-.index_gradient:nth-child(2):after{content: ''; display: block; position: absolute; left: -0.857rem; top: 34px; width: 1px; height: 18px; background-color: #EBEBEB; }
-.banner{padding: 0px}
+.index_gradient{position: relative;    padding-top: 1.614rem; padding-bottom: 1.614rem;}
+.index_gradient:nth-child(2):after{content: ''; display: block; position: absolute; left: -0.857rem; top: 35px; width: 1px; height: 14px; background-color: #E0E0E0; }
 .head_img{margin: 0 auto}
 .bg_img{min-height:100%;background-color:white;background-size:100% 100%;}
 .head_img{width:3.42rem;height:3.42rem;border-radius:50%;overflow:hidden;}
-.line_left{width:1.5px;height: 20px;background-color: #b3945e}
+.line_left{width:1.5px;height: 20px;background-color: #b3945e;border-radius: 3px;}
 .line_left img{display: none;}
 .line_center{width:1.714rem;height:auto;}
 .line_left{left:0px;top:2px;}
-.banner_img{height:2.857rem;}
+.banner_img{height:50px;background: url("../image/nologin_light_box.png") no-repeat;background-size: 100% 100%;}
 .banner_img img{width:100%;height:100%;}
-.banner_txt{top:0px;left:0px;width:100%;height:100%;line-height:2.857rem;}
+.banner_txt{top:0px;left:0px;width:100%;height:100%;line-height:50px;}
 .white_bg{background-color: white;}
+.gray_bg{background-color: #f7f7f7;}
 /*表单*/
 .form_item select,.form_item input{width:100%;height:100%;font-size:0.875rem;}
 .form_item .between{color: #808080;min-width: 55px;}
 .entry_btn{background-color: #1f1f1f;color: white;}
-.btn_height{height: 45px;line-height: 44px;color: white;}
+.btn_height{height: 45px;line-height: 44px;color: white;border-radius: 3px;}
 .gray_btn{background-color:#E1E1E1;color:#808080  }
 .verification{padding:0.1rem 0.572rem;line-height: 20px;color:#b2945e;margin-left: 5px;border: .5px solid #b2945e;border-radius: 3px;}
 .verification_active{color:#b2945e;border: .5px solid #b2945e}
@@ -243,29 +227,31 @@
 
 
 /**/
-.balance_content{background-color: white;margin-top: 44px;}
+.balance_content{background-color: white;}
+.balance_header{padding: 51px 0 51px 0}
 .containers_list{padding-left:0.857rem;padding-right:0.857rem;}
-.containers_list .color3{color: #959595}
 .balance_content .recharge{padding:0;}
 .balance_content .bd_bottom:after{border: 0px;}
-.balance_content .balance_choose{padding: 18px 0;border-bottom:1px solid #EDEFEC;}
+.balance_content .balance_choose{padding: 18px 0;border-bottom:.5px solid #EDEFEC;}
+.containers_list_wrap{padding: 25.25px 0;border-bottom: .5px solid #ededed;}
+.containers_list_wrap:last-child{border-bottom: 0px}
 .right_line{border-left:.5px solid #3a3a3a;}
 .shadow_b{height: 1px;width: 19px;background-color: #b3945e;margin: 5px auto 0 auto}
 /*.recharge div:after{content: '';position:absolute;right:0px;top:30%;border-left: .5px solid #3a3a3a;height:0.507rem;}*/
 .recharge div:last-child:after{content: '';border:0px;}
-.recharge .active{color:#b2945e; border-bottom: 1px solid #b2945e;}
+.recharge .active{color:#b2945e; border-bottom: .5px solid #b2945e;}
 .recharge .active .shadow_b{display:none;}
 .prompt{left:-1.1428rem;top:0px;border:none;color:#6e6e6e;}
 
 /**/
-.card_item{padding:1.314rem 1.142rem 1rem 0.971rem;}
+.card_item{padding:1.014rem 1.142rem .81rem 0.871rem}
 
 .silver{border-radius:2.5px;display:inline-block;height:0.857rem;width:2px;background:linear-gradient(top,#adb2b5,#787a7c);background:-webkit-linear-gradient(top,#adb2b5,#787a7c);box-shadow:0 0 3px #adb2b5;}
-.gold{border-radius:2.5px;display:inline-block;height:0.857rem;width:2px;background:linear-gradient(top,#adb2b5,#787a7c);background:-webkit-linear-gradient(top,#ac9060,#816430);box-shadow:0 0 1px #ac9060;}
+.gold{border-radius: 2.5px; display: inline-block; height: 11px; width: 2px; float: left; margin-top: 7px;background:linear-gradient(top,#adb2b5,#787a7c);background:-webkit-linear-gradient(top,#ac9060,#816430);box-shadow:0 0 1px #ac9060;}
 .platinum{border-radius:2.5px;display:inline-block;height:0.857rem;width:2px;background:linear-gradient(top,#adb2b5,#787a7c);background:-webkit-linear-gradient(top,#465976,#213b65);box-shadow:0 0 3px #374e72;}
 .ka{box-shadow:0 0 10px rgba(255,255,255,0.1);}
 .ka img{display:block;}
-.pay_mode_item{padding-top:1.628rem;padding-bottom:1.942rem;border:0.5px solid transparent;background-clip:border-box;}
+.pay_mode_item{padding-top:1.328rem;padding-bottom:1.342rem;border:0.5px solid transparent;background-clip:border-box;}
 .pay_mode_item .check{position:absolute;top:8px;right:10px;}
 .pay_mode .check_item{background:none;box-shadow: 0 0 20px rgba(178,148,94,.3);;position:relative;}
 .check_item{color:#b2945e;}
@@ -293,47 +279,49 @@
 .coupon_rows{overflow: hidden; position:relative;background-color: #fff;}
 .coupon_img_wrap{float: left;width: 132px;position: relative;}
 .coupon_img_wrap_zhe{content: "";position: absolute;top: -0.8rem;right: -30%;width: 42%;height: 12rem;background-color: #fff;-webkit-transform: rotate(15deg);transform: rotate(15deg);}
-.coupon_img_content{float: right;padding-right:10px;width: calc(100% - 140px);margin-left: 0%;position: relative;}
+.coupon_img_content{float: right;padding-right:10px;width: calc(100% - 145px);margin-left: 0%;position: relative;}
 .coupon_details_ico{position: relative;padding-top: 1.1rem;;display: inline-block;margin-left: -30px;}
-.select_coupon_bg{width: 148px;height: 132px;text-align: center;overflow: hidden;}
+.select_coupon_bg{width: 147px;height: 132px;text-align: center;overflow: hidden;}
 .select_coupon_bg > div{height: 132px;line-height: 132px;padding-right: 2rem; }
 .coupon_state{position: absolute;top: 10px;right: 10px;}
-.gradient_green_bg{min-height: 100%; background: -webkit-radial-gradient(#c2e0C8, #CAE8D0, #cde2d3); background: radial-gradient(#c2e0C8, #CAE8D0, #cde2d3);}
-.gradient_gold_bg{min-height: 100%; background: -webkit-radial-gradient(#D8C5Aa, #d6bfa0, #e0ceaf); background: radial-gradient(#D8C5Aa, #d6bfa0, #e0ceaf);color: #fff}
-.gradient_blue_bg{min-height: 100%; background: -webkit-radial-gradient(#C1C7DF, #D1D6EA, #C7CCE0); background: radial-gradient(#C1C7DF, #D1D6EA, #C7CCE0);}
+.gradient_green_bg{min-height: 100%; background: -webkit-linear-gradient(to right, #a8d0b3, #CBE7D0); background:linear-gradient(to right, #a8d0b3, #CBE7D0);text-shadow: 0 0 4px rgba(0,0,0,.3);}
+.gradient_gold_bg{min-height: 100%; background: -webkit-linear-gradient(to right, #cbb58c, #E1D2B5); background:linear-gradient(to right, #cbb58c, #E1D2B5);color: #fff;text-shadow: 0 0 4px rgba(0,0,0,.3);}
+.gradient_blue_bg{min-height: 100%; background: -webkit-linear-gradient(to right, #b9bed4, #CDD2E6); background:linear-gradient(to right, #b9bed4, #CDD2E6);text-shadow: 0 0 4px rgba(0,0,0,.3);}
+.gradient_gray_bg{min-height: 100%; background: -webkit-linear-gradient(to right, #CBCBCB, #DCDCDC); background:linear-gradient(to right, #CBCBCB, #DCDCDC);text-shadow: 0 0 4px rgba(0,0,0,.3);color:white;}
 .color_dui{color: #fff;}
 .color_zhe{color: #fff}
-.card_logo{    width: 25.535%; height: 46px;margin-left: 16px; margin-right: 29px;}
 .card_share_logo{width: 75px;margin-right: 15px;}
 .card_share_word{padding-left: 35%;margin-top: 15px;letter-spacing: 1px;}
-.jfk-cardinfo-title{padding-top: 0; margin-top: 30px;color: #b2945e}
+.jfk-cardinfo-title{padding-top: 0;color: #b2945e}
 .main_tab_line{border-left:.5px solid #ECECEC;height: 0.609rem;display: inline-block;}
 .pay_money_input{border-top: .5px solid #373737;border-bottom: .5px solid #373737;padding: 15px 0}
-.okpay_logo{width: 3.7rem; border-radius: 50%;box-shadow: 0px 1px 45px rgba(178, 156, 94, .2);}
+.okpay_logo{width: 59px;height: 59px; border-radius: 50%;box-shadow: 0px 1px 45px rgba(178, 156, 94, .2);}
 .index-width{width: 10px; display: inline-block;}
 .lint_title{position: relative;}
-.lint_title:after{content: '';position: absolute;left: 0px;top:10px;width: 37%;height: 1px;background-color:#EBEBEB; }
-.lint_title:before{content: '';position: absolute;right: 0px;top:10px;width: 37%;height: 1px;background-color:#EBEBEB;}
+.lint_title:after{content: '';position: absolute;left: 0px;top:10px;width: 37%;height: 1px;background-color:#E0E0E0; }
+.lint_title:before{content: '';position: absolute;right: 0px;top:10px;width: 37%;height: 1px;background-color:#E0E0E0;}
 .cardinfo-word{line-height:25px;display: inline-block;color: #bfbfbf;}
 .card-info-item .between{color: #7f7f7f;}
 .icon-user_icon_fail_norma:after{content: "\e626";}
 .icon-radio_icon_selected_default:before { content: "\e676"; }
 .jfk-msgbox__icon{ padding-top: 3.375rem; padding-bottom: 2rem;}
-.jj-ico{float: left; margin-top: 4px;margin-right: 3px;}
-.emptyIcons{font-size: 2.8rem;color: #808080;}
-.emptyTitle{font-size: 0.785rem; margin-top: 1.714rem; margin-bottom: 4rem;color: #808080; letter-spacing: 3px;}
+.jj-ico{float: left;margin-top: 6px; margin-right: 2px;}
+.emptyIcons{font-size: 2.8rem;color: #bfbfbf;}
+.emptyTitle{font-size: 0.785rem; margin-top: 1.714rem; margin-bottom: 4rem;color: #bfbfbf; letter-spacing: 3px;}
 .select_coupon_ico{margin-right: -7px;}
-.button_song{width:47%;border: 0.5px solid #c0c0c0;margin-right:2%;background-color: transparent;}
+.button_song{width:47%;border: 0.5px solid #1f1f1f;margin-right:2%;background-color: transparent;color:#1f1f1f;}
 .button_use{width:47%;background-color: #1a1a1a;margin-left:2%;color: white!important}
-.erweima_img{text-align: center;margin-bottom: 20px;}
+.erweima_img{text-align: center;margin-bottom: 20px;margin-top:30px;}
 .erweima_img div{display: inline-block;background-color: white;padding: 20px;width: 76%;}
-.index_button{width: 143px;height: 44px;line-height: 44px;display: inline-block;margin-right: 17px;}
+.index_button{width: 143px;height: 44px;line-height: 44px;display: inline-block;margin-right: 17px;background-color: white;color: #333333;}
+.index_button .margin_right_8{color: #7bc339}
+.index_button:after{border: 0px solid white;}
 .index_button2{width: 143px;height: 45px;line-height: 45px;display: inline-block;}
 .pad_420{padding-top: 46px; padding-bottom: 1.7rem;}
 .margin_bottom_30p{margin-bottom: 30%;}
 .cardword{height: 36px;overflow:hidden; text-overflow:ellipsis; display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:2; margin-bottom: 7px;}
 .jfk-msgbox.is-icon.no-title .jfk-msgbox__icon{height: 8.25rem;}
-.song_btn{    border: 0.5px solid #808080; margin-top: 40px; margin-left: 1.219rem; margin-right: 1.219rem; height: 45px; line-height: 44px;color: #333333;background-color: white;}
+.song_btn{border: 0.5px solid #1f1f1f; margin-top: 40px; margin-left: 1.219rem; margin-right: 1.219rem; height: 45px; line-height: 44px;color: #1f1f1f;background-color: transparent;}
 .cardinfo-word-ico{color: #bfbfbf}
 .cardinfo-word-title{color: #808080;}
 /*.index_gradient{background-image:linear-gradient(left bottom, #26292a, #292d2e);background-image:-webkit-linear-gradient(left bottom, #26292a, #292d2e );}*/
@@ -348,11 +336,25 @@
 .desp-btn:after{border: 0px;}
 .desp-notice{color: #bfbfbf}
 .depoinfo-title{color: #333333;}
-.depo-pay-title{color: #666666}
+.depo-pay-title{color: #808080}
 .wbf{color: #bfbfbf;}
 .getcard_banner{padding-top: 0.857rem}
-.getcard-title{padding-top: 3px;}
+.getcard-title{padding-top: 3px;padding-bottom: 15px}
 .getcard-word{color: #bfbfbf;}
 .getcard-num{color: #b2945e}
 .getcard-ctitle{color: #bfbfbf}
 .getcard-cnum{color:#333333; }
+.form-top{padding-top: 32px}
+.getcard-rows{box-shadow:1px 1px 1px 1px rgba(0,0,0,.1);margin-bottom: 15px;padding-top: 27.5px; padding-bottom: 27.5px;}
+.getcard-rows .txt_show1{text-shadow:0 0 0 white;}
+.card_name{color:#808080;}
+.card-info-notice{color:#bfbfbf;}
+.card_info_button{background: #1f1f1f;color: white;}
+.card_info_button:after{border: 0px;}
+.index-wnum{ padding-top: 54px;padding-bottom: 23px;}
+.buydeposit-title{color:#808080;}
+.couponType1{color: #b2945e;}
+.couponType2{color: #b4bad8;}
+.couponType3{color: #a5caac;}
+.couponType4{color: #b2945e;}
+.jfk-cardinfo-title{    padding-top: 0; padding-bottom: 19px; margin-top: 30px;}

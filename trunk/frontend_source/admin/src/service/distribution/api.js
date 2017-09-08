@@ -21,7 +21,15 @@ const v1 = {
   GET_ADD_RULE: `${API_URL_SUFFIX}/rule_data`,
   GET_REFUND_LIST: `${API_URL_SUFFIX}/refund_list`,
   GET_MODULE: `${API_URL_SUFFIX}/get_module`,
-  GET_BRANCH: `${API_URL_SUFFIX}/get_branch`
+  GET_BRANCH: `${API_URL_SUFFIX}/get_branch`,
+  GET_REFUND_ORDER: `${API_URL_SUFFIX}/refund_order`,
+  POST_REFUND: `${API_URL_SUFFIX}/send_refund`,
+  GET_BANK_CHECK_ACCOUNT: `${API_URL_SUFFIX}/bank_check_account`,
+  POST_CHECK_ACCOUNT: `${API_URL_SUFFIX}/check_account`,
+  GET_CAPITAL_OVERVIEW: `${API_URL_SUFFIX}/capital_overview`,
+  GET_CAPITAL_LIST: `${API_URL_SUFFIX}/capital_list`,
+  GET_TRANSFER_ACCOUNTS: `${API_URL_SUFFIX}/transfer_accounts`,
+  GET_SINGLE_SEND: `${API_URL_SUFFIX}/single_send`
 }
 
 export {

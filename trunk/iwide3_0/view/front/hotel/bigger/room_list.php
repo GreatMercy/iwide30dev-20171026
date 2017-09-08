@@ -61,7 +61,7 @@
     </div>
     <div class="wrapper" style="padding-top:0">
         <div class="bd_bottom webkitbox room_information" style="width:100%;">
-            <div class="room_list_score pad_r10" style="font-family: Helvetica, sans-serif;"><?php echo $t_t['comment_score'];?></div>
+            <div class="room_list_score pad_r10 pclight"><?php echo $t_t['comment_score'];?></div>
             <div class="flexgrow mar_l20">
                 <div class="iconfont star h26">
                     <?php for($x = 0; $x < 5; $x++){ ?>
@@ -128,7 +128,7 @@
                                 </div> 
                                 <?php }?>
                             <?php }?>
-                            <span class="floatr pad_t10 room_collect"><em class="iconfont color1 room_triangle h24">&#xE013;</em> </span>
+                            <span class="floatr room_collect"><em class="iconfont color1 room_triangle h24">&#xE013;</em> </span>
                         </div>
                         <div class="itemfoot layer_bg bd_list">
                             <?php if(!empty($r['state_info'])){ foreach($r['state_info'] as $si){?>
@@ -141,7 +141,17 @@
                                     <div class="h20 point room_list_exclusive" style="color:#c3b686"><span><?php echo $tag;?></span></div>
                                     <?php }}?>
                                     <?php if(isset($si['useable_coupon_favour']) && !empty($si['useable_coupon_favour'])){ ?>
-                                        <div class="h20 point room_list_exclusive" style="color:#c3b686"><span><?php echo '券可减'.$si['useable_coupon_favour'].'元';?></span></div>
+                                        <div class="h20 point room_list_exclusive" style="color:#c3b686">
+                                            <span>
+                                                <?php
+                                                     if($si['coupon_type']!='discount'){
+                                                         echo '券可减'.$si['useable_coupon_favour'].'元';
+                                                     }else{
+                                                         echo '可用'.($si['useable_coupon_favour']*10).'折券';
+                                                     }
+                                                ?>
+                                            </span>
+                                        </div>
                                     <?php }?>
                                     <?php if($si['wxpay_favour_sign']==1){?>
                                         <div class="h20 point room_list_exclusive" style="color:#c3b686"><span><?php echo '微信支付减'.$si['bookpolicy_condition']['wxpay_favour'].'元';?></span></div>
@@ -256,6 +266,7 @@
         <a href="/index.php/hotel/hotel/order_details?state=1" class="iconfont color_fff center pad_tb20 pad_lr80">&#xe016;</a>
     </div>
 </section>
+<div class="back_ico"></div>
 </body>
 <?php echo referurl('js','room_list.js',1,$media_path) ?>
 <script>
@@ -353,7 +364,7 @@
                 }
             }
 
-            r_temp+='<span class="floatr pad_t10 room_collect"><em class="iconfont color1 room_triangle h24">&#xE013;</em> </span> </div>';
+            r_temp+='<span class="floatr room_collect"><em class="iconfont color1 room_triangle h24">&#xE013;</em> </span> </div>';
 
             r_temp+='<div class="itemfoot layer_bg bd_list">';
 
@@ -375,7 +386,11 @@
                             }
 
                             if(si.useable_coupon_favour !=undefined && si.useable_coupon_favour!=''){
+                                if(si.coupon_type == 'discount'){
+                                    r_temp +='<div class="h20 point room_list_exclusive" style="color:#c3b686"><span>可用'+parseFloat(si.useable_coupon_favour)*10+'折券</span></div>';
+                                }else{
                                     r_temp +='<div class="h20 point room_list_exclusive" style="color:#c3b686"><span>券可减'+si.useable_coupon_favour+'元</span></div>';
+                                }
                             }
 
                             if(si.wxpay_favour_sign ==1){

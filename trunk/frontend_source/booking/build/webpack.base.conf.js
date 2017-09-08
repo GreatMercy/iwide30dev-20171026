@@ -12,7 +12,8 @@ module.exports = {
     app: './src/main.js'
   },
   externals: {
-    wx: 'window.wx'
+    wx: 'window.wx',
+    BMap: 'window.BMap'
   },
   output: {
     path: config.build.assetsRoot,

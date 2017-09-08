@@ -4,29 +4,23 @@
 
     <!--已接单，已发货，已签收-->
     <div class="logistics-detail-state">
-        <span class="jfk-button__text color-golden" v-if="status && status === 1">
-          <i class="jfk-font icon-font_zh_shang__qkby font-size--60"></i>
-          <i class="jfk-font icon-font_zh_pin_qkbys font-size--60"></i>
-          <i class="jfk-font icon-font_zh_yi_qkbys font-size--60"></i>
-          <i class="jfk-font icon-font_zh_jie_qkbys font-size--60"></i>
-          <i class="jfk-font icon-font_zh_dan_qkbys font-size--60"></i>
+        <span class="jfk-button__text color-golden font-size--60" v-if="status && status === 1">
+          <i class="jfk-font icon-font_zh_yi_qkbys"></i>
+          <i class="jfk-font icon-font_zh_jie_qkbys"></i>
+          <i class="jfk-font icon-font_zh_dan_qkbys"></i>
         </span>
 
-      <span class="jfk-button__text color-golden" v-if="status && status=== 2">
-          <i class="jfk-font icon-font_zh_shang__qkby font-size--60"></i>
-          <i class="jfk-font icon-font_zh_pin_qkbys font-size--60"></i>
-          <i class="jfk-font icon-font_zh_yi_qkbys font-size--60"></i>
-          <i class="jfk-font icon-font_zh_fa_qkbys font-size--60"></i>
-          <i class="jfk-font icon-font_zh_huo_qkbys font-size--60"></i>
+      <span class="jfk-button__text color-golden font-size--60" v-if="status && status=== 2">
+          <i class="jfk-font icon-font_zh_yi_qkbys"></i>
+          <i class="jfk-font icon-font_zh_fa_qkbys"></i>
+          <i class="jfk-font icon-font_zh_huo_qkbys"></i>
       </span>
 
 
-      <span class="jfk-button__text color-golden" v-if="status && status=== 5 ">
-          <i class="jfk-font icon-font_zh_shang__qkby font-size--60"></i>
-          <i class="jfk-font icon-font_zh_pin_qkbys font-size--60"></i>
-          <i class="jfk-font icon-font_zh_yi_qkbys font-size--60"></i>
-          <i class="jfk-font icon-font_zh_shou_qkbys font-size--60"></i>
-          <i class="jfk-font icon-font_zh_huo_qkbys font-size--60"></i>
+      <span class="jfk-button__text color-golden font-size--60" v-if="status && status=== 5 ">
+          <i class="jfk-font icon-font_zh_yi_qkbys"></i>
+          <i class="jfk-font icon-font_zh_shou_qkbys"></i>
+          <i class="jfk-font icon-font_zh_huo_qkbys"></i>
       </span>
 
     </div>
@@ -42,8 +36,8 @@
           <div class="logistics-detail-info__product--content">
             <p class="font-size--34 name" v-text="product.name" v-if="product.name"></p>
             <p class="price jfk-flex is-align-middle">
-                <span class="jfk-price font-size--50" v-if="product.price_package">
-                  <i class="jfk-font-number jfk-price__currency">¥</i>
+                <span class="jfk-price font-size--50 color-golden-price" v-if="product.price_package">
+                  <i class="jfk-font-number jfk-price__currency">￥</i>
                   <i class="jfk-font-number jfk-price__number" v-text="product.price_package"></i>
                 </span>
               <span class="font-color-light-gray font-size--24 number" v-text="product.qty + '份'"
@@ -53,14 +47,14 @@
         </div>
 
         <div class="logistics-detail-info__user">
-          <p class="jfk-flex is-align-middle logistics-detail-info__user--name font-size--24">
+          <p class="jfk-flex logistics-detail-info__user--name font-size--24">
             <span class="title">收<small class="font-size--24">件</small>人</span>
             <i class="font-size--28">
               <small class="font-size--28" v-text="userInfo.contact" v-if="userInfo.contact"></small>
               <span v-text="userInfo.phone" v-if="userInfo.phone"></span>
             </i>
           </p>
-          <p class="jfk-flex is-align-middle font-size--24">
+          <p class="jfk-flex font-size--24">
             <span class="title">收件地址</span>
             <i class="font-size--28" v-text="userInfo.address"></i>
           </p>
@@ -80,6 +74,7 @@
           <div class="logistics-status__item--logo">
             <span class="font-size--30 logistics-status__item--line"
                   :class="'logistics-status__item--' + item.class_name">
+              <i></i>
             </span>
           </div>
           <div class="logistics-status__item--text" :class="{'is-active': item.status}">
@@ -126,11 +121,10 @@
             this.logistic[i]['class_name'] = 'default'
             this.logistic[i]['status'] = false
           }
-          this.status = 5
           // 如果当前的状态为 5 (已签收)
           if (this.status === 5) {
-            this.logistic[0]['class_name'] = 'end'
             this.logistic[0]['status'] = true
+            this.logistic[0]['class_name'] = 'end'
             this.logistic[len - 1]['class_name'] = 'start'
           } else {
             this.logistic[0]['status'] = true
@@ -143,8 +137,7 @@
         this.toast.close()
       })
     },
-    watch: {
-    },
+    watch: {},
     data () {
       return {
         product: {},

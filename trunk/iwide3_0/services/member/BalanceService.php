@@ -490,14 +490,14 @@ class BalanceService extends MemberBaseService
             $package_deposit = $this->doCurlPostRequest( $packge_url , $package_data );
             \MYLOG::w("Balance pay | Type package/give | ".@json_encode(array('result'=>$package_deposit,'url'=>$packge_url,'param'=>$package_data)),'membervip/debug-log');
         }
-        $pay_param = array(
+        /*$pay_param = array(
             'id' => $inter_id,
             'orderId' => $orderId,
             'orderNum' => $order_info['order_num'],
             'orderMoney' => $order_info['pay_money']
         );
-        $pay_param = http_build_query($pay_param);
-        return array('err'=>0,'msg'=>'支付成功！','data'=>site_url("membervip/balance/okpay?{$pay_param}"));
+        $pay_param = http_build_query($pay_param);*/
+        return array('err'=>0,'msg'=>'支付成功','data'=>site_url("membervip/balance/okpay") . "?id={$inter_id}&orderId={$orderId}&orderNum={$order_info['order_num']}&orderMoney={$order_info['pay_money']}");
     }
 
     //储值支付成功

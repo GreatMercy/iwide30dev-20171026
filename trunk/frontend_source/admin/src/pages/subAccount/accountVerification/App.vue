@@ -114,7 +114,7 @@
                 <el-button
                   type="text"
                   size="small"
-                  class="jfk-color--danger" v-else-if="tableData[scope.$index].status == 2" @click="checkAccount('resend', scope.$index)" :disabled="sendAjax">
+                  class="jfk-color--danger" v-else-if="tableData[scope.$index].status == 2" @click="checkAccount('re_send', scope.$index)" :disabled="sendAjax">
                   重新验证
                 </el-button> 
                 <div v-else>--</div>
@@ -239,7 +239,7 @@
               type: 'success'
             })
           }).catch((err) => {
-            if (err.status === '1012') {
+            if (err.status === 1012) {
               this.tableData[idx].status_name = err.data.status_name
               this.tableData[idx].status = err.data.status
               this.tableData[idx].remark = err.data.remark

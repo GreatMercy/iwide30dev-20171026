@@ -54,6 +54,7 @@ class Coupon_model extends CI_Model {
 		$wxcards = array ();
 		$this->load->model('hotel/Price_code_model');
 		$list=array();
+        $all_cards=array();
 		$coupon_condition=array();
 		if (is_numeric($params ['price_code']))
 			$list = $this->Price_code_model->get_room_price_set ( $inter_id, $params ['hotel'], $params ['category'], $params ['price_code'] );
@@ -82,6 +83,7 @@ class Coupon_model extends CI_Model {
 				}
 			}
 		}
+
 		if (!empty($coupon_condition)){
 			if (!empty($condition['no_coupon'])||!empty($coupon_condition['no_coupon'])||empty($coupon_condition['num_type'])){
 				return array (
@@ -162,8 +164,7 @@ class Coupon_model extends CI_Model {
 				return array (
 						'cards' => $result,
 						'wxcards' => $wxcards,
-						'count' => $count,
-                        'all_cards'=>$all_cards
+						'count' => $count
 				);
 			}
 			foreach ( $all_cards['data'] as $c ) {
@@ -200,7 +201,8 @@ class Coupon_model extends CI_Model {
 		return array (
 				'cards' => $result,
 				'wxcards' => $wxcards,
-				'count' => $count
+				'count' => $count,
+                'all_cards'=>$all_cards
 		);
 	}
 	function get_usable_coupon_m($inter_id, $openid, $params, $is_ajax = false) {
@@ -937,18 +939,26 @@ class Coupon_model extends CI_Model {
         if(!empty($cards['cards'])){ //有优惠券
             $cards_list = json_decode(json_encode($cards['cards']),true);
             uasort($cards_list, function ($a, $b){
-                return $a['reduce_cost'] - $b['reduce_cost'] > 0 ? -1 : 1;
+                if($a['coupon_type']=='discount' && $b['coupon_type']=='discount'){
+                    return $a['reduce_cost'] - $b['reduce_cost'] < 0 ? -1 : 1;
+                }elseif($a['coupon_type']=='voucher' && $b['coupon_type']=='voucher'){
+                    return $a['reduce_cost'] - $b['reduce_cost'] > 0 ? -1 : 1;
+                }elseif($a['coupon_type'] != $b['coupon_type']){
+                    return $a['coupon_type']=='discount'? -1 : 1;
+                }
+//                return $a['reduce_cost'] - $b['reduce_cost'] > 0 ? -1 : 1;
             });
             $select_amount = 0;
             $i = 0;
             foreach($cards_list as $v){
                 //循环卡券
-                if($params['amount'] > $select_amount + $v['reduce_cost']){
+                if(($params['amount'] > $select_amount + $v['reduce_cost'])){
                     //当前已默认选择卡券
                     $cards['selected'][] = $v;
                     $select_amount += $v['reduce_cost'];
                     $i++;
                 }
+                if($v['coupon_type']=='discount')break;
                 if($i >= $cards['count']['num']){
                     break;
                 }

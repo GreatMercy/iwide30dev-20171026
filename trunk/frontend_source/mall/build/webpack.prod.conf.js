@@ -14,12 +14,15 @@ var env = process.env.NODE_ENV === 'testing'
   ? require('../config/test.env')
   : config.build.env
 
+var entry = {
+  light: './src/styles/postcss/theme/light.postcss',
+  vendor: ['@/utils/http.js', '@/service/http.js']
+}
+if (process.env.npm_config_interid !== 'accor') {
+  entry.dark = './src/styles/postcss/theme/dark.postcss'
+}
 var webpackConfig = merge(baseWebpackConfig, {
-  entry: {
-    dark: './src/styles/postcss/theme/dark.postcss',
-    light: './src/styles/postcss/theme/light.postcss',
-    vendor: ['@/utils/http.js', '@/service/http.js']
-  },
+  entry: entry,
   module: {
     rules: utils.styleLoaders({
       sourceMap: config.build.productionSourceMap,
@@ -110,7 +113,7 @@ var webpackConfig = merge(baseWebpackConfig, {
       }
     ]),
     new ManifestPlugin({
-      fileName: `./soma/vue/manifest${process.env.npm_config_cdn ? '-cdn' : ''}.json`
+      fileName: `./soma/vue${process.env.npm_config_interid ? '_' + process.env.npm_config_interid : ''}/manifest${process.env.npm_config_cdn ? '-cdn' : ''}.json`
     })
   ]
 })

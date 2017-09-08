@@ -10,7 +10,7 @@
     width: calc(1 / 7 * 100%);
   }
   &__tools {
-    font-size: calc(32 / 28)em;
+    font-size: calc(30 / 28)em;
     line-height: 1;
     height: calc(1 + 34 / 32)em;
     .switch-month {
@@ -18,35 +18,8 @@
       display: inline-block;
       width: calc((77 * 2 + 16) / 610 * 100%);
       height: 1em;
-      &:before, &:after {
-        position: absolute;
-        content: '';
-        width: calc(20 / 32)em;
-        height: calc(4 / 32)em;
-        top: 50%;
-        left: 50%;
-      }
-      &:before {
-        transform: rotate(-45deg);
-      }
-      &:after {
-        transform: rotate(45deg);
-      }
-      &.is-next {
-        &:before {
-          transform-origin:  right center;
-        }
-        &:after {
-          transform-origin:  right center;
-        }
-      }
-      &.is-prev {
-        &:before {
-          transform-origin:  left center;
-        }
-        &:after {
-          transform-origin:  left center;
-        }
+      .jfk-font {
+        font-size: 1em;
       }
     }
     .title {
@@ -86,6 +59,7 @@
   &__value {
     font-size: calc(30 / 28)em;
     position: relative;
+    z-index: 1;
   }
   &__row {
     &.is-today {

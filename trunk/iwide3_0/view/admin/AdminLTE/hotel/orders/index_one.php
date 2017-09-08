@@ -87,6 +87,7 @@ echo $block_left;
 .isolatioin{margin:0 10px;}
 .none_txt{text-align:center;font-size:20px;color:#666;margin:20px 0;}
 .thim_list{width:70px;display:inline-block;margin-right:3%;}
+.notice_link {color:#3c8dbc; }
 </style>
 <div class="content-wrapper" style="background:#fff;">
     <section class="content">
@@ -94,6 +95,21 @@ echo $block_left;
         <div class="col-xs-12">
             <div class="box-body" style="margin-left:16px;">
                 <div class="form-group m_width">
+
+                    <?php if(isset($notice_model)): ?>
+                        <div class="containers" style="padding: 0;font-size: 18px;">
+                            <div class="pull-left" style="background:#fff;padding-right: 4px;">
+                                <i class="fa fa-bullhorn" style="font-size: 26px;"></i>
+                            </div>
+                            <span style="padding-left: 10px;">
+                                <a class="notice_link" href="<?php echo EA_const_url::inst()->get_url("privilege/notice/detail?ids=" . $notice_model->id) ?>"><?php echo $notice_model->title; ?></a>
+                            </span>
+                            <div class="pull-right" style="margin-right: 5px;">
+                                <a class="notice_link" href="<?php echo EA_const_url::inst()->get_url("privilege/notice/grid") ?>">更多</a>
+                            </div>
+                        </div>
+                    <?php endif ?>
+
                     <div class="titile">
                         <h2 style="margin-right:18px;" >今日概览</h2>
                         <font><?php echo date('Y.m.d')?></font>
@@ -154,7 +170,7 @@ echo $block_left;
                 <div class="containers m_width">
                     <div class="boxs">
                         <div class="title">订房订单确认<font id="ocnum">(<?php echo $order_comfirm_num;?>)</font></div>
-                        <?php if(!empty($order_confirm_two)){ 
+                        <?php if(!empty($order_confirm_two)){
                         foreach ($order_confirm_two as $ko => $vo) {?>
                         <div class="ticket">
                             <div class="con_left">
@@ -331,7 +347,7 @@ function show_detail(obj){
             temp+='<select id="after_status">';
             $.each(data.after,function(i,n){
                 if(i!=4)
-                    temp+='<option value="'+i+'">'+n+'</option>';       
+                    temp+='<option value="'+i+'">'+n+'</option>';
             });
             temp+='</select>';
         }else{

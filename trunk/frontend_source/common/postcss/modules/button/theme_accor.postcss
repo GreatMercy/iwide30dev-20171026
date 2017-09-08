@@ -1,0 +1,28 @@
+/* 主题相关类名 */
+@each $brand in novotel, fairmont, pullman, raffles, sofitel, swissotel, mercure {
+  .is-$(brand) {
+    .jfk-button {
+      &--primary {
+        background-color: var(--button-primary-fill-color-$(brand));
+        border-color: var(--button-primary-border-$(brand));
+        &.is-plain {
+          color: var(--button-primary-plain-color-$(brand));
+          background-color: transparent;
+        }
+        &.is-special {
+          color: var(--button-primary-special-color);
+          background-color: var(--button-primary-special-fill-color-$(brand));
+          border-color: var(--button-primary-special-border-$(brand));
+        }
+      }
+      &--suspension {
+        background-color: var(--button-suspension-fill-color-$(brand));
+        border-color: var(--button-suspension-border-$(brand));
+      }
+      &--default {
+        border-color: var(--button-default-border-$(brand));
+        color: var(--button-default-color-$(brand));
+      }
+    }
+  }
+}

@@ -1,12 +1,12 @@
 <template>
-  <div class="gradient_bg">
+  <div class="gradient_bg white_bg">
   <section class="balance_pad">
-    <div class="center padding_top_48 main_color1">
+    <div class="center balance_header main_color1">
         <em class="iconfonts font_30">{{dataList.total_credit}}</em>
         <p class="color3 font_14 margin_top_15">账户{{dataList.filed_name.credit_name}}</p>
     </div>
     <section class="balance_content">
-      <div class="flex font_16 centers margin_top_42 bd_bottom padding_bottom_35 recharge color2 padding_top_15">
+      <div class="flex font_16 centers bd_bottom padding_bottom_35 recharge color2 padding_top_15">
         <div class="flex_1 center relative balance_choose" @click="bouns = true, dataList = bounsList" :class="{ active: bouns}">
           <span class="relative padding_0_26 padding_bottom_5">
               获取记录
@@ -22,7 +22,7 @@
       </div>
       <section class="containers_list">
         <section v-show="bouns">
-          <div v-for="(value,key) in bounsList.bonuslist"  class="flex between padding_30 bd_bottom">
+          <div v-for="(value,key) in bounsList.bonuslist"  class="flex between containers_list_wrap bd_bottom">
             <div>
               <p class="font_16 width_210 txtclip color1">{{value.note}}</p>
               <p class="font_12 margin_top_18 color3">{{value.last_update_time}}</p>  
@@ -37,9 +37,9 @@
           </div>
         </section>
         <section v-show="!bouns">
-          <div v-for="(value,key) in rechargeList.bonuslist" class="flex between padding_30 bd_bottom">
+          <div v-for="(value,key) in rechargeList.bonuslist" class="flex between containers_list_wrap bd_bottom">
             <div>
-              <p class="font_16 width_210 txtclip">{{value.note}}</p>
+              <p class="font_16 width_210 txtclip color1">{{value.note}}</p>
               <p class="font_12 margin_top_18 color3">{{value.last_update_time}}</p> 
             </div>
             <div class="jfk-font main_color1">

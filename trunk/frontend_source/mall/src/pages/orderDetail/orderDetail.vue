@@ -1,19 +1,22 @@
 <template>
-  <div class="jfk-pages jfk-page__orderCoupon">
+  <div class="jfk-pages jfk-page__orderCoupon" :class="pageNamespace">
     <div class="jfk-pages__theme"></div>
     <headTitle :headTitleMsg="headTitleMsg"/>
     <div class="orderDetail__state jfk-pl-30 jfk-pr-30 " v-if="orderStatusMsg">
-      <div class="orderDetail__state__main">
-        <img src="../../assets/image/goldlight.png" class="goldlight">
-        <div class="orderDetail__state__type color-golden font-size--60" v-html="orderStatusMsg">
+      <div class="orderDetail__state__main font-color-light-gray-common"  v-if="used || overdue || refunded">
+        <div class="orderDetail__state__type  font-size--60" v-html="orderStatusMsg" >
         </div>
       </div>
+      <div class="orderDetail__state__main color-golden" v-else>
+        <div class="orderDetail__state__type  font-size--60" v-html="orderStatusMsg" >
+        </div>
+      </div>   
     </div>
     <div class="orderCoupon jfk-pl-30 jfk-pr-30">
       <div class="orderCoupon__main">
         <ordergiftinfo :giftinfo="giftinfo"></ordergiftinfo>
         <div class="jfk-menuList" v-if="validCoupon.status === '2'&& !used && !overdue && !refunded && menuListBtnShow">
-          <div class="menu-inn jfk-clearfix">
+          <div class="menu-inn jfk-clearfix color-golden">
             <div class="item" v-if="menuList.canReserve"><a
               :href="pageResource.package_booking + '&code_id='+validCoupon.code_id + '&oid=' + product.order_id"><i
               class="jfk-font icon-user_icon_Checkin_normal"></i>
@@ -27,11 +30,11 @@
               <i class="jfk-font icon-mall_icon_orderDetail_post"></i>
               <p class="font-size--24">邮寄</p></a>
             </div>
-            <div class="item" v-if="menuList.canWxBooking"><a 
+            <div class="item" v-if="menuList.canWxBooking"><a
             :href="pageResource.wx_select_hotel+'&oid='+validCoupon.order_id+'&aiid='+validCoupon.asset_item_id">
               <i class="jfk-font icon-user_icon_Reservatio"></i>
               <p class="font-size--24">订房</p></a>
-            </div>            
+            </div>
             <div class="item" v-if="menuList.canSend"><a
               :href="pageResource.package_send+'&aiid='+validCoupon.asset_item_id+'&oid='+validCoupon.order_id"><i
               class="jfk-font icon-mall_icon_orderDetai_gift"></i>
@@ -50,7 +53,7 @@
                 <div class="item__left">
                   <span class="title font-size--28">券 码</span>
                   <span class="number fot-size--32">
-                          <jfk-text-split :text="item.code" :split="3"></jfk-text-split>
+                          <jfk-text-split :text="item.code" :split="4"></jfk-text-split>
                         </span>
                 </div>
                 <div class="item__right" v-if="item.status=='2'" @click="handleQrcode(item.code,item.qrcode_url)">
@@ -134,38 +137,35 @@
       <div class="moreinfo__item"><span class="item__name font-size--28">下单时间</span><span
         class="item__value font-size--30">{{product.create_time}}</span></div>
       <div class="moreinfo__item"><span class="item__name font-size--28">订单总价</span><span
-        class="jfk-price  font-size--40 item__value"><i class="jfk-font-number jfk-price__currency">￥</i><i
+        class="jfk-price  font-size--38 item__value"><i class="jfk-font-number jfk-price__currency">￥</i><i
         class="jfk-font-number jfk-price__number">{{product.real_grand_total}}</i></span><span
         class="item__showTrade font-size--24" @click="handleTradePhoto">交易快照<i
         class="jfk-font icon-user_icon_jump_normal"></i></span></div>
     </div>
     <div class="orderBtns jfk-pl-30 jfk-pr-30">
-      <div class="jfk-flex btn-box">
-        <div class="btn-item font-size--28" v-if="canRefundOrder">
+      <div class="jfk-flex btn-box ">
+        <div class="btn-item font-size--28" v-if="canRefundOrder && !refundSchedule">
           <a :href="pageResource.refund_index + product.order_id">
-            <i class="jfk-font icon-mall_icon_orderDetail_refund btn-item-icon"></i>
-            <i class="jfk-font icon-font_zh_shen_qkbys"></i>
-            <i class="jfk-font icon-font_zh_qing__qkbys"></i>
-            <i class="jfk-font icon-font_zh_tui_qkbys"></i>
-            <i class="jfk-font icon-font_zh_kuan_qkbys"></i>
+            <span class="jfk-font icon-mall_icon_orderDetail_refund color-golden font-size--32"></span>
+            申请退款
           </a>
         </div>
+        <div class="btn-item font-size--28" v-if="refundSchedule">
+          <a :href="pageResource.refund_detail">
+            <span class="jfk-font icon-mall_icon_orderDetail_refund color-golden font-size--32"></span>
+            查看退款
+          </a>
+        </div>        
         <div class="btn-item font-size--28" v-if="canDeleteOrder" @click="handleDeleteOrder(pageResource.del_order)">
           <a>
-            <i class="jfk-font icon-mall_icon_orderDetail_delete btn-item-icon"></i>
-            <i class="jfk-font icon-font_zh_shan_qkbys"></i>
-            <i class="jfk-font icon-font_zh_chu_qkbys"></i>
-            <i class="jfk-font icon-font_zh_ding_qkbys"></i>
-            <i class="jfk-font icon-font_zh_dan_qkbys"></i>
+            <span class="jfk-font icon-mall_icon_orderDetail_delete color-golden font-size--32"></span>
+            删除订单
           </a>
         </div>
         <div class="btn-item font-size--28" @click="handleHotelPhone(productPackage.hotel_tel)">
           <a>
-            <i class="jfk-font icon-mall_icon_orderDetail_contact btn-item-icon"></i>
-            <i class="jfk-font icon-font_zh_ke_qkbys"></i>
-            <i class="jfk-font icon-font_zh_fu_qkbys1"></i>
-            <i class="jfk-font icon-font_zh_dian__qkbys"></i>
-            <i class="jfk-font icon-font_zh_hua_qkbys"></i>
+            <span class="jfk-font icon-mall_icon_orderDetail_contact color-golden font-size--32"></span>
+            客服电话
           </a>
         </div>
       </div>
@@ -176,7 +176,7 @@
       </p>
       <img :src="popQrcodeUrl">
     </jfk-popup>
-    <jfk-popup v-model="showTradePhoto" :showCloseButton="true" class="trade-photo" position="bottom">
+    <jfk-popup v-model="showTradePhoto" :showCloseButton="true" class="trade-photo" >
       <div class="tradeBox">
         <div class="tradeBox-cont" :style="{'max-height': maxHeight}">
           <div class="order-timeId font-size--24">
@@ -192,18 +192,14 @@
             <div class="content jfk-pl-30 ">
               <h2 class="font-size--32">{{giftinfo.title}}</h2>
               <p class="font-size--24 validate">{{productPackage.hotel_name}}</p>
-              <div class="price_box"><span class="jfk-price  font-size--40"><i
+              <div class="price_box color-golden-price"><span class="jfk-price  font-size--38"><i
                 class="jfk-font-number jfk-price__currency">￥</i><i
                 class="jfk-font-number jfk-price__number">{{giftinfo.price}}</i></span><span
                 class="number font-size--24">{{giftinfo.number}}份</span></div>
             </div>
           </div>
           <a class="jfk-button jfk-button--primary is-plain font-size--30 product-button"
-             :href="pageResource.package_detail+productPackage.product_id"><span class="jfk-button__text"><i
-            class="jfk-font jfk-button__text-item icon-font_zh_zai__qkbys"></i><i
-            class="jfk-font jfk-button__text-item icon-font_zh_ci_qkbys"></i><i
-            class="jfk-font jfk-button__text-item icon-font_zh_gou_qkbys"></i><i
-            class="jfk-font jfk-button__text-item icon-font_zh_mai_qkbys"></i></span></a>
+             :href="pageResource.package_detail+productPackage.product_id"><span >再次购买</span></a>
           <div class="trade-service">
             <ul class="jfk-clearfix jfk-ta-c ">
               <li class="font-size--40"><i class="jfk-font icon-mall_icon_support_ensure"></i>
@@ -216,7 +212,7 @@
               <li class="font-size--40" v-if="menuList.canPost"><i class="jfk-font icon-mall_icon_orderDetail_post"></i>
                 <p class="font-size--28">邮寄到家</p>
               </li>
-              <li class="font-size--40" v-if="menuList.canSend"><i class="jfk-font icon-user_icon_Polite_nor"></i>
+              <li class="font-size--40" v-if="menuList.canSend"><i class="jfk-font icon-mall_icon_orderDetai_gift"></i>
                 <p class="font-size--28">赠送好友</p>
               </li>
               <li class="font-size--40" v-if="menuList.canCheck"><i class="jfk-font icon-mall_icon_support_deliver"></i>
@@ -274,10 +270,11 @@
     success: '<i class="jfk-font icon-font_zh_gou_qkbys"></i><i class="jfk-font icon-font_zh_mai_qkbys"></i><i class="jfk-font icon-font_zh_cheng_qkbys"></i><i class="jfk-font icon-font_zh_gong_qkbys"></i>',
     refund: '<i class="jfk-font icon-font_zh_yi_qkbys"></i><i class="jfk-font icon-font_zh_tui_qkbys"></i><i class="jfk-font icon-font_zh_kuan_qkbys"></i>',
     used: '<i class="jfk-font icon-font_zh_shi_qkbys"></i><i class="jfk-font icon-font_zh_yong_qkbys"></i><i class="jfk-font icon-font_zh_wan_qkbys"></i><i class="jfk-font icon-font_zh_bi_qkbys"></i>',
-    invalid: '<i class="jfk-font icon-font_zh_yi_qkbys"></i><i class="jfk-font icon-font_zh_guo_qkbys"></i><i class="jfk-font icon-font_zh_qi_qkbys"></i>'
+    invalid: '<i class="jfk-font icon-font_zh_yi_qkbys"></i><i class="jfk-font icon-font_zh_guo_qkbys"></i><i class="jfk-font icon-font_zh_qi_qkbys"></i>',
+    refunding: '<i class="jfk-font icon-font_zh_tui_qkbys"></i><i class="jfk-font icon-font_zh_kuan_qkbys"></i><i class="jfk-font icon-font_zh_zhong_qkbys"></i>'
   }
   const orderStatusFn = function (type) {
-    return orderStatusMap[type] + '<i class="jfk-font-number"></i>'
+    return orderStatusMap[type]
   }
   export default {
     name: 'orderDetail',
@@ -330,7 +327,8 @@
         used: false,
         refunded: false,
         compose: {},
-        showProductimg: false
+        showProductimg: false,
+        refundSchedule: false
       }
     },
     beforeCreate () {
@@ -342,6 +340,7 @@
         iconClass: 'jfk-loading__snake',
         isLoading: true
       })
+      this.$pageNamespace(params)
     },
     created () {
       let that = this
@@ -380,16 +379,15 @@
         that.productPackage = productPackage
         that.overdue = new Date() > new Date(that.giftinfo.validate) ? 'true' : false
         that.used = product.consume_status === '23' ? 'true' : false
-        that.refunded = product.refund_status === '33' ? 'true' : false
-        that.compose = productPackage.compose
-
+        that.refunded = product.refund_info_status === '3' ? 'true' : false
+        that.compose = productPackage.composes
         if (code[0] && code[0].status === '2') {
           that.validCoupon = code[0]
         }
-        if (that.overdue || product.consume_status === '23' || product.refund_status === '33') {
+        if (that.overdue || product.consume_status === '23' || product.refund_info_status === '3') {
           that.canDeleteOrder = true
         }
-        if (that.menuList.canRefund && product.consume_status === '21' && !that.overdue && product.refund_status !== '33') {
+        if (that.menuList.canRefund && product.consume_status === '21' && !that.overdue && product.refund_info_status !== '3' && product.refund_info_status !== '5' && product.refund_info_status !== '6') {
           that.canRefundOrder = true
         }
         if (product.status === '12') {
@@ -397,11 +395,12 @@
         }
         if (that.refunded) {
           that.orderStatusMsg = orderStatusFn('refund')
-        }
-        if (that.overdue) {
+        } else if (product.refund_info_status === '1' || product.refund_info_status === '2' || product.refund_info_status === '6') {
+          that.orderStatusMsg = orderStatusFn('refunding')
+          that.refundSchedule = true
+        } else if (that.overdue) {
           that.orderStatusMsg = orderStatusFn('invalid')
-        }
-        if (that.used) {
+        } else if (that.used) {
           that.orderStatusMsg = orderStatusFn('used')
         }
       })

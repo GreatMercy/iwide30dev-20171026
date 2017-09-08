@@ -1,0 +1,108 @@
+.jfk-pages__post {
+
+  .invoice-add-address {
+    &__content {
+      background-color: var(--color-white);
+      color: var(--font-color-extra-light-gray);
+      box-shadow: 0 0 1em rgba(178, 148, 94, 0.15);
+
+      i {
+        border: 1px solid var(--color-golden);
+        &::after {
+          background-color: var(--color-golden);
+        }
+
+        &::before {
+          background-color: var(--color-golden);
+        }
+      }
+    }
+  }
+
+  .invoice-address {
+    &__content {
+      background-color: var(--color-white);
+      box-shadow: 0 0 1em rgba(178, 148, 94, 0.15);
+
+      .jfk-font {
+        color: var(--font-color-extra-light-gray);
+      }
+
+    }
+
+    &__title {
+      color: var(--font-color-extra-light-gray);
+    }
+
+    &__item-content {
+      color: var(--font-color-white);
+    }
+
+    &__line {
+      &:after {
+        background-color: #fff;
+        background-image: linear-gradient(to left,
+        #e57979 46%, transparent 46%, transparent 50%, #70a8d3 50%, #70a8d3 96%, transparent 96%, transparent);
+      }
+    }
+  }
+
+  .post-number-wrap {
+    background-color: var(--color-white);
+  }
+
+  .post-info {
+    &__name {
+      span {
+        color: var(--font-color-white);
+      }
+
+      &--mask {
+        width: px2rem(4);
+        height: px2rem(28);
+        background-color: var(--color-golden);
+      }
+    }
+
+    &__hotel {
+      color: var(--font-color-extra-light-gray);
+    }
+
+    &__number {
+      color: var(--font-color-extra-light-gray);
+      span {
+        color: var(--font-color-white);
+        margin: 0 px2rem(13);
+      }
+    }
+  }
+
+
+  .post-number {
+    &::before {
+      left: 0;
+      bottom: 0;
+      background-color: var(--line-color-light-silver);
+    }
+
+    &__title {
+      color: var(--font-color-extra-light-gray);
+    }
+  }
+
+  .post-explain {
+    &__title {
+      i {
+        color: #6e6e6e;
+      }
+      span {
+        color: var(--font-color-extra-light-gray);
+      }
+    }
+
+    &__content {
+      color: var(--font-color-light-gray);
+    }
+  }
+
+}

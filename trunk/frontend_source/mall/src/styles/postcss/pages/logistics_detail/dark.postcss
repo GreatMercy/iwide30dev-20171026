@@ -21,11 +21,6 @@
           color: var(--font-color-white);
         }
 
-        .price {
-          .jfk-price {
-            color: var(--font-color-white);
-          }
-        }
       }
     }
 
@@ -53,7 +48,7 @@
     }
 
     &__no-info {
-      color: var(--font-color-extra-light-gray-bg-white);
+      color: var(--font-color-extra-light-gray-common);
     }
 
     &__item {
@@ -61,23 +56,42 @@
       }
 
       &--start {
-        background-image: background-image(/refund_detail/start.png, theme);
-        background-size: px2rem(20) px2rem(20);
+        i {
+          width: 6px;
+          height: 6px;
+          border: 2px solid #6a5d45;
+          border-radius: 100%;
+        }
       }
 
       &--default {
-        background-image: background-image(/refund_detail/step.png, theme);
-        background-size: px2rem(12) px2rem(12);
+        i {
+          width: px2rem(12);
+          height: px2rem(12);
+          background-color: var(--font-color-light-silver);
+          border-radius: 100%;
+        }
       }
 
       &--finish {
-        background-image: background-image(/refund_detail/finish.png, theme);
-        background-size: px2rem(56) px2rem(56);
+        i {
+          width: px2rem(12);
+          height: px2rem(12);
+          background-color: #ad9565;
+          border-radius: 100%;
+          box-shadow: 0 0 10px #ad9565;
+        }
       }
 
       &--end {
-        background-image: background-image(/refund_detail/end.png, theme);
-        background-size: px2rem(68) px2rem(68);
+        i {
+          width: px2rem(30);
+          height: px2rem(30);
+          background-image: background-image(/refund_detail/end.png, theme);
+          border-radius: 100%;
+          background-size: contain;
+          box-shadow: 0 0 10px #ad9565;
+        }
       }
 
       &--line {

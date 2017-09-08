@@ -14,7 +14,7 @@
           <div class="product-info-cont">
             <h3 class="product-title font-size--32 font-color-dark-white" v-once>{{product.name}}</h3>
             <div class="product-price" v-if="product.price_market">
-              <span class="jfk-price product-price-package color-golden font-size--54" v-html="pricePackage" v-once></span>
+              <span class="jfk-price product-price-package color-golden-price font-size--54" v-html="pricePackage" v-once></span>
               <span class="jfk-price__original product-price-market font-size--24 font-color-light-gray" :class="{'is-integral': product.tag === 7}" v-once>{{priceMarket}}</span>
             </div>
             <p class="font-size--24 product-number font-color-light-gray-common" v-html="productNumber"></p>

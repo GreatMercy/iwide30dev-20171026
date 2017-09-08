@@ -45,8 +45,57 @@
     .choose_date_calendar{
       background: var(--color-white);
     }
+    .search_city{
+      background-color: var(--color-light-black);
+      & input{
+        background-color: var(--color-light-black);
+      }
+      & input::placeholder{
+        color: var(--font-color-light-gray);
+        background-color: var(--color-light-black);
+      }
+      .color{
+        color: var(--font-color-light-gray);
+      }
+      .icon-icon_search{
+        color: var(--font-color-light-gray);
+      }
+      &::before {
+        background-color: var(--font-color-light-gray);
+      }
+      & .no_far{
+        color: var(--color-golden);
+      }
+      .icon-icon_delete{
+        background: #bfbfbf;
+        color: var(--color-white);
+      }
+    }
 
+    .search_city_list{
+      &_item{
+        p{
+          color: var(--font-color-white);
+          &::before {
+            background-color: var(--font-color-light-gray);
+          }
+        }
+      }
+    }
 
+    .for_you{
+      &_list_item{
+        & p{
+          color: var(--font-color-white);
+          &::before {
+            background-color: var(--font-color-light-gray);
+          }
+          i{
+            color: var(--font-color-silver);
+          }
+        }
+      }
+    }
 
   }
 

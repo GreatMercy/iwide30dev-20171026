@@ -29,5 +29,6 @@
           s.parentNode.insertBefore(vds, s);
         })();
       })();
+      var url_param = "<?php echo $url_param;?>";
 </script>
 <body>

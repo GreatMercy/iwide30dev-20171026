@@ -1,0 +1,66 @@
+.jfk-coupons {
+  &__item {
+    box-shadow: 0 0 calc(25 / 24)em  rgba(128, 128, 128, .2);
+    .jfk-coupons__money {
+      &-cont {
+        .jfk-coupons__money-num {
+          color: #fff;
+        }
+      }
+    }
+    &.is-offset {
+      .jfk-coupons__money {
+        background-color: #c0a779;
+        background-image: linear-gradient(51deg, #bea77e, #e9dbbf);
+        &-num {
+          text-shadow: 0 0 calc(15 / 120)em color(#ad9262 a(24%));
+        }
+      }
+    }
+    &.is-exchange {
+      .jfk-coupons__money {
+        background-color: #afd0b5;
+        background-image: linear-gradient(51deg, #a8c8ae, #d2eed7);
+        &-num {
+          text-shadow: 0 0 calc(15 / 106)em color(#6ba475 a(25%));
+        }
+      }
+    }
+    &.is-discount {
+      .jfk-coupons__money {
+        background-color: #aab2d2;
+        background-image: linear-gradient(51deg, #adb3ca, #d8ddf1);
+        &-num {
+          text-shadow: 0 0 calc(15 / 158)em color(#7683c8 a(24%));
+        }
+      }
+    }
+    &.is-disabled {
+      .jfk-coupons__money {
+        background-image: linear-gradient(51deg, #c5c5c5, #e1e0e0);
+      }
+      .jfk-coupons {
+        &__name {
+          color: #bfbfbf;
+        }
+        &__scope{
+          color: #bfbfbf;
+        }
+        &__expire {
+          color: #bfbfbf;
+        }
+        &__status{
+          &-text {
+            color: #333;
+          }
+        }
+      }
+    }
+  }
+  &__cont {
+    background-color: #fff;
+    &:before {
+      background-color: #fff;
+    }
+  }
+}

@@ -35,6 +35,7 @@
   .product-info {
     padding-top: px2rem(44);
     padding-left: px2rem(70);
+    position: relative;
     .name {
       line-height: calc(55 / 38);
       @mixin ellipsis 2;
@@ -134,7 +135,6 @@
       .list {
         @mixin one-line horizontal {
           top: 0;
-          
         }
       }
     }
@@ -144,14 +144,17 @@
   }
   /*邮寄赠送与订单信息同时存在*/
   .mail-gift + .order-info {
-    padding-top: 0;
+    margin-top: 0;
   }
   /* 订单信息 */
   .order-info {
-    padding-top: px2rem(66);
+    margin-top: px2rem(66);
   }
   /* 只邮寄 */
   .mail-only {
+    .card {
+      overflow: hidden;
+    }
     .add {
       height: px2rem(100);
     }
@@ -166,12 +169,12 @@
     .lace {
       position: absolute;
       height: px2rem(5);
-      left: 0;
-      right: 0;
+      left: -0.2em;
+      right: -0.2em;
       bottom: 0;
       overflow: hidden;
       &:after {
-        transform: skew(30deg, 0);
+        transform: skew(45deg, 0);
         background-size: px2rem(138) px2rem(5);
         position: absolute;
         top: 0;
@@ -344,7 +347,7 @@
       }
        &.is-open {
         .detail:before {
-          transform: rotate(-540deg);
+          transform: rotate(180deg);
           top: 0;
         }
       }

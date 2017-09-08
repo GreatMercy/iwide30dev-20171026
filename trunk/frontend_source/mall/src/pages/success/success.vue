@@ -1,16 +1,18 @@
 <template>
-  <div class="jfk-pages jfk-pages__success">
+  <div class="jfk-pages jfk-pages__success" :class="pageNamespace">
     <div class="jfk-pages__theme"></div>
     <div class="shengguang">
       <img src="../../assets/image/shengguang.png">
     </div>
     <headTitle :headTitleMsg="headTitleMsg" />
-    <div class="success_main">
+    <div class="success_main color-golden">
       <div class="gou">
-        <img src="../../assets/image/gou.png">
+        <span class="mainbox">
+        <i class="jfk-font icon-radio_icon_selected_default"></i>
+        </span>
       </div>
-      <div class="wenan font-size--46">
-        <i class="jfk-font icon-font_zh_gong_qkbys1"></i>
+      <div class="wenan font-size--46 ">
+        <i class="jfk-font icon-font_zh_gong_1_qkbys"></i>
         <i class="jfk-font icon-font_zh_xi_qkbys"></i>
         <i class="jfk-font icon-font_zh_ni_qkbys" style="margin-right: 10px"></i>
         <i class="jfk-font icon-font_zh_gou_qkbys"></i>
@@ -21,19 +23,13 @@
       </div>
       <div class="actionbtns">
         <a :href="productDetail" class="jfk-button jfk-button--primary is-plain font-size--30 product-button jfk-button--lower">
-            <span class="jfk-button__text">
-              <i class="jfk-font jfk-button__text-item icon-font_zh_zai__qkbys"></i>
-              <i class="jfk-font jfk-button__text-item icon-font_zh_ci_qkbys"></i>
-              <i class="jfk-font jfk-button__text-item icon-font_zh_gou_qkbys"></i>
-              <i class="jfk-font jfk-button__text-item icon-font_zh_mai_qkbys"></i>
+            <span >
+              再次购买
             </span>
         </a>
         <a :href="orderDetail" class="jfk-button jfk-button--primary font-size--30 product-button jfk-button--lower">
-            <span class="jfk-button__text">
-              <i class="jfk-font jfk-button__text-item icon-font_zh_cha_qkbys"></i>
-              <i class="jfk-font jfk-button__text-item icon-font_zh_kan_qkbys"></i>
-              <i class="jfk-font jfk-button__text-item icon-font_zh_ding_qkbys"></i>
-              <i class="jfk-font jfk-button__text-item icon-font_zh_dan_qkbys"></i>
+            <span >
+             查看订单
             </span>
         </a>
       </div>
@@ -47,8 +43,8 @@
       </div> -->
     </div>
     <div class="recommendation jfk-pl-30" v-if="recommendations.length">
-      <p class="font-size--24 font-color-light-gray tip">其他用户还看了</p>
-      <div class="recommendations-list">
+      <p class="font-size--24 font-color-light-gray-common tip">其他用户还看了</p>
+      <div class="recommendations-list " :class="{'jfk-pr-30': recommendations.length == 1}">
         <jfk-recommendation :items="recommendations" :linkPrefix="detailUrl" :emptyLink="indexUrl"></jfk-recommendation>
       </div>
     </div>
@@ -90,6 +86,7 @@
         params.oid = '1000011950'
       }
       this.oid = params.oid
+      this.$pageNamespace(params)
     },
     created () {
       let that = this

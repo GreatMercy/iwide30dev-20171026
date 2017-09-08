@@ -2,124 +2,46 @@
   <div class="page_list">
     <div class="main">
       <div class="leftmenu">
-        <ul class="list">
-          <li class="active">北京</li>
-          <li>北京</li>
-          <li >北京</li>
+        <ul class="list" >
+          <li :class="{active: idx == currentIdx}" v-for="(item, idx) in listData" @click="handleCity(idx)">{{item.city}}</li>
         </ul>
       </div>
       <div class="rightcontent">
         <ul>
-          <li>
-            <img src="../assets/hotelimg.jpg"></img>
-            <div class="hotelinfo">
-              <h3>北京万达索菲索菲特大饭店特大饭店</h3>
-              <p>天安门／王府井<a>进入商城</a></p>
-            </div>
+          <li v-for="item in listData[currentIdx].data">
+            <a :href="linkPrefix + item.tkid + '&brandname=' + item.brandname">
+              <img :src="'./static/img/small/'+item.image" />
+              <div class="hotelinfo">
+                <h3>{{item.hotel}}</h3>
+                <p><span>{{item.place}}</span><i class="tomall">进入商城</i></p>
+              </div>
+            </a>
           </li>
-          <li>
-            <img src="../assets/hotelimg.jpg"></img>
-            <div class="hotelinfo">
-              <h3>北京万达索菲特大饭店</h3>
-              <p>天安门／王府井<a>进入商城</a></p>
-            </div>
-          </li>
-          <li>
-            <img src="../assets/hotelimg.jpg"></img>
-            <div class="hotelinfo">
-              <h3>北京万达索菲特大饭店</h3>
-              <p>天安门／王府井<a>进入商城</a></p>
-            </div>
-          </li>  
-          <li>
-            <img src="../assets/hotelimg.jpg"></img>
-            <div class="hotelinfo">
-              <h3>北京万达索菲特大饭店</h3>
-              <p>天安门／王府井<a>进入商城</a></p>
-            </div>
-          </li> 
-                    <li>
-            <img src="../assets/hotelimg.jpg"></img>
-            <div class="hotelinfo">
-              <h3>北京万达索菲特大饭店</h3>
-              <p>天安门／王府井<a>进入商城</a></p>
-            </div>
-          </li>           <li>
-            <img src="../assets/hotelimg.jpg"></img>
-            <div class="hotelinfo">
-              <h3>北京万达索菲特大饭店</h3>
-              <p>天安门／王府井<a>进入商城</a></p>
-            </div>
-          </li>           <li>
-            <img src="../assets/hotelimg.jpg"></img>
-            <div class="hotelinfo">
-              <h3>北京万达索菲特大饭店</h3>
-              <p>天安门／王府井<a>进入商城</a></p>
-            </div>
-          </li>           <li>
-            <img src="../assets/hotelimg.jpg"></img>
-            <div class="hotelinfo">
-              <h3>北京万达索菲特大饭店</h3>
-              <p>天安门／王府井<a>进入商城</a></p>
-            </div>
-          </li>           <li>
-            <img src="../assets/hotelimg.jpg"></img>
-            <div class="hotelinfo">
-              <h3>北京万达索菲特大饭店</h3>
-              <p>天安门／王府井<a>进入商城</a></p>
-            </div>
-          </li>           <li>
-            <img src="../assets/hotelimg.jpg"></img>
-            <div class="hotelinfo">
-              <h3>北京万达索菲特大饭店</h3>
-              <p>天安门／王府井<a>进入商城</a></p>
-            </div>
-          </li>           <li>
-            <img src="../assets/hotelimg.jpg"></img>
-            <div class="hotelinfo">
-              <h3>北京万达索菲特大饭店</h3>
-              <p>天安门／王府井<a>进入商城</a></p>
-            </div>
-          </li>           <li>
-            <img src="../assets/hotelimg.jpg"></img>
-            <div class="hotelinfo">
-              <h3>北京万达索菲特大饭店</h3>
-              <p>天安门／王府井<a>进入商城</a></p>
-            </div>
-          </li>           <li>
-            <img src="../assets/hotelimg.jpg"></img>
-            <div class="hotelinfo">
-              <h3>北京万达索菲特大饭店</h3>
-              <p>天安门／王府井<a>进入商城</a></p>
-            </div>
-          </li>           <li>
-            <img src="../assets/hotelimg.jpg"></img>
-            <div class="hotelinfo">
-              <h3>北京万达索菲特大饭店</h3>
-              <p>天安门／王府井<a>进入商城</a></p>
-            </div>
-          </li>           <li>
-            <img src="../assets/hotelimg.jpg"></img>
-            <div class="hotelinfo">
-              <h3>北京万达索菲特大饭店</h3>
-              <p>天安门／王府井<a>进入商城</a></p>
-            </div>
-          </li>                             
         </ul>
       </div>
     </div>
   </div>
 </template>
-
 <script>
 import accor from '@/accorfile/accor.json'
+import formatUrlParams from 'jfk-ui/lib/format-urlparams.js'
+const mainCity = ['beijing', 'shanghai', 'guangzhou', 'nanjing', 'xian']
 // console.log(accor)
 export default {
   name: 'list',
   data () {
     return {
       msg: 'haha',
-      accor: accor
+      accor: accor,
+      listData: [],
+      currentIdx: 0
+    }
+  },
+  beforeCreate () {
+    this.params = formatUrlParams(window.location.hash)
+    this.linkPrefix = 'http://1.025op.com/index.php/soma/package/index/?id=a502245149&catid=&tkid='
+    if (process.env.NODE_ENV === 'development') {
+      this.linkPrefix = 'http://' + location.hostname + ':8080?id=a502245149&catid=&tkid='
     }
   },
   created () {
@@ -136,26 +58,44 @@ export default {
           result.push({
             city: item.city,
             hotel: item.hotel,
-            brand: item.brand
+            brand: item.brand,
+            cityname: item.cityname,
+            data: [item]
           })
           map[item.city] = item
-          console.log('hha')
         } else {
           for (let j in result) {
             let itemj = result[j]
             if (itemj.city === item.city) {
-              console.log('nihao')
-              itemj.push({
-                data: []
-              })
               itemj.data.push(item)
               break
             }
           }
         }
       }
-      // return result
-      // console.log(result, 'ni')
+      let maincityData = []
+      result.forEach((item, idx) => {
+        mainCity.forEach((itemcity, index) => {
+          if (item.cityname.toLowerCase() === itemcity) {
+            maincityData.push(item)
+            result.splice(index, 1)
+          }
+        })
+      })
+      result = maincityData.concat(result)
+      this.listData = result
+      if (this.params) {
+        maincityData.forEach((item, idx) => {
+          if (this.params.city.toLowerCase() === item.cityname) {
+            this.currentIdx = idx
+            return
+          }
+        })
+      }
+      console.log(result)
+    },
+    handleCity (idx) {
+      this.currentIdx = idx
     }
   },
   computed: {

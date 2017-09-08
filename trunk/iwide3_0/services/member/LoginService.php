@@ -56,8 +56,8 @@ class LoginService extends MemberBaseService
         $data['login_config'] = $login_config;
         $data['inter_id'] = $inter_id;
         if ($this->getCI()->input->get('redir')){
-            $data['succ_url']=urldecode($this->getCI()->input->get('redir'));
-            $data['redir']=urlencode($this->getCI()->input->get('redir'));
+            $data['succ_url']=urldecode(substr($_SERVER ['REQUEST_URI'],strpos($_SERVER ['REQUEST_URI'],'redir=')+6));
+            $data['redir']=urlencode(substr($_SERVER ['REQUEST_URI'],strpos($_SERVER ['REQUEST_URI'],'redir=')+6));
         }else {
             $data['succ_url']=site_url('membervip/center').'?id='.$inter_id;
             $data['redir']='';

@@ -10,8 +10,8 @@
               <div class="hotel-pictures__items"
                    :class="{active: show[curIndex].isActive,picPushOutBack : show[curIndex].isShow1 , picPushOutFront : show[curIndex].isShow2 ,
                    picPushInBack : show[curIndex].isShow3 , picPushInFront : show[curIndex].isShow4}"
-                   @touchstart="doStartAction(index)" @touchmove="doMoveAction"
-                   @touchend="doEndAction">
+                   @touchstart="doStartAction" @touchmove="doMoveAction"
+                   @touchend="doEndAction(index)">
                 <div class="hotel-pictures__title">
                   {{item.info + '(' + item.gallery_name + ')'}}
                 </div>
@@ -24,8 +24,8 @@
               <div class="hotel-pictures__items active"
                    :class="{active: show[nextIndex].isActive,picPushOutBack : show[nextIndex].isShow1 , picPushOutFront : show[nextIndex].isShow2 ,
                    picPushInBack : show[nextIndex].isShow3 , picPushInFront : show[nextIndex].isShow4}"
-                   @touchstart="doStartAction(index)" @touchmove="doMoveAction"
-                   @touchend="doEndAction">
+                   @touchstart="doStartAction" @touchmove="doMoveAction"
+                   @touchend="doEndAction(index)">
                 <div class="hotel-pictures__title">
                   {{item.info + '(' + item.gallery_name + ')'}}
                 </div>
@@ -36,13 +36,13 @@
             </template>
             <template v-else>
               <div class="hotel-pictures__items" :class="{active:selected === index}"
-                   @touchstart="doStartAction(index)" @touchmove="doMoveAction"
-                   @touchend="doEndAction">
+                   @touchstart="doStartAction" @touchmove="doMoveAction"
+                   @touchend="doEndAction(index)">
                 <div class="hotel-pictures__title">
                   {{item.info + '(' + item.gallery_name + ')'}}
                 </div>
                 <div class="hotel-pictures__photo squareimg">
-                  <img v-if="selected !== 0" :src="default_img">
+                  <img v-if="selected !== 0 && selected < cur_gallery.length -1" :src="default_img">
                   <img v-else :src="item.image_url">
                 </div>
               </div>
@@ -51,11 +51,17 @@
         </div>
       </div>
       <div class="hotel-pictures__pagination">
-        <template v-if="direction === 'down'">
+        <template v-if="direction === 'down' && selected <= cur_gallery.length -2">
           <span class="current">{{selected + 2}}</span>
         </template>
-        <template v-else-if="direction === 'up'">
-          <span class="current">{{selected + 1}}</span>
+        <template v-else-if="direction === 'down' && selected > cur_gallery.length -2">
+          <span class="current">{{cur_gallery.length}}</span>
+        </template>
+        <template v-else-if="direction === 'up' && selected >= 1">
+          <span class="current">{{selected}}</span>
+        </template>
+        <template v-else-if="direction === 'up' && selected == 0">
+          <span class="current">1</span>
         </template>
         <template v-else-if="direction ==='' ">
           <span class="current">1</span>
@@ -67,12 +73,13 @@
 </template>
 <script>
   import {getHotelAlbum} from '@/service/http'
+  import formatUrlParams from 'jfk-ui/lib/format-urlparams.js'
 
   export default {
     name: 'app',
     components: {},
     created () {
-      this.hotel_id = this.getUrlParams('h')
+      this.hotel_id = formatUrlParams(location.href).h || ''
       this.getAlbumData()
     },
     data () {
@@ -98,22 +105,6 @@
       }
     },
     methods: {
-      // 获取url 参数
-      getUrlParams (urlName) {
-        let url = location.href
-        let paraString = url.substring(url.indexOf('?') + 1, url.length).split('&')
-        let returnValue
-        for (let i = 0; i < paraString.length; i++) {
-          let tempParas = paraString[i].split('=')[0]
-          let parasValue = paraString[i].split('=')[1]
-          if (tempParas === urlName) returnValue = parasValue
-        }
-        if (typeof (returnValue) === 'undefined') {
-          return ''
-        } else {
-          return returnValue
-        }
-      },
       // 获取相册数据
       getAlbumData () {
         getHotelAlbum({h: this.hotel_id}).then((res) => {
@@ -134,8 +125,8 @@
         }
       },
       // 开始触摸
-      doStartAction (index, e) {
-        var ele = e || window.event
+      doStartAction (e) {
+        let ele = e || window.event
         if (document.all) {
           ele.cancelBubble = true
           ele.returnValue = false
@@ -143,7 +134,6 @@
           ele.stopPropagation()
           ele.preventDefault()
         }
-        this.selected = index
         let _e = ele.touches[0]
         this.state = {
           time: Date.now(),
@@ -153,7 +143,7 @@
       },
       // 移动中
       doMoveAction (e) {
-        var ele = e || window.event
+        let ele = e || window.event
         if (document.all) {
           ele.cancelBubble = true
           ele.returnValue = false
@@ -163,8 +153,8 @@
         }
       },
       // 结束触摸
-      doEndAction (e) {
-        var ele = e || window.event
+      doEndAction (index, e) {
+        let ele = e || window.event
         if (document.all) {
           ele.cancelBubble = true
           ele.returnValue = false
@@ -177,7 +167,7 @@
         let distanceY = _e.pageY - this.state.pageY
         let time = Date.now() - this.state.time
         let event = ''
-        // 倾斜度在30-150之间触发
+        // 倾斜度大概在30-150之间触发
         let angle = Math.atan2(Math.abs(distanceX), Math.abs(distanceY))
         if (angle < 0.9) {
           // 方向
@@ -193,6 +183,7 @@
             // pan
             event = 'pan'
           }
+          this.selected = index
           this.photoChange({event: event, direction: this.direction})
         }
       },
@@ -231,20 +222,20 @@
         }
         if (name !== 'tap') {
           // 如果两次事件相隔小于animationDuration，则需要立刻执行changeDomClass
-
+          if (this.timeGap < this.animationDuration && this.nextIndex && this.curIndex) {
+            console.log(this.nextIndex)
+//            this.changeDomClass(this.curIndex, this.nextIndex)
+          }
           this.nextIndex = isUp ? this.selected - 1 : this.selected + 1
           if (this.nextIndex >= 0 && this.nextIndex < this.cur_gallery.length) {
-            if (this.timeGap < this.animationDuration && this.nextIndex && this.curIndex) {
-              this.changeDomClass(this.curIndex, this.nextIndex)
-            }
             this.curIndex = this.selected
             // 动画
             if (isUp) {
               this.show[this.curIndex].isShow1 = true
-              this.show[this.curIndex].isShow3 = true
+              this.show[this.nextIndex].isShow3 = true
             } else {
               this.show[this.curIndex].isShow2 = true
-              this.show[this.curIndex].isShow4 = true
+              this.show[this.nextIndex].isShow4 = true
             }
             let that = this
             clearTimeout(this.animationTime)

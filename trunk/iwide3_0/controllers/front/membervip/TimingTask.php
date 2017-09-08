@@ -16,6 +16,64 @@ class TimingTask extends MY_Controller {
         parent::__construct();
     }
 
+    //'/send_20170830174928.xlsx'
+    public function cancelcard(){
+        $this->load->model('membervip/common/Public_model','public_model');
+        $file_path = FD_PUBLIC . '/send_20170830174928.xlsx';
+        $arrays = $this->public_model->do_xlsx_parser($file_path);
+        $card_code = array();
+        foreach ($arrays as $val){
+            $Content = $val['Content'];
+            foreach ($Content as $key => $item){
+                if((!empty(trim($item[2])) OR trim($item[2]) === 0) && $key > 1) $card_code[] = str_replace('\'','',$item[2]);
+            }
+        }
+
+        if(!empty($this->input->get('debug')=='on')){
+            echo '<pre>';
+            print_r($card_code);
+            echo '</pre>';
+            exit;
+        }
+
+        MYLOG::w(@json_encode(array('a500360290',$card_code)),'membervip/debug-log','cancelcard');
+
+        foreach ($card_code as $code){
+            $f = 1;
+            $s = 1;
+            if(!empty($code)){
+                $where = array(
+                    'inter_id' => 'a500360290',
+                    'coupon_code' => $code
+                );
+                $info = $this->public_model->get_info($where,'member_card','member_card_id');
+                if(!empty($info)){
+                    //todo
+                    $params['inter_id'] = 'a500360290';
+                    $params['coupon_code'] = $code;
+                    $post_data = array(
+                        'is_useoff' => 't',
+                        'is_use' => 't',
+                        'is_active' => 'f'
+                    );
+                    $update_result = $this->public_model->update_save($params,$post_data,'member_card');
+                    if($update_result){
+                        MYLOG::w(@json_encode(array('s: '.$s,'a500360290',$code,$update_result)),'membervip/debug-log','cancelcard');
+                        $s++;
+                    }else{
+                        MYLOG::w(@json_encode(array('s: '.$f,'a500360290',$code,$update_result)),'membervip/debug-log','cancelcard');
+                        $f++;
+                    }
+
+                }else{
+                    MYLOG::w(@json_encode(array('s: '.$f,'a500360290',$code,null)),'membervip/debug-log','cancelcard');
+                    $f++;
+                }
+            }
+        }
+        echo "Completion of transaction";
+    }
+
     public function member_sales(){
         ini_set('memory_limit',-1); //无内存限制
         set_time_limit(0); //无时间限制
@@ -23,7 +81,8 @@ class TimingTask extends MY_Controller {
         $where = array(
             'inter_id' => 'a492669988',
             'member_mode' => 2,
-            'createtime >' => 1502812800
+            'createtime >=' => 1501516800  ,
+            'createtime <=' => 1504108800
         );
         $info = $this->public_model->get_list($where,'member_info','member_info_id,open_id',5000);
         if(!empty($info)){

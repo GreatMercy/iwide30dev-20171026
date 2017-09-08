@@ -65,17 +65,15 @@ class SupportService extends MemberBaseService
         $types = array('reg', 'pan');
         if ($this->saler_protected === true) { //已开启分销保护
             if (empty($saler_id) OR $saler_id === 0) {
-                $saler_info = $this->idistribute_model()->get_protection_saler($openid, $inter_id);
-                MYLOG::w("get_protection_saler :" . json_encode($saler_info) . '|' . $saler_id . '|' . $inter_id . " | " . $openid, 'membervip/debug-log');
-                if (!empty($saler_info)) {
-                    $saler_info = (array)$saler_info;
-                    if ($saler_info['protect_to'] > time()) { //在保护期内
-                        $this->saler_id = $saler_info['saler'];
-                    }
+                $_saler_id = $this->idistribute_model()->get_protection_saler($openid, $inter_id);
+                MYLOG::w("get_protection_saler :" . $_saler_id . '|' . $inter_id . " | " . $openid, 'membervip/debug-log');
+                if (!empty($_saler_id) && $_saler_id > 0) {
+                    $this->saler_id = $_saler_id;
                 }
             } else {
-                $saler_info = $this->idistribute_model()->save_saler_protection_info($inter_id, $openid, $_SERVER['REQUEST_URI'], $saler_id, time(), 'menbervip');
-                MYLOG::w("save_saler_protection_info :" . json_encode($saler_info) . '|' . $saler_id . '|' . $inter_id . " | " . $openid, 'membervip/debug-log');
+                $link = 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+                $saler_res = $this->idistribute_model()->save_saler_protection_info($inter_id, $openid, $link, $saler_id, time(), 'menbervip');
+                MYLOG::w("save_saler_protection_info :" . $saler_res . '|' . $saler_id . '|' . $inter_id . " | " . $openid, 'membervip/debug-log');
             }
         } elseif (empty($this->saler_id) && !in_array($type, $types)) {
             $this->saler_id = $this->getCI()->session->userdata('salesId');

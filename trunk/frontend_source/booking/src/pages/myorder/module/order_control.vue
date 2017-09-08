@@ -11,7 +11,7 @@
     </template>
     <template v-else>
       <span v-if="item.status === '3' && item.can_comment === '1' " class="comment"
-            @click="toLocationHref(item.TO_COMMENT+'?oid='+item.id)">
+            @click="toLocationHref(item.TO_COMMENT)">
       <!-- 评论 -->
       <i class="booking_icon_font font-size--30 icon-font_zh_ping_qkbys"></i>
       <i class="booking_icon_font font-size--30 icon-font_zh_lun_qkbys"></i>
@@ -19,7 +19,7 @@
       <!--退房-->
       <template v-if="item.orderstate.self_checkout !== 0">
         <span v-if="item.orderstate.self_checkout === 1" class="return"
-              @click="toLocationHref(item.CHECK_OUT+'?oid='+item.id)">
+              @click="toLocationHref(item.CHECK_OUT)">
           <!--退房-->
           <i class="booking_icon_font font-size--30 icon-font_zh_tui_qkbys"></i>
           <i class="booking_icon_font font-size--30 icon-font_zh_fang_qkbys"></i>
@@ -34,7 +34,7 @@
         </span>
       </template>
       <!--再次预定-->
-      <span class="order_btn whiteColor" @click="toLocationHref(item.INDEX+'?h='+item.hotel_id)">
+      <span class="order_btn whiteColor" @click="toLocationHref(item.INDEX)">
         <i class="booking_icon_font font-size--30 icon-font_zh_zai__qkbys"></i>
         <i class="booking_icon_font font-size--30 icon-font_zh_ci_qkbys"></i>
         <i class="booking_icon_font font-size--30 icon-font_zh_yv_qkbys"></i>

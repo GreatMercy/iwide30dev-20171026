@@ -1,5 +1,5 @@
 <template>
-  <div class="jfk-pages jfk-pages__reserve">
+  <div class="jfk-pages jfk-pages__reserve" :class="pageNamespace">
     <div class="jfk-pages__theme"></div>
     <div class="reserve-box" v-if="productInfo.product_id">
       <reverse-killsec-time @killsec-finish="handleKillsecFinish" :countdown="countdown" v-if="productInfo.tag === 2 && tokenId"></reverse-killsec-time>
@@ -30,10 +30,11 @@
         </div>
       </div>
       <div class="product-info jfk-ml-30 jfk-mr-30">
+        <i class="color-golden gap-line"></i>
         <div class="name font-color-white font-size--38">{{productInfo.name}}</div>
         <div class="product-other font-size--24" v-once v-html="packageInfoHtml"></div>
         <div class="price">
-          <span class="jfk-price product-price-package color-golden font-size--54">
+          <span class="jfk-price product-price-package color-golden-price font-size--54">
             <i class="jfk-font-number jfk-price__currency" v-if="!isIntegral">￥</i>
             <i class="jfk-font-number jfk-price__number">{{productInfo.price_package}}</i>
           </span>
@@ -100,7 +101,7 @@
             </div>
           </div>
           <transition name="fade">
-            <div class="tip jfk-flex is-align-middle jfk-pr-30 font-color-light-gray body font-size--24" v-show="useType === '2'">
+            <div class="tip jfk-flex is-align-middle jfk-pr-30 font-color-light-gray-common body font-size--24" v-show="useType === '2'">
               <div class="box jfk-pos-r">
                 <i class="jfk-font font-size--28 tip-icon icon-booking_icon_question_normal"></i>下单后，购买成功，将礼物打包赠转发给好友，好友点击即可成功领取
               </div>
@@ -192,7 +193,7 @@
       </div>
       <footer class="footer jfk-footer jfk-clearfix">
         <div class="order-detail jfk-fl-l" :class="{'is-open': priceOrderVisible}" @click="handleShowOrderDetail">
-          <span class="price color-golden">
+          <span class="price color-golden-price">
             <i class="price__currency font-size--24" v-if="!isIntegral">¥</i>
             <i class="price__number font-size--48">{{priceWithDiscount}}</i>
           </span>
@@ -201,7 +202,7 @@
           </span>
         </div>
         <div class="control jfk-fl-l">
-          <button href="javascript:;" @click="handleSubmitOrder" class="jfk-button font-size--34 jfk-button--higher jfk-button--free jfk-button--primary">
+          <button href="javascript:;" @click="handleSubmitOrder" class="jfk-button font-size--34 jfk-button--higher jfk-button--suspension jfk-button--free">
             <span class="jfk-button__text">
               <i class="jfk-font jfk-button__text-item icon-font_zh_li_qkbys"></i>
               <i class="jfk-font jfk-button__text-item icon-font_zh_ji_qkbys"></i>
@@ -233,11 +234,11 @@
       <div class="price-detail-box">
         <div class="price-detail-item item-price jfk-flex is-justify-space-between">
           <span class="font-size--28 font-color-extra-light-gray price-detail-label">微信价</span>
-          <span class="font-size--30 color-golden"><i v-if="!isIntegral">¥</i>{{pricePackage}}</span>
+          <span class="font-size--30 color-golden-price"><i v-if="!isIntegral">¥</i>{{pricePackage}}</span>
         </div>
         <div class="price-detail-item item-discount jfk-flex is-justify-space-between">
           <span class="font-size--28 font-color-extra-light-gray price-detail-label">{{priceDiscountItem.name}}</span>
-          <span class="font-size--30 color-golden">- <i v-if="!isIntegral">¥</i>{{priceDiscountItem.price}}</span>
+          <span class="font-size--30 color-golden-price">- <i v-if="!isIntegral">¥</i>{{priceDiscountItem.price}}</span>
         </div>
       </div>
     </jfk-popup>
@@ -286,6 +287,7 @@
         iconClass: 'jfk-loading__snake',
         isLoading: true
       })
+      this.$pageNamespace(params)
     },
     created () {
       let that = this

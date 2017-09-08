@@ -2,7 +2,7 @@
 <?php include 'header.php' ?>
 
 <div id="app"></div>
-<div id="scriptArea" data-page-id="index"></div>
+<div id="scriptArea" data-page-id="search"></div>
 
 </body>
 

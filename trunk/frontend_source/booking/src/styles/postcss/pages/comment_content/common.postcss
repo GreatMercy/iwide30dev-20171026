@@ -56,7 +56,7 @@
         margin-top: px2rem(30);
 
         .pregress {
-          width: px2rem(380);
+          width: px2rem(250);
           display: inline-block;
           height: px2rem(8);
           .bar {
@@ -128,18 +128,46 @@
         .score-text {
           margin-left: px2rem(10);
         }
+        span {
+          margin-left: -3px;
+        }
       }
       .font-size--18 {
         font-size: px2rem(18);
       }
     }
-
     .comment {
       margin-top: px2rem(35);
       margin-bottom: px2rem(25);
       line-height: px2rem(48);
+      word-wrap: break-word;
+      overflow: hidden;
     }
+    .swiper-container {
+      width: 100% !important;
+      height: px2rem(270) !important;
+      .swiper-slide {
+        width: px2rem(260) !important;
+        height: 100% !important;
+        a {
+          display: block;
+          height: 100%;
+          padding-bottom: 0;
+          overflow: hidden;
+          .jfk-swiper__item-bg {
+            width: 100%;
+            height: 100%;
+            background-color: red;
+            background-size: cover;
+            background-image: url(http://file.iwide.cn/public/media/club/201610310207346431.jpg);
+            position: absolute;
+            left: 0;
+            top: 0;
+          }
+        }
+      }
 
+    }
     .show_all {
       margin-bottom: px2rem(60);
     }
@@ -164,12 +192,11 @@
 
     .check_repeat {
       margin: 0 0 px2rem(30) 0;
-      .show_icon {
+      .show_icon, .hide_icon {
         display: inline-block;
-        width: px2rem(40);
-        height: px2rem(40);
-        line-height: px2rem(40);
-        margin-left: px2rem(-10);
+        margin-left: px2rem(10);
+      }
+      .show_icon {
         transform: rotate(180deg);
         -ms-transform: rotate(180deg);
         -moz-transform: rotate(180deg);
@@ -194,6 +221,9 @@
       }
     }
 
+  }
+  .comment-ul {
+    margin-bottom: px2rem(160);
   }
   .booking_now {
     width: 100%;

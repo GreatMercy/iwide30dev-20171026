@@ -3,9 +3,6 @@
 import Vue from 'vue'
 import JfkUi from 'jfk-ui/lib/jfk-ui.js'
 Vue.use(JfkUi)
-import '../../common/postcss/fonts/number/style.css'
-import '@/styles/postcss/reset.postcss'
-import '@/styles/postcss/common.postcss'
 
 import Promise from 'promise-polyfill'
 import pages from '@/pages/page'
@@ -16,9 +13,9 @@ if (process.env.NODE_ENV === 'development') {
     let formatUrlParams = require('jfk-ui/lib/format-urlparams.js')
     let params = formatUrlParams.default(location.href)
     if (params.theme === '1') {
-      require('@/styles/postcss/theme/light.postcss')
-    } else {
       require('@/styles/postcss/theme/dark.postcss')
+    } else {
+      require('@/styles/postcss/theme/light.postcss')
     }
   })
 } else {

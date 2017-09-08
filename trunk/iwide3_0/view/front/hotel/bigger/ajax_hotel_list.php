@@ -15,7 +15,7 @@
                             <?php if(!empty($r->comment_data)){?>
                             <p class="results_score float mar_r10"><span class="hotel_list_letter"><?php echo $r->comment_data['comment_score']?></span></p>
                             <?php }?>
-                            <p class="txtclip h30"><?php echo $r->name;?></p>
+                            <p class="txtclip h30 color1"><?php echo $r->name;?></p>
                         </div>
                         <div class="clearfix h24 color3 spacing1">
                             <?php if(isset($r->distance)){ if(!isset($landmark)){ ?>

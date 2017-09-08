@@ -18,6 +18,7 @@ class Resetpassword extends MY_Front_Member
             $data = ResetpasswordService::getInstance()->index($this->inter_id);
         }
         $data['page_title'] = '会员卡重置密码';
+        $data['inter_id']=$this->inter_id;
         $this->template_show('member',$this->_template,'resetpassword',$data);
     }
 

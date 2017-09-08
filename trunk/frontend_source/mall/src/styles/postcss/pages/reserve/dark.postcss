@@ -7,13 +7,18 @@
     }
   }
   .product-info {
-    @mixin line-down {
-      transform: rotate(-90deg);
-      transform-origin: center;
-      width: calc(72 / 30)em;
-      top: px2rem(70);
-      bottom: auto;
-      left: -1em;
+    .gap-line {
+      @mixin line-down {
+        transform: rotate(-90deg);
+        transform-origin: center;
+        width: calc(72 / 30)em;
+        top: px2rem(70);
+        bottom: auto;
+        left: -1em;
+      }
+      position: absolute;
+      top: 0;
+      left: 0;
     }
     .product-other {
       .limit-tag {

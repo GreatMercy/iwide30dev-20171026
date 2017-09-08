@@ -18,7 +18,7 @@
               <div class="price price-icon ta-r flex-1">
                 <span class="price-symbol f24 price-icon">¥</span><span v-html="item.goods_price"
                                                                         class="price-number f58"></span><span
-                class="symbol f24">/</span><span class="symbol f24 price-icon">位</span>
+                class="symbol f24">/</span><span class="symbol f24 price-icon">份</span>
               </div>
 
             </div>

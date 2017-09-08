@@ -83,11 +83,11 @@
         <div class="bd_top pad_b50 pad_t60 comment_list_rows">
             <div class="clearfix">
                 <div class="float mar_r20 comment_portrait">
-                    <?php if(!empty($c['headimgurl'])){?><img src="<?php echo $c['headimgurl'];?>"><?php }?>
+                    <?php if(!empty($c['headimgurl'])){?><img src="<?php echo $c['headimgurl'];?>"><?php } else {?> <img src="/public/hotel/bigger/images/head.png" ?><?php } ?>
                 </div>
                 <div class="float">
                     <p class="h28 color2"><?php echo $c['nickname'];?></p>
-                    <p class="h24 color3"><?php echo date('Y.m.d',$c['comment_time']);?></p>
+                    <p class="h24 color3"><?php echo date('m/d',$c['comment_time']);?></p>
                 </div>
                 <div class="comment_list_score floatr color3">
                     <?php if(!empty($c['score'])){?>
@@ -96,13 +96,13 @@
                 </div>
             </div>
             <p class="comment_list_word mar_t40 h28 color1 lineheight17"><?php echo $c['content'];?></p>
-            <div class="comment_list_img mar_t40 swiper-container" style="width: calc(100% + 15px);">
+            <div class="comment_list_img mar_t40 swiper-container">
                 <div class="swiper-wrapper">
                     <?php
                     if(isset($c['images']) && !empty($c['images'])){
                             foreach($c['images'] as $c_arr){
                                 ?>
-                                <div class="squareimg swiper-slide">
+                                <div class="squareimg swiper-slide <?php if(count($c['images']) == 1) {echo "comment_only";} ?>">
                                     <img src="<?php echo $c_arr;?>" alt="">
                                 </div>
                             <?php
@@ -137,6 +137,7 @@
     <?php include 'footer.php' ?>
     <div style="padding-top:65px"></div>
 </div>
+<div class="back_ico"></div>
 </body>
 <script type="text/javascript">
     var isload =false;

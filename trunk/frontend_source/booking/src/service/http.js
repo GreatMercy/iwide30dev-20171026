@@ -5,7 +5,7 @@ import ajax from '@/utils/http'
  * 获取酒店评论详情
  * @param  {Number} data.h  酒店id
  */
-const getCommentComment = (data, config, version = 'v1') => {
+const getCommentContent = (data, config, version = 'v1') => {
   let url = apiConfig[version] && apiConfig[version].GET_COMMENT_CONTENT || apiConfig.v1.GET_COMMENT_CONTENT
   return ajax.get(url, data, config)
 }
@@ -130,10 +130,40 @@ const getHotelDetail = (data, config, version = 'v1') => {
  */
 const getBookroomDetail = (data, config, version = 'v1') => {
   let url = apiConfig[version] && apiConfig[version].GET_BOOKROOM_DETAIL || apiConfig.v1.GET_BOOKROOM_DETAIL
-  return ajax.get(url, data, config)
+  return ajax.post(url, data, config)
 }
 /**
- * 获取酒店详情
+ * 填写订单优惠券接口
+ * @data 请求参数
+ * @data.h 酒店id
+ * @data.r 房型id
+ */
+const getBookroomCoupon = (data, config, version = 'v1') => {
+  let url = apiConfig[version] && apiConfig[version].GET_BOOKROOM_COUPON || apiConfig.v1.GET_BOOKROOM_COUPON
+  return ajax.post(url, data, config)
+}
+/**
+ * 填写订单积分接口
+ * @data 请求参数
+ * @data.h 酒店id
+ * @data.r 房型id
+ */
+const getBookroomBonus = (data, config, version = 'v1') => {
+  let url = apiConfig[version] && apiConfig[version].GET_BOOKROOM_BONUS || apiConfig.v1.GET_BOOKROOM_BONUS
+  return ajax.post(url, data, config)
+}
+/**
+ * 填写订单判断积分支付
+ * @data 请求参数
+ * @data.h 酒店id
+ * @data.r 房型id
+ */
+const getPointpaySet = (data, config, version = 'v1') => {
+  let url = apiConfig[version] && apiConfig[version].GET_POINTPAY_SET || apiConfig.v1.GET_POINTPAY_SET
+  return ajax.post(url, data, config)
+}
+/**
+ * 提交订单接口
  * @data 请求参数
  * @data.h 酒店id
  * @data.r 房型id
@@ -154,9 +184,30 @@ const getCommentOrderDetail = (data, config, version = 'v1') => {
   let url = apiConfig[version] && apiConfig[version].TO_COMMENT || apiConfig.v1.TO_COMMENT
   return ajax.get(url, data, config)
 }
-
+/**
+ * 提交评价
+ * @param  {Object}  data    请求参数
+ * @param  {Number} [data.hotel_id] 酒店id
+ * @param  {Number} [data.orderid]  订单编号
+ * @param  {String} [data.content]  内容
+ * @param  {Object} [data.img_url]  图片列表
+ * @param  {Number} [data.service_score]  服务分数
+ * @param  {Number} [data.net_score]      网络分数
+ * @param  {Number} [data.facilities_score]  设施分数
+ * @param  {Number} [data.clean_score]    卫生分数
+ * @param  {String} [data.hotel_name]     酒店名称
+ * @param  {String} [data.room_name]      房间名称
+ * @param  {Object} [data.sign]     标签
+ * @param  {Object} [config]  axios配置
+ * @param  {String} [version='v1'] API版本
+ * @return {Object}         首页信息
+ */
+const submitComment = (data, config, version = 'v1') => {
+  let url = apiConfig[version] && apiConfig[version].NEW_COMMENT_SUB || apiConfig.v1.NEW_COMMENT_SUB
+  return ajax.post(url, data, config)
+}
 export {
-  getCommentComment,
+  getCommentContent,
   getHotelIntDetail,
   getHotelAlbum,
   getCancelOrder,
@@ -170,6 +221,10 @@ export {
   getOrderDetail,
   getHotelDetail,
   getBookroomDetail,
+  getBookroomCoupon,
+  getBookroomBonus,
+  getPointpaySet,
   postSaveOrder,
-  getCommentOrderDetail
+  getCommentOrderDetail,
+  submitComment
 }

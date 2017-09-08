@@ -1,11 +1,17 @@
 .orderDetail__state{
-    &__main{
-        .goldlight{
+    &__main{ 
+        &:before{
+            content: '';
+            display: inline-block;
+            width: px2rem(6);
+            height: px2rem(80);
             position: absolute;
             left: 0;
             top: 0;
-            height: px2rem(80);
-        }            
+            border-radius: 0 50% 50%  0;
+            background-image: radial-gradient(ellipse at left center, currentColor 0%, color(#fff a(0%)) 70%);
+            opacity: 0.8;
+        }                     
     }
     &__tip{
         color: #808080;

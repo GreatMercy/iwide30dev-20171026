@@ -12,7 +12,7 @@
       <div class="price pr f40 dp-f">
         <div class="discount price-icon">
           <span class="price-symbol f30">¥</span><span v-html="specPrice" class="f58"></span><span
-          class="symbol f24">/位</span>
+          class="symbol f24">/份</span>
         </div>
         <div class="original pr f24" v-html="'¥' + original"></div>
       </div>

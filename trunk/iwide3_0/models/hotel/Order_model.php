@@ -26,56 +26,62 @@ class Order_model extends MY_Model {
 			$sql .= " group by $group_by";
 		return $this->db->query ( $sql )->result_array ();
 	}
-	function date_validate($startdate, $enddate,$inter_id='',$hotel_id=0) {
-		$this->load->model('hotel/Hotel_config_model');
-		$config_data = $this->Hotel_config_model->get_hotel_config ( $inter_id, 'HOTEL', $hotel_id, array (
-			'BOOK_DATE_VALIDATE',
-		) );
-		if (! empty ( $config_data ['BOOK_DATE_VALIDATE'] )) {
-			$condition=json_decode($config_data['BOOK_DATE_VALIDATE'],true);
-		}else{
-			$condition = array();
-		}
-
-		$start_val=0;
-
-		if(!empty($condition['startdate']) && date("Ymd", strtotime($startdate)) < date('Ymd')){
-			foreach($condition['startdate'] as $v){
-				$hour = $v['hour'];
-				switch($v['compare']){
-					case 'less': //当前时间少于值
-						if(date('H') < $hour){
-							$start_val = $v['val'];
-						}
-						break;
-					case 'more':
-						if(date('H') > $hour){
-							$start_val = $v['val'];
-						}
-						break;
-				}
-				//循环，出现多次条件匹配，以最后为准
-			}
-		}
-		$compare=date('Ymd',time()+(intval($start_val)*86400));
-		if($inter_id == 'a455510007' && date('H') < 6 && date("Ymd", strtotime($startdate)) < date('Ymd')){
-			$startdate = date('Ymd', strtotime('- 1 day', time()));
-		} else{
-			if(!strtotime($startdate) || date("Ymd", strtotime($startdate)) < $compare){
-				$startdate = $compare;
-			}
-		}
-
-		$startdate = date ( "Ymd", strtotime ( $startdate ) );
-		if (! strtotime ( $enddate ) || date ( "Ymd", strtotime ( $enddate ) ) <= $startdate) {
-			$enddate = date ( 'Ymd', strtotime ( '+ 1 day', strtotime ( $startdate ) ) );
-		}
-		$enddate = date ( "Ymd", strtotime ( $enddate ) );
-		return array (
-				$startdate,
-				$enddate 
-		);
-	} 
+	function date_validate($startdate, $enddate,$inter_id='',$hotel_id=0,$config_data=array()) {
+        if (! $config_data) {
+            $this->load->model ( 'hotel/Hotel_config_model' );
+            $config_data = $this->Hotel_config_model->get_hotel_config ( $inter_id, 'HOTEL', $hotel_id, array (
+                    'BOOK_DATE_VALIDATE',
+                    'MIN_START_DATE' 
+            ) );
+        }
+        $start_val = 0;
+        $start_disp = 0;
+        $startdate = date ( "Ymd", strtotime ( $startdate ) );
+        $enddate = date ( "Ymd", strtotime ( $enddate ) );
+        if (! empty ( $config_data ['BOOK_DATE_VALIDATE'] )) {
+            $condition = json_decode ( $config_data ['BOOK_DATE_VALIDATE'], true );
+            if (! empty ( $condition ['startdate'] )) {
+                foreach ( $condition ['startdate'] as $v ) {
+                    $hour = $v ['hour'];
+                    switch ($v ['compare']) {
+                        case 'less' : // 当前时间少于值
+                            if (date ( 'H' ) < $hour) {
+                                $start_val = intval ( $v ['val'] );
+                            }
+                            break;
+                        case 'more' :
+                            if (date ( 'H' ) > $hour) {
+                                $start_val = intval ( $v ['val'] );
+                            }
+                            break;
+                    }
+                    // 循环，出现多次条件匹配，以最后为准
+                }
+            }
+        }
+        if (! empty ( $config_data ['MIN_START_DATE'] )) {
+            $min_date_diff = ceil ( (strtotime ( $config_data ['MIN_START_DATE'] ) - strtotime ( date ( 'Ymd' ) )) / 86400 );
+            if ($min_date_diff > 0) {
+                $start_disp = $min_date_diff;
+                $start_val = $start_disp + $start_val;
+            }
+        }
+        $compare = array (
+                date ( 'Ymd', time () + (intval ( $start_disp ) * 86400) ),
+                date ( 'Ymd', time () + (intval ( $start_val ) * 86400) ) 
+        );
+        if (! strtotime ( $startdate ) || date ( "Ymd", strtotime ( $startdate ) ) < min ( $compare )) {
+            $startdate = max ( $compare );
+        }
+        if (! strtotime ( $enddate ) || date ( "Ymd", strtotime ( $enddate ) ) <= $startdate) {
+            $enddate = date ( 'Ymd', strtotime ( '+ 1 day', strtotime ( $startdate ) ) );
+        }
+        return array (
+                $startdate,
+                $enddate,
+                $start_val 
+        );
+    } 
 	function get_rooms_change_calendar($rooms, $idents = array(), $condit = array()) {
 		if (! empty ( $idents ['query_site'] ) && $idents ['query_site'] == 'admin') {
 			$enddate = $condit ['enddate'];
@@ -732,17 +738,39 @@ class Order_model extends MY_Model {
 			}
 			
 			//@Editor lGh 2016-5-31 21:22:07 增加开始与结束日期配置
+			$check_sdate_s = 1;
+			$check_sdate_e = 1;
 			if (!empty( $pcs ['use_condition'] ['s_date_s'] )&&strtotime($pcs ['use_condition'] ['s_date_s'])&&$condit ['startdate']<$pcs ['use_condition'] ['s_date_s']) {
-				continue;
+			    $check_sdate_s = 0;
 			}
 			if (!empty( $pcs ['use_condition'] ['s_date_e'] )&&strtotime($pcs ['use_condition'] ['s_date_e'])&&$condit ['startdate']>$pcs ['use_condition'] ['s_date_e']) {
-				continue;
+			    $check_sdate_e = 0;
 			}
+			if(!empty( $pcs ['use_condition'] ['s_date_m'] ) && $pcs ['use_condition'] ['s_date_m'] == 2){
+			    if (!($check_sdate_s | $check_sdate_e)){
+			        continue;
+			    }
+			}else{
+			    if (!($check_sdate_s & $check_sdate_e)){
+			        continue;
+			    }
+			}
+			$check_edate_s = 1;
+			$check_edate_e = 1;
 			if (!empty( $pcs ['use_condition'] ['e_date_s'] )&&strtotime($pcs ['use_condition'] ['e_date_s'])&&$condit ['enddate']<$pcs ['use_condition'] ['e_date_s']) {
-				continue;
+			    $check_edate_s = 0;
 			}
 			if (!empty( $pcs ['use_condition'] ['e_date_e'] )&&strtotime($pcs ['use_condition'] ['e_date_e'])&&$condit ['enddate']>$pcs ['use_condition'] ['e_date_e']) {
-				continue;
+			    $check_edate_e = 0;
+			}
+			if(!empty( $pcs ['use_condition'] ['e_date_m'] ) && $pcs ['use_condition'] ['e_date_m'] == 2){
+			    if (!($check_edate_s | $check_edate_e)){
+			        continue;
+			    }
+			}else{
+			    if (!($check_edate_s & $check_edate_e)){
+			        continue;
+			    }
 			}
 			
 			//@Editor lGh 2016-7-6 16:03:25 最大天数限制
@@ -1542,19 +1570,33 @@ class Order_model extends MY_Model {
 			$db = $this->load->database ( 'iwide_r1', true );
 		}
 		$s = '';
+		$union_s1='';
+		$union_s2='';
 		$o = '';
 		$a = '';
-		if (! empty ( $idents ['member_no'] ))
-			$s = "( o.member_no='" . $idents ['member_no'] . "' or ( o.openid='" . $idents ['openid'] . "' and (o.member_no ='' or o.member_no is null) )) and";
-		else if (! empty ( $idents ['openid'] ))
-			$s = " o.openid='" . $idents ['openid'] . "' and (o.member_no ='' or o.member_no is null) and ";
+		$selects=' oa.*,o.*,h.name hname,h.intro_img himg,h.address haddress,h.longitude,h.latitude,h.tel htel ';
+		if (! empty ( $idents ['member_no'] )){
+			$s = "( o.member_no='" . $idents ['member_no'] . "' or ( o.openid='" . $idents ['openid'] . "' and o.member_no ='' )) and";
+			$union_s1=" o.member_no='" . $idents ['member_no']. "' and ";
+			$union_s2=" o.openid='" . $idents ['openid'] . "' and o.member_no ='' and ";
+			$selects .=',o.id as orderbyid';
+		}else if (! empty ( $idents ['openid'] ))
+			$s = " o.openid='" . $idents ['openid'] . "' and o.member_no ='' and ";
 		else if (! empty ( $idents ['only_openid'] ))
 			$s = " o.openid='" . $idents ['only_openid'] . "' and ";
+		$s_condition = '';
 		if (isset ( $idents ['status'] ) && ! is_null ( $idents ['status'] )) {
-			$s .= ' o.status in (' . $idents ['status'] . ' ) and ';
+		    $s_condition .= ' o.status in (' . $idents ['status'] . ' ) and ';
 		}
 		if (isset ( $idents ['handled'] ) && ! is_null ( $idents ['handled'] )) {
-			$s .= ' o.handled =  ' . $idents ['handled'] . ' and ';
+		    $s_condition .= ' o.handled =  ' . $idents ['handled'] . ' and ';
+		}
+		if ($s_condition){
+		    $s .= $s_condition;
+		    if ($union_s1){
+		        $union_s1.=$s_condition;
+		        $union_s2.=$s_condition;
+		    }
 		}
 		if (! empty ( $idents ['orderid'] )) {
 			$o .= " o.orderid ='" . $idents ['orderid'] . "' and ";
@@ -1565,13 +1607,21 @@ class Order_model extends MY_Model {
 		$o .= " o.inter_id='$inter_id' and o.isdel ";
 		$o .= empty ( $idents ['isdel'] ) ? ' = 0 and ' : ' in (0,' . $idents ['isdel'] . ') and ';
 		$o .= empty ( $a ) ? '' : $a;
-		$sql = "select oa.*,o.*,h.name hname,h.intro_img himg,h.address haddress,h.longitude,h.latitude,h.tel htel
+		$sql = "select $selects 
 				 from " . $db->dbprefix ( self::TAB_HO ) . " o
 		          join " . $db->dbprefix ( self::TAB_H ) . " h
 		           join " . $db->dbprefix ( self::TAB_HOA ) . " oa
 		           	on o.orderid=oa.orderid and o.inter_id=oa.inter_id and o.hotel_id=h.hotel_id and o.inter_id=h.inter_id
-		           	 where $s $o h.inter_id = '$inter_id' ";
-		$sql .= empty ( $idents ['order_by'] ) ? ' order by o.id desc' : " order by " . $idents ['order_by'];
+		           	 where ";
+		if (!$union_s1){
+		    $sql .= " $s $o h.inter_id = '$inter_id' ";
+    		$sql .= empty ( $idents ['order_by'] ) ? ' order by o.id desc' : " order by " . $idents ['order_by'];
+		}else{
+		    $union_sql1 = $sql." $union_s1 $o h.inter_id = '$inter_id' ";
+		    $union_sql2 = $sql." $union_s2 $o h.inter_id = '$inter_id' ";
+		    $sql = $union_sql1.' UNION '.$union_sql2;
+		    $sql .= ' order by orderbyid desc' ;
+		}
 		$sql .= empty ( $idents ['nums'] ) ? '' : ' limit ' . $idents ['offset'] . ',' . $idents ['nums'];
 		$result = $db->query ( $sql )->result_array ();
 		if (! empty ( $idents ['idetail'] )) {
@@ -3076,15 +3126,13 @@ class Order_model extends MY_Model {
 			$this->db->trans_begin ();
 			if ($item ['istatus'] == 2 || $item ['istatus'] == 1) {
 				$this->load->helper ( 'date' );
-// 				$begin_range = get_day_range ( date ( 'Ymd', strtotime ( '- 10 day', strtotime ( $item ['startdate'] ) ) ), date ( 'Ymd', strtotime ( '+ 10 day', strtotime ( $item ['startdate'] ) ) ), 'array' );
-// 				$end_range = get_day_range ( date ( 'Ymd', strtotime ( '- 10 day', strtotime ( $item ['enddate'] ) ) ), date ( 'Ymd', strtotime ( '+ 10 day', strtotime ( $item ['enddate'] ) ) ), 'array' );
 				$updata = array ();
 				$order_update = array ();
 				$main_order=$this->get_order($inter_id,array('orderid'=>$orderid));
 				$main_order=$main_order[0];
-				if(isset($data['new_price'])&&$data['new_price']>=0){
+				if(isset($data['new_price'])&&$data['new_price']>=0&&$data['new_price']!=$item['iprice']){
 				    $updata ['iprice'] = $data ['new_price'];
-				    	
+				
 				    if ($main_order ['complete_point_given'] == 2) {
 				        $point_info = json_decode ( $main_order ['complete_point_info'], TRUE );
 				        if (! empty ( $point_info ['give_amount'] )) {
@@ -3097,9 +3145,8 @@ class Order_model extends MY_Model {
 				                // 								}
 				            }
 				        }
-				        $order_update ['complete_point_info'] = json_encode ( $point_info );
+				        $order_update ['complete_point_info'] = empty($point_info) ? '' : json_encode ( $point_info );
 				    }
-				
 				    //更新离店储值返现
 				    if ($main_order ['complete_balance_given'] == 2) {
 				        $balance_info = json_decode ( $main_order ['complete_balance_info'], TRUE );
@@ -3110,10 +3157,20 @@ class Order_model extends MY_Model {
 				        $order_update ['complete_balance_info'] = json_encode ( $balance_info );
 				    }
 				}
-                if (! empty ( $data ['startdate'] ) || ! empty ( $data ['enddate'] ) || !empty($updata ['iprice'])) {
-                    $data ['startdate'] = empty ( $data ['startdate'] ) ? $item ['startdate'] : date ( 'Ymd', strtotime ( $data ['startdate'] ) );
-                    $data ['enddate'] = empty ( $data ['enddate'] ) ? $item ['enddate'] : date ( 'Ymd', strtotime ( $data ['enddate'] ) );
-                    if ($data ['enddate'] >= $data ['startdate']) {
+				if (! empty ( $data ['startdate'] ) || ! empty ( $data ['enddate'] ) || isset($updata ['iprice'])) {
+    				$min_begin_date =  date ( 'Ymd', strtotime ( '- 30 day', strtotime ( $item ['startdate'] ) )) ;
+    				$max_begin_date =  date ( 'Ymd', strtotime ( '+ 90 day', strtotime ( $item ['startdate'] ) )) ;
+    				$min_end_date =  date ( 'Ymd', strtotime ( '- 30 day', strtotime ( $item ['enddate'] ) )) ;
+    				$max_end_date =  date ( 'Ymd', strtotime ( '+ 90 day', strtotime ( $item ['enddate'] ) )) ;
+				    $data ['startdate'] = empty ( $data ['startdate'] ) ? $item ['startdate'] : date ( 'Ymd', strtotime ( $data ['startdate'] ) );
+				    $data ['enddate'] = empty ( $data ['enddate'] ) ? $item ['enddate'] : date ( 'Ymd', strtotime ( $data ['enddate'] ) );
+				    if ($data ['startdate'] < $min_begin_date || $data ['startdate'] > $max_begin_date){
+				        unset($data ['startdate']);
+				    }
+				    if ($data ['enddate'] < $min_end_date || $data ['enddate'] > $max_end_date){
+				        unset($data ['enddate']);
+				    }
+				    if ((!empty($data ['startdate']) && !empty($data ['enddate']) && $data ['enddate'] >= $data ['startdate']) && ($data ['startdate']!=$item['startdate'] || $data ['enddate']!=$item['enddate']  || (isset($updata ['iprice']) && $updata ['iprice']!=$item['iprice']))) {
                         $updata ['startdate'] = $data ['startdate'];
                         $updata ['enddate'] = $data ['enddate'];
     
@@ -3142,11 +3199,13 @@ class Order_model extends MY_Model {
                             }
     						$days = get_room_night($order ['startdate'],$order ['enddate'],'ceil',$order);//至少有1个间夜
     	                    $new_night=$total_night - $ori_room_night + $room_night;
+    //	                    if(!empty($data['new_price']) && $data['new_price'] > 0){
     	                    if(isset($data['new_price'])&&$data['new_price']>=0){
     		                    $new_price = $total_price - $item['iprice'] + $data['new_price'];
     	                    } else{
     		                    $new_price = $total_price;
     	                    }
+    
     
                             $this->load->model ( 'hotel/Coupon_model' );
                             $new_market_reward = $this->Coupon_model->create_market_reward ( $inter_id, $order, 'order_complete', array (
@@ -3175,8 +3234,7 @@ class Order_model extends MY_Model {
                                 }
                             }
     
-    
-                            $order_update ['coupon_give_info'] = json_encode ( $coupon_info );
+                            $order_update ['coupon_give_info'] = empty($coupon_info) ? '' : json_encode ( $coupon_info );
     
                         }elseif ($vid!=1 && $main_order ['complete_reward_given'] == 2) {
                             $coupon_info = json_decode ( $main_order ['coupon_give_info'], TRUE );
@@ -3193,21 +3251,16 @@ class Order_model extends MY_Model {
                                     }
                                 }
                             }
-                            $order_update ['coupon_give_info'] = json_encode ( $coupon_info );
+                            $order_update ['coupon_give_info'] = empty($coupon_info) ? '' : json_encode ( $coupon_info );
                         }
-                    }
-			    }
+				    }
+                }
                 if (! empty ( $data ['mt_room_id'] ) && $data ['mt_room_id'] !=$item ['mt_room_id']) {
                     $updata ['mt_room_id'] = $data ['mt_room_id'];
                 }
                 
-                //房间号
-				if(!empty($data['room_no'])){
-					$updata['room_no']=$data['room_no'];
-				}
-				
-				empty($data['webs_orderid']) or	$updata['webs_orderid']=$data['webs_orderid'];
-    
+                empty($data['webs_orderid']) or	$updata['webs_orderid']=$data['webs_orderid'];
+                
 				// 更新优惠信息
 				if(!empty($order_update)){
 					$this->db->where ( array (
@@ -3216,12 +3269,12 @@ class Order_model extends MY_Model {
 					) );
 					$this->db->update ( self::TAB_HOA, $order_update );
 				}
-				
+
 				if (! empty ( $updata )) {
 					$this->db->where ( array (
 // 							'orderid' => $orderid,
 							'id' => $id,
-// 							'inter_id' => $inter_id 
+// 							'inter_id' => $inter_id
 					) );
 					$this->db->update ( self::TAB_HOI, $updata );
 				}
@@ -3230,13 +3283,13 @@ class Order_model extends MY_Model {
 					return false;
 				}
 				$this->db->trans_commit ();
-				
+
 				//记录订房操作日志
 				if(!empty($updata)){
 					$this->load->model('hotel/Hotel_log_model');
 					$this->Hotel_log_model->add_admin_log('Order/items#'.$id,'save',$updata);
 				}
-				
+
 			}
 			if (! empty ( $data ['istatus'] ) && $data ['istatus'] != $item ['istatus']) {
 				$this->db->trans_begin ();

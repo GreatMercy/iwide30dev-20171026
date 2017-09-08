@@ -12,7 +12,7 @@
       <div class="list-box" v-infinite-scroll="loadMore" infinite-scroll-distance="10" infinite-scroll-disabled="disableLoadProduct">
         <div class="item" v-for="item in goodsData">
           <div class="goods-info">
-            <a :href="packageDetail + item.product_id">
+            <a :href="item.detail">
               <img :src="item.face_img" />
               <div class="intro">
                 <h3 class="font-size--26">{{item.name}}</h3>
@@ -21,8 +21,8 @@
             </a>
           </div>
           <div class="buy-info font-size--26">
-            <div class="rewardNum">奖励金额<span v-if="item.reward_type == 2">{{item.reward_percent * 100 +'%'}}</span><span>{{item.reward_money}}</span></div>
-            <div class="buybtn bg_main" @click="handleQrcode(item.qrcode_detail, item.hotel_name)" ><i class="iconfont icon-mall_icon_pay_focus"></i><span>面对面购买</span></div>
+            <div class="rewardNum">奖励金额<span v-if="item.reward_type == 2">{{rewardpercentFunc(item.reward_percent)}}</span><span v-if="item.reward_type == 2">({{item.reward_money}})</span><span v-else>{{item.reward_money}}</span></div>
+            <div class="buybtn bg_main" @click="handleQrcode(item.qrcode_detail, item.name)" ><i class="iconfont icon-mall_icon_pay_focus"></i><span>面对面购买</span></div>
           </div>
         </div> 
         <p class="products-list__loading color_main" v-show="!showFullLoading && isLoadProduct" >
@@ -95,10 +95,13 @@ export default {
       noGoods: false,
       popHotelname: '',
       mainColor: '',
-      packageDetail: '',
       pricetag: priceTag,
       attachQrcode: '',
-      shownogoodsContent: true
+      shownogoodsContent: true,
+      rewardpercentFunc: function (val) {
+        let value = String(val * 10000 / 100)
+        return value.substring(0, value.indexOf('.') + 3) + '%'
+      }
     }
   },
   beforeCreate () {
@@ -128,10 +131,9 @@ export default {
       axios.get('/index.php/iapi/soma/package/distribute_products', {params}).then((res) => {
         this.isLoadProduct = false
         this.toast.close()
-        const { page_resource, product_info, attach } = res.data.web_data
+        const { page_resource = {}, product_info, attach } = res.data.web_data
         /* eslint camelcase: 0 */
-        const { count, page, size, link } = page_resource
-        this.packageDetail = link.detail
+        const { count, page, size } = page_resource
         if (res.data.status === 1000) {
           if (resetProducts) {
             this.goodsData = product_info

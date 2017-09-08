@@ -1,0 +1,49 @@
+.jfk-package-info {
+
+  &__base-info {
+    &--left {
+      background: radial-gradient(#383838, #292929, #1d1d1d);
+    }
+
+    &--title {
+      i {
+        color: #697f6d;
+      }
+    }
+
+    &--right {
+      background-color: #1f1f1f;
+      &::before {
+        background-color: #1f1f1f;
+      }
+    }
+
+    &--content {
+      .name {
+        color: var(--font-color-white);
+      }
+
+      .validity {
+        color: var(--font-color-light-gray);
+      }
+
+      .more {
+        color: var(--font-color-light-gray);
+      }
+    }
+  }
+
+  &__more-info {
+    background-color: #1f1f1f;
+    &::before {
+      left: 0;
+      top: 0;
+      background-color: var(--line-color-light-silver);
+    }
+    li {
+      span {
+        color: var(--font-color-extra-light-gray-common);
+      }
+    }
+  }
+}

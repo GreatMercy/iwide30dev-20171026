@@ -1,22 +1,22 @@
 <template>
-  <div class="gradient_bg padding_30 padding_0_15">
-    <div class="white_bg radius_3 padding_16 padding_0_15 overflow mar_b30 flex" v-if="dataList.public">
+  <div class="gradient_bg padding_top_30 padding_0_15">
+    <div class="white_bg layer_bg radius_3 cardinfo-heder padding_0_15 overflow mar_b30 flex" v-if="dataList.public">
       <img :src="dataList.public.logo" class="card_logo">
       <p class="card_name font_14 flex_1">{{dataList.public.name}}</p>
     </div>
     <div class="between font_12">
         <div class="margin_right_30 relative padding_left_35">
-          <div class="line_left absolute"><img class="line_height65" src="../../assets/image/line_03.png" alt=""></div>
+          <div class="line_left absolute"><img class="line_height65" src="../../styles/postcss/image/line_03.png" alt=""></div>
         </div>
         <p class="padding_0_20 padding_21 color_fff font_19 pclight jfk-cardinfo-title">{{dataList.card_info.title}}</p>
-        <p class="padding_0_20 font_12 font_spacing_4 color3">{{dataList.card_info.notice}}</p>
+        <p class="padding_0_20 font_12 font_spacing_4 color3 card-info-notice padding_bottom_23">{{dataList.card_info.notice}}</p>
       </div>
-      <div class="mar_t60 mar_b20" v-if="dataList.card_info.is_giving === 'f'">
+      <div class="margin_top_55 mar_b20" v-if="dataList.card_info.is_giving === 'f'">
         <div v-if="dataList.card_info.is_online === '2' || dataList.card_info.is_online === '3'">
-          <p class="mar_b30"><span class="color2 mar_r20 h24">线下使用方式</span><span class="color3 h24">(请选择以下任意一种方式使用)</span></p>
+          <p class="mar_b30"><span class="color2 mar_r20 font_12">线下使用方式</span><span class="color3 font_12">(请选择以下任意一种方式使用)</span></p>
           <div class="clearfix layer_bg pad_tb40 pad_lr40 border_radius mar_b30 white_bg box_shadowb">
-              <p class="h28 color3">方式一 :&nbsp;&nbsp;向商家出示二维码/券码</p>
-              <p class="color1 margin_top_20 center h34 spacing" v-html="this.couponHtml"></p>
+              <p class="font_14 color3">方式一 :&nbsp;&nbsp;向商家出示二维码/券码</p>
+              <p class="color1 margin_top_20 margin_bottom_23 center h34 spacing" v-html="this.couponHtml"></p>
               <div class="erweima_img center margin_top_20">
                   <div>
                     <img :src="dataList.page_resource.links.qrcodecon_url +'&margin=0&data='+ dataList.card_info.coupon_code" alt="">
@@ -24,19 +24,19 @@
               </div>
           </div>
           <div class="clearfix layer_bg pad_tb40 pad_lr40 border_radius white_bg box_shadowb">
-              <p class="h28 color3">方式二 :&nbsp;&nbsp;商家输入核销码</p>
+              <p class="font_14 color3">方式二 :&nbsp;&nbsp;商家输入核销码</p>
               <div class="bd_bottom mar_t80 pad_b20">
                   <input v-model="write" id="writeoffcode" class="color1 h30 w80" type="password" placeholder="请商家输入核销码">
               </div>
               <div class="center pad_t80">
-                  <a @click="writeUse" class="button mar_b40 spacing card_info font_17">提&nbsp;交</a>
+                  <a @click="writeUse" class="button mar_b40 spacing card_info_button font_17">提&nbsp;交</a>
               </div>
           </div>
         </div>
       </div>
       <div class="mar_t40 bd_bottom pad_t40 pad_b80 card-info-item">
         <p>
-          <span class="font_12 width_60 inblock mar_r20">
+          <span class="font_12 width_50 inblock mar_r20">
             <p class="flex between">
               <span class="block">使</span>
               <span class="block">用</span>
@@ -47,7 +47,7 @@
           <span class="font_14 color1">{{dataList.card_info.use_way}}</span>
         </p>
         <p class="mar_t20">
-          <div class="font_12 width_60 inblock mar_r20">
+          <div class="font_12 width_50 inblock mar_r20">
             <p class="flex between">
               <span class="block">券</span>
               <span class="block">码</span>
@@ -56,7 +56,7 @@
           <span class="font_14 color1">{{dataList.card_info.coupon_code}}</span>
         </p>
         <p class="mar_t20">
-          <span class="font_12 width_60 inblock mar_r20">
+          <span class="font_12 width_50 inblock mar_r20">
              <p class="flex between">
               <span class="block">使</span>
               <span class="block">用</span>
@@ -67,19 +67,19 @@
           <span class="font_14 color1">{{dataList.card_info.expire_time_quantum}}</span>
         </p>
       </div>
-      <div class="webkitbox webkittop color3 mar_t60 mar_b40">
+      <div class="webkitbox webkittop color3 mar_t60">
           <div class="jfk-font font_12 mar_r10 cardinfo-word-ico">&#xe642;</div>
           <div style="width: calc(100% - 20px);">
-              <div class="color2 font_12 mar_b30 cardinfo-word-title">使用说明</div>
+              <div class="color2 font_12 margin_bottom_15 cardinfo-word-title">使用说明</div>
               <div class="font_12 cardinfo-word" v-html="dataList.card_info.description"></div>
           </div>
       </div>
-      <div  v-if="dataList.authentication_give === 1 && dataList.card_info.is_online !== '1' " class="block center btn_height auto jfk-font entry_btn song_btn" @click="share = true">赠送优惠券</a>
+      <div  v-if="dataList.authentication_give === 1 && dataList.card_info.is_online !== '1' " class="block center btn_height auto entry_btn song_btn" @click="share = true">赠送优惠券</a>
       </div>
 
       <div class="center mar_t80" v-if="dataList.card_info.is_online === '1' && dataList.authentication_give === 1">
-        <a v-if="dataList.authentication_give === 1" class="btn_height inblock font_15 jfk-font entry_btn color1 button_song" @click="share = true">赠送优惠券</a>
-        <a v-if="dataList.card_info.is_giving === 'f' || dataList.card_info.card_type === '3'" class="btn_height font_15 inblock jfk-font entry_btn color1 button_use" :href="dataList.card_info.header_url">立即使用</a>
+        <a v-if="dataList.authentication_give === 1" class="btn_height inblock font_15 entry_btn color1 button_song" @click="share = true">赠送优惠券</a>
+        <a v-if="dataList.card_info.is_giving === 'f' || dataList.card_info.card_type === '3'" class="btn_height font_15 inblock entry_btn color1 button_use" :href="dataList.card_info.header_url">立即使用</a>
       </div>
       <div class="center mar_t80" v-else-if="dataList.card_info.is_online === '1'">
         <a v-if="dataList.card_info.is_giving === 'f' || dataList.card_info.card_type === '3'" class="block card_info center btn_height auto jfk-font entry_btn" style="width:80%;" :href="dataList.card_info.header_url" >立即使用</a>
@@ -90,7 +90,7 @@
       </div>
       <div class="whole_eject" v-show="share" @click="share = false">
         <div class="txt_r">
-          <img class="card_share_logo" src="../../assets/image/share_jian.png" alt="">
+          <img class="card_share_logo" src="../../styles/postcss/image/share_jian.png" alt="">
         </div>
         <div class="card_share_word pad_r40 font_16">
             <p class="mar_b40 color1 pclight">请<span class="main_color1 pclight">点击右上角</span>功能操作，<br>将优惠券转发给好友。</p>
@@ -132,7 +132,6 @@ export default {
       //  微信分享配置
       const wx = window.wx
       const shareConfig = this.dataList.js_share_config
-      const wxConfig = this.dataList.wx_config
       const that = this
       if (wx) {
         wx.onMenuShareTimeline({
@@ -161,7 +160,7 @@ export default {
           }
         })
         wx.onMenuShareAppMessage({
-          title: shareConfig.title !== '' ? wxConfig.title : '发送给好友',
+          title: shareConfig.title !== '' ? shareConfig.title : '发送给好友',
           desc: shareConfig.desc,
           link: shareConfig.link,
           imgUrl: shareConfig.imgUrl,

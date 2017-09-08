@@ -93,4 +93,85 @@ class Valify_tokens_model extends MY_Model
         $db->update('authority_valify_tokens', $array);
         return $db->affected_rows();
     }
+    
+    /**根据type插入token
+     * @param unknown $tokenType
+     * @param array $params
+     * @return boolean|unknown
+     */
+    public function tokenAddAdapter($tokenType,$params=array()) {
+        $this->load->library ( 'authority/authorityConst' );
+        if (! isset ( authorityConst::$valifyTokenTypes [$tokenType] )) {
+            return FALSE;
+        }
+        $this->load->library ( 'authority/authorityLib' );
+        $data = array (
+                'type' => $tokenType,
+                'create_time' => date ( 'Y-m-d H:i:s' ) 
+        );
+        $config = isset ( authorityConst::$valifyTokenConfig [$tokenType] ) ? authorityConst::$valifyTokenConfig [$tokenType] : authorityConst::$valifyTokenConfig ['default'];
+        $data ['expire_time'] = time () + $config ['ttl'];
+        $lib=new authorityLib();
+        $method = 'creatValifyToken' . $tokenType;
+        if (method_exists ( $lib, $method )) {
+            $data ['token'] = $lib::$method ();
+        } else {
+            $data ['token'] = $lib::creatValifyToken ();
+        }
+        isset($params['admin_id']) and $data['admin_id']=$params['admin_id'];
+        isset($params['openid']) and $data['openid']=$params['openid'];
+        isset($params['app_id']) and $data['app_id']=$params['app_id'];
+        isset($params['valify_data']) and $data['valify_data']=json_encode($params['valify_data']);
+        $db = $this->db_write ();
+        if ($db->insert ( authorityConst::TAB_VALIFY_TOKENS, $data )) {
+            return $data ['token'];
+        }
+        return FALSE;
+    }
+    /**更新token后再取值
+     * @param unknown $tokenType
+     * @param unknown $token
+     * @return number[]|unknown[]|number[]|string[]
+     */
+    public function upGetToken($tokenType, $token) {
+        $now = time ();
+        $updata = array (
+                'status' => 1,
+                'operate_time' => date ( 'Y-m-d H:i:s' ) 
+        );
+        $filter = array (
+                'type' => $tokenType,
+                'token' => $token,
+                'status' => 0,
+                'expire_time >=' => $now 
+        );
+        $this->load->library ( 'authority/authorityConst' );
+        $db = $this->db_write ();
+        $db->where ( $filter );
+        $db->update ( authorityConst::TAB_VALIFY_TOKENS, $updata );
+        $update_row = $db->affected_rows ();
+        $db->limit ( 1 );
+        $db->where ( array (
+                'type' => $tokenType,
+                'token' => $token 
+        ) );
+        $data = $db->get ( authorityConst::TAB_VALIFY_TOKENS )->row_array ();
+        $err = 'none';
+        if ($data) {
+            if ($update_row > 0) {
+                return array (
+                        's' => 1,
+                        'token' => $data 
+                );
+            } else if ($data ['status'] != 0) {
+                $err = 'used';
+            } else if ($data ['expire_time'] < $now) {
+                $err = 'expired';
+            }
+        }
+        return array (
+                's' => 0,
+                'err' => $err 
+        );
+    }
 }

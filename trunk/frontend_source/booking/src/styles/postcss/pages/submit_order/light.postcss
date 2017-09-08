@@ -1,4 +1,7 @@
 .jfk-pages__submitOrder {
+  .jfk-pages__theme{
+    background: #f6f7f7;
+  }
   .goldColor {
     color: var(--color-golden);
   }
@@ -37,7 +40,7 @@
       }
     }
   }
-  
+
   .pay_type{
       &_item{
         background-color: var(--color-white);
@@ -59,7 +62,7 @@
       color: #8b8d8c;
     }
   }
-  
+
 
   .footer {
     background-color: var(--color-white);
@@ -69,7 +72,7 @@
       }
     }
   }
-  
+
   .order_detail{
     &_content{
       background: var(--color-white);
@@ -112,6 +115,33 @@
       }
     }
   }
+
+  .btn_submit{
+    background: #1a1a1a;
+    color: #fff;
+  }
+
+.on_checked{
+  background-color: #ab8e5a;
+}
+.on_checked:after{
+  background-color: #fff;
+  border: 1px solid #efefef;
+}
+.off_checked{
+  background-color: #fff;
+  border: 1px solid #efefef;
+}
+.off_checked:after{
+  background-color: #fff;
+}
+.disable_checked{
+  background-color: rgba(0,0,0,0);
+  border: 1px solid #1f1f1f;
+}
+.disable_checked:after{
+  background-color: #363636;
+}
 
 
 

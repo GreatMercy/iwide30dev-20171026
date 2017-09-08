@@ -152,6 +152,7 @@ class Member_model extends MY_Model_Member {
         }
 
         $result = $this->_shard_db()->where($where)->order_by($sort)->limit($page_size, $offset)->get()->result_array();
+        MYLOG::w(@json_encode(array('result'=>$result,'SQL'=>$this->_shard_db()->last_query())),'admin/membervip/debug-log','task-sql');
         return $result;
     }
 

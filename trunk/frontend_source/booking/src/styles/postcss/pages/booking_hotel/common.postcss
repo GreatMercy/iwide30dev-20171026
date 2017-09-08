@@ -122,6 +122,10 @@
           vertical-align: super;
           .font{
             font-size: px2rem(50);
+            display: inline-block;
+              &::first-letter{
+                font-size: px2rem(60);
+              }
           }
         }
       }
@@ -552,6 +556,42 @@
           margin-bottom: px2rem(30);
         }
       }
+      .ht_del_ul_container {
+        @mixin one-line horzin {
+        };
+        position: relative;
+        &::before {
+          position: absolute;
+          bottom: 0;
+          left: 0;
+        }
+        .ht_sth {
+          margin-top: px2rem(55);
+          margin-bottom: px2rem(40);
+        }
+        .ht_del_ul {
+          height: auto;
+          overflow: hidden;
+          @mixin one-line horzin {
+          };
+          position: relative;
+          &::before {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+          }
+          & li {
+            text-align: left;
+            float: left;
+            width: 33%;
+            margin-bottom: px2rem(45);
+
+            & i {
+              margin-right: px2rem(15);
+            }
+          }
+        }
+      }
     }
     .package_desc{
       position: fixed;
@@ -634,6 +674,42 @@
         padding: px2rem(30);
         & p{
           margin-bottom: px2rem(30);
+        }
+      }
+      .ht_del_ul_container {
+        @mixin one-line horzin {
+        };
+        position: relative;
+        &::before {
+          position: absolute;
+          bottom: 0;
+          left: 0;
+        }
+        .ht_sth {
+          margin-top: px2rem(55);
+          margin-bottom: px2rem(40);
+        }
+        .ht_del_ul {
+          height: auto;
+          overflow: hidden;
+          @mixin one-line horzin {
+          };
+          position: relative;
+          &::before {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+          }
+          & li {
+            text-align: left;
+            float: left;
+            width: 33%;
+            margin-bottom: px2rem(45);
+
+            & i {
+              margin-right: px2rem(15);
+            }
+          }
         }
       }
     }

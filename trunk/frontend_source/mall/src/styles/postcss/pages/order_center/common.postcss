@@ -1,4 +1,18 @@
 .jfk-pages__order-center {
+  .tabs {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 99;
+  }
+  .mask {
+    position: absolute;
+    width: 100%;
+    height: px2rem(30);
+    left: 0;
+    top: px2rem(70);
+  }
   .order-center-tab {
     padding-top: px2rem(46);
     position: relative;
@@ -6,6 +20,7 @@
     &__item {
       flex: 1;
       position: relative;
+      line-height: 1;
       i {
         font-size: calc(32 / 32)em;
         margin-right: px2rem(12);
@@ -51,13 +66,13 @@
   }
 
   .order-list {
-
     &__loading {
       padding-top: px2rem(30);
       padding-bottom: px2rem(30);
     }
 
-    margin-top: px2rem(20);
+    padding-top: px2rem(90);
+
     li {
       position: relative;
       padding-top: px2rem(92);
@@ -68,6 +83,11 @@
         bottom: 0;
         left: 0;
       }
+      &:last-child {
+        &::before {
+          height: 0;
+        }
+      }
     }
 
     &__order-info {
@@ -76,7 +96,7 @@
 
     &__status {
       .jfk-font {
-        margin-right: px2rem(20);
+        margin-right: px2rem(10);
       }
     }
 

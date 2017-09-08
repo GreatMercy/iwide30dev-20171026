@@ -23,12 +23,13 @@ class authorityConst {
     const TAB_CONTROLLERS = 'authority_controllers';
     const TAB_FUNCTIONS = 'authority_functions';
     const TAB_OPERATIONS = 'authority_operations';
+    const TAB_VALIFY_TOKENS = 'authority_valify_tokens';
     
     const FULL_ACCESS_INTERID = 'fullaccess';
     
     //不同角色类型可用的权限的状态
     static $authStatesForRole = array (
-            self::ROLE_TYPE_STANDARD => array (
+            self::ROLE_TYPE_STANDARD => array (  
                     self::AUTH_ROLE_STATE_ALLOPEN 
             ),
             self::ROLE_TYPE_CUSTOM => array (
@@ -49,5 +50,20 @@ class authorityConst {
                     self::AUTH_ACCOUNT_RANGE_ALLOPEN, 
                     self::AUTH_ACCOUNT_RANGE_ORDINARY 
             ) 
+    );
+    
+    static $valifyTokenTypes = array( 
+            1=>'登录验证',
+            2=>'绑定微信',
+            3=>'应用登录授权码'
+    );
+    static $valifyTokenConfig = array(
+            1=>array(
+              'ttl'=>300      
+            ),2=>array(
+              'ttl'=>300      
+            ),3=>array(
+              'ttl'=>300      
+            ),
     );
 }

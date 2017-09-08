@@ -13,10 +13,10 @@
             :key="val.prize_id"
             class="jfk-coupons__box"
             @click="handlePickCoupon(index, idx)">
-            <div class="jfk-coupons__item">
+            <div class="jfk-coupons__item is-default" :class="couponItemClass(item, val)">
               <div class="jfk-coupons__money">
                 <div class="jfk-coupons__money-cont jfk-flex is-align-middle is-justify-center">
-                  <span class="color-golden zh-word jfk-font icon-font_zh_jiang_qkbys"></span>
+                  <span class="color-golden jfk-coupons__money-num jfk-font icon-font_zh_jiang_qkbys"></span>
                 </div>
               </div>
               <div class="jfk-coupons__cont">
@@ -123,6 +123,7 @@
       let urlParams = formatUrlParams(location.href)
       this.actNum = urlParams.act_num || ''
       this.prizeType = urlParams.prize_type || ''
+      this.prizeId = urlParams.prize_id || ''
       this.toast = this.$jfkToast({
         duration: -1,
         iconClass: 'jfk-loading__snake',
@@ -133,7 +134,8 @@
       let vm = this
       getPancakeGameCouponList({
         act_num: this.actNum,
-        prize_type: this.prizeType
+        prize_type: this.prizeType,
+        prize_id: this.prizeId
       }).then(function (res) {
         vm.toast.close()
         const { list, follow_qrcode: qrcode, subscribe } = res.web_data
@@ -147,6 +149,9 @@
         vm.couponChecked = Object.assign({}, vm.couponChecked, result)
         vm.subscribe = subscribe
         vm.qrcode = qrcode
+        if (vm.prizeId) {
+          vm.receiveCoupons([vm.prizeId])
+        }
       }).catch(function () {
         vm.toast.close()
       })
@@ -220,6 +225,30 @@
         }
         return result
       },
+      receiveCoupons (ids) {
+        let vm = this
+        postPancakeGameReceivePrize(`act_num=${this.actNum}&prize_id=${ids.join(',')}&is_all_received=0`, {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          }
+        }).then(function (res) {
+          if (vm.subscribe) {
+            vm.successVisible = true
+          } else {
+            vm.qrcodeVisible = true
+          }
+        }).catch(function (err) {
+          // 部分领取成功，需要刷新当前页面
+          if (err.status === 1002) {
+            if (err.$msgbox) {
+              err.$msgbox.then(function () {
+                location.reload()
+              })
+            }
+          }
+          console.log(err)
+        })
+      },
       handleReceiveCoupons () {
         let vm = this
         if (!vm.items.length) {
@@ -236,27 +265,7 @@
           }
         }
         if (ids.length) {
-          postPancakeGameReceivePrize(`act_num=${this.actNum}&prize_id=${ids.join(',')}&is_all_received=0`, {
-            headers: {
-              'Content-Type': 'application/x-www-form-urlencoded'
-            }
-          }).then(function (res) {
-            if (vm.subscribe) {
-              vm.successVisible = true
-            } else {
-              vm.qrcodeVisible = true
-            }
-          }).catch(function (err) {
-            // 部分领取成功，需要刷新当前页面
-            if (err.status === 1002) {
-              if (err.$msgbox) {
-                err.$msgbox.then(function () {
-                  location.reload()
-                })
-              }
-            }
-            console.log(err)
-          })
+          vm.receiveCoupons(ids)
         } else {
           this.$jfkToast({
             iconType: 'error',
@@ -306,6 +315,18 @@
         }
         if (isChecked) {
           classes.push('is-checked')
+        }
+        return classes.join(' ')
+      },
+      couponItemClass (prizeList, item) {
+        let classes = []
+        let type = prizeList.prize_type
+        let limit = prizeList.remain_num
+        let checked = this.couponChecked
+        let id = item.prize_id
+        let isChecked = checked[type][id]
+        if (limit === 0 || (!isChecked && checked[type].length >= limit)) {
+          classes.push('is-disabled')
         }
         return classes.join(' ')
       },

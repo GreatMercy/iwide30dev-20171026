@@ -21,6 +21,7 @@ class Product_package extends MY_Admin_Soma {
 
 	public function edit()
 	{
+
 		$this->label_action= '商品管理';
 		$this->_init_breadcrumb($this->label_action);
 		
@@ -574,6 +575,11 @@ class Product_package extends MY_Admin_Soma {
 		$post['wx_booking_config'] = json_encode( $hotels );
 		// var_dump( $hotels, $hotelIds, $post['wx_booking_config'] );die;
 
+        //积分、储值商品不能退款（2017-09-01，建磊要求要改）
+        if(in_array($post['type'], [$model::PRODUCT_TYPE_BALANCE, $model::PRODUCT_TYPE_POINT])){
+            $post['can_refund'] = $model::STATUS_CAN_NO;
+        }
+
         //规格信息
         $spec_save_sign = FALSE;
         $specList = array(
@@ -1045,39 +1051,41 @@ class Product_package extends MY_Admin_Soma {
 	}
 	public function _get_codes( $inter_id, $hotelIds, $codeIds=array() )
 	{
-		//获取不同房型的价格
-		$this->load->model ( 'hotel/Price_code_model' );
-		//这里存了不同的价格(2.00，1.00，0.500)
-		$sets = $this->Price_code_model->get_hotels_price_set( $inter_id, array_keys( $hotelIds ), 'price_code,room_id,hotel_id,price' );
-		//这里存了不同的价格名称(普通价，微信价，金房卡价)
-		$codes = $this->Price_code_model->get_price_codes( $inter_id );
-		if( $hotelIds ){
-			$len = count( $codeIds );
-			// var_dump( $len, $codeIds );die;
-			foreach( $sets as $k=>$v ){
-				foreach( $v as $sk=>$sv ){
-					foreach( $sv as $ssk=>$ssv ){
-						if( $len == 0 ){
-							//多个价格
-							$sv[$ssk]['price_name'] = $codes[$ssk]['price_name'];
-							$hotelIds[$k]['room_ids'][$sk]['price_codes'] = $sv;
-						}else{
-							//过滤房型
-							// var_dump(  $codeIds[$k][$sk] = array(1,2) );die;
-							if( isset( $codeIds[$k][$sk] ) && is_array( $codeIds[$k][$sk] ) ){
-								if( in_array( $ssv['price_code'], array_keys( $codeIds[$k][$sk] ) ) ){
-									//一个价格
-									$sv[$ssk]['price_name'] = $codes[$ssk]['price_name'];
-									$hotelIds[$k]['room_ids'][$sk]['price_codes'][$ssk] = $sv[$ssk];
-								}
-							}
-						}
-					}
-				}
-			}
-		}
+//		//获取不同房型的价格
+//		$this->load->model ( 'hotel/Price_code_model' );
+//		//这里存了不同的价格(2.00，1.00，0.500)
+//		$sets = $this->Price_code_model->get_hotels_price_set( $inter_id, array_keys( $hotelIds ), 'price_code,room_id,hotel_id,price' );
+//		//这里存了不同的价格名称(普通价，微信价，金房卡价)
+//		$codes = $this->Price_code_model->get_price_codes( $inter_id );
+//		if( $hotelIds ){
+//			$len = count( $codeIds );
+//			// var_dump( $len, $codeIds );die;
+//			foreach( $sets as $k=>$v ){
+//				foreach( $v as $sk=>$sv ){
+//					foreach( $sv as $ssk=>$ssv ){
+//						if( $len == 0 ){
+//							//多个价格
+//							$sv[$ssk]['price_name'] = $codes[$ssk]['price_name'];
+//							$hotelIds[$k]['room_ids'][$sk]['price_codes'] = $sv;
+//						}else{
+//							//过滤房型
+//							// var_dump(  $codeIds[$k][$sk] = array(1,2) );die;
+//							if( isset( $codeIds[$k][$sk] ) && is_array( $codeIds[$k][$sk] ) ){
+//								if( in_array( $ssv['price_code'], array_keys( $codeIds[$k][$sk] ) ) ){
+//									//一个价格
+//									$sv[$ssk]['price_name'] = $codes[$ssk]['price_name'];
+//									$hotelIds[$k]['room_ids'][$sk]['price_codes'][$ssk] = $sv[$ssk];
+//								}
+//							}
+//						}
+//					}
+//				}
+//			}
+//		}
+//
+//		return $hotelIds;
 
-		return $hotelIds;
+        return [];
 	}
 
 	//套票转预订，拉取房型

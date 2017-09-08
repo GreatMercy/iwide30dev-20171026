@@ -9,6 +9,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 */
 class Membercenter extends MY_Admin_Api
 {
+
+
 	//配置列表
 	public function index(){
         //获取酒店集团的信息

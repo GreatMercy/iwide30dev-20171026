@@ -3,7 +3,7 @@
       <el-form ref="search"  label-width="120px">
         <el-row :gutter="20">
           <el-col :span="10">
-            <el-form-item label="验证时间">
+            <el-form-item label="转账时间">
               <el-col :span="11">
                 <el-form-item>
                   <el-date-picker type="date" placeholder="选择日期"  style="width: 100%;" v-model="startTime"></el-date-picker>
@@ -18,7 +18,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="10">
-            <el-form-item label="验证状态">
+            <el-form-item label="转账状态">
               <el-col :span="11">
                 <el-select v-model="selectedState" placeholder="所有状态" >
                     <el-option
@@ -207,7 +207,7 @@
               type: 'success'
             })
           }).catch((err) => {
-            if (err.status === '1012') {
+            if (err.status === 1012) {
               this.tableData[idx].remark = err.data.remark
               this.tableData[idx].status_name = err.data.status_name
               this.tableData[idx].update_time = err.data.update_time

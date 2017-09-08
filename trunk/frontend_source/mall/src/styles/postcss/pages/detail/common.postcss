@@ -28,6 +28,9 @@
         & + .jfk-font{
           margin-left: 11px;
         }
+        &:before {
+          text-shadow: 0 0 calc(24 / 36)em color(#0a0a0a a(20%))
+        }
       }
     }
   }
@@ -44,11 +47,7 @@
       line-height: 1;
       padding: 0 calc(5 / 48)em;
       vertical-align: -.24em;
-      color: #fff;
       letter-spacing: 0.1em;
-    }
-    .notice-icon-1,.notice-icon {
-      text-shadow: 0 0 1em currentColor;
     }
     .notice-icon-1 {
       margin-left: -.4em;
@@ -60,7 +59,6 @@
     }
     .unit {
       padding-right: .2em;
-      color: #fff;
     }
   }
   /*秒杀*/
@@ -71,6 +69,7 @@
     width: 100%;
     height: 100%;
     border-radius: px2rem(var(--border-radius-big));
+    overflow: hidden;
     &-box {
       width: calc(595 / 750 * 100%);
       padding-bottom: calc(242 / 750 * 100%);
@@ -170,7 +169,7 @@
         &-line {
           left: px2rem(42);
           right: px2rem(-42);
-          top: px2rem(24);
+          top: px2rem(23.5);
           height: px2rem(2);
           position: absolute;
           z-index: 10;
@@ -208,7 +207,7 @@
     }
   }
   .killsec-original {
-    padding-top: px2rem(80);
+    margin-top: px2rem(80);
     &__cont {
       height: px2rem(100);
       padding: 0 px2rem(52) px2rem(0) px2rem(46);
@@ -223,7 +222,6 @@
   }
   /* 服务 */
   .service {
-    padding: px2rem(38) px2rem(50) px2rem(66) px2rem(50);
     text-align: center;
     .label {
       padding-top: px2rem(12);
@@ -235,7 +233,7 @@
       @mixin clearfix;
       &--multiple {
         position: relative;
-        padding-right: calc(40 / 24)em;
+        padding-right: calc(50 / 24)em;
         .service-item {
           width: 24.5%;
         }
@@ -297,7 +295,7 @@
   .service {
     & + .detail-box {
       .killsec-original {
-        padding-top: 0;
+        margin-top: 0;
       }
     }
   }
@@ -357,6 +355,11 @@
             left: 0;
             width: 1px;
           }
+        }
+      }
+      &--2 {
+        .label {
+          width: 50%;
         }
       }
     }
@@ -520,10 +523,6 @@
     }
     .tip {
       letter-spacing: .2em;
-      .color-golden {
-        letter-spacing: -0.1em;
-        text-shadow: 0 0 .3em currentColor;
-      }
       span {
         display: inline-block;
       }
@@ -576,12 +575,11 @@
       display: inline-block;
       margin-right: calc(14 / 24)em;
       color: #fff;
-      letter-spacing: -.1em;
       padding: 0 calc(10 / 24)em;
       line-height: calc(36 / 24);
       vertical-align: .2125em;
       position: relative;
-      .price-tag-item {
+      .text {
         position: relative;
         z-index: 2;
       }
@@ -604,7 +602,7 @@
     .date-norm{
       padding-top: calc(36 / 24)em;
       padding-bottom: calc(24 / 24)em;
-      padding-left: px2rem(70);
+      position: relative;
       .triangle{
         vertical-align: middle;
         padding-left: calc(5 / 24)em;
@@ -620,6 +618,10 @@
       width: calc(340 / 750 * 100%);
       .jfk-flex{
         height: px2rem(100);
+        padding: {
+          left: calc(20 / 340 * 100%);
+          right: calc(46 / 340 * 100%);
+        }
       }
     }
     .link{
@@ -651,7 +653,7 @@
       height: 100%;
       box-sizing: border-box;
       padding-left: px2rem(84);
-      padding-right: px2rem(164);
+      padding-right: px2rem(128);
       background-size: 100%;
     }
     .icon-icon_location {
@@ -670,18 +672,18 @@
     }
     .address {
       position: relative;
-
       span {
-        display: block;
-        @mixin ellipsis;
+        display: inline-block;
+        max-width: 91.82%;
+        i {
+          @mixin ellipsis;
+          display: block;
+        }
+
       }
-      i {
-        position: absolute;
+      i.jfk-font {
         font-size: 0.8em;
-        top: 50%;
-        right: calc(-33 / (28 * 0.8))em;
-        z-index: 10;
-        transform: translateY(-50%);
+        padding-left: .3em;
       }
     }
     .order {
@@ -698,13 +700,22 @@
     .qrcode {
       width: px2rem(136);
       height: px2rem(136);
-      border-radius: px2rem(var(--border-radius-big));
-      background-color: currentColor;
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
       right: px2rem(-58);
       text-align: center;
+      &:before {
+        width: 100%;
+        height: 100%;
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: -1;
+        background-color: currentColor;
+        border-radius: px2rem(var(--border-radius-big));
+      }
       i {
         font-size: px2rem(64);
         display: inline-block;

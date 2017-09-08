@@ -3,9 +3,9 @@
   <section class="padding_0_15 bg_show">
     <header class="padding_top_35">
       <div class="center main_color1">
-        <p class="color3 font_12">支付金额</p>
-        <p class="margin_top_18"><font class="font_25 jfk-font margin_right_7">&#xe643;</font><em class="iconfonts font_30">{{dataList.order.pay_money}}</em></p>
-        <p class="font_12 margin_top_45"><span class="wbf">您的{{dataList.filed_name.balance_name}}：</span><em class="jfk-font font_14 color3">¥{{dataList.total_deposit}}</em></p>
+        <p class="color3 font_14">支付金额</p>
+        <p class="margin_top_18"><font class="font_27 jfk-font margin_right_7">&#xe643;</font><em class="iconfonts font_30">{{dataList.order.pay_money}}</em></p>
+        <p class="font_14 balance_pay_button"><span class="wbf">您的{{dataList.filed_name.balance_name}}：</span><em class="pclight font_14 color3">¥{{dataList.total_deposit}}</em></p>
       </div>
     </header>
 <!--     <div class="layer_bg radius_3 padding_45 mar_tb40">
@@ -19,10 +19,10 @@
         </div>
       </div>
     </div> -->
-    <div class="margin_top_35 font_17">
-      <a class="block width_85 auto center jfk-font entry_btn btn_height" @click="submit">{{postText}}</a>
+    <div class="font_17">
+      <a class="block width_85 auto center entry_btn btn_height" @click="submit">{{postText}}</a>
     </div>
-    <section class="margin_top_40">
+    <section class="margin_top_90">
       <div class="font_12 padding_left_20">
         <p class="color2 relative"><em class="jfk-font absolute prompt cardinfo-word-ico">&#xe642;</em><span class="cardinfo-word-title">温馨提示</span></p>
         <p class="color3 margin_top_15 cardinfo-word">为了让支付更加安全便捷，请前往“会员中心>储值”页面 设置您的支付密码</p>

@@ -1,7 +1,7 @@
 <template>
   <div class="jfk-rater">
     <input v-model="currentValue" style="display:none">
-    <a class="jfk-rater-box jfk-rater__default" v-for="i in max"
+    <a class="jfk-rater-box jfk-rater__default" v-for="(i, index) in max" :key="index"
        @click="handleClick(i-1)"
        :class="{ 'jfk-rater__active' : currentValue > 0 && currentValue > i-1 && cutIndex !== i-1 }"
        :style="{marginRight:margin+'px',fontSize: fontSize + 'px', width: fontSize + 'px', height: fontSize + 'px', lineHeight: fontSize + 'px'}">
@@ -15,6 +15,7 @@
   export default {
     name: 'jfkRater',
     created () {
+      window.alert(1)
       this.currentValue = this.value
     },
     mounted () {
@@ -57,6 +58,7 @@
     },
     methods: {
       handleClick (i, force) {
+        alert('click')
         if (!this.disabled || force) {
           if (this.currentValue === i + 1) {
             this.currentValue = i

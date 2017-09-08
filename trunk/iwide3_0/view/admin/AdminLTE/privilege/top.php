@@ -1,4 +1,4 @@
-
+<div style="padding-top:52px;"></div>
 <header class="main-header">
 <!-- Logo -->
     <a href="<?php echo EA_const_url::inst()->get_default_admin(); ?>" class="logo">

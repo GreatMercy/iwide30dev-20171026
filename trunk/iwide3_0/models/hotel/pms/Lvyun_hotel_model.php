@@ -705,6 +705,14 @@ class Lvyun_hotel_model extends CI_Model {
 		if($order['inter_id']=='a487576098'){
 			$data['channel']=$pms_auth['salesChannel'];
 		}
+        //特殊的备注
+        $this->load->model ( 'common/Enum_model' );
+        $pay_types = $this->Enum_model->get_enum_des ( 'PAY_WAY',1);
+        if ($order['inter_id'] == 'a499938809' && $pms_auth['special_remark'] == 1) {
+            $data['remark'] .= $order['order_details'][0]['price_code_name']
+                            .','.$order['price'].','.$pay_types[$order['paytype']];
+        }
+
 		$res = $this->post_to ( $url, $data, $inter_id );
 		/*
 		 * 返回的信息如下：
@@ -927,6 +935,13 @@ class Lvyun_hotel_model extends CI_Model {
 		if($order['inter_id']=='a487576098'){
 			$data['channel']=$pms_auth['salesChannel'];
 		}
+        //特殊的备注
+        $this->load->model ( 'common/Enum_model' );
+        $pay_types = $this->Enum_model->get_enum_des ( 'PAY_WAY',1);
+        if ($order['inter_id'] == 'a499938809' && $pms_auth['special_remark'] == 1) {
+            $data['remark'] .= $order['order_details'][0]['price_code_name']
+                            .','.$order['price'].','.$pay_types[$order['paytype']];
+        }
 
 		$res = $this->post_to ( $url, $data, $inter_id );
 

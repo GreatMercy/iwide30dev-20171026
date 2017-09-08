@@ -20,19 +20,41 @@
         left: px2rem(-30);
       }
     }
-
     & .desc {
       margin-bottom: px2rem(50);
     }
 
     & .order_btn {
-      span {
-        width: px2rem(470);
-        height: px2rem(90);
-        line-height: px2rem(90);
-        margin-bottom: px2rem(80);
+      margin-bottom: px2rem(80);
+      & .order-btn-item {
+        width: px2rem(196);
+
+
+        height: px2rem(62);
+        line-height: px2rem(62);
+        margin-right: px2rem(16);
         text-align: center;
-        display: inline-block;
+        display: block;
+        float: left;
+      }
+      & .order-text-item {
+        line-height: px2rem(62);
+        margin-left: px2rem(22);
+        float: left;
+        &.check_out {
+          margin-left: px2rem(40);
+        }
+      }
+      & .comment {
+        margin-right: px2rem(42);
+        @mixin one-line vertical {
+        };
+        &::before {
+          position: absolute;
+          right: px2rem(-42);
+          top: px2rem(13);
+          height: px2rem(36) !important;
+        }
       }
     }
   }
@@ -142,11 +164,13 @@
     }
     &_item {
       word-break: break-all;
-      span {
+      span{
+        &:nth-child(1){
+        width: px2rem(160);
+      }
         display: inline-block;
         letter-spacing: .1em;
         text-align: left;
-        margin-right: px2rem(50);
       }
     }
     &_item:last-child {

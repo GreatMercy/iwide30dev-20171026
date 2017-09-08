@@ -69,16 +69,6 @@ class Login extends MY_Front_Member_Iapi
         }
     }
 
-    public function dowxlogin(){
-        $login_result = LoginService::getInstance()->wxlogin($this->inter_id,$this->openid);
-        if($login_result['code']==1000){
-            $ext['links']['next'] = site_url('membervip/center')."?id=$this->inter_id";
-            $this->out_put_msg(1,$login_result['msg'],$login_result['data'],'membervip/login/dowxlogin',$ext);
-        }else{
-            $this->out_put_msg(3,$login_result['msg'],$login_result['data'],'membervip/login/dowxlogin');
-        }
-    }
-
     //退出登录
     public function outlogin(){
         $login_result = LoginService::getInstance()->outlogin($this->inter_id,$this->openid);

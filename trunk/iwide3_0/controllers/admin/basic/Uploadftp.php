@@ -72,7 +72,7 @@ class Uploadftp extends MY_Admin {
 		$file_system_path = '/public/uploads/' .date("Ym"). '/';
 		
 		$config['upload_path']      = './public/base/tmp/';
-        $config['allowed_types']    = 'gif|jpg|jpeg|png|bmp|swf|flv|swf|flv|mp3|wav|wma|wmv|mid|avi|mpg|asf|rm|rmvb|doc|docx|xls|xlsx|ppt|htm|html|txt|zip|rar|gz|bz2';
+        $config['allowed_types']    = 'pdf|gif|jpg|jpeg|png|bmp|swf|flv|swf|flv|mp3|wav|wma|wmv|mid|avi|mpg|asf|rm|rmvb|doc|docx|xls|xlsx|ppt|htm|html|txt|zip|rar|gz|bz2';
         $config['max_size']     = 20480;
         $config['max_width']        = 10240;
         $config['max_height']       = 7680;
@@ -149,7 +149,7 @@ class Uploadftp extends MY_Admin {
             $in['inter_id'] = $inter_id;
             $in['dir'] = date("Ym");
             $in['addtime'] = time();
-            
+
             $in['filesize'] = $data['upload_data']['file_size'];
             $in['filetype'] = $data['upload_data']['image_type'];
             $in['filename'] = $data['upload_data']['client_name'];
@@ -158,7 +158,7 @@ class Uploadftp extends MY_Admin {
             $in['src'] = $file_domain.$file_system_path.$data['upload_data']['file_name'];
             
             $this->db->insert('upload',$in);
-            
+
             $file_url = $in['src'];
             echo json_encode(array('error' => 0, 'url' => $file_url));
             @unlink($config['upload_path'].$config['file_name'].$data['upload_data']['file_ext']);       
@@ -241,7 +241,7 @@ class Uploadftp extends MY_Admin {
             $in['src'] = $re['url'];
             
             $this->db->insert('upload',$in);
-            
+
             $file_url = $in['src'];
             if(!isset($re['url'])){
     			echo json_encode(array('code'=>1,'msg'=>$re['errmsg']));

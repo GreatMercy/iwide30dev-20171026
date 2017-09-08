@@ -30,8 +30,12 @@ class DepositcardService extends MemberBaseService
         if ($salesId) {
             $this->getCI()->load->model('distribute/Staff_model');
             $saler = $this->getCI()->Staff_model->get_my_base_info_saler($this->getCI()->inter_id, $salesId);
+            \MYLOG::w("get_my_base_info_saler :" . json_encode($saler) . '|' . $salesId . '|' . $this->getCI()->inter_id, 'membervip/debug-log');
             if (!empty($saler)) {
+                $this->getCI()->session->set_userdata('salesId',$salesId);
                 $this->saler_id = $salesId;
+                $saler_id = \App\services\member\SupportService::getInstance()->check_set_saler($this->getCI()->inter_id, $this->getCI()->openid, $this->saler_id); //分销保护
+                \MYLOG::w("check_set_saler_saler_id :" . $saler_id . '|' . $this->getCI()->inter_id, 'membervip/debug-log');
             }
         }
 
@@ -174,7 +178,13 @@ class DepositcardService extends MemberBaseService
             'deposit_card_id' => $cardId,
         );
         $card_info = $this->doCurlPostRequest($post_info_url, $post_info_data)['data'];
-
+        if(empty($card_info['logo_url'])){
+            $this->getCI()->load->model ( 'common/Enum_model' );
+            $logo_url_info = $this->getCI()->Enum_model->get_enum_des ( array (
+                 'MEMBER_CARD_DEMO_IMG'
+             ));
+            $card_info['logo_url'] = $logo_url_info['MEMBER_CARD_DEMO_IMG']['member_card_demo_img'];
+        }
         /*检查是否满足泛分销条件*/
         if ($inter_id == 'a472731996') {  //测试环境是a469428180，正式是a472731996
             $redis_img = $this->getCI()->p_model->get_vip_redis();
@@ -307,6 +317,7 @@ class DepositcardService extends MemberBaseService
 
         $cardId = isset($_GET['cardId']) ? (int)$_GET['cardId'] : 0;
         $pay_type = isset($_GET['pay']) ? $_GET['pay'] : 'wechat';
+        $this->getCI()->load->model('membervip/common/Public_model', 'p_model');
         $deposit_card = $this->getCI()->p_model->get_info(array('deposit_card_id' => $cardId), 'deposit_card', 'pay_type');
         if (!empty($deposit_card)) {
             $pay_types = explode(',', $deposit_card['pay_type']);
@@ -316,6 +327,7 @@ class DepositcardService extends MemberBaseService
         }else{
             return array('err' => 40003, 'msg' => '此卡暂不能购买!');
         }
+
         //创建支付订单
         $saler_id = \App\services\member\SupportService::getInstance()->check_set_saler($inter_id, $openid, $this->saler_id); //分销保护
         if (!empty($saler_id) && $saler_id > 0) $distribution_num = $saler_id;
@@ -774,5 +786,3 @@ class DepositcardService extends MemberBaseService
         return $signPackage;
     }
 }
-
-?>

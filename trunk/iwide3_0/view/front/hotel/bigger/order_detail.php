@@ -52,16 +52,16 @@
                     <div class="h24 color2 pad_r40"><?php echo $order['roomnums'] ?> 间</div> 
                 </div>
                 <div class="order_information center bd webkitbox">
-                    <div class="txt_l" style="    width: 35%;">
+                    <div class="txt_l" style="    width: 32%;">
                         <p class="color3 h24 mar_b10">入 住</p>
-                        <p class="color1 h32 mar_b10"><?php echo date('y/m/d',strtotime($order['startdate']));?></p>
+                        <p class="color1 h32 mar_b10"><?php echo date('Y/m/d',strtotime($order['startdate']));?></p>
                         <p class="color2 h24"><?php echo $startdate_weekday; ?></p>
                     </div>
                     <div class="main_shadow_wrap">
                     </div>
                     <div class="txt_l">
                         <p class="color3 h24 mar_b10">离 店</p>
-                        <p class="color1 h32 mar_b10"><?php echo date('y/m/d',strtotime($order['enddate']));?></p>
+                        <p class="color1 h32 mar_b10"><?php echo date('Y/m/d',strtotime($order['enddate']));?></p>
                         <p class="color2 h24"><?php echo $enddate_weekday; ?></p>
                     </div>
                 </div>

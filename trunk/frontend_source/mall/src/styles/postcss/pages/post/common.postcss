@@ -39,19 +39,22 @@
 
   .invoice-address {
     padding-top: px2rem(30);
+    padding-bottom: px2rem(60);
     margin-bottom: px2rem(96);
     position: relative;
     &__content {
       padding-top: px2rem(60);
+      padding-bottom: px2rem(60);
       border-radius: px2rem(var(--border-radius-big));
-      height: px2rem(157);
       position: relative;
       padding-left: px2rem(42);
       padding-right: px2rem(42);
       overflow: hidden;
+      ul {
+        padding-right: px2rem(20);
+      }
 
       li {
-        line-height: 1;
         &:first-child {
           margin-bottom: px2rem(36);
         }
@@ -85,7 +88,10 @@
     }
 
     &__title {
+      display: block;
       width: calc(152 / 24)em;
+      height: calc(40 / 24)em;
+      line-height: calc(40 / 24)em;
     }
 
     &__word {
@@ -93,7 +99,8 @@
     }
 
     &__item-content {
-      @mixin ellipsis {
+      flex: 1;
+      @mixin ellipsis 2{
       }
       i {
         margin-right: px2rem(30);
@@ -103,7 +110,7 @@
 
   .post-info {
     padding-left: px2rem(98);
-    margin-bottom: px2rem(72);
+    margin-bottom: px2rem(100);
     &__name {
       position: relative;
       &--mask {

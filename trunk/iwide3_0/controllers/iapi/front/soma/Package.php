@@ -254,7 +254,7 @@ class Package extends MY_Front_Soma_Iapi
             'link' => [
                 'home' => $this->link['home'],
                 'order' =>  $this->link['order_link'],
-                'prepay' => $this->link['prepay_link'].'?pid='.$productId.'&btype=package'
+                'prepay' => $this->link['prepay_link'].'&pid='.$productId
             ]
         ];
 

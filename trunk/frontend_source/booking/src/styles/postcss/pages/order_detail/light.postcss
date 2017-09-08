@@ -31,9 +31,20 @@
     }
 
     & .order_btn {
-      span {
+      .order-btn-item {
         color: var(--font-color-dark-white);
-        border: 1px solid var(--font-color-dark-white);
+        border: 1px solid var(--color-golden);
+        &.nowPay {
+          color: var(--color-white);
+          background-color: var(--color-golden);
+        }
+      }
+      & .comment {
+        @mixin one-line vertical {
+        };
+        &::before {
+          background-color: #eeeae9;
+        }
       }
     }
   }

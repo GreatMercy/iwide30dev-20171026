@@ -1,0 +1,51 @@
+.jfk-clause {
+  position: relative;
+  &__title {
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+    span {
+      display: block;
+      margin: 0 auto;
+      font-size: 1em;
+      line-height: 1;
+      position: relative;
+      z-index: 2;
+      background-color: rgba(0, 0, 0, 0);
+      width: calc(174 / 28)em;
+
+      &::before {
+        content: '';
+        height: 1px;
+        position: absolute;
+        width: 1000%;
+        top: 50%;
+        left: 100%;
+        transform: translate(0, -50%) scale(1, 0.5);
+      }
+
+      &::after {
+        content: '';
+        height: 1px;
+        position: absolute;
+        width: 1000%;
+        top: 50%;
+        right: 100%;
+        transform: translate(0, -50%) scale(1, 0.5);
+      }
+    }
+  }
+
+  &__list {
+    margin-top: px2rem(52);
+    li {
+      line-height: 1;
+      padding: 0 px2rem(66);
+      margin-bottom: px2rem(38);
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+}
+

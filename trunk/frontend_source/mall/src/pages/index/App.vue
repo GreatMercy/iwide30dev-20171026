@@ -1,7 +1,10 @@
 <template>
-  <div class="jfk-pages jfk-pages__index">
+  <div class="jfk-pages jfk-pages__index" :class="pageNamespace">
     <div class="jfk-pages__theme"></div>
+    <div class="page__header">
+    <accor-header v-if="isAccor"></accor-header>
     <jfk-banner :items="advs" v-if="advs.length"></jfk-banner>
+    </div>
     <div class="categories jfk-pl-30">
       <swiper class="jfk-swiper" :options="tabSwiperOptions">
         <swiper-slide v-for="(category, index) in categories" :key="category.cat_id" :data-cid="category.cat_id"
@@ -36,7 +39,8 @@
     name: 'app',
     components: {
       Tabbar,
-      GoodList
+      GoodList,
+      'accor-header': () => import('./gallery/accor')
     },
     beforeCreate () {
       let params = formatUrlParams(location.href)
@@ -44,8 +48,10 @@
       if (params.layout !== undefined) {
         layout = layouts[params.layout] || layouts[0]
       }
+      this.$pageNamespace(params)
       this.fcid = params.fcid || '-1'
       this.layout = layout
+      this.isAccor = process.env.INTER_ID === 'accor'
     },
     data () {
       let that = this
@@ -75,7 +81,7 @@
                 let cid = swiper.clickedSlide.dataset.cid
                 if (cid) {
                   that.fcid = cid
-                  that.disableLoadProduct = false
+                  that.disableLoadProduct = true
                   that.page = 1
                   that.showFullLoading = true
                   that.loadPackages(true)

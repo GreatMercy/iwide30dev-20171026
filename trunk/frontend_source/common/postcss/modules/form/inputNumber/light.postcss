@@ -1,15 +1,26 @@
 .jfk-input-number {
   &__box {
-    border: solid 1px #ebebeb;
+    border: solid 1px #e0e0e0;
   }
   &__control {
     &:after,&:before {
       background-color: #333;
     }
+  }
+  .is-sub {
+    &:before {
+      background-color: #333;
+    }
     &.is-disabled {
-      &:after,&:before {
+      &:before {
         background-color: #bfbfbf;
       }
+    }
+  }
+  .is-add {
+    color: #333;
+    &.is-disabled {
+      color: #bfbfbf;
     }
   }
   &__input {

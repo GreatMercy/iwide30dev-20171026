@@ -351,7 +351,15 @@ class Express extends MY_Admin_Iapi
             }
         }
         if (!empty($data['status'])) {
-            $filter['status'] = (int)$data['status'];
+            if ($data['type'] == self::SHUNFENG_TYPE) {
+                $filter['status'] = (int)$data['status'];
+            } else {
+                if ($data['status'] != $model::STATUS_SHIPPED) {
+                    $filter['status'] = (int)$data['status'];
+                } else {
+                    $filter['status'] = array($model::STATUS_SHIPPED, $model::STATUS_FINISHED);
+                }
+            }
         }
         if ($data['type'] == self::SHUNFENG_TYPE && !empty($data['status']) && $data['status'] != $model::STATUS_APPLY) {
             $filter['distributor'] = 'a_sf';
@@ -421,15 +429,28 @@ class Express extends MY_Admin_Iapi
             $inter_id = $this->current_inter_id;
         }
 
+        $this->load->model('soma/Consumer_shipping_model');
+        $shipping_model  = $this->Consumer_shipping_model;
         $filter = array();
-        if ($status) $filter['status'] = $status;
+        if ($status) {
+            if ($type == self::SHUNFENG_TYPE) {
+                $filter['status'] = (int)$status;
+            } else {
+                if ($status != $shipping_model::STATUS_SHIPPED) {
+                    $filter['status'] = (int)$status;
+                } else {
+                    $filter['status'] = array($shipping_model::STATUS_SHIPPED, $shipping_model::STATUS_FINISHED);
+                }
+            }
+        }
         if ($start) $filter['create_time >='] = $start;
         if ($end) $filter['create_time <='] = $end . ' 23:59:59';
-        if ($type == self::SHUNFENG_TYPE && !empty($data['status'])) {
+
+        if ($type == self::SHUNFENG_TYPE && !empty($status)) {
             $filter['distributor'] = 'a_sf';
         }
         //快递中文 =》 快递英文
-        $this->load->model('soma/Consumer_shipping_model');
+//        $this->load->model('soma/Consumer_shipping_model');
         $dist_result = $this->Consumer_shipping_model->get_express();
         $dist_label = array_column($dist_result, 'dist_label');
         $dist_map = array_column($dist_result, 'dist_name', 'dist_label');

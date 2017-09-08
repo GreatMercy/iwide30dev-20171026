@@ -1,0 +1,131 @@
+.jfk-pages__index{
+  .accor-header {
+    &__cont {
+      @mixin clearfix;
+      padding-top: calc(5 / 24)em;
+    }
+    a {
+      color: #002b40;
+      float: left;
+      width: calc(88 / 690 * 100%);
+      padding-top: calc(44 / 24)em;
+      @media screen and (max-width: 320px) {
+        width: calc(110 / 690 * 100%);
+      }
+      .jfk-font {
+        margin-top: calc(5 / 24)em;
+        float: left;
+        font-size: calc(32 / 24)em;
+      }
+    }
+    .back {
+      float: left;
+      padding-left: calc(5 / 24)em;
+      .logo {
+        width: calc(37 / 24)em;
+        height: calc(17 / 24)em;
+        display: block;
+        background: {
+          size: 100%;
+          repeat: no-repeat;
+          position: center;
+          image: background-image(/accor/logo.png, theme);
+        }
+      }
+      .text {
+        line-height: calc((12 + 12 + 24) / 24)
+      }
+    }
+    .info {
+      font-size: calc(28 / 24)em;
+      float: left;
+      width: calc(514 / 690 * 100%);
+      text-align: center;
+      margin-left: calc(8 / 690 * 100%);
+      position: relative;
+      @mixin one-line horizontal {
+        left: 0;
+        bottom: calc((18 + 28 + 27) / 28)em;
+        background-color: #e0e0e0;
+      }
+      .line {
+        position: absolute;
+        left: 50%;
+        bottom: calc((18 + 28 + 27 - 5) / 28)em;
+        margin-left: calc(-74 / 28 / 2)em;
+        height: calc(12 / 28)em;
+        width: calc(28 / 28)em;
+        padding: 0 calc(23 / 28)em;
+        background: #fff;
+        .slash {
+          position: relative;
+          height: 100%;
+        }
+        i {
+          top: 0;
+          height: calc(12 / 28)em;
+          width: 1px;
+          transform: rotate(45deg);
+          @mixin one-line {
+            background-color: #808080;
+            height: 100%;
+          }
+          position: absolute;
+          &:first-child {
+            left: 0;
+          }
+          &:nth-child(2) {
+            left: calc(14 / 28)em;
+          }
+          &:last-child {
+            right: 0;
+          }
+        }
+      }
+      .logo {
+        &-img {
+          width: calc(300 / 28)em;
+          height: calc(135 / 28)em;
+          display: inline-block;
+          margin-bottom: calc(4 / 28)em;
+          background: {
+            size: 100%;
+            repeat: no-repeat;
+            position: center;
+          }
+        }
+      }
+      .hotel {
+        color: #231417;
+        letter-spacing: calc(3 / 28)em;
+        line-height: calc((18 + 18 + 28) / 28);
+      }
+    }
+  }
+  @each $brand in novotel, fairmont, pullman, raffles, sofitel, swissotel, mercure {
+    &.is-$(brand) {
+      .accor-header {
+        .info {
+          .logo {
+            &-img {
+              background-image: background-image(/accor/$(brand).png, theme)
+            }
+          }
+        }
+      }
+    }
+  }
+  .products{
+    &-layout {
+      &--card {
+        .products-list {
+          &__item {
+            .jfk-price__original {
+              vertical-align: -0.5em;
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -22,6 +22,9 @@ let defaultRules = {
   phone: function (val) {
     return /1\d{10}/.test(val)
   },
+  integer: function (val) {
+    return /^[0-9]+$/.test(val)
+  },
   required: function (val, type = 'string') {
     return !isEmptyValue(val, type)
   },

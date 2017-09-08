@@ -1,6 +1,12 @@
 .jfk-pages__detail{
   .hotel-staff {
     background-color: #27282d;
+    .number {
+      text-shadow: 0 0 1em currentColor;
+    }
+    .notice-icon-1,.notice-icon {
+      text-shadow: 0 0 1em currentColor;
+    }
   }
   .detail-top {
     position: relative;
@@ -32,6 +38,7 @@
     margin-top: px2rem(-118);
     z-index: 100;
     .date-norm {
+      padding-left: px2rem(70);
       @mixin line-down 4, default, inside {
         width: calc(112 / 24)em;
         transform: rotate(-60deg);
@@ -43,7 +50,7 @@
       .mask {
         background-image: linear-gradient(-139deg, #9c8151, #bda372);
       }
-      &-item{
+      .text{
         text-shadow: 0 0 0.4em color(#292114 a(81%));
       }
     }
@@ -101,6 +108,7 @@
   }
   /*服务*/
   .service {
+    padding: px2rem(38) px2rem(50) px2rem(66) px2rem(50);
     &:before {
       background-color: #363636;
     }
@@ -111,6 +119,13 @@
     }
     .label {
       color: #bfbfbf;
+    }
+  }
+  .jfk-popup__qrcode {
+    .tip {
+      .color-golden {
+         text-shadow: 0 0 .3em currentColor;
+      }
     }
   }
   .productinfo-detail {
@@ -158,7 +173,7 @@
       }
     }
     .qrcode {
-      box-shadow: 0 0 1em color(#d8c67c a(38%));
+      box-shadow: 0 0 1em color(#000 a(20%));
     }
   }
 }

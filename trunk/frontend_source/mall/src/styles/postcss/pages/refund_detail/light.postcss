@@ -1,0 +1,132 @@
+.jfk-pages__refund-detail {
+
+  .refund-detail {
+    &-step {
+
+      &__line {
+        @mixin one-line horizontal {
+        }
+        &::before {
+          background-color: #e0e0e0;
+        }
+      }
+
+      &__start {
+        i {
+          width: 8px;
+          height: 8px;
+          border: 2px solid var(--color-golden);
+          border-radius: 100%;
+        }
+      }
+
+      &__default {
+        i {
+          width: px2rem(12);
+          height: px2rem(12);
+          background-color: var(--font-color-extra-light-gray-common);
+          border-radius: 100%;
+        }
+
+        &.refund-detail-step__left {
+          &::before {
+            left: px2rem(-20);
+          }
+        }
+
+        &.refund-detail-step__right {
+          &::after {
+            right: px2rem(-20);
+          }
+        }
+
+      }
+
+      &__finish {
+        i {
+          width: px2rem(12);
+          height: px2rem(12);
+          background-color: var(--color-golden);
+          border-radius: 100%;
+        }
+
+        &.refund-detail-step__left {
+          &::before {
+            left: px2rem(-20);
+          }
+        }
+
+        &.refund-detail-step__right {
+          &::after {
+            right: px2rem(-20);
+          }
+        }
+
+      }
+
+      &__end {
+        i {
+          width: px2rem(30);
+          height: px2rem(30);
+          background-image: background-image(/refund_detail/end_2.png, theme);
+          border-radius: 100%;
+          background-size: contain;
+        }
+        &.refund-detail-step__left {
+          &::before {
+            left: px2rem(-16);
+          }
+        }
+      }
+
+      &__right {
+        &::after {
+          background-color: var(--font-color-extra-light-gray-common);
+        }
+      }
+
+      &__left {
+        &::before {
+          background-color: var(--font-color-extra-light-gray-common);
+        }
+      }
+
+      &__name {
+        color: var(--font-color-extra-light-gray);
+      }
+
+      &__active {
+        color: var(--font-color-white);
+      }
+
+    }
+  }
+
+
+  .refund-order {
+    &__main-title {
+      color: var(--font-color-extra-light-gray);
+    }
+
+    &__title {
+      color: var(--font-color-extra-light-gray);
+    }
+
+    &__content {
+      color: var(--font-color-white);
+    }
+
+    &__info {
+      &::before {
+        background-color: var(--line-color-light-silver);
+      }
+    }
+  }
+
+  .recommendation {
+    .tip {
+      color: var(--font-color-extra-light-gray);
+    }
+  }
+
+}

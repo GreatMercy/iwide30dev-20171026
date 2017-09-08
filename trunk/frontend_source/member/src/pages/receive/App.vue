@@ -1,14 +1,14 @@
 <template>
   <div class="gradient_bg padding_30 padding_0_15">
-    <div class="layer_bg radius_3 padding_20 padding_0_15 overflow mar_b30" v-if="dataList.public">
+    <div class="white_bg layer_bg radius_3 cardinfo-heder padding_0_15 overflow mar_b30 flex" v-if="dataList.public">
       <img :src="dataList.public.logo" class="card_logo">
       <p class="card_name font_14">{{dataList.public.name}}</p>
     </div>
     <div class="between font_12">
         <div class="margin_right_30 relative padding_left_35">
-          <div class="line_left absolute"><img src="../../assets/image/line_03.png" alt=""></div>
+          <div class="line_left absolute"><img src="../../styles/postcss/image/line_03.png" alt=""></div>
         </div>
-        <p class="padding_0_20 padding_18 color_fff font_19">{{dataList.card_info.title}}</p>
+        <p class="padding_0_20 padding_21 color_fff font_19 pclight jfk-cardinfo-title">{{dataList.card_info.title}}</p>
         <p class="padding_0_20 mar_b20">{{dataList.card_info.notice}}</p>
         <p class="padding_0_20 color1" v-if="dataList.card_info.is_giving === 't' && dataList.card_info.member_info_id !== dataList.gift_mem_info.member_info_id">
           <span v-if="dataList.gift_mem_info.name">您的好友{{dataList.gift_mem_info.name}}赠送你一张</span>

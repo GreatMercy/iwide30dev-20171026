@@ -1,13 +1,13 @@
 <template>
-  <div class="jfk-pages jfk-pages__detail">
+  <div class="jfk-pages jfk-pages__detail" :class="pageNamespace">
     <div class="jfk-pages__theme"></div>
     <div v-if="productInfo.product_id">
       <div class="hotel-staff jfk-pl-30 jfk-pr-30" v-if="salerBanner.length">
-        <div class="cont color-golden font-size--24">
+        <div class="cont font-color-light-gray-common font-size--24">
           <span class="jfk-font notice-icon font-size--24 icon-mall_icon_notice"></span>
           <span class="jfk-font notice-icon-1 font-size--24 icon-mall_icon_1_notice"></span>{{salerBanner[0]}}
-          <span v-if="salerBanner[1]" class="number jfk-font-number font-size--48">{{salerBanner[1]}}</span>
-          <span v-if="salerBanner[2]" class="unit">{{salerBanner[2]}}</span>{{salerBanner[3]}}</div>
+          <span v-if="salerBanner[1]" class="number jfk-font-number font-size--48 color-golden-price">{{salerBanner[1]}}</span>
+          <span v-if="salerBanner[2]" class="unit color-golden-price">{{salerBanner[2]}}</span>{{salerBanner[3]}}</div>
       </div>
       <div class="detail-top" :class="{'is-default': productGalleryIsDefault}">
         <div class="banners">
@@ -37,13 +37,13 @@
           </div>
           <div class="sales font-color-light-gray font-size--24">
             <span class="suppier" v-if="publicInfo.name">{{publicInfo.name}}提供</span>
-            <span class="sales_num" v-if="productInfo.show_sales_cut === '1'">已售
+            <span class="sales_num" v-if="productInfo.show_sales_cnt === '1'">已售
               <i class="number">{{productInfo.sales_cnt}}</i>
             </span>
           </div>
           <div class="others jfk-clearfix">
             <div class="prices jfk-fl-l">
-              <span class="jfk-price product-price-package color-golden font-size--68" v-html="pricePackage" v-once></span>
+              <span class="jfk-price product-price-package color-golden-price font-size--68" v-html="pricePackage" v-once></span>
               <span class="jfk-price__original product-price-market font-size--24 font-color-light-gray" v-once v-html="priceMarket"></span>
             </div>
             <div class="date-norm jfk-fl-r font-color-extra-light-gray font-size--24" v-if="productInfo.spec_product" @click="handleSpecTicket">
@@ -81,7 +81,7 @@
         </div>
         <div v-if="productDetailInfo.labels.length" class="productinfo-detail" ref="productInfoDetail">
           <jfk-sticky>
-          <ul class="jfk-ml-30 jfk-mr-30 productinfo-detail-label">
+          <ul class="jfk-ml-30 jfk-mr-30 productinfo-detail-label" :class="'productinfo-detail-label--' + productDetailInfo.labels.length">
             <li
               v-for="item in productDetailInfo.labels"
               :key="item.key"
@@ -89,7 +89,7 @@
               @click="handleLabel(item.key)"
               :class="{
                 'color-golden is-selected': currentLabel === item.key,
-                'font-color-light-gray': currentLabel !== item.key
+                'font-color-light-gray-common': currentLabel !== item.key
               }"
             ><div>{{item.label}}</div></li>
           </ul>
@@ -103,19 +103,12 @@
         <div class="cont" @click="handleShowMap">
           <i class="jfk-font font-size--40 font-color-extra-light-gray icon-icon_location"></i>
           <div class="name font-size--30 font-color-white">{{hotelInfo.name}}</div>
-          <div class="address font-size--28 font-color-extra-light-gray"><span>{{hotelInfo.address}}</span><i class="jfk-font icon-user_icon_jump_normal"></i></div>
+          <div class="address font-size--28 font-color-extra-light-gray"><span><i>{{hotelInfo.address}}</i></span><i class="jfk-font icon-user_icon_jump_normal"></i></div>
         </div>
         <div class="order">
-          <a :href="orderUrl" class="jfk-button jfk-button--free font-size--30 jfk-button--primary is-plain">
-            <span class="jfk-button__text">
-            <i class="jfk-font jfk-button__text-item icon-font_zh_wo_qkbys"></i>
-            <i class="jfk-font jfk-button__text-item icon-font_zh_de_qkbys"></i>
-            <i class="jfk-font jfk-button__text-item icon-font_zh_ding_qkbys"></i>
-            <i class="jfk-font jfk-button__text-item icon-font_zh_dan_qkbys"></i>
-            </span>
-          </a>
+          <a :href="orderUrl" class="jfk-button jfk-button--free font-size--30 jfk-button--primary is-plain">我的订单</a>
         </div>
-        <div class="qrcode color-golden jfk-flex is-align-middle" @click="handleQrcode">
+        <div class="qrcode color-golden-price jfk-flex is-align-middle" @click="handleQrcode">
           <div>
           <i class="jfk-font icon-mall_icon_pay_focus"></i>
           <p class="font-size--18">关注享优惠</p>
@@ -123,8 +116,8 @@
         </div>
       </div>
     </div>
-    <div class="recommendation jfk-pl-30" v-if="recommendations.length">
-      <p class="font-size--24 font-color-light-gray tip">其他用户还看了</p>
+    <div class="recommendation jfk-pl-30" v-if="recommendations.length" :class="{'jfk-pr-30': recommendations.length === 1}">
+      <p class="font-size--24 font-color-light-gray-common tip">其他用户还看了</p>
       <div class="recommendations-list">
         <jfk-recommendation :items="recommendations" :linkPrefix="detailUrl" :emptyLink="indexUrl"></jfk-recommendation>
       </div>
@@ -144,7 +137,7 @@
         </div>
       </div>
       <div class="control jfk-fl-l">
-        <button href="javascript:;" @click="handleSubmitOrder" class="jfk-button font-size--34 jfk-button--higher jfk-button--free jfk-button--primary">{{buttonText}}</button>
+        <button href="javascript:;" @click="handleSubmitOrder" class="jfk-button font-size--34 jfk-button--higher jfk-button--suspension jfk-button--free">{{buttonText}}</button>
       </div>
     </footer>
     <template v-if="productInfo.spec_product">
@@ -169,16 +162,11 @@
       <div class="qrcode">
         <img :src="hotelInfo.qrcode" />
       </div>
-      <template v-if="fansInfo.is_fans">
+      <template v-if="!fansInfo.is_fans">
         <div class="tip font-size--28 font-color-extra-light-gray">长按识别关注公众号</div>
         <div class="tip font-size--28 font-color-extra-light-gray">
           <span>享受</span>
-          <span class="color-golden font-size--36">
-            <i class="jfk-font icon-font_zh_geng_qkbys"></i>
-            <i class="jfk-font icon-font_zh_duo_qkbys"></i>
-            <i class="jfk-font icon-font_zh_you__qkbys"></i>
-            <i class="jfk-font icon-font_zh_hui_qkbys"></i>
-          </span>
+          <span class="color-golden font-size--36">更多优惠</span>
         </div>
       </template>
       <template v-else>
@@ -205,14 +193,14 @@
   const salerBannerReg = /(\d+(?:\.\d+)?)([^\d]+)?/
   const priceTagMap = {
     // 0: 默认 惊喜价 1：专属 2：秒杀 3：拼团 4：满减 5：组合 6：储值 7：积分
-    '0': '<i class="font-size--24 jfk-font price-tag-item icon-font_zh_jing_fzdbs"></i><i class="font-size--24 jfk-font price-tag-item icon-font_zh_xi_fzdbs"></i><i class="font-size--24 jfk-font price-tag-item icon-font_zh_jia_fzdbs"></i>',
-    '1': '<i class="font-size--24 jfk-font price-tag-item icon-font_zh_zhuan_fzdbs"></i><i class="font-size--24 jfk-font price-tag-item icon-font_zh_shu_fzdbs"></i><i class="font-size--24 jfk-font price-tag-item icon-font_zh_jia_fzdbs">',
-    '2': '<i class="font-size--24 jfk-font price-tag-item icon-font_zh_miao_fzdbs"></i><i class="font-size--24 jfk-font price-tag-item icon-font_zh_sha_fzdbs"></i><i class="font-size--24 jfk-font price-tag-item icon-font_zh_jia_fzdbs">',
-    '3': '<i class="font-size--24 jfk-font price-tag-item icon-font_zh_ren_fzdbs"></i><i class="font-size--24 jfk-font price-tag-item icon-font_zh_tuan_fzdbs"></i>',
-    '4': '<i class="font-size--24 jfk-font price-tag-item icon-font_zh_jing_fzdbs"></i><i class="font-size--24 jfk-font price-tag-item icon-font_zh_xi_fzdbs"></i><i class="font-size--24 jfk-font price-tag-item icon-font_zh_jia_fzdbs">',
-    '5': '<i class="font-size--24 jfk-font price-tag-item icon-font_zh_jing_fzdbs"></i><i class="font-size--24 jfk-font price-tag-item icon-font_zh_xi_fzdbs"></i><i class="font-size--24 jfk-font price-tag-item icon-font_zh_jia_fzdbs">',
-    '6': '<i class="font-size--24 jfk-font price-tag-item icon-font_zh_chu_fzdbs"></i><i class="font-size--24 jfk-font price-tag-item icon-font_zh_zhi_fzdbs"></i><i class="font-size--24 jfk-font price-tag-item icon-font_zh_jia_fzdbs">',
-    '7': '<i class="font-size--24 jfk-font price-tag-item icon-font_zh_ji_fzdbs"></i><i class="font-size--24 jfk-font price-tag-item icon-font_zh_fen_fzdbs"></i><i class="font-size--24 jfk-font price-tag-item icon-font_zh_jia_fzdbs">'
+    '0': '惊喜价',
+    '1': '专属价',
+    '2': '秒杀价',
+    '3': '人团',
+    '4': '惊喜价',
+    '5': '惊喜价',
+    '6': '储值价',
+    '7': '积分价'
   }
   const defaultGallery = {
     gry_id: '-1',
@@ -235,6 +223,7 @@
         // 跳转到404页面
         console.log(404)
       }
+      this.$pageNamespace(params)
       this.maxHeight = document.documentElement.clientHeight
       this.toast = this.$jfkToast({
         duration: -1,
@@ -245,8 +234,7 @@
     created () {
       let that = this
       getPackageInfo({
-        pid: this.productId,
-        openid: '123444xxa'
+        pid: this.productId
       }).then(function (res) {
         const { product_info, page_resource, saler_banner: salerBanner, hotel_info, public_info, fans_info } = res.web_data
         that.toast.close()
@@ -344,7 +332,7 @@
       tag (val) {
         this.buttonText = val === 2 ? '立即秒杀' : val === 6 ? '储值购买' : '立即购买'
         val = (!val || val > 7) ? '0' : val
-        this.priceTag = '<i class="mask color-golden"></i>' + priceTagMap[val]
+        this.priceTag = '<i class="mask color-golden"></i><i class="text font-size--24">' + priceTagMap[val] + '</i>'
         if (val !== 2) {
           this.killsecButtonDisabled = false
         } else {
@@ -431,7 +419,7 @@
         }
         if (this.productDetail) {
           labels.push({label: '商品内容', key: 'detail'})
-          html += `<div class="detail productinfo-detail-item jfk-pl-30 jfk-pr-30 font-size--28"><div class="title font-color-white font-size--32"><span>商品内容</span></div><ul class="cont" id="detail"><li class="item thead font-color-light-gray">商品名称<i class="right">数量</i></li>${this.productDetail}</ul></div>`
+          html += `<div class="detail productinfo-detail-item jfk-pl-30 jfk-pr-30 font-size--28"><div class="title font-color-white font-size--32"><span>商品内容</span></div><ul class="cont" id="detail"><li class="item thead font-color-light-gray-common">商品名称<i class="right">数量</i></li>${this.productDetail}</ul></div>`
         }
         if (labels.length) {
           this.currentLabel = labels[0].key

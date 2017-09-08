@@ -134,7 +134,7 @@ $(".j_whole_show collect").on("click",function(){
           <div class="city_content">
               <a class="nearby" href="javascript:;">
                 <div class="webkitbox bd_bottom nearby_sarch_wrap color3">
-                  <em class="h34 main_color1 iconfont city_light_ico inblock" style="width:1.1rem;margin-right:6px">&#xE025;</em> 
+                  <em class="h36 main_color1 iconfont city_light_ico inblock" style="width:1.1rem;margin-right:6px">&#xE025;</em> 
                   <span class="h32 main_color1 mar_r20">附近</span>
                   <input id="nearby_sarch" class="h26 flexgrow color3" type="text" value="附近有什么，去看看" disabled>
                 </div>
@@ -161,7 +161,7 @@ $(".j_whole_show collect").on("click",function(){
               <?php }?>
               <div class="city_list_wrap mar_t40 color2 h28 color3">
                     <div>
-                      <p class="hotel_search" city="" area="" style="border-bottom: 0.5px solid #363636;">全部</p>
+                      <p class="hotel_search" city="" area="" style="border-bottom: 0">全部</p>
                     </div>
                   <?php $let=array(); foreach($citys as $ck=>$cs){ $let[]=$ck;?>
                     <div data-letter="<?php echo $ck;?>">

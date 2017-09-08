@@ -106,6 +106,20 @@
         </div>
       </div>
     </jfk-popup>
+     <jfk-popup
+      v-model="winNoCouponVisible"
+      :showCloseButton="true"
+      class="jfk-popup__pancake">
+      <div class="popup-cont">
+        <div class="title font-color-white font-size--30 jfk-ta-c">您今日领取此奖项已达上限</div>
+        <div class="cont font-color-light-gray font-size--24">奖品已放至公众号下个人中心——我的优惠券进行查看，感谢您对我们一如既往的支持~
+        </div>
+        <div class="btns btns-2">
+          <a href="javascript:;" class="jfk-button jfk-button--free jfk-button--primary is-plain" @click="handleCloseResult(2)">再来一把</a>
+          <a href="javascript:;" class="jfk-button jfk-button--free jfk-button--primary" @click="handleUseCoupon">马上使用</a>
+        </div>
+      </div>
+    </jfk-popup>
     <jfk-popup
       v-model="notWinVisible"
       class="jfk-popup__pancake-result not-win">
@@ -115,7 +129,7 @@
           <div class="tip font-color-white font-size--30">很遗憾什么都没有，不要灰心~</div>
         </div>
         <div class="btns btns-1">
-          <a href="javascript:;" class="jfk-button jfk-button--free jfk-button--primary is-plain" @click="handleCloseResult()">再来一把</a>
+          <a href="javascript:;" class="jfk-button jfk-button--free jfk-button--primary is-plain" @click="handleCloseResult(-1)">再来一把</a>
         </div>
       </div>
     </jfk-popup>
@@ -130,7 +144,7 @@
           <div class="tip font-color-white font-size--30">{{prizeContent ? '恭喜您获得了' + prizeContent : '你来晚啦，奖品领光啦'}}</div>
         </div>
         <div class="btns" :class="'btns-' + (isPrizeEnough ? 2 : 1)">
-          <a href="javascript:;" class="jfk-button jfk-button--free jfk-button--primary is-plain" @click="handleCloseResult(true)">再来一把</a>
+          <a href="javascript:;" class="jfk-button jfk-button--free jfk-button--primary is-plain" @click="handleCloseResult(1)">再来一把</a>
           <a href="javascript:;" class="jfk-button jfk-button--free jfk-button--primary" v-show="isPrizeEnough" @click="handleReceiveCoupon">立即领取</a>
         </div>
       </div>
@@ -187,7 +201,7 @@
   let jfkConfig = window.jfkConfig
   if (process.env.NODE_ENV === 'development') {
     jfkConfig = {
-      couponUrl: '/coupon'
+      couponUrl: '/coupon?a=b'
     }
   }
   export default {
@@ -233,6 +247,7 @@
         timesVisible: false,
         musicIsClosed: false,
         raiderVisible: false,
+        winNoCouponVisible: false,
         gameNotRight: true,
         popup: {
           title: '测试',
@@ -252,6 +267,7 @@
         prizeDescImg: '',
         howToPlay: '',
         isPrizeEnough: false,
+        canReceive: false,
         prizeId: -1,
         diceDuration: 1600,
         timer: null,
@@ -294,11 +310,17 @@
       handleShowDesc () {
         this.descVisible = true
       },
-      handleCloseResult (isWin) {
-        if (isWin) {
-          this.winVisible = false
-        } else {
-          this.notWinVisible = false
+      handleCloseResult (type) {
+        let vm = this
+        switch (type) {
+          case -1:
+            vm.notWinVisible = false
+            break
+          case 1:
+            vm.winVisible = false
+            break
+          default:
+            vm.winNoCouponVisible = false
         }
         this.startShake()
       },
@@ -319,11 +341,12 @@
         getPancakeGameRoll({
           act_num: this.actNum
         }).then(function (res) {
-          const { prize_type: prizeType, throw_num: throwNum, prize_id: prizeId, is_prize_enough: isPrizeEnough, prize_name: prizeName, prize_content: prizeContent } = res.web_data
+          const { prize_type: prizeType, throw_num: throwNum, prize_id: prizeId, can_receive: canReceive, is_prize_enough: isPrizeEnough, prize_name: prizeName, prize_content: prizeContent } = res.web_data
           vm.prizeType = prizeType
           vm.dices = throwNum.split(',')
           vm.prizeId = prizeId
           vm.isPrizeEnough = isPrizeEnough
+          vm.canReceive = canReceive
           vm.prizeName = prizeName
           vm.prizeContent = prizeContent
           let times = vm.remainFreeTimes - 1
@@ -374,6 +397,12 @@
       showDiceResult () {
         if (this.prizeType === 0) {
           this.notWinVisible = true
+        } else if (this.isPrizeEnough) {
+          if (this.canReceive) {
+            this.winVisible = true
+          } else {
+            this.winNoCouponVisible = true
+          }
         } else {
           this.winVisible = true
         }
@@ -402,7 +431,13 @@
         })
       },
       handleReceiveCoupon () {
-        location.href = jfkConfig.couponUrl
+        location.href = jfkConfig.couponUrl + '&prize_id=' + this.prizeId
+      },
+      handleUseCoupon () {
+        if (process.env.NODE_ENV === 'development') {
+          alert('个人中心')
+        }
+        location.href = jfkConfig.memberCenterUrl
       }
     }
   }

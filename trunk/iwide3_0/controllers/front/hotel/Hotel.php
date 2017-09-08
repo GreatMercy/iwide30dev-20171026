@@ -23,8 +23,14 @@ class Hotel extends MY_Front_Hotel {
 		$this->share ['desc'] = $this->public ['name'] . '欢迎您使用微信订房,享受快捷服务...';
 		$this->share ['type'] = '';
 		$this->share ['dataUrl'] = '';
+		$this->common_show ['csrf_token'] = $this->security->get_csrf_token_name ();
+		$this->common_show ['csrf_value'] = $this->security->get_csrf_hash ();
 		$this->common_show ['share'] = $this->share;
-
+		$this->common_show ['url_param'] = $this->url_param;
+		$this->common_show ['inter_id'] = $this->inter_id;
+		$this->common_show ['csrf_token_arr'] = array(
+		        $this->common_show ['csrf_token']=>$this->common_show ['csrf_value']
+		);
 	}
 	function search() {
 		$data = $this->common_show;

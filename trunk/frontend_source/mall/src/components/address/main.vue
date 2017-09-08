@@ -1,7 +1,7 @@
 <template>
   <div class="jfk-address jfk-form font-size--28">
-    <div class="jfk-address__add jfk-pl-30 jfk-pr-30" v-show="showAdd">
-      <form class="jfk-address-form">
+    <div class="jfk-address__add" v-show="showAdd">
+      <form class="jfk-address-form  jfk-pl-30 jfk-pr-30">
         <div class="form-item">
           <label>
             <span class="form-item__label form-item__label--word-3 font-color-extra-light-gray">收件人</span>
@@ -54,8 +54,7 @@
           <label>
             <span class="form-item__label font-color-extra-light-gray">详细地址</span>
             <div class="form-item__body">
-              <input type="text"
-                     v-model="addressPicked.address" class="font-color-white" placeholder="如街道、楼层等"/>
+              <textarea v-model="addressPicked.address" rows="2" class="font-color-white" placeholder="如街道、楼层等"></textarea>
               <div class="form-item__status is-error" v-show="validResult.address.show"
                    @click="handleHiddenError('address')">
                 <i class="form-item__status-icon jfk-font icon-msg_icon_error_norma"></i>
@@ -69,7 +68,7 @@
         </div>
       </form>
       <div class="jfk-address__add-control">
-        <a href="javascript:;" class="jfk-button--free jfk-button jfk-button--primary is-plain"
+        <a href="javascript:;" class="jfk-button--free jfk-button jfk-button--primary is-special"
            @click="handleSaveAddress">保存</a>
       </div>
     </div>
@@ -109,11 +108,10 @@
       </ul>
       <div class="jfk-address__list-control">
         <a href="javascript:;" @click="handleAddAddress"
-           class="jfk-button jfk-button--primary jfk-button-higher jfk-button--free"><i
+           class="jfk-button jfk-button--suspension jfk-button-higher jfk-button--free"><i
           class="jfk-address__list-icon jfk-d-ib">+</i><i class="jfk-d-ib">新增收货地址</i></a>
       </div>
     </div>
-    <div v-show="loading">正在加载</div>
     <jfk-popup class="jfk-actionsheet jfk-actionsheet__address" :closeOnClickModal="false" position="bottom"
                v-model="actionsheetVisible">
       <address-select :ids="addressRegionIds" @address-data-loaded="handleAddressLoaded"

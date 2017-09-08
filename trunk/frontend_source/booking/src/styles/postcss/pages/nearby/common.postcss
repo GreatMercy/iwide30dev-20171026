@@ -131,6 +131,89 @@
       padding-top: px2rem(100);
     }
 
+  .no_search{
+    height: px2rem(420);
+    padding-top: px2rem(180);
+    text-align: center;
+    .no_seach_result{
+      .icon_noresult_search{
+
+      }
+
+    }
+  }
+
+    .for_you{
+      &_list_item{
+        margin-top: px2rem(50);
+        & p{
+          height: px2rem(80);
+          line-height: px2rem(80);
+          font-size: px2rem(30);
+          @mixin one-line horzin {};
+          position:relative;
+          &::before {
+            width: 100%;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+          }
+        }
+        i{
+          margin-right: px2rem(20);
+        }
+      }
+      &_item:first{
+        font-size: px2rem(32);
+      }
+    }
+  .search_city{
+    padding-top: px2rem(50);
+    padding-bottom: px2rem(50);
+    position: relative;
+    @mixin one-line horzin {};
+    position:relative;
+    &::before {
+      width: 100%;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+    }
+
+    & input{
+      outline: none;
+      padding:0 px2rem(40);
+      -webkit-appearance: none;
+      border-radius: 0;
+      border: none;
+      height: px2rem(70);
+      line-height: px2rem(70);
+      width: 90%;
+    }
+
+    .icon-icon_search{
+      position: absolute;
+      left: px2rem(30);
+      top: px2rem(75);
+    }
+
+    .icon-icon_delete{
+      display: inline-block;
+      width: px2rem(35);
+      height: px2rem(35);
+      border-radius: 50%;
+      font-size: px2rem(18);
+      position: absolute;
+      right: px2rem(30);
+      top: px2rem(70);
+      width: px2rem(40);
+      height: px2rem(40);
+      line-height: px2rem(40);
+      text-align: center;
+
+    }
+
+  }
 
 
   }

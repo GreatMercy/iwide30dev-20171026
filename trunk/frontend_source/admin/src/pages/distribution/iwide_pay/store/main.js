@@ -25,6 +25,7 @@ export default {
     api.getSplitRuleList(a).then(function (res) {
       this.state.normal.page = res.data.page
       this.state.list = res.data.list
+      this.state.exportData = res.data.url.ext_data
     }.bind(this))
   },
   getPublics: function () {

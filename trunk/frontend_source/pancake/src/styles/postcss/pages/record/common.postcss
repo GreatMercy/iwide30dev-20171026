@@ -69,10 +69,10 @@
       }
       .prize-btns {
         width: calc(177 / 690 * 100%);
+        text-align: right;
         @media screen and (max-width: 320px) {
           width: calc(200 / 690 * 100%);
         }
-        @mixin clearfix;
         .btn {
           display: inline-block;
           width: calc(92 / 30)em;
@@ -83,9 +83,6 @@
           line-height: calc(48 / 30)em;
           height: calc(50 / 30)em;
           font-size: 1em;
-        }
-        .num {
-          float: right;
         }
       }
     }

@@ -1,5 +1,5 @@
 <template>
-  <div class="gradient_bg padding_35">
+  <div class="gradient_bg form-top">
 	<section class="padding_0_15">
 		<form class="form_list font_14" ref=form>
 			<div  v-for="(value,key) in configList" v-if="value.show === 1" :data="value.show" class="flex form_item bd_bottom padding_18">
@@ -11,7 +11,7 @@
 				<div class="flex_1 font_14"><input @keyup="setRemove($event)" :type="value.type" :name="key" :placeholder="value.note" maxlength="20"></div>
         <div v-if="key === 'phonesms'" @click="smsSend" class="relative verification" :class="{verification_active:sms}">{{smsTitle}}</div>
 			</div>
-			<div class="margin_top_35 font_17">
+			<div class="pad_top40 font_17">
 				<a class="block width_85 center btn_height auto jfk-font entry_btn land_btn" @click="submit()">登&ensp;录</a>
 			</div>
       <div class="overflow">
@@ -21,8 +21,8 @@
         </div>
       </div>
 		</form>
-		<div class="flex layer_bg padding_14 radius_3 margin_top_70 margin_bottom_40 centers padding_0_23">
-			<div class="margin_right_23"><em class="jfk-font main_color1 txt_show6 font_28">&#xe62a;</em></div>
+		<div class="flex layer_bg padding_14 radius_3 margin_top_58 margin_bottom_40 centers padding_0_23">
+			<div class="margin_right_23"><em class="jfk-font main_color1 txt_show6 fontw40">&#xe62a;</em></div>
 			<div class="font_12 color1">注册可获得注册<font class="main_color1">大礼包</font>,享受更多<font class="main_color1">会员优惠</font>!</div>
 		</div>
 	</section>

@@ -149,7 +149,13 @@ const mallPackage = (r) => {
     r(mallPackage.default)
   }, showLoadError, 'mall_package')
 }
-
+// 礼包配送
+const giftPackage = (r) => {
+  require.ensure([], function (require) {
+    let giftPackage = require('./mall/gift_package/index')
+    r(giftPackage.default)
+  }, showLoadError, 'mall_gift-package')
+}
 /* ---------------- 商城相关模块结束 ---------------- */
 /* ---------------- 系统相关模块开始 ---------------- */
 
@@ -221,25 +227,25 @@ const statisticsExample = (r) => {
 /* ---------------- 分账相关模块开始 ---------------- */
 const refund = (r) => {
   require.ensure([], function (require) {
-    let statisticsExample = require('./subAccount/refund/index')
+    let statisticsExample = require('./distribution/refund/index')
     r(statisticsExample.default)
   }, showLoadError, 'refund')
 }
 const fundOverview = (r) => {
   require.ensure([], function (require) {
-    let statisticsExample = require('./subAccount/fundOverview/index')
+    let statisticsExample = require('./distribution/fundOverview/index')
     r(statisticsExample.default)
   }, showLoadError, 'fundOverview')
 }
 const accountVerification = (r) => {
   require.ensure([], function (require) {
-    let statisticsExample = require('./subAccount/accountVerification/index')
+    let statisticsExample = require('./distribution/accountVerification/index')
     r(statisticsExample.default)
   }, showLoadError, 'accountVerification')
 }
 const transferAudit = (r) => {
   require.ensure([], function (require) {
-    let statisticsExample = require('./subAccount/transferAudit/index')
+    let statisticsExample = require('./distribution/transferAudit/index')
     r(statisticsExample.default)
   }, showLoadError, 'transferAudit')
 }
@@ -277,4 +283,6 @@ export default {
   authorityModule,
   fundOverview,
   accountVerification,
-  transferAudit}
+  transferAudit,
+  giftPackage
+}

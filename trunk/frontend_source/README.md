@@ -22,4 +22,15 @@
   - `build` 打包静态资源，去除调试log及warn信息，去除mock信息
   - `unit` 前端单元测试
   - `lint` javascript风格检测
-
+### 变更记录
+- 2017-09-06 公共postcss的line-down的mixin在白色版本的下划线由`var(--color-golden)`变更为`currentColor`
+    影响范围
+    - 所有文件名为light.postcss中引用 `@mixin line-down` 的样式
+- 2017-09-03 为方便切换黑白两版主题，新增三个类名,这三个颜色不会随黑白切换变换颜色
+    - `font-color-silver-common` #333
+    - `font-color-light-gray-common` #808080
+    - `font-color-extra-light-gray-common` #bfbfbf
+    影响范围
+    - `jfk-recommendation` 推荐商品[不需要手动变更]
+    - `jfk-coupons` 优惠券列表[需要手动变更]
+    

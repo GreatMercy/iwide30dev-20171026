@@ -30,14 +30,14 @@
 .search_img_wrapper{padding: 0.875rem 0 0 0.875rem;padding-right: 30px;}
 .search_top_word{position: absolute;bottom: 3px;right: 8px;z-index: 2;}
 .search_discount_word{margin-bottom: 0.168rem;}
-.search_bg .others>*{padding: 0.3rem 2px 1rem 2px;}
+.search_bg .others>*{padding: 0rem 2px .827rem 2px;}
 #old_search a{margin-bottom: 1.406rem;}
 #old_search a:last-child{margin-bottom: 0px;}
 .others .img .always:before{content:"\e055";font-family:iconfont;font-size: 1.42rem}
 .others .img .collect:before{content:"\e061";font-family:iconfont;font-size: 1.42rem}
 .others .img .order:before{content:"\e053";font-family:iconfont;font-size: 1.42rem}
 /*广告位*/
-.others>*{padding: 0 2px 1.2rem 2px;margin-right:0.625rem;border-radius: 3.5px;border:0.5px solid transparent;background-clip:border-box;position: relative;}
+.others>*{padding: 0 2px 1.2rem 2px;margin-right: 0.469rem;border-radius: 3.5px;border:0.5px solid transparent;background-clip:border-box;position: relative;}
 .others>*:last-child{margin-right:0}
 .others .txtclip{width:6em; min-width:100%}
 .others .img{width:40px;margin: 1.112rem auto  0.75rem auto;}
@@ -64,7 +64,7 @@
 .hide_pack .main_tab_line ,.hide_pack .shadow_b,.hide_pack #j-swim{display: none!important;}
 .hide_pack #business_portal{position: absolute;top: 11px;right: 17px;width: 66px!important;}
 .hide_pack{padding-bottom: 7px;position: relative;}
-.room_collect{cursor: pointer;}
+.room_collect{cursor: pointer;margin-top: 11px;}
 .room_list_question{cursor: pointer;}
 /*评分*/
 .score:after, .room_list_score:after{content:"分"; font-size:0.853rem;}

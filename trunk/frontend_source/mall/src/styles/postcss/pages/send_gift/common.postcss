@@ -1,7 +1,7 @@
 /* 转赠 */
 .jfk-pages__send-gift {
   .button-box {
-    margin-top: px2rem(80);
+    margin-top: px2rem(44);
     margin-left: auto;
     margin-right: auto;
     width: px2rem(590);
@@ -36,6 +36,7 @@
   }
 
   .title {
+    line-height: 1;
     padding-top: px2rem(47);
     position: relative;
     margin-bottom: px2rem(60);
@@ -43,7 +44,7 @@
 
   .goods-info {
     height: px2rem(365);
-    margin-bottom: px2rem(44);
+    margin-bottom: px2rem(50);
     border-radius: px2rem(7);
     position: relative;
     overflow: hidden;
@@ -59,7 +60,7 @@
     &-mask {
       position: absolute;
       width: 100%;
-      height: px2rem(151);
+      height: px2rem(368);
       left: 0;
       bottom: -1px;
       background: background-image(/send_gift/goods_mask.png) center center no-repeat;
@@ -79,15 +80,14 @@
 
     &-desc {
       width: 100%;
-      height: px2rem(80);
       position: absolute;
       left: 0;
       bottom: px2rem(20);
       font-size: 0;
 
       &__price {
-        margin-left: calc(109 / 750 * 100%);
-        padding-right: calc(30 / 750 * 100%);
+        margin-left: calc(80 / 690 * 100%);
+        padding-right: calc(30 / 690 * 100%);
         box-sizing: border-box;
         flex: 1;
         .jfk-price {
@@ -102,13 +102,16 @@
       &__line {
         height: px2rem(20);
         width: 1px;
-        margin-left: calc(26 / 690 * 100%);
-        margin-right: calc(26 / 690 * 100%);
+        margin-left: calc(26 / 258 * 100%);
+        margin-right: calc(26 / 258 * 100%);
       }
 
       &__packname {
-        padding-left: calc(30 / 750 * 100%);
-        width: calc(343 / 750 * 100%);
+        padding-left: calc(30 / 690 * 100%);
+        width: calc(280 / 690 * 100%);
+        @media screen and (min-width: 375px) {
+          width: calc(330 / 690 * 100%);
+        }
         @mixin ellipsis 2 {
         }
       }
@@ -170,9 +173,9 @@
       background: none;
       border: none;
       outline: none;
+      width: 100%;
       height: px2rem(50);
       padding: 0;
-      line-height: 1;
     }
   }
 
@@ -220,7 +223,6 @@
       .gift-theme-list__box {
         transform: scale(1);
         transform-origin: center;
-        transition: all 0.5s;
         &:after {
           background-color: rgba(0, 0, 0, 0);
         }

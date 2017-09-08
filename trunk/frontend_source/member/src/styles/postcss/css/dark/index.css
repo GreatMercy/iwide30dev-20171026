@@ -235,7 +235,7 @@ background:url(../../image/loading.gif) no-repeat rgba(0,0,0,0.5) center center;
 .bd_clear{border: 0px!important;}
 /*条件选择*/
 .condition{text-align: left;}
-.condition > div{    display: inline-block; position: relative; width: 31.1%; margin-right: 1.1%; margin-left: 1.1%;margin-bottom: 10px; border-radius: 4px; padding: 1.51rem 0; text-align: center; background-color: #1f1f1f; color: #c5c5c5;}
+.condition > div{display: inline-block; position: relative; width: 31.1%; margin-right: 1.1%; margin-left: 1.1%; margin-bottom: 10px; border-radius: 3px; padding: 1.139rem 0; text-align: center;; background-color: #1f1f1f; color: #c5c5c5;}
 .condition > div:after{content: ''; width: 200%; height: 200%; position: absolute; top: 0; left: 0; border: 0px solid #1f1f1f; border-radius: 4px; -webkit-transform: scale(0.5,0.5); transform: scale(0.5,0.5); -webkit-transform-origin: top left;}
 .condition span{display: none;position: absolute;top: -.5%;right: -.5%;width: 25px;height: 25px;z-index: 3}
 .condition .active:after{border:1px solid #b2945e;}

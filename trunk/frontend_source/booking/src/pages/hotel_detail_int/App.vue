@@ -19,14 +19,8 @@
            @click="phoneCall(hotel.tel)"></i>
       </div>
     </div>
-    <div class="ht_del_ul_container">
-      <p class="ht_sth font-size--24">酒店设施</p>
-      <ul class="ht_del_ul font-size--28">
-        <li v-for="item in hotel.imgs.hotel_service"><i
-          class="booking_icon_font icon-booking_icon_collect1 icon_close font-size--30"></i>{{item.info}}
-        </li>
-      </ul>
-    </div>
+    <!--酒店设施 组件-->
+    <hotelServiceIcon :hotel_service="hotelService"/>
     <div class="ht_int font-size--28">
       <p class="ht_int_title">酒店介绍</p>
       <p class="ht_int_del">
@@ -37,41 +31,30 @@
 </template>
 <script>
   import {getHotelIntDetail} from '@/service/http'
+  import hotelServiceIcon from '../../components/common/hotel_service_icon.vue'
+  import formatUrlParams from 'jfk-ui/lib/format-urlparams.js'
 
   export default {
-    name: 'app',
-    components: {},
+    components: {
+      hotelServiceIcon
+    },
     created () {
-      this.hotel_id = this.getUrlParams('h')
+      this.hotel_id = formatUrlParams(location.href).h || ''
       this.getHotelData()
     },
     data () {
       return {
         hotel_id: 0,
-        hotel: {}
+        hotel: {},
+        hotelService: ''
       }
     },
     methods: {
-      // 获取url 参数
-      getUrlParams (urlName) {
-        let url = location.href
-        let paraString = url.substring(url.indexOf('?') + 1, url.length).split('&')
-        let returnValue
-        for (let i = 0; i < paraString.length; i++) {
-          let tempParas = paraString[i].split('=')[0]
-          let parasValue = paraString[i].split('=')[1]
-          if (tempParas === urlName) returnValue = parasValue
-        }
-        if (typeof (returnValue) === 'undefined') {
-          return ''
-        } else {
-          return returnValue
-        }
-      },
       // 获取酒店数据
       getHotelData () {
         getHotelIntDetail({h: this.hotel_id}).then((res) => {
           this.hotel = res.web_data.hotel
+          this.hotelService = this.hotel.imgs.hotel_service
         })
       },
       // 获取位置

@@ -10,7 +10,6 @@
 <script>
   import { findIndex } from '@/utils/utils'
   import { getExpressTree } from '@/service/http'
-  // import jfkPicker from '../../../../common/components/src/packages/jfk-picker/src/main.vue'
   const getAddressSlots = function (data, ids) {
     let result = []
     if (data.length) {
@@ -72,9 +71,6 @@
         addressData: [],
         slots: []
       }
-    },
-    components: {
-      // jfkPicker
     },
     created () {
       let that = this

@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { INTER_ID, OPEN_ID } from '../config/env'
+import {INTER_ID, OPEN_ID} from '../config/env'
 import formatUrlParams from 'jfk-ui/lib/format-urlparams.js'
 import handleErrorStatus from '@/utils/handleErrorStatus'
 
@@ -11,6 +11,10 @@ if (process.env.NODE_ENV === 'development') {
 axios.defaults.timeout = 60000
 axios.interceptors.request.use(function (config) {
   // 生产环境默认增加token
+  if (process.env.NODE_ENV === 'production') {
+    alert(window.url_param)
+    addSaler()
+  }
   if (process.env.NODE_ENV === 'production') {
     if (config.method === 'post' || config.method === 'put') {
       addCSRFTOKEN(config.data)
@@ -29,6 +33,13 @@ axios.interceptors.response.use(function (response) {
 const addCSRFTOKEN = function (data) {
   const token = window.jfkConfig.token
   const {name, value} = token
+  if (data[name] === undefined) {
+    data[name] = value
+  }
+}
+const addSaler = function (data) {
+  const urlParam = window.url_param
+  const {name, value} = urlParam
   if (data[name] === undefined) {
     data[name] = value
   }

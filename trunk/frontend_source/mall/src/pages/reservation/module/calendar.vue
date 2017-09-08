@@ -18,6 +18,7 @@
 
 <script>
   import stringLengthToTwo from 'jfk-ui/lib/string-length-to-two.js'
+  import moment from 'moment'
   export default {
     components: {},
     computed: {
@@ -27,9 +28,6 @@
       max () {
         return this.$store.getters.reservationCalendarDate.max || null
       },
-      defaultValue () {
-        return this.$store.getters.reservationCalendarDate.defaultValue || null
-      },
       calendarDate () {
         return this.$store.getters.reservationCalendarDate
       },
@@ -38,8 +36,11 @@
       }
     },
     data () {
-      return {}
+      return {
+        defaultValue: null
+      }
     },
+    watch: {},
     methods: {
       disabledDate (date, disabled, y, m, d) {
         let container = y + '-' + stringLengthToTwo(m)
@@ -55,11 +56,17 @@
       dateTextRender (date, disabled, y, m, d) {
         let container = y + '-' + stringLengthToTwo(m)
         let key = y + '-' + stringLengthToTwo(m) + '-' + String(parseInt(d))
+        // 用于转换 时间戳 对比  2018-01-01
+        let contrastKey = y + '-' + stringLengthToTwo(m) + '-' + stringLengthToTwo(String(parseInt(d)))
         if (this.calendarDate[container]) {
           const obj = parseInt(this.calendarDate[container][key]['num'])
           // 判断是否是今天
-          if (this.today === key) {
+          if (this.today['key'] === key) {
             return obj === 0 ? '满房' : '今天'
+          }
+          // 判断是否小于今天
+          if (moment(contrastKey).valueOf() < moment(this.today).valueOf()) {
+            return d
           }
           if (obj === 0) {
             return '满房'
@@ -67,24 +74,11 @@
         }
       },
       dateCellRender (date, y, m, d) {
-        let container = y + '-' + stringLengthToTwo(m)
-        let key = y + '-' + stringLengthToTwo(m) + '-' + String(parseInt(d))
-        let str = '<p></p>'
-        if (this.calendarDate[container]) {
-          const obj = parseInt(this.calendarDate[container][key]['num'])
-          if (obj === 0) {
-            str = `<p class="font-size--20 font-color-extra-light-gray tip reservation__opacity">${obj}间</p>`
-          }
-          if (obj > 0 && obj <= 10) {
-            str = `<p class="font-size--20 font-color-extra-light-gray tip">${obj}间</p>`
-          } else if (obj > 100) {
-            str = `<p class="font-size--20 font-color-extra-light-gray tip">>100</p>`
-          }
-        }
-        return str
+        return ''
       },
       handleDateClick (value, isChecked) {
         this.$store.commit('updateReservationCheckInDate', value)
+        this.defaultValue = new Date(value)
         this.$router.push('/form')
       }
     },
@@ -95,4 +89,3 @@
     }
   }
 </script>
-

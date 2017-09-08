@@ -14,7 +14,9 @@
       <template v-else>
         <div class="jfk-toast__cont">
           <div class="jfk-toast__main">
-            <i class="jfk-toast__icon font-size--80 color-golden" :class="[iconClass, iconTypeClass]" v-if="iconType || iconClass !== ''"></i>
+            <span class="jfk-toast__icon" v-if="iconType || iconClass !== ''">
+              <i class=" font-size--80 jfk-toast__icon-icon color-golden"  :class="[iconClass, iconTypeClass]"></i>
+            </span>
             <div class="jfk-toast__text font-size--28 font-color-extra-light-gray" v-show="message">{{ message }}</div>
           </div>
         </div>

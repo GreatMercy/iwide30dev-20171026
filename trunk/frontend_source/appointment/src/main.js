@@ -21,7 +21,7 @@ let call = function () {
 
 document.addEventListener('DOMContentLoaded', function (event) {
   let scriptAreaElement = document.getElementById('scriptArea')
-  let pageId = scriptAreaElement && scriptAreaElement.dataset.pageId || 'home'
+  let pageId = scriptAreaElement && scriptAreaElement.dataset.pageId || 'index'
   let pageConfig = pages[pageId]
   if (pageConfig) {
     pageConfig(call)

@@ -11,7 +11,7 @@
         </div>
         <div class="refund-information__hotel font-size--24" v-if="detail.hotel_name"
              v-text="detail.hotel_name + '提供'"></div>
-        <div class="jfk-price font-size--54 refund-information__price" v-if="detail.real_grand_total">
+        <div class="jfk-price font-size--54 refund-information__price color-golden-price" v-if="detail.real_grand_total">
           <i class="jfk-font-number jfk-price__currency">¥</i>
           <i class="jfk-font-number jfk-price__number" v-text="detail.real_grand_total"></i>
         </div>
@@ -71,9 +71,9 @@
         </ul>
 
         <div class="refund-btn">
-          <button class="jfk-button jfk-button--primary is-plain font-size--30 jfk-button--free"
+          <button class="jfk-button jfk-button--primary  font-size--30 jfk-button--free"
                   @click="apply"
-                  :class="{'is-disabled': result.length > 0 ? false: true}">
+                  :class="{'is-disabled': buttonDisabled, 'is-special': !buttonDisabled }">
             <span>提交</span>
           </button>
         </div>
@@ -88,6 +88,11 @@
   let params = formatUrlParams.default(location.href)
   export default {
     components: {},
+    computed: {
+      buttonDisabled () {
+        return this.result.length > 0 ? 0 : 1
+      }
+    },
     beforeCreate () {
       this.toast = this.$jfkToast({
         duration: -1,

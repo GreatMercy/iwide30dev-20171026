@@ -1,29 +1,29 @@
 <template>
-  <div class="jfk-coupons jfk-pl-30 jfk-pr-30 jfk-pt-30">
-    <ul class="jfk-coupons__list font-size--24" :style="{'max-height': maxHeight}">
+  <div class="jfk-coupons jfk-pl-30 jfk-pr-30">
+    <ul class="jfk-coupons__list font-size--24 jfk-pt-30" :style="{'max-height': maxHeight}">
       <li
         class="jfk-coupons__box"
         v-for="item in items"
         :key="item.member_card_id"
         :title="item.title">
-        <div class="jfk-coupons__item" @click="handlePickCoupon(item.member_card_id, item.usable)" :class="{'is-disabled': !item.usable}">
+        <div class="jfk-coupons__item" @click="handlePickCoupon(item.member_card_id, item.usable)" :class="{'is-disabled': !item.usable, 'is-exchange': item.card_type === '3', 'is-offset': item.card_type === '1', 'is-discount': item.card_type === '2'}">
           <div class="jfk-coupons__money">
             <div class="jfk-coupons__money-cont jfk-flex is-align-middle is-justify-center">
-              <span class="exchange jfk-font icon-font_zh_dui_qkbys" v-if="item.card_type === '3'"></span>
-              <span class="discount" v-else-if="item.card_type === '2'">
-                <i class="jfk-font-number discount-number">{{item.discount}}</i>
-                <i class="jfk-font discount-word icon-font_zh_zhe_qkbys"></i>
+              <span class="jfk-coupons__money-num jfk-font icon-font_zh_dui_qkbys" v-if="item.card_type === '3'"></span>
+              <span class="jfk-coupons__money-num" v-else-if="item.card_type === '2'">
+                <i class="jfk-font-number jfk-coupons__money-number">{{item.discount}}</i>
+                <i class="jfk-font jfk-coupons__money-unit icon-font_zh_zhe_qkbys"></i>
               </span>
-              <span class="offset color-golden" :class="'offset--length-' + item.reduce_cost.length" v-else-if="item.card_type === '1'">
-                <i class="offset__currency jfk-font-number">￥</i>
-                <i class="offset__number jfk-font-number">{{item.reduce_cost}}</i>
+              <span class="jfk-coupons__money-num color-golden" :class="'jfk-coupons__money-num--length-' + item.reduce_cost.length" v-else-if="item.card_type === '1'">
+                <i class="jfk-coupons__money-currency jfk-font-number">￥</i>
+                <i class="jfk-coupons__money-number jfk-font-number">{{item.reduce_cost}}</i>
               </span>
             </div>
           </div>
           <div class="jfk-coupons__cont">
             <div class="jfk-coupons__name font-color-white">{{item.title}}</div>
-            <div class="jfk-coupons__scope font-color-light-gray">{{item.scopeType}}</div>
-            <div class="jfk-coupons__expire font-color-light-gray">{{item.expire_time}}</div>
+            <div class="jfk-coupons__scope font-color-light-gray-common">{{item.scopeType}}</div>
+            <div class="jfk-coupons__expire font-color-light-gray-common">{{item.expire_time}}</div>
           </div>
           <div class="jfk-coupons__status">
             <span class="jfk-radio jfk-radio--shape-circle color-golden" :class="{'is-checked': item.member_card_id === cid}" v-show="item.usable">
@@ -45,7 +45,7 @@
   export default {
     name: 'jfk-coupons',
     beforeCreate () {
-      this.maxHeight = (window.innerHeight - 50 - 15) + 'px'
+      this.maxHeight = (window.innerHeight - 50) + 'px'
     },
     data () {
       return {

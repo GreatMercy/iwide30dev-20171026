@@ -30,9 +30,8 @@
             <div class="prize-number jfk-fl-l font-color-extra-light-gray">中：<i class="color-golden">{{item.prize_count}}</i></div>
             <div class="prize-btns jfk-fl-r" @click="handleReceivePrize(item)">
               <span class="btn">
-                <button class="jfk-button jfk-button--free jfk-button--primary is-plain" :disabled="!item.is_available">可领</button>
+                <button class="jfk-button jfk-button--free jfk-button--primary is-plain" :disabled="!item.is_available">{{item.is_available ? '可领' : '已领'}}</button>
               </span>
-              <span class="num color-golden">{{item.received_num}}/{{item.receive_limit_num}}</span>
             </div>
           </li>
         </ul>

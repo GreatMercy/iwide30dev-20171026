@@ -3,11 +3,13 @@
     <div class="jfk-msgbox__box">
       <div class="jfk-msgbox" :class="msgboxClass" v-show="value">
         <i class="jfk-msgbox__close font-size--30 jfk-font icon-icon_close" @click="handleAction('close')" v-show="showCloseButton"></i>
-        <i class="jfk-msgbox__icon font-size--80 color-golden" :class="iconClasses" v-if="iconClasses !== ''"></i>
+        <span class="jfk-msgbox__icon" v-if="iconClasses !== ''">
+          <i class=" font-size--90 color-golden jfk-msgbox__icon-icon"  :class="iconClasses"></i>
+        </span>
         <div class="jfk-msgbox__header" v-if="title !== ''">
           <div class="jfk-msgbox__title font-color-white" :class="titleClass">{{ title }}</div>
         </div>
-        <div class="jfk-msgbox__content" :class="contentClass" v-if="message !== ''">
+        <div class="jfk-msgbox__content font-size--28" :class="contentClass" v-if="message !== ''">
           <div class="jfk-msgbox__message" v-html="message"></div>
           <div class="jfk-msgbox__input" v-if="showInput">
             <input v-model="inputValue" :placeholder="inputPlaceholder" ref="input">
@@ -81,10 +83,10 @@
         }
       },
       contentClass () {
-        return this.iconClasses === '' ? 'font-size--28 font-color-extra-light-gray' : 'font-size--24 font-color-light-gray'
+        return this.title === '' ? 'font-color-extra-light-gray' : 'font-color-light-gray'
       },
       confirmButtonClasses() {
-        let classes = 'jfk-msgbox__btn font-size--34 jfk-button--length-2 jfk-button jfk-msgbox__confirm ' + this.confirmButtonClass;
+        let classes = 'jfk-msgbox__btn jfk-button--primary is-special font-size--34 jfk-button--length-2 jfk-button jfk-msgbox__confirm ' + this.confirmButtonClass;
         if (this.confirmButtonHighlight) {
           classes += ' jfk-msgbox__confirm--highlight';
         }

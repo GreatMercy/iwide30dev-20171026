@@ -9,13 +9,13 @@
           <span class="tip jfk-d-ib color-golden font-size--24">距离{{killsecParams.process === 1 ? '开始' : '结束'}}</span>
           <span class="clock jfk-d-ib">
             <i :class="numClass" class="num jfk-d-ib font-color-white date" v-show="killsecParams.dates > 0">{{killsecParams.dates}}</i>
-            <i class="unit font-size--22 jfk-d-ib font-color-light-gray" v-show="killsecParams.dates > 0">天</i>
+            <i class="unit font-size--22 jfk-d-ib font-color-light-gray-common" v-show="killsecParams.dates > 0">天</i>
             <i :class="numClass" class="num jfk-d-ib font-color-white">{{killsecParams.hours}}</i>
-            <i class="unit font-size--22 jfk-d-ib font-color-light-gray">时</i>
+            <i class="unit font-size--22 jfk-d-ib font-color-light-gray-common">时</i>
             <i :class="numClass" class="num jfk-d-ib font-color-white">{{killsecParams.minutes}}</i>
-            <i class="unit font-size--22 jfk-d-ib font-color-light-gray">分</i>
+            <i class="unit font-size--22 jfk-d-ib font-color-light-gray-common">分</i>
             <i :class="numClass" class="num jfk-d-ib font-color-white">{{killsecParams.seconds}}</i>
-            <i class="unit font-size--22 jfk-d-ib font-color-light-gray">秒</i>
+            <i class="unit font-size--22 jfk-d-ib font-color-light-gray-common">秒</i>
           </span>
         </div>
         <div class="process">
