@@ -126,7 +126,7 @@ class Presents extends MY_Front_Soma_Iapi
         $returnData = array(
             'is_expire' => $is_expire, //是否已经过期
             'gift_theme' => $giftTheme, //主题
-            'order_list_url'    => Soma_const_url::inst()->get_soma_order_list(array('id'=>$this->inter_id)),
+            'order_list_url'    => $this->link['order_link'],
         );
 
         if(empty($item['qty_origin'])){
@@ -300,6 +300,11 @@ class Presents extends MY_Front_Soma_Iapi
         $request_param = $this->input->input_json();
         $request_array = $request_param->toArray();
 
+        $redis = $this->get_redis_instance();
+        $layout = $redis->get('layout');
+        $tkId = $redis->get('tkid');
+        $brandName = $redis->get('brandname');
+
         $inter_id = $this->inter_id;
         $business = 'package';
         $aiidsArr = $request_array['aiids']; //asset_item的需求量json数组,required
@@ -367,13 +372,26 @@ class Presents extends MY_Front_Soma_Iapi
                 $returnData['desc'] = $message;
 
                 /*分享所需参数打包*/
-                $redirect= urlencode( Soma_const_url::inst()->get_soma_gift_list( 'send' ,$param = array("id"=>$this->inter_id,'gid'=>$gift_id)));
-                $redirect_url = Soma_const_url::inst()->get_url('soma/gift/package_sending',  array('id'=> $this->inter_id, 'redirect'=> $redirect ,'gid'=>$gift_id) );
+                $redirect= urlencode( Soma_const_url::inst()->get_soma_gift_list( 'send' ,$param = array(
+                    "id"=>$this->inter_id,'gid'=>$gift_id,
+                    'tkid' => $tkId,
+                    'brandname' => $brandName,
+                    'layout' => $layout
+                    )));
+                $redirect_url = Soma_const_url::inst()->get_url('soma/gift/package_sending',  array(
+                    'id'=> $this->inter_id, 'redirect'=> $redirect ,'gid'=>$gift_id,
+                    'tkid' => $tkId,
+                    'brandname' => $brandName,
+                    'layout' => $layout
+                ) );
                 $params= array(
                     'id'=> $this->inter_id,
                     'bsn'=> $business,
                     'gid'=> $gift_id,
-                    'sign'=> $sign
+                    'sign'=> $sign,
+                    'tkid' => $tkId,
+                    'brandname' => $brandName,
+                    'layout' => $layout
                 );
                 $fans= $this->Publics_model->get_wxuser_info($this->inter_id, $this->openid);
 
@@ -856,9 +874,11 @@ class Presents extends MY_Front_Soma_Iapi
         $orders = $this->g_model->get_order_detail($business, $this->inter_id);
         $item = $orders['items'][0];
         // 默认跳转到订单中心
-        $redirect_url = Soma_const_url::inst()->get_url('soma/order/order_detail', array('id' => $this->inter_id, 'oid'=> $item['order_id'], 'bsn' => $business));
+        //$redirect_url = Soma_const_url::inst()->get_url('soma/order/order_detail', array('id' => $this->inter_id, 'oid'=> $item['order_id'], 'bsn' => $business));
+        $redirect_url = $this->link['detail_link'].item['order_id'].'&bsn='.$business;
         if($send_from == Gift_order_model::SEND_FROM_GIFT) {
-            $redirect_url = Soma_const_url::inst()->get_url('soma/gift/package_received', array('id' => $this->inter_id, 'gid'=> $send_order_id, 'sign' => ''));
+            //$redirect_url = Soma_const_url::inst()->get_url('soma/gift/package_received', array('id' => $this->inter_id, 'gid'=> $send_order_id, 'sign' => ''));
+            $redirect_url = $this->link['package_received'].$send_order_id.'&sign=';
         }
 
         $this->out_put_msg(FrontConst::OPER_STATUS_SUCCESS, '',array( 'redirect_url' => $redirect_url));
@@ -1206,9 +1226,9 @@ class Presents extends MY_Front_Soma_Iapi
         $returnData['item'] = $item ;
         $returnData['fans'] = $this->Publics_model->get_fans_info( $orders['openid_give'] );
         $returnData['message'] = $orders['message'];
-        $returnData['order_list_url'] = Soma_const_url::inst()->get_soma_order_list(array('id'=>$this->inter_id)) ;
+        $returnData['order_list_url'] = $this->link['order_link'];
         $returnData['theme_id'] = $orders['theme_id']; //主题
-        $returnData['redirect_url']  = Soma_const_url::inst()->get_soma_gift_received(array('id'=> $this->inter_id,'gid'=>$gift_id ));
+        $returnData['redirect_url']  = $this->link['package_received'].$gift_id;
         $themeArr = $this->get_theme();
         foreach($themeArr as $singleTheme){
             if($singleTheme['theme_id'] == $orders['theme_id']){
@@ -1564,7 +1584,8 @@ class Presents extends MY_Front_Soma_Iapi
         $item = new \EasyWeChat\Support\Collection($item);
         $item = $item->except($this->itemFiledFilter)->toArray();
         $returnData = array(
-            'product_url'    => Soma_const_url::inst ()->get_package_detail(array('id'=>$this->inter_id,'pid'=>$item['product_id'])),
+            //'product_url'    => Soma_const_url::inst ()->get_package_detail(array('id'=>$this->inter_id,'pid'=>$item['product_id'])),
+            'product_url'    => $this->link['product_link'].$item['product_id'],
             'origin_gid'=> $gift_id,
             'item'=>$item,
             'received_time' => $order['update_time'],

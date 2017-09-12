@@ -6,17 +6,22 @@ export default {
       if (!params) {
         params = formatUrlParams(location.href)
       }
+      let pageNamespace = []
       if (params.brandname) {
-        this.pageNamespace = `is-${params.brandname} is-accor`
+        pageNamespace = [`is-${params.brandname}`, 'is-accor']
       } else {
         let tkid = params.tkid
         let d = data[tkid]
         if (d) {
-          this.pageNamespace = `is-${d.brandname} is-accor`
+          pageNamespace = [`is-${d.brandname}`, 'is-accor']
         } else {
-          this.pageNamespace = 'is-accor'
+          pageNamespace = ['is-accor']
         }
       }
+      let $body = document.body
+      pageNamespace.forEach(function (c) {
+        $body.classList.add(c)
+      })
     }
   }
 }

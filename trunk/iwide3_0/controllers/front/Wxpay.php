@@ -74,10 +74,10 @@ class Wxpay extends MY_Front {
 					}
 					
 					$this->Wxpay_model->setParameter ( "body", $order_details ['hname'] . ' - ' .$order_details ['first_detail'] ['roomname'] ); // 商品描述
-					$wxpay_reduce = is_null ( $order_details ['wxpay_favour'] ) ? 0 : $order_details ['wxpay_favour'];
+// 					$wxpay_reduce = is_null ( $order_details ['wxpay_favour'] ) ? 0 : $order_details ['wxpay_favour'];
 					$this->Wxpay_model->setParameter ( "out_trade_no", $pay_orderid ); // 商户订单号
 					$this->Wxpay_model->setParameter ( "detail", $order_details ['hname'].'-'.$order_details ['first_detail'] ['roomname'].',单号：'.$order_details ['orderid'] ); // 商品名称明细列表
-					$this->Wxpay_model->setParameter ( "total_fee", ($order_details ['price'] - $wxpay_reduce) * 100 ); // 总金额
+					$this->Wxpay_model->setParameter ( "total_fee", $order_details ['price'] * 100 ); // 总金额
 					$this->Wxpay_model->setParameter ( "notify_url", site_url ( 'Wxpayreturn/hotel_payreturn/'.$order_details ['inter_id'] ) ); // 通知地址
 					$this->Wxpay_model->setParameter ( "trade_type", "JSAPI" ); // 交易类型
 					//添加订单超时时间 add by ping
@@ -104,71 +104,74 @@ class Wxpay extends MY_Front {
 		$data ['jsApiParameters'] = $parameters;
 		$this->display ( 'pay/hotel_order/wxpay', $data );
 	}
-    function hotel_continue() {
-        $this->load->library ( 'MYLOG' ); // 统计探针
-        MYLOG::hotel_tracker ( $this->openid, $this->inter_id );
-        
-        $parameters = '';
-        $data = array ();
-        $debtid = $this->input->get ( 'debtid', true );
-        $data ['fail_url'] = site_url ( 'hotel/hotel/myorder' ) . '?id=' . $this->inter_id;
-        $data ['success_url'] = $data ['fail_url'];
-        if ($debtid) {
-            $this->load->model ( 'wx/Publics_model' );
-            $public = $this->Publics_model->get_public_by_id ( $this->inter_id );
-            if (! empty ( $public ['app_id'] )) {
-                $this->load->model ( 'hotel/Debts_model' );
-                $debt = $this->Debts_model->get_debt_by_id ( $this->inter_id, $debtid );
-                if ($debt && $debt['debt_state']==0) {
-                    $this->load->model ( 'hotel/Order_check_model' );
-                    $result = $this->Order_check_model->check_self_continue ( $this->inter_id, $debt ['source_id'], $this->openid, $debt ['sub_ident'] );
-                    if ($result ['s'] == 1) {
-                        $this->load->model ( 'pay/Wxpay_model' );
-                        $this->load->model ( 'pay/Pay_model' );
-                        $order = $result ['order'];
-                        $data ['fail_url'] = site_url ( 'hotel/hotel/orderdetail' ) . '?id=' . $this->inter_id;
-                        $pay_paras = $this->Pay_model->get_pay_paras ( $order ['inter_id'], 'weixin' );
-                        if (! empty ( $pay_paras ['sub_mch_id'] )) {
-                            $this->Wxpay_model->setParameter ( "sub_openid", $this->openid );
-                            if (! empty ( $pay_paras ['sub_mch_id_h_' . $order ['hotel_id']] ))
-                                $this->Wxpay_model->setParameter ( "sub_mch_id", $pay_paras ['sub_mch_id_h_' . $order ['hotel_id']] );
-                            else
-                                $this->Wxpay_model->setParameter ( "sub_mch_id", $pay_paras ['sub_mch_id'] );
-                            $this->Wxpay_model->setParameter ( "mch_id", $pay_paras ['mch_id'] );
-                        } else {
-                            $this->Wxpay_model->setParameter ( "openid", $this->openid );
-                            $this->Wxpay_model->setParameter ( "mch_id", $pay_paras ['mch_id'] );
-                            if (empty ( $pay_paras ['app_id'] )) 
-                                $pay_paras ['app_id'] = $public ['app_id'];
-                        }
-                        $body = $order ['hname'] . '-' . $order ['orderid'];
-                        $body .= empty ( $order ['web_orderid'] ) ? '订单续住' : '/' . $order ['web_orderid'] . '订单续住';
-                        $this->load->helper ( 'string' );
-                        $body = cubstr ( $body, 0, 127 ); // 微信文档里body长度为128，实际只能到127
-                        $this->Wxpay_model->setParameter ( "body", $body ); // 商品描述
-                        $this->Wxpay_model->setParameter ( "out_trade_no", $result ['debtid'] ); // 商户订单号
-                        $this->Wxpay_model->setParameter ( "detail", $debt ['remark'] ); // 商品名称明细列表
-                        $this->Wxpay_model->setParameter ( "total_fee", $debt ['debt_amount'] * 100 ); // 总金额
-                        $this->Wxpay_model->setParameter ( "notify_url", site_url ( 'Wxpayreturn/hotel_debt/' . $order ['inter_id'] ) ); // 通知地址
-                        $this->Wxpay_model->setParameter ( "trade_type", "JSAPI" ); // 交易类型
-                        $prepay_id = $this->Wxpay_model->getPrepayId ( $pay_paras );
-                        $this->Wxpay_model->setPrepayId ( $prepay_id );
-                        $jsApiObj ["appId"] = $pay_paras ['app_id'];
-                        $timeStamp = time ();
-                        $jsApiObj ["timeStamp"] = "$timeStamp";
-                        $jsApiObj ["nonceStr"] = $this->Wxpay_model->createNoncestr ();
-                        $jsApiObj ["package"] = "prepay_id=$prepay_id";
-                        $jsApiObj ["signType"] = "MD5";
-                        $jsApiObj ["paySign"] = $this->Wxpay_model->getSign ( $jsApiObj, $pay_paras );
-                        $parameters = json_encode ( $jsApiObj );
-                        $data ['success_url'] = site_url ( 'hotel/hotel/orderdetail' ) . '?id=' . $this->inter_id . '&orderid=' . $debt ['source_id'];
-                    }
-                }
-            }
-        }
-        $data ['jsApiParameters'] = $parameters;
-        $this->display ( 'pay/hotel_order/wxpay', $data );
-    }
+	function hotel_continue() {
+	    $this->load->library ( 'MYLOG' ); // 统计探针
+	    MYLOG::hotel_tracker ( $this->openid, $this->inter_id );
+	
+	    $parameters = '';
+	    $data = array ();
+	    $debtid = $this->input->get ( 'debtid', true );
+	    $data ['fail_url'] = site_url ( 'hotel/hotel/myorder' ) . '?id=' . $this->inter_id;
+	    $data ['success_url'] = $data ['fail_url'];
+	    if ($debtid) {
+	        $this->load->model ( 'wx/Publics_model' );
+	        $public = $this->Publics_model->get_public_by_id ( $this->inter_id );
+	        if (! empty ( $public ['app_id'] )) {
+	            $this->load->model ( 'hotel/Debts_model' );
+	            $debt = $this->Debts_model->get_debt_by_id ( $this->inter_id, $debtid );
+	            if ($debt && $debt['debt_state']==0) {
+	                $this->load->model ( 'hotel/Order_check_model' );
+	                $result = $this->Order_check_model->check_self_continue ( $this->inter_id, $debt ['source_id'], $this->openid, $debt ['sub_ident'] );
+	                if ($result ['s'] == 1) {
+	                    $this->load->model ( 'pay/Wxpay_model' );
+	                    $this->load->model ( 'pay/Pay_model' );
+	                    $order = $result ['order'];
+	                    $data ['fail_url'] = site_url ( 'hotel/hotel/orderdetail' ) . '?id=' . $this->inter_id;
+	                    $pay_paras = $this->Pay_model->get_pay_paras ( $order ['inter_id'], 'weixin' );
+	                    if (! empty ( $pay_paras ['sub_mch_id'] )) {
+	                        $this->Wxpay_model->setParameter ( "sub_openid", $this->openid );
+	                        if (! empty ( $pay_paras ['sub_mch_id_h_' . $order ['hotel_id']] ))
+	                            $this->Wxpay_model->setParameter ( "sub_mch_id", $pay_paras ['sub_mch_id_h_' . $order ['hotel_id']] );
+	                            else
+	                                $this->Wxpay_model->setParameter ( "sub_mch_id", $pay_paras ['sub_mch_id'] );
+	                                $this->Wxpay_model->setParameter ( "mch_id", $pay_paras ['mch_id'] );
+	                    } else {
+	                        $this->Wxpay_model->setParameter ( "openid", $this->openid );
+	                        $this->Wxpay_model->setParameter ( "mch_id", $pay_paras ['mch_id'] );
+	                        if (empty ( $pay_paras ['app_id'] ))
+	                            $pay_paras ['app_id'] = $public ['app_id'];
+	                    }
+	                    $body = $order ['hname'] . '-' . $order ['orderid'];
+	                    $body .= empty ( $order ['web_orderid'] ) ? '订单续住' : '/' . $order ['web_orderid'] . '订单续住';
+	                    $this->load->helper ( 'string' );
+	                    $body = cubstr ( $body, 0, 127 ); // 微信文档里body长度为128，实际只能到127
+	                    $this->Wxpay_model->setParameter ( "body", $body ); // 商品描述
+	                    $this->Wxpay_model->setParameter ( "out_trade_no", $result ['debtid'] ); // 商户订单号
+	                    $this->Wxpay_model->setParameter ( "detail", $debt ['remark'] ); // 商品名称明细列表
+	                    $this->Wxpay_model->setParameter ( "total_fee", $debt ['debt_amount'] * 100 ); // 总金额
+	                    $this->Wxpay_model->setParameter ( "notify_url", site_url ( 'Wxpayreturn/hotel_debt/' . $order ['inter_id'] ) ); // 通知地址
+	                    $this->Wxpay_model->setParameter ( "trade_type", "JSAPI" ); // 交易类型
+	                    $prepay_id = $this->Wxpay_model->getPrepayId ( $pay_paras );
+	                    $this->Wxpay_model->setPrepayId ( $prepay_id );
+	                    $jsApiObj ["appId"] = $pay_paras ['app_id'];
+	                    $timeStamp = time ();
+	                    $jsApiObj ["timeStamp"] = "$timeStamp";
+	                    $jsApiObj ["nonceStr"] = $this->Wxpay_model->createNoncestr ();
+	                    $jsApiObj ["package"] = "prepay_id=$prepay_id";
+	                    $jsApiObj ["signType"] = "MD5";
+	                    $jsApiObj ["paySign"] = $this->Wxpay_model->getSign ( $jsApiObj, $pay_paras );
+	                    $parameters = json_encode ( $jsApiObj );
+	                    $data ['success_url'] = site_url ( 'hotel/hotel/orderdetail' ) . '?id=' . $this->inter_id . '&orderid=' . $debt ['source_id'];
+	                }else{
+	                    echo $result['errmsg'];
+	                    exit;
+	                }
+	            }
+	        }
+	    }
+	    $data ['jsApiParameters'] = $parameters;
+	    $this->display ( 'pay/hotel_order/wxpay', $data );
+	}
 
 	public function mall_pay()
 	{

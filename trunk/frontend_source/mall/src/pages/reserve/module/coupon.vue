@@ -37,7 +37,7 @@
       </li>
     </ul>
     <div class="jfk-coupons__control">
-      <a href="javascript:;" class="jfk-button jfk-button--primary jfk-button--higher jfk-button--free" @click="handlePickedCoupon">确认</a>
+      <a href="javascript:;" class="jfk-button jfk-button--primary jfk-button--higher jfk-button--free" @click="handlePickedCoupon">{{buttonText}}</a>
     </div>
   </div>
 </template>
@@ -65,6 +65,15 @@
     watch: {
       couponId (val) {
         this.cid = val
+      }
+    },
+    computed: {
+      buttonText () {
+        let text = '返回订单'
+        if (this.items.length && this.items[0].usable) {
+          text = '确认'
+        }
+        return text
       }
     },
     methods: {

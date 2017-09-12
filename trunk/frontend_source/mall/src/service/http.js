@@ -505,6 +505,71 @@ const getExpressDetail = (data, config, version = 'v1') => {
   let url = apiConfig[version] && apiConfig[version].GET_EXPRESS_DETAIL || apiConfig.v1.GET_EXPRESS_DETAIL
   return ajax.get(url, data, config)
 }
+/**
+ * 获取礼包列表
+ * @param {String} data.inter_id 礼包列表
+ * @param {String} data.saler_id 分销员ID
+ * */
+const getGiftPackageList = (data, config, version = 'v1') => {
+  let url = apiConfig[version] && apiConfig[version].GET_GIFT_PACKAGE_LIST || apiConfig.v1.GET_GIFT_PACKAGE_LIST
+  return ajax.get(url, data, config)
+}
+/**
+ * 生成礼包
+ * @param {String} data.gift_id  礼物ID
+ * @param {String} data.inter_id 公众号ID
+ * @param {String} data.saler_id 分销员ID
+ * @param {String} data.saler_name 分销员名称
+ * @param {String} data.record_info 登记信息
+ * @param {String} data.orther_remark 其他
+ * @param {String} data.gift_num 礼包数量
+ */
+const postGenerateGift = (data, config, version = 'v1') => {
+  let url = apiConfig[version] && apiConfig[version].POST_GENERATE_GIFT || apiConfig.v1.POST_GENERATE_GIFT
+  return ajax.post(url, data, config)
+}
+/**
+ * 获取礼包详情
+ * @param {String} data.gift_detail_id 礼包详情ID
+ * @param {String} data.inter_id 公众号ID
+ * @param {String} data.request_token token
+ */
+const getGiftPackageDetail = (data, config, version = 'v1') => {
+  let url = apiConfig[version] && apiConfig[version].GET_GIFT_PACKAGE_DETAIL || apiConfig.v1.GET_GIFT_PACKAGE_DETAIL
+  return ajax.get(url, data, config)
+}
+/**
+ * 获取礼包二维码
+ * @param {String} data.gift_detail_id 礼包详情ID
+ * @param {String} data.inter_id 公众号ID
+ * @param {String} data.request_token 请求的token
+ */
+const getGiftPackageQrcode = (data, config, version = 'v1') => {
+  let url = apiConfig[version] && apiConfig[version].GET_GENERATE_GIFT_QRCODE || apiConfig.v1.GET_GENERATE_GIFT_QRCODE
+  return ajax.get(url, data, config)
+}
+/**
+ * 确认领礼包取礼包详情页
+ * @param {String} data.gift_detail_id 礼包详情ID
+ * @param {String} data.inter_id 公众号ID
+ * @param {String} data.request_token token
+ * @param {String} data.gift_id 礼包ID
+ * @param {String} data.saler_id 分销员ID
+ */
+const getGiftPackageQrcodeDetail = (data, config, version = 'v1') => {
+  let url = apiConfig[version] && apiConfig[version].GET_GIFT_PACKAGE_QRCODE_DETAIL || apiConfig.v1.GET_GIFT_PACKAGE_QRCODE_DETAIL
+  return ajax.get(url, data, config)
+}
+/**
+ * 领取礼包详情
+ * @param {String} data.gift_detail_id 礼包详情ID
+ * @param {String} data.inter_id 公众号ID
+ * @param {String} data.request_token token
+ */
+const postGenerateGiftOrder = (data, config, version = 'v1') => {
+  let url = apiConfig[version] && apiConfig[version].POST_GIFT_PACKAGE_ORDER || apiConfig.v1.POST_GIFT_PACKAGE_ORDER
+  return ajax.post(url, data, config)
+}
 export {
   getPackageLists,
   getPackageInfo,
@@ -547,5 +612,11 @@ export {
   getExpressIndex,
   posExpressCommit,
   getExpressAddress,
-  getExpressDetail
+  getExpressDetail,
+  getGiftPackageList,
+  postGenerateGift,
+  getGiftPackageDetail,
+  getGiftPackageQrcode,
+  getGiftPackageQrcodeDetail,
+  postGenerateGiftOrder
 }

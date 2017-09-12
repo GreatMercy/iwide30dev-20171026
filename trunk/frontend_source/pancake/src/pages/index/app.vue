@@ -93,6 +93,7 @@
           </a>
         </div>
       </div>
+      <jfk-support v-once></jfk-support>
     </div>
     <pancake-tabbar :selected="tabbarSelected"></pancake-tabbar>
     <jfk-popup

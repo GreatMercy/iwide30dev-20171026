@@ -31,6 +31,10 @@
                 "button_color":"rgba(251, 213, 50)",
                 "button_text_color":"rgba(72, 152, 191)"
             },
+            "ad_conf":{
+                "ad_text":"",
+                "ad_logo":""
+            },
             "icon_conf":{
                 "icon1":"我的身份",
                 "icon2":"酒店订单",

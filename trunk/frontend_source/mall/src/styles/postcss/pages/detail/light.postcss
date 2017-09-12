@@ -106,18 +106,30 @@
       }
     }
   }
-  .productinfo-detail-label {
-    background-color: #fff;
-    .label {
-      &.is-selected {
-        div {
-          margin: 0 px2rem(14);
-          @mixin line-down 2;
+  .productinfo-detail {
+    margin-top: px2rem(20);
+    &-label {
+      background-color: #fff;
+      .label {
+        &.is-selected {
+          div {
+            margin: 0 px2rem(14);
+            @mixin line-down 2, default, inside;
+          }
+        }
+        & + .label {
+          &:after {
+            background-color: #ebebeb;
+          }
         }
       }
-      & + .label {
-        &:after {
-          background-color: #ebebeb;
+    }
+    &-box {
+      &.great-then-2 {
+        @mixin one-line horizontal {
+          background-color: #e0e0e0;
+          top: px2rem(90);
+          left: 0;
         }
       }
     }
@@ -134,6 +146,14 @@
   }
   .service {
     padding: px2rem(44) px2rem(50) px2rem(66) px2rem(44);
+    background-color: #fff;
+  }
+  .killsec-box {
+    &.is-show {
+      & + .service {
+        background-color: transparent;
+      }
+    }
   }
   .jfk-popup__service {
     .popup-service-item {
@@ -147,6 +167,7 @@
     background-color: #fff;
   }
   .killsec-original{
+    margin-top: px2rem(50);
     &:before {
       background-color: #ebebeb;
     }

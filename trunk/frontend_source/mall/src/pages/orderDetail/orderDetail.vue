@@ -1,16 +1,16 @@
 <template>
-  <div class="jfk-pages jfk-page__orderCoupon" :class="pageNamespace">
+  <div class="jfk-pages jfk-page__orderCoupon">
     <div class="jfk-pages__theme"></div>
     <headTitle :headTitleMsg="headTitleMsg"/>
     <div class="orderDetail__state jfk-pl-30 jfk-pr-30 " v-if="orderStatusMsg">
-      <div class="orderDetail__state__main font-color-light-gray-common"  v-if="used || overdue || refunded">
-        <div class="orderDetail__state__type  font-size--60" v-html="orderStatusMsg" >
+      <div class="orderDetail__state__main font-color-light-gray-common" v-if="used || overdue || refunded">
+        <div class="orderDetail__state__type  font-size--60" v-html="orderStatusMsg">
         </div>
       </div>
       <div class="orderDetail__state__main color-golden" v-else>
-        <div class="orderDetail__state__type  font-size--60" v-html="orderStatusMsg" >
+        <div class="orderDetail__state__type  font-size--60" v-html="orderStatusMsg">
         </div>
-      </div>   
+      </div>
     </div>
     <div class="orderCoupon jfk-pl-30 jfk-pr-30">
       <div class="orderCoupon__main">
@@ -31,7 +31,7 @@
               <p class="font-size--24">邮寄</p></a>
             </div>
             <div class="item" v-if="menuList.canWxBooking"><a
-            :href="pageResource.wx_select_hotel+'&oid='+validCoupon.order_id+'&aiid='+validCoupon.asset_item_id">
+              :href="pageResource.wx_select_hotel+'&oid='+validCoupon.order_id+'&aiid='+validCoupon.asset_item_id">
               <i class="jfk-font icon-user_icon_Reservatio"></i>
               <p class="font-size--24">订房</p></a>
             </div>
@@ -42,14 +42,13 @@
           </div>
         </div>
       </div>
-      <div class="orderCoupon__detail" v-if="!refunded && coupons.length">
+      <div class="orderCoupon__detail" v-if="!refunded && coupons.length && goodsType!== '3'">
         <h3 class="coupon__detail__title font-size--24">包含券码</h3>
         <div class="coupon__inn">
           <div class="coupon__detail__list">
-            <template v-for="(item ,idx) in coupons">
+            <template v-for="(item ,idx) in currentshowCoupons">
               <div class="item jfk-flex"
-                   :class="{ item__invalid : item.status=='3'&&item.shipping_id=='0',item__post: item.status=='3'&&item.shipping_id!='0',item__send: item.status=='4'}"
-                   v-if='idx==0'>
+                   :class="{ item__invalid : item.status=='3'&&item.shipping_id=='0',item__post: item.status=='3'&&item.shipping_id!='0',item__send: item.status=='4'}">
                 <div class="item__left">
                   <span class="title font-size--28">券 码</span>
                   <span class="number fot-size--32">
@@ -75,41 +74,6 @@
                   </a>
                 </div>
                 <div class="item__right" v-else-if="item.status=='3'&&item.shipping_id=='0'">
-                  <a
-                    :href="pageResource.package_review+'&ciid='+item.consumer_item_id+'&aiid='+item.asset_item_id+'&code_id='+item.code_id">
-                    <span class="coupon__state font-size--24">已使用</span>
-                    <i class="jfk-font icon-user_icon_jump_normal arrow"></i>
-                  </a>
-                </div>
-              </div>
-              <div class="item jfk-flex"
-                   :class="{ item__invalid : item.status=='3'&&item.shipping_id=='0',item__post: item.status=='3'&&item.shipping_id!='0',item__send: item.status=='4'}"
-                   v-else-if='couponsShow'>
-                <div class="item__left">
-                  <span class="title font-size--28">券 码</span>
-                  <span class="number fot-size--32">
-                          <jfk-text-split :text="item.code" :split="3"></jfk-text-split>
-                        </span>
-                </div>
-                <div class="item__right" v-if="item.status=='2'" @click="handleQrcode(item.code,item.qrcode_url)">
-                  <a href="javascript:;">
-                    <i class="jfk-font icon-mall_icon_pay_focus qrcode font-size--44"></i>
-                    <i class="jfk-font icon-user_icon_jump_normal arrow"></i>
-                  </a>
-                </div>
-                <div class="item__right" v-else-if="item.status == '4'">
-                  <a :href="pageResource.get_received_list+'&gid='+item.gid">
-                    <span class="coupon__state font-size--24">已赠送</span>
-                    <i class="jfk-font icon-user_icon_jump_normal arrow"></i>
-                  </a>
-                </div>
-                <div class="item__right" v-else-if="item.status =='3'&& item.shipping_id!='0'">
-                  <a :href="pageResource.shipping_detail+'&spid='+item.shipping_id">
-                    <span class="coupon__state font-size--24">已邮寄</span>
-                    <i class="jfk-font icon-user_icon_jump_normal arrow"></i>
-                  </a>
-                </div>
-                <div class="item__right" v-else-if="item.status =='3'&& item.shipping_id =='0'">
                   <a
                     :href="pageResource.package_review+'&ciid='+item.consumer_item_id+'&aiid='+item.asset_item_id+'&code_id='+item.code_id">
                     <span class="coupon__state font-size--24">已使用</span>
@@ -155,7 +119,7 @@
             <span class="jfk-font icon-mall_icon_orderDetail_refund color-golden font-size--32"></span>
             查看退款
           </a>
-        </div>        
+        </div>
         <div class="btn-item font-size--28" v-if="canDeleteOrder" @click="handleDeleteOrder(pageResource.del_order)">
           <a>
             <span class="jfk-font icon-mall_icon_orderDetail_delete color-golden font-size--32"></span>
@@ -176,7 +140,7 @@
       </p>
       <img :src="popQrcodeUrl">
     </jfk-popup>
-    <jfk-popup v-model="showTradePhoto" :showCloseButton="true" class="trade-photo" >
+    <jfk-popup v-model="showTradePhoto" :showCloseButton="true" class="trade-photo">
       <div class="tradeBox">
         <div class="tradeBox-cont" :style="{'max-height': maxHeight}">
           <div class="order-timeId font-size--24">
@@ -199,7 +163,7 @@
             </div>
           </div>
           <a class="jfk-button jfk-button--primary is-plain font-size--30 product-button"
-             :href="pageResource.package_detail+productPackage.product_id"><span >再次购买</span></a>
+             :href="pageResource.package_detail+productPackage.product_id"><span>再次购买</span></a>
           <div class="trade-service">
             <ul class="jfk-clearfix jfk-ta-c ">
               <li class="font-size--40"><i class="jfk-font icon-mall_icon_support_ensure"></i>
@@ -301,7 +265,6 @@
           canReserve: true,
           canCheck: true,
           canPost: true,
-          canOrder: true,
           canSend: true,
           canRefund: true,
           canInvoice: true,
@@ -316,6 +279,7 @@
           orderPrice: '987'
         },
         coupons: [],
+        currentshowCoupons: [],
         pageResource: {},
         couponsShow: false,
         validCoupon: {},
@@ -328,7 +292,8 @@
         refunded: false,
         compose: {},
         showProductimg: false,
-        refundSchedule: false
+        refundSchedule: false,
+        goodsType: ''
       }
     },
     beforeCreate () {
@@ -358,8 +323,8 @@
         that.giftinfo.price = product.real_grand_total
         that.giftinfo.number = product.row_qty
         that.coupons = code
+        that.currentshowCoupons = [that.coupons[0]]
         that.pageResource = res.web_data.page_resource.link
-        console.log(that.pageResource)
         if (process.env.NODE_ENV === 'development') {
           let bookingUrl = that.pageResource.package_booking
           if (that && that.pageResource && bookingUrl) {
@@ -371,9 +336,8 @@
         that.menuList.canReserve = productPackage.can_reserve === '1' ? 'true' : false
         that.menuList.canCheck = productPackage.can_pickup === '1' ? 'true' : false
         that.menuList.canPost = productPackage.can_mail === '1' ? 'true' : false
-        that.menuList.canOrder = productPackage.can_wx_booking === '1' ? 'true' : false
         that.menuList.canSend = productPackage.can_gift === '1' ? 'true' : false
-        that.menuList.canRefund = productPackage.can_refund === '1' ? 'true' : false
+        that.menuList.canRefund = productPackage.can_refund !== '2' ? 'false' : true
         that.menuList.canInvoice = productPackage.can_invoice === '1' ? 'true' : false
         that.menuList.canWxBooking = productPackage.can_wx_booking === '1' ? 'true' : false
         that.productPackage = productPackage
@@ -381,13 +345,14 @@
         that.used = product.consume_status === '23' ? 'true' : false
         that.refunded = product.refund_info_status === '3' ? 'true' : false
         that.compose = productPackage.composes
+        that.goodsType = product.package[0].goods_type
         if (code[0] && code[0].status === '2') {
           that.validCoupon = code[0]
         }
-        if (that.overdue || product.consume_status === '23' || product.refund_info_status === '3') {
+        if (that.overdue || product.consume_status === '23' || product.refund_info_status === '3' || product.package[0].type === '3' || product.package[0].type === '5') {
           that.canDeleteOrder = true
         }
-        if (that.menuList.canRefund && product.consume_status === '21' && !that.overdue && product.refund_info_status !== '3' && product.refund_info_status !== '5' && product.refund_info_status !== '6') {
+        if (that.menuList.canRefund && product.consume_status === '21' && !that.overdue && product.refund_info_status !== '3' && product.refund_info_status !== '5' && product.refund_info_status !== '6' && product.package[0].type !== '3' && product.package[0].type !== '5') {
           that.canRefundOrder = true
         }
         if (product.status === '12') {
@@ -440,7 +405,13 @@
     },
     methods: {
       couponShowHide () {
-        this.couponsShow = (this.couponsShow) === false ? 'true' : false
+        if (!this.couponsShow) {
+          this.couponsShow = true
+          this.currentshowCoupons = this.coupons
+        } else {
+          this.couponsShow = false
+          this.currentshowCoupons = [this.coupons[0]]
+        }
       },
       handleQrcode (code, qrcodeurl) {
         this.popQrcodeNum = code

@@ -6,7 +6,7 @@
 
     <div class="coupon-base-info jfk-pl-30 jfk-pr-30 is-align-middle">
       <div class="coupon-base-info__name font-size--38 is-align-middle jfk-flex">
-        <div class="coupon-base-info__shadow"></div>
+        <div class="coupon-base-info__shadow color-golden"></div>
         <span v-text="product.name"></span>
       </div>
       <div class="coupon-base-info__hotel font-size--24" v-text="product.hotel_name"></div>
@@ -56,6 +56,7 @@
       }
     },
     created () {
+      this.$pageNamespace(params)
       this.toast = this.$jfkToast({
         duration: -1,
         iconClass: 'jfk-loading__snake',

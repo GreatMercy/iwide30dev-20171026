@@ -10,7 +10,7 @@
     <div class="suspend">
       <h2 >{{brandData.brandname}}推荐酒店</h2>
       <img src="../assets/linegap.png" class="linegap"/>
-      <div class="item" v-for="item in brandHotel" >
+      <div class="item" v-for="(item,idx) in brandHotel" >
         <a :href="linkPrefix + item.tkid + '&brandname=' + item.brandname">
           <div :style="{'background-image': 'url(./static/img/hotelbanner/'+item.hotelbanner+')'}" class="hotelbanner"></div>
           <div class="hotelinfo">
@@ -39,11 +39,14 @@ export default {
     }
   },
   beforeCreate () {
+    document.body.scrollTop = 0
     this.params = formatUrlParams(window.location.hash)
-    this.linkPrefix = 'http://1.025op.com/index.php/soma/package/index/?id=a502245149&catid=&tkid='
+    console.log(window.location)
+    this.linkPrefix = 'http://jx.jinfangka.com/index.php/soma/package/index/?id=a502245149&catid=&tkid='
     if (process.env.NODE_ENV === 'development') {
       this.linkPrefix = 'http://' + location.hostname + ':8080?id=a502245149&catid=&tkid='
     }
+    document.scrollTop
   },
   created () {
     this.brand.forEach((item) => {
@@ -95,12 +98,7 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style>
-html,body{
-    height: 100%;
-    overflow-y: auto;
-}
-#app{
-  height: 100%;
-}
+<style >
+
 </style>
+

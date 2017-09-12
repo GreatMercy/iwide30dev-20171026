@@ -83,7 +83,8 @@
         }
       },
       contentClass () {
-        return this.title === '' ? 'font-color-extra-light-gray' : 'font-color-light-gray'
+        console.log(this.title, this.iconClasses)
+        return this.title !== '' && this.iconClasses !== '' ? 'font-color-light-gray' : 'font-color-extra-light-gray'
       },
       confirmButtonClasses() {
         let classes = 'jfk-msgbox__btn jfk-button--primary is-special font-size--34 jfk-button--length-2 jfk-button jfk-msgbox__confirm ' + this.confirmButtonClass;

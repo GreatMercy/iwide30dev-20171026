@@ -15,11 +15,13 @@ var env = process.env.NODE_ENV === 'testing'
   : config.build.env
 
 var entry = {
-  light: './src/styles/postcss/theme/light.postcss',
   vendor: ['@/utils/http.js', '@/service/http.js']
 }
 if (process.env.npm_config_interid !== 'accor') {
   entry.dark = './src/styles/postcss/theme/dark.postcss'
+  entry.light = './src/styles/postcss/theme/light.postcss'
+} else {
+  entry.light = `./src/styles/postcss/theme/light_${process.env.npm_config_interid}.postcss`
 }
 var webpackConfig = merge(baseWebpackConfig, {
   entry: entry,

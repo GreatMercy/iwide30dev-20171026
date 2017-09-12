@@ -2,25 +2,22 @@
   <div class="jfk-pages jfk-pages__gift-package">
     <div class="jfk-pages__theme"></div>
 
-    <pack></pack>
+    <pack :info="products" :status="status" @changeStatus="changeStatus" v-if="products"></pack>
 
     <div class="package-box">
-      <clause :title="'领取信息'" :list="info"></clause>
+      <clause :title="'领取信息'" :list="info" v-if="info.length > 0"></clause>
     </div>
 
 
     <div class="package-box">
-      <clause :title="'注意事项'" :list="notice"></clause>
+      <clause :title="'注意事项'" :list="notice" v-if="notice.length > 0"></clause>
     </div>
 
 
     <div class="package-btn">
-      <button class="jfk-button jfk-button--primary is-plain jfk-button--free font-size--32" @click="receive">
-        <span class="jfk-button__text">
-          <i class="jfk-font jfk-button__text-item icon-font_zh_li_qkbys"></i>
-          <i class="jfk-font jfk-button__text-item icon-font_zh_ji_qkbys"></i>
-          <i class="jfk-font jfk-button__text-item icon-font_zh_ling_qkbys"></i>
-          <i class="jfk-font jfk-button__text-item icon-font_zh_qu_qkbys1"></i>
+      <button class="jfk-button jfk-button--primary is-special jfk-button--free font-size--32" @click="receive">
+        <span>
+          立即领取
         </span>
       </button>
     </div>
@@ -31,7 +28,10 @@
 <script>
   import clause from '@/components/clause/main'
   import pack from '@/components/package/main'
-  import { JfkMessageBox } from 'jfk-ui'
+  // import { JfkMessageBox } from 'jfk-ui'
+  const formatUrlParams = require('jfk-ui/lib/format-urlparams.js')
+  const params = formatUrlParams.default(location.href)
+  import { getGiftPackageQrcodeDetail, postGenerateGiftOrder } from '@/service/http'
   export default {
     components: {
       clause,
@@ -39,30 +39,99 @@
     },
     computed: {},
     created () {
+      this.$pageNamespace(params)
+      this.loading()
+      getGiftPackageQrcodeDetail({
+        'gift_detail_id': params['gift_detail_id'] || '',
+        'inter_id': params['inter_id'] || '',
+        'gift_id': params['gift_id'] || '',
+        'saler_id': params['saler_id'] || '',
+        'request_token': params['request_token']
+      }).then((res) => {
+        const content = res['web_data']
+        // 领取信息
+        if (content['gift_record_info']) {
+          let room = ''
+          let remark = ''
+          if (content['gift_record_info']['record_info']) {
+            room = `登记信息：${content['gift_record_info']['record_info']}`
+          }
+          if (content['gift_record_info']['orther_remark']) {
+            remark = `其他：${content['gift_record_info']['orther_remark']}`
+          } else {
+            remark = '无'
+          }
+          this.info = [room, remark]
+        }
+        // 注意事项
+        let noticeTime = ''
+        let price = ''
+        if (content['expiration_date']) {
+          noticeTime = '该商品有效期至' + content['expiration_date']
+        }
+        if (content['price_market']) {
+          price = '礼包原价' + content['price_market'] + '元'
+        }
+        this.notice = [noticeTime, '请在规定时间内使用', price, '仅供住店客人使用，使用时请出示劵码']
+        this.toast.close()
+        // 套餐信息
+        this.products = {
+          'name': content['name'] || '',
+          'time': content['expiration_date'] || '',
+          'products': content['child_product_info'] || []
+        }
+      }).catch(() => {
+        this.toast.close()
+      })
     },
     methods: {
-      changeStatus () {
-        // this.status = !this.status
+      loading () {
+        this.toast = this.$jfkToast({
+          duration: -1,
+          iconClass: 'jfk-loading__snake',
+          isLoading: true
+        })
       },
       receive () {
-        JfkMessageBox({
-          showClose: true,
-          showCloseButton: true,
-          title: '',
-          message: '领取失败，货存不足',
-          showConfirmButton: true,
-          showCancelButton: false,
-          confirmButtonText: '确定',
-          iconClass: 'jfk-font icon-user_icon_fail_norma'
-        }).then(() => {
+        this.toast = this.$jfkToast({
+          duration: -1,
+          iconClass: 'jfk-loading__snake',
+          isLoading: true
         })
+        postGenerateGiftOrder({
+          'gift_detail_id': params['gift_detail_id'] || '',
+          'inter_id': params['inter_id'] || '',
+          'request_token': params['request_token']
+        }).then((res) => {
+          // console.log(res)
+          this.toast.close()
+          window.location.href = res['web_data']['page_resource']['link']['gift_detail']
+        }).catch(() => {
+          this.toast.close()
+        })
+        /*
+         JfkMessageBox({
+         showClose: true,
+         showCloseButton: true,
+         title: '',
+         message: '领取失败，货存不足',
+         showConfirmButton: true,
+         showCancelButton: false,
+         confirmButtonText: '确定',
+         iconClass: 'jfk-font icon-user_icon_fail_norma'
+         }).then(() => {
+         }) */
+      },
+      changeStatus () {
+        this.status = !this.status
       }
     },
     data () {
       return {
-        status: true,
-        info: ['登记信息：1102房', '其他：无'],
-        notice: ['该商品有效期至2017年8月29日', '请在规定时间内使用', '礼包原价233元', '仅供住店客人使用，使用时请出示劵码']
+        status: false,
+        info: [],
+        products: {},
+        notice: []
       }
     }
   }

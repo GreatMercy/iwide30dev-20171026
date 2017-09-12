@@ -111,6 +111,15 @@ class ViewService extends MemberBaseService
             $data['color_default_conf'] = $color_default_conf;
         }
 
+        //置顶广告栏设置
+        if(PublicService::getAuth(10,$template)){
+            $ad_conf = array(
+                'ad_text' => '',
+                'ad_logo' => ''
+            );
+            $data['ad_conf'] = $ad_conf;
+        }
+
         //菜单栏目
         $icon_conf = $this->getCI()->ui_model->get_uiicon();
         $data['icon_conf'] = $icon_conf;
@@ -185,7 +194,7 @@ class ViewService extends MemberBaseService
             'version4' => '普通版',
             'phase2' => '黄色版',
             'highclass' => '高端黑',
-            'highwhile' => '高端白'
+            'highclass#white' => '高端白'
         );
 
         $data['template'] = $template;
@@ -342,6 +351,40 @@ class ViewService extends MemberBaseService
                 return $this->res_data;
             }
             //<-- 保存颜色配置end -->
+
+            //<-- 置顶广告栏设置start -->
+            $where = array(
+                'inter_id' => $inter_id,
+                'type_code' => 'TOP_AD'
+            );
+            $top_ad_conf = $this->getCI()->mem_public_model->get_info($where, 'inter_member_config');
+
+            $top_ad_conf_data = array(
+                'ad_text' => !empty($post_data['ad_text']) ? $post_data['ad_text'] : '',
+                'ad_logo' => !empty($post_data['ad_logo']) ? $post_data['ad_logo'] : '',
+            );
+
+            if(!empty($top_ad_conf)){
+                $sdata = array(
+                    'value'     => json_encode($top_ad_conf_data),
+                );
+                $result = $this->getCI()->mem_public_model->update_save($where,$sdata,'inter_member_config');
+            }else{
+                $sdata = array(
+                    'inter_id' => $inter_id,
+                    'value'     => json_encode($top_ad_conf_data),
+                    'type_code' => 'TOP_AD',
+                    'sync_config' => 0,
+                    'createtime' => time()
+                );
+                $result = $this->getCI()->mem_public_model->add_data($sdata,'inter_member_config');
+            }
+            if($result===false){
+                $this->res_data['status'] = 3;
+                $this->res_data['msg'] = '置顶广告栏设置保存失败';
+                return $this->res_data;
+            }
+            //<-- 置顶广告栏设置end -->
 
             //<-- 保存菜单设置start -->
             $nav_post = array();

@@ -59,13 +59,13 @@
       .name {
         margin-bottom: px2rem(30);
         line-height: 1;
-        @mixin ellipsis {
+        @mixin ellipsis 1{
         }
       }
 
       .validity {
         line-height: 1;
-        @mixin ellipsis {
+        @mixin ellipsis 1{
         }
       }
       .more {
@@ -96,6 +96,8 @@
         display: block;
         line-height: 1;
         flex: 1;
+        @mixin ellipsis 1{
+        }
       }
       &:last-child {
         margin-bottom: 0;

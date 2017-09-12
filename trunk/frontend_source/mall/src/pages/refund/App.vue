@@ -6,7 +6,7 @@
     <template v-if="detail">
       <div class="refund-information jfk-pl-30 jfk-pr-30 is-align-middle">
         <div class="refund-information__name font-size--38 is-align-middle jfk-flex">
-          <div class="refund-information__shadow"></div>
+          <div class="refund-information__shadow color-golden"></div>
           <span v-if="detail.item_name" v-text="detail.item_name"></span>
         </div>
         <div class="refund-information__hotel font-size--24" v-if="detail.hotel_name"
@@ -99,6 +99,7 @@
         iconClass: 'jfk-loading__snake',
         isLoading: true
       })
+      this.$pageNamespace(params)
     },
     methods: {
       choiceReason (index) {

@@ -1,22 +1,40 @@
 <template>
-  <div class="gradient_bg padding_35">
-    <section class="padding_0_15">
-      <form class="form_list font_14" ref="form">
-        <div class="form_item bd_bottom padding_18" v-for="(value,key) in configList"  v-if="value.show === 1" :data="value.show">
-          <div class="flex">
-            <div class="margin_right_22 width_120 flex between" v-html="value.namehtml"></div>
-            <div v-if="key === 'sex'" class="flex_1 bg_arrow">
-              <select class="font_15 color1 position_x" :value="value.value" :name="key" :disabled="view">
-                <option value="1" name="1">男</option>
-                <option value="2" name="2">女</option>
-                <option value="3" name="3">-</option>
-              </select>
-            </div>
-            <div v-else-if="key === 'birthday'" class="flex_1 bg_arrow">
-              <input class="font_14 color1" type="date" :name="key" :disabled="view"  :value="value.value" style="height: 20px;">
-            </div>
-            <div v-else class="flex_1 color1">
-              <input class="font_14 color1"  :disabled="view" @keyup="setRemove($event)" :value="value.value" :type="value.type" :name="key" placeholder="-">
+  <div class="gradient_bg form-top">
+    <section >
+      <form class="form_list font_14 jfk-form" ref="form">
+        <div class="white_bg padding_0_15">
+          <div class="form_item bd_bottom padding_18" v-for="(value,key) in configList"  v-if="value.show === 1" :data="value.show">
+            <div class="flex">
+              <div class="margin_right_22 width_120 flex between" v-html="value.namehtml"></div>
+              <div v-if="key === 'sex'" class="flex_1 bg_arrow">
+                <select class="font_15 color1 position_x form-item" :value="value.value" :name="key" :disabled="view">
+                  <option value="1" name="1">男</option>
+                  <option value="2" name="2">女</option>
+                  <option value="3" name="3">-</option>
+                </select>
+              </div>
+              <div v-else-if="key === 'birthday'" class="flex_1 bg_arrow form-item">
+                <input class="font_14 color1" type="date" :name="key" :disabled="view"  :value="value.value" style="height: 20px;">
+                  <div class="form-item__status is-error" v-show="value.passed" @click="handleHiddenError(key)">
+                  <i class="form-item__status-icon jfk-font icon-msg_icon_error_norma"></i>
+                  <span class="form-item__status-tip">
+                    <i class="form-item__status-cont">{{value.message}}</i>
+                    <i class="form-item__status-trigger">重新输入</i>
+                  </span>
+                </div>
+              </div>
+              <div v-else class="flex_1 color1 form-item">
+                <div class="form-item__body">
+                  <input class="font_14 color1"  :disabled="view" @keyup="setRemove($event)" :value="value.value" :type="value.type" :name="key" placeholder="-">
+                  <div class="form-item__status is-error" v-show="value.passed" @click="handleHiddenError(key)">
+                    <i class="form-item__status-icon jfk-font icon-msg_icon_error_norma"></i>
+                    <span class="form-item__status-tip">
+                      <i class="form-item__status-cont">{{value.message}}</i>
+                      <i class="form-item__status-trigger">重新输入</i>
+                    </span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -63,8 +81,8 @@ export default {
           continue
         }
         if (result[[item]].value === '') {
-          result[[item]].setAttribute('class', 'bg_ico_close')
-          result[[item]].placeholder = '请输入' + this.configList[item].name
+          let thatMsg = this.configList[item]['name'] + '不能为空'
+          this.configList[item] = Object.assign({}, this.configList[item], {'passed': true, 'message': thatMsg})
           setBol = false
           continue
         }
@@ -72,13 +90,13 @@ export default {
           let str = '/' + this.configList[item].regular + '/'
           /* eslint-disable */let reg = eval(str)
           if (!reg.test(result[[item]].value)) {
-            result[[item]].placeholder = '请输入正确的' + this.configList[item].name
-            result[[item]].setAttribute('class', 'bg_ico_sigh')
+            let thatMsg = '请输入正确的' + this.configList[item]['name'] 
+            this.configList[item] = Object.assign({}, this.configList[item], {'passed': true, 'message': thatMsg})
             setBol = false
             continue
           }
         }
-        setDate[[item]] = result[[item]].value
+        setDate[[item]] = result[[item]].value 
       }
 
       if (setBol) {
@@ -193,6 +211,10 @@ export default {
           })
         }
       })
+    },
+    handleHiddenError (item) {
+      this.configList[[item]].passed = false
+      this.configList[[item]].message = ''
     }
   },
   computed: {

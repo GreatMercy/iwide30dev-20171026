@@ -114,26 +114,18 @@ export default {
       couponHtml: ''
     }
   },
-  created () {
-    let params = formatUrlParams(location.search)
-    let setdata = {'member_card_id': params.member_card_id}
-    getCardDetail(setdata).then((res) => {
-      this.dataList = res.web_data
-      this.couponHtml = '<span class="pad_lr10">'
-      for (let i = 0; i < this.dataList.card_info.coupon_code.length; i++) {
-        let num = i + 1
-        if (num % 4 === 0 && num + 4 <= this.dataList.card_info.coupon_code.length) {
-          this.couponHtml += this.dataList.card_info.coupon_code[i]
-          this.couponHtml += '</span><span class="pad_lr10">'
-        } else {
-          this.couponHtml += this.dataList.card_info.coupon_code[i]
-        }
-      }
-      //  微信分享配置
-      const wx = window.wx
-      const that = this
-      if (wx && this.dataList.authentication_give === 1) {
+  beforeCreate () {
+    //  微信分享配置
+    const wx = window.wx
+    let shareConfig = window.jfkConfig
+    const that = this
+    if (wx) {
+      wx.ready(function () {
+        shareConfig = shareConfig.wxShare
         wx.onMenuShareTimeline({
+          title: shareConfig.title,
+          link: shareConfig.link,
+          imgUrl: shareConfig.imgUrl,
           success: function () {
             that.handleShare().then((res) => {
               if (res.status === 1000) {
@@ -156,6 +148,10 @@ export default {
           }
         })
         wx.onMenuShareAppMessage({
+          title: shareConfig.title,
+          desc: shareConfig.desc,
+          link: shareConfig.link,
+          imgUrl: shareConfig.imgUrl,
           success: function () {
             that.handleShare().then((res) => {
               if (res.status === 1000) {
@@ -177,6 +173,23 @@ export default {
             })
           }
         })
+      })
+    }
+  },
+  created () {
+    let params = formatUrlParams(location.search)
+    let setdata = {'member_card_id': params.member_card_id}
+    getCardDetail(setdata).then((res) => {
+      this.dataList = res.web_data
+      this.couponHtml = '<span class="pad_lr10">'
+      for (let i = 0; i < this.dataList.card_info.coupon_code.length; i++) {
+        let num = i + 1
+        if (num % 4 === 0 && num + 4 <= this.dataList.card_info.coupon_code.length) {
+          this.couponHtml += this.dataList.card_info.coupon_code[i]
+          this.couponHtml += '</span><span class="pad_lr10">'
+        } else {
+          this.couponHtml += this.dataList.card_info.coupon_code[i]
+        }
       }
     })
   },

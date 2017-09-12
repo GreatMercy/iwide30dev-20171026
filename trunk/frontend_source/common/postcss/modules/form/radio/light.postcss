@@ -93,17 +93,18 @@
       input[type="radio"] {
         &:disabled ~ .jfk-radio {
           &__icon {
-            border-color: #ebebeb;
-            background-color: #ebebeb;
+            border-color: #e9e9e9;
+            background-color: #e9e9e9;
             z-index: -1;
           }
           &__text {
-            color: #808080;
+            color: #afafaf;
           }
         }
         &:disabled:checked ~ .jfk-radio {
           &__icon {
             background-color: transparent;
+            border-color: #bfbfbf;
             &:before {
               border-color: #bfbfbf #bfbfbf transparent transparent;
             }
@@ -119,17 +120,18 @@
       &.is-disabled {
         .jfk-radio {
           &__icon {
-            border-color: #ebebeb;
-            background-color: #ebebeb;
+            border-color: #e9e9e9;
+            background-color: #e9e9e9;
             z-index: -1;
           }
           &__text {
-            color: #808080;
+            color: #afafaf;
           }
         }
         &.is-checked {
           .jfk-radio {
             &__icon {
+              border-color: #bfbfbf;
               background-color: transparent;
               &:before {
                 border-color: #bfbfbf #bfbfbf transparent transparent;

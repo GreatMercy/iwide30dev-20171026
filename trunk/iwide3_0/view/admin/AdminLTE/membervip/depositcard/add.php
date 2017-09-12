@@ -78,8 +78,8 @@ echo $block_left;
                     </th>
                 </tr>
                 <tr>
-                    <th>商户名称</th>
-                    <th><input class="form-control" name="brand_name" value="<?php if(isset($cardinfo['brand_name']) && $cardinfo['brand_name'] ){ echo $cardinfo['brand_name']; }?>"  placeholder="请填写商户名称"/></th>
+                    <th>副名</th>
+                    <th><input class="form-control" name="brand_name" value="<?php if(isset($cardinfo['brand_name']) && $cardinfo['brand_name'] ){ echo $cardinfo['brand_name']; }?>"  placeholder="请填写副名"/></th>
                 </tr>
                 <tr>
                     <th>购卡名称</th>
@@ -168,7 +168,7 @@ echo $block_left;
                         <div class="bdtime" style="">
                             <div class="controls1 m_r_75">
                                 <label class="control-checkbox wechat">
-                                    <input type="checkbox" name="pay_type[]" <?=$wechat_checked?> value="wechat" onclick="return false;"/>
+                                    <input type="checkbox" name="pay_type[]" <?=$wechat_checked?> value="wechat" onclick="return false;" />
                                     <span class="m_r_20 m_l_10 width_20">微信支付</span>
                                 </label>
                                 <label class="control-checkbox balance" style="margin-left: 10px;">
@@ -276,9 +276,13 @@ $(function(){
                                 }
                                 break;
                             case 'money':
+                                var regexp = /^\+?\d+$/; //正整数
                                 if (!value && inputos[i].disabled === false) {
                                     _null = true;
                                     _msg = '请填写储值券金额';
+                                }else if(!regexp.test(value) && (value != '' || value != null)){
+                                    _null = true;
+                                    _msg = '购卡金额必须是正整数';
                                 }
                                 break;
                         }

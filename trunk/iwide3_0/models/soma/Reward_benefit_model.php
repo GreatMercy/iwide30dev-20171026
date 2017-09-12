@@ -494,7 +494,8 @@ class Reward_benefit_model extends MY_Model_Soma {
 
     public function bgySpecialHotelReward($inter_id, $order)
     {
-        $interIds = ['a421641095', 'a450089706'];
+        //去除需谨慎，为碧桂园定制的分销规则
+        $interIds = ['a421641095'];
         if (!in_array($inter_id, $interIds)) {
             return ['status' => Soma_base::STATUS_FALSE];
         }

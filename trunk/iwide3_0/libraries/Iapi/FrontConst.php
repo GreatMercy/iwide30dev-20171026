@@ -171,6 +171,7 @@ class FrontConst extends BaseConst
                 'first_city',
                 'hot_city',
                 'citys',
+                'area',
                 'homepage_set',
             ),
             'mul_arr' => array(
@@ -324,7 +325,7 @@ class FrontConst extends BaseConst
         'hotel/hotel/add_hotel_collection' => array(
             'keys' => array(
                 'inter_id',
-                'mark_id',
+                'mid',
             ),
         ),
         'hotel/hotel/clear_visited_hotel'  => array(
@@ -452,6 +453,7 @@ class FrontConst extends BaseConst
                     'keys' => array(
                         'hotel_id',
                         'name',
+                        'link',
                     ),
                 ),
             ),
@@ -460,6 +462,7 @@ class FrontConst extends BaseConst
             'keys'    => array(
                 'exe_param',
                 'index_url',
+                'landmark',
             ),
             'mul_arr' => array(
                 'result'      => array(
@@ -469,7 +472,6 @@ class FrontConst extends BaseConst
                         'intro_img',
                         'comment_data',
                         'distance',
-                        'landmark',
                         'address',
                         'lowest',
                         'link',
@@ -496,6 +498,7 @@ class FrontConst extends BaseConst
                 'room_list',
                 'first_room',
                 'first_state',
+                'first_pay_favour',
                 'bookpolicy_condition',
                 'customer_condition',
                 'extra_info',

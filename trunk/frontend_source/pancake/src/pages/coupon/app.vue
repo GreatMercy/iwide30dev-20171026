@@ -45,6 +45,7 @@
           <div class="empty-tip font-size--24">暂无可领取奖品</div>
         </div>
       </div>
+      <jfk-support v-once></jfk-support>
     </div>
     <footer class="coupon-footer jfk-clearfix">
       <div class="select  font-size--26 jfk-fl-l" @click="handleCheckAllCoupon">

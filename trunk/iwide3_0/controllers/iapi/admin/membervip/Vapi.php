@@ -6,9 +6,13 @@
 // +----------------------------------------------------------------------
 // | Vapi.php 2017-06-16
 // +----------------------------------------------------------------------
+
+use App\services\vip\StatementsService;
+
 defined ( 'BASEPATH' ) or exit ( 'No direct script access allowed' );
 
 class Vapi extends MY_Admin_Iapi{
+
     private   $admin_profile = array();
     public function __construct(){
         parent::__construct();
@@ -75,6 +79,97 @@ class Vapi extends MY_Admin_Iapi{
         }
         $this->_ajaxReturn($msg);
     }
+
+
+    public function hotels_list(){
+        $msg = array(
+            'status'=>1004,
+            'err'=>'9999',
+            'msg'=>'请求失败'
+        );
+        if(!empty($this->admin_profile['inter_id'])){
+            $inter_id = $this->admin_profile['inter_id'];
+            $this->load->model('membervip/admin/Vapi_statements','statements');
+
+            $select = "hotel_id,name";
+            $tag_data = $this->statements->hotel_list($inter_id ,$select);
+            $this->_ajaxReturn($tag_data);
+        }
+        $this->_ajaxReturn($msg);
+    }
+
+    //注册分销报表
+    //sales_id
+    //hotel_id
+    //time_type  [update_time,createtime]
+    //start_time
+    //end_time
+    public function reg_distribution_statements(){
+        $returnData = array(
+            'status'=>1004,
+            'err'=>'9999',
+            'msg'=>'请求失败'
+        );
+
+        $request_params = $this->input->get();
+//        if(empty($request_params))
+//            $this->_ajaxReturn($returnData);
+//        $request_params['sales_id'] = 36;
+//        $request_params['time_type'] = 'createtime';
+//        $request_params['start_time'] ='2017-07-25';
+//        $request_params['end_time'] ='2017-09-25';
+        $result = StatementsService::getInstance()->reg_distribution($request_params);
+
+        if(empty($result)){
+            $returnData['status'] = 1000;
+            $returnData['err'] = 0;
+            $returnData['msg'] = '数据为空';
+            $this->_ajaxReturn($returnData);
+        }
+
+        $returnData = $this->initReturnData($result);
+        $this->_ajaxReturn($returnData);
+
+    }
+
+    //购卡分销
+    public function deposit_card_statements(){
+        $returnData = array(
+            'status'=>1004,
+            'err'=>'9999',
+            'msg'=>'请求失败'
+        );
+
+        $request_params = $this->input->get();
+        $result = StatementsService::getInstance()->deposit_card($request_params);
+
+        if(empty($result)){
+            $returnData['status'] = 1000;
+            $returnData['err'] = 0;
+            $returnData['msg'] = '数据为空';
+            $this->_ajaxReturn($returnData);
+        }
+
+        $returnData = $this->initReturnData($result);
+        $this->_ajaxReturn($returnData);
+    }
+
+
+    public function initReturnData( $data ,$err = 0,$status = 1000, $msg = 'OK', $msg_type =''){
+        $tag_data = array(
+            'status'=>$status,
+            'err'=> $err,
+            'msg'=> $msg,
+            'msg_type'=> $msg_type,
+        );
+        $tag_data_group = array(
+            'csrf_token'=>$this->security->get_csrf_token_name(),
+            'csrf_value'=>$this->security->get_csrf_hash()
+        );
+        $tag_data_group['data']  = $data;
+        $tag_data['web_data'] = $tag_data_group;
+        return $tag_data;
+}
 
     /**
      * Ajax方式返回数据到客户端

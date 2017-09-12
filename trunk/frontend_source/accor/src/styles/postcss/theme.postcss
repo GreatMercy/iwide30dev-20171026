@@ -1,7 +1,10 @@
 html,body{
   -webkit-overflow-scrolling: touch;
+  font-family: 'PingFangSC-Light';
 }
+
 .page_home{
+    padding-bottom: 45px;
     .topbanner{
         position: relative;
 
@@ -102,6 +105,13 @@ html,body{
             padding-left: 15px;
             padding-right: 15px;
         }
+        .swiper-slide{
+            img{
+                width: 88%;
+                margin: 0 auto;
+                display: block;
+            }
+        }
         .swiper-button-prev,.swiper-button-next{
             background: #fff;
             opacity: 1;
@@ -160,7 +170,7 @@ html,body{
         .twoimg{
             display: flex;
             margin-top: 10px;
-            margin-bottom: 45px;
+
             a{
                 width: 50%;
                 margin-right: 10px;
@@ -244,9 +254,11 @@ html,body{
                     display: block;
                     width: 45px;
                     height: 45px;
+                    border-radius: 3px;
                 }
                 .hotelinfo{
                     padding-left: 60px;
+
                     h3{
                         font-size: 15px;
                         color: #333333;
@@ -303,6 +315,7 @@ html,body{
     }
 }
 .page_brand{
+    padding-bottom: 45px;
     .banner{
         img{
             width: 100%;
@@ -338,7 +351,7 @@ html,body{
             width: 260px;
             margin: 0 auto;
             display: block;
-            margin-bottom: 12px;
+            margin-bottom: 15px;
         }
         .item{
             margin-bottom: 9px;
@@ -375,6 +388,7 @@ html,body{
                 bottom: 12px;
                 left: 14px;
                 z-index: 10;
+                font-family: 'PingFangSC-Regular';
                 h3{
                     color: #fff;
                     font-size: 15px;
@@ -400,6 +414,9 @@ html,body{
                         vertical-align: 2px;
                     }
                 }                               
+            }
+            &:last-child{
+                margin-bottom: 0;
             }
             
         }

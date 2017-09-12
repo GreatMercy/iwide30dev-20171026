@@ -27,7 +27,6 @@
                   <div class="product-info">
                     <label class="check main_color1">
                       <input type="checkbox"
-                             check="false"
                              class="room_check"
                              @click="addRoom($event, value, key)">
                       <em></em>
@@ -45,7 +44,7 @@
                       <div class="show_detail_btn font-size--24">
                       <span @click="setDetailStatus(key)">
                         详情
-                        <span class="icon_show">
+                        <span :class="value.product_show_status ? 'icon_show' : 'icon_hide'">
                           <i class="booking_icon_font icon-booking_icon_right_normal font-size--24">
                           </i>
                         </span>
@@ -55,18 +54,15 @@
                         <jfk-input-number v-model="value.countNum"
                                           :min="minNum"
                                           :max="value.nums"
-                                          @click.native.prevent="handleRoom(item, key)">
+                                          @click.native.prevent="setAllPrice()">
                         </jfk-input-number>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-              <!--v-if="item.product_show_status"-->
-              <div class="bottom_info_del font-size--24">
-                <p class="title font-size--28">
-                  {{value.short_intro}}</p>
-                <!--<p class="del_item">迪士尼一日三餐晚餐迪士尼一 </p>-->
+              <div class="bottom_info_del font-size--24" v-show="value.product_show_status">
+                <p class="title font-size--28">{{value.short_intro}}</p>
               </div>
             </li>
           </ul>
@@ -86,11 +82,7 @@
   </div>
 </template>
 <script>
-//  import { getUrlParams, logJSON } from '@/utils/geturl'
   import { getBookroomDetail } from '@/service/http'
-  // import submitOrder from '../booking_hotel/module/order.vue'
-  // const formatUrlParams = require('jfk-ui/lib/format-urlparams.js')
-  // let params = formatUrlParams.default(location.href)
   import formatUrlParams from 'jfk-ui/lib/format-urlparams.js'
   let params = formatUrlParams(location.search)
   export default {
@@ -141,10 +133,18 @@
       getData () {
         this.item = this.$store.getters.productListData
         this.alldata = this.$store.getters.bookingAllData
-        for (let key in this.item.package_info.items) {
-          this.item.package_info.items[key].countNum = 1
+        if (JSON.stringify(this.item) === '{}' || JSON.stringify(this.alldata) === '{}') {
+          window.history.back()
+          return
         }
-//      nums datas protrol_code(商务协议码) more_room（接口RETURN_MORE_ROOM） package_info（是否是数组） select_package csrf_token
+        for (let key in this.item.package_info.items) {
+          // 设置默认选中数量
+          this.item.package_info.items[key].countNum = this.item.package_info.items[key].selectnum
+          // 设置显示状态
+          this.item.package_info.items[key] = Object.assign({}, this.item.package_info.items[key], {product_show_status: true})
+        }
+        // nums datas protrol_code(商务协议码)
+        // more_room（接口RETURN_MORE_ROOM）
         this.packages = this.alldata.packages
         this.sendData.hotel_id = this.alldata.hotel.hotel_id
         this.sendData.price_codes = this.item.state_info.price_code
@@ -158,20 +158,21 @@
         this.datas[this.sendData.room_id] = 1
         this.xprice_code[this.sendData.room_id] = this.sendData.price_code
         this.sendData.select_package = []
-        // 设置按钮显示状态
-        for (let key in this.item.package_info.items) {
-//          this.item.package_info.items[key].product_show_status = true
-          this.item.package_info.items[key] = Object.assign({}, this.item.package_info.items[key], {product_show_status: true})
-        }
+        // 设置选中状态
+        this.setProductChoose()
+        // 计算总价
+        this.setAllPrice()
+      },
+      // 商品设置默认选中
+      setProductChoose () {
+        console.log(this.item)
       },
       setDetailStatus (key) {
-        console.log(this.packages.package_info.items, '==========')
-        this.$set(this.packages[key], 'product_show_status', true)
-        console.log(key)
-        this.packages[key]['product_show_status'] = !this.packages[key]['product_show_status']
-        console.log(this.packages)
-        this.packages[key] = Object.assign({}, this.packages[key], {product_show_status: true})
-        this.packages.$set(key, 'product_show_status', true)
+        if (this.item.package_info.items[key].product_show_status === false) {
+          this.item.package_info.items[key] = Object.assign({}, this.item.package_info.items[key], {product_show_status: true})
+        } else {
+          this.item.package_info.items[key] = Object.assign({}, this.item.package_info.items[key], {product_show_status: false})
+        }
       },
       addRoom ($event, item, key) {
         if ($event.currentTarget.checked) {
@@ -189,19 +190,14 @@
             }
           }
         }
-        let num = 0
-        for (var keyIndex in this.sendData.select_package) {
-          num += Number(this.sendData.select_package[keyIndex].price) * Number(this.sendData.select_package[keyIndex].countNum)
-        }
-        this.allPrice = num
-        this.sendData.allPrice = this.allPrice
+        this.setAllPrice()
       },
-      handleRoom (item, key) {
+      setAllPrice () {
         let num = 0
         for (var keyIndex in this.sendData.select_package) {
           num += Number(this.sendData.select_package[keyIndex].price) * Number(this.sendData.select_package[keyIndex].countNum)
         }
-        this.allPrice = num
+        this.allPrice = Number(num) + Number(this.item.state_info.avg_price)
         this.sendData.allPrice = this.allPrice
       },
       goSubmitOrder () {
@@ -212,6 +208,7 @@
         this.$store.commit('updateSubmitOrderConfig', this.sendData)
         this.beforePage()
       },
+      // 过去submit order 之前 获取数据并使用vuex传过去
       beforePage () {
         let loading = this.$jfkToast({
           iconClass: 'jfk-loading__snake ',
@@ -226,17 +223,18 @@
           this.datas[this.sendData.room_id] = 1
           this.price_type[this.sendData.price_type] = 1
         }
-        let goodsItems = ''
+        this.package_info = {}
         if (this.sendData.select_package) {
           for (let i = 0; i < this.sendData.select_package.length; i++) {
             const content = this.sendData.select_package[i]
             let goodId = content.goods_id.toString()
-            let nums = content.countNum
-            let obj = `"${goodId}":{"gid":"${goodId}","nums":"${nums}"}`
-            goodsItems += obj
+            this.package_info[goodId] = {
+              'gid': goodId,
+              'nums': content.countNum
+            }
           }
         }
-        this.package_info = `{${goodsItems}}`
+        this.package_info = JSON.stringify(this.package_info)
         let setData = {
           id: params.id || '',
           openid: params.openid || '',

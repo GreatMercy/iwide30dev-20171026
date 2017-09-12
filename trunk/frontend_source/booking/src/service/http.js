@@ -87,13 +87,48 @@ const getAjaxHotelList = (data, config, version = 'v1') => {
 }
 
 /**
- * 获取房态列表（酒店预订）
+ * 搜索筛选酒店
  * @param  {Object} data    请求参数
  * @param  {Object} [config]  axios配置
+ */
+const getSearchHotelList = (data, config, version = 'v1') => {
+  let url = apiConfig[version] && apiConfig[version].AJAX_HOTEL_SEARCH || apiConfig.v1.AJAX_HOTEL_SEARCH
+  return ajax.get(url, data, config)
+}
+
+/**
+ * 获取房态列表（酒店预订）
+ * @param  {Object} data    请求参数
+ * @param  {String} [data.start] 开始日期
+ * @param  {String} [data.end] 结束日期
+ * @param  {String} [data.h] 酒店id
+ * @param  {String} [data.type] 酒店类型 （选填）
+ * @param  {String} [data.tc_id] 专题活动id （选填）
+ * @param  {Object} [config]  axios配置
+ * @param  {String} [version='v1'] API版本
+ * @return {Object}         首页信息
  */
 const getHotelIndex = (data, config, version = 'v1') => {
   let url = apiConfig[version] && apiConfig[version].GET_HOTEL_INDEX || apiConfig.v1.GET_HOTEL_INDEX
   return ajax.get(url, data, config)
+}
+
+/**
+ * 获取异步刷新房态列表（酒店预订）
+ * @param  {Object} data    请求参数
+ * @param  {String} [data.start] 开始日期
+ * @param  {String} [data.end] 结束日期
+ * @param  {String} [data.h] 酒店id
+ * @param  {String} [data.type] 酒店类型 （选填）
+ * @param  {String} [data.tc_id] 专题活动id （选填）
+ * @param  {String} [data.protrol_code] 协议代码 （选填）
+ * @param  {Object} [config]  axios配置
+ * @param  {String} [version='v1'] API版本
+ * @return {Object}         首页信息
+ */
+const getRetrunMoreRoom = (data, config, version = 'v1') => {
+  let url = apiConfig[version] && apiConfig[version].RETURN_MORE_ROOM || apiConfig.v1.RETURN_MORE_ROOM
+  return ajax.post(url, data, config)
 }
 
 /**
@@ -206,6 +241,31 @@ const submitComment = (data, config, version = 'v1') => {
   let url = apiConfig[version] && apiConfig[version].NEW_COMMENT_SUB || apiConfig.v1.NEW_COMMENT_SUB
   return ajax.post(url, data, config)
 }
+/**
+ * 收藏酒店
+ * @param  {Object}  data    请求参数
+ * @param  {Number} [data.hid] 酒店id
+ * @param  {String} [data.hname]  酒店名
+ * @param  {Object} [config]  axios配置
+ * @param  {String} [version='v1'] API版本
+ * @return {Object} 首页信息
+ */
+const addcollection = (data, config, version = 'v1') => {
+  let url = apiConfig[version] && apiConfig[version].ADD_HOTEL_COLLECTION || apiConfig.v1.ADD_HOTEL_COLLECTION
+  return ajax.get(url, data, config)
+}
+/**
+ * 取消收藏酒店
+ * @param  {Object}  data    请求参数
+ * @param  {Number} [data.mid] 收藏id
+ * @param  {Object} [config]  axios配置
+ * @param  {String} [version='v1'] API版本
+ * @return {Object} 首页信息
+ */
+const cancelCollection = (data, config, version = 'v1') => {
+  let url = apiConfig[version] && apiConfig[version].CANCEL_HOTEL_COLLECTION || apiConfig.v1.CANCEL_HOTEL_COLLECTION
+  return ajax.get(url, data, config)
+}
 export {
   getCommentContent,
   getHotelIntDetail,
@@ -226,5 +286,9 @@ export {
   getPointpaySet,
   postSaveOrder,
   getCommentOrderDetail,
-  submitComment
+  submitComment,
+  getRetrunMoreRoom,
+  addcollection,
+  cancelCollection,
+  getSearchHotelList
 }

@@ -1,59 +1,72 @@
 .jfk-pages__hotelDetailint {
+  line-height: 1;
   padding: 0 px2rem(30);
 
   .ht_del_top {
-    padding-top: px2rem(30);
+    margin-top: px2rem(38);
+    box-shadow: 0 0 4px 8px #eee;
     &_info {
-      height: px2rem(200);
-      background-image: background-image(/detail_map_white.jpg);
+      height: px2rem(246);
+      background-image: background-image(/detail_map_white.png);
       background-size: 100% 100%;
-      padding: px2rem(70) px2rem(40) 0 px2rem(40);
+      padding: 0 px2rem(43) 0 px2rem(43);
       position: relative;
+      border-top-left-radius: 5px;
+      border-top-right-radius: 5px;
       & .info_title {
-        margin-bottom: px2rem(40);
+        padding-top: px2rem(69);
+        margin-bottom: px2rem(32);
         @mixin ellipsis 1;
         width: px2rem(420);
       }
 
       & .info_place {
         width: px2rem(420);
+        line-height: px2rem(29);
+        position: relative;
+        .map-sign{
+          position: absolute;
+        }
       }
 
       & .icon_dh {
         position: absolute;
-        right: px2rem(50);
-        bottom: px2rem(80);
+        right: px2rem(59);
+        top: px2rem(85);
         i {
           margin-left: px2rem(8);
           display: block;
-          margin-bottom: px2rem(10);
+          margin-bottom: px2rem(23);
         }
       }
     }
     & .ht_tel {
-      padding: px2rem(55) px2rem(40);
       position: relative;
+      padding: px2rem(54) px2rem(39);
+      padding-bottom: px2rem(59);
+      border-bottom-left-radius: 5px;
+      border-bottom-right-radius: 5px;
+      @mixin one-line vertical {
+      };
+      &::before {
+        top: px2rem(57);
+        right: px2rem(184);
+        height: px2rem(27);
+      }
       & span {
         display: inline-block;
         width: px2rem(420);
-        @mixin one-line vertical {
-        };
-        position: relative;
-        &::before {
-          position: absolute;
-          bottom: 0;
-          right: 0;
-        }
       }
       & .icon_tel {
         position: absolute;
-        right: px2rem(60);
+        right: px2rem(78);
       }
     }
   }
 
   .ht_service {
     margin-top: px2rem(20);
+    margin-bottom: px2rem(80);
     & .title {
       height: px2rem(100);
       line-height: px2rem(100);
@@ -82,12 +95,13 @@
       left: 0;
     }
     .ht_sth {
-      margin-top: px2rem(55);
-      margin-bottom: px2rem(40);
+      margin-top: px2rem(66);
+      margin-bottom: px2rem(36);
     }
     .ht_del_ul {
       height: auto;
       overflow: hidden;
+      padding-bottom: px2rem(9);
       @mixin one-line horzin {
       };
       position: relative;
@@ -100,8 +114,13 @@
         text-align: left;
         float: left;
         width: 33%;
-        margin-bottom: px2rem(45);
-
+        margin-bottom: px2rem(44);
+        &:nth-child(3n-1){
+          text-align: center;
+        }
+        &:nth-child(3n){
+        text-align: right;
+      }
         & i {
           margin-right: px2rem(15);
         }
@@ -112,8 +131,8 @@
   .ht_int {
     margin-bottom: px2rem(30);
     &_title {
-      margin-top: px2rem(60);
-      margin-bottom: px2rem(36);
+      margin-top: px2rem(56);
+      margin-bottom: px2rem(34);
     }
     .ht_int_del {
       text-indent: px2rem(66);

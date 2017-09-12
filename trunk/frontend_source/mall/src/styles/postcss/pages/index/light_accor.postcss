@@ -1,3 +1,18 @@
+@each $brand in novotel, fairmont, pullman, raffles, sofitel, swissotel, mercure {
+  body.is-$(brand) {
+    .jfk-pages__index {
+      .accor-header {
+        .info {
+          .logo {
+            &-img {
+              background-image: background-image(/accor/$(brand).png, theme)
+            }
+          }
+        }
+      }
+    }
+  }
+}
 .jfk-pages__index{
   .accor-header {
     &__cont {
@@ -102,26 +117,13 @@
       }
     }
   }
-  @each $brand in novotel, fairmont, pullman, raffles, sofitel, swissotel, mercure {
-    &.is-$(brand) {
-      .accor-header {
-        .info {
-          .logo {
-            &-img {
-              background-image: background-image(/accor/$(brand).png, theme)
-            }
-          }
-        }
-      }
-    }
-  }
   .products{
     &-layout {
       &--card {
         .products-list {
           &__item {
             .jfk-price__original {
-              vertical-align: -0.5em;
+              vertical-align: -0.1em;
             }
           }
         }

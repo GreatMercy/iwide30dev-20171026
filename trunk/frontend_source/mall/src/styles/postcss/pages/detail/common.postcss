@@ -177,8 +177,9 @@
       }
     }
     .number {
-      span {
-        vertical-align: bottom;
+      line-height: calc(44 / 24)em;
+      .stock {
+        font-size: calc(28 / 24)em;
       }
     }
     .mask {
@@ -207,7 +208,6 @@
     }
   }
   .killsec-original {
-    margin-top: px2rem(80);
     &__cont {
       height: px2rem(100);
       padding: 0 px2rem(52) px2rem(0) px2rem(46);
@@ -335,15 +335,17 @@
     .jfk-sticky {
       z-index: 100;
     }
+    &-box {
+      padding-bottom: px2rem(132 - 90);
+    }
     &-label {
-      height: px2rem(72);
+      height: px2rem(90);
       display: flex;
       justify-content: center;
-      padding-bottom: px2rem(132 - 72);
       .label {
         width: 33%;
         text-align: center;
-        line-height: px2rem(72);
+        line-height: px2rem(90);
         position: relative;
         & + .label {
           &:after {
@@ -555,7 +557,7 @@
       margin-top: calc(18 / 24)em;
       margin-bottom: calc(10 / 24)em;
       .suppier {
-        padding-right: calc(28 / 24)em;
+        padding-right: calc(20 / 24)em;
       }
       .sales_num {
         @mixin one-line {
@@ -565,10 +567,10 @@
           left: 0;
           background-color: currentColor;
         }
-        padding-left: calc(18 / 24)em;
+        padding-left: calc(24 / 24)em;
       }
       .number {
-        padding-left: calc(12 / 24)em;
+        padding-left: calc(6 / 24)em;
       }
     }
     .price-tag {
@@ -582,6 +584,7 @@
       .text {
         position: relative;
         z-index: 2;
+        font-family: var(--pingfang-regular);
       }
       .mask {
         position: absolute;
@@ -665,10 +668,8 @@
       padding-top: px2rem(58);
     }
     .name {
-
       line-height: calc(42 / 30);
-      @mixin ellipsis 2;
-      padding-bottom: calc(18 / 28)em;
+      margin-bottom: calc(18 / 28)em;
     }
     .address {
       position: relative;
@@ -684,6 +685,22 @@
       i.jfk-font {
         font-size: 0.8em;
         padding-left: .3em;
+      }
+    }
+    /*适配文案*/
+    @media screen and (max-width: 320px) {
+      .name {
+        @mixin ellipsis;
+      }
+      .address {
+        i.jfk-font {
+          padding-left: 0;
+        }
+      }
+    }
+    @media screen and (min-width: 321px) {
+      .name {
+        @mixin ellipsis 2;
       }
     }
     .order {

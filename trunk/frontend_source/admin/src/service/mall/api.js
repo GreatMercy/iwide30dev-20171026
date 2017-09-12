@@ -30,7 +30,11 @@ const v1 = {
   // 获取礼包列表
   GET_GIFT_DELIVERY_GIFT_LIST: `${API_GIFT_DELIVERY}/getGiftList`,
   // 获取可添加至礼包的商品列表
-  GET_GIFT_DELIVERY_PRODUCT_IST: `${API_GIFT_DELIVERY}/getProductList`
+  GET_GIFT_DELIVERY_PRODUCT_IST: `${API_GIFT_DELIVERY}/getProductList`,
+  // 选择商品
+  POST_GIFT_DELIVERY_SELECT_GIFT: `${API_GIFT_DELIVERY}/selectAddGift`,
+  // 删除商品
+  DELETE_GIFT_DELIVERY_GIFT: `${API_GIFT_DELIVERY}/deleteProductGift`
 }
 
 export {

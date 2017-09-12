@@ -25,10 +25,10 @@
             </div>
           </div>
         </div>
-        <div class="number font-color-light-gray">
-          <span class="tip jfk-d-ib font-size--24">剩余库存</span>
-          <span class="stock jfk-d-ib font-size--28">{{killsecStock}} /</span>
-          <span class="total jfk-d-ib font-size--24">{{killsecTotal}}</span>
+        <div class="number font-color-light-gray font-size--24">
+          <span class="tip jfk-d-ib">剩余库存</span>
+          <span class="stock jfk-d-ib">{{killsecStock}} /</span>
+          <span class="total jfk-d-ib">{{killsecTotal}}</span>
         </div>
       </div>
     </div>

@@ -331,12 +331,6 @@ class SomaPackage
     public $show_sales_cnt;
 
     /**
-     * @var string $qrcode_detail
-     * @SWG\Property(type="string", description="商品二维码")
-     */
-    public $qrcode_detail;
-
-    /**
      * @var string $reward_money
      * @SWG\Property(type="double", description="商品绩效金额")
      */

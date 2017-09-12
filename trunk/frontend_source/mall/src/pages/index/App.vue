@@ -1,5 +1,5 @@
 <template>
-  <div class="jfk-pages jfk-pages__index" :class="pageNamespace">
+  <div class="jfk-pages jfk-pages__index">
     <div class="jfk-pages__theme"></div>
     <div class="page__header">
     <accor-header v-if="isAccor"></accor-header>

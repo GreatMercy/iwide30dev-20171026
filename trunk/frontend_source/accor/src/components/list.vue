@@ -1,5 +1,5 @@
 <template>
-  <div class="page_list">
+  <div class="page_list" :style="{height: maxHeight }">
     <div class="main">
       <div class="leftmenu">
         <ul class="list" >
@@ -8,7 +8,7 @@
       </div>
       <div class="rightcontent">
         <ul>
-          <li v-for="item in listData[currentIdx].data">
+          <li v-for="(item,idx) in listData[currentIdx].data">
             <a :href="linkPrefix + item.tkid + '&brandname=' + item.brandname">
               <img :src="'./static/img/small/'+item.image" />
               <div class="hotelinfo">
@@ -38,8 +38,9 @@ export default {
     }
   },
   beforeCreate () {
+    this.maxHeight = document.documentElement.clientHeight + 'px'
     this.params = formatUrlParams(window.location.hash)
-    this.linkPrefix = 'http://1.025op.com/index.php/soma/package/index/?id=a502245149&catid=&tkid='
+    this.linkPrefix = 'http://jx.jinfangka.com/index.php/soma/package/index/?id=a502245149&catid=&tkid='
     if (process.env.NODE_ENV === 'development') {
       this.linkPrefix = 'http://' + location.hostname + ':8080?id=a502245149&catid=&tkid='
     }
@@ -78,7 +79,7 @@ export default {
         mainCity.forEach((itemcity, index) => {
           if (item.cityname.toLowerCase() === itemcity) {
             maincityData.push(item)
-            result.splice(index, 1)
+            result.splice(idx, 1)
           }
         })
       })
@@ -92,7 +93,6 @@ export default {
           }
         })
       }
-      console.log(result)
     },
     handleCity (idx) {
       this.currentIdx = idx
@@ -104,12 +104,6 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style>
-html,body{
-    height: 100%;
-    overflow-y: auto;
-}
-#app{
-  height: 100%;
-}
+<style >
+
 </style>

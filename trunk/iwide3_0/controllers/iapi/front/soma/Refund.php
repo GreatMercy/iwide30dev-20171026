@@ -382,6 +382,11 @@ class Refund extends MY_Front_Soma_Iapi
      *                      type="integer 1:已申请 2：已审核 3：已退款 4：取消 5：挂起 6：微信退款中",
      *                  ),
      *                  @SWG\Property(
+     *                      property="create_time",
+     *                      description="下单日期",
+     *                      type="string",
+     *                  ),
+     *                  @SWG\Property(
      *                      property="refund_type",
      *                      description="退款类型",
      *                      type="string 1:微信支付退款 2：储值支付退款 3：积分支付退款",
@@ -424,6 +429,9 @@ class Refund extends MY_Front_Soma_Iapi
             return;
         }
 
+        /**
+         * @var \Sales_order_model $order
+         */
         //订单信息
         $this->load->model('soma/Sales_order_model', 'sales_order_model');
         $order = $this->sales_order_model->load($order_id);
@@ -437,6 +445,7 @@ class Refund extends MY_Front_Soma_Iapi
         $data['total'] = $order->m_get('real_grand_total');
         $data['status'] = $refund_info['status'];
         $data['refund_type'] = $refund_info['refund_type'];
+        $data['create_time'] = date('Y/m/d H:i:s', strtotime($order->m_get('create_time')));
 
         //审核状态
         $pending = $sales_refund_model::STATUS_PENDING;//已审核

@@ -1,5 +1,5 @@
 <template>
-  <div class="jfk-pages jfk-pages__reserve" :class="pageNamespace">
+  <div class="jfk-pages jfk-pages__reserve">
     <div class="jfk-pages__theme"></div>
     <div class="reserve-box" v-if="productInfo.product_id">
       <reverse-killsec-time @killsec-finish="handleKillsecFinish" :countdown="countdown" v-if="productInfo.tag === 2 && tokenId"></reverse-killsec-time>
@@ -103,7 +103,7 @@
           <transition name="fade">
             <div class="tip jfk-flex is-align-middle jfk-pr-30 font-color-light-gray-common body font-size--24" v-show="useType === '2'">
               <div class="box jfk-pos-r">
-                <i class="jfk-font font-size--28 tip-icon icon-booking_icon_question_normal"></i>下单后，购买成功，将礼物打包赠转发给好友，好友点击即可成功领取
+                <i class="jfk-font font-size--28 tip-icon icon-msg_icon_prompt_1_default"></i>下单后，购买成功，将礼物打包赠转发给好友，好友点击即可成功领取
               </div>
             </div>
           </transition>
@@ -162,7 +162,7 @@
               <div class="form-item__body">
                 <p class="tip" :class="couponsClass">{{couponsText}}</p>
               </div>
-              <span class="form-item__foot">
+              <span class="form-item__foot" v-show="coupons.length && !(this.orderRulePicked && this.orderRule.rule_type)">
                 <i class="jfk-font icon-user_icon_jump_normal font-color-extra-light-gray"></i>
               </span>
             </div>
@@ -247,6 +247,7 @@
 <script>
   /* eslint-disable camelcase */
   import formatUrlParams from 'jfk-ui/lib/format-urlparams.js'
+  import { accSub, accMul, accDiv } from 'jfk-ui/lib/arithmetic.js'
   import validator from 'jfk-ui/lib/validator.js'
   import { showFullLayer, findIndex } from '@/utils/utils'
   import handleErrorStatus from '@/utils/handleErrorStatus'
@@ -290,7 +291,7 @@
       this.$pageNamespace(params)
     },
     created () {
-      let that = this
+      let vm = this
       // 获取订单信息
       getOrderPay({
         pid: this.productId,
@@ -299,23 +300,23 @@
         token: this.tokenId,
         common: this.common
       }).then(function (res) {
-        that.toast.close()
+        vm.toast.close()
         const { count, psp_setting, product, countdown, address, public_info, customer_info = {}, create_order_params = {}, point, balance } = res.web_data
-        that.count = count.default
-        that.max = count.limit
-        that.pspSetting = psp_setting
-        that.point = point
-        that.balance = Object.assign({}, that.balance, balance)
+        vm.count = count.default
+        vm.max = count.limit
+        vm.pspSetting = psp_setting
+        vm.point = point
+        vm.balance = Object.assign({}, vm.balance, balance)
         // 倒计时5分钟
-        that.countdown = countdown * 1000
-        that.orderParams = Object.assign({}, that.orderParams, create_order_params)
+        vm.countdown = countdown * 1000
+        vm.orderParams = Object.assign({}, vm.orderParams, create_order_params)
         if (address.length) {
-          that.address = address
-          that.addressId = address[0].address_id
+          vm.address = address
+          vm.addressId = address[0].address_id
         }
-        that.productInfo = Object.assign({}, that.productInfo, product)
-        that.publicInfo = Object.assign({}, that.publicInfo, public_info)
-        that.customerInfo = Object.assign({}, that.customerInfo, {
+        vm.productInfo = Object.assign({}, vm.productInfo, product)
+        vm.publicInfo = Object.assign({}, vm.publicInfo, public_info)
+        vm.customerInfo = Object.assign({}, vm.customerInfo, {
           name: customer_info.name || '',
           phone: customer_info.mobile || ''
         })
@@ -534,11 +535,11 @@
       },
       // 原价
       pricePackage () {
-        return Math.ceil(this.productInfo.price_package * this.count * 100) / 100
+        return accMul(this.productInfo.price_package, this.count)
       },
       // 优惠后的价格
       priceWithDiscount () {
-        let price = Math.ceil(this.pricePackage * 100 - this.priceDiscountItem.price * 100) / 100
+        let price = accSub(this.pricePackage, this.priceDiscountItem.price)
         return price < 0 ? (this.priceDiscountItem.canZero ? 0 : 0.01) : price
       },
       // 优惠的情况
@@ -557,7 +558,7 @@
             price = c.reduce_cost
           } else if (c.card_type === '2') {
             // 折扣券
-            price = Math.floor(this.productInfo.price_package * this.count * 100 * (10 - c.discount) / 10) / 100
+            price = Number(accMul(accMul(this.productInfo.price_package, this.count), accDiv(10 - c.discount, 10)).toFixed(2))
             canZero = false
           } else if (c.card_type === '3') {
             // 兑换券，只能兑换一个商品
@@ -565,6 +566,7 @@
           }
           name = c.title
         }
+        console.log(price)
         return {
           name,
           price,
@@ -625,9 +627,9 @@
       },
       // 获取优惠券
       getCoupons () {
-        let that = this
-        that.coupons = []
-        that.couponId = '-1'
+        let vm = this
+        vm.coupons = []
+        vm.couponId = '-1'
         getPackageCoupons({
           pid: this.productId,
           qty: this.count,
@@ -637,19 +639,19 @@
             cancel = c
           })
         }).then(function (res) {
-          that.lastGetDiscountTimestamp = Date.now()
-          that.coupons = res.web_data || []
+          vm.lastGetDiscountTimestamp = Date.now()
+          vm.coupons = res.web_data || []
         }).catch(function () {
-          that.lastGetDiscountTimestamp = Date.now()
-          that.coupons = []
+          vm.lastGetDiscountTimestamp = Date.now()
+          vm.coupons = []
         })
       },
       // 获取优惠活动
       getActivities () {
-        let that = this
+        let vm = this
         // 请求前先置空数据
-        that.$set(that, 'orderRule', {})
-        that.orderRulePicked = false
+        vm.$set(vm, 'orderRule', {})
+        vm.orderRulePicked = false
         getPackageRule({
           pid: this.productId,
           qty: this.count,
@@ -660,28 +662,28 @@
             cancel = c
           })
         }).then(function (res) {
-          that.lastGetDiscountTimestamp = Date.now()
+          vm.lastGetDiscountTimestamp = Date.now()
           let rule = formatOrderRule(res.web_data)
           if (rule) {
-            that.orderRule = Object.assign({}, that.orderRule, rule)
+            vm.orderRule = Object.assign({}, vm.orderRule, rule)
           } else {
-            that.$set(that, 'orderRule', {})
+            vm.$set(vm, 'orderRule', {})
           }
         }).catch(function () {
-          that.lastGetDiscountTimestamp = Date.now()
-          that.$set(that, 'orderRule', {})
+          vm.lastGetDiscountTimestamp = Date.now()
+          vm.$set(vm, 'orderRule', {})
         })
       },
       // 同时获取优惠活动及优惠券
       getPackageDiscount () {
-        let that = this
+        let vm = this
         let cc = new CancelToken(function executor (c) {
           cancel = c
         })
-        that.coupons = []
-        that.$set(that, 'orderRule', {})
-        that.orderRulePicked = false
-        that.couponId = '-1'
+        vm.coupons = []
+        vm.$set(vm, 'orderRule', {})
+        vm.orderRulePicked = false
+        vm.couponId = '-1'
         axios.all([
           getPackageCoupons({
             pid: this.productId,
@@ -699,24 +701,24 @@
             cancelToken: cc
           })
         ]).then(axios.spread(function (coupons, rule) {
-          that.lastGetDiscountTimestamp = Date.now()
+          vm.lastGetDiscountTimestamp = Date.now()
           if (coupons.status === 1000) {
-            that.coupons = coupons.web_data
+            vm.coupons = coupons.web_data
           } else {
-            that.coupons = []
+            vm.coupons = []
           }
           if (rule.status === 1000) {
             let _rule = formatOrderRule(rule.web_data)
             if (_rule) {
-              that.orderRule = Object.assign({}, that.orderRule, _rule)
+              vm.orderRule = Object.assign({}, vm.orderRule, _rule)
               return
             }
           }
-          that.$set(that, 'orderRule', {})
+          vm.$set(vm, 'orderRule', {})
         })).catch(function (err) {
-          that.lastGetDiscountTimestamp = Date.now()
-          that.coupons = []
-          that.$set(that, 'orderRule', {})
+          vm.lastGetDiscountTimestamp = Date.now()
+          vm.coupons = []
+          vm.$set(vm, 'orderRule', {})
           return handleErrorStatus(err)
         })
       },
@@ -766,10 +768,10 @@
       checkForm () {
         let passed = true
         let rules = this.rules
-        let that = this
+        let vm = this
         for (let i in rules) {
-          let r = validator(that.getFormItemVal(i), rules[i])
-          that.validResult = Object.assign({}, that.validResult, {
+          let r = validator(vm.getFormItemVal(i), rules[i])
+          vm.validResult = Object.assign({}, vm.validResult, {
             [i]: {
               ...r,
               show: !r.passed
@@ -779,7 +781,7 @@
             passed = false
             // 不监测validResult的变化
             if (i === 'area') {
-              that.$jfkAlert('邮寄地址错误', '', {
+              vm.$jfkAlert('邮寄地址错误', '', {
                 iconType: 'error'
               })
             }

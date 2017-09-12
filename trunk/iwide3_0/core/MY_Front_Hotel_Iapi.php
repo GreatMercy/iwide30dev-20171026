@@ -136,6 +136,9 @@ class MY_Front_Hotel_Iapi extends MY_Front_Iapi {
 				'highclass' => array (
                         'hotel/hotel_photo'=>array(
                             'all_photo' => 1
+                        ),
+                        'hotel/search' => array (
+                            'show_area' => 1
                         )
 				),
 		);

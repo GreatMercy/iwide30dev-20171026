@@ -11,7 +11,7 @@
           <div class="refund-detail-step__item">
             <p class="refund-detail-step__status">
               <span class="refund-detail-step__right refund-detail-step__start">
-                <i></i>
+                <i class="color-golden"></i>
               </span>
             </p>
             <p class="font-size--30 jfk-ta-c refund-detail-step__name refund-detail-step__active">酒店审核中</p>
@@ -22,7 +22,7 @@
           <div class="refund-detail-step__item">
             <p class="refund-detail-step__status">
               <span class="refund-detail-step__right refund-detail-step__start">
-                <i></i>
+                <i class="color-golden"></i>
               </span>
             </p>
             <p class="font-size--28 jfk-ta-c refund-detail-step__name">酒店审核中</p>
@@ -34,7 +34,7 @@
           <div class="refund-detail-step__item">
             <p class="refund-detail-step__status">
               <span class="refund-detail-step__left refund-detail-step__right refund-detail-step__finish">
-                <i></i>
+                <i class="color-golden"></i>
               </span>
             </p>
             <p class="font-size--30 jfk-ta-c refund-detail-step__name refund-detail-step__active">同意退款</p>
@@ -58,7 +58,7 @@
           <div class="refund-detail-step__item">
             <p class="refund-detail-step__status">
               <span class="refund-detail-step__left refund-detail-step__right refund-detail-step__finish">
-                <i></i>
+                <i class="color-golden"></i>
               </span>
             </p>
             <p class="font-size--30 jfk-ta-c refund-detail-step__name refund-detail-step__active">微信退款中</p>
@@ -77,11 +77,11 @@
 
 
         <!-- 已退款 -->
-        <template v-if="status === 3">
+        <template v-if="status !== 3">
           <div class="refund-detail-step__item">
             <p class="refund-detail-step__status">
               <span class="refund-detail-step__left refund-detail-step__end">
-                <i></i>
+                <i class="jfk-font icon-radio_icon_selected_default color-golden"></i>
               </span>
             </p>
             <p class="font-size--30 jfk-ta-c refund-detail-step__name refund-detail-step__active">退款成功</p>
@@ -113,9 +113,9 @@
             <div class="refund-order__content font-size--30" v-text="detail.order_id"></div>
           </li>
 
-          <li class="jfk-flex is-align-middle">
+          <li class="jfk-flex is-align-middle" v-if="detail.create_time">
             <div class="refund-order__title font-size--28">下单时间</div>
-            <div class="refund-order__content font-size--30">2017/03/01 13:34:09</div>
+            <div class="refund-order__content font-size--30" v-text="detail.create_time"></div>
           </li>
 
           <li class="jfk-flex is-align-middle" v-if="detail.total">
@@ -159,6 +159,7 @@
         iconClass: 'jfk-loading__snake',
         isLoading: true
       })
+      this.$pageNamespace(params)
     },
     created () {
       // 已申请: 酒店审核中

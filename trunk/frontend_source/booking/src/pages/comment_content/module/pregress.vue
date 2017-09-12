@@ -6,7 +6,7 @@
       <div class="pregress">
         <span class="bar" :style="{width: allWidth.clean}"></span>
       </div>
-      <span class="grayColor80">{{score.comment_score}}</span>
+      <span class="grayColor80 item-score">{{score.comment_score}}</span>
     </div>
     <div class="pregress_item font-size--24">
       <span v-if="comment_config.facilities_score" class="name">{{comment_config.facilities_score}}</span>
@@ -14,7 +14,7 @@
       <div class="pregress">
         <span class="bar" :style="{width: allWidth.facilities}"></span>
       </div>
-      <span class="grayColor80">{{score.facilities_score}}</span>
+      <span class="grayColor80 item-score">{{score.facilities_score}}</span>
     </div>
     <div class="pregress_item font-size--24">
       <span v-if="comment_config.service_score" class="name">{{comment_config.service_score}}</span>
@@ -22,7 +22,7 @@
       <div class="pregress">
         <span class="bar" :style="{width: allWidth.service}"></span>
       </div>
-      <span class="grayColor80">{{score.service_score}}</span>
+      <span class="grayColor80 item-score">{{score.service_score}}</span>
     </div>
     <div class="pregress_item font-size--24">
       <span v-if="comment_config.net_score" class="name">{{comment_config.net_score}}</span>
@@ -30,7 +30,7 @@
       <div class="pregress">
         <span class="bar" :style="{width: allWidth.net}"></span>
       </div>
-      <span class="grayColor80">{{score.net_score}}</span>
+      <span class="grayColor80 item-score">{{score.net_score}}</span>
     </div>
   </div>
 

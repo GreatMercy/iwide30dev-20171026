@@ -60,6 +60,7 @@
         text-align: center;
         line-height: 1;
         margin-left: -1em;
+        font-family: var(--pingfang-regular);
         i {
           color: #fff;
           line-height: calc(34 / 24)em;
@@ -337,18 +338,19 @@
           width: 0;
           height: 0;
           transition: transform .3s;
+          transform: rotate(180deg);
           border: {
             style: solid dashed dashed dashed;
             width: px2rem(7);
           }
-          top: calc(10 / 24)em;
+          top: 0;
           right: calc(-30 / 24)em;
         }
       }
        &.is-open {
         .detail:before {
-          transform: rotate(180deg);
-          top: 0;
+          transform: rotate(0deg);
+          top: calc(10 / 24)em;
         }
       }
     }

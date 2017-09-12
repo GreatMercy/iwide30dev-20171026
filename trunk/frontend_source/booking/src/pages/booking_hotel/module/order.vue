@@ -9,7 +9,6 @@
           </span>
       </div>
       <p class="hotel_name font-size--38" v-html="hotel.name"></p>
-
       <p class="stay_time grayColor80 font-size--24">
         <span class="in">入住 <span class="date" v-html="startdate"></span></span>
         <span class="left">离店 <span class="date" v-html="enddate"></span></span>
@@ -104,8 +103,8 @@
     <div class="pay_type">
       <div class="pay_type_item" v-for="(value,key) in payWays" :class="{'acitve' : key === 0 }">
 
-        <input v-if="value.disable" type="radio" v-model="payType" @click="handleOrder(value.pay_type)" name="pay"  :value="value.pay_type">
-        <input v-else type="radio" v-model="payType" @click="handleOrder(value.pay_type)" name="pay" :value="value.pay_type">
+        <input v-if="value.disable" type="radio" v-model="payType" @click="handleOrder(value.pay_type, value.favour)" name="pay"  :value="value.pay_type">
+        <input v-else type="radio" v-model="payType" @click="handleOrder(value.pay_type, value.favour)" name="pay" :value="value.pay_type">
 
         <p class="font-size--28">
           <i class="booking_icon_font font-size--40 icon-user_icon_wxpay_n-"></i><br>
@@ -118,8 +117,7 @@
         <i class="booking_icon_font font-size--30 icon-msg_icon_prompt_default"></i>
         预定说明
       </p>
-      <p class="desc">
-        {{hotel.book_policy}}
+      <p class="desc" v-html="hotel.book_policy">
       </p>
     </div>
     <!-- 底部栏 -->
@@ -150,7 +148,9 @@
         <div class="room_cost jfk-pl-30 jfk-pr-30 font-size--26 grayColor80">
           <p class="title font-size--28 font-color-dark-white">
             <span class="left">房费</span>
-            <span class="right goldColor font-size--30"><span class="money_icon">¥</span>{{totalPrice}}</span>
+            <!--<span class="right goldColor font-size&#45;&#45;30"><span class="money_icon">¥</span>{{totalPrice}}</span>-->
+            <!--xm-->
+            <span class="right goldColor font-size--30"><span class="money_icon">¥</span>{{realPrice}}</span>
           </p>
           <p class="room_cost_item" v-for="(value,key) in tmpPrice">
             <span class="left">{{value.date}}（{{count}}间）</span>
@@ -237,7 +237,9 @@
 <script>
 // getBookroomDetail
   import { getBookroomCoupon, getBookroomBonus, getPointpaySet, postSaveOrder } from '@/service/http'
-  import { formatDate } from '@/utils/utils'
+  import { showFullLayer, formatDate } from '@/utils/utils'
+  import formatUrlParams from 'jfk-ui/lib/format-urlparams.js'
+  let params = formatUrlParams(location.search)
   export default {
     watch: {
       submitOrderConfig (val) {
@@ -256,8 +258,13 @@
         return this.$store.getters.submitResdata || {}
       }
     },
+    beforeRouteEnter (to, from, next) {
+      next(vm => {
+        // 通过 `vm` 访问组件实例
+        vm.beforePage()
+      })
+    },
     created () {
-      this.beforePage()
     },
     data () {
       return {
@@ -344,22 +351,33 @@
     methods: {
       beforePage () {
         this.sendData = this.submitOrderConfig
+        if (JSON.stringify(this.sendData) === '{}') {
+          window.history.back()
+          return
+        }
         this.datas = {}
         this.xprice_code = {}
         this.datas[this.sendData.room_id] = 1
         this.xprice_code[this.sendData.room_id] = this.sendData.price_codes
         this.price_type[this.sendData.price_type] = 1
-        let goodsItems = ''
+        // package_info 如果是选择商品页面跳转， 则会有this.sendData.select_package 商品
         if (this.sendData.select_package) {
+          this.package_info = {}
           for (let i = 0; i < this.sendData.select_package.length; i++) {
             const content = this.sendData.select_package[i]
             let goodId = content.goods_id.toString()
-            let nums = content.countNum
-            let obj = `"${goodId}":{"gid":"${goodId}","nums":"${nums}"}`
-            goodsItems += obj
+            this.package_info[goodId] = {
+              'gid': goodId,
+              'nums': content.countNum
+            }
+          }
+          this.package_info = JSON.stringify(this.package_info)
+        } else {
+          // 否则从主页面跳转 判断是否存在 package_info
+          if (this.sendData.package_info) {
+            this.package_info = JSON.stringify(this.sendData.package_info)
           }
         }
-        this.package_info = `{${goodsItems}}`
         const res = this.submitResdata
         if (res.web_data.page_resource.links.redirect) {
           window.location.href = res.web_data.page_resource.links.redirect
@@ -437,56 +455,58 @@
         // 获取优惠券需要数据
         let couponData = {
           // url id
-          id: this.getUrlParams('id'),
-          openid: this.getUrlParams('openid'),
+          id: params.id,
+          openid: params.openid,
           datas: JSON.stringify(this.datas) || {},
           start: this.sendData.startdate || '',
           end: this.sendData.enddate || '',
           h: this.sendData.hotel_id || '',
-          total: this.sendData.allPrice || '',
+          total: this.totalPrice || '',
           price_code: JSON.stringify(this.xprice_code) || {},
           // ================
           paytype: this.payType,
-          pay_favour: this.sendData.pay_favour || ''
+          pay_favour: this.payFavour || ''
         }
         getBookroomCoupon(couponData).then((res) => {
           if (loading) {
             loading.close()
             loading = true
           }
+          let _this = this
           // 优惠券数据
           const coupon = res.web_data
           if (coupon.cards !== '') {
             let bool = false
-
             if (!coupon.vid || coupon.vid === 0) {
               bool = true
             }
             if (bool) {
-              this.maxRoomNightUse = coupon.count.max_room_night_use
-              this.maxOrderUse = coupon.count.max_order_use
+              _this.maxRoomNightUse = coupon.count.max_room_night_use
+              _this.maxOrderUse = coupon.count.max_order_use
             } else {
-              this.maxCouponUse = coupon.count.num
+              _this.maxCouponUse = coupon.count.num
               if (coupon.count.effects && coupon.count.effects.paytype_counts) {
-                this.paytypeCounts = coupon.count.effects.paytype_counts
+                _this.paytypeCounts = coupon.count.effects.paytype_counts
               }
             }
             if (coupon.selected) {
-              this.couponAmount = 0
-              this.coupons = {}
+              _this.couponAmount = 0
+              _this.coupons = {}
               for (let item in coupon.selected) {
-                this.coupons[[coupon.selected[item].code]] = coupon.selected[item].reduce_cost
+                _this.coupons[[coupon.selected[item].code]] = coupon.selected[item].reduce_cost
               }
             }
+            // xm
             for (let index in coupon.cards) {
-              if (this.coupons[[coupon.cards[index].code]]) {
-                this.couponAmount += this.couponAmount + parseFloat(coupon.cards[index].reduce_cost)
+              if (_this.coupons[[coupon.cards[index].code]]) {
+                // _this.couponAmount += _this.couponAmount + parseFloat(coupon.cards[index].reduce_cost)
+                _this.couponAmount += parseFloat(coupon.cards[index].reduce_cost)
                 if (coupon.cards[index].hotel_use_num_type === 'room_nights' && bool) {
-                  this.maxRoomNightUse--
+                  _this.maxRoomNightUse--
                 } else if (coupon.cards[index].hotel_use_num_type === 'order' && bool) {
-                  this.maxOrderUse--
+                  _this.maxOrderUse--
                 } else if (!bool) {
-                  this.maxCouponUse--
+                  _this.maxCouponUse--
                 }
               }
               coupon.cards[index].date_info_end_timestamp = formatDate(coupon.cards[index].date_info_end_timestamp)
@@ -502,15 +522,17 @@
               }
               coupon.cards[index].bool = bool
             }
-            this.couponCards = coupon.cards
-            this.totalFavour = this.couponAmount + this.payFavour
-            if (this.couponAmount > 0) {
-              this.couponText = '已选￥' + this.couponAmount.toFixed(2)
+            _this.couponCards = coupon.cards
+            _this.totalFavour = _this.couponAmount + _this.payFavour
+            if (_this.couponAmount > 0) {
+              _this.couponText = '已选￥' + _this.couponAmount.toFixed(2)
+              console.log(_this.couponText)
+              console.log(_this.couponAmount)
             } else {
-              this.couponText = '选择优惠券'
+              _this.couponText = '选择优惠券'
             }
-            this.totalPrice = (parseFloat((this.realPrice - this.totalFavour).toFixed(2)) + parseFloat(this.packagesPrice)).toFixed(2)
-            this.getBonusSet()
+            _this.totalPrice = (parseFloat((_this.realPrice - _this.totalFavour).toFixed(2)) + parseFloat(_this.packagesPrice)).toFixed(2)
+            _this.getBonusSet()
           }
         }).catch(function (e) {
           if (loading) {
@@ -524,13 +546,13 @@
           // 获取积分所需数据
           let bonusData = {
             // url id
-            id: this.getUrlParams('id'),
-            openid: this.getUrlParams('openid'),
+            id: params.id,
+            openid: params.openid,
             datas: JSON.stringify(this.datas) || {},
             start: this.sendData.startdate || '',
             end: this.sendData.enddate || '',
             h: this.sendData.hotel_id || '',
-            total_price: this.sendData.allPrice || '',
+            total_price: this.totalPrice || '',
             price_code: JSON.stringify(this.xprice_code) || {},
             // ================
             paytype: this.payType,
@@ -714,13 +736,13 @@
         if (this.hasPointPay === 1) {
           let getPoint = {
             // url id
-            id: this.getUrlParams('id'),
-            openid: this.getUrlParams('openid'),
+            id: params.id,
+            openid: params.openid,
             datas: JSON.stringify(this.datas) || {},
             start: this.sendData.startdate || '',
             end: this.sendData.enddate || '',
             h: this.sendData.hotel_id || '',
-            total_price: this.sendData.allPrice || '',
+            total_price: this.totalPrice || '',
             price_code: JSON.stringify(this.xprice_code) || {},
             // ==========
             paytype: this.payType,
@@ -760,6 +782,8 @@
           this.totalFavour = 0
         }
         let tmpval = this.count
+        // xm
+        this.datas[this.sendData.room_id] = this.count
         this.realPrice = this.unitPrice * tmpval
         this.totalPrice = (parseFloat((this.unitPrice * tmpval).toFixed(2)) + parseFloat(this.packagesPrice)).toFixed(2)
         let roomnos = {}
@@ -771,9 +795,13 @@
       handleShow () {
         if (this.couponDis) {
           this.couponShow = true
+          const cb = () => {
+            this.couponShow = false
+          }
+          showFullLayer(null, '选择优惠券', location.href, cb)
         }
       },
-      handleOrder (type) {
+      handleOrder (type, favour) {
         if (type === 'bonus') {
           this.couponText = '不可用'
           this.couponDis = false
@@ -795,6 +823,9 @@
         this.couponAmount = 0
         this.coupons = {}
         this.totalPrice = (parseFloat((this.realPrice - this.totalFavour).toFixed(2)) + parseFloat(this.packagesPrice)).toFixed(2)
+        // xm
+        this.payType = type
+        this.payFavour = favour
         this.getBonusSet()
         this.getCoupon()
       },
@@ -822,8 +853,8 @@
         if (saveBol) {
           let saveData = {
             // url id
-            id: this.getUrlParams('id'),
-            openid: this.getUrlParams('openid'),
+            id: params.id,
+            openid: params.openid,
             name: this.customerInfo.name,
             tel: this.customerInfo.tel,
             custom_remark: this.customerInfo.customRemark,
@@ -863,22 +894,6 @@
             }
             console.log(e)
           })
-        }
-      },
-      // 获取url 参数
-      getUrlParams (urlName) {
-        let url = location.href
-        let paraString = url.substring(url.indexOf('?') + 1, url.length).split('&')
-        let returnValue
-        for (let i = 0; i < paraString.length; i++) {
-          let tempParas = paraString[i].split('=')[0]
-          let parasValue = paraString[i].split('=')[1]
-          if (tempParas === urlName) returnValue = parasValue
-        }
-        if (typeof (returnValue) === 'undefined') {
-          return ''
-        } else {
-          return returnValue
         }
       }
     }

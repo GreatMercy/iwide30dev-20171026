@@ -2,10 +2,10 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import VueLazyload from 'vue-lazyload'
-import VueAwesomeSwiper from 'vue-awesome-swiper'
+// import VueAwesomeSwiper from 'vue-awesome-swiper'
 // import VueTouch from 'vue-touch'
 Vue.use(VueLazyload)
-Vue.use(VueAwesomeSwiper)
+// Vue.use(VueAwesomeSwiper)
 import 'swiper/dist/css/swiper.css'
 import App from './App'
 import router from './router'

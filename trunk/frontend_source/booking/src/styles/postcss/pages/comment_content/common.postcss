@@ -1,4 +1,5 @@
 .jfk-pages__commentContent {
+  line-height: 1;
   .jfk-pages__theme {
     background-color: #fff;
   }
@@ -20,29 +21,29 @@
       };
       position: relative;
       &::before {
-        width: 3px;
+        width: px2rem(3);
         height: px2rem(56);
         position: absolute;
-        top: px2rem(26);
+        top: px2rem(40);
         left: 0;
       }
     }
     & .score {
-      margin-top: px2rem(70);
-      .font-size--80 {
-        font-size: px2rem(80);
+      margin-top: px2rem(42);
+      .font-size--108 {
+        font-size: px2rem(108);
       }
-      .font-size--64 {
-        font-size: px2rem(64);
+      .font-size--88 {
+        font-size: px2rem(88);
       }
-      .font-size--38 {
-        font-size: px2rem(38);
+      .font-size--36 {
+        font-size: px2rem(36);
       }
     }
     .jfk-rater {
-      margin-top: px2rem(30);
+      margin-top: px2rem(24);
       & a {
-        margin-right: px2rem(40) !important;
+        margin-right: px2rem(38) !important;
         &:last-child {
           margin-right: 0 !important;
         }
@@ -50,15 +51,23 @@
     }
 
     .pregress_list {
-      margin-top: px2rem(80);
+      margin-top: px2rem(72);
       & .pregress_item {
+        position: relative;
         line-height: 1;
-        margin-top: px2rem(30);
-
+        margin-bottom: px2rem(32);
+        .name{
+          letter-spacing: 5px;
+          display: inline-block;
+          width: px2rem(170);
+          overflow: hidden;
+          text-align: right;
+        }
         .pregress {
-          width: px2rem(250);
           display: inline-block;
           height: px2rem(8);
+          margin-right: px2rem(8);
+          margin-left: px2rem(2);
           .bar {
             display: inline-block;
             height: px2rem(8);
@@ -74,14 +83,14 @@
 
   .talk {
     margin: 0 px2rem(30);
-    padding-top: px2rem(50);
+    padding-top: px2rem(48);
     .title {
-      margin-bottom: px2rem(30);
+      margin-bottom: px2rem(32);
     }
     ul {
       overflow: hidden;
       z-index: 9999;
-      padding-bottom: px2rem(30);
+      padding-bottom: px2rem(46);
       @mixin one-line horzin {
       };
       position: relative;
@@ -92,138 +101,145 @@
         left: 0;
       }
       li {
-        padding: px2rem(10) px2rem(20);
+        padding: px2rem(12) px2rem(20);
+        text-align: center;
         float: left;
         margin-right: px2rem(20);
-        margin-bottom: px2rem(24);
         border-radius: px2rem(6);
       }
     }
   }
-
-  .content {
-    & .contitle_info {
-      position: relative;
-      margin-top: px2rem(65);
-      height: px2rem(72);
-      .head_img {
-        width: px2rem(72);
-        height: px2rem(72);
-        border-radius: 100%;
-      }
-      .name {
-        position: absolute;
-        top: 0;
-        left: px2rem(102);
-      }
-      .date {
-        position: absolute;
-        top: px2rem(47);
-        left: px2rem(102);
-      }
-      .score {
-        position: absolute;
-        right: px2rem(30);
-        top: px2rem(22);
-        .score-text {
-          margin-left: px2rem(10);
-        }
-        span {
-          margin-left: -3px;
-        }
-      }
-      .font-size--18 {
-        font-size: px2rem(18);
-      }
-    }
-    .comment {
-      margin-top: px2rem(35);
-      margin-bottom: px2rem(25);
-      line-height: px2rem(48);
-      word-wrap: break-word;
-      overflow: hidden;
-    }
-    .swiper-container {
-      width: 100% !important;
-      height: px2rem(270) !important;
-      .swiper-slide {
-        width: px2rem(260) !important;
-        height: 100% !important;
-        a {
-          display: block;
-          height: 100%;
-          padding-bottom: 0;
-          overflow: hidden;
-          .jfk-swiper__item-bg {
-            width: 100%;
-            height: 100%;
-            background-color: red;
-            background-size: cover;
-            background-image: url(http://file.iwide.cn/public/media/club/201610310207346431.jpg);
-            position: absolute;
-            left: 0;
-            top: 0;
-          }
-        }
-      }
-
-    }
-    .show_all {
-      margin-bottom: px2rem(60);
-    }
-
-    .file {
-      & .one_img {
-        width: px2rem(390);
-        height: px2rem(380);
-        border-radius: px2rem(10);
-      }
-      & .recommendations-list {
-        & .swiper-slide {
-          width: px2rem(260) !important;
-          margin-right: px2rem(20) !important;
-          img {
-            width: px2rem(260);
-            height: px2rem(270);
-          }
-        }
-      }
-    }
-
-    .check_repeat {
-      margin: 0 0 px2rem(30) 0;
-      .show_icon, .hide_icon {
-        display: inline-block;
-        margin-left: px2rem(10);
-      }
-      .show_icon {
-        transform: rotate(180deg);
-        -ms-transform: rotate(180deg);
-        -moz-transform: rotate(180deg);
-        -webkit-transform: rotate(180deg);
-        -o-transform: rotate(180deg);
-      }
-    }
-
-    .repeat_content {
-      padding: px2rem(30) px2rem(50);
-      border-radius: px2rem(6);
-      line-height: px2rem(48);
-      @mixin one-line horzin {
-      };
-      &::before {
-        width: 100%;
-        height: 1px;
-        background-color: #eeeae9;
-        position: absolute;
-        bottom: px2rem(-30);
-        left: 0;
-      }
-    }
-
-  }
   .comment-ul {
     margin-bottom: px2rem(160);
+    .content {
+      margin-top: px2rem(68);
+      padding-bottom: px2rem(35);
+      @mixin one-line horzin {
+      };
+      &::before{
+        bottom: 0;
+      }
+      & .contitle_info {
+        position: relative;
+        height: px2rem(72);
+        .head_img {
+          width: px2rem(72);
+          height: px2rem(72);
+          border-radius: 100%;
+        }
+        .name {
+          position: absolute;
+          top: px2rem(6);
+          left: px2rem(102);
+        }
+        .date {
+          position: absolute;
+          bottom: px2rem(-2);
+          left: px2rem(102);
+        }
+        .score {
+          position: absolute;
+          right: px2rem(30);
+          top: px2rem(22);
+          .score-text {
+            margin-left: px2rem(10);
+          }
+          .font-size--12{
+            font-size: px2rem(12);
+          }
+          span {
+            margin-left: -3px;
+          }
+        }
+        .font-size--18 {
+          font-size: px2rem(18);
+        }
+      }
+      .comment {
+        margin-top: px2rem(42);
+        line-height: px2rem(38);
+        word-wrap: break-word;
+        overflow: hidden;
+      }
+      .swiper-container {
+        &.single-pic{
+          height: px2rem(382) !important;
+          .swiper-slide{
+            width: px2rem(395) !important;
+          }
+        }
+        width: 100% !important;
+        height: px2rem(270) !important;
+        margin-top: px2rem(34);
+        padding-left: 0;
+        .swiper-slide {
+          width: px2rem(260) !important;
+          height: 100% !important;
+          a {
+            display: block;
+            height: 100%;
+            padding-bottom: 0;
+            overflow: hidden;
+            .jfk-swiper__item-bg {
+              width: 100%;
+              height: 100%;
+              background-color: red;
+              background-size: cover;
+              background-image: url(http://file.iwide.cn/public/media/club/201610310207346431.jpg);
+              position: absolute;
+              left: 0;
+              top: 0;
+            }
+          }
+        }
+
+      }
+      .show_all {
+        margin-top: px2rem(25);
+      }
+
+      .file {
+        & .one_img {
+          width: px2rem(390);
+          height: px2rem(380);
+          border-radius: px2rem(10);
+        }
+        & .recommendations-list {
+          & .swiper-slide {
+            width: px2rem(260) !important;
+            margin-right: px2rem(20) !important;
+            img {
+              width: px2rem(260);
+              height: px2rem(270);
+            }
+          }
+        }
+      }
+
+      .check_repeat {
+        margin-top: px2rem(50);
+        .show_icon, .hide_icon {
+          font-size: px2rem(20);
+          display: inline-block;
+          margin-left: px2rem(10);
+        }
+        .show_icon {
+          transform: rotate(180deg);
+          -ms-transform: rotate(180deg);
+          -moz-transform: rotate(180deg);
+          -webkit-transform: rotate(180deg);
+          -o-transform: rotate(180deg);
+        }
+      }
+
+      .repeat_content {
+        margin: px2rem(32) 0 0 0;
+        padding: px2rem(30) px2rem(50);
+        border-radius: px2rem(6);
+        line-height: px2rem(46);
+      }
+
+    }
   }
   .booking_now {
     width: 100%;
@@ -234,6 +250,7 @@
     left: 0;
     bottom: 0;
     border: none;
+    letter-spacing: 5px;
     z-index: 999;
   }
 

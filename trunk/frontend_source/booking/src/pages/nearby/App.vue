@@ -11,7 +11,8 @@
       <span class="search_bar_item" @click="changeTab($event,'comment_score')">
         <span class="type">评价</span>
       </span>
-      <span class="search_bar_item" @click="changeTab($event,'distance')">
+      <span class="search_bar_item"
+            @click="changeTab($event,'distance')" :class="filterType === 'distance' ? 'active' : ''">
         <span class="type">距离</span>
       </span>
       <span class="search_bar_item" @click="showSearchEvt()">
@@ -37,10 +38,14 @@
         </span> -->
         <p class="hotel_name font-size--30">
           <span class="score font-size--24">{{item.comment_data.comment_score}}</span>
-          {{item.name}}
+          <span v-html="item.name.replace(keyword, highLightKeyword)"></span>
         </p>
         <p class="address font-size--24 grayColor80">
-          <span class="distance" v-if="item.distance">距您{{item.distance}}公里</span>
+          <span class="distance" v-if="item.distance">
+            距离
+            <span v-html="allData.web_data.landmark.replace(searchInputVal, replaceWord)"></span>
+            {{item.distance}}公里
+          </span>
           {{item.address}}
         </p>
         <span class="jfk-price product-price-package font-size--24" v-if="item.lowest && item.lowest >= 0">
@@ -59,65 +64,82 @@
     <!--日历-->
     <div class="choose_date_calendar" v-show="showCalendar">
       <div class="jfk-pl-30 jfk-pr-30">
-        <jfk-calendar ref="jfkCalendar" class="font-size--28" format="yyyy/MM/dd" @date-pick="handleDateClick"
-                      :minDate="min" :maxDate="max" :range="true">
+        <jfk-calendar ref="jfkCalendar"
+                      class="font-size--28"
+                      format="yyyy/MM/dd"
+                      @date-pick="handleDateClick"
+                      :minDate="min"
+                      :maxDate="max"
+                      :range="true"
+                      :value="[new Date(startString), new Date(endString)]">
         </jfk-calendar>
       </div>
     </div>
-    <div class="nosearch_container" v-show="!showList">
-      <div class="search_city font-size--38 jfk-pl-30 jfk-pr-30">
-        <form @submit.prevent="searchHotelAction()">
-          <input type="text" class="font-size--38" placeholder="城市/关键字/位置" v-model="searchInputVal" id="searchVal"
+    <div class="filter" v-show="filterContainerStatus">
+      <div class="nosearch_container" v-show="!showList">
+        <div class="search_city font-size--38 jfk-pl-30 jfk-pr-30">
+          <form @submit.prevent="searchHotelAction()">
+          <!--v-on:input="searchHotelAction"-->
+          <input type="text"
+                 class="font-size--38"
+                 placeholder="城市/关键字/位置"
+                 v-model="searchInputVal"
+                 id="searchVal"
                  autocomplete="off">
-        </form>
-        <i class="jfk-font jfk-button__text-item icon-icon_close icon-icon_delete" v-show="showDeleteIcon"
-           @click="clearInput"></i>
-      </div>
-      <!-- 无搜索结果 -->
-      <div v-show="hasNoResult">
-        <div class="no_search">
-          <div class="no_seach_result font-size--24 grayColor">
-            <i class="booking_icon_font icon-icon_search font-size--52 icon_noresult_search"></i><br/>
-            没有搜索到相关结果~ <br/>
-            换个条件试试
+          </form>
+          <i class="jfk-font jfk-button__text-item icon-icon_close icon-icon_delete" v-show="showDeleteIcon"
+             @click="clearInput"></i>
+        </div>
+        <!-- 无搜索结果 -->
+        <div v-show="hasNoResult">
+          <div class="no_search">
+            <div class="no_seach_result font-size--24 grayColor">
+              <i class="booking_icon_font icon-icon_search font-size--52 icon_noresult_search"></i><br/>
+              没有搜索到相关结果~ <br/>
+              换个条件试试
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <!--异步搜索的列表-->
-    <div class="search_city_list jfk-pl-30 jfk-pr-30" v-show="searchResult">
-      <div class="search_city_list_item" v-for="(item, index) in asycSearchData" :key="index">
-        <p>
-          <i class="booking_icon_font font-size--24 icon-booking_icon_businessdistrict_norma grayColor"></i>
-          <span class="goldColor">{{item.name}}</span>
-        </p>
+      <!--异步搜索的列表-->
+      <div class="search_city_list jfk-pl-30 jfk-pr-30" v-show="searchResult">
+        <div class="search_city_list_item" v-for="(item, index) in asycSearchData" :key="index">
+          <p>
+            <a :href="item.link" class="grayColor80">
+              <i class="booking_icon_font font-size--24 icon-booking_icon_hotel_normal grayColor80"></i>
+              <span v-html="item.name.replace(searchInputVal, replaceWord)"></span>
+            </a>
+          </p>
+        </div>
       </div>
-    </div>
-    <!-- 百度搜索的列表 -->
-    <div class="search_city_list jfk-pl-30 jfk-pr-30" v-show="searchResult">
-      <div class="baidu-search">搜索到以下地标</div>
-      <div class="search_city_list_item" v-for="(item, index) in baiduApiData" :key="index">
-        <p>
-          <i class="booking_icon_font font-size--24 icon-booking_icon_businessdistrict_norma grayColor"></i>
-          <span class="goldColor">{{item.title}}</span>
-        </p>
+      <!-- 百度搜索的列表 -->
+      <div class="search_city_list jfk-pl-30 jfk-pr-30" v-show="searchResult">
+        <div class="baidu-search">搜索到以下地标</div>
+        <div class="search_city_list_item"
+             v-for="(item, index) in baiduApiData"
+             :key="index"
+             @click="checkBaiLai(item)">
+          <p>
+            <i class="booking_icon_font font-size--24 icon-booking_icon_hotel_normal grayColor80"></i>
+            <span v-html="item.title.replace(searchInputVal, replaceWord)"></span>
+          </p>
+        </div>
       </div>
     </div>
     <JfkSupport v-once></JfkSupport>
   </div>
 </template>
 <script>
-  import {getAjaxHotelList, getBaiduSearchPlaceList} from '@/service/http'
+  import {getAjaxHotelList, getSearchHotelList} from '@/service/http'
   import {showFullLayer} from '@/utils/utils'
-
+  import formatUrlParams from 'jfk-ui/lib/format-urlparams.js'
+  let params = formatUrlParams(location.search)
   export default {
     name: 'useCoupon',
     components: {},
     beforeCreate () {
     },
     created () {
-      // 加载swiper
-      this.loadPackages()
       // 获取日期
       this.getDate()
     },
@@ -137,7 +159,7 @@
         // 价格排序往下
         priceDown: false,
         // 筛选的type
-        filterType: 'distance',
+        filterType: '',
         // 日历显示
         showCalendar: false,
         startDate: '',
@@ -148,8 +170,8 @@
         min: null,
         // 日历最大日期
         max: null,
-        startString: this.getUrlParams('startdate'),
-        endString: this.getUrlParams('enddate'),
+        startString: '',
+        endString: '',
         page_resource: '',
         // 显示列表
         showList: true,
@@ -165,16 +187,86 @@
         firstCity: '全部',
         defaultCity: '北京',
         searchedCity: '',
-        localSearchData: ''
+        localSearchData: '',
+        replaceWord: '',
+//        lat: window.localStorage.getItem('latitude') || 23.117,
+//        lnt: window.localStorage.getItem('longitude') || 113.275
+        lat: '',
+        lnt: '',
+        ec: {},
+        keyword: '',
+        highLightKeyword: '',
+        city: '',
+        area: '',
+        tc_id: '',
+        filterContainerStatus: false
       }
     },
     methods: {
       getDate () {
-//        let month = this.getUrlParams('startdate').substr(5, 2)
-        this.startMonth = this.getUrlParams('startdate').substr(5, 2)
-        this.endMonth = this.getUrlParams('enddate').substr(5, 2)
-        this.startDate = this.startMonth + '/' + this.getUrlParams('startdate').substr(8, 2)
-        this.endDate = this.endMonth + '/' + this.getUrlParams('enddate').substr(8, 2)
+        // 对 url 上的日期参数的预处理
+        let _this = this
+        if (params.start && params.end) {
+          _this.startString = params.start
+          _this.endString = params.end
+        } else if (params.startdate && params.enddate) {
+          _this.startString = params.startdate
+          _this.endString = params.enddate
+        } else {
+          let year = new Date().getFullYear()
+          let month = new Date().getMonth() + 1
+          month = (month < 10 ? '0' + month : month)
+          let today = new Date().getDate()
+          today < 10 ? today = '0' + today : today
+          _this.startString = year + '/' + month + '/' + today
+          _this.endString = _this.getDayAdd(_this.startString)
+        }
+        _this.startDate = _this.startString.substr(5, 10)
+        _this.endDate = _this.endString.substr(5, 10)
+        // 对不同页面过来的 url 参数进行预处理
+        _this.dealWithUrlData()
+      },
+      dealWithUrlData () {
+        if (params.nearby === '1') {
+          if (window.wx) {
+            window.wx.getLocation({
+              type: 'wgs84',
+              // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
+              success: (res) => {
+                // 纬度
+                this.lat = res.latitude || ''
+                // 经度
+                this.lnt = res.longitude || ''
+                this.filterType = 'distance'
+              }
+            })
+          } else {
+            // 纬度
+            this.lat = ''
+            // 经度
+            this.lnt = ''
+            this.filterType = ''
+          }
+        } else {
+          this.lat = params.lat || ''
+          this.lnt = params.lng || ''
+        }
+        // 百度搜索过来
+        if (params.title) {
+          this.ec['bdmap'] = this.lat + ',' + this.lnt + ',' + params.title
+        }
+        // 百度搜索关键词高亮
+        if (params.keyword) {
+          this.keyword = params.keyword
+          this.highLightKeyword = '<span style="color:#b2945e">' + params.keyword + '</span>'
+        }
+        params.city === '全部' ? params.city = '' : params.city
+        params.area === '全部' ? params.area = '' : params.area
+        this.city = params.city
+        this.area = params.area
+        params.tc_id ? this.tc_id = params.tc_id : ''
+        // 加载数据
+        this.loadPackages()
       },
       loadPackages () {
         let that = this
@@ -185,34 +277,34 @@
           isLoading: true
         })
         let args = {
-          id: that.getUrlParams('id'),
-          openid: that.getUrlParams('openid'),
+          id: params.id,
+          openid: params.openid,
           // 纬度
-          lat: window.localStorage.getItem('latitude') || 23.117,
+          lat: that.lat,
           // 经度
-          lnt: window.localStorage.getItem('longitude') || 113.275,
+          lnt: that.lnt,
           // 开始日期
           start: that.startString,
           // 结束日期
           end: that.endString,
           // 城市
-          city: that.getUrlParams('city') || '广州',
+          city: that.city || '',
           // 县
-          area: '',
+          area: that.area || '',
           // 关键字
-          keyword: '',
+          keyword: that.keyword,
           // 开始位置
           off: 0,
           // 排序类型
-          sort_type: this.filterType,
+          sort_type: that.filterType,
           // 每次返回数量
           num: 20,
           // 根据百度地标搜索，根据标签搜索
-          ec: '',
+          ec: that.ec || {},
           // 类型
           type: '',
           // 专题活动id
-          tc_id: ''
+          tc_id: that.tc_id || ''
         }
         getAjaxHotelList(args).then(function (res) {
           if (loading) {
@@ -231,22 +323,26 @@
       // 异步查询酒店列表
       searchHotelAction () {
         let postData = {
-          start: this.startDate,
-          end: this.endDate,
+          city: this.city,
+          tc_id: this.tc_id,
           keyword: this.searchInputVal
         }
-        getAjaxHotelList(postData).then((res) => {
+        getSearchHotelList(postData).then((res) => {
           this.asycSearchData = res.web_data.result
+          this.replaceWord = '<span style="color: #b2945e">' + this.searchInputVal + '</span>'
+          for (let i = 0; i < res.web_data.result.length; i++) {
+            res.web_data.result[i].link = res.web_data.result[i].link + '&startdate=' + this.startString + '&enddate=' + this.endString + '&'
+          }
           this.checkSearchNull()
         }).catch((e) => {
           this.asycSearchData.length = 0
         })
         if (this.searchInputVal) {
           this.showDeleteIcon = true
+          this.baiduCheck()
         } else {
           this.showDeleteIcon = false
         }
-        this.baiduCheck()
       },
       toBaiduSearch (lat, lng, title) {
         // JSON.parse 将json字符串转为JSON对象
@@ -269,6 +365,7 @@
         window.localStorage['searchcache'] = JSON.stringify(this.localSearchData)
         window.location.href = this.toLinks.SRESULT + '&lat=' + lat + '&lng=' + lng + '&title' + title
       },
+      // input 是否为空
       checkSearchNull () {
         if (this.baiduApiData.length === 0 && this.asycSearchData.length === 0) {
           this.searchResult = false
@@ -283,24 +380,30 @@
         // 使用百度地图进行模糊查询
         const BMap = window.BMap
         let myGeo = new BMap.Geocoder()
+        let _this = this
         // 如果不传首选城市(值为全部) 则默认为北京
-        this.searchedCity = this.firstCity === '全部' ? this.defaultCity : this.firstCity
+//        this.searchedCity = this.firstCity === '全部' ? this.defaultCity : this.firstCity
+        _this.searchedCity = _this.city === '' ? _this.defaultCity : _this.city
         let keyword = this.searchInputVal
-        myGeo.getPoint(this.searchedCity, (point) => {
+        myGeo.getPoint(_this.searchedCity, (point) => {
+          console.log(point)
           //  获取指定城市的经纬度
           if (point) {
             let local = new BMap.LocalSearch(point, {
               onSearchComplete: (results) => {
-                this.baiduApiData = results.vr
-                this.checkSearchNull()
+                console.log(results)
+                if (results.vr) {
+                  _this.baiduApiData = results.vr
+                }
+                _this.checkSearchNull()
               }
             })
             // 查询完成 => onSearchComplete
             local.search(keyword, {forceLocal: true})
           } else {
-            this.baiduApiData.length = 0
+            _this.baiduApiData = []
           }
-        }, this.searchedCity)
+        }, _this.searchedCity)
       },
       changeTab ($event, tabType) {
         let searchbaritem = document.querySelectorAll('.search_bar .search_bar_item')
@@ -357,8 +460,13 @@
         _self.min = today
         _self.max = _self.setDateMonth()
         this.showCalendar = true
+        const cb = () => {
+          _self.showCalendar = false
+        }
+        // 调用日期插件
+        showFullLayer(null, '选择日期', location.href, cb)
       },
-      //  设置日期+3
+      // 设置日期+3
       setDateMonth () {
         var d = new Date()
         var month = d.getMonth()
@@ -374,49 +482,20 @@
       showSearchEvt () {
         let _this = this
         _this.showList = false
+        _this.filterContainerStatus = true
         const cb = () => {
           _this.showList = true
+          _this.filterContainerStatus = false
         }
         showFullLayer(null, '搜索', location.href, cb)
       },
       toLocationHref (href) {
         window.location.href = href + '&startdate=' + this.startString + '&enddate=' + this.endString + '&'
       },
-      // input离焦事件
-      searchPlace () {
-        let _this = this
-        _this.showDeleteIcon = false
-//      console.log(_self.searchInputVal)
-        let args = {
-          q: _this.searchInputVal,
-          region: '北京',
-          output: 'json',
-          ak: 'ggmZIrqw5hOjnXwT7ypK0aIoZXrn4yfS'
-        }
-        getBaiduSearchPlaceList(args).then(function (res) {
-          console.log(res)
-        }).catch(function (e) {
-          console.log(e)
-        })
-      },
-      // 输入事件
-      inputSearch () {
-        if (this.searchInputVal) {
-          this.showDeleteIcon = true
-          if (this.baiduApiData.results.length !== 0) {
-            this.searchResult = false
-            this.hasNoResult = true
-          } else {
-            this.searchResult = true
-            this.hasNoResult = false
-          }
-        } else {
-          this.showDeleteIcon = false
-        }
-      },
       clearInput () {
         this.searchInputVal = ''
         this.hasNoResult = false
+        this.showDeleteIcon = false
       },
       hasClass (obj, cls) {
         return obj.className.match(new RegExp('(\\s|^)' + cls + '(\\s|$)'))
@@ -429,7 +508,40 @@
           }
         }
       },
-      // 获取url 参数
+      // 百度地图的搜索
+      checkBaiLai (item) {
+        console.log(item)
+        this.lat = item.point.lat
+        this.lnt = item.point.lng
+        this.searchResult = false
+        // 从百度地图api的地标搜索结果里进入，需将日期、所选城市(city)、城镇(area)、地标的经纬度、extra_condition(ec)传入，
+        // ec参数为json，格式如{"bdmap":"39.90841,116.479538,飘HOME连锁酒店(国贸东店)"}，
+        // 通过百度地标搜索时键名为bdmap，键值格式为“经度,纬度,地标名”，
+        // 且在搜索结果中显示距离地标多少距离，返回结果里的酒店数据里有distance，即酒店与该地标距离，landmark，即该地标名称，输入的关键字需高亮
+        // let href = this.allData.web_data.index_url + '&nearby=1&lat=' + item.point.lat + '&lng=' +item.point.lng + '&title=' + item.title + '&keyword=' +this.searchInputVal
+        // window.location.href = href
+        this.lat = item.point.lat
+        this.lnt = item.point.lng
+        this.ec['bdmap'] = this.lat + ',' + this.lnt + ',' + item.title
+        this.keyword = this.searchInputVal
+        // 高亮
+        this.highLightKeyword = '<span style="color:#b2945e">' + this.keyword + '</span>'
+        this.showList = true
+        this.filterContainerStatus = false
+        this.loadPackages()
+      },
+      // 时间戳转换成八位日期
+      getDayAdd (d) {
+        d = new Date(d)
+        d = +d + 1000 * 60 * 60 * 24 + 86400
+        d = new Date(d)
+        let month = d.getMonth() + 1
+        let tommorrow = d.getDate()
+        if (tommorrow < 10) tommorrow = '0' + tommorrow
+        month = (month < 10 ? '0' + month : month)
+        return d.getFullYear() + '/' + month + '/' + tommorrow
+      },
+      // 获取url 参数+
       getUrlParams (urlName) {
         let url = location.href
         let paraString = url.substring(url.indexOf('?') + 1, url.length).split('&')

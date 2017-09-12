@@ -75,7 +75,7 @@ class SomaSalesOrderItem
 
     /**
      * @var string $can_refund
-     * @SWG\Property(enum={1, 2}, type="string", description="能否退 1 是 2 否")
+     * @SWG\Property(enum={1, 2, 3}, type="string", description="能否退 1, 7天退款 2, 不能退款 3, 随时退款")
      */
     public $can_refund;
 

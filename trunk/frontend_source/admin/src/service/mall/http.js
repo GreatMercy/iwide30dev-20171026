@@ -80,7 +80,32 @@ const getGiftPackagesList = (data, config, version = 'v1') => {
   let url = apiConfig[version] && apiConfig[version].GET_GIFT_DELIVERY_GIFT_LIST || apiConfig['v1'].GET_GIFT_DELIVERY_GIFT_LIST
   return ajax.get(url, data, config)
 }
-
+/**
+ * 获取可以配送的商品列表
+ * @param {String} data.name 搜索关键字
+ */
+const getGiftProductList = (data, config, version = 'v1') => {
+  let url = apiConfig[version] && apiConfig[version].GET_GIFT_DELIVERY_PRODUCT_IST || apiConfig['v1'].GET_GIFT_DELIVERY_PRODUCT_IST
+  return ajax.get(url, data, config)
+}
+/**
+ * 选择商品添加礼包
+ * @param {String} data.start_time 开始时间
+ * @param {String} data.end_time 结束时间
+ * @param {String} data.product_id 添加至礼包的商品id （单个或多个）
+ */
+const postGiftProduct = (data, config, version = 'v1') => {
+  let url = apiConfig[version] && apiConfig[version].POST_GIFT_DELIVERY_SELECT_GIFT || apiConfig['v1'].POST_GIFT_DELIVERY_SELECT_GIFT
+  return ajax.post(url, data, config)
+}
+/**
+ * 删除礼包
+ * @param data.product_id 商品id
+ */
+const postDeleteGiftProduct = (data, config, version = 'v1') => {
+  let url = apiConfig[version] && apiConfig[version].DELETE_GIFT_DELIVERY_GIFT || apiConfig['v1'].DELETE_GIFT_DELIVERY_GIFT
+  return ajax.post(url, data, config)
+}
 export {
   getPackageListDatas,
   postExpressDelivery,
@@ -88,5 +113,8 @@ export {
   postExpressBatchPost,
   postExpressBatchCreateOrder,
   getExpressList,
-  getGiftPackagesList
+  getGiftPackagesList,
+  getGiftProductList,
+  postGiftProduct,
+  postDeleteGiftProduct
 }

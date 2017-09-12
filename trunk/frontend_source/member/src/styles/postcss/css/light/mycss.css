@@ -137,8 +137,8 @@
 .color_338b43{color:#338b43;}
 .color_808080{color:#808080;}
 /*border_radius*/
-.radius_3{border-radius:4px;}
-.radius_5{border-radius: 5px;}
+.radius_3{border-radius:1.5px;}
+.radius_5{border-radius: 2.5px;}
 .radius_10{border-radius: 10px;}
 .radius_50{border-radius: 50%}
 /*border*/
@@ -169,7 +169,7 @@
 .box_shadow1{box-shadow: 0 0 15px rgba(178,148,94,.25); border-radius: 50%;}
 .box_shadowb{box-shadow: 0 0 20px rgba(0,0,0,.1);}
 /*.box_shadow2{box-shadow: 0 0 20px rgba(0,0,0,.15);}*/
-.spot{top: -4px; left: -18px;}
+.spot{top: -4.5px; left: -18px;}
 .btn{border:0.5px solid;text-align:center;}
 .text_hide{    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
 /**/
@@ -186,7 +186,7 @@
 .jfk-index-name{display: inline-block;}
 .jfk-index-name .color1{color: black;}
 .jfk-index-interests{display: none;}
-.jfk-index-nkname{    margin-top: 23px; margin-bottom: 11px;color: #333333;}
+.jfk-index-nkname{ margin-top: 16px; margin-bottom: 8px;color: #333333;}
 .jfk-index-header{padding:23px 0px 0px 0px;}
 .jfk-big-ico{color: #b2945e}
 .jfk-index-shipnum{color: #808080;}
@@ -200,7 +200,7 @@
 .head_img{margin: 0 auto}
 .bg_img{min-height:100%;background-color:white;background-size:100% 100%;}
 .head_img{width:3.42rem;height:3.42rem;border-radius:50%;overflow:hidden;}
-.line_left{width:1.5px;height: 20px;background-color: #b3945e;border-radius: 3px;}
+.line_left{width:1.5px;height: 20px;background-color: #b3945e;border-radius: 1.5px;}
 .line_left img{display: none;}
 .line_center{width:1.714rem;height:auto;}
 .line_left{left:0px;top:2px;}
@@ -213,9 +213,9 @@
 .form_item select,.form_item input{width:100%;height:100%;font-size:0.875rem;}
 .form_item .between{color: #808080;min-width: 55px;}
 .entry_btn{background-color: #1f1f1f;color: white;}
-.btn_height{height: 45px;line-height: 44px;color: white;border-radius: 3px;}
-.gray_btn{background-color:#E1E1E1;color:#808080  }
-.verification{padding:0.1rem 0.572rem;line-height: 20px;color:#b2945e;margin-left: 5px;border: .5px solid #b2945e;border-radius: 3px;}
+.btn_height{height: 45px;line-height: 44px;color: white;border-radius: 1.5px;}
+.gray_btn{background-color:black;color:white  }
+.verification{padding:0.1rem 0.572rem;line-height: 20px;color:#b2945e;margin-left: 5px;border: .5px solid #b2945e;border-radius: 1.5px;}
 .verification_active{color:#b2945e;border: .5px solid #b2945e}
 .actives{color:#fff;}
 .actives:after{border-color:#fff;}
@@ -233,6 +233,7 @@
 .balance_content .recharge{padding:0;}
 .balance_content .bd_bottom:after{border: 0px;}
 .balance_content .balance_choose{padding: 18px 0;border-bottom:.5px solid #EDEFEC;}
+.balance_choose{color: #808080}
 .containers_list_wrap{padding: 25.25px 0;border-bottom: .5px solid #ededed;}
 .containers_list_wrap:last-child{border-bottom: 0px}
 .right_line{border-left:.5px solid #3a3a3a;}
@@ -253,10 +254,12 @@
 .ka img{display:block;}
 .pay_mode_item{padding-top:1.328rem;padding-bottom:1.342rem;border:0.5px solid transparent;background-clip:border-box;}
 .pay_mode_item .check{position:absolute;top:8px;right:10px;}
-.pay_mode .check_item{background:none;box-shadow: 0 0 20px rgba(178,148,94,.3);;position:relative;}
+.pay_mode_item .jfk-font{color: #808080;}
+.pay_mode .check_item{background:white;box-shadow: 0 0 10px rgba(51,51,51,.1);position:relative;}
 .check_item{color:#b2945e;}
 .check_item .depo-pay-title{color:#b2945e;}
 .check_item .check em:after{content:'\e63f';color:#b2945e;}
+.check_item .jfk-font{color:#b2945e;}
 .balance{width:100%;bottom:-17px;left:0px;}
 .hotel_logo{left:2.5rem;top:3.485rem;width:5.14rem;height:3.428rem;}
 .hotel_logo img{height:100%;width:auto;}
@@ -276,7 +279,7 @@
 .card_content{padding:1.257rem 0.571rem;}
 
 /*优惠券*/
-.coupon_rows{overflow: hidden; position:relative;background-color: #fff;}
+.coupon_rows{overflow: hidden; position:relative;background-color: #fff;box-shadow: 0 3px 9px rgba(0,0,0,.1);}
 .coupon_img_wrap{float: left;width: 132px;position: relative;}
 .coupon_img_wrap_zhe{content: "";position: absolute;top: -0.8rem;right: -30%;width: 42%;height: 12rem;background-color: #fff;-webkit-transform: rotate(15deg);transform: rotate(15deg);}
 .coupon_img_content{float: right;padding-right:10px;width: calc(100% - 145px);margin-left: 0%;position: relative;}
@@ -284,14 +287,16 @@
 .select_coupon_bg{width: 147px;height: 132px;text-align: center;overflow: hidden;}
 .select_coupon_bg > div{height: 132px;line-height: 132px;padding-right: 2rem; }
 .coupon_state{position: absolute;top: 10px;right: 10px;}
-.gradient_green_bg{min-height: 100%; background: -webkit-linear-gradient(to right, #a8d0b3, #CBE7D0); background:linear-gradient(to right, #a8d0b3, #CBE7D0);text-shadow: 0 0 4px rgba(0,0,0,.3);}
-.gradient_gold_bg{min-height: 100%; background: -webkit-linear-gradient(to right, #cbb58c, #E1D2B5); background:linear-gradient(to right, #cbb58c, #E1D2B5);color: #fff;text-shadow: 0 0 4px rgba(0,0,0,.3);}
-.gradient_blue_bg{min-height: 100%; background: -webkit-linear-gradient(to right, #b9bed4, #CDD2E6); background:linear-gradient(to right, #b9bed4, #CDD2E6);text-shadow: 0 0 4px rgba(0,0,0,.3);}
-.gradient_gray_bg{min-height: 100%; background: -webkit-linear-gradient(to right, #CBCBCB, #DCDCDC); background:linear-gradient(to right, #CBCBCB, #DCDCDC);text-shadow: 0 0 4px rgba(0,0,0,.3);color:white;}
+.gradient_green_bg{min-height: 100%; background: -webkit-linear-gradient(to right, #a8d0b3, #CBE7D0); background:linear-gradient(to right, #a8d0b3, #CBE7D0);text-shadow: 0 0 4px rgba(0,0,0,.1);}
+.gradient_gold_bg{min-height: 100%; background: -webkit-linear-gradient(to right, #cbb58c, #E1D2B5); background:linear-gradient(to right, #cbb58c, #E1D2B5);color: #fff;text-shadow: 0 0 4px rgba(0,0,0,.1);}
+.gradient_blue_bg{min-height: 100%; background: -webkit-linear-gradient(to right, #b9bed4, #CDD2E6); background:linear-gradient(to right, #b9bed4, #CDD2E6);text-shadow: 0 0 4px rgba(0,0,0,.1);}
+.gradient_gray_bg{min-height: 100%; background: -webkit-linear-gradient(to right, #CBCBCB, #DCDCDC); background:linear-gradient(to right, #CBCBCB, #DCDCDC);text-shadow: 0 0 4px rgba(0,0,0,.1);color:white;}
 .color_dui{color: #fff;}
 .color_zhe{color: #fff}
 .card_share_logo{width: 75px;margin-right: 15px;}
 .card_share_word{padding-left: 35%;margin-top: 15px;letter-spacing: 1px;}
+.card_share_word .color1{color: #ffffff}
+.card_share_word .color3{color: #bfbfbf}
 .jfk-cardinfo-title{padding-top: 0;color: #b2945e}
 .main_tab_line{border-left:.5px solid #ECECEC;height: 0.609rem;display: inline-block;}
 .pay_money_input{border-top: .5px solid #373737;border-bottom: .5px solid #373737;padding: 15px 0}
@@ -339,22 +344,23 @@
 .depo-pay-title{color: #808080}
 .wbf{color: #bfbfbf;}
 .getcard_banner{padding-top: 0.857rem}
-.getcard-title{padding-top: 3px;padding-bottom: 15px}
-.getcard-word{color: #bfbfbf;}
+.getcard-title{padding-top: 1px;padding-bottom: 15px;padding-left: 20px;}
+.getcard-word{color: #bfbfbf;padding-left: 20px;}
 .getcard-num{color: #b2945e}
 .getcard-ctitle{color: #bfbfbf}
 .getcard-cnum{color:#333333; }
-.form-top{padding-top: 32px}
+/*.form-top{padding-top: 32px}*/
 .getcard-rows{box-shadow:1px 1px 1px 1px rgba(0,0,0,.1);margin-bottom: 15px;padding-top: 27.5px; padding-bottom: 27.5px;}
 .getcard-rows .txt_show1{text-shadow:0 0 0 white;}
 .card_name{color:#808080;}
 .card-info-notice{color:#bfbfbf;}
 .card_info_button{background: #1f1f1f;color: white;}
 .card_info_button:after{border: 0px;}
-.index-wnum{ padding-top: 54px;padding-bottom: 23px;}
+.index-wnum{ padding-top: 40px;padding-bottom: 23px;}
 .buydeposit-title{color:#808080;}
 .couponType1{color: #b2945e;}
 .couponType2{color: #b4bad8;}
 .couponType3{color: #a5caac;}
 .couponType4{color: #b2945e;}
 .jfk-cardinfo-title{    padding-top: 0; padding-bottom: 19px; margin-top: 30px;}
+.index-wnum .txt_show1{text-shadow: 0 0 0px #b3945e;}

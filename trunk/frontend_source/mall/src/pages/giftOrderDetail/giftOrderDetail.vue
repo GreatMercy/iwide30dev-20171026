@@ -1,5 +1,5 @@
 <template>
-  <div class="jfk-pages jfk-page__orderCoupon jfk-page__giftOrder" :class="pageNamespace">
+  <div class="jfk-pages jfk-page__orderCoupon jfk-page__giftOrder">
     <div class="jfk-pages__theme"></div>
     <headTitle :headTitleMsg="headTitleMsg" />
     <div class="orderDetail__state jfk-pl-30 jfk-pr-30 ">
@@ -34,8 +34,8 @@
         <h3 class="coupon__detail__title font-size--24">包含券码</h3>
         <div class="coupon__inn">
             <div class="coupon__detail__list">
-               <template v-for="item,idx in webData.consumer_code">
-                <div class="item jfk-flex"  :class="{item__invalid: item.status == '3', item__post: item.status =='5',item__send: item.status == '4'}" v-if='idx==0' >
+               <template v-for="(item,idx) in currentshowCoupons">
+                <div class="item jfk-flex"  :class="{item__invalid: item.status == '3', item__post: item.status =='5',item__send: item.status == '4'}" >
                     <div class="item__left">
                         <span class="title font-size--28">券码</span>
                         <span class="number fot-size--32">
@@ -66,46 +66,14 @@
                         <i class="jfk-font icon-user_icon_jump_normal arrow"></i>
                       </a>
                     </div>                                                        
-                </div>
-                <div class="item jfk-flex"  :class="{item__invalid: item.status == '3', item__post: item.status =='5',item__send: item.status == '4'}" v-else-if='couponsShow'>
-                    <div class="item__left">
-                        <span class="title font-size--28">券码</span>
-                        <span class="number fot-size--32">
-                          <jfk-text-split :text="item.code" :split="3" ></jfk-text-split>
-                        </span>
-                    </div>
-                    <div class="item__right" v-if="item.status == '2'">
-                      <a href="javascript:;" @click="handleQrcode(item.code,item.qrcode_url)">
-                        <i class="jfk-font icon-mall_icon_pay_focus qrcode font-size--44"></i>
-                        <i class="jfk-font icon-user_icon_jump_normal arrow"></i>
-                      </a>
-                    </div>
-                    <div class="item__right" v-else-if="item.status == '3'">
-                      <a :href="item.btn_url?item.btn_url: 'javascript:;'">
-                        <span class="coupon__state font-size--24">已使用</span>
-                        <i class="jfk-font icon-user_icon_jump_normal arrow"></i>
-                      </a>
-                    </div>
-                    <div class="item__right" v-else-if="item.status == '5'">
-                      <a :href="item.btn_url?item.btn_url: 'javascript:;'">
-                        <span class="coupon__state font-size--24">已邮寄</span>
-                        <i class="jfk-font icon-user_icon_jump_normal arrow"></i>
-                      </a>
-                    </div>     
-                    <div class="item__right" v-else-if="item.status == '4'">
-                      <a :href="item.btn_url?item.btn_url: 'javascript:;'">
-                        <span class="coupon__state font-size--24">已赠送</span>
-                        <i class="jfk-font icon-user_icon_jump_normal arrow"></i>
-                      </a>
-                    </div>                                                        
-                </div>  
+                </div> 
                </template>
               
             </div>
-            <div class="coupon__showhide jfk-ta-c font-size--24" :class="{hideCoupon:couponsShow}"  @click="couponShowHide" v-if="webData.consumer_code.length>1">
+            <div class="coupon__showhide jfk-ta-c font-size--24" :class="{hideCoupon:couponsShow}"  @click="couponShowHide" v-if="consumerCode.length>1">
               <div class="inn">
               <span v-if="couponsShow">收起</span>
-              <span v-else>查看其他{{webData.consumer_code.length -1}}张券</span>
+              <span v-else>查看其他{{consumerCode.length -1}}张券</span>
                 <i class="jfk-font icon-home_icon_Jump_norma"></i>
               </div>
             </div>
@@ -169,6 +137,8 @@
         gift: {},
         webData: {},
         btn: [],
+        consumerCode: [],
+        currentshowCoupons: [],
         couponsShow: false,
         popQrcodeNum: '',
         popQrcodeUrl: '',
@@ -197,6 +167,8 @@
       getReceivedGiftDetail(param).then(function (res) {
         that.webData = res.web_data
         that.gift = res.web_data.item
+        that.consumerCode = res.web_data.consumer_code
+        that.currentshowCoupons = [that.consumerCode[0]]
         that.headTitleMsg = '该商品由' + that.gift.hotel_name + '提供'
         res.web_data.btn.forEach(function (item) {
           that.btn.push({'btnicon': btnsMap[item.type], 'btnurl': item.url, 'btnMsg': btnsMsg[item.type]})
@@ -205,7 +177,13 @@
     },
     methods: {
       couponShowHide () {
-        this.couponsShow = (this.couponsShow) === false ? 'true' : false
+        if (!this.couponsShow) {
+          this.couponsShow = true
+          this.currentshowCoupons = this.consumerCode
+        } else {
+          this.couponsShow = false
+          this.currentshowCoupons = [this.consumerCode[0]]
+        }
       },
       handleQrcode (code, qrcodeurl) {
         this.popQrcodeNum = code

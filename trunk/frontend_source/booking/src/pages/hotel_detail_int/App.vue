@@ -5,17 +5,17 @@
       <div class="ht_del_top_info" @click="getLocationData()">
         <p class="info_title font-size--34">{{hotel.name}}</p>
         <p class="info_place font-size--24">
-          <i class="booking_icon_font icon-booking_icon_businessdistrict_norma font-size--30"></i>
+          <i class="booking_icon_font icon-booking_icon_businessdistrict_norma font-size--34"></i>
           {{hotel.address}}
         </p>
         <span class="icon_dh font-size--24">
-          <i class="booking_icon_font icon-booking_icon_navigation_normal  font-size--34"></i>
+          <i class="booking_icon_font icon-booking_icon_navigation_normal  font-size--34 map-sign"></i>
           <span>导 航</span>
         </span>
       </div>
       <div class="ht_tel font-size--28">
         <span>酒店电话： {{hotel.tel}}</span>
-        <i class="booking_icon_font icon-mall_icon_reservation_contact font-size--28 icon_tel"
+        <i class="booking_icon_font icon-mall_icon_reservation_contact font-size--30 icon_tel"
            @click="phoneCall(hotel.tel)"></i>
       </div>
     </div>

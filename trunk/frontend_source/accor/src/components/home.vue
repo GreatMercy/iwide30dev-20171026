@@ -2,20 +2,20 @@
   <div class="page_home">
     <div class="topbanner">
       <swiper :options="swiperOption" >
-          <swiper-slide v-for="item in banners">
-            <a>
-              <img :src="'./static/img/'+item" />
+          <swiper-slide v-for="(item,idx) in swiperBanner">
+            <a href="javascript:;">
+              <img :src="'./static/img/'+ item" />
             </a>
-          </swiper-slide>
+          </swiper-slide>         
       </swiper>
       <div class="swiper-pagination swiper-pagination-fraction">
-        <span class="swiper-pagination-current ">{{productGalleryIndex}}</span> / <span class="swiper-pagination-total">{{banners.length}}</span>
+        <span class="swiper-pagination-current ">{{productGalleryIndex}}</span> / <span class="swiper-pagination-total">2</span>
       </div>      
     </div>
     <h2 class="subtitle">精选目的地</h2>
     <div class="bestPlace">
       <swiper :options="swiperOption2" >
-          <swiper-slide v-for="item in bestPlace">
+          <swiper-slide v-for="(item,idx) in bestPlace">
             <router-link :to="'/list?city='+item.city">
               <img :src="'./static/img/hotplace/'+item.img" />
               <p class="tab"><i></i>{{item.cityname}}<span>{{item.city}}</span></p>
@@ -29,8 +29,8 @@
       </swiper>
     </div>
     <div class="ads">
-      <a v-for="item in ads">
-        <img :src="'./static/img/'+item" />
+      <a v-for="(item,idx) in ads" :href="item.link">
+        <img :src="'./static/img/'+item.img" />
       </a>            
     </div>
     <h2 class="subtitle">我们的品牌</h2>
@@ -81,12 +81,12 @@
       </swiper>   
 
     </div>
-    <h2 class="subtitle">精选必看</h2>
+    <h2 class="subtitle">雅高精选</h2>
     <div class="bestSelect" >
-      <img :src="'./static/img/'+item" class="bigbanner" v-for="item in bestbanner"/>
+      <img :src="'./static/img/'+item" class="bigbanner" v-for="(item,idx) in bestbanner"/>
       <div class="twoimg">
-        <a v-for="item in twoimg">
-          <img :src="'./static/img/'+item" />
+        <a v-for="(item,idx) in twoimg" :href="item.href">
+          <img :src="'./static/img/'+item.image" />
         </a>      
       </div>
     </div>
@@ -94,12 +94,15 @@
 </template>
 
 <script>
+import Vue from 'vue'
+import VueAwesomeSwiper from 'vue-awesome-swiper'
+Vue.use(VueAwesomeSwiper)
 export default {
   name: 'home',
   data () {
     return {
       msg: 'haha',
-      banners: [ 'swiper_banner.jpg', 'swiper_banner.jpg' ],
+      swiperBanner: ['swiperbanner1.jpg', 'swiperbanner2.jpg'],
       bestPlace: [
         {'img': 'beijing.jpg', 'city': 'Beijing', 'cityname': '北京'},
         {'img': 'shanghai.jpg', 'city': 'Shanghai', 'cityname': '上海'},
@@ -107,15 +110,23 @@ export default {
         {'img': 'nanjing.jpg', 'city': 'Nanjing', 'cityname': '南京'},
         {'img': 'xian.jpg', 'city': 'Xian', 'cityname': '西安'}
       ],
-      twoimg: ['join.jpg', 'downloadapp.jpg'],
-      ads: ['food.jpg', 'gift.jpg', 'spa.jpg'],
+      // twoimg: ['join.jpg', 'downloadapp.jpg'],
+      twoimg: [{
+        'image': 'join.jpg',
+        'href': 'https://s-leclub.accorhotels.com/enrollment-light-form-loyalty1.action'
+      }, {
+        'image': 'downloadapp.jpg',
+        'href': 'http://a.app.qq.com/o/simple.jsp?pkgname=com.accor.appli.hybrid'
+      }],
+      // ads: ['food.jpg', 'gift.jpg', 'spa.jpg'],
+      ads: [{'img': 'food.jpg', 'link': 'http://jx.jinfangka.com/index.php/soma/package/index/?id=a502245149&tkid=429&catid='}, {'img': 'gift.jpg', 'link': 'http://jx.jinfangka.com/index.php/soma/package/index/?id=a502245149&tkid=429&catid='}, {'img': 'spa.jpg', 'link': 'http://jx.jinfangka.com/index.php/soma/package/index/?id=a502245149&tkid=429&catid='}],
       productGalleryIndex: 0,
       swiperOption: {
         autoplay: 3000,
         initialSlide: 0,
         loop: true,
         productGalleryIndex: 0,
-        onSlideChangeEnd: swiper => {
+        onSlideChangeStart: swiper => {
           this.productGalleryIndex = swiper.realIndex + 1
         }
       },
@@ -140,3 +151,6 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
+<style >
+
+</style>

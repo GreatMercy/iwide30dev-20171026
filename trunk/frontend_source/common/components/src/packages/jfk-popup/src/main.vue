@@ -16,7 +16,7 @@
         default: true
       },
       modalFade: {
-        default: false
+        default: true
       },
       modalClass: String,
       lockScroll: {

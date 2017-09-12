@@ -27,7 +27,8 @@ module.exports = {
     'jfk-share': './src/packages/jfk-share/index.js',
     'jfk-sticky': './src/packages/jfk-sticky/index.js',
     'jfk-rater': './src/packages/jfk-rater/index.js',
-    'validator': './src/utils/validator.js'
+    'validator': './src/utils/validator.js',
+    'arithmetic': './src/utils/arithmetic.js'
   },
   output: {
     path: config.build.assetsRoot,

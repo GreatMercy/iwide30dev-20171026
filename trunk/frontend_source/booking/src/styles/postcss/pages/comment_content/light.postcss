@@ -15,10 +15,13 @@ body {
   .grayColor66 {
     color: var(--font-color-light-silver);
   }
+  .grayColor33 {
+    color: var(--font-color-dark-white);
+  }
 
   .comment_top {
     &::before {
-      background-color: #eeeae9;
+      background-color: #e0e0e0;
     }
     & .container {
       &::before {
@@ -47,7 +50,7 @@ body {
         background-color: var(--line-color-light-silver);
       }
       li {
-        border: 1px solid #ebebeb;
+        border: 1px solid #e0e0e0;
         color: var(--font-color-dark-white);
       }
       li.active {
@@ -62,6 +65,9 @@ body {
   }
 
   .content {
+    &::before{
+      background-color: #e0e0e0;
+    }
     .comment {
       color: var(--font-color-dark-white);
     }
@@ -70,19 +76,9 @@ body {
       color: var(--font-color-dark-white);
       margin-bottom: px2rem(30);
     }
-    /*.swiper-container {
-      width: px2rem(260);
-      height: px2rem(270);
-    }
-    .swiper-wrapper{
-      width: 100%;
-    }
-    .jfk-swiper__item {
-      width: 100%;
-    }*/
   }
   .booking_now {
-    background-color: #1a1a1a;
+    background-color: #b2945e;
     color: #fff;
   }
 

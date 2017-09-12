@@ -53,7 +53,8 @@ class HotelService extends HotelBaseService {
 		        'BOOK_DATE_VALIDATE',
 		        'MAX_BOOK_DAY',
 		        'LOGIN_ACTION_NAME',
-		        'INDEX_TEL'
+		        'INDEX_TEL',
+                'SHORT_CITY'
 		) );
 		$data['login_action_name']=isset($config_data['LOGIN_ACTION_NAME'])?$config_data['LOGIN_ACTION_NAME']:'登录';
 		$data['index_tel']=isset($config_data['INDEX_TEL'])?$config_data['INDEX_TEL']:NULL;
@@ -122,6 +123,27 @@ class HotelService extends HotelBaseService {
                 }
                 if(isset( $data['citys'][0]))unset($data['citys'][0]);
                 ksort ( $data['citys'] );
+            }
+        }
+
+        if (isset($config_data['SHORT_CITY']) && $config_data['SHORT_CITY']==1){
+            if(!empty($data['last_orders'])){
+                foreach($data['last_orders'] as $key => $last_orders){
+                    $data['last_orders'][$key]['hcity'] = str_replace(array('市','区','县'),'',$last_orders['hcity']);
+                }
+            }
+            if(!empty($data['hot_city'])){
+                foreach($data['hot_city'] as $key => $hot_city){
+                    $data['hot_city'][$key] = str_replace(array('市','区','县'),'',$hot_city);
+                }
+            }
+            if(!empty($data['citys'])){
+                foreach($data['citys'] as $key => $temp_letters){
+                    foreach($temp_letters as $t_key => $temp_cities){
+                        $data['citys'][$key][$t_key]['city'] = str_replace(array('市','区','县'),'',$temp_cities['city']);
+                        if(isset($data['citys'][$key][$t_key]['area'])) $data['citys'][$key][$t_key]['area'] = str_replace(array('市','区','县'),'',$temp_cities['area']);
+                    }
+                }
             }
         }
 
@@ -1075,6 +1097,7 @@ class HotelService extends HotelBaseService {
 			return $b->favour != $a->favour?$b->favour - $a->favour:0;
 		});
 		$data ['pay_ways']=array_merge($has_favour_ways,$no_favour_ways);
+		$data['first_pay_favour'] = isset($data['pay_ways'][0]->favour)?$data['pay_ways'][0]->favour:0;
 
         if(!empty($data ['post_packages'])){
             foreach($data ['pay_ways'] as $ways_key => $payways_arr){
@@ -1608,7 +1631,7 @@ class HotelService extends HotelBaseService {
 // 		$package_info=json_decode('{"3":{"gid":3,"num":1},"4":{"gid":4,"num":1}}',true);
 		$package_data=array();
 		if (!empty($first_state['goods_info']['items'])){
-    		if (empty($package_info)&&$first_state['goods_info']['sale_way']!=2){
+    		if (empty($package_info)&&$first_state['is_packages']==1&&$first_state['goods_info']['sale_way']!=2){
     		    $info['errmsg']='请选择套餐';
     		    return $info;
     		}else if (!empty($package_info)){

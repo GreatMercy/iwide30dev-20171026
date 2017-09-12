@@ -7,30 +7,39 @@
 <script>
   export default {
     name: 'orderTime',
-    props: ['states'],
+    props: {
+      states: {
+        type: Object
+      }
+    },
     created () {
-      this.accountTimeout(this.time)
+//      this.accountTimeout()
+    },
+    mounted () {
+      this.accountTimeout()
     },
     data () {
       return {
-        time: '',
+        time: '00:00:00',
         timeShow: true
       }
     },
     methods: {
       // 计算倒计时
-      accountTimeout (lastTime) {
-        lastTime = this.states.last_repay_time
+      accountTimeout () {
+        let lastTime = this.states.last_repay_time
+        // 将当前日期格式化
         let newtime = new Date(this.getNowFormatDate())
         let oldtime = new Date(lastTime)
         let s1 = newtime.getTime()
         let s2 = oldtime.getTime()
+        // 获取时间差
         let total = (s2 - s1) / 1000
-        let day = parseInt(total / (24 * 60 * 60))
+        let day = Math.floor(total / (24 * 60 * 60))
         let afterDay = total - day * 24 * 60 * 60
-        let hour = parseInt(afterDay / (60 * 60))
+        let hour = Math.floor(afterDay / (60 * 60))
         let afterHour = total - day * 24 * 60 * 60 - hour * 60 * 60
-        let min = parseInt(afterHour / 60)
+        let min = Math.floor(afterHour / 60)
         let afterMin = total - day * 24 * 60 * 60 - hour * 60 * 60 - min * 60
         if (total < 0) {
           return false
@@ -49,13 +58,23 @@
         if (afterMin >= 0 && afterMin <= 9) {
           afterMin = '0' + afterMin
         }
-        this.time = hour + ':' + min + ':' + afterMin
-        setTimeout(this.accountTimeout, 1000)
+        if (!lastTime) {
+          this.time = '00:00:00'
+        } else {
+          this.time = hour + ':' + min + ':' + afterMin
+        }
+        let that = this
+        setTimeout(function () {
+          that.timeShow = true
+        }, 1500)
+        setTimeout(function () {
+          that.accountTimeout()
+        }, 1000)
       },
       // 获取日期并格式化
       getNowFormatDate () {
         let date = new Date()
-        let seperator1 = '-'
+        let seperator1 = '/'
         let seperator2 = ':'
         let month = date.getMonth() + 1
         let strDate = date.getDate()

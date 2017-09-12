@@ -8,7 +8,7 @@
       <ul class="order-center-tab jfk-flex is-align-middle jfk-pl-30 jfk-pr-30">
         <li class="order-center-tab__item font-size--32 jfk-ta-c"
             v-for="(item, index) in tabsItems.list"
-            :class="{'order-center-tab__active' : tabsItems.selected === item.menu_type}"
+            :class="{'order-center-tab__active' : tabsItems.selected === item.menu_type, 'color-golden': tabsItems.selected === item.menu_type}"
             @click="changeTab(item.menu_type)">
           <i class="jfk-d-ib jfk-font icon-user_icon_Polite_nor" v-if="item.icon"></i><span v-html="item.text"></span>
         </li>
@@ -32,7 +32,7 @@
             <a :href="item.order_detail_link || 'javascript:void(0)'" class="order-list__disabled">
               <div class="jfk-flex is-align-middle order-list__order-info">
                 <div class="font-size--28 order-list__order-id" v-html="'订单号：' + item.order_id"></div>
-                <div class="font-size--30 jfk-ta-r order-list__status">已过期</div>
+                <div class="font-size--30 jfk-ta-r order-list__status color-golden">已过期</div>
               </div>
 
               <div class="order-list__info jfk-flex">
@@ -73,7 +73,7 @@
             <a :href="item.order_detail_link || 'javascript:void(0)'" class="order-list__disabled">
               <div class="jfk-flex is-align-middle order-list__order-info">
                 <div class="font-size--28 order-list__order-id" v-html="'订单号：' + item.order_id"></div>
-                <div class="font-size--30 jfk-ta-r order-list__status">已退款</div>
+                <div class="font-size--30 jfk-ta-r order-list__status color-golden">已退款</div>
               </div>
 
               <div class="order-list__info jfk-flex">
@@ -108,7 +108,7 @@
             <a :href="item.order_detail_link || 'javascript:void(0)'">
               <div class="jfk-flex is-align-middle order-list__order-info">
                 <div class="font-size--28 order-list__order-id" v-html="'订单号：' + item.order_id"></div>
-                <div class="font-size--30 jfk-ta-r order-list__status">购买成功</div>
+                <div class="font-size--30 jfk-ta-r order-list__status color-golden">购买成功</div>
               </div>
 
               <div class="order-list__info jfk-flex">
@@ -157,7 +157,7 @@
             <a :href="item.order_detail_link || 'javascript:void(0)'" class="order-list__disabled">
               <div class="jfk-flex is-align-middle order-list__order-info">
                 <div class="font-size--28 order-list__order-id" v-html="'订单号：' + item.order_id"></div>
-                <div class="font-size--30 jfk-ta-r order-list__status">已完成</div>
+                <div class="font-size--30 jfk-ta-r order-list__status color-golden">已完成</div>
               </div>
 
               <div class="order-list__info jfk-flex">
@@ -201,7 +201,7 @@
           <a :href="item.detail_url || 'javascript:void(0)'">
             <div class="jfk-flex is-align-middle order-list__order-info">
               <div class="font-size--28 order-list__order-id" v-html="'赠送编号：' + item.gift_id"></div>
-              <div class="font-size--30 jfk-ta-r order-list__status"><i
+              <div class="font-size--30 jfk-ta-r order-list__status color-golden"><i
                 class="jfk-font icon-user_icon_Polite_nor"></i><span>收礼成功</span>
               </div>
             </div>
@@ -271,12 +271,17 @@
 </template>
 
 <script>
+  import formatUrlParams from 'jfk-ui/lib/format-urlparams.js'
+  let params = formatUrlParams(location.href)
   import { getOrderList, getPresentsMineList, deleteOrder, deletePresentsGiftOrder } from '@/service/http'
   export default {
     computed: {
       debug () {
         return process.env.NODE_ENV === 'development'
       }
+    },
+    beforeCreate () {
+      this.$pageNamespace(params)
     },
     methods: {
       // 切换分类

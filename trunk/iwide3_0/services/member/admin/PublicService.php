@@ -129,6 +129,12 @@ class PublicService extends MemberBaseService
                     'yasite'
                 );
                 break;
+            case 10: //菜单登陆后显示
+                $auth_arr = array(
+                    'highclass',
+                    'highclass#white'
+                );
+                break;
             default:
                 $auth_arr = array();
                 break;

@@ -15,7 +15,6 @@
   export default {
     name: 'jfkRater',
     created () {
-      window.alert(1)
       this.currentValue = this.value
     },
     mounted () {
@@ -58,7 +57,6 @@
     },
     methods: {
       handleClick (i, force) {
-        alert('click')
         if (!this.disabled || force) {
           if (this.currentValue === i + 1) {
             this.currentValue = i

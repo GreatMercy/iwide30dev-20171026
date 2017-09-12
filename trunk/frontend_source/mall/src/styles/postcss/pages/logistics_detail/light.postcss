@@ -4,7 +4,7 @@
     &::after {
       width: px2rem(4);
       height: px2rem(28);
-      background-color: var(--color-golden);
+      background-color: currentColor;
     }
   }
 
@@ -67,7 +67,7 @@
         i {
           width: 6px;
           height: 6px;
-          border: 2px solid var(--color-golden);
+          border: 2px solid currentColor;
           border-radius: 100%;
         }
       }
@@ -85,7 +85,7 @@
         i {
           width: px2rem(12);
           height: px2rem(12);
-          background-color: var(--color-golden);
+          background-color: currentColor;
           border-radius: 100%;
         }
       }
@@ -94,9 +94,14 @@
         i {
           width: px2rem(30);
           height: px2rem(30);
-          background-image: background-image(/refund_detail/end_2.png, theme);
           border-radius: 100%;
           background-size: contain;
+          span {
+            background-color: currentColor;
+            &::before {
+              color: var(--color-white);
+            }
+          }
         }
       }
 

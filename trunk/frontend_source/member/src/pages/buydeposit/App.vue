@@ -39,6 +39,9 @@ export default {
   created () {
     getBuydepositInfo().then((res) => {
       this.dataList = res.web_data
+      if (this.dataList.page_resource.links.redirect) {
+        window.location.replace(res.web_data.page_resource.links.redirect)
+      }
       for (let item in this.dataList.deposit_list) {
         this.dataList.deposit_list[item].money *= 1
       }

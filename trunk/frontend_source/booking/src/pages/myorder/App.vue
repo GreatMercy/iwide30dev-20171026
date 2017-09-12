@@ -4,10 +4,7 @@
     <div class="order_list">
       <div v-for="(item,index) in orderList" :key="index"
            class="order_list_item">
-        <!--前端路由-->
-        <!--<div @click="toLocationHref('/order_detail?oid='+parseInt(item.id))">-->
-        <!--线上环境-->
-        <div @click="toLocationHref(item.ORDERDETAIL)">
+          <div @click="toLocationHref(item.ORDERDETAIL)">
           <orderStatus :orderItem="item"/>
           <template v-if="item.status === '9' || item.status === '0' || item.status === '1' || item.status_des === '待入住' ||
           item.status ==='2'">
@@ -24,8 +21,8 @@
               </p>
             </div>
             <div class="price goldColor">
-              <i class="jfk-font-number jfk-price__currency">￥</i>
-              <i class="jfk-font-number jfk-price__number font-size--38">{{item.price}}</i>
+              <i class="jfk-font-number jfk-price__currency font-size--32">￥</i>
+              <i class="jfk-font-number jfk-price__number font-size--48">{{item.price}}</i>
             </div>
           </template>
           <template v-else>

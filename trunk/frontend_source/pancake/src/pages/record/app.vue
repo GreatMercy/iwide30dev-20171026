@@ -2,42 +2,43 @@
   <div class="jfk-pages jfk-pages__record">
     <div class="jfk-pages__theme is-default"></div>
     <div class="jfk-pages__body">
-    <div class="user font-size--30 jfk-ml-30 jfk-mr-30">
-      <div v-show="userAvatar" class="avatar">
-        <img :src="userAvatar"/>
+      <div class="user font-size--30 jfk-ml-30 jfk-mr-30">
+        <div v-show="userAvatar" class="avatar">
+          <img :src="userAvatar"/>
+        </div>
+        <div v-show="!userAvatar" class="avatar is-default">
+        </div>
+        <div class="name font-color-white">{{useName}}</div>
+        <a href="javascript:;" @click="handleReceivePrize()" class="coupon-enter font-color-white font-size--24">
+          领奖<i class="font-color-extra-light-gray">></i>
+        </a>
       </div>
-      <div v-show="!userAvatar" class="avatar is-default">
+      <div class="times font-size--30 font-color-extra-light-gray jfk-ml-30 jfk-mr-30">
+        <span class="throw-times">投掷<i class="color-golden font-size--48">{{throwTimes}}</i>次</span>
+        <span class="prize-times">中奖<i class="color-golden font-size--48">{{prizeTimes}}</i>次</span>
       </div>
-      <div class="name font-color-white">{{useName}}</div>
-      <a href="javascript:;" @click="handleReceivePrize()" class="coupon-enter font-color-white font-size--24">
-        领奖<i class="font-color-extra-light-gray">></i>
-      </a>
-    </div>
-    <div class="times font-size--30 font-color-extra-light-gray jfk-ml-30 jfk-mr-30">
-      <span class="throw-times">投掷<i class="color-golden font-size--48">{{throwTimes}}</i>次</span>
-      <span class="prize-times">中奖<i class="color-golden font-size--48">{{prizeTimes}}</i>次</span>
-    </div>
-    <div class="record-box">
-      <div class="title font-size--32 font-color-extra-light-gray jfk-ta-c">今日战绩</div>
-      <div class="record-cont jfk-font--30 jfk-pl-30 jfk-pr-30">
-        <ul class="record-list" v-if="prizeData.length">
-          <li
-            class="record-list__item jfk-clearfix"
-            v-for="(item, index) in prizeData"
-            :key="index">
-            <div class="order font-size--60 jfk-fl-l" :class="{'color-golden': index < 3, 'font-color-white': index > 2}">{{item.ranking}}</div>
-            <div class="prize font-color-extra-light-gray jfk-fl-l">{{item.prize_name}}</div>
-            <div class="prize-number jfk-fl-l font-color-extra-light-gray">中：<i class="color-golden">{{item.prize_count}}</i></div>
-            <div class="prize-btns jfk-fl-r" @click="handleReceivePrize(item)">
-              <span class="btn">
-                <button class="jfk-button jfk-button--free jfk-button--primary is-plain" :disabled="!item.is_available">{{item.is_available ? '可领' : '已领'}}</button>
-              </span>
-            </div>
-          </li>
-        </ul>
-        <div class="empty font-color-light-gray jfk-ta-c font-size--24" v-else>今日暂未中奖</div>
+      <div class="record-box">
+        <div class="title font-size--32 font-color-extra-light-gray jfk-ta-c">今日战绩</div>
+        <div class="record-cont jfk-font--30 jfk-pl-30 jfk-pr-30">
+          <ul class="record-list" v-if="prizeData.length">
+            <li
+              class="record-list__item jfk-clearfix"
+              v-for="(item, index) in prizeData"
+              :key="index">
+              <div class="order font-size--60 jfk-fl-l" :class="{'color-golden': index < 3, 'font-color-white': index > 2}">{{item.ranking}}</div>
+              <div class="prize font-color-extra-light-gray jfk-fl-l">{{item.prize_name}}</div>
+              <div class="prize-number jfk-fl-l font-color-extra-light-gray">中：<i class="color-golden">{{item.prize_count}}</i></div>
+              <div class="prize-btns jfk-fl-r" @click="handleReceivePrize(item)">
+                <span class="btn">
+                  <button class="jfk-button jfk-button--free jfk-button--primary is-plain" :disabled="!item.is_available">{{item.is_available ? '可领' : '已领'}}</button>
+                </span>
+              </div>
+            </li>
+          </ul>
+          <div class="empty font-color-light-gray jfk-ta-c font-size--24" v-else>今日暂未中奖</div>
+        </div>
       </div>
-    </div>
+      <jfk-support v-once></jfk-support>
     </div>
     <pancake-tabbar :selected="tabbarSelected"></pancake-tabbar>
   </div>

@@ -3,15 +3,15 @@ use App\services\member\admin\ViewService;
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 /**
- *	显示配置
- *	@author  liwensong
- *   @copyright www.iwide.cn
- *   @version 4.0
- *   @Email septet-l@outlook.com
- */
+*	显示配置
+*	@author  liwensong
+*   @copyright www.iwide.cn
+*   @version 4.0
+*   @Email septet-l@outlook.com
+*/
 class View extends MY_Admin_Iapi
 {
-    //会员中心显示配置
+	//会员中心显示配置
     public function index(){
         $inter_id = $this->session->get_admin_inter_id();
         $data = ViewService::getInstance()->index($inter_id);

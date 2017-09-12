@@ -57,11 +57,18 @@
           }
         }
       }
+      .defaultBanner{
+        height: 23.4375rem;
+        img{
+          width: 100%;
+          height: 100%;
+        }
+      }
     }
     .title_info_container{
-      height: px2rem(260);
+      height: px2rem(130);
       padding: 0 px2rem(30);
-      text-align: center;
+      text-align: left;
       & .title_info{
          width: 100%;
          height: 100%;
@@ -71,11 +78,19 @@
            bottom: 0;
            left: 0;
          }
+         & .collection{
+           position: absolute;
+           right: 0;
+           top: 0;
+           width: px2rem(42);
+           height: px2rem(42);
+           display: inline-block;
+         }
          &_ht_name{
             @mixin ellipsis 1;
             padding: 0 px2rem(48);
             margin-top: px2rem(40);
-         }post
+         }
           &_ht_place{
              @mixin ellipsis 1;
              padding: 0 px2rem(50);
@@ -216,15 +231,17 @@
           }
         }
         &_item.item1{
-          width: 36%;
+          width: 34%;
         }
         &_item.item2{
-          width: 36%;
+          width: 34%;
         }
         &_item.item3{
           width: 24%;
         }
-
+        &_item.justItem1{
+          width: 70%;
+        }
         &_item.active{
           position: relative;
           @mixin one-line horzin {};
@@ -700,18 +717,102 @@
         }
       }
     }
-    .inputBuess{
+    .whole_eject{
+      position: fixed;
+      top: 0px;
+      height: 100%;
+      width: 100%;
+      z-index: 10;
+    }
+    .whole_all_eject{
       width: 100%;
       height: 100%;
-      position: fixed;
+      padding: 3%;
+      z-index: 10;
+      border-radius: 4px;
+    }
+    .whole_eject_content,.whole_all_eject_content{
+      height: 100%;
+      position: relative;
+      border-radius: 3.5px;
+    }
+    .whole_eject_small{
+      position: relative;
+      margin-top: 45%;
+      border-radius: 4px;
+      padding-top:2.312rem;
+    }
+    .whole_bottom_small_wrap{
+      position: absolute;
+      bottom: 70px;
+      width: 94%;
+      left: 3%;
+      max-height: 90%;
+      overflow: scroll;
+    }
+    .iScrollIndicator{
+      width: 2.5px!important;
+      border: 0px!important;
+      right: 0px!important;
+    }
+    .center{
+      text-align: center;
+    }
+    .h32 {
+      font-size: 0.975rem;
+    }
+    .button{
+      cursor: pointer;
+      text-align: center;
+      min-width: 7.32rem;
+      display: block;
+      position: relative;
+      height: 2.812rem;
+      line-height: 2.812rem;
+      padding-top: 0.15rem;
+    }
+    .button:after {
+      content: '';
+      width: 200%;
+      height: 200%;
+      position: absolute;
       top: 0;
       left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0, 0, 0, .4);
-      z-index: 9999;
+      border: 1px solid #b2945e;
+      -webkit-transform: scale(0.5,0.5);
+      transform: scale(0.5,0.5);
+      -webkit-transform-origin: top left;
     }
-
+    .pad_b60, .pad_tb60 {
+      padding-bottom: 1.828rem;
+    }
+    .pad_l60, .pad_lr60 {
+      padding-left: 1.828rem;
+    }
+    .pad_r60, .pad_lr60 {
+      padding-right: 1.828rem;
+    }
+    .business_val {
+      border: none;
+      width: 100%;
+      padding: 0 0 8px 0px;
+      margin-top: 4rem;
+      border-radius: 0px;
+      font-weight: normal;
+      resize: none;
+      background: none;
+      -webkit-appearance: none;
+      margin-bottom: 1rem;
+      outline:none;
+    }
+    .close {
+      position: absolute;
+      top: 0.7125rem;
+      right: 0.875rem;
+      font-size: 1rem;
+      z-index: 2;
+      cursor: pointer;
+    }
 }
 
 

@@ -55,7 +55,7 @@
       })
       getPresentsValidateGiftOrder(requestParams).then((res) => {
         const content = res['web_data']
-        this.name = content['fans']['nickname']
+        this.name = content['fans']['nickname'] || '你的好友'
         this.goodsDetail = content['item']
         this.goodsDetail['used'] = parseInt(content['item']['qty_origin']) - parseInt(content['item']['qty'])
         this.goodsDetail['wish'] = content['message']

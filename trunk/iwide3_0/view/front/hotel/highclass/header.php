@@ -15,6 +15,7 @@
 
 <title><?php echo $pagetitle;?></title>
 <?php include 'wxheader.php' ?>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=ggmZIrqw5hOjnXwT7ypK0aIoZXrn4yfS"></script>
 <script type='text/javascript'>
       var _vds = _vds || [];
       window._vds = _vds;

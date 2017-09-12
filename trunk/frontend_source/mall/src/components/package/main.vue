@@ -12,9 +12,9 @@
 
         <div class="jfk-package-info__base-info--right">
           <div class="jfk-package-info__base-info--content">
-            <p class="name font-size--32">小狮子王A礼包</p>
-            <p class="validity font-size--24">有效期至2017年8月29日</p>
-            <p class="more" @click="changeStatus">
+            <p class="name font-size--32" v-text="info.name" v-if="info.name"></p>
+            <p class="validity font-size--24" v-text="'有效期至' +info.time" v-if="info.time"></p>
+            <p class="more" @click="changeStatus" v-if="info && info.products && info.products.length > 0">
               <span class="font-size--24">详情</span>
               <span class="font-size--24 icon">
                    <i class="jfk-font icon-booking_icon_DN_norm" v-if="!status"></i>
@@ -26,20 +26,35 @@
       </div>
 
       <ul class="jfk-package-info__more-info" v-if="status">
-        <li class="jfk-flex">
-          <span class="jfk-ta-l font-size--28">自助餐</span>
-          <span class="jfk-ta-r font-size--28">1份</span>
+        <li class="jfk-flex" v-if="info && info.products && info.products.length > 0"
+            v-for="(item, index) in info.products" :key="index">
+          <span class="jfk-ta-l font-size--28" v-text="item.name">自助餐</span>
+          <span class="jfk-ta-r font-size--28" v-text="item.num"></span>
         </li>
 
-        <li class="jfk-flex">
-          <span class="jfk-ta-l font-size--28">儿童乐园门票</span>
-          <span class="jfk-ta-r font-size--28">1份</span>
-        </li>
       </ul>
 
     </div>
   </div>
 </template>
 <script>
-  export default {}
+  export default {
+    props: {
+      status: {
+        type: Boolean,
+        default: false
+      },
+      info: {
+        type: Object,
+        default: function () {
+          return {}
+        }
+      }
+    },
+    methods: {
+      changeStatus () {
+        this.$emit('changeStatus')
+      }
+    }
+  }
 </script>

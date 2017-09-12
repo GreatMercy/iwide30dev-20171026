@@ -144,12 +144,14 @@
                 line-height: calc(52 / 32);
                 padding: calc(44 / 32)em px2rem(20) 0 px2rem(16);
                 max-height: calc(1em * 3 * 1.5625);
-                @mixin ellipsis 2;
-                height: calc(52 / 32 * 2)em;
                 margin-bottom: calc(16 / 32)em;
                 @media screen and (max-width: 320px) {
                   @mixin ellipsis 1;
                   height: calc(52 / 32)em;
+                }
+                @media screen and (min-width: 321px) {
+                  @mixin ellipsis 2;
+                  height: calc(52 / 32 * 2)em;
                 }
               }
               &-price,&-number{

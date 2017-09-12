@@ -14,6 +14,8 @@ let API_PRESENTS_V1 = `${API_URL_SUFFIX_V1}/presents`
 let API_EXPRESS_V1 = `${API_URL_SUFFIX_V1}/express`
 // 退款相关
 let API_REFUND_V1 = `${API_URL_SUFFIX_V1}/refund`
+// 礼包相关
+let API_GIFT_DELIVERY_V1 = `${API_URL_SUFFIX_V1}/GiftDelivery`
 const v1 = {
   // 请求商品列表
   GET_PACKAGE_LISTS: `${API_PACKAGE_V1}/list`,
@@ -102,7 +104,19 @@ const v1 = {
   // 提交退款申请
   POST_REFUND_APPLY: `${API_REFUND_V1}/apply`,
   // 请求退款详情
-  GET_REFUND_DETAIL: `${API_REFUND_V1}/detail`
+  GET_REFUND_DETAIL: `${API_REFUND_V1}/detail`,
+  // 获取礼包列表
+  GET_GIFT_PACKAGE_LIST: `${API_GIFT_DELIVERY_V1}/gift_list`,
+  // 生成礼包
+  POST_GENERATE_GIFT: `${API_GIFT_DELIVERY_V1}/generate_gift`,
+  // 二维码链接
+  GET_GENERATE_GIFT_QRCODE: `${API_GIFT_DELIVERY_V1}/generate_gift_qrcode`,
+  // 礼包详情
+  GET_GIFT_PACKAGE_DETAIL: `${API_GIFT_DELIVERY_V1}/gift_detail`,
+  // 确认领取礼包详情
+  GET_GIFT_PACKAGE_QRCODE_DETAIL: `${API_GIFT_DELIVERY_V1}/qrcode_gift_detail`,
+  // 领取礼包
+  POST_GIFT_PACKAGE_ORDER: `${API_GIFT_DELIVERY_V1}/generate_gift_order`
 }
 export {
   v1

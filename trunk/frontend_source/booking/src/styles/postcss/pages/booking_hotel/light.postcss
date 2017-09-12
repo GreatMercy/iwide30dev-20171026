@@ -15,11 +15,20 @@
     }
     .title_info_container{
     & .title_info{
+      .noCollect{
+        color: var(--font-color-extra-light-gray);
+      }
        &::before {
          background-color: var(--font-color-light-gray);
        }
         &_ht_place{
            color: var(--font-color-light-gray);
+           a{
+             color: var(--font-color-extra-light-gray-common);
+           }
+            i{
+              color: #999;
+            }
         }
         .btn_group{
           color: var(--color-golden);
@@ -40,7 +49,7 @@
         .comments{
           color: var(--font-color-white);
         }
-        
+
         &::before {
           background-color: var(--font-color-light-gray);
         }
@@ -201,5 +210,26 @@
           }
         }
       }
+    }
+    .whole_eject{
+      background-color: rgba(1,1,1,.3);
+    }
+    .iScrollIndicator{
+      background: #666666!important;
+    }
+    .color1, a.color1 {
+      color: #000;
+    }
+    .button{
+      color: #000;
+    }
+    .button:after {
+      border: 1px solid #b2945e;
+    }
+    .bg_282828 {
+      background-color: #fff;
+    }
+    #business_val {
+      border-bottom: 1px solid #ebebeb;
     }
 }

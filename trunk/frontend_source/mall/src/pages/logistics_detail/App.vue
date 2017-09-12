@@ -3,7 +3,7 @@
     <div class="jfk-pages__theme"></div>
 
     <!--已接单，已发货，已签收-->
-    <div class="logistics-detail-state">
+    <div class="logistics-detail-state color-golden">
         <span class="jfk-button__text color-golden font-size--60" v-if="status && status === 1">
           <i class="jfk-font icon-font_zh_yi_qkbys"></i>
           <i class="jfk-font icon-font_zh_jie_qkbys"></i>
@@ -74,7 +74,9 @@
           <div class="logistics-status__item--logo">
             <span class="font-size--30 logistics-status__item--line"
                   :class="'logistics-status__item--' + item.class_name">
-              <i></i>
+              <i class="color-golden">
+                <span v-if="item.class_name === 'end'" class="jfk-font icon-radio_icon_selected_default"></span>
+              </i>
             </span>
           </div>
           <div class="logistics-status__item--text" :class="{'is-active': item.status}">
@@ -103,6 +105,7 @@
         iconClass: 'jfk-loading__snake',
         isLoading: true
       })
+      this.$pageNamespace(params)
     },
     created () {
       // 已接单，已发货，已签收

@@ -147,7 +147,7 @@ class Package extends MY_Front_Soma_Iapi
                 if($ps_detail) {
                     $specProduct = true;
                     foreach ($ps_detail as $pid => $setting){
-                        $productDetail['price_package'] = $setting[0]['spec_price'];
+                        $productDetail['price_package'] = PackageService::getInstance()->progressNumber($setting[0]['spec_price']);
                     }
                 }
             }
@@ -269,8 +269,7 @@ class Package extends MY_Front_Soma_Iapi
             $qrCode = WxService::getInstance()->getQrcode(WxService::QR_CODE_SOMA_PUBLIC)->getData();
         }
         catch (Exception $e){
-            //todo 上线去掉
-            //$qrCode = 'https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=gQEh8TwAAAAAAAAAAS5odHRwOi8vd2VpeGluLnFxLmNvbS9xLzAyeGVOSHRMUm1mSjMxMDAwMHcwN3IAAgT_G4BZAwQAAAAA';
+
         }
         $hotelInfo = [
             'name' => data_get($hotelInfo, 'name'),
@@ -429,10 +428,33 @@ class Package extends MY_Front_Soma_Iapi
             ];
             $option = [
                 'limit' => null,
-                'orderBy' => 'sort desc',
+                'orderBy' => 'cat_sort desc',
             ];
             $page_data['categories'] = $this->categoryModel->get(array_keys($filter), array_values($filter), '*', $option);
         }
+
+
+        //多店铺
+        $redis = $this->get_redis_instance();
+        $ticketId = $redis->get('tkid');
+        $pIds = [];
+        if ($ticketId) {
+            //获取产品id列表
+            $serviceName = $this->serviceName(Product_Service::class);
+            $serviceAlias = $this->serviceAlias(Product_Service::class);
+            $this->load->service($serviceName, null, $serviceAlias);
+            $catId = $filter_cat;
+            $info = $this->soma_product_service->getProductPackageTicketProductIds($ticketId, $filter_cat);
+            if($info){
+                $pIds = array_column($info['products'], 'product_id');
+                $ticketDetail = current($info['ticketList']);
+            }
+            //门店设置了皮肤
+            if (isset($ticketDetail['theme_path']) && $ticketDetail['theme_path']) {
+                $this->theme = $ticketDetail['theme_path'];
+            }
+        }
+
 
         //商品
         $this->load->model('soma/Product_package_model', 'productPackageModel');
@@ -449,6 +471,10 @@ class Package extends MY_Front_Soma_Iapi
             'or (date_type = '        => $productModel::DATE_TYPE_STATIC,
             'and expiration_date > '  => "'" . $nowTime . "'))",
         ];
+        if(!empty($pIds)){
+            $pIds = "'" . implode("','", $pIds) . "'";;
+            $where['and product_id in ('] = $pIds.')';
+        }
         if(!empty($filter_cat)) {
             $where['and cat_id = '] = $filter_cat;
         }
@@ -459,7 +485,7 @@ class Package extends MY_Front_Soma_Iapi
             'sort', 'status', 'type','date_type', 'expiration_date', 'sales_cnt', 'show_sales_cnt'
         ];
         $options = [
-            'limit' => $page_size, 'offset' => ($page - 1) * $page_size, 
+            'limit' => $page_size, 'offset' => ($page - 1) * $page_size,
             'orderBy' => 'sort DESC, product_id DESC', 'page' => $page
         ];
 
@@ -545,16 +571,18 @@ class Package extends MY_Front_Soma_Iapi
 
         //取出秒杀id
         $act_id = array();
+        $kill_sec_times = array();
         foreach ($page_data['products'] as $p) {
             if ($p['product_type'] == $productModel::PRODUCT_ACTIVITY_KILLSEC) {
                 $act_id[] = $p['killsec']['act_id'];
+                $kill_sec_times[] = $p['killsec']['killsec_time'];
             }
         }
 
         //获取用户订阅的act_id
         $actids = array();
         if (!empty($act_id)) {
-            $openid_actid = KillsecService::getInstance()->getOpenidSubscribActid($act_id, $this->inter_id, $this->openid);
+            $openid_actid = KillsecService::getInstance()->getOpenidSubscribKilltime($act_id, $this->inter_id, $this->openid, $kill_sec_times);
         }
         if (!empty($openid_actid)) {
             $actids = array_column($openid_actid, 'act_id');
@@ -1358,5 +1386,90 @@ class Package extends MY_Front_Soma_Iapi
         $this->json(BaseConst::OPER_STATUS_SUCCESS, '', $result);
     }
 
+
+    /**
+     * 获取绩效商品/商城首页 二维码
+     * @SWG\Get(
+     *     tags={"package"},
+     *     path="/package/distribute_qrcode",
+     *     summary="获取绩效商品/商城首页 二维码",
+     *     description="获取绩效商品/商城首页 二维码",
+     *     operationId="distribute_qrcode",
+     *     produces={"application/json"},
+     *     @SWG\Parameter(
+     *         description="二维码跳转链接",
+     *         in="query",
+     *         name = "url",
+     *         required=true,
+     *         type="string"
+     *     ),
+     *     @SWG\Response(
+     *         response="200",
+     *         description="successful operation",
+     *         @SWG\Schema(
+     *              type="object"
+     *         )
+     *     )
+     * )
+     */
+    public function get_distribute_qrcode(){
+
+        PackageService::getInstance()->getQrcodeStream($this->input->get('url', null, $this->link['home']));
+    }
+
+
+
+    /**
+     * 用户是否已经关注该公众号，并返回公众号二维码
+     * @SWG\Get(
+     *     tags={"package"},
+     *     path="/package/is_subscribe",
+     *     summary="用户是否已经关注该公众号，并返回公众号二维码",
+     *     description="用户是否已经关注该公众号，并返回公众号二维码",
+     *     operationId="is_subscribe",
+     *     produces={"application/json"},
+     *     @SWG\Parameter(
+     *         description="二维码跳转链接",
+     *         in="query",
+     *         name = "url",
+     *         required=true,
+     *         type="string"
+     *     ),
+     *     @SWG\Response(
+     *         response="200",
+     *         description="successful operation",
+     *         @SWG\Schema(
+     *              type="object",
+     *              @SWG\Property(
+     *                  property="subscribe_status",
+     *                  description="关注状态，true：已关注，false：未关注",
+     *                  type = "bool",
+     *              ),
+     *              @SWG\Property(
+     *                  property="qr_code_url",
+     *                  description="公众号二维码",
+     *                  type = "string",
+     *              ),
+     *         )
+     *     )
+     * )
+     */
+    public function get_is_subscribe(){
+
+        /**
+         * @var \Fans_model $fansModel
+         */
+        $this->load->model('wx/Fans_model', 'fansModel');
+        $fansModel = $this->fansModel;
+        $subscribeStatus = $fansModel->subscribeStatus($this->inter_id, $this->openid);
+        $qrCodeUrl = WxService::getInstance()->getQrcode(WxService::QR_CODE_KILLSEC_SUBSCRIBE)->getData();
+
+        $res = [
+            'subscribe_status' => $subscribeStatus,
+            'qr_code_url' => $qrCodeUrl
+        ];
+
+        $this->json(BaseConst::OPER_STATUS_SUCCESS, '', $res);
+    }
 
 }

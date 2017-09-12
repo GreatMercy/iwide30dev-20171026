@@ -12,10 +12,6 @@ axios.defaults.timeout = 60000
 axios.interceptors.request.use(function (config) {
   // 生产环境默认增加token
   if (process.env.NODE_ENV === 'production') {
-    alert(window.url_param)
-    addSaler()
-  }
-  if (process.env.NODE_ENV === 'production') {
     if (config.method === 'post' || config.method === 'put') {
       addCSRFTOKEN(config.data)
     }
@@ -33,13 +29,6 @@ axios.interceptors.response.use(function (response) {
 const addCSRFTOKEN = function (data) {
   const token = window.jfkConfig.token
   const {name, value} = token
-  if (data[name] === undefined) {
-    data[name] = value
-  }
-}
-const addSaler = function (data) {
-  const urlParam = window.url_param
-  const {name, value} = urlParam
   if (data[name] === undefined) {
     data[name] = value
   }
@@ -99,6 +88,19 @@ const formatUrl = function (url, data, contentType) {
   }
   if (urlParamArr.length) {
     newUrl += '?' + urlParamArr.join('&')
+  }
+  // 判断是否为生产环境
+  // alert('guguugugug')
+  // alert(process.env.NODE_ENV)
+  // alert(typeof process.env.NODE_ENV)
+  if (process.env.NODE_ENV === 'production') {
+    const salerParam = window.url_param + '&test=test'
+    if (urlParamArr.length) {
+      newUrl = '&' + salerParam
+    } else {
+      newUrl = '?' + salerParam
+    }
+    alert('调整后的参数' + newUrl)
   }
   if (contentType === 'application/x-www-form-urlencoded') {
     let dataArr = []

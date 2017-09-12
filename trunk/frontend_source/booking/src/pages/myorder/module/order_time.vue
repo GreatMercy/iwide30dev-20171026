@@ -21,16 +21,19 @@
       // 计算倒计时
       accountTimeout (lastTime) {
         lastTime = this.item.orderstate.last_repay_time
+//        console.log(lastTime) 2015/11/25 10:38:02 这里是短线在ios会出现问题
+//        alert('后端返回的数据是' + lastTime)
         let newtime = new Date(this.getNowFormatDate())
         let oldtime = new Date(lastTime)
+//        alert('使用Date处理后的数据' + oldtime)
         let s1 = newtime.getTime()
         let s2 = oldtime.getTime()
         let total = (s2 - s1) / 1000
-        let day = parseInt(total / (24 * 60 * 60))
+        let day = Math.floor(total / (24 * 60 * 60))
         let afterDay = total - day * 24 * 60 * 60
-        let hour = parseInt(afterDay / (60 * 60))
+        let hour = Math.floor(afterDay / (60 * 60))
         let afterHour = total - day * 24 * 60 * 60 - hour * 60 * 60
-        let min = parseInt(afterHour / 60)
+        let min = Math.floor(afterHour / 60)
         let afterMin = total - day * 24 * 60 * 60 - hour * 60 * 60 - min * 60
         if (total < 0) {
           return false
@@ -55,7 +58,7 @@
       // 获取日期并格式化
       getNowFormatDate () {
         let date = new Date()
-        let seperator1 = '-'
+        let seperator1 = '/'
         let seperator2 = ':'
         let month = date.getMonth() + 1
         let strDate = date.getDate()

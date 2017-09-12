@@ -1,5 +1,5 @@
 <template>
-  <div class="jfk-pages jfk-pages__detail" :class="pageNamespace">
+  <div class="jfk-pages jfk-pages__detail">
     <div class="jfk-pages__theme"></div>
     <div v-if="productInfo.product_id">
       <div class="hotel-staff jfk-pl-30 jfk-pr-30" v-if="salerBanner.length">
@@ -35,7 +35,7 @@
           <div class="name font-size--38 font-color-white">
             <span class="price-tag font-size--24" v-html="priceTag"></span>{{productInfo.name}}
           </div>
-          <div class="sales font-color-light-gray font-size--24">
+          <div class="sales font-color-light-gray-common font-size--24">
             <span class="suppier" v-if="publicInfo.name">{{publicInfo.name}}提供</span>
             <span class="sales_num" v-if="productInfo.show_sales_cnt === '1'">已售
               <i class="number">{{productInfo.sales_cnt}}</i>
@@ -54,7 +54,7 @@
         </div>
       </div>
       <product-killsec v-if="productInfo.tag ===2 && showKillsecModule" @killsec-status="handleKillsecStatus" :killsec="productInfo.killsec"></product-killsec>
-      <div class="service jfk-ml-30 jfk-mr-30" v-if="serviceItems.length" v-once>
+      <div class="service jfk-pl-30 jfk-pr-30" v-if="serviceItems.length" v-once>
         <ul class="service-list font-size--24" :class="'service-list--' + (serviceItems.length < 5 ? 'single' : 'multiple')" @click="handleService">
           <li class="service-item" v-for="item in serviceItems" :key="item.key">
             <p class="icon">
@@ -79,20 +79,22 @@
             </span>
           </div>
         </div>
-        <div v-if="productDetailInfo.labels.length" class="productinfo-detail" ref="productInfoDetail">
+        <div v-if="productDetailInfo.labels.length" class="productinfo-detail"  ref="productInfoDetail">
           <jfk-sticky>
-          <ul class="jfk-ml-30 jfk-mr-30 productinfo-detail-label" :class="'productinfo-detail-label--' + productDetailInfo.labels.length">
-            <li
-              v-for="item in productDetailInfo.labels"
-              :key="item.key"
-              class="font-size-32 label"
-              @click="handleLabel(item.key)"
-              :class="{
-                'color-golden is-selected': currentLabel === item.key,
-                'font-color-light-gray-common': currentLabel !== item.key
-              }"
-            ><div>{{item.label}}</div></li>
-          </ul>
+            <div class="productinfo-detail-box jfk-pl-30 jfk-pr-30" :class="{'great-then-2': productDetailInfo.labels.length > 1}">
+              <ul class="productinfo-detail-label" :class="'productinfo-detail-label--' + productDetailInfo.labels.length">
+                <li
+                  v-for="item in productDetailInfo.labels"
+                  :key="item.key"
+                  class="font-size-32 label"
+                  @click="handleLabel(item.key)"
+                  :class="{
+                    'color-golden is-selected': currentLabel === item.key,
+                    'font-color-light-gray-common': currentLabel !== item.key
+                  }"
+                ><div>{{item.label}}</div></li>
+              </ul>
+            </div>
           </jfk-sticky>
           <div class="productinfo-detail-cont" v-html="productDetailInfo.html"></div>
         </div>
@@ -103,7 +105,7 @@
         <div class="cont" @click="handleShowMap">
           <i class="jfk-font font-size--40 font-color-extra-light-gray icon-icon_location"></i>
           <div class="name font-size--30 font-color-white">{{hotelInfo.name}}</div>
-          <div class="address font-size--28 font-color-extra-light-gray"><span><i>{{hotelInfo.address}}</i></span><i class="jfk-font icon-user_icon_jump_normal"></i></div>
+          <div class="address font-size--28 font-color-extra-light-gray"><span><i>{{hotelInfo.address}}</i></span><i class="jfk-font icon-user_icon_jump_normal" v-show="hotelInfo.latitude && hotelInfo.longitude"></i></div>
         </div>
         <div class="order">
           <a :href="orderUrl" class="jfk-button jfk-button--free font-size--30 jfk-button--primary is-plain">我的订单</a>
@@ -332,7 +334,7 @@
       tag (val) {
         this.buttonText = val === 2 ? '立即秒杀' : val === 6 ? '储值购买' : '立即购买'
         val = (!val || val > 7) ? '0' : val
-        this.priceTag = '<i class="mask color-golden"></i><i class="text font-size--24">' + priceTagMap[val] + '</i>'
+        this.priceTag = '<i class="mask color-golden"></i><i class="text">' + priceTagMap[val] + '</i>'
         if (val !== 2) {
           this.killsecButtonDisabled = false
         } else {

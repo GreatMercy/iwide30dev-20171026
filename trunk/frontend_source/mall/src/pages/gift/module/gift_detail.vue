@@ -5,9 +5,9 @@
 
       <giftBg :wish="info.wish"></giftBg>
 
-      <p class="gift-goods-img jfk-ta-c jfk-pl-30 jfk-pr-30">
-        <img :src="info.face_img" v-if="info.face_img">
-      </p>
+      <div class="gift-goods-img jfk-ta-c jfk-pl-30 jfk-pr-30">
+        <div v-if="info.face_img" :style="'background-image:url('+ info.face_img + ')'" class="gift-goods-img__content"></div>
+      </div>
 
       <p class="gift-goods-name jfk-ta-c font-size--30 jfk-pl-30 jfk-pr-30" v-html="info.name"></p>
       <p class="gift-goods-number jfk-ta-c font-size--24 jfk-pl-30 jfk-pr-30"
@@ -15,12 +15,9 @@
 
       <p class="gift-goods-btn">
         <button class="jfk-button jfk-button--primary  jfk-button--free" @click="link(info.goods_link)">
-      <span class="jfk-button__text font-size--34">
-        <i class="jfk-font jfk-button__text-item icon-font_zh_li_qkbys"></i>
-        <i class="jfk-font jfk-button__text-item icon-font_zh_ji_qkbys"></i>
-        <i class="jfk-font jfk-button__text-item icon-font_zh_cha_qkbys"></i>
-        <i class="jfk-font jfk-button__text-item icon-font_zh_kan_qkbys"></i>
-      </span>
+          <span class="font-size--34">
+            立即查看
+          </span>
         </button>
       </p>
 

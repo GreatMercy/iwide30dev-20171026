@@ -5,7 +5,7 @@
       <div class="jfk-pages__theme"></div>
       <div class="invoice-add-address jfk-pl-30 jfk-pr-30" v-if="!product.address_show" @click="addAddress">
         <div class="invoice-add-address__content jfk-flex is-align-middle font-size--28">
-          <i class="jfk-d-ib"></i><span>新增收货地址</span>
+          <i class="jfk-d-ib color-golden"></i><span>新增收货地址</span>
         </div>
       </div>
 
@@ -33,7 +33,7 @@
 
       <div class="post-info jfk-pl-30 jfk-pr-30">
         <div class="post-info__name">
-          <i class="post-info__name--mask"></i>
+          <i class="post-info__name--mask color-golden"></i>
           <span class="font-size--38" v-text="product.name"></span>
         </div>
         <div class="post-info__hotel font-size--24" v-text="product.provider"></div>
@@ -98,6 +98,7 @@
     },
     computed: {},
     beforeCreate () {
+      this.$pageNamespace(params)
       this.toast = this.$jfkToast({
         duration: -1,
         iconClass: 'jfk-loading__snake',
@@ -200,14 +201,17 @@
         const content = res['web_data']
         this.max = parseInt(content['count'])
         this.product = {
-          'count': content['count'],
-          'product_id': content['product']['product_id'],
-          'name': content['product']['name'],
+          'count': content['count'] || 0,
+          'product_id': content['product']['product_id'] || '',
+          'name': content['product']['name'] || '',
           'provider': `由${content['wechat_name']}提供`,
-          'address': content['address'],
-          'arid': content['arid'],
-          'user_name': content['contact'],
-          'phone': content['phone']
+          'address': content['address'] || '',
+          'arid': content['arid'] || '',
+          'user_name': content['contact'] || '',
+          'phone': content['phone'] || ''
+        }
+        if (typeof content['wechat_name'] === 'undefined') {
+          this.product['provider'] = ''
         }
         this.aiid = content['aiid']
         // 判断进来的时候是否存在地址

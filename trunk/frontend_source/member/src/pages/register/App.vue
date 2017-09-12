@@ -1,7 +1,7 @@
 <template>
   <div class="gradient_bg padding_bottom_30">
-	<section class="padding_0_15">
-		<div class="flex between padding_45 font_12">
+	<section>
+		<div class="flex between padding_45 font_12 padding_0_15">
 			<div class="margin_right_30 relative padding_left_35">
 				<div class="line_left absolute top_65"><img class="line_height65" src="../../styles/postcss/image/line_03.png" alt=""></div>
 				<div>
@@ -10,17 +10,30 @@
 				</div>
 			</div>
 		</div>
-		<form class="form_list font_14" ref="form">
-			<div v-for="(value,key) in configList" v-if="value.show === 1" :data="value.show" class="flex form_item bd_bottom padding_18">
-				<div class="margin_right_22 width_75">
-					<div class="flex between">
-						<div class="margin_right_22 flex between" v-html="value.namehtml"></div>
-					</div>
-        </div>
-				<div class="flex_1 font_14"><input @keyup="setRemove($event)" :type="value.type" :name="key" :placeholder="value.note" maxlength="20"></div>
-        <div v-if="key === 'phonesms'" @click="smsSend" class="relative verification" :class="{verification_active:sms}">{{smsTitle}}</div>
-			</div>
-			<div class="margin_top_75 font_17">
+		<form class="form_list font_14 jfk-form" ref="form">
+      <div class="white_bg padding_0_15">
+  			<div v-for="(value,key) in configList" v-if="value.show === 1" :data="value.show" class="flex form_item bd_bottom padding_tb_15">
+  				<div class="margin_right_22 width_75">
+  					<div class="flex between">
+  						<div class="margin_right_22 flex between" v-html="value.namehtml"></div>
+  					</div>
+          </div>
+  				<div class="flex_1 font_14 form-item">
+            <div class="form-item__body">
+              <input @keyup="setRemove($event)" :type="value.type" :name="key" :placeholder="value.note" maxlength="20">
+              <div class="form-item__status is-error" v-show="value.passed" @click="handleHiddenError(key)">
+                <i class="form-item__status-icon jfk-font icon-msg_icon_error_norma"></i>
+                <span class="form-item__status-tip">
+                  <i class="form-item__status-cont">{{value.message}}</i>
+                  <i class="form-item__status-trigger">重新输入</i>
+                </span>
+              </div>
+            </div>  
+          </div>
+          <div v-if="key === 'phonesms'" @click="smsSend" class="relative verification" :class="{verification_active:sms}">{{smsTitle}}</div>
+  			</div>
+      </div>
+			<div class="margin_top_75 font_17 padding_0_15">
 				<div class="block width_85 center btn_height entry_btn auto jfk-font gray_btn register" @click="submit()">注&ensp;册</div>
 			</div>
 			<div class="center margin_top_30 font_12 color3">已有账号？<span class="mar_l10"><a class="main_color1" :href="links.login">马上登录</a></span><em class="color3 mar_l10 jfk-font xx-small">&#xe61c;</em></a>
@@ -73,7 +86,8 @@ export default {
           continue
         }
         if (result[[item]].value === '') {
-          result[[item]].setAttribute('class', 'bg_ico_close')
+          let thatMsg = this.configList[item]['name'] + '不能为空'
+          this.configList[item] = Object.assign({}, this.configList[item], {'passed': true, 'message': thatMsg})
           setBol = false
           continue
         }
@@ -81,11 +95,16 @@ export default {
           let str = '/' + this.configList[item].regular + '/'
           /* eslint-disable */let reg = eval(str)
           if (!reg.test(result[[item]].value)) {
-            result[[item]].placeholder = '请输入正确的' + this.configList[item].name
-            result[[item]].setAttribute('class', 'bg_ico_sigh')
+            let thatMsg = '请输入正确的' + this.configList[item]['name'] 
+            this.configList[item] = Object.assign({}, this.configList[item], {'passed': true, 'message': thatMsg})
             setBol = false
             continue
           }
+        }
+        if (result['password'].value.length < 6) {
+          this.configList['password'] = Object.assign({}, this.configList['password'], {'passed': true, 'message': '登录密码不能少于6位'})
+          setBol = false
+          continue
         }
         setDate[[item]] = result[[item]].value 
       }
@@ -153,6 +172,10 @@ export default {
     },
     setRemove (even) {
       even.target.className = ''
+    },
+    handleHiddenError (item) {
+      this.configList[[item]].passed = false
+      this.configList[[item]].message = ''
     }
   }
 }

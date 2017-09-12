@@ -3,9 +3,10 @@
     <div class="jfk-pages__theme"></div>
 
     <div class="order_status">
-      <orderTime :states="states"/>
       <!--订单状态-->
       <orderStatus :orderItem="order"/>
+      <!--倒计时-->
+      <orderTime :states="states"/>
       <p class="desc font-size--24 grayColor80">
         {{states.status_tips}}
       </p>
@@ -32,13 +33,14 @@
           <i class="booking_icon_font font-size--30 icon-font_zh_ding_qkbys"></i>
           <i class="booking_icon_font font-size--30 icon-font_zh_dan_qkbys"></i>
         </span>
-        <span v-else-if="states.can_comment === 1" @click="toLocationHref(links.TO_COMMENT)">
+        <span class="order-text-item comment" v-else-if="states.can_comment === 1"
+              @click="toLocationHref(links.TO_COMMENT)">
           <!-- 评论 -->
           <i class="booking_icon_font font-size--30 icon-font_zh_ping_qkbys"></i>
           <i class="booking_icon_font font-size--30 icon-font_zh_lun_qkbys"></i>
         </span>
         <span v-if="states.self_checkout === 1" @click="toLocationHref(links.CHECK_OUT)"
-              class="order-text-item">
+              class="order-text-item check_out">
           <!--退房-->
           <i class="booking_icon_font font-size--30 icon-font_zh_tui_qkbys"></i>
           <i class="booking_icon_font font-size--30 icon-font_zh_fang_qkbys"></i>
@@ -88,8 +90,8 @@
       <p class="order_info_item grayColor80"><span>支付类型</span> <span
         class="font-size--30 darkColor333">{{order.paytype_des}}</span>
       </p>
-      <p class="order_info_item grayColor80"><span>下单时间</span> <span
-        class="font-size--30 darkColor333">{{parseTime(order.order_time)}}</span>
+      <p class="order_info_item grayColor80"><span>下单时间</span>
+        <span v-if="order.order_time" class="font-size--30 darkColor333">{{parseTime(order.order_time)}}</span>
       </p>
       <p class="order_info_item grayColor80"><span>优&nbsp惠&nbsp券</span> <span
         class="font-size--30 darkColor333">{{order.coupon_favour}}</span></p>
@@ -144,7 +146,13 @@
         window.location.href = href
       },
       getDetailData () {
+        let loading = this.$jfkToast({
+          iconClass: 'jfk-loading__snake',
+          duration: -1,
+          isLoading: true
+        })
         getOrderDetail({oid: this.oid}).then((res) => {
+          loading.close()
           this.order = res.web_data.order
           this.states = res.web_data.states
           this.links = res.web_data.page_resource.links
@@ -165,6 +173,9 @@
         let year = oDate.getFullYear()
         let month = oDate.getMonth() + 1
         let day = oDate.getDate()
+        let hour = oDate.getHours()
+        let min = oDate.getMinutes()
+        let second = oDate.getSeconds()
         if (year >= 0 && year <= 9) {
           year = '0' + year
         }
@@ -174,7 +185,16 @@
         if (day >= 0 && day <= 9) {
           day = '0' + day
         }
-        return year + '.' + month + '.' + day
+        if (hour >= 0 && hour <= 9) {
+          hour = '0' + hour
+        }
+        if (min >= 0 && min <= 9) {
+          min = '0' + min
+        }
+        if (second >= 0 && second <= 9) {
+          second = '0' + second
+        }
+        return year + '/' + month + '/' + day + ' ' + hour + ':' + min + ':' + second
       },
       // 设置年月日期的格式
       setMyDate (strDate) {
@@ -183,7 +203,13 @@
       // 取消订单
       cancelOrder (oid) {
         // 确认
-        this.$jfkConfirm('是否确定删除?').then(action => {
+        this.$jfkConfirm('您确定要取消吗?', '提示',
+          {
+            cancelButtonText: '不',
+            confirmButtonText:
+              '确定'
+          }
+        ).then(action => {
           if (action === 'confirm') {
             this.toast = this.$jfkToast({
               duration: -1,

@@ -158,7 +158,15 @@ class MY_Front_Hotel extends MY_Front {
                     'hotel/hotel_comment' => array (
                         'comment_pages' => 1
                     )
-                )
+                ),
+		        'highclass' => array (
+						'hotel/sresult' => array (
+								'no_hotel_list' => 1
+						),
+                        'hotel/search' => array (
+                            'show_area' => 1
+                        )
+				)
 		);
 		return empty ( $config [$skin_name] [$fun] ) ? array () : $config [$skin_name] [$fun];
 	}

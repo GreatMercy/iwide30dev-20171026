@@ -1,5 +1,5 @@
 <template>
-  <div class="jfk-pages jfk-pages__success" :class="pageNamespace">
+  <div class="jfk-pages jfk-pages__success">
     <div class="jfk-pages__theme"></div>
     <div class="shengguang">
       <img src="../../assets/image/shengguang.png">
@@ -50,12 +50,8 @@
     </div>
     <jfk-popup v-model="visible" :showCloseButton="true" class="jfk-ta-c success_qrcode">
       <img :src="qrCode" />
-      <p class="font-color-extra-light-gray font-size--28 content" v-if="qrCodeContent">你还未关注公众号
-        <br>先长按识别关注公众号吧！</p>
-      <p class="font-color-extra-light-gray font-size--28 content" v-else>长按识别关注公众号
-        <br>享受
-        <span class="color-golden font-size--34"><i class="jfk-font icon-font_zh_geng_qkbys"></i><i class="jfk-font icon-font_zh_duo_qkbys"></i><i class="jfk-font icon-font_zh_you__qkbys"></i><i class="jfk-font icon-font_zh_hui_qkbys"></i></span>
-      </p>
+      <p class="font-color-extra-light-gray font-size--28 content" >你还未关注公众号
+        <br>长按识别关注随时查看订单</p>
     </jfk-popup>
     <JfkSupport v-once></JfkSupport>  
   </div>
@@ -75,7 +71,6 @@
         recommendations: [],
         visible: false,
         qrCode: '',
-        qrCodeContent: false,
         productDetail: '',
         orderDetail: ''
       }
@@ -90,6 +85,18 @@
     },
     created () {
       let that = this
+      getSuccessPay({
+        oid: this.oid
+      }).then(function (res) {
+        let successAbout = res.web_data
+        that.productDetail = successAbout.page_resource.link.product_detail + successAbout.product_id
+        that.orderDetail = successAbout.page_resource.link.order_detail
+        that.headTitleMsg = '本商品由' + successAbout.hotel_name + '提供'
+        if (successAbout.subscribe_status === 0) {
+          that.qrCode = successAbout.qr_code
+          that.visible = true
+        }
+      })
       // 推荐商品无分页，page_size设置大一些，一页全部请求完毕
       getPackageRecommendation({
         page: 1,
@@ -104,18 +111,6 @@
         }
         that.detailUrl = detail
         that.indexUrl = home
-      })
-      getSuccessPay({
-        oid: this.oid
-      }).then(function (res) {
-        let successAbout = res.web_data
-        that.qrCode = successAbout.qr_code
-        that.productDetail = successAbout.page_resource.link.product_detail + successAbout.product_id
-        that.orderDetail = successAbout.page_resource.link.order_detail
-        that.headTitleMsg = '本商品由' + successAbout.hotel_name + '提供'
-        if (successAbout.subscribe_status === 0) {
-          that.qrCodeContent = true
-        }
       })
     },
     methods: {

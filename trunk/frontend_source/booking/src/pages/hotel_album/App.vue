@@ -226,7 +226,7 @@
             console.log(this.nextIndex)
 //            this.changeDomClass(this.curIndex, this.nextIndex)
           }
-          this.nextIndex = isUp ? this.selected - 1 : this.selected + 1
+          this.nextIndex = isUp ? (this.selected - 1) : (this.selected + 1)
           if (this.nextIndex >= 0 && this.nextIndex < this.cur_gallery.length) {
             this.curIndex = this.selected
             // 动画
@@ -234,13 +234,14 @@
               this.show[this.curIndex].isShow1 = true
               this.show[this.nextIndex].isShow3 = true
             } else {
+              console.log('oooooo')
               this.show[this.curIndex].isShow2 = true
               this.show[this.nextIndex].isShow4 = true
             }
             let that = this
             clearTimeout(this.animationTime)
             this.animationTime = setTimeout(function () {
-              return that.changeDomClass(that.curIndex, that.nextIndex)
+              that.changeDomClass(that.curIndex, that.nextIndex)
             }, this.animationDuration)
           }
         }

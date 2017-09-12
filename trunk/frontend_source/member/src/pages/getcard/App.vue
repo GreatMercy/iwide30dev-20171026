@@ -8,8 +8,8 @@
         <div class="margin_right_30 relative padding_left_35">
           <div class="line_left absolute"><img src="../../styles/postcss/image/line_03.png" alt=""></div>
         </div>
-        <p v-if="dataList.card_info.is_package === 'f'" class="padding_left_35 padding_16 color_fff font_16 getcard-title">尊贵的会员，您获得了一张{{dataList.card_info.title}}</p>
-        <p v-else class="padding_left_35 padding_16 color_fff font_16 getcard-title">尊贵的会员，您获得了{{dataList.card_info.name}}</p>
+        <p v-if="dataList.card_info.is_package === 'f'" class="padding_left_35 padding_16 color_fff font_16 getcard-title">尊贵的会员，{{cardText}}{{dataList.card_info.title}}</p>
+        <p v-else class="padding_left_35 padding_16 color_fff font_16 getcard-title">尊贵的会员，{{packageText}}{{dataList.card_info.name}}</p>
         <p class="padding_left_35 color3 font_spacing_2 font_12 getcard-word">马上领取享受更多的优惠</p>
       </div>
       <div class="margin_top_40" v-if="dataList.card_info.is_package === 'f'">
@@ -102,10 +102,12 @@
       </div>
     </section>
     <section  v-if="dataList.card_info.is_package === 'f'" class="flex layer_bg fixed_btn font_17 color_fff">
-      <div @click="addcard" class="center main_bg1 padding_13" style="width:100%;">马上领取</div>
+      <div v-if="dataList.card_info.frequency <= dataList.gain_count" class="center main_bg1 padding_13" style="width:100%;"><a class="main_bg1" :href="dataList.page_resource.links.cardcenter_url">马上查看</a></div>
+      <div v-else @click="addcard" class="center main_bg1 padding_13" style="width:100%;">马上领取</div>
     </section>
     <section v-else class="flex layer_bg fixed_btn font_17 color_fff">
-      <div @click="package" class="center main_bg1 padding_13" style="width:100%;">马上领取</div>
+    <div v-if="dataList.card_info.frequency <= dataList.gain_count" class="center main_bg1 padding_13" style="width:100%;"><a  class="main_bg1" :href="dataList.page_resource.links.cardcenter_url">马上查看</a></div>
+      <div v-else @click="package" class="center main_bg1 padding_13" style="width:100%;">马上领取</div>
     </section>
     <JfkSupport v-once></JfkSupport>
   </div>
@@ -118,7 +120,9 @@ export default {
   data () {
     return {
       dataList: [],
-      list: 1
+      list: 1,
+      packageText: '您获得了',
+      cardText: '您获得了一张'
     }
   },
   created () {
@@ -137,6 +141,12 @@ export default {
         }).then((res) => {
           window.location.href = this.dataList.page_resource.links.center_url
         })
+      }
+      this.dataList.card_info.frequency = Number(this.dataList.card_info.frequency)
+      this.dataList.gain_count = Number(this.dataList.gain_count)
+      if (this.dataList.card_info.frequency <= this.dataList.gain_count) {
+        this.cardText = '您已领取了'
+        this.packageText = '您已领取了'
       }
       for (let item in this.dataList.card_info.card) {
         if (this.dataList.card_info.card[item].discount !== '') {

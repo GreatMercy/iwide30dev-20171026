@@ -46,7 +46,15 @@ const v1 = {
   // 提交订单接口
   TO_COMMENT: `${API_HOTEL_V1}/hotel/to_comment`,
   // 提交评论接口
-  NEW_COMMENT_SUB: `${API_HOTEL_V1}/hotel/new_comment_sub`
+  NEW_COMMENT_SUB: `${API_HOTEL_V1}/hotel/new_comment_sub`,
+  // 获取酒店预订刷新房间接口
+  RETURN_MORE_ROOM: `${API_HOTEL_V1}/hotel/return_more_room`,
+  // 收藏酒店
+  ADD_HOTEL_COLLECTION: `${API_HOTEL_V1}/hotel/add_hotel_collection`,
+  // 取消收藏酒店
+  CANCEL_HOTEL_COLLECTION: `${API_HOTEL_V1}/hotel/cancel_one_mark`,
+  // 搜索筛选酒店
+  AJAX_HOTEL_SEARCH: `${API_HOTEL_V1}/check/ajax_hotel_search`
 }
 export {
   v1

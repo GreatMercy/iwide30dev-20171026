@@ -1,14 +1,25 @@
 <template>
-  <div class="gradient_bg padding_35">
+  <div class="gradient_bg form-top">
   <section class="padding_0_15">
-    <form class="form_list font_14"  ref="form">
+    <form class="form_list font_14 jfk-form" ref="form">
       <div v-for="(value,key) in configList" v-if="value.show === 1" :data="value.show" class="flex form_item bd_bottom padding_18">
         <div class="margin_right_22 width_75">
           <div class="flex between">
             <div class="margin_right_22 flex between" v-html="value.namehtml"></div>
           </div>
         </div>
-        <div class="flex_1 font_15"><input @keyup="setRemove($event)" :type="value.type" :name="key" :placeholder="value.note"></div>
+        <div class="flex_1 font_15 form-item">
+           <div class="form-item__body">
+             <input @keyup="setRemove($event)" :type="value.type" :name="key" :placeholder="value.note">
+             <div class="form-item__status is-error" v-show="value.passed" @click="handleHiddenError(key)">
+                <i class="form-item__status-icon jfk-font icon-msg_icon_error_norma"></i>
+                <span class="form-item__status-tip">
+                  <i class="form-item__status-cont">{{value.message}}</i>
+                  <i class="form-item__status-trigger">重新输入</i>
+                </span>
+              </div>
+            </div>
+        </div>
         <div v-if="key === 'phonesms'" @click="smsSend" class="relative verification" :class="{verification_active:sms}">{{smsTitle}}</div>
       </div>
       <div class="margin_top_35 font_17">
@@ -62,7 +73,8 @@ export default {
           continue
         }
         if (result[[item]].value === '') {
-          result[[item]].setAttribute('class', 'bg_ico_close')
+          let thatMsg = '不能为空'
+          this.configList[item] = Object.assign({}, this.configList[item], {'passed': true, 'message': thatMsg})
           setBol = false
           continue
         }
@@ -70,8 +82,8 @@ export default {
           let str = '/' + this.configList[item].regular + '/'
           /* eslint-disable */let reg = eval(str)
           if (!reg.test(result[[item]].value)) {
-            result[[item]].placeholder = '请输入正确的' + this.configList[item].name
-            result[[item]].setAttribute('class', 'bg_ico_sigh')
+            let thatMsg = '请输入正确的' + this.configList[item]['name'] 
+            this.configList[item] = Object.assign({}, this.configList[item], {'passed': true, 'message': thatMsg})
             setBol = false
             continue
           }
@@ -142,6 +154,10 @@ export default {
     },
     setRemove (even) {
       even.target.className = ''
+    },
+    handleHiddenError (item) {
+      this.configList[[item]].passed = false
+      this.configList[[item]].message = ''
     }
   }
 }

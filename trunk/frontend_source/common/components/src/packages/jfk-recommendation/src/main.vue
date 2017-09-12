@@ -51,8 +51,9 @@
       let _lists = []
       let that = this
       let num = 3 - that.items.length
+      let items = that.items.concat()
       if (num > 0) {
-        that.items.push({
+        items.push({
           _isEmpty: true
         })
         if (num === 2) {
@@ -61,13 +62,12 @@
           })
         }
       }
-      _lists = that.items.map(function (item, index) {
+      _lists = items.map(function (item, index) {
         if (that.formatProductInfo) {
           return that.formatProductInfo(item, index)
         }
         return that.formatProductInfoInner(item, index)
       })
-      console.log(_lists)
       that.lists = _lists
     },
     methods: {

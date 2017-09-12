@@ -86,7 +86,7 @@
               <span class="color3 font_12 jfk-index-name">{{data.assets_bottons.balance_name.name}}</span>
               <span class="index-width"></span>
             </p>
-            <p class="margin_left_8 margin_top_4 jfk-index-num"><span v-if="data.centerinfo.value === 'login' &&  data.centerinfo.member_mode === 1">-</span><span v-else class="font_19 color1"><em class="font_14">¥</em>{{data.centerinfo.balance}}<em class="jfk-font margin_left_4 font_17 color2">&#xe61e;</em></span>
+            <p class="margin_left_8 margin_top_4 jfk-index-num"><span v-if="data.centerinfo.value === 'login' &&  data.centerinfo.member_mode === 1">-</span><span v-else class="font_19 color1"><em class="font_12">¥</em>{{data.centerinfo.balance}}<em class="jfk-font margin_left_4 font_17 color2">&#xe61e;</em></span>
             </p>
           </a>
         </div>

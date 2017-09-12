@@ -438,7 +438,7 @@ class PackageService extends BaseService
             else{
                 $activity = array('status' => 2, 'auto_rule' => array());
             }
-            if(isset($rules['cal_rule'])) {
+            if(isset($rules['cal_rule']) && isset($rules['cal_rule']['reduce_cost'])) {
                 $rules['cal_rule']['reduce_cost'] = $this->progressNumber($rules['cal_rule']['reduce_cost']);
                 $rules['cal_rule']['quote'] = $this->progressNumber($rules['cal_rule']['quote']);
 
@@ -458,15 +458,40 @@ class PackageService extends BaseService
     //处理数字
     public function progressNumber($number){
 
-        //去掉.00
-        if (stripos($number, '.00') !== false) {
-            $number = number_format($number, 0, '.', '');
-        }
-//        if(preg_match('/^0.\d{0}+/', $number)){
-//            $number = number_format($number);
+        $number = number_format($number, 2, '.', '');
+
+//        //去掉.00
+//        if (stripos($number, '.00') !== false) {
+//            $number = number_format($number, 0, '.', '');
 //        }
 
-        return $number;
+        //$number = preg_replace(' /^\d+(\.\d[0]+)?$/', '', $number);
+
+        $split = explode('.', $number);
+        $previous = $split[0];
+        $after = $split[1];
+        $dot = '';
+        $after_ = '';
+        if(!empty($after)){
+            $arr = str_split($after);
+            $arr_ = [];
+            for($i = count($arr) - 1; $i >= 0; $i--){
+                if($arr[$i] != '0'){
+                    $arr_[] = $arr[$i];
+                    $dot = '.';
+                }
+                else{
+                    if(!empty($arr_)){
+                        $arr_[] = $arr[$i];
+                    }
+                }
+            }
+            if(!empty($arr_)){
+                $after_ = implode('', array_reverse($arr_));
+            }
+        }
+
+        return $previous.$dot.$after_;
     }
 
 
@@ -726,7 +751,7 @@ class PackageService extends BaseService
 
         //首页二维码
         $qrCodeImg = WxService::QR_CODE_SOMA_INDEX.$this->getCI()->inter_id.'_'.$saler.'_'.$fansler.'.png';
-        $qrCodeUrl = site_url('soma/package/index?'. http_build_query([
+        $qrCodeIndexUrl = site_url('soma/package/index?'. http_build_query([
                 'id' => $this->getCI()->inter_id,
                 'saler' => $saler,
                 'fans_saler' => $fansler
@@ -1017,7 +1042,7 @@ class PackageService extends BaseService
             'total' => count($productsList),
             'theme' => json_decode($themeConfig, true),
             'attach' => [
-                'qrcode_index' => $qrcodeIndex
+                'index' => $qrCodeIndexUrl
             ]
         ];
 
@@ -1025,9 +1050,11 @@ class PackageService extends BaseService
     }
 
 
-
-
-    //获取分销员信息
+    /**
+     * 获取分销员信息
+     * @return array
+     * @author liguanglong  <liguanglong@mofly.cn>
+     */
     public function getSalerInfo(){
 
         $saler_id = $saler_name = $saler_type = null;
@@ -1062,8 +1089,28 @@ class PackageService extends BaseService
 
     }
 
+    /**
+     * 生成自定义链接二维码，文件流
+     * @param $codeUrl 二维码链接
+     * @author liguanglong  <liguanglong@mofly.cn>
+     */
+    public function getQrcodeStream($codeUrl){
 
-    //生成自定义链接二维码
+        //生成二维码
+        $this->getCI()->load->helper('phpqrcode');
+        //生成二维码图片
+        \QRcode::png($codeUrl,false, 'L', 6, 2);
+
+    }
+
+    /**
+     * 生成自定义链接二维码，cdn
+     * @param $filePath 上传文件目录
+     * @param $fileName 上传文件名
+     * @param $codeUrl 二维码跳转链接
+     * @return bool|string
+     * @author liguanglong  <liguanglong@mofly.cn>
+     */
     public function getQrcode($filePath, $fileName, $codeUrl){
 
         $redis = $this->getCI()->get_redis_instance();
@@ -1096,7 +1143,12 @@ class PackageService extends BaseService
     }
 
 
-    //cdn上传
+    /**
+     * cdn上传
+     * @param $furl 上传文件路径（包括文件名）
+     * @return string
+     * @author liguanglong  <liguanglong@mofly.cn>
+     */
     public function uploadFileToCdn($furl){
 
         //cdn

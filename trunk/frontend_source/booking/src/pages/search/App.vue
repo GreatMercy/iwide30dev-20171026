@@ -6,12 +6,18 @@
         <jfk-banner :items="advs" v-if="advs.length" :swiperOptions="swiperOptions"></jfk-banner>
         <div class="search_place_container">
           <div class="search_place">
-            <p class="search_title font-size--28" @click="goCityChoose()">
+            <p class="search_title font-size--28" @click="goCityChoose(1)">
+              <i class="booking_icon_font icon_search icon-icon_search"></i>
+              {{clickCityWord}}
+            </p>
+          </div>
+          <div class="search_place">
+            <p class="search_title font-size--28 searchCity" @click="goCityChoose(0)">
               <i class="booking_icon_font icon_search icon-icon_search"></i>
               {{searchVal}}
             </p>
             <i class="booking_icon_font icon_place icon-booking_icon_nearby_normal"
-               @click="toLocationHref(toLinks.NEARBY)"></i>
+               @click="HrefToNearby()"></i>
           </div>
         </div>
         <div class="date_container">
@@ -31,7 +37,7 @@
           </div>
         </div>
         <div class="checkBtn">
-          <a :href="toLinks.SRESULT">查 询 酒 店</a>
+          <a :href="toLinks.SRESULT + '&startdate=' + handleStartDate + '&enddate=' + handleEndDate + '&area=' + this.areaWord + '&city=' + clickCityWord">查 询 酒 店</a>
           <!--<a href="http://ihotels.iwide.cn/index.php/hotel/hotel/to_comment?oid=1048686">查 询 酒 店</a>-->
         </div>
         <!-- <p class="color-golden" v-show="isLoadProduct">loading</p> -->
@@ -79,8 +85,14 @@
       <JfkSupport v-once></JfkSupport>
       <div class="choose_date_calendar" v-show="showCalendar">
         <div class="jfk-pl-30 jfk-pr-30">
-          <jfk-calendar ref="jfkCalendar" class="font-size--28" format="yyyy/MM/dd" @date-pick="handleDateClick"
-                        :minDate="min" :maxDate="max" :range="true">
+          <jfk-calendar ref="jfkCalendar"
+                        class="font-size--28"
+                        format="yyyy/MM/dd"
+                        @date-pick="handleDateClick"
+                        :minDate="min"
+                        :maxDate="max"
+                        :range="true"
+                        :value="[new Date(handleStartDate), new Date(handleEndDate)]">
           </jfk-calendar>
         </div>
         <!-- :minDate="min" :maxDate="max" :defaultValue="defaultValue" :dateCellRender="dateCellRender" :disabledDate="disabledDate" @date-click="handleDateClick"  -->
@@ -114,8 +126,12 @@
                  :allCitys="allCitys"
                  :hotCitys="hotCitys"
                  :toLocationHref="toLocationHref"
+                 :getChooseCityVal="getChooseCityVal"
+                 :HrefToNearby="HrefToNearby"
                  :toLinks="toLinks"
-                 :firstCity="firstCity">
+                 :firstCity="firstCity"
+                 :clicktype="cityChooseType"
+                 :currentCity="clickCityWord">
 
     </city-choose>
   </div>
@@ -138,8 +154,9 @@
       // 使用日历
       this.setCalendar()
       // 设置缓存
-      this.searchCacheData = JSON.parse(window.localStorage['searchcache'])
-      console.log(this.searchCacheData)
+      if (this.searchCacheData.length !== 0) {
+        this.searchCacheData = JSON.parse(window.localStorage['searchcache'])
+      }
     },
     data () {
       return {
@@ -196,13 +213,34 @@
         hotCitys: [],
         // 设置首选城市
         firstCity: '',
-        searchCacheData: []
+        searchCacheData: [],
+        startString: '',
+        endString: '',
+        // 用来判断是选择城市还是搜索 0 1 因为使用watch 要给0 ，1 以外的数字
+        cityChooseType: 3,
+        // 入住城市
+        clickCityWord: '全部',
+        areaWord: '全部'
       }
     },
     methods: {
       // 页面跳转
       toLocationHref (href) {
         window.location.href = href
+      },
+      HrefToNearby () {
+        window.location.href = this.toLinks.NEARBY + '&startdate=' + this.handleStartDate + '&area=' + this.areaWord + '&enddate=' + this.handleEndDate + '&city=' + this.clickCityWord
+      },
+      getChooseCityVal (area, city) {
+        this.clickCityWord = city
+        if (area !== 0) {
+          this.areaWord = area
+        } else {
+          // 设置 全部 过去 nearby 会被忽略
+          this.areaWord = '全部'
+        }
+        this.showCityChoose = false
+//        this.setJumpUrls()
       },
       getDate () {
         // 获取现在的时间
@@ -250,7 +288,7 @@
           that.allCitys = res.web_data.citys
           that.hotCitys = res.web_data.hot_city
           that.firstCity = res.web_data.first_city
-          that.setJumpUrls()
+//          that.setJumpUrls()
           let menu = res.web_data.homepage_set.menu
           for (let attr in menu) {
             that.homepage_set_menu.push(menu[attr])
@@ -265,9 +303,11 @@
         })
       },
       // 去往选择城市组件
-      goCityChoose () {
+      goCityChoose (type) {
         let _this = this
         _this.showCityChoose = true
+        // 用来判断是选择城市还是搜索
+        _this.cityChooseType = type
         const cb = () => {
           _this.showCityChoose = false
         }
@@ -291,7 +331,7 @@
         _self.endDate = _self.changeDay(result[1])
         _self.startMonth = _self.changeMonth(result[0])
         _self.endMonth = _self.changeMonth(result[1])
-        _self.setJumpUrls()
+//        _self.setJumpUrls()
         // 关闭日历
         setTimeout(function () {
           _self.showCalendar = false
@@ -300,10 +340,10 @@
       // 设置跳转添加(加参)
       setJumpUrls () {
         // 查询酒店路径
-        let url1 = this.toLinks.SRESULT
-        let url2 = this.toLinks.NEARBY
-        this.toLinks.SRESULT = url1 + '&startdate=' + this.handleStartDate + '&enddate=' + this.handleEndDate
-        this.toLinks.NEARBY = url2 + '&startdate=' + this.handleStartDate + '&enddate=' + this.handleEndDate
+//        let url1 = this.toLinks.SRESULT
+//        let url2 = this.toLinks.NEARBY
+//        this.toLinks.SRESULT = url1 + '&startdate=' + this.handleStartDate + '&enddate=' + this.handleEndDate + '&city=' + this.clickCityWord
+//        this.toLinks.NEARBY = url2 + '&startdate=' + this.handleStartDate + '&enddate=' + this.handleEndDate + '&city=' + this.clickCityWord
       },
       // change day
       changeDay (result) {

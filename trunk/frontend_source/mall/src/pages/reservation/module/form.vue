@@ -4,7 +4,7 @@
 
     <div class="reservation-base-info jfk-pl-30 jfk-pr-30 is-align-middle">
       <div class="reservation-base-info__name font-size--38 is-align-middle jfk-flex">
-        <div class="reservation-base-info__shadow"></div>
+        <div class="reservation-base-info__shadow color-golden"></div>
         <span v-if="detail && detail.room" v-text="detail.room.name"></span>
       </div>
       <div class="reservation-base-info__hotel font-size--24" v-if="detail && detail.hotel"

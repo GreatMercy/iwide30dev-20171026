@@ -99,6 +99,7 @@ class Depositcard extends MY_Admin_Api
         $inter_id = $this->session->get_admin_inter_id();
 		$deposit_card_id = $this->input->post('deposit_card_id');
 		$data = $this->input->post();
+
 		if(empty($data['pay_type'])){
             $this->_ajaxReturn('请选择支付方式!',null,0);
         }
@@ -109,6 +110,22 @@ class Depositcard extends MY_Admin_Api
 
         if(in_array('balance',$data['pay_type']) && $data['is_balance'] == 't'){
             $this->_ajaxReturn('储值支付方式不可计入余额!',null,0);
+        }
+
+        if(!empty($data['title']) && mb_strlen($data['title']) > 10){
+            $this->_ajaxReturn('购卡名称，字数不能超过10个汉字，请重新输入!',null,0);
+        }
+
+        if(!empty($data['brand_name']) && mb_strlen($data['brand_name']) > 10){
+            $this->_ajaxReturn('购卡副名，字数不能超过10个汉字，请重新输入!',null,0);
+        }
+
+        if(!empty($data['notice']) && mb_strlen($data['notice']) > 20){
+            $this->_ajaxReturn('使用提醒，字数不能超过20个汉字，请重新输入!',null,0);
+        }
+
+        if(!empty($data['description']) && mb_strlen($data['description']) > 300){
+            $this->_ajaxReturn('使用说明，字数不能超过300个汉字，请重新输入!',null,0);
         }
 
         $pay_type = implode(',',$data['pay_type']);

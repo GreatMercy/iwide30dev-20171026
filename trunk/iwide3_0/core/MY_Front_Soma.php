@@ -170,12 +170,16 @@ class MY_Front_Soma extends MY_Front
                 if(isset($themeConfig['theme_id'])){
                     $themeConfigInfo = $this->Theme_config_model->get(['theme_id'], [$themeConfig['theme_id']]);
                     if($themeConfigInfo){
-                        $this->version = $themeConfigInfo[0]['version'];
+                        if($themeConfigInfo[0]['version']){
+                            $this->version = $themeConfigInfo[0]['version'];
+                        }
                     }
                 }
                 //把公众号配置的特殊信息放入配置
                 $this->statis_code = $this->_get_statis_code($this->inter_id, $themeConfig);
             }
+
+            $this->getTicketTheme();
         }
 
         if (ENVIRONMENT != 'production') {
@@ -281,6 +285,37 @@ EOF;
         if(in_array($this->inter_id, $this->cannotRefundInterId)){
             $this->datas['refund'] = false;
         }
+
+    }
+
+    public function getTicketTheme(){
+        $ticketId = $this->input->get('tkid');
+        //获取皮肤
+        if(!empty($ticketId)){
+            $this->load->model('soma/Product_package_ticket_model', 'ProductPackageTicketModel');
+            $ticket = $this->ProductPackageTicketModel->get_product_package_ticket_byIds([$ticketId], $this->inter_id);
+            if(!empty($ticket)){
+                $this->load->model('soma/Theme_config_use_model', 'ThemeConfigUseModel');
+                $this->load->model('soma/Theme_config_model', 'themeConfigModel');
+                $themeConfigUse = $this->ThemeConfigUseModel->get(
+                    ['inter_id', 'theme_id'],
+                    [$this->inter_id, $ticket[0]['theme_id']]
+                );
+                $themeConfig = $this->themeConfigModel->get(
+                    ['theme_id'],
+                    [$ticket[0]['theme_id']]
+                );
+                if(!empty($themeConfig)){
+                    if(!empty($themeConfigUse)){
+                        $this->themeConfig['index_bg'] = $themeConfigUse[0]['index_bg'];
+                        $this->themeConfig['cat_bg'] = $themeConfigUse[0]['cat_bg'];
+                    }
+                    $this->theme = $themeConfig[0]['theme_path'];
+                    $this->version = $themeConfig[0]['version'];
+                }
+            }
+
+        }
     }
 
 
@@ -306,6 +341,8 @@ EOF;
     {
         $ttl = 24 * 3600;
 
+        $redis = $this->get_redis_instance();
+
         //分销员ID
         $saler_id = $this->input->get('saler', null, 0);
         if($saler_id) {
@@ -321,20 +358,6 @@ EOF;
         } else{
             $this->session->set_tempdata('fans');
         }
-
-        /* add by chencong 20170829 分销保护期 start */
-        if(!$saler_id && !$fans_id){
-            $this->load->model('distribute/Idistribute_model');
-            $trueSaler = $this->Idistribute_model->get_protection_saler($this->openid, $this->inter_id);
-            if($trueSaler){
-                if($trueSaler >= 10000000){// 泛分销10000000起的
-                    $this->session->set_tempdata('fans', $trueSaler, $ttl);
-                }else{
-                    $this->session->set_tempdata('saler', $trueSaler, $ttl);
-                }
-            }
-        }
-        /* add by chencong 20170829 分销保护期 end */
 
         //泛分销粉丝ID
         $fans_saler_id = $this->input->get('fans_saler', null, 0);
@@ -377,13 +400,21 @@ EOF;
         //tkid
         $tkid = $this->input->get('tkid', null, '');
         if($tkid){
-            $this->session->set_tempdata('tkid', $tkid, $ttl);
+            $redis->set('tkid', $tkid, $ttl);
         }
 
         //brandname
         $brandname = $this->input->get('brandname', null, '');
-        if($brandname){
-            $this->session->set_tempdata('brandname', $brandname, $ttl);
+        //if($brandname){
+            $redis->set('brandname', $brandname, $ttl);
+            //$this->session->set_tempdata('brandname', $brandname, $ttl);
+        //}
+
+        //layout
+        $layout = $this->input->get('layout', null, '');
+        if($layout){
+            $redis->set('layout', $layout, $ttl);
+            //$this->session->set_tempdata('layout', $layout, $ttl);
         }
     }
 
@@ -1273,12 +1304,14 @@ var _hmt = _hmt || [];
     {
         $salerId        = $this->input->get('saler');
         $fansSalerId    = $this->input->get('fans_saler');
+
+        //需要跳转
+        $url = Url::current();
+
         if( $salerId ) {
             //如果链接存在分销号，就不刷新链接的分销号，转发刷新，购买计算绩效
             $this->session->set_userdata( 'giveDistribute'.$this->inter_id.$this->openid, $salerId );
         } else {
-            //需要跳转
-            $url = Url::current();
 
             //如果链接不存在分销号，判断是否为分销员
             $staff = $this->get_user_saler_or_fans_id();

@@ -4,9 +4,9 @@
     <div class="comment_top">
       <div class="container">
         <p class="score">
-          <i class="jfk-font-number jfk-price__number font-size--80">{{intNum}}</i>
-          <i class="jfk-font-number jfk-price__number font-size--64">.{{pointNum}}</i>
-          <span class="jfk-font-number jfk-price__number font-size--38">分</span>
+          <i class="jfk-font-number jfk-price__number font-size--108">{{intNum}}</i>
+          <i class="jfk-font-number jfk-price__number font-size--88">.{{pointNum}}</i>
+          <span class="jfk-font-number jfk-price__number font-size--36">分</span>
         </p>
         <jfk-rater :disabled="true" :value="score.comment_score"></jfk-rater>
         <pregress :allWidth="allWidth" :score="score" :comment_config="comment_config"/>
@@ -28,16 +28,16 @@
       </ul>
     </div>
     <ul class="comment-ul" v-if="commentList.length !== 0">
-      <li class="content jfk-pl-30 jfk-pr-30" :key="index" v-for="(item,index) in commentList" v-if="(item.content !== '' && item.type && item.type === 'user') && (item.status === '1'
+      <li class="content jfk-ml-30 jfk-mr-30" :key="index" v-for="(item,index) in commentList" v-if="(item.content !== '' && item.type && item.type === 'user') && (item.status === '1'
       || (member.open_id && item.openid === member.open_id))">
         <div class="contitle_info">
           <img :src="item.headimgurl" alt="" class="head_img">
           <span class="name font-size--28 grayColor80">{{item.nickname}}</span>
           <span class="date font-size--24 grayColorbf">{{parseTime(item.comment_time)}}</span>
-          <span class="score grayColor66">
-            <span class="font-size--28">{{item.intNum}}.</span>
-            <span class="font-size--24 grayColor66">{{item.pointNum}}</span>
-            <span class="font-size--18">分</span>
+          <span class="score grayColor33">
+            <span class="font-size--32">{{item.intNum}}.</span>
+            <span class="font-size--28">{{item.pointNum}}</span>
+            <span class="font-size--12">分</span>
           </span>
         </div>
         <p :style="{height : setHeight[index]}" class="comment font-size--28" ref="commentHeight">{{item.content}}</p>
@@ -66,10 +66,7 @@
       </li>
     </ul>
     <button class="booking_now font-size--34" @click="toLocationHref(bookingUrl)">
-      <i class="booking_icon_font font-size--34 icon-font_zh_li_qkbys"></i>
-      <i class="booking_icon_font font-size--34 icon-font_zh_ji_qkbys"></i>
-      <i class="booking_icon_font font-size--34 icon-font_zh_yv_qkbys"></i>
-      <i class="booking_icon_font font-size--34 icon-font_zh_ding__qkbys"></i>
+      立即预定
     </button>
     <!--<p class="color-golden" v-show="isLoadProduct">loading</p>-->
     <!--<JfkSupport v-once></JfkSupport>-->
@@ -143,8 +140,9 @@
           }
           this.$nextTick(() => {
             for (let j = 0; j < this.$refs.commentHeight.length; j++) {
-              if (this.$refs.commentHeight[j].offsetHeight / 24 > this.line) {
-                this.setHeight.push(this.line * 24 + 'px')
+              if (this.$refs.commentHeight[j].offsetHeight / 19 > this.line) {
+                console.log('下标是' + j)
+                this.setHeight.push(this.line * 19 + 'px')
                 this.isOpen.push(1)
               } else {
                 this.setHeight.push('auto')
@@ -178,7 +176,7 @@
       },
       // 计算宽度
       calculateWidth (value) {
-        return (value / 5 * 100) + '%'
+        return (value / 5 * 100) * 1.2 + 'px'
       },
       // 展开全文
       openAll (index) {
@@ -188,7 +186,7 @@
       // 收起全文
       closeAll (index) {
         this.$set(this.isOpen, index, 1)
-        this.$set(this.setHeight, index, this.line * 24 + 'px')
+        this.$set(this.setHeight, index, this.line * 19 + 'px')
       },
       // 修改酒店内容状态
       changeHotelReply (index, status) {

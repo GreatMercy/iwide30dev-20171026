@@ -37,7 +37,7 @@
         }
       }
       & .dateContainer{
-        width:33%;
+        width:30%;
         vertical-align: middle;
         &::before{
           display: none;
@@ -213,6 +213,40 @@
 
     }
 
+  }
+  .search_city_list{
+    .baidu-search{
+      margin-top: px2rem(50);
+    }
+    &_item{
+      & p{
+        height: px2rem(80);
+        line-height: px2rem(80);
+        a{
+          display: inline-block;
+          width: 100%;
+          height: 100%;
+        }
+        font-size: px2rem(30);
+        @mixin one-line horzin {};
+        position:relative;
+        &::before {
+          width: 100%;
+          position: absolute;
+          bottom: 0;
+          left: 0;
+        }
+      }
+      i{
+        margin-right: px2rem(20);
+      }
+      .goldColor{
+
+      }
+    }
+    &_item:first{
+      font-size: px2rem(32);
+    }
   }
 
 

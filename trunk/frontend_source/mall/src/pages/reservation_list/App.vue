@@ -39,7 +39,7 @@
             </div>
 
             <div class="reservation-list__right">
-              <button class="jfk-button jfk-button--primary is-plain font-size--30 product-button">
+              <button class="jfk-button jfk-button--primary is-special font-size--30 product-button">
                 <span>
                   现在订房
                 </span>
@@ -98,6 +98,7 @@
       this.searchValue = ''
       this.getData('page')
       this.codeId = params['code_id'] || ''
+      this.$pageNamespace(params)
     },
     methods: {
       getData (operation) {

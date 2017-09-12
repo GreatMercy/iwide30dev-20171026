@@ -1,5 +1,5 @@
 <template>
-  <div class="jfk-pages jfk-pages__invalid" :class="pageNamespace">
+  <div class="jfk-pages jfk-pages__invalid">
     <div class="jfk-pages__theme"></div>
     <div class="invalid_content">
       <div class="invalid_icon"><i class="jfk-font icon-mall_icon_remove"></i></div>

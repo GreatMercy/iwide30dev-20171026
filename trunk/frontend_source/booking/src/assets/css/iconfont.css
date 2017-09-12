@@ -1,20 +1,20 @@
 
 @font-face {
   font-family: "jfk-font";
-  src: url('//at.alicdn.com/t/font_359566_a896r3l7y32z9f6r.eot');
-  src: url('//at.alicdn.com/t/font_359566_a896r3l7y32z9f6r.eot?#iefix') format('embedded-opentype'),
-  url('//at.alicdn.com/t/font_359566_a896r3l7y32z9f6r.woff') format('woff'),
-  url('//at.alicdn.com/t/font_359566_a896r3l7y32z9f6r.ttf') format('truetype'),
-  url('//at.alicdn.com/t/font_359566_a896r3l7y32z9f6r.svg#jfk-font') format('svg');
+  src: url('//at.alicdn.com/t/font_359566_wue4fv65lhiio1or.eot');
+  src: url('//at.alicdn.com/t/font_359566_wue4fv65lhiio1or.eot?#iefix') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_359566_wue4fv65lhiio1or.woff') format('woff'),
+  url('//at.alicdn.com/t/font_359566_wue4fv65lhiio1or.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_359566_wue4fv65lhiio1or.svg#jfk-font') format('svg');
 }
 
 @font-face {
   font-family: 'booking_font_icon';  /* project id 332906 */
-  src: url('//at.alicdn.com/t/font_332906_ji6eivv46de7b9.eot');
-  src: url('//at.alicdn.com/t/font_332906_ji6eivv46de7b9.eot?#iefix') format('embedded-opentype'),
-  url('//at.alicdn.com/t/font_332906_ji6eivv46de7b9.woff') format('woff'),
-  url('//at.alicdn.com/t/font_332906_ji6eivv46de7b9.ttf') format('truetype'),
-  url('//at.alicdn.com/t/font_332906_ji6eivv46de7b9.svg#iconfont') format('svg');
+  src: url('//at.alicdn.com/t/font_332906_lpqmpafzbkyphkt9.eot');
+  src: url('//at.alicdn.com/t/font_332906_lpqmpafzbkyphkt9.eot?#iefix') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_332906_lpqmpafzbkyphkt9.woff') format('woff'),
+  url('//at.alicdn.com/t/font_332906_lpqmpafzbkyphkt9.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_332906_lpqmpafzbkyphkt9.svg#iconfont') format('svg');
 }
 .jfk-font {
   font-family:"jfk-font" !important;
@@ -82,7 +82,7 @@
 
 .icon-font_zh_fu_qkbys1:before { content: "\e646"; }
 
-.icon-font_zh_gong_qkbys1:before { content: "\e616"; }
+.icon-font_zh_gong_1_qkbys:before { content: "\e616"; }
 
 .icon-font_zh_geng_qkbys:before { content: "\e618"; }
 
@@ -202,8 +202,6 @@
 
 .icon-font_zh_emark_qkbys:before { content: "\e655"; }
 
-.icon-font_zh_yong_qkbys:before { content: "\e658"; }
-
 .icon-font_zh_gou_qkbys:before { content: "\e65a"; }
 
 .icon-font_zh_chu_fzdbs:before { content: "\e65d"; }
@@ -298,11 +296,41 @@
 
 .icon-font_zh_lun_qkbys:before { content: "\e68b"; }
 
+.icon-booking_icon_addpictures_normal:before { content: "\e69d"; }
+
 .icon-booking_icon_question_normal:before { content: "\e6b8"; }
+
+.icon-booking_icon_up_normal:before { content: "\e6a8"; }
 
 .icon-user_icon_Polite_nor:before { content: "\e6b9"; }
 
+.icon-font_zh_yong_qkbys:before { content: "\e6c2"; }
+
 .icon-mall_icon_orderDetai_gift:before { content: "\e6c4"; }
+
+.icon-booking_icon_DN_norm:before { content: "\e6d9"; }
+
+.icon-font_zh_er_qkbys:before { content: "\e6da"; }
+
+.icon-font_zh_ling_qkbys:before { content: "\e6db"; }
+
+.icon-font_zh_qu_qkbys1:before { content: "\e6dc"; }
+
+.icon-font_zh_li_qkbys1:before { content: "\e6dd"; }
+
+.icon-font_zh_ma_qkbys:before { content: "\e6de"; }
+
+.icon-font_zh_wei_qkbys1:before { content: "\e6df"; }
+
+.icon-font_zh_cheng_qkbys1:before { content: "\e6e0"; }
+
+.icon-font_zh_sheng_qkbys:before { content: "\e6e1"; }
+
+.icon-mall_icon_booking_cancel:before { content: "\e6e2"; }
+
+.icon-icon_jump_normal:before { content: "\e6e3"; }
+
+.icon-font_zh_zhong_qkbys:before { content: "\e6e4"; }
 
 /*booking*/
 .icon-zhifu:before { content: "\e66c"; }
@@ -310,6 +338,10 @@
 .icon-yinlianzhifu:before { content: "\e67c"; }
 
 .icon-laqiala:before { content: "\e641"; }
+
+.icon-ipt_icon_gte_default:before { content: "\e602"; }
+
+.icon-ipt_icon_lte_default:before { content: "\e603"; }
 
 .icon-font_zh_deng_qkbys:before { content: "\e605"; }
 
@@ -320,6 +352,8 @@
 .icon-font_zh_lu_qkbys:before { content: "\e607"; }
 
 .icon-font_zh_zhi_qkbys:before { content: "\e60a"; }
+
+/*.icon-user_icon_jump_normal:before { content: "\e60b"; }*/
 
 .icon-font_zh_dan_qkbys:before { content: "\e612"; }
 
@@ -564,6 +598,8 @@
 .icon-booking_icon_swimmin:before { content: "\e6df"; }
 
 .icon-booking_icon_Bathcro:before { content: "\e6e0"; }
+
+/*.icon-icon_jump_normal:before { content: "\e6e1"; }*/
 
 /*其他*/
 .icon-booking_icon_addpictures_normal:before { content: "\e69d"; }

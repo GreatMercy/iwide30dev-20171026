@@ -31,7 +31,7 @@
         </p>
       </div>
     </div>
-    <div class="trip_type jfk-pl-30 jfk-pr-30 font-size--30" v-show="tourType != ''">
+    <div class="trip_type jfk-pl-30 jfk-pr-30 font-size--30" v-show="tourType !== null">
       <p class="title">出游类型</p>
       <ul class="tripType">
         <li v-for="(item, index) in tourType" @click="chooseType(index)" :key="index"

@@ -142,13 +142,11 @@ class Skin extends MY_Admin_Iapi
     }
 
     /**
-     * todo 待跟前端确认接口格式
      * 交换轮播图的顺序
      * 前端数据格式 POST请求
      * [
      *  't' => 1
-     *  ['id' => 1, 'sort' => 2],
-     *  ['id' => 2, 'sort' => 3],
+     *  'focus' => ['id' => '1', 'sort' => 2, 'key'=>'1'],
      * ]
      *  t= 1向下 2向上
      * @author daikanwu <daikanwu@jperation.com>
@@ -156,22 +154,66 @@ class Skin extends MY_Admin_Iapi
     public function exchange_position()
     {
         $post = $this->get_source();
+//        $post = [
+//            't' => 1,
+//            'focus' => ['id' => 78, 'sort' => '5', 'key' => 0]
+//        ];
 
-        //获取顺序最小的和最大的
+        //校验参数
+        if (!in_array($post['t'], [1, 2])) {
+            $this->out_put_msg(BaseConst::OPER_STATUS_FAIL_TOAST, 't值只能为1或2');
+        }
+
+        if (empty($post['focus']['id'])) {
+            $this->out_put_msg(BaseConst::OPER_STATUS_FAIL_TOAST, 'id必填');
+        }
+        if ($post['focus']['sort'] === '') {
+            $this->out_put_msg(BaseConst::OPER_STATUS_FAIL_TOAST, 'sort必填');
+        }
+
+        //校验是否可以交换
         $this->load->model('wx/Publics_model');
         $roast = $this->Publics_model->get_pub_imgs($this->inter_id, 'hotelslide');
         if (empty($roast)) {
             $this->out_put_msg(BaseConst::OPER_STATUS_FAIL_TOAST, '轮播图设置为空');
         }
-        $first = $roast[0];
-        $end = end($roast);
+        $last_key = count($roast)-1;
+
+        //开启事务
+        $this->db->trans_start();
 
         if ($post['t'] == 1) {
+            //向下交换
+            if ($post['focus']['key'] == $last_key) {
+                $this->out_put_msg(BaseConst::OPER_STATUS_FAIL_TOAST, '已经是最下');
+            }
+            //更新sort字段
+            $target = ['id' => $post['focus']['id'], 'sort' => $roast[$post['focus']['key'] + 1]['sort']];
+            $target_down = ['id' => $roast[$post['focus']['key'] + 1]['id'], 'sort' => $post['focus']['sort']];
 
+            $this->Publics_model->update_focus_new($target);
+            $this->Publics_model->update_focus_new($target_down);
         } else {
+            //向上交换
+            if ($post['focus']['key'] == 0) {
+                $this->out_put_msg(BaseConst::OPER_STATUS_FAIL_TOAST, '已经是最上');
+            }
+            //更新sort字段
+            $target = ['id' => $post['focus']['id'], 'sort' => $roast[$post['focus']['key'] - 1]['sort']];
+            $target_up = ['id' => $roast[$post['focus']['key'] - 1]['id'], 'sort' => $post['focus']['sort']];
+            $this->Publics_model->update_focus_new($target);
+            $this->Publics_model->update_focus_new($target_up);
 
         }
 
+        $this->db->trans_complete();
+        //事务结束
+
+        if ($this->db->trans_status() === FALSE) {
+            $this->out_put_msg(BaseConst::OPER_STATUS_FAIL_TOAST, '互换位置失败');
+        }
+
+        $this->out_put_msg(BaseConst::OPER_STATUS_SUCCESS, '');
     }
 
     /**
@@ -180,7 +222,7 @@ class Skin extends MY_Admin_Iapi
      *
      * [
      *  'share_setting' => array('id' => '', 'page_title' => '', 'page_desc' => '', 'share_icon' => ''),
-     *  'roasting_setting' => array(['id'=> 1, 'link'=> '', 'img_url' => 'xxx', sort=>'1'])
+     *  'roasting_setting' => array(['id'=> 1, 'link'=> '', 'image_url' => 'xxx', sort=>'1'])
      *  'font_setting' => ['font_color'=> '', 'font_size'=>11],
      *   'home_setting' => [
      *     'id'=> '1997',

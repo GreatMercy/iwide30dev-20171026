@@ -2000,6 +2000,112 @@ class Cron_nz extends MY_Controller
         echo 'success';
     }
 
+	/**
+	 * 烟台万达文华酒店
+	 */
+	public function ytwdwh_booking_suceess()
+	{
+		// 1000322982
+		$inter_id = 'a503998048';
+		$template_id = 'RhKVOACzhoPfWttuAnM9AyQA1nbuj2fLV_00auElYbA';
+		$file = $this->_basic_path . 'ytwdwh_booking_suceess.csv';
 
+		$data['template_id'] = $template_id;
+		$data['url'] = 'http://assist.iwide.cn/index.php/soma/package/index?id=a503998048&saler=290';
+		$data['topcolor'] = '#000000';
+		$subdata['first'] = array(
+			'value' => '您已成功预约烟台万达文华酒店开业三周年微信商城促销活动！',
+			'color' => '#000000'
+		);
+		$subdata['keyword1'] = array(
+			'value' => '预约项目：微信商城首促活动',
+			'color' => '#000000'
+		);
+		$subdata['keyword2'] = array(
+			'value' => '预约时间：',
+			'color' => '#000000'
+		);
+		$subdata['remark'] = array(
+			'value' => '活动倒计时17小时！错过本次再等一年！',
+			'color' => '#000000'
+		);
+		$data['data'] = $subdata;
 
+		$openids = $this->get_target_openids_from_csv($inter_id, $file);
+		// 已下单openid
+		$orderOpenidsData = $this->soma_db_conn_read
+			->distinct()
+			->select('openid')
+			->where('inter_id', 'a503998048')
+			->from('iwide_soma_sales_order_1001')
+			->get()
+			->result_array();
+		$orderOpenids = array_column($orderOpenidsData, 'openid');
+		// 没下单openid
+		$openids = array_diff($openids, $orderOpenids);
+
+		$this->load->model('soma/Message_wxtemp_template_model', 't_model');
+		$base_key = 'Soma_cron_nz:' . date('Y-m-d') . ':' . __FUNCTION__ . ':';
+		foreach ($openids as $openid) {
+			$redis_key = $base_key . $openid;
+			if($this->_redis->exists($redis_key))
+			{
+				continue;
+			}
+			$data['touser'] = $openid;
+			$res = $this->t_model->send_template(json_encode($data), $inter_id);
+			$this->_redis->set($redis_key, json_encode($res));
+		}
+		echo 'success';
+	}
+
+    /**
+     * Wuqd 2017-09-11
+     * 手动发送微信模板消息
+     * 成都世纪城洲际大饭店
+     */
+    public function sjczj_0911()
+    {
+        // 1000331591//
+        $inter_id = 'a484122795';
+        $template_id = 'BM20NbWAxqv0D-EBD1csiilkMPdRoonm5QHdsjJCvOo';
+        $file = $this->_basic_path . 'sjczj_0911.csv';
+
+        $data['template_id'] = $template_id;
+        $data['url'] = '';
+        $data['topcolor'] = '#000000';
+        $subdata['first'] = array(
+            'value' => '您购买的618活动商品即将在9月18日到期，因会展活动9月11日-16日酒店不可接待已经为您延期至9月30日',
+            'color' => '#000000'
+        );
+        $subdata['keyword1'] = array(
+            'value' => '',
+            'color' => '#000000'
+        );
+        $subdata['keyword2'] = array(
+            'value' => '',
+            'color' => '#000000'
+        );
+        $subdata['remark'] = array(
+            'value' => '请在有效期前使用完毕',
+            'color' => '#000000'
+        );
+        $data['data'] = $subdata;
+
+        $openids = $this->get_target_openids_from_csv($inter_id, $file);
+
+        $this->load->model('soma/Message_wxtemp_template_model', 't_model');
+        $base_key = 'Soma_cron_nz:' . date('Y-m-d') . ':' . __FUNCTION__ . ':';
+        foreach ($openids as $openid) {
+            $redis_key = $base_key . $openid;
+            if($this->_redis->exists($redis_key))
+            {
+                continue;
+            }
+            $data['touser'] = $openid;
+            $res = $this->t_model->send_template(json_encode($data), $inter_id);
+            $this->_redis->set($redis_key, json_encode($res));
+        }
+        echo 'success';
+    }
 }
