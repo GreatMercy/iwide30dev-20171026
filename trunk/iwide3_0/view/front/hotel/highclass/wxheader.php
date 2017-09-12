@@ -56,7 +56,7 @@ wx.onMenuShareAppMessage({
 //       window.localStorage.setItem('longitude',longitude)
 //     }
 //   })
-// });
+});
 function tonavigate(lati,longi,hname,addr) {
     wx.openLocation({
         latitude: lati,

@@ -19,6 +19,13 @@ const bookingPackageProducts = (r) => {
     r(packageProducts.default)
   }, showLoadError, 'booking_package-products')
 }
+// 订房皮肤管理
+const bookingskinManage = (r) => {
+  require.ensure([], function (require) {
+    let packageProducts = require('./booking/skinManage/index')
+    r(packageProducts.default)
+  }, showLoadError, 'bookingskinManage')
+}
 /* ---------------- 订房相关模块结束 ---------------- */
 /* ---------------- 会员相关模块开始 ---------------- */
 const coupon = (r) => {
@@ -253,6 +260,7 @@ const transferAudit = (r) => {
 export default {
   bookingPrices,
   bookingPackageProducts,
+  bookingskinManage,
   coupon,
   couponList,
   couponDetail,

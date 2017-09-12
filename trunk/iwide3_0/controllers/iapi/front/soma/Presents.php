@@ -1231,7 +1231,7 @@ class Presents extends MY_Front_Soma_Iapi
         $returnData['message'] = $orders['message'];
         $returnData['order_list_url'] = $this->link['order_link'];
         $returnData['theme_id'] = $orders['theme_id']; //主题
-        $returnData['redirect_url']  = $this->link['package_received'].$gift_id;
+        $returnData['redirect_url']  = $this->link['package_received'].$gift_id.'&sign='.$getSign.'&grd=1';
         $themeArr = $this->get_theme();
         foreach($themeArr as $singleTheme){
             if($singleTheme['theme_id'] == $orders['theme_id']){

@@ -263,44 +263,51 @@ class Consumer extends MY_Front_Soma
      */
     public function consumer_scaner()
     {
-        //print_r($this);die;
-        //TODO: 是否在管理员授权表中状态正常
-        $this->load->model('core/priv_admin_authid', 'admin_authid');
-        $is_permit = $this->admin_authid->can_access($this->openid);
-        if ($is_permit) {
-            $header = array(
-                'title' => '扫码核销',
-            );
-            $this->load->helper('encrypt');
-            $encrypt_util = new Encrypt();
-            $token = $encrypt_util->encrypt($this->openid . date('YmdH'));
 
-            //增加以下jsapi
-            $base_api_list = array('scanQRCode', 'closeWindow');
+        //todo 由于改版此功能没错，故写死皮肤
+        $this->theme = 'v1';
 
-            $data = array(
-                'message' => '点击页面，开始核销',
-                'callback' => EA_const_url::inst()->get_url('*/*/consumer_callback', array('id' => $this->inter_id)),
-                'js_api_list' => $base_api_list,
-                'openid' => $this->openid,
-                't' => $token,
-            );
-            $this->_view("header", $header);
-            $this->_view('consumer_scaner', $data);
+        if(!$this->isNewTheme()){
+            //print_r($this);die;
+            //TODO: 是否在管理员授权表中状态正常
+            $this->load->model('core/priv_admin_authid', 'admin_authid');
+            $is_permit = $this->admin_authid->can_access($this->openid);
+            if ($is_permit) {
+                $header = array(
+                    'title' => '扫码核销',
+                );
+                $this->load->helper('encrypt');
+                $encrypt_util = new Encrypt();
+                $token = $encrypt_util->encrypt($this->openid . date('YmdH'));
 
-        } else {
-            $header = array(
-                'title' => '认证失败',
-            );
-            $base_api_list = array('closeWindow');
-            $message = '您的微信号未经授权，不能进行此操作。';
-            $data = array(
-                'message' => $message,
-                'js_api_list' => $base_api_list,
-            );
-            $this->_view("header", $header);
-            $this->_view('consumer_deny', $data);
+                //增加以下jsapi
+                $base_api_list = array('scanQRCode', 'closeWindow');
+
+                $data = array(
+                    'message' => '点击页面，开始核销',
+                    'callback' => EA_const_url::inst()->get_url('*/*/consumer_callback', array('id' => $this->inter_id)),
+                    'js_api_list' => $base_api_list,
+                    'openid' => $this->openid,
+                    't' => $token,
+                );
+                $this->_view("header", $header);
+                $this->_view('consumer_scaner', $data);
+
+            } else {
+                $header = array(
+                    'title' => '认证失败',
+                );
+                $base_api_list = array('closeWindow');
+                $message = '您的微信号未经授权，不能进行此操作。';
+                $data = array(
+                    'message' => $message,
+                    'js_api_list' => $base_api_list,
+                );
+                $this->_view("header", $header);
+                $this->_view('consumer_deny', $data);
+            }
         }
+
     }
 
     /**
