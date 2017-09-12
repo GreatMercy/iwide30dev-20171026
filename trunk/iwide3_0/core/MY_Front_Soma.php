@@ -399,9 +399,9 @@ EOF;
 
         //tkid
         $tkid = $this->input->get('tkid', null, '');
-        if($tkid){
+        //if($tkid){
             $redis->set('tkid', $tkid, $ttl);
-        }
+        //}
 
         //brandname
         $brandname = $this->input->get('brandname', null, '');

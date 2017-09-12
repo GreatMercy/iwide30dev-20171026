@@ -377,7 +377,7 @@ class Hotel_model extends CI_Model {
 		if ($replace_host && $result){
 		    $reg = '/(http)s{0,1}:\/\/([^\/]+)/i';
 		    foreach ($result as &$r){
-		        $r['mark_link'] = preg_replace($reg,$replace_host, $r['mark_link'],1);
+		        $r['mark_link'] = 'http://'.preg_replace($reg,$replace_host, $r['mark_link'],1);
 		    }
 		}
 		return $result;
