@@ -15,7 +15,7 @@
       </div>
       <p class="relative border_bottom margin_top_10 height_1"></p>
       <div class="flex between margin_top_13">
-        <div class="main_color1 font_12"><font class="jfk-font margin_right_2 font_21">&#xe643;</font><em class="iconfonts font_25">{{value.money}}</em></div>
+        <div class="main_color1 font_12"><font class="jfk-font margin_right_2 font_21">&#xe643;</font><em class="iconfonts font_25">{{value.money * 1}}</em></div>
         <div class="font_15 color1 border_1 width_100 center padding_5 relative border_b2945e desp-btn" @click="bucard(value.deposit_card_id)">立即购买</div>
       </div>
     </div>

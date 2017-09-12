@@ -182,10 +182,10 @@
               <li class="font-size--40" v-if="menuList.canCheck"><i class="jfk-font icon-mall_icon_support_deliver"></i>
                 <p class="font-size--28">到店自提</p>
               </li>
-              <li class="font-size--40" v-if="menuList.canInvoice"><i
+              <!-- <li class="font-size--40" v-if="menuList.canInvoice"><i
                 class="jfk-font icon-mall_icon_support_invoice"></i>
                 <p class="font-size--28">开具发票</p>
-              </li>
+              </li> -->
               <li class="font-size--40" v-if="menuList.canWxBooking"><i class="jfk-font icon-user_icon_Reservatio"></i>
                 <p class="font-size--28">微信订房</p>
               </li>

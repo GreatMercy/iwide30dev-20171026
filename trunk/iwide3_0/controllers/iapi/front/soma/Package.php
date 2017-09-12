@@ -439,12 +439,13 @@ class Package extends MY_Front_Soma_Iapi
         $ticketId = $redis->get('tkid');
         $pIds = [];
         if ($ticketId) {
+
             //获取产品id列表
             $serviceName = $this->serviceName(Product_Service::class);
             $serviceAlias = $this->serviceAlias(Product_Service::class);
             $this->load->service($serviceName, null, $serviceAlias);
             $catId = $filter_cat;
-            $info = $this->soma_product_service->getProductPackageTicketProductIds($ticketId, $filter_cat);
+            $info = $this->soma_product_service->getProductPackageTicketProductIds($ticketId);
             if($info){
                 $pIds = array_column($info['products'], 'product_id');
                 $ticketDetail = current($info['ticketList']);

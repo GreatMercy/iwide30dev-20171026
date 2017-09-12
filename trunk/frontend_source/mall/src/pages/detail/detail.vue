@@ -164,17 +164,8 @@
       <div class="qrcode">
         <img :src="hotelInfo.qrcode" />
       </div>
-      <template v-if="!fansInfo.is_fans">
-        <div class="tip font-size--28 font-color-extra-light-gray">长按识别关注公众号</div>
-        <div class="tip font-size--28 font-color-extra-light-gray">
-          <span>享受</span>
-          <span class="color-golden font-size--36">更多优惠</span>
-        </div>
-      </template>
-      <template v-else>
-        <div class="tip font-size--28 font-color-extra-light-gray">你还未关注公众号</div>
-        <div class="tip font-size--28 font-color-extra-light-gray">先长按识别关注公众号吧！</div>
-      </template>
+      <div class="tip font-size--28 font-color-extra-light-gray">长按关注公众号</div>
+      <div class="tip font-size--28 font-color-extra-light-gray">及时获取优惠信息</div>
     </jfk-popup>
     <jfk-popup v-model="killsecQrcodeVisible" :showCloseButton="true" :closeOnClickModal="false" class="jfk-popup__qrcode jfk-ta-c">
       <div class="qrcode">
@@ -375,7 +366,7 @@
         return formatPrice(this.productInfo, true, true)
       },
       serviceItems () {
-        let services = ['can_refund_3', 'can_mail', 'can_gift', 'can_pickup', 'can_invoice', 'can_refund']
+        let services = ['can_refund_3', 'can_mail', 'can_gift', 'can_pickup', 'can_refund']
         let items = []
         services.forEach((item, index) => {
           if (item === 'can_refund_3' && this.productInfo['can_refund'] === '3' || this.productInfo[item] === '1') {

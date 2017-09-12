@@ -875,7 +875,7 @@ class Presents extends MY_Front_Soma_Iapi
         $item = $orders['items'][0];
         // 默认跳转到订单中心
         //$redirect_url = Soma_const_url::inst()->get_url('soma/order/order_detail', array('id' => $this->inter_id, 'oid'=> $item['order_id'], 'bsn' => $business));
-        $redirect_url = $this->link['detail_link'].item['order_id'].'&bsn='.$business;
+        $redirect_url = $this->link['detail_link'].$item['order_id'].'&bsn='.$business;
         if($send_from == Gift_order_model::SEND_FROM_GIFT) {
             //$redirect_url = Soma_const_url::inst()->get_url('soma/gift/package_received', array('id' => $this->inter_id, 'gid'=> $send_order_id, 'sign' => ''));
             $redirect_url = $this->link['package_received'].$send_order_id.'&sign=';
@@ -1217,6 +1217,9 @@ class Presents extends MY_Front_Soma_Iapi
             $this->out_put_msg(FrontConst::OPER_STATUS_FAIL_ALERT, $this->lang->line('接受分享链接签名错误！'));
             return;
         }
+
+        $fans = $this->Publics_model->get_fans_info($this->inter_id, $orders['openid_give'] );
+
         $items = $giftOrderModel->load( $gift_id )->get_order_items($business, $this->inter_id);
         $item = $items[0];
         $itemFiledFilter = ['parent_id', 'parent_id', 'hotel_id', 'openid_origin', 'type', 'sku', 'conn_devices', 'name_en', 'card_id', 'compose', 'transparent_img', 'compose_en', 'use_cnt', 'can_split_use', 'can_wx_booking', 'wx_booking_config', 'can_refund', 'can_mail', 'can_gift', 'can_pickup', 'can_sms_notify', 'can_invoice', 'can_reserve', 'is_hide_reserve_date', 'room_id', 'add_time', 'send_wxtemp_status'];
@@ -1224,7 +1227,7 @@ class Presents extends MY_Front_Soma_Iapi
         $item->toArray();
         $item = $item->except($itemFiledFilter)->toArray();
         $returnData['item'] = $item ;
-        $returnData['fans'] = $this->Publics_model->get_fans_info( $orders['openid_give'] );
+        $returnData['fans'] = $fans;
         $returnData['message'] = $orders['message'];
         $returnData['order_list_url'] = $this->link['order_link'];
         $returnData['theme_id'] = $orders['theme_id']; //主题

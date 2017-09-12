@@ -136,7 +136,7 @@ class MY_Front_Soma_Iapi extends MY_Front_Iapi
                     'brandname' => $brandName,
                     'layout' => $layout
                 ]), // 卷码 - 已使用（消费）
-            'refund_index_link' => site_url('soma/refund/apply') . "?id=" . $this->inter_id .'&layout='.$layout."&tkid=".$tkId.'&brandname='.$brandName. '&oid=',
+            'refund_index_link' => site_url('soma/refund/apply') . "?id=" . $this->inter_id .'&bsn=package'.'&layout='.$layout."&tkid=".$tkId.'&brandname='.$brandName. '&oid=',
             //微信支付
             'wx_pay' => site_url('wxpay/soma_pay').'?id=' . $this->inter_id.'&layout='.$layout."&tkid=".$tkId.'&brandname='.$brandName,
             //威富通支付
@@ -154,6 +154,13 @@ class MY_Front_Soma_Iapi extends MY_Front_Iapi
                     'aiid' => '',
                     'aiidi' => '',
                     'oid' => '',
+                ]),
+            'wx_select_hotel' => site_url('soma/booking/wx_select_hotel') . '?' . http_build_query([
+                    'id'=>$this->inter_id,
+                    'aiidi'=>0,
+                    'aiid'=>'%s',
+                    'oid'=>'%s',
+                    'bsn'=>'%s'
                 ]),
             // 微信订房 - 选酒店房型 [api]
             'wx_select_hotel_api_link' => site_url('iapi/soma/order/wx_select_hotel') . '?' . http_build_query([
@@ -198,7 +205,7 @@ class MY_Front_Soma_Iapi extends MY_Front_Iapi
                 ]),
 
             //退款首页
-            'refund_index' => site_url('soma/refund/apply') . "?id=" . $this->inter_id.'&layout='.$layout."&tkid=".$tkId.'&brandname='.$brandName . '&oid=',
+            'refund_index' => site_url('soma/refund/apply') . "?id=" . $this->inter_id.'&layout='.$layout."&tkid=".$tkId.'&brandname='.$brandName .'&bsn=package'.'&oid=',
             //退款详情 //http://credit.iwide.cn/index.php/soma/refund/detail?&oid=1000013037&saler=35
             'refund_detail' => site_url('soma/refund/detail') . "?id=" . $this->inter_id .'&bsn=package'.'&layout='.$layout."&tkid=".$tkId.'&brandname='.$brandName,
             //二维码礼包详情页

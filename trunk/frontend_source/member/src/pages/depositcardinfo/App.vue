@@ -15,7 +15,7 @@
         <p class="float font_15 depoinfo-title">{{dataList.card.title}}</p>
         <p class="floatr main_color1 deposit-price">
           <em class="jfk-font font_19">&#xe643;</em>
-          <span class="iconfonts font_25">{{dataList.card.money}}</span>
+          <span class="iconfonts font_25">{{dataList.card.money * 1}}</span>
         </p>
       </div>
       <p class="font_12 deposit-notice color3">{{dataList.card.notice}}</p>
@@ -49,7 +49,7 @@
     </section>
   </section>
   <section class="flex layer_bg fixed_btn font_17 color_fff white_bg">
-    <div class="flex_1 padding_left_30 depoinfo-total"><font class="font_13">¥ </font><em class="font_25">{{dataList.card.money}}</em></div>
+    <div class="flex_1 padding_left_30 depoinfo-total"><font class="font_13">¥ </font><em class="font_25">{{dataList.card.money * 1}}</em></div>
     <div class="jfk-font width_150 center main_bg1 padding_13 font_19" @click="submit()">&#xe63b;&#xe63a;&#xe639;&#xe638;</div>
   </section>
   <JfkSupport v-once></JfkSupport>

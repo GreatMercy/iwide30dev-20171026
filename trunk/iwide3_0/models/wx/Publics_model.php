@@ -553,11 +553,15 @@ class Publics_model extends CI_Model {
      * @param $openid 微信ID
      * @return mixed
      */
-	function get_fans_info($openid) {
-		return $this->db->get_where ( self::TAB_FANS, array (
-				'openid' => $openid 
-		) )->row_array ();
-	}
+    function get_fans_info($openid,$inter_id = '') {
+        $db_read = $this->load->database('iwide_r1',true);
+        $where = array('openid'=>$openid);
+        if(!empty($inter_id))
+            $where['inter_id'] = $inter_id;
+        $db_read->where($where);
+        $query = $db_read->get ( self::TAB_FANS )->row_array ();
+        return $query;
+    }
 	
 	/**
 	 * 通过多个openid获取所有粉丝信息
