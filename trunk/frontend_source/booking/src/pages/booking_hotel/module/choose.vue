@@ -11,8 +11,7 @@
           组合已选房型 <span class="other_room">{{item.room_info.name}}</span> 购买更优惠
         </p>
       </div>
-      <div class="products-layout jfk-tab__body-item products-layout--card" infinite-scroll-disabled="disableLoadProduct"
-           infinite-scroll-distance="60">
+      <div class="products-layout jfk-tab__body-item products-layout--card">
         <div class="products-layout__body">
           <ul class="jfk-pl-30 jfk-pr-30">
             <li class="mt30" v-for="(value, key) in item.package_info.items" :key="key">
@@ -29,6 +28,7 @@
                       <input type="checkbox"
                              class="room_check"
                              @click="addRoom($event, value, key)">
+                      <!--:checked="value.checked"-->
                       <em></em>
                     </label>
                     <div class="product-info-cont">
@@ -52,7 +52,7 @@
                       </div>
                       <div class="count jfk-d-ib font-size--32 set_num">
                         <jfk-input-number v-model="value.countNum"
-                                          :min="minNum"
+                                          :min="0"
                                           :max="value.nums"
                                           @click.native.prevent="setAllPrice()">
                         </jfk-input-number>
@@ -115,7 +115,7 @@
           startdate: '',
           enddate: '',
           datas: {},
-          select_package: {}
+          select_package: []
         },
         countNum: 1,
         allPrice: 0,
@@ -160,12 +160,22 @@
         this.sendData.select_package = []
         // 设置选中状态
         this.setProductChoose()
-        // 计算总价
-        this.setAllPrice()
       },
       // 商品设置默认选中
       setProductChoose () {
-        console.log(this.item)
+        console.log(this.item, ' ============== item')
+//        for (let key in this.item.package_info.items) {
+//           // 设置默认选中数量
+//          if (this.item.package_info.items[key].selectnum > 0) {
+//            this.item.package_info.items[key].checked = true
+//            this.sendData.select_package.push(this.item.package_info.items[key])
+//            this.item.package_info.items[key].indexVal = key
+//          } else {
+//            this.item.package_info.items[key].checked = false
+//          }
+//        }
+        // 计算总价
+        this.setAllPrice()
       },
       setDetailStatus (key) {
         if (this.item.package_info.items[key].product_show_status === false) {
@@ -198,7 +208,7 @@
           num += Number(this.sendData.select_package[keyIndex].price) * Number(this.sendData.select_package[keyIndex].countNum)
         }
         this.allPrice = Number(num) + Number(this.item.state_info.avg_price)
-        this.sendData.allPrice = this.allPrice
+        this.sendData.allPrice = this.allPrice = this.allPrice.toFixed(2)
       },
       goSubmitOrder () {
         if (this.sendData.select_package.length === 0) {

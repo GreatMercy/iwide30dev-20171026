@@ -66,7 +66,7 @@
             <a class="layer_bg color2 j_whole_show always" v-if="item.code === 'collect'"
                @click="showBottomTip(1)">
               <div class="img">
-                <i class="booking_icon_font icon_arrow icon-booking_icon_timerent_normal font-size--40"></i>
+                <i class="booking_icon_font icon_arrow icon-booking_icon_timelimitspike_normal font-size--40"></i>
               </div>
               <div class="txtclip font-size--28 mar_b">{{item.menu_name}}</div>
               <div class="txtclip font-size--24 gray_color">{{item.desc}}</div>
@@ -74,7 +74,7 @@
             <a class="layer_bg color2 j_whole_show always" v-if="item.code === 'order'"
                :href="item.link">
               <div class="img">
-                <i class="booking_icon_font icon_arrow icon-booking_icon_timerent_normal font-size--40"></i>
+                <i class="booking_icon_font icon_arrow icon-booking_icon_earlytoearly_normal font-size--40"></i>
               </div>
               <div class="txtclip font-size--28 mar_b">{{item.menu_name}}</div>
               <div class="txtclip font-size--24 gray_color">{{item.desc}}</div>

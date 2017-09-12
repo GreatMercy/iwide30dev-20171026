@@ -3,7 +3,7 @@
     <!-- <div class="jfk-pages__theme"></div> -->
     <p class="float_word font-size--22" v-show="searchCityList">
         <span v-for="(item, index) in allCitys" :key="index">
-          {{index}} <br/>
+          <a @click.stop.prevent="href(index)">{{index}}</a><br/>
         </span>
     </p>
     <!--<p class="color-golden" v-show="isLoadProduct">loading</p>-->
@@ -57,7 +57,7 @@
     <div class="all_city font-size--28 jfk-pl-30 jfk-pr-30" v-show="searchCityList">
       <div class="all_city_item"
            v-for="(item,value) in allCitys">
-        <p class="all_city_item_word">{{value}}</p>
+        <p class="all_city_item_word" :id="value">{{value}}</p>
         <ul v-for="(item1, index1) in item"
             :key="index1">
           <li @click="getChooseCityVal(0, item1.city)" v-if="!item1.area">{{item1.city}}</li>
@@ -258,6 +258,14 @@
         } else {
           return returnValue
         }
+      },
+      href (index) {
+//        debugger
+//        window.location.href = '#' + index
+//        return
+        let height = document.getElementById(index).offsetTop
+        debugger
+        window.scrollTo(0, height)
       },
       // 输出专用
       logJSON (data) {

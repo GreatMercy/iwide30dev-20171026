@@ -165,8 +165,8 @@
               <ul class="room_price_ul" v-show="item.showStatus">
                 <li v-for="(value, object) in item.state_info" :key="object">
                 <span class="price_type font-size--30">
-                {{value.price_name}}<i
-                  class="booking_icon_font icon-booking_icon_question_normal font-size--24"></i><br/>
+                {{value.price_name}}
+                  <i class="booking_icon_font icon-booking_icon_question_normal font-size--24" @click="showPriceTip(item)"></i><br/>
                 <span class="belong blueColor" v-if="value.useable_coupon_favour">
                   券可减{{value.useable_coupon_favour}}元
                   <br>
@@ -252,7 +252,7 @@
               </span>
             </span>
             <span v-else="item.book_status !== 'available'">
-              <span>售罄</span>
+              <span class="chooseBtn">售罄</span>
             </span>
           </span>
             </div>
@@ -348,24 +348,25 @@
         </div>
       </section>
       <!--价格解释弹窗-->
-      <section class="whole_eject" v-show="false">
+      <section class="whole_eject" v-show="showInfoStatus">
         <div class="jfk-pl-30 jfk-pr-30">
           <div class="whole_eject_small bg_282828 pad_lr60 pad_b60">
             <i class="jfk-font close iconfont color6 icon-user_icon_jump_normal icon-icon_close"
-               @click="showPryCode=false"></i>
-            <div class="">
-              <p class="color1 font-size--32 center">商务客户预定验证</p>
-              <p class="priceWord">显示显示</p>
-              <p class="priceWord">显示显示</p>
-              <p class="priceWord">显示显示</p>
-              <p class="priceWord">显示显示</p>
-              <p class="priceWord">显示显示</p>
-              <div class="iconfont button spacing font-size--32  mar_t80">确定</div>
+               @click="showInfoStatus=false"></i>
+            <div>
+              <p class="color1 font-size--32 center">金房卡会员价</p>
+              <p class="priceWord"
+                 v-for="(item, index) in showInfo.show_info" v-if="JSON.stringify(showInfo.show_info) !== '{}'">
+                {{item.price_name}}{{item.avg_price}}{{item.related_des}}
+              </p>
+              <p class="priceWord" v-else v-for="(value, key) in item.state_info">
+                {{value.price_name}}{{value.des}}
+              </p>
+              <div class="iconfont button spacing font-size--32 mar_t80" @click="showInfoStatus=false">确定</div>
             </div>
           </div>
         </div>
       </section>
-
     </div>
   </div>
 </template>
@@ -430,8 +431,8 @@
             this.productGalleryIndex = swiper.activeIndex + 1
           }
         },
-        packagesInfo: [],
-        rooms: [],
+        packagesInfo: {},
+        rooms: {},
         // 显示预定选择
         showRoomInfo: true,
         showWord: '收起',
@@ -491,7 +492,11 @@
         // 是否是收藏
         isCollection: false,
         // 收藏id
-        collectionId: ''
+        collectionId: '',
+        // 价格弹窗信息
+        showInfo: {},
+        // 是否显示价格弹窗
+        showInfoStatus: false
       }
     },
     methods: {
@@ -522,8 +527,10 @@
             _this.collectionId = _this.allData.collect_id
           }
           for (let key in _this.rooms) {
-            _this.rooms[key] = Object.assign({}, _this.rooms[key], {showWord: '收起'})
-            _this.rooms[key] = Object.assign({}, _this.rooms[key], {showStatus: true})
+//            _this.rooms[key] = Object.assign({}, _this.rooms[key], {showWord: '收起'})
+//            _this.rooms[key] = Object.assign({}, _this.rooms[key], {showStatus: true})
+            _this.$set(_this.rooms[key], 'showWord', '收起')
+            _this.$set(_this.rooms[key], 'showStatus', true)
           }
           if (loading) {
             loading.close()
@@ -538,17 +545,16 @@
       // 预订酒店 收起 与更多的状态控制
       showroom (index) {
         if (!this.rooms[index].showStatus) {
-          this.rooms[index] = Object.assign({}, this.rooms[index], {showWord: '收起'})
-          this.rooms[index] = Object.assign({}, this.rooms[index], {showStatus: true})
+//          this.rooms[index] = Object.assign({}, this.rooms[index], {showWord: '收起'})
+//          this.rooms[index] = Object.assign({}, this.rooms[index], {showStatus: true})
           this.$set(this.rooms[index], 'showWord', '收起')
           this.$set(this.rooms[index], 'showStatus', true)
         } else {
-          this.rooms[index] = Object.assign({}, this.rooms[index], {showWord: '更多'})
-          this.rooms[index] = Object.assign({}, this.rooms[index], {showStatus: false})
+//          this.rooms[index] = Object.assign({}, this.rooms[index], {showWord: '更多'})
+//          this.rooms[index] = Object.assign({}, this.rooms[index], {showStatus: false})
           this.$set(this.rooms[index], 'showWord', '更多')
           this.$set(this.rooms[index], 'showStatus', false)
         }
-        console.log(this.rooms[index])
       },
       reverLiveDate (val) {
         let str = val.substring(val.length - 4)
@@ -733,7 +739,12 @@
           this.datas[this.sendData.room_id] = 1
           this.price_type[this.sendData.price_type] = 1
         }
-        JSON.stringify(this.package_info) === '{}' ? this.package_info = '' : this.package_info = JSON.stringify(this.package_info)
+        // JSON.stringify(this.package_info) === '{}' ? this.package_info = '' : this.package_info = JSON.stringify(this.package_info)
+        if (JSON.stringify(this.package_info) === '{}' || '') {
+          this.package_info = ''
+        } else {
+          this.package_info = JSON.stringify(this.package_info)
+        }
         let setData = {
           id: params.id || '',
           openid: params.openid || '',
@@ -747,6 +758,7 @@
           select_package: this.sendData.select_package || [],
           package_info: this.package_info || ''
         }
+        debugger
         getBookroomDetail(setData).then((res) => {
           if (loading) {
             loading.close()
@@ -840,6 +852,13 @@
           }
           console.log(e)
         })
+      },
+      // 显示价格弹窗
+      showPriceTip (item) {
+        this.logJSON(item)
+        this.showInfoStatus = true
+        this.showInfo = item
+        this.logJSON(this.showInfo)
       },
       // 取消收藏
       cancelCollectionHotel () {
