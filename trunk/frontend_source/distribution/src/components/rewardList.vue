@@ -22,7 +22,7 @@
           </div>
           <div class="buy-info font-size--26">
             <div class="rewardNum">奖励金额<span v-if="item.reward_type == 2">{{rewardpercentFunc(item.reward_percent)}}</span><span v-if="item.reward_type == 2">({{item.reward_money}})</span><span v-else>{{item.reward_money}}</span></div>
-            <div class="buybtn bg_main" @click="handleQrcode(item.qrcode_detail, item.name)" ><i class="iconfont icon-mall_icon_pay_focus"></i><span>面对面购买</span></div>
+            <div class="buybtn bg_main" @click="handleQrcode(item.detail, item.name)" ><i class="iconfont icon-mall_icon_pay_focus"></i><span>面对面购买</span></div>
           </div>
         </div> 
         <p class="products-list__loading color_main" v-show="!showFullLoading && isLoadProduct" >
@@ -43,7 +43,8 @@
               <h2 class="font-size--30">{{popHotelname}}</h2>
               <img src="../assets/images/codetitle.png" class="codetitle"/>
               <div style="min-height: 277px;margin-top: 0px;">
-                <img :src="popQrcode" class="codeimg"/>
+                <!-- <img :src="popQrcode" class="codeimg"/> -->
+                <qriously :value="popQrcode" :size="255" />
               </div>
             </div>
         </div>
@@ -126,7 +127,7 @@ export default {
       }
       if (process.env.NODE_ENV === 'development') {
         params.id = 'a450089706'
-        params.openid = 'hf9qSMwC0agCVdHw34'
+        params.openid = 'o9VbtwzF1rt_bNF2XOBPIHr9-tuw'
       }
       axios.get('/index.php/iapi/soma/package/distribute_products', {params}).then((res) => {
         this.isLoadProduct = false
@@ -142,7 +143,7 @@ export default {
           }
           if (!this.goodsData.length) {
             this.noGoods = true
-            this.attachQrcode = attach.qrcode_index
+            this.attachQrcode = attach.index
           }
           this.showFullLoading = false
         }
@@ -171,8 +172,13 @@ export default {
         this.loadPages(true)
       }
     },
-    handleQrcode (qrcodeUrl, hotelname) {
-      this.popQrcode = qrcodeUrl
+    handleQrcode (productDetail, hotelname) {
+      // axios.get('/index.php/iapi/soma/package/distribute_qrcode', {params}).then((res) => {
+      //   this.popQrcode = res.data
+      // }).catch((err) => {
+      //   console.log(err, 'cuowu')
+      // })
+      this.popQrcode = productDetail
       this.popHotelname = hotelname
       this.showPopWindow = true
       if (this.noGoods) {

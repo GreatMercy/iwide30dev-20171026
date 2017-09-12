@@ -6,6 +6,8 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import JfkUi from 'jfk-ui/lib/jfk-ui.js'
+import VueQriously from 'vue-qriously'
+Vue.use(VueQriously)
 Vue.use(JfkUi)
 import Promise from 'promise-polyfill'
 window.Promise = Promise

@@ -1,16 +1,12 @@
 <template>
   <div class="jfk-pages jfk-pages__cityChoose">
-    <!-- <div class="jfk-pages__theme"></div> -->
     <p class="float_word font-size--22" v-show="searchCityList">
         <span v-for="(item, index) in allCitys" :key="index">
           <a @click.stop.prevent="href(index)">{{index}}</a><br/>
         </span>
     </p>
-    <!--<p class="color-golden" v-show="isLoadProduct">loading</p>-->
-    <!--<JfkSupport v-once></JfkSupport>-->
     <div class="search_city font-size--38 jfk-pl-30 jfk-pr-30" v-show="showInput">
       <form @submit.prevent="searchHotelAction()">
-        <!--v-on:input="searchHotelAction"-->
         <input type="text"
                placeholder="关键字 / 位置 / 名称"
                class="font-size--38"
@@ -24,7 +20,7 @@
          @click="clearInput">
       </i>
     </div>
-    <!-- 附近搜索 -->
+    <!-- 附近 -->
     <div class="search_city font-size--32 jfk-pl-30 jfk-pr-30" v-show="searchStatus"
          @click="HrefToNearby()">
         <span class="no_far">
@@ -33,18 +29,6 @@
           &nbsp;&nbsp;&nbsp;附近有什么，去看看
         </span>
     </div>
-    <!-- 历史搜索 -->
-    <!--<div class="history_search font-size&#45;&#45;30 jfk-pl-30 jfk-pr-30" v-show="searchStatus">-->
-    <!--<p class="history_search_title font-size&#45;&#45;24 grayColor">-->
-    <!--历史搜索-->
-    <!--</p>-->
-    <!--<span v-for="(item, index) in lastorderData"-->
-    <!--:key="index">-->
-    <!--<a :href="item.link">-->
-    <!--{{item.hname}}-->
-    <!--</a>-->
-    <!--</span>-->
-    <!--</div>-->
     <!-- 热门搜索结果 -->
     <div class="history_search font-size--30 jfk-pl-30 jfk-pr-30" v-show="searchCityList">
       <p class="history_search_title font-size--24 grayColor">
@@ -53,7 +37,7 @@
       <span class="hot_item" v-for="(item, index) in hotCitys" :key="index"
             @click="toLocationHref(toLinks.SRESULT+'&keyword='+item + '&startdate=' + handleStartDate + '&enddate=' + handleEndDate + '&city=' + item)">{{item}}</span>
     </div>
-    <!--所有城市-->
+    <!-- 所有城市 -->
     <div class="all_city font-size--28 jfk-pl-30 jfk-pr-30" v-show="searchCityList">
       <div class="all_city_item"
            v-for="(item,value) in allCitys">
@@ -199,6 +183,7 @@
         window.localStorage['searchcache'] = JSON.stringify(this.localSearchData)
         window.location.href = this.toLinks.SRESULT + '&lat=' + lat + '&lng=' + lng + '&title=' + title + '&city=' + this.currentCity + '&keyword=' + this.searchInputVal
       },
+      // 清除 input 框
       clearInput () {
         this.searchInputVal = ''
         this.searchStatus = true
@@ -232,6 +217,7 @@
           }
         }, this.searchedCity)
       },
+      // 搜索框是否为空的判断
       checkSearchNull () {
         if (this.baiduApiData.length === 0 && this.asycSearchData.length === 0) {
           this.searchStatus = false
@@ -243,7 +229,7 @@
           this.hasNoResult = false
         }
       },
-      // 获取url 参数
+      // 获取 url 参数
       getUrlParams (urlName) {
         let url = location.href
         let paraString = url.substring(url.indexOf('?') + 1, url.length).split('&')
@@ -259,6 +245,7 @@
           return returnValue
         }
       },
+      // 滚动 伪锚点链接
       href (index) {
         let height = document.getElementById(index).offsetTop
         window.scrollTo(0, height)

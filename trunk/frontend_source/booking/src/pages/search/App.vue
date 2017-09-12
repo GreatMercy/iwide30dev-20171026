@@ -228,8 +228,10 @@
       toLocationHref (href) {
         window.location.href = href
       },
+      // nearby = 1 查看附近
       HrefToNearby () {
-        window.location.href = this.toLinks.NEARBY + '&startdate=' + this.handleStartDate + '&area=' + this.areaWord + '&enddate=' + this.handleEndDate + '&city=' + this.clickCityWord
+        let href = this.toLinks.NEARBY + '&startdate=' + this.handleStartDate + '&area=' + this.areaWord + '&enddate=' + this.handleEndDate + '&city=' + this.clickCityWord
+        window.location.href = href
       },
       getChooseCityVal (area, city) {
         this.clickCityWord = city

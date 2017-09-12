@@ -1,6 +1,6 @@
 <template>
   <div class="jfk-banner">
-    <div v-if="items.length === 1" v-once class="jfk-banner__item">
+    <div v-if="items.length === 1" v-once class="jfk-banner__item is-one-item">
       <a :href="hrefMethod(items[0])" class="jfk-swiper__item-box">
         <div v-lazy:background-image="imgUrlMethod(items[0])" class="jfk-swiper__item-bg jfk-banner__item-content jfk-image__lazy jfk-image__lazy--4-2 jfk-swiper__slide-content jfk-image__lazy-background-image">
           <div class="jfk-banner__item-mask"></div>

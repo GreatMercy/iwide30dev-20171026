@@ -1,10 +1,10 @@
 {
-  "app.css": "soma/vue_accor/css/app.9af7c31434cfe64f08f4ce59b1c04c3e.css",
+  "app.css": "soma/vue_accor/css/app.25d2f325f75c326ce6fae1d48be52661.css",
   "app.js": "soma/vue_accor/js/app.da993b646ea1ac1e2304.js",
   "booking.js": "soma/vue_accor/js/booking.b1544e232f7b356120c2.js",
   "coupon.js": "soma/vue_accor/js/coupon.c165ee7709e7286c6b09.js",
   "detail.js": "soma/vue_accor/js/detail.60273d81342098574677.js",
-  "gift.js": "soma/vue_accor/js/gift.0e41f75109b440e711b2.js",
+  "gift.js": "soma/vue_accor/js/gift.b39d7f7b821cd98130c5.js",
   "giftInvalid.js": "soma/vue_accor/js/giftInvalid.aa200460be34eef0a0e0.js",
   "giftList.js": "soma/vue_accor/js/giftList.2c2458e00e5322054cc4.js",
   "giftOrderDetail.js": "soma/vue_accor/js/giftOrderDetail.59cf9ac30873032a8d7d.js",
@@ -15,7 +15,7 @@
   "light.css": "soma/vue_accor/css/light.fe81e68be0e379b5510f710f1d18f017.css",
   "light.js": "soma/vue_accor/js/light.6592a6fb311d0a467776.js",
   "logisticsDetail.js": "soma/vue_accor/js/logisticsDetail.f22604b3b6ecfc4d2d95.js",
-  "manifest.js": "soma/vue_accor/js/manifest.c29b4b7cdc48f73f00c6.js",
+  "manifest.js": "soma/vue_accor/js/manifest.3009d57531db46dedc53.js",
   "orderCenter.js": "soma/vue_accor/js/orderCenter.7531244b1000887b5fe3.js",
   "orderDetail.js": "soma/vue_accor/js/orderDetail.3055c9859c1f0708c33a.js",
   "packageList.js": "soma/vue_accor/js/packageList.0edb5c2eae41cf4eb7b1.js",
@@ -46,5 +46,5 @@
   "soma/vue_accor/js/33.84fe3b7a2fb230cc9725.js": "soma/vue_accor/js/33.84fe3b7a2fb230cc9725.js",
   "soma/vue_accor/js/34.0f374c151bb1c225b326.js": "soma/vue_accor/js/34.0f374c151bb1c225b326.js",
   "success.js": "soma/vue_accor/js/success.cd0e0108b47309bfe0b7.js",
-  "vendor.js": "soma/vue_accor/js/vendor.a62158d283730770644d.js"
+  "vendor.js": "soma/vue_accor/js/vendor.cc9b715db8e23c959135.js"
 }

@@ -21,7 +21,7 @@
       <div class="booking-coupon-wrap">
 
         <div class="booking-coupon-list">
-          <div class="booking-coupon-list__title font-size--28">请拨打预约电话进行预订客房</div>
+          <div class="booking-coupon-list__title font-size--28">请拨打预约电话进行预订</div>
           <div class="booking-coupon-list__content jfk-flex is-align-middle">
             <span class="font-size--28 booking-coupon-list__left">劵<i></i>码</span>
             <div class="font-size--32 booking-coupon-list__right">
@@ -69,7 +69,7 @@
     },
     data () {
       return {
-        message: '客房预约，您的订单将不能退款',
+        message: '预约成功后，您的订单将不能退款',
         product: {},
         code: ''
       }

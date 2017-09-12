@@ -38,7 +38,7 @@
         // 主题
         theme: '',
         // 礼盒显示
-        boxShow: true,
+        boxShow: false,
         // 详情显示
         detailShow: true
       }
@@ -55,15 +55,19 @@
       })
       getPresentsValidateGiftOrder(requestParams).then((res) => {
         const content = res['web_data']
-        this.name = content['fans']['nickname'] || '你的好友'
+        if (content && content['fans'] && content['fans']['nickname']) {
+          this.name = content['fans']['nickname']
+        } else {
+          this.name = '你的好友'
+        }
         this.goodsDetail = content['item']
         this.goodsDetail['used'] = parseInt(content['item']['qty_origin']) - parseInt(content['item']['qty'])
         this.goodsDetail['wish'] = content['message']
         this.goodsDetail['link'] = content['order_list_url']
         this.theme = `gift-theme_${content['theme_keyword']}`
         this.goodsDetail['goods_link'] = res['web_data']['redirect_url'] || ''
-        // 判断之前是否曾经打开过礼物
-        this.boxShow = parseInt(content['received']) === 1 ? 0 : 1
+        // 判断之前是否曾经打开过礼物 （1 已领取  2 未领取）
+        this.boxShow = parseInt(content['received']) === 1 ? 1 : 0
         this.toast.close()
       }).catch(() => {
         this.toast.close()

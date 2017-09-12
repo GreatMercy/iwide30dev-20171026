@@ -228,6 +228,8 @@
       },
       dealWithUrlData () {
         if (params.nearby === '1') {
+          alert('nearby===1')
+          this.filterType = 'distance'
           if (window.wx) {
             window.wx.getLocation({
               type: 'wgs84',
@@ -237,7 +239,8 @@
                 this.lat = res.latitude || ''
                 // 经度
                 this.lnt = res.longitude || ''
-                this.filterType = 'distance'
+                alert('diaoyong wx success')
+                alert(this.lat, this.lnt)
               }
             })
           } else {
@@ -245,11 +248,11 @@
             this.lat = ''
             // 经度
             this.lnt = ''
-            this.filterType = ''
           }
         } else {
           this.lat = params.lat || ''
           this.lnt = params.lng || ''
+          this.filterType = ''
         }
         // 百度搜索过来
         if (params.title) {

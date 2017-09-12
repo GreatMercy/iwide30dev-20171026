@@ -1,12 +1,12 @@
 {
-  "app.css": "soma/vue/css/app.9b8d1cb1306e19714a4a7fb6b7d54a9c.css",
+  "app.css": "soma/vue/css/app.2758674f179267bda043829bf4e59257.css",
   "app.js": "soma/vue/js/app.dfbb3e4c787a935ce44a.js",
   "booking.js": "soma/vue/js/booking.46d820d2f91b59a56d04.js",
   "coupon.js": "soma/vue/js/coupon.32688a957b21520be9ae.js",
   "dark.css": "soma/vue/css/dark.e8d8cbfac42835a81185e07ad9387051.css",
   "dark.js": "soma/vue/js/dark.6adc7c0f3340bcecc24e.js",
   "detail.js": "soma/vue/js/detail.e4677232f1aa76bb301e.js",
-  "gift.js": "soma/vue/js/gift.c51ae5e433efe6323b96.js",
+  "gift.js": "soma/vue/js/gift.babb78159f40892bfbd6.js",
   "giftInvalid.js": "soma/vue/js/giftInvalid.8f4bff0ada8311b88789.js",
   "giftList.js": "soma/vue/js/giftList.28f705799b8ce45c3a28.js",
   "giftOrderDetail.js": "soma/vue/js/giftOrderDetail.38aba7b82d1a634849d5.js",
@@ -17,7 +17,7 @@
   "light.css": "soma/vue/css/light.8de18ffd084acf3f9804aebfcde9379b.css",
   "light.js": "soma/vue/js/light.01955b3066a0501a58aa.js",
   "logisticsDetail.js": "soma/vue/js/logisticsDetail.08c2c170027c14776be3.js",
-  "manifest.js": "soma/vue/js/manifest.abb2a2899ec5ec1b5a62.js",
+  "manifest.js": "soma/vue/js/manifest.57214e5639449bbde541.js",
   "orderCenter.js": "soma/vue/js/orderCenter.2dfaaa29fff1db21b562.js",
   "orderDetail.js": "soma/vue/js/orderDetail.b5abf3f885953d0df83e.js",
   "packageList.js": "soma/vue/js/packageList.0009c8de014ec86b7a52.js",
@@ -52,5 +52,5 @@
   "soma/vue/js/34.0cc44a9afa04636dac93.js": "soma/vue/js/34.0cc44a9afa04636dac93.js",
   "soma/vue/js/35.e2160dfd2bd71dda3437.js": "soma/vue/js/35.e2160dfd2bd71dda3437.js",
   "success.js": "soma/vue/js/success.540897913d621ed2faa0.js",
-  "vendor.js": "soma/vue/js/vendor.84788f10c52d98e5a011.js"
+  "vendor.js": "soma/vue/js/vendor.bd840291e7cedca30746.js"
 }
