@@ -260,11 +260,7 @@
         }
       },
       href (index) {
-//        debugger
-//        window.location.href = '#' + index
-//        return
         let height = document.getElementById(index).offsetTop
-        debugger
         window.scrollTo(0, height)
       },
       // 输出专用

@@ -758,7 +758,6 @@
           select_package: this.sendData.select_package || [],
           package_info: this.package_info || ''
         }
-        debugger
         getBookroomDetail(setData).then((res) => {
           if (loading) {
             loading.close()
