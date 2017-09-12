@@ -84,13 +84,15 @@ class HotelService extends HotelBaseService {
 			                                                                   'inter_id' => $this->_hotel_ci->inter_id,
 			                                                                   'openid' => $this->_hotel_ci->openid,
 			                                                                   'mark_type' => 'hotel_collection',
-			                                                                   'status' => 1
+			                                                                   'status' => 1,
+		                                                                       'replace_host' => $_SERVER['HTTP_HOST']
 		                                                                   ), 'mark_nums desc', 5, 0 );
 		$data ['hotel_visited'] = $this->_hotel_ci->Hotel_model->get_front_marks ( array (
 			                                                                'inter_id' => $this->_hotel_ci->inter_id,
 			                                                                'openid' => $this->_hotel_ci->openid,
 			                                                                'mark_type' => 'hotel_visited',
-			                                                                'status' => 1
+			                                                                'status' => 1,
+	                                                                        'replace_host' => $_SERVER['HTTP_HOST']
 		                                                                ), 'mark_time desc', 5, 0 );
 
 		$data['pre_sp_date']=$pre_sp_date;

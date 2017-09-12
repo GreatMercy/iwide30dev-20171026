@@ -578,7 +578,7 @@ class Presents extends MY_Front_Soma_Iapi
                     unset($gift_list[$giftKey]['items']);
                 }
                 $gift_list[$giftKey]['gift_id'] =  $giftKey;
-                $gift_list[$giftKey]['detail_url'] = Soma_const_url::inst()->get_soma_gift_received(array('id'=>$this->inter_id,'gid'=>$giftKey));
+                $gift_list[$giftKey]['detail_url'] =  $this->link['package_received'].$giftKey;
                 $returnData['gift_info'][] = $gift_list[$giftKey];
             }
         }
