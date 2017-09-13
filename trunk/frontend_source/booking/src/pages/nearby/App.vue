@@ -228,29 +228,25 @@
       },
       dealWithUrlData () {
         if (params.nearby === '1') {
-          alert('nearby===1')
           this.filterType = 'distance'
           const wx = window.wx
-          alert(wx)
-//          if (wx) {
-          wx.getLocation({
-            type: 'wgs84',
-            // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
-            success: (res) => {
-              // 纬度
-              this.lat = res.latitude || ''
-              // 经度
-              this.lnt = res.longitude || ''
-              alert('diaoyong wx success')
-              alert(this.lat, this.lnt)
-            }
-          })
-//          } else {
-//            // 纬度
-//            this.lat = ''
-//            // 经度
-//            this.lnt = ''
-//          }
+          if (wx) {
+            wx.getLocation({
+              type: 'wgs84',
+              // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
+              success: (res) => {
+                // 纬度
+                this.lat = res.latitude || ''
+                // 经度
+                this.lnt = res.longitude || ''
+              }
+            })
+          } else {
+            // 纬度
+            this.lat = ''
+            // 经度
+            this.lnt = ''
+          }
         } else {
           this.lat = params.lat || ''
           this.lnt = params.lng || ''

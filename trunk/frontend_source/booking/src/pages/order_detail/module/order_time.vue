@@ -1,7 +1,7 @@
 <template>
-  <div v-if="states.re_pay === 1 && timeShow" class="count_down grayColorbf">
-    支付倒计时
-    <span class="goldColor font-size--28">{{time}}</span>
+  <div v-if="states.re_pay === 1 && timeShow" class="count_down">
+    <span class="grayColorbf font-size--24">支付倒计时</span>
+    <span class="yellowColor font-size--30">{{time}}</span>
   </div>
 </template>
 <script>
@@ -59,9 +59,9 @@
           afterMin = '0' + afterMin
         }
         if (!lastTime) {
-          this.time = '00:00:00'
+          this.time = '00:00'
         } else {
-          this.time = hour + ':' + min + ':' + afterMin
+          this.time = min + ':' + afterMin
         }
         let that = this
         setTimeout(function () {

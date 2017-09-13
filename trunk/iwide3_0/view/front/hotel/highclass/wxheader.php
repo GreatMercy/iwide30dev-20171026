@@ -44,18 +44,18 @@ wx.onMenuShareAppMessage({
         // 用户取消分享后执行的回调函数
     }
 });
-// wx.getLocation({
-//     type: 'wgs84',
-//     // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
-//     success: (res) => {
-//       // 纬度
-//       let latitude = res.latitude
-//       // 经度
-//       let longitude = res.longitude
-//       window.localStorage.setItem('latitude',latitude)
-//       window.localStorage.setItem('longitude',longitude)
-//     }
-//   })
+wx.getLocation({
+    type: 'wgs84',
+    // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
+    success: (res) => {
+      // 纬度
+      let latitude = res.latitude
+      // 经度
+      let longitude = res.longitude
+      window.localStorage.setItem('latitude',latitude)
+      window.localStorage.setItem('longitude',longitude)
+    }
+  })
 });
 function tonavigate(lati,longi,hname,addr) {
     wx.openLocation({

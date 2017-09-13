@@ -59,6 +59,8 @@
       handleClick (i, force) {
         if (!this.disabled || force) {
           if (this.currentValue === i + 1) {
+            // 限制最低一星 不能选 0 星
+            if (this.currentValue === 1) return
             this.currentValue = i
             this.updateStyle()
           } else {

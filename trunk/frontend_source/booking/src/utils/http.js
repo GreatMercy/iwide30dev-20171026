@@ -89,11 +89,8 @@ const formatUrl = function (url, data, contentType) {
   if (urlParamArr.length) {
     newUrl += '?' + urlParamArr.join('&')
   }
-  // 判断是否为生产环境
-  // alert('guguugugug')
-  // alert(process.env.NODE_ENV)
-  // alert(typeof process.env.NODE_ENV)
-  if (process.env.NODE_ENV === 'production') {
+  if (process.env.NODE_ENV) {
+  } else {
     const salerParam = window.url_param + '&test=test'
     if (urlParamArr.length) {
       newUrl = '&' + salerParam

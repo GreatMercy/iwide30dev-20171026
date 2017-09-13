@@ -150,9 +150,9 @@ export default {
           this.menulist.push(this.data.menu[item][inItem])
         }
       }
-      // if (this.data.member_status !== 1 && this.data.centerinfo.value === 'login') {
-      //   this.data.page_resource.links.perfectinfo = 'javascript:;'
-      // }
+      if (this.data.member_status !== 1 && this.data.centerinfo.value === 'login') {
+        this.data.page_resource.links.perfectinfo = 'javascript:;'
+      }
     })
   },
   methods: {

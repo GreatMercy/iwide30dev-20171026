@@ -1,59 +1,83 @@
 .jfk-pages__orderDetail {
+  line-height: 1;
   margin-bottom: px2rem(90);
   .font-size--60 {
     font-size: px2rem(60);
   }
 
   .order_status {
-    padding: 0 px2rem(30) px2rem(80) px2rem(70);
-    padding-top: px2rem(80);
+    padding: px2rem(90) px2rem(28) px2rem(80) px2rem(88);
     & .status {
-      margin-bottom: px2rem(40);
       @mixin one-line vertical {
       };
       position: relative;
       &::before {
-        width: 3px;
-        height: 50%;
+        width: px2rem(3);
+        height: px2rem(30);
         position: absolute;
-        top: 20%;
-        left: px2rem(-30);
+        top: px2rem(16);
+        left: px2rem(-60);
       }
     }
+    .count_down {
+      margin-top: px2rem(38);
+    }
+    .now_pay_price {
+      margin-top: px2rem(42);
+    }
     & .desc {
-      margin-bottom: px2rem(50);
+      margin-top: px2rem(28);
+      line-height: px2rem(40);
     }
 
     & .order_btn {
-      margin-bottom: px2rem(80);
+      margin-top: px2rem(70);
+      letter-spacing: px2rem(4);
+      text-align: center;
+      &::after {
+        display: block;
+        clear: both;
+        overflow: hidden;
+        content: '';
+        height: 0;
+      }
       & .order-btn-item {
-        width: px2rem(196);
-
-
-        height: px2rem(62);
-        line-height: px2rem(62);
-        margin-right: px2rem(16);
+        &.booking-again {
+          width: px2rem(192);
+          height: px2rem(60);
+          line-height: px2rem(60);
+        }
+        &.nowPay {
+          width: px2rem(194);
+          height: px2rem(63);
+          line-height: px2rem(63);
+          margin-right: px2rem(20);
+        }
         text-align: center;
         display: block;
         float: left;
       }
       & .order-text-item {
-        line-height: px2rem(62);
-        margin-left: px2rem(22);
+        line-height: px2rem(60);
+        margin-left: px2rem(38);
         float: left;
         &.check_out {
           margin-left: px2rem(40);
         }
-      }
-      & .comment {
-        margin-right: px2rem(42);
-        @mixin one-line vertical {
-        };
-        &::before {
-          position: absolute;
-          right: px2rem(-42);
-          top: px2rem(13);
-          height: px2rem(36) !important;
+        &.cancel-text {
+          margin-left: px2rem(42);
+        }
+        &.comment {
+          margin-left: px2rem(42);
+          margin-right: px2rem(42);
+          @mixin one-line vertical {
+          };
+          &::before {
+            position: absolute;
+            right: px2rem(-42);
+            top: px2rem(23);
+            height: px2rem(16) !important;
+          }
         }
       }
     }
@@ -62,15 +86,16 @@
   .ht_del {
     padding: px2rem(30) px2rem(30) 0 px2rem(30);
     &_info {
-      height: px2rem(200);
-      background-image: background-image(/detail_map_white.jpg);
+      height: px2rem(246);
+      background-image: background-image(/detail_map_white.png);
       background-size: 100% 100%;
-      padding: px2rem(70) px2rem(40) 0 px2rem(40);
+      padding-left: px2rem(40);
       position: relative;
       & .info_title {
+        padding-top: px2rem(70);
         margin-bottom: px2rem(40);
         @mixin ellipsis 1;
-        width: px2rem(420);
+        width: px2rem(434);
       }
 
       & .info_place {
@@ -80,7 +105,7 @@
       & .icon_dh {
         position: absolute;
         right: px2rem(60);
-        bottom: px2rem(80);
+        bottom: px2rem(83);
         i {
           margin-left: px2rem(8);
         }
@@ -164,10 +189,10 @@
     }
     &_item {
       word-break: break-all;
-      span{
-        &:nth-child(1){
-        width: px2rem(160);
-      }
+      span {
+        &:nth-child(1) {
+          width: px2rem(160);
+        }
         display: inline-block;
         letter-spacing: .1em;
         text-align: left;

@@ -67,7 +67,7 @@
         this.theme = `gift-theme_${content['theme_keyword']}`
         this.goodsDetail['goods_link'] = res['web_data']['redirect_url'] || ''
         // 判断之前是否曾经打开过礼物 （1 已领取  2 未领取）
-        this.boxShow = parseInt(content['received']) === 1 ? 1 : 0
+        this.boxShow = parseInt(content['received']) === 1 ? 0 : 1
         this.toast.close()
       }).catch(() => {
         this.toast.close()

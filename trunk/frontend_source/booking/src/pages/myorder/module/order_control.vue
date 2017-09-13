@@ -1,6 +1,6 @@
 <template>
   <div class="btn_container font-size--28">
-    <template v-if="item.re_pay === '1'">
+    <template v-if="item.re_pay === 1">
       <!--立即支付-->
       <span class="order_btn" @click="toLocationHref(item.orderstate.repay_url)">
             <!--<i class="booking_icon_font font-size&#45;&#45;30 icon-font_zh_li_qkbys"></i>-->

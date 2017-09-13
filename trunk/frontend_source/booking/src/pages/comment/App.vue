@@ -90,10 +90,12 @@
 <script>
   import formatUrlParams from 'jfk-ui/lib/format-urlparams.js'
   import {getCommentOrderDetail, submitComment} from '@/service/http'
-  // import jfkRater from '../../../../../common/components/src/packages/jfk-rater/src/main.vue'
+//  import jfkRater from '../../../../common/components/src/packages/jfk-rater/src/main.vue'
   export default {
     name: 'comment',
-    components: {},
+    components: {
+//      jfkRater
+    },
     created () {
       this.locationParams = formatUrlParams(location.href)
       this.getOrderDetail()

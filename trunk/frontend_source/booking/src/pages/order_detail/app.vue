@@ -7,43 +7,29 @@
       <orderStatus :orderItem="order"/>
       <!--倒计时-->
       <orderTime :states="states"/>
-      <p class="desc font-size--24 grayColor80">
+      <p v-if="states.status_tips" class="desc font-size--24 grayColor80">
         {{states.status_tips}}
       </p>
+      <p v-if="states.re_pay === 1" class="now_pay_price goldColor"><span class="jfk-font-number jfk-price__currency font-size--32">￥</span>
+        <span class="jfk-font-number jfk-price__number font-size--48">{{order.price}}</span></p>
       <p class="order_btn">
         <span v-if="states.re_pay === 1" @click="toLocationHref(states.repay_url)" class="order-btn-item nowPay">
-          <!--立即支付-->
-          <i class="booking_icon_font font-size--30 icon-font_zh_li_qkbys"></i>
-          <i class="booking_icon_font font-size--30 icon-font_zh_ji_qkbys"></i>
-          <i class="booking_icon_font font-size--30 icon-font_zh_zhi_qkbys"></i>
-          <i class="booking_icon_font font-size--30 icon-font_zh_fu_2_qkbys"></i>
+          立即支付
         </span>
         <span @click="toLocationHref(links.INDEX)"
-              class="order-btn-item">
-          <!--再次预定-->
-          <i class="booking_icon_font font-size--30 icon-font_zh_zai__qkbys"></i>
-          <i class="booking_icon_font font-size--30 icon-font_zh_ci_qkbys"></i>
-          <i class="booking_icon_font font-size--30 icon-font_zh_yv_qkbys"></i>
-          <i class="booking_icon_font font-size--30 icon-font_zh_ding_qkbys"></i>
+              class="order-btn-item booking-again">
+          再次预定
         </span>
-        <span v-if="states.can_cancel === 1" @click="cancelOrder(order.orderid)" class="order-text-item">
-          <!--取消订单-->
-          <i class="booking_icon_font font-size--30 icon-font_zh_qv_qkbys"></i>
-          <i class="booking_icon_font font-size--30 icon-font_zh_xiao_qkbys"></i>
-          <i class="booking_icon_font font-size--30 icon-font_zh_ding_qkbys"></i>
-          <i class="booking_icon_font font-size--30 icon-font_zh_dan_qkbys"></i>
+        <span v-if="states.can_cancel === 1" @click="cancelOrder(order.orderid)" class="order-text-item cancel-text">
+          取消订单
         </span>
         <span class="order-text-item comment" v-else-if="states.can_comment === 1"
               @click="toLocationHref(links.TO_COMMENT)">
-          <!-- 评论 -->
-          <i class="booking_icon_font font-size--30 icon-font_zh_ping_qkbys"></i>
-          <i class="booking_icon_font font-size--30 icon-font_zh_lun_qkbys"></i>
+           评论
         </span>
         <span v-if="states.self_checkout === 1" @click="toLocationHref(links.CHECK_OUT)"
-              class="order-text-item check_out">
-          <!--退房-->
-          <i class="booking_icon_font font-size--30 icon-font_zh_tui_qkbys"></i>
-          <i class="booking_icon_font font-size--30 icon-font_zh_fang_qkbys"></i>
+              class="order-text-item check_out grayColor80">
+          退房
         </span>
       </p>
     </div>

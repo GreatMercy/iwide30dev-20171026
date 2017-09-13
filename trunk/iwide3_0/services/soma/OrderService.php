@@ -1576,8 +1576,8 @@ class OrderService extends BaseService
             if(!empty($product)){
                if(in_array($product[0]['type'], [$product_package_model::PRODUCT_TYPE_BALANCE, $product_package_model::PRODUCT_TYPE_POINT])){
                    $item_map[$key]['can_refund'] = (string)$product_package_model::CAN_F;
-                   $item_map[$key]['type'] = $product[0]['type'];
                }
+               $item_map[$key]['type'] = $product[0]['type'];
             }
 
         }

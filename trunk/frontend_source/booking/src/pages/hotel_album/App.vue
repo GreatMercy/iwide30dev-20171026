@@ -10,8 +10,7 @@
               <div class="hotel-pictures__items"
                    :class="{active: show[curIndex].isActive,picPushOutBack : show[curIndex].isShow1 , picPushOutFront : show[curIndex].isShow2 ,
                    picPushInBack : show[curIndex].isShow3 , picPushInFront : show[curIndex].isShow4}"
-                   @touchstart="doStartAction" @touchmove="doMoveAction"
-                   @touchend="doEndAction(index)">
+                   @touchstart="doStartAction" @touchmove="doMoveAction" @touchend="doEndAction(index)">
                 <div class="hotel-pictures__title">
                   {{item.info + '(' + item.gallery_name + ')'}}
                 </div>
@@ -92,6 +91,7 @@
         default_img: require('../../assets/hotel_default.png'),
         loadQueueTime: null,
         skipLoadImg: 500,
+        // 定时器
         animationTime: null,
         // 动画持续时间，由css中定义，如果修改，需要同步修改css
         animationDuration: 300,
@@ -115,13 +115,13 @@
       },
       setShowStatus () {
         for (let i = 0; i < this.cur_gallery.length; i++) {
-          this.show[i] = {
+          this.$set(this.show, i, {
             isActive: false,
             isShow1: false,
             isShow2: false,
             isShow3: false,
             isShow4: false
-          }
+          })
         }
       },
       // 开始触摸
@@ -184,6 +184,7 @@
             event = 'pan'
           }
           this.selected = index
+          console.log(this.selected)
           this.photoChange({event: event, direction: this.direction})
         }
       },
@@ -196,18 +197,20 @@
       },
       // 重置当前图片和下一个图片的动画类
       resetShowStatus (curIndex, nextIndex) {
-        this.show[curIndex] = {
+        this.$set(this.show, curIndex, {
+          isActive: false,
           isShow1: false,
           isShow2: false,
           isShow3: false,
           isShow4: false
-        }
-        this.show[nextIndex] = {
+        })
+        this.$set(this.show, nextIndex, {
+          isActive: false,
           isShow1: false,
           isShow2: false,
           isShow3: false,
           isShow4: false
-        }
+        })
       },
       // 改变class名 执行动画
       photoChange (eventObj) {
@@ -223,25 +226,24 @@
         if (name !== 'tap') {
           // 如果两次事件相隔小于animationDuration，则需要立刻执行changeDomClass
           if (this.timeGap < this.animationDuration && this.nextIndex && this.curIndex) {
-            console.log(this.nextIndex)
-//            this.changeDomClass(this.curIndex, this.nextIndex)
+            this.changeDomClass(this.curIndex, this.nextIndex)
           }
           this.nextIndex = isUp ? (this.selected - 1) : (this.selected + 1)
+//          console.log(this.nextIndex)
           if (this.nextIndex >= 0 && this.nextIndex < this.cur_gallery.length) {
             this.curIndex = this.selected
             // 动画
             if (isUp) {
-              this.show[this.curIndex].isShow1 = true
-              this.show[this.nextIndex].isShow3 = true
+              this.$set(this.show, this.curIndex, {isShow1: true})
+              this.$set(this.show, this.nextIndex, {isShow3: true})
             } else {
-              console.log('oooooo')
-              this.show[this.curIndex].isShow2 = true
-              this.show[this.nextIndex].isShow4 = true
+              this.$set(this.show, this.curIndex, {isShow2: true})
+              this.$set(this.show, this.nextIndex, {isShow4: true})
             }
             let that = this
             clearTimeout(this.animationTime)
             this.animationTime = setTimeout(function () {
-              that.changeDomClass(that.curIndex, that.nextIndex)
+              return that.changeDomClass(that.curIndex, that.nextIndex)
             }, this.animationDuration)
           }
         }
