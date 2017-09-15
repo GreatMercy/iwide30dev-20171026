@@ -8,11 +8,9 @@
         margin-top: px2rem(70);
     }
     .coupon-qrcode{
-        padding-left: 3.4375rem;
-        padding-right: 3.4375rem;
         padding-top: 3.125rem;
         img{
-            width: 14rem;
+            width: 59%;;
             margin-top: 1.5rem;
             margin-bottom: 2.5rem;
         }
@@ -82,6 +80,7 @@
                     width: 100%;
                     display: block;
                     margin-top: px2rem(30);
+                    margin-bottom: px2rem(30);
                 }
                 p{
                     margin-top: px2rem(30);
@@ -99,6 +98,12 @@
                 .order_notice{
                     margin-top: px2rem(30);
                     &+p{
+                        margin-top: 0;
+                    }
+                }
+                .imgdetail{
+                    margin-top: px2rem(30);
+                    &+img{
                         margin-top: 0;
                     }
                 }
@@ -143,5 +148,10 @@
             width: calc( 306/644 *100%);
             height: px2rem(84);
         }
+    }
+}
+@media screen and (max-width: 320px) {
+    .jfk-page__orderCoupon .trade-photo .tradeBox .trade-service ul li p{
+        font-size: 12px;
     }
 }

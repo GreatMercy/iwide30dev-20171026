@@ -34,7 +34,9 @@ const v1 = {
   // 选择商品
   POST_GIFT_DELIVERY_SELECT_GIFT: `${API_GIFT_DELIVERY}/selectAddGift`,
   // 删除商品
-  DELETE_GIFT_DELIVERY_GIFT: `${API_GIFT_DELIVERY}/deleteProductGift`
+  DELETE_GIFT_DELIVERY_GIFT: `${API_GIFT_DELIVERY}/deleteProductGift`,
+  // 礼物派送报表列表
+  GET_GIFT_DELIVERY_GIFT_RECEIVE_LIST: `${API_GIFT_DELIVERY}/giftReceiveDetail`
 }
 
 export {

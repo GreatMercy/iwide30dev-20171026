@@ -102,7 +102,7 @@
         class="item__value font-size--30">{{product.create_time}}</span></div>
       <div class="moreinfo__item"><span class="item__name font-size--28">订单总价</span><span
         class="jfk-price  font-size--38 item__value"><i class="jfk-font-number jfk-price__currency">￥</i><i
-        class="jfk-font-number jfk-price__number">{{product.real_grand_total}}</i></span><span
+        class="jfk-font-number jfk-price__number">{{product.grand_total}}</i></span><span
         class="item__showTrade font-size--24" @click="handleTradePhoto">交易快照<i
         class="jfk-font icon-user_icon_jump_normal"></i></span></div>
     </div>
@@ -169,7 +169,7 @@
               <li class="font-size--40"><i class="jfk-font icon-mall_icon_support_ensure"></i>
                 <p class="font-size--28">品质保证</p>
               </li>
-              <li class="font-size--40" v-if="menuList.canRefund"><i
+              <li class="font-size--40" v-if="canRefund"><i
                 class="jfk-font icon-mall_icon_orderDetail_refund"></i>
                 <p class="font-size--28">随时退款</p>
               </li>
@@ -182,7 +182,7 @@
               <li class="font-size--40" v-if="menuList.canCheck"><i class="jfk-font icon-mall_icon_support_deliver"></i>
                 <p class="font-size--28">到店自提</p>
               </li>
-              <!-- <li class="font-size--40" v-if="menuList.canInvoice"><i
+              <!-- <li class="font-size--40" v-if="canInvoice"><i
                 class="jfk-font icon-mall_icon_support_invoice"></i>
                 <p class="font-size--28">开具发票</p>
               </li> -->
@@ -201,7 +201,7 @@
             <template v-if="showProductimg">
               <template v-if="productPackage.img_detail">
                 <h3 class="font-size--24">商品详情</h3>
-                <div v-html="productPackage.img_detail" class="font-size--28"></div>
+                <div v-html="productPackage.img_detail" class="font-size--28 imgdetail"></div>
               </template>
               <template v-if="productDetail">
                 <h3 class="font-size--24">商品内容</h3>
@@ -266,10 +266,12 @@
           canCheck: true,
           canPost: true,
           canSend: true,
-          canRefund: true,
-          canInvoice: true,
+          // canRefund: true,
+          // canInvoice: true,
           canWxBooking: true
         },
+        canRefund: true,
+        canInvoice: true,
         canDeleteOrder: false,
         canRefundOrder: false,
         orderStatusMsg: '',
@@ -320,7 +322,7 @@
         that.giftinfo.imgUrl = productPackage.face_img
         that.giftinfo.title = productPackage.name
         that.giftinfo.validate = productPackage.expiration_date
-        that.giftinfo.price = product.real_grand_total
+        that.giftinfo.price = product.grand_total
         that.giftinfo.number = product.row_qty
         that.coupons = code
         that.currentshowCoupons = [that.coupons[0]]
@@ -333,26 +335,26 @@
           }
         }
         that.product = product
-        that.menuList.canReserve = productPackage.can_reserve === '1' ? 'true' : false
-        that.menuList.canCheck = productPackage.can_pickup === '1' ? 'true' : false
-        that.menuList.canPost = productPackage.can_mail === '1' ? 'true' : false
-        that.menuList.canSend = productPackage.can_gift === '1' ? 'true' : false
-        that.menuList.canRefund = productPackage.can_refund !== '2' ? 'false' : true
-        that.menuList.canInvoice = productPackage.can_invoice === '1' ? 'true' : false
-        that.menuList.canWxBooking = productPackage.can_wx_booking === '1' ? 'true' : false
+        that.menuList.canReserve = (productPackage.can_reserve === '1') ? Boolean(true) : false
+        that.menuList.canCheck = (productPackage.can_pickup === '1') ? Boolean(true) : false
+        that.menuList.canPost = (productPackage.can_mail === '1') ? Boolean(true) : false
+        that.menuList.canSend = (productPackage.can_gift === '1') ? Boolean(true) : false
+        that.canRefund = (productPackage.can_refund === '2') ? Boolean(false) : true
+        that.canInvoice = (productPackage.can_invoice === '1') ? Boolean(true) : false
+        that.menuList.canWxBooking = (productPackage.can_wx_booking === '1') ? Boolean(true) : false
         that.productPackage = productPackage
-        that.overdue = new Date() > new Date(that.giftinfo.validate) ? 'true' : false
-        that.used = product.consume_status === '23' ? 'true' : false
-        that.refunded = product.refund_info_status === '3' ? 'true' : false
+        that.overdue = new Date() > new Date(that.giftinfo.validate) ? Boolean(true) : false
+        that.used = product.consume_status === '23' ? Boolean(true) : false
+        that.refunded = product.refund_info_status === '3' ? Boolean(true) : false
         that.compose = productPackage.composes
-        that.goodsType = product.package[0].goods_type
+        that.goodsType = productPackage.goods_type
         if (code[0] && code[0].status === '2') {
           that.validCoupon = code[0]
         }
         if (that.overdue || product.consume_status === '23' || product.refund_info_status === '3' || product.package[0].type === '3' || product.package[0].type === '5') {
           that.canDeleteOrder = true
         }
-        if (that.menuList.canRefund && product.consume_status === '21' && !that.overdue && product.refund_info_status !== '3' && product.refund_info_status !== '5' && product.refund_info_status !== '6' && product.package[0].type !== '3' && product.package[0].type !== '5') {
+        if (that.canRefund && product.consume_status === '21' && !that.overdue && (product.refund_info_status === '0' || product.refund_info_status === '4') && productPackage.type !== '3' && productPackage.type !== '5' && (parseFloat(product.grand_total) >= 0.005)) {
           that.canRefundOrder = true
         }
         if (product.status === '12') {
@@ -360,7 +362,7 @@
         }
         if (that.refunded) {
           that.orderStatusMsg = orderStatusFn('refund')
-        } else if (product.refund_info_status === '1' || product.refund_info_status === '2' || product.refund_info_status === '6') {
+        } else if (product.refund_info_status === '1' || product.refund_info_status === '2' || product.refund_info_status === '3' || product.refund_info_status === '6') {
           that.orderStatusMsg = orderStatusFn('refunding')
           that.refundSchedule = true
         } else if (that.overdue) {
@@ -392,7 +394,7 @@
         const menuList = this.menuList
         let j = 0
         for (let i in menuList) {
-          if (menuList[i] === 'true') {
+          if (menuList[i] === true) {
             j++
           }
         }

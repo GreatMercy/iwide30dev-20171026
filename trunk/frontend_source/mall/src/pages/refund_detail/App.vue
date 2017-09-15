@@ -77,7 +77,7 @@
 
 
         <!-- 已退款 -->
-        <template v-if="status !== 3">
+        <template v-if="status === 3">
           <div class="refund-detail-step__item">
             <p class="refund-detail-step__status">
               <span class="refund-detail-step__left refund-detail-step__end">

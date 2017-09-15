@@ -48,6 +48,20 @@ const couponDetail = (r) => {
     r(couponDetail.default)
   }, showLoadError, 'user_coupon-detail')
 }
+
+const depositStatements = (r) => {
+  require.ensure([], function (require) {
+    let depositStatements = require('./user/depositstatements/index')
+    r(depositStatements.default)
+  }, showLoadError, 'user_deposit-statements')
+}
+
+const regStatements = (r) => {
+  require.ensure([], function (require) {
+    let regStatements = require('./user/regstatements/index')
+    r(regStatements.default)
+  }, showLoadError, 'user_reg-statements')
+}
 /* ---------------- 会员相关模块结束 ---------------- */
 /* ---------------- 分销相关模块开始 ---------------- */
 const account = (r) => {
@@ -156,12 +170,19 @@ const mallPackage = (r) => {
     r(mallPackage.default)
   }, showLoadError, 'mall_package')
 }
-// 礼包配送
+// 礼包派送
 const giftPackage = (r) => {
   require.ensure([], function (require) {
     let giftPackage = require('./mall/gift_package/index')
     r(giftPackage.default)
   }, showLoadError, 'mall_gift-package')
+}
+// 礼包派送报表
+const giftPackageList = (r) => {
+  require.ensure([], function (require) {
+    let giftPackageList = require('./mall/gift_package_list/index')
+    r(giftPackageList.default)
+  }, showLoadError, 'mall_gift-package-list')
 }
 /* ---------------- 商城相关模块结束 ---------------- */
 /* ---------------- 系统相关模块开始 ---------------- */
@@ -264,6 +285,8 @@ export default {
   coupon,
   couponList,
   couponDetail,
+  depositStatements,
+  regStatements,
   account,
   iwidePay,
   tradeRecord,
@@ -292,5 +315,6 @@ export default {
   fundOverview,
   accountVerification,
   transferAudit,
-  giftPackage
+  giftPackage,
+  giftPackageList
 }

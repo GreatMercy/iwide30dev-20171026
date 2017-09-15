@@ -300,10 +300,10 @@ class Presents extends MY_Front_Soma_Iapi
         $request_param = $this->input->input_json();
         $request_array = $request_param->toArray();
 
-        $redis = $this->get_redis_instance();
-        $layout = $redis->get('layout');
-        $tkId = $redis->get('tkid');
-        $brandName = $redis->get('brandname');
+        $packageService = \App\services\soma\PackageService::getInstance();
+        $layout = $packageService->getParams()['layout'];
+        $tkId = $packageService->getParams()['tkid'];
+        $brandName = $packageService->getParams()['brandname'];
 
         $inter_id = $this->inter_id;
         $business = 'package';
@@ -1231,7 +1231,7 @@ class Presents extends MY_Front_Soma_Iapi
         $returnData['message'] = $orders['message'];
         $returnData['order_list_url'] = $this->link['order_link'];
         $returnData['theme_id'] = $orders['theme_id']; //主题
-        $returnData['redirect_url']  = $this->link['package_received'].$gift_id.'&sign='.$getSign.'&grd=1';
+        $returnData['redirect_url']  = $this->link['package_received'].$gift_id;
         $themeArr = $this->get_theme();
         foreach($themeArr as $singleTheme){
             if($singleTheme['theme_id'] == $orders['theme_id']){

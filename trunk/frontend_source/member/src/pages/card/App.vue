@@ -143,7 +143,13 @@ export default {
     }
   },
   created () {
+    this.toast = this.$jfkToast({
+      duration: -1,
+      iconClass: 'jfk-loading__snake',
+      isLoading: true
+    })
     getCardInfo().then((res) => {
+      this.toast.close()
       this.dataList = res.web_data
       this.changeData()
     })

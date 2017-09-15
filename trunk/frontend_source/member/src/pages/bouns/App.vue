@@ -2,8 +2,8 @@
   <div class="gradient_bg white_bg">
   <section class="balance_pad">
     <div class="center balance_header main_color1">
-        <em class="iconfonts font_30">{{dataList.total_credit}}</em>
-        <p class="color3 font_14 margin_top_15">账户{{dataList.filed_name.credit_name}}</p>
+        <em class="iconfonts font_30">{{bounsList.total_credit}}</em>
+        <p class="color3 font_14 margin_top_15">账户{{bounsList.filed_name.credit_name}}</p>
     </div>
     <section class="balance_content">
       <div class="flex font_16 centers bd_bottom padding_bottom_35 recharge color2 padding_top_15">
@@ -13,7 +13,7 @@
               <em class="shadow_b"></em>
           </span>
         </div>
-        <div class="flex_1 center relative balance_choose"  @click="bouns = false, dataList = rechargeList" :class="{ active: !bouns}">
+        <div class="flex_1 center relative balance_choose"  @click="change" :class="{ active: !bouns}">
           <span class="relative padding_0_26 padding_bottom_5">
               消费记录
               <em class="shadow_b"></em>
@@ -63,21 +63,44 @@ export default {
   data () {
     return {
       dataList: [],
-      rechargeList: [],
+      rechargeList: {
+        bonuslist: []
+      },
       bounsList: [],
-      bouns: true
+      bouns: true,
+      getBol: false
     }
   },
   created () {
+    this.toast = this.$jfkToast({
+      duration: -1,
+      iconClass: 'jfk-loading__snake',
+      isLoading: true
+    })
     getBonusInfo({'credit_type': 1}).then((res) => {
+      this.toast.close()
       this.bounsList = res.web_data
       this.dataList = this.bounsList
     })
-    getBonusInfo({'credit_type': 2}).then((res) => {
-      this.rechargeList = res.web_data
-    })
   },
   methods: {
+    change () {
+      this.bouns = false
+      if (this.getBol) {
+        this.dataList = this.rechargeList
+      } else {
+        this.toast = this.$jfkToast({
+          duration: -1,
+          iconClass: 'jfk-loading__snake',
+          isLoading: true
+        })
+        getBonusInfo({'credit_type': 2}).then((res) => {
+          this.toast.close()
+          this.rechargeList = res.web_data
+          this.getBol = true
+        })
+      }
+    }
   }
 }
 </script>

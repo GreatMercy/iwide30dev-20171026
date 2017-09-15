@@ -2713,7 +2713,7 @@ class HotelService extends HotelBaseService {
 
         if($mediaid){
             $images_url = '';
-            $this->_hotel_ci->load->model('wx/access_token_model');
+            $this->_hotel_ci->load->model('wx/Access_token_model');
             $access_token= $this->_hotel_ci->Access_token_model->get_access_token( $this->_hotel_ci->inter_id );
 
             foreach($mediaid as $arr){

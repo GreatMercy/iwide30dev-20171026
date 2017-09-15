@@ -53,7 +53,7 @@
       <p class="font-color-extra-light-gray font-size--28 content" >你还未关注公众号
         <br>长按识别关注随时查看订单</p>
     </jfk-popup>
-    <JfkSupport v-once></JfkSupport>  
+    <JfkSupport v-once></JfkSupport>
   </div>
 </template>
 <script>
@@ -76,6 +76,11 @@
       }
     },
     beforeCreate () {
+      this.toast = this.$jfkToast({
+        duration: -1,
+        iconClass: 'jfk-loading__snake',
+        isLoading: true
+      })
       let params = formatUrlParams(location.href)
       if (process.env.NODE_ENV === 'development' && !params.oid) {
         params.oid = '1000011950'
@@ -88,6 +93,7 @@
       getSuccessPay({
         oid: this.oid
       }).then(function (res) {
+        that.toast.close()
         let successAbout = res.web_data
         that.productDetail = successAbout.page_resource.link.product_detail + successAbout.product_id
         that.orderDetail = successAbout.page_resource.link.order_detail

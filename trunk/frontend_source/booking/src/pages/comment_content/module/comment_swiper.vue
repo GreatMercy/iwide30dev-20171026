@@ -19,7 +19,7 @@
         <div class="jfk-swiper__item-box">
           <div class="jfk-swiper__item-bg swiper-lazy" :data-background="items[0]">
             <div
-              class="jfk-image__lazy--3-3 jfk-image__lazy--background-image">
+              class="jfk-image__lazy--3-3">
             </div>
             <div class="jfk-swiper__item-mask"></div>
           </div>

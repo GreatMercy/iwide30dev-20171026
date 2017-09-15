@@ -11,7 +11,7 @@
         <p class="padding_0_20 padding_21 color_fff font_19 pclight jfk-cardinfo-title">{{dataList.card_info.title}}</p>
         <p class="padding_0_20 font_12 font_spacing_4 color3 card-info-notice padding_bottom_23">{{dataList.card_info.notice}}</p>
       </div>
-      <div class="margin_top_55 mar_b20" v-if="dataList.card_info.is_giving === 'f'">
+      <div class="margin_top_55 mar_b20" v-if="dataList.card_info.is_giving === 'f' && dataList.my_card">
         <div v-if="dataList.card_info.is_online === '2' || dataList.card_info.is_online === '3'">
           <p class="mar_b30"><span class="color2 mar_r20 font_12">线下使用方式</span><span class="color3 font_12">(请选择以下任意一种方式使用)</span></p>
           <div class="clearfix layer_bg pad_tb40 pad_lr40 border_radius mar_b30 white_bg box_shadowb">
@@ -74,19 +74,19 @@
               <div class="font_12 cardinfo-word" v-html="dataList.card_info.description"></div>
           </div>
       </div>
-      <div  v-if="dataList.authentication_give === 1 && dataList.card_info.is_online !== '1' " class="block center btn_height auto entry_btn song_btn" @click="share = true">赠送优惠券</a>
+      <div  v-if="dataList.authentication_give === 1 && dataList.card_info.is_online !== '1' && dataList.my_card" class="block center btn_height auto entry_btn song_btn" @click="share = true">赠送优惠券</a>
       </div>
 
-      <div class="center mar_t80" v-if="dataList.card_info.is_online === '1' && dataList.authentication_give === 1">
+      <div class="center mar_t80" v-if="dataList.card_info.is_online === '1' && dataList.authentication_give === 1 && dataList.my_card">
         <a v-if="dataList.authentication_give === 1" class="btn_height inblock font_15 entry_btn color1 button_song" @click="share = true">赠送优惠券</a>
         <a v-if="dataList.card_info.is_giving === 'f' || dataList.card_info.card_type === '3'" class="btn_height font_15 inblock entry_btn color1 button_use" :href="dataList.card_info.header_url">立即使用</a>
       </div>
-      <div class="center mar_t80" v-else-if="dataList.card_info.is_online === '1'">
+      <div class="center mar_t80" v-else-if="dataList.card_info.is_online === '1'  && dataList.my_card">
         <a v-if="dataList.card_info.is_giving === 'f' || dataList.card_info.card_type === '3'" class="block card_info center btn_height auto jfk-font entry_btn" style="width:80%;" :href="dataList.card_info.header_url" >立即使用</a>
       </div>
 
-      <div v-if="dataList.card_info.is_giving === 't'" class="center">
-        <a class="btn_height font_17 inblock jfk-font entry_btn color1" style="width:80%;background-color: #b2945e;" href="javascript:;">转赠中</a>
+      <div v-if="dataList.card_info.is_giving === 't' && dataList.my_card" class="center">
+        <a class="btn_height font_17 inblock jfk-font entry_btn color1 btn_white" style="width:80%;background-color: #b2945e;" href="javascript:;">转赠中</a>
       </div>
       <div class="whole_eject" v-show="share" @click="share = false">
         <div class="txt_r">

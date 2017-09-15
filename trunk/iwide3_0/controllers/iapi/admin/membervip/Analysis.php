@@ -20,7 +20,7 @@ class Analysis extends MY_Admin_Iapi{
     }
 
 
-    //注册分销报表
+    //储值数据分析
     //sales_id
     //hotel_id
     //time_type  [update_time,createtime]
@@ -38,9 +38,11 @@ class Analysis extends MY_Admin_Iapi{
         $start_date = $this->input->get('start_date');
         $end_date  = $this->input->get('end_date');
 
+
+        /*测试数据*/
         $request_params['start_date'] = $start_date = '2017-08-11';
         $request_params['end_date'] = $end_date = '2017-09-21';
-
+        /*测试数据*/
 
         if(empty($start_date) || empty($end_date)){
             $returnData['msg'] = '起始日期和结束日期不能为空';
@@ -56,6 +58,7 @@ class Analysis extends MY_Admin_Iapi{
             $returnData['msg'] = '日期格式不正确';
             $this->_ajaxReturn($returnData);
         }
+
 //
         $result = StatementsService::getInstance()->deposit_analysis($request_params);
         $returnData = $this->initReturnData($result);
@@ -64,6 +67,101 @@ class Analysis extends MY_Admin_Iapi{
     }
 
 
+    //储值数据分析
+    //sales_id
+    //hotel_id
+    //time_type  [update_time,createtime]
+    //start_time
+    //end_time
+    public function balance_analysis_by_date(){
+        $returnData = array(
+            'status'=>1004,
+            'err'=>'9999',
+            'msg'=>'请求失败'
+        );
+
+        $request_params = $this->input->get();
+
+        $start_date = $this->input->get('start_date');
+        $end_date  = $this->input->get('end_date');
+
+
+        /*测试数据*/
+        $request_params['start_date'] = $start_date = '2017-09-11';
+        $request_params['end_date'] = $end_date = '2017-09-11';
+        $request_params['log_type'] = 1;
+        /*测试数据*/
+
+        if(empty($start_date) || empty($end_date)){
+            $returnData['msg'] = '起始日期和结束日期不能为空';
+            $this->_ajaxReturn($returnData);
+        }elseif($start_date > $end_date){
+            $returnData['msg'] = '起始日期不能大于结束日期';
+            $this->_ajaxReturn($returnData);
+        }
+
+        list($start_y,$start_m,$start_d)=explode('-',$start_date);
+        list($end_y,$end_m,$end_d)=explode('-',$end_date);
+        if(!checkdate($start_m,$start_d,$start_y) || !checkdate($end_m,$end_d,$end_y)){
+            $returnData['msg'] = '日期格式不正确';
+            $this->_ajaxReturn($returnData);
+        }
+
+//
+        $result = StatementsService::getInstance()->deposit_analysis_detail_by_date($request_params);
+        $returnData = $this->initReturnData($result);
+        $this->_ajaxReturn($returnData);
+
+    }
+
+    //积分数据分析
+    //sales_id
+    //hotel_id
+    //time_type  [update_time,createtime]
+    //start_time
+    //end_time
+    public function credit_analysis(){
+        $returnData = array(
+            'status'=>1004,
+            'err'=>'9999',
+            'msg'=>'请求失败'
+        );
+
+        $request_params = $this->input->get();
+
+        $start_date = $this->input->get('start_date');
+        $end_date  = $this->input->get('end_date');
+
+        $hotel_id = $this->input->get('hotel_id');
+
+        /*测试数据*/
+        $request_params['start_date'] = $start_date = '2017-08-11';
+        $request_params['end_date'] = $end_date = '2017-09-21';
+        /*测试数据*/
+
+
+        list($start_y,$start_m,$start_d)=explode('-',$start_date);
+        list($end_y,$end_m,$end_d)=explode('-',$end_date);
+        if(!checkdate($start_m,$start_d,$start_y) || !checkdate($end_m,$end_d,$end_y)){
+            $returnData['msg'] = '日期格式不正确';
+            $this->_ajaxReturn($returnData);
+        }
+
+        if(empty($start_date) || empty($end_date)){
+            $returnData['msg'] = '起始日期和结束日期不能为空';
+            $this->_ajaxReturn($returnData);
+        }elseif($start_date > $end_date){
+            $returnData['msg'] = '起始日期不能大于结束日期';
+            $this->_ajaxReturn($returnData);
+        }
+
+
+        $result = StatementsService::getInstance()->credit_analysis($request_params);
+        print_r($result);
+//        $returnData = $this->initReturnData($result);
+//        $this->_ajaxReturn($returnData);
+
+    }
 
     /**
      * Ajax方式返回数据到客户端

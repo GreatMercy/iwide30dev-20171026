@@ -1,5 +1,5 @@
 <template>
-  <transition :name="currentTransition">
+  <transition :name="currentTransition" @after-enter="afterEnter" @afterLeave="afterLeave">
     <div v-show="currentValue" class="jfk-popup" :class="[position ? 'jfk-popup__' + position : '', full ? 'is-full' : 'not-full']">
       <i class="jfk-popup__close font-size--30 jfk-font icon-icon_close" v-show="showCloseButton" @click="handleClose"></i>
       <slot></slot>

@@ -15,7 +15,7 @@
       left: 0;
     }
     & .container {
-      padding-bottom: px2rem(70);
+      padding-bottom: px2rem(69);
       padding-left: px2rem(100);
       @mixin one-line horzin {
       };
@@ -30,6 +30,9 @@
     }
     & .score {
       margin-top: px2rem(42);
+      i:nth-child(2){
+        font-weight: bold;
+      }
       .font-size--108 {
         font-size: px2rem(108);
       }
@@ -41,7 +44,7 @@
       }
     }
     .jfk-rater {
-      margin-top: px2rem(24);
+      margin-top: px2rem(18);
       & a {
         margin-right: px2rem(38) !important;
         &:last-child {
@@ -51,12 +54,12 @@
     }
 
     .pregress_list {
-      margin-top: px2rem(72);
+      margin-top: px2rem(66);
       & .pregress_item {
         position: relative;
         line-height: 1;
         margin-bottom: px2rem(32);
-        .name{
+        .name {
           letter-spacing: 5px;
           display: inline-block;
           width: px2rem(170);
@@ -116,7 +119,7 @@
       padding-bottom: px2rem(35);
       @mixin one-line horzin {
       };
-      &::before{
+      &::before {
         bottom: 0;
       }
       & .contitle_info {
@@ -129,7 +132,7 @@
         }
         .name {
           position: absolute;
-          top: px2rem(6);
+          top: px2rem(8);
           left: px2rem(102);
         }
         .date {
@@ -144,11 +147,14 @@
           .score-text {
             margin-left: px2rem(10);
           }
-          .font-size--12{
+          .font-size--12 {
             font-size: px2rem(12);
           }
           span {
             margin-left: -3px;
+            &:nth-child(3){
+                font-size: px2rem(12);
+          }
           }
         }
         .font-size--18 {
@@ -162,9 +168,9 @@
         overflow: hidden;
       }
       .swiper-container {
-        &.single-pic{
+        &.single-pic {
           height: px2rem(382) !important;
-          .swiper-slide{
+          .swiper-slide {
             width: px2rem(395) !important;
           }
         }
@@ -183,9 +189,8 @@
             .jfk-swiper__item-bg {
               width: 100%;
               height: 100%;
-              background-color: red;
               background-size: cover;
-              background-image: url(http://file.iwide.cn/public/media/club/201610310207346431.jpg);
+              background-image: background-image(/hotel_default_white.jpg);
               position: absolute;
               left: 0;
               top: 0;
@@ -233,8 +238,8 @@
       }
 
       .repeat_content {
-        margin: px2rem(32) 0 0 0;
-        padding: px2rem(30) px2rem(50);
+        margin: px2rem(27) 0 0 0;
+        padding: px2rem(28) px2rem(50);
         border-radius: px2rem(6);
         line-height: px2rem(46);
       }

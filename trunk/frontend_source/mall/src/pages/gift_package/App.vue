@@ -2,7 +2,7 @@
   <div class="jfk-pages jfk-pages__gift-package">
     <div class="jfk-pages__theme"></div>
 
-    <pack :info="products" :status="status" @changeStatus="changeStatus" v-if="products"></pack>
+    <pack :info="products" :status="status" @changeStatus="changeStatus" :number="giftNumber" v-if="products"></pack>
 
     <div class="package-box">
       <clause :title="'领取信息'" :list="info" v-if="info.length > 0"></clause>
@@ -28,7 +28,7 @@
 <script>
   import clause from '@/components/clause/main'
   import pack from '@/components/package/main'
-  // import { JfkMessageBox } from 'jfk-ui'
+  import { JfkToast, JfkMessageBox } from 'jfk-ui'
   const formatUrlParams = require('jfk-ui/lib/format-urlparams.js')
   const params = formatUrlParams.default(location.href)
   import { getGiftPackageQrcodeDetail, postGenerateGiftOrder } from '@/service/http'
@@ -47,21 +47,26 @@
         'gift_id': params['gift_id'] || '',
         'saler_id': params['saler_id'] || '',
         'request_token': params['request_token']
-      }).then((res) => {
+      }, {REJECTERRORCONFIG: {serveError: true}}).then((res) => {
         const content = res['web_data']
         // 领取信息
         if (content['gift_record_info']) {
           let room = ''
           let remark = ''
-          if (content['gift_record_info']['record_info']) {
+          let number = ''
+          if (content['gift_record_info'] && content['gift_record_info']['record_info']) {
             room = `登记信息：${content['gift_record_info']['record_info']}`
           }
-          if (content['gift_record_info']['orther_remark']) {
+          if (content['gift_record_info'] && content['gift_record_info']['orther_remark']) {
             remark = `其他：${content['gift_record_info']['orther_remark']}`
           } else {
-            remark = '无'
+            remark = '其他：无'
           }
-          this.info = [room, remark]
+          if (content['gift_record_info'] && content['gift_record_info']['gift_num']) {
+            this.giftNumber = content['gift_record_info']['gift_num'] || 1
+            number = `数量：${content['gift_record_info']['gift_num']}`
+          }
+          this.info = [room, remark, number]
         }
         // 注意事项
         let noticeTime = ''
@@ -80,7 +85,39 @@
           'time': content['expiration_date'] || '',
           'products': content['child_product_info'] || []
         }
-      }).catch(() => {
+      }).catch((err) => {
+        console.log(err['status'])
+        console.log(err)
+        const toast = () => {
+          JfkToast({
+            iconType: 'error',
+            title: '',
+            message: err.msg || '',
+            duration: 2000
+          })
+        }
+        if (err['status'] === 1001) {
+          console.log(err['web_data']['page_resource'])
+          if (err['web_data'] && err['web_data']['page_resource'] && err['web_data']['page_resource']['gift_status'] && err['web_data']['page_resource']['gift_status'] === 2) {
+            JfkMessageBox({
+              showClose: false,
+              showCloseButton: false,
+              title: '',
+              message: err.msg || '',
+              showConfirmButton: true,
+              showCancelButton: false,
+              closeOnClickModal: false,
+              confirmButtonText: '去商城逛逛',
+              iconClass: 'jfk-font icon-user_icon_fail_norma'
+            }).then(() => {
+              window.location.href = err['web_data']['page_resource']['link']['gift_detail']
+            })
+          } else {
+            toast()
+          }
+        } else {
+          toast()
+        }
         this.toast.close()
       })
     },
@@ -103,24 +140,11 @@
           'inter_id': params['inter_id'] || '',
           'request_token': params['request_token']
         }).then((res) => {
-          // console.log(res)
           this.toast.close()
           window.location.href = res['web_data']['page_resource']['link']['gift_detail']
         }).catch(() => {
           this.toast.close()
         })
-        /*
-         JfkMessageBox({
-         showClose: true,
-         showCloseButton: true,
-         title: '',
-         message: '领取失败，货存不足',
-         showConfirmButton: true,
-         showCancelButton: false,
-         confirmButtonText: '确定',
-         iconClass: 'jfk-font icon-user_icon_fail_norma'
-         }).then(() => {
-         }) */
       },
       changeStatus () {
         this.status = !this.status
@@ -131,7 +155,8 @@
         status: false,
         info: [],
         products: {},
-        notice: []
+        notice: [],
+        giftNumber: 1
       }
     }
   }

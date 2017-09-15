@@ -6,4 +6,21 @@
   &__close {
     color: var(--popup-close-color);
   }
+  &__input {
+    .jfk-msgbox__status {
+      background-color: var(--popup-fill-color);
+      &.is-error {
+        color: var(--form-error-font-color);
+        .jfk-msgbox__status-icon {
+          color: var(--form-error-icon-color);
+        }
+      }
+      &.is-warn {
+        color: var(--form-warn-font-color);
+        .jfk-msgbox__status-icon {
+          color: var(--form-warn-icon-color);
+        }
+      }
+    }
+  }
 }

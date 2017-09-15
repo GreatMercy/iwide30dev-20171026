@@ -3,7 +3,7 @@
 
   .order_list {
     &_item {
-      padding-top: px2rem(62);
+      padding-top: px2rem(58);
       padding-left: px2rem(40);
       overflow: hidden;
       @mixin one-line horzin {
@@ -18,26 +18,26 @@
       & .status {
         @mixin one-line vertical {
         };
-        margin-bottom: px2rem(38);
+        margin-bottom: px2rem(33);
         position: relative;
         &::before {
           width: px2rem(3);
           position: absolute;
-          top: px2rem(4);
+          top: px2rem(10);
           left: px2rem(-40);
           height: px2rem(26);
         }
       }
       & .title {
-        margin-bottom: px2rem(30);
+        margin-bottom: px2rem(26);
       }
 
       & .room_detail {
         & .item:first-child {
-          margin-bottom: px2rem(11);
+          margin-bottom: px2rem(8);
         }
         & .item:nth-child(2) {
-          margin-bottom: px2rem(60);
+          margin-bottom: px2rem(46);
           span {
             margin-left: px2rem(5);
             margin-right: px2rem(40);
@@ -47,7 +47,7 @@
 
       & .price {
         font-size: px2rem(22);
-        margin-bottom: px2rem(43);
+        margin-bottom: px2rem(41);
       }
 
       & .count_down {
@@ -69,11 +69,11 @@
           height: px2rem(65);
           line-height: px2rem(60);
           text-indent: px2rem(8);
-          letter-spacing: 4px;
+          letter-spacing: px2rem(4);
           display: inline-block;
           text-align: center;
           background-color: red;
-          border-radius: 3px;
+          border-radius: px2rem(3);
         }
         & .comment, & .return {
           display: inline-block;

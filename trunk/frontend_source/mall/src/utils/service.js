@@ -8,6 +8,12 @@
 * 七天退款
 */
 export default {
+  can_quality: {
+    label: '品质保证',
+    desc: '该商品由酒店精心提供，保证品质最优',
+    icon: 'icon-mall_icon_support_ensure',
+    key: 'can_qualilty'
+  },
   can_refund_3: {
     label: '随时退款',
     desc: '该商品支持有效期内随时退款',

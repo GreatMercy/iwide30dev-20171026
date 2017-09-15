@@ -89,6 +89,7 @@
 </template>
 <script>
   import formatUrlParams from 'jfk-ui/lib/format-urlparams.js'
+  // submitComment
   import {getCommentOrderDetail, submitComment} from '@/service/http'
 //  import jfkRater from '../../../../common/components/src/packages/jfk-rater/src/main.vue'
   export default {
@@ -119,7 +120,9 @@
         selectedTour: 0,
         placeholderVal: '亲~ 住的舒服吗?服务满意吗?',
         locationParams: {},
-        postData: {},
+        postData: {
+          img_url: {}
+        },
         comment_input_value: '',
         // 上传数量
         upload_num: 1,
@@ -130,7 +133,10 @@
         images: [],
         jumpUrl: '',
         orderid: '',
-        roomnight: 0
+        roomnight: 0,
+        imageLength: 0,
+        // 存放图片 server id
+        imgServerId: []
       }
     },
     methods: {
@@ -203,21 +209,22 @@
               for (let j = 0; j < res.localIds.length; j++) {
                 that.$set(that.images, length + j, res.localIds[j])
               }
-              this.upload()
+              that.imageLength = 0
+              that.upload()
             }
           })
         }
       },
       upload () {
         let that = this
-        let i = 0
         let length = that.images.length
         const wx = window.wx
         wx.uploadImage({
-          localId: that.images[i],
+          localId: that.images[that.imageLength],
           success: function (res) {
-            i++
-            if (i < length) {
+            that.imgServerId.push(res.serverId)
+            that.imageLength ++
+            if (that.imageLength < length) {
               that.upload()
             }
           },
@@ -238,8 +245,8 @@
         this.postData.facilities_score = this.star.value2
         this.postData.clean_score = this.star.value3
         this.postData.content = this.comment_input_value
-        for (let m = 0; m < this.images.length; m++) {
-          this.postData.images_url.m = this.images[m]
+        for (let key in this.imgServerId) {
+          this.postData.img_url[key] = this.imgServerId[key]
         }
         this.postData.sign = {0: this.tourType[this.selectedTour]}
         if (this.star.value0 === 0 || this.star.value1 === 0 || this.star.value2 === 0 || this.star.value3 === 0) {
@@ -280,7 +287,8 @@
             iconType: 'success',
             message: '评论提交成功！'
           })
-          window.location.href = this.jumpUrl
+          // window.location.href = this.jumpUrl
+          window.location.href = res.web_data.page_resource.HOTEL_COMMENT
         }).catch(function (e) {
           if (loading) {
             loading.close()

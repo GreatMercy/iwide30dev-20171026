@@ -32,7 +32,6 @@
               <ul class="rank-list is-prize font-size--30"
                 v-infinite-scroll="loadMore"
                 infinite-scroll-disabled="disabledLoadData"
-                :infinite-scroll-immediate-check="false"
                 infinite-scroll-distance="60">
                 <template v-if="tabKey === 'prize'">
                   <li
@@ -178,6 +177,11 @@
           return
         }
         this.tabKey = type
+        this.disabledLoadData = true
+        this.dataPage = 1
+        this.resetPage = true
+        this.listData = []
+        this.loadData()
       },
       handleThumbup (index, item) {
         let vm = this
@@ -198,14 +202,6 @@
             })
           })
         }
-      }
-    },
-    watch: {
-      tabKey (val) {
-        this.disabledLoadData = false
-        this.dataPage = 1
-        this.resetPage = true
-        this.listData = []
       }
     }
   }

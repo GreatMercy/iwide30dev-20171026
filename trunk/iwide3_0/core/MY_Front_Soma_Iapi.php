@@ -39,14 +39,17 @@ class MY_Front_Soma_Iapi extends MY_Front_Iapi
     private function _initLink()
     {
 
-        $redis = $this->get_redis_instance();
-        $layout = $redis->get('layout');
-        $tkId = $redis->get('tkid');
-        $brandName = $redis->get('brandname');
+//        $redis = $this->get_redis_instance();
+//        $layout = $redis->get($this->inter_id.'_is_layout');
+//        $tkId = $redis->get('tkid');
+//        $brandName = $redis->get('brandname');
 
-//        $layout = $this->session->tempdata('layout');
-//        $tkId = $this->session->tempdata('tkid');
-//        $brandName = $this->session->tempdata('brandname');
+
+        $packageService = \App\services\soma\PackageService::getInstance();
+
+        $layout = $packageService->getParams()['layout'];
+        $tkId = $packageService->getParams()['tkid'];
+        $brandName = $packageService->getParams()['brandname'];
 
         $this->link = array(
             'home' => site_url('soma/package/index') . "?id=" . $this->inter_id."&tkid=".$tkId.'&brandname='.$brandName.'&layout='.$layout,
@@ -103,13 +106,13 @@ class MY_Front_Soma_Iapi extends MY_Front_Iapi
                     'pid' => '',
                 ]), // 订单详情
             'show_shipping_info' => site_url('soma/consumer/show_shipping_info') . '?' . http_build_query([
-                    'oid' => '',
-                    'gid' => '',
                     'bsn' => 'package',
                     'id' => $this->inter_id,
                     'tkid' => $tkId,
                     'brandname' => $brandName,
-                    'layout' => $layout
+                    'layout' => $layout,
+                    'oid' => '',
+                    'gid' => '',
                 ]), // 邮寄
             // 卷码相关
             'get_received_list' => site_url('soma/gift/get_received_list') . '?' . http_build_query([
@@ -214,6 +217,15 @@ class MY_Front_Soma_Iapi extends MY_Front_Iapi
             'gift_list'=>site_url('soma/GiftDelivery/gift_list') . "?id=" . $this->inter_id .'&bsn=package'.'&layout='.$layout."&tkid=".$tkId.'&brandname='.$brandName,
             //确认领取礼包详情页
             'receive_gift_detail'=>site_url('soma/GiftDelivery/receive_gift_detail') . "?id=" . $this->inter_id .'&bsn=package'.'&layout='.$layout."&tkid=".$tkId.'&brandname='.$brandName,
+            'received_gift_empty' => site_url('soma/gift/received_gift_empty').'?'. http_build_query([
+                    'id' => $this->inter_id,
+                    'tkid' => $tkId,
+                    'brandname' => $brandName,
+                    'layout' => $layout,
+                    'bsn' => '%s',
+                    'gid' => '%s'
+
+                ])
         );
     }
 
@@ -284,5 +296,6 @@ class MY_Front_Soma_Iapi extends MY_Front_Iapi
     {
         return true;
     }
+
 
 }

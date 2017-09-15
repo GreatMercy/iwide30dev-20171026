@@ -2,7 +2,7 @@
   <div class="jfk-pages jfk-pages__submitOrder" v-if="hotel.hotel_id">
     <div class="jfk-pages__theme"></div>
     <div class="submit_order_top">
-      <div class="submit_order_top_title" style="display:none;">
+      <div class="submit_order_top_title" v-show="false">
           <span class="word font-size--28">登陆后享受 <span class="font-size--36">更低优惠</span></span>
           <span class="if goldColor">
             <i class="booking_icon_font font-size--34 icon-font_zh_li_qkbys"></i><i class="booking_icon_font font-size--34 icon-font_zh_ji_qkbys"></i><i class="booking_icon_font font-size--34 icon-font_zh_deng_qkbys"></i><i class="booking_icon_font font-size--34 icon-font_zh_lu_qkbys"></i><i class="booking_icon_font font-size--28 icon-booking_icon_right_normal"></i>
@@ -101,11 +101,9 @@
     </div>
     <!-- 支付方式 -->
     <div class="pay_type">
-      <div class="pay_type_item" v-for="(value,key) in payWays" :class="{'acitve' : key === 0 }">
-
+      <div class="pay_type_item" v-for="(value, key) in payWays" :key="key" :class="{'acitve' : key === 0 }">
         <input v-if="value.disable" type="radio" v-model="payType" @click="handleOrder(value.pay_type, value.favour)" name="pay"  :value="value.pay_type">
         <input v-else type="radio" v-model="payType" @click="handleOrder(value.pay_type, value.favour)" name="pay" :value="value.pay_type">
-
         <p class="font-size--28">
           <i class="booking_icon_font font-size--40 icon-user_icon_wxpay_n-"></i><br>
           {{value.pay_name}}
@@ -392,8 +390,13 @@
           this.days = resData.days
           this.firstState = resData.first_state
           this.packages = resData.packages
-          this.customerInfo.name = resData.last_order.name
-          this.customerInfo.tel = resData.last_order.tel
+          if (resData.last_order) {
+            this.customerInfo.name = resData.last_order.name
+            this.customerInfo.tel = resData.last_order.tel
+          } else {
+            this.customerInfo.name = ''
+            this.customerInfo.tel = ''
+          }
           this.exchangeMaxPoint = resData.exchange_max_point
           this.pointName = resData.point_name
           this.pointConsumRate = resData.point_consum_rate ? 0 : resData.point_consum_rate
@@ -446,12 +449,15 @@
         let date = new Date(dateStr)
         return date
       },
-      getCoupon () {
-        let loading = this.$jfkToast({
-          iconClass: 'jfk-loading__snake ',
-          duration: -1,
-          isLoading: true
-        })
+      getCoupon (loadingType) {
+        let loading = null
+        if (!loadingType) {
+          loading = this.$jfkToast({
+            iconClass: 'jfk-loading__snake ',
+            duration: -1,
+            isLoading: true
+          })
+        }
         // 获取优惠券需要数据
         let couponData = {
           // url id
@@ -541,7 +547,15 @@
           console.log(e)
         })
       },
-      getBonusSet () {
+      getBonusSet (loadingType) {
+        let loading = null
+        if (!loadingType) {
+          loading = this.$jfkToast({
+            iconClass: 'jfk-loading__snake ',
+            duration: -1,
+            isLoading: true
+          })
+        }
         if (this.noPartBonus === 0) {
           // 获取积分所需数据
           let bonusData = {
@@ -558,11 +572,6 @@
             paytype: this.payType,
             point_name: '积分'
           }
-          let loading = this.$jfkToast({
-            iconClass: 'jfk-loading__snake ',
-            duration: -1,
-            isLoading: true
-          })
           getBookroomBonus(bonusData).then((res) => {
             if (loading) {
               loading.close()
@@ -726,12 +735,15 @@
         this.couponCards = this.couponCards
         this.totalPrice = (parseFloat((this.realPrice - this.totalFavour).toFixed(2)) + parseFloat(this.packagesPrice)).toFixed(2)
       },
-      getPointpaySet () {
-        let loading = this.$jfkToast({
-          iconClass: 'jfk-loading__snake ',
-          duration: -1,
-          isLoading: true
-        })
+      getPointpaySet (loadingType) {
+        let loading = null
+        if (!loadingType) {
+          loading = this.$jfkToast({
+            iconClass: 'jfk-loading__snake ',
+            duration: -1,
+            isLoading: true
+          })
+        }
         // 判断能否使用积分支付
         if (this.hasPointPay === 1) {
           let getPoint = {
@@ -775,6 +787,7 @@
         }
       },
       handleRoom () {
+        if (this.count === this.maxRoomNums) return
         this.pointFavour = 0
         if (this.paytype === 'weixin') {
           this.totalFavour = this.payFavour
@@ -788,9 +801,17 @@
         this.totalPrice = (parseFloat((this.unitPrice * tmpval).toFixed(2)) + parseFloat(this.packagesPrice)).toFixed(2)
         let roomnos = {}
         roomnos[[this.rid]] = tmpval
-        this.getBonusSet()
-        this.getPointpaySet()
-        this.getCoupon()
+        let loading = this.$jfkToast({
+          iconClass: 'jfk-loading__snake ',
+          duration: -1,
+          isLoading: true
+        })
+        this.getBonusSet(true)
+        this.getPointpaySet(true)
+        this.getCoupon(true)
+        if (loading) {
+          loading.close()
+        }
       },
       handleShow () {
         if (this.couponDis) {

@@ -8,6 +8,7 @@
 Class Idistribute_model extends CI_Model{
 	private $CI;
 	private $_model;
+	private $_distribution_model;
 	private $_notice_model;
 	private $_grades_model;
 	private $_grades_ext_model;
@@ -243,6 +244,7 @@ Class Idistribute_model extends CI_Model{
 	 */
 	public function create_ext_grade($params){
 		try {
+			MYLOG::w('泛分销接收数据：' . json_encode($params), 'distribute_extends');
 			return $this->get_distribute_ext_model()->create_dist($params);
 		} catch (Exception $e) {
 			log_message('error',$e->getMessage());
@@ -273,6 +275,7 @@ Class Idistribute_model extends CI_Model{
 	 */
 	public function update_ext_grade($params){
 		try {
+			MYLOG::w('update泛分销接收数据：' . json_encode($params), 'distribute_extends');
 			return $this->get_distribute_ext_model()->update_grades($params);
 		} catch (Exception $e) {
 			log_message('error',$e->getMessage());

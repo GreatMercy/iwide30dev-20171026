@@ -84,7 +84,10 @@ class Gift_delivery extends MY_Admin_Iapi{
         //获取商家inter_id
         $params['inter_id'] = $this->session->get_admin_inter_id();
         //加载gift_delivery_model
-        $this->db->db_select('iwide30soma');
+        $this->load->model('soma/Gift_detail_model', 'Gift_detail_model');
+        $Gift_detail_model = $this->Gift_detail_model;
+        $this->db = $Gift_detail_model->_shard_db_r($this->inter_id);
+
         $this->load->model('soma/gift_delivery_model');
         //获取礼包列表
         $resultInfo = $this->gift_delivery_model->getGiftListData($params);
@@ -105,6 +108,8 @@ class Gift_delivery extends MY_Admin_Iapi{
                 'size'=> $resultInfo['page_size'],
             ],
             'csrf' => $this->common_data,
+            'start_time'=>$resultInfo['start_time'],
+            'end_time'=>$resultInfo['end_time'],
         ];
 
         //结果返回
@@ -183,7 +188,9 @@ class Gift_delivery extends MY_Admin_Iapi{
 
         //加载gift_delivery_model
         $this->load->model('soma/gift_delivery_model');
-        $this->db->db_select('iwide30soma');
+        $this->load->model('soma/Gift_detail_model', 'Gift_detail_model');
+        $Gift_detail_model = $this->Gift_detail_model;
+        $this->db = $Gift_detail_model->_shard_db_r($this->inter_id);
         //获取hotel_id
         $hotel_ids = $this->session->get_admin_hotels();
         if($hotel_ids){
@@ -213,7 +220,7 @@ class Gift_delivery extends MY_Admin_Iapi{
      *         in="query",
      *         name="start_time",
      *         required=true,
-     *         type="date",
+     *         type="string",
      *         format="int32",
      *     ),
      *     @SWG\Parameter(
@@ -221,7 +228,7 @@ class Gift_delivery extends MY_Admin_Iapi{
      *         in="query",
      *         name="end_time",
      *         required=true,
-     *         type="date",
+     *         type="string",
      *         format="int32",
      *     ),
      *     @SWG\Parameter(
@@ -229,7 +236,7 @@ class Gift_delivery extends MY_Admin_Iapi{
      *         in="query",
      *         name="product_id",
      *         required=true,
-     *         type="array",
+     *         type="string",
      *         format="int32",
      *     ),
      *     @SWG\Response(
@@ -254,10 +261,7 @@ class Gift_delivery extends MY_Admin_Iapi{
         $productIdArr = explode(',',$paramsJson['product_id']);
         $params['start_time'] = $paramsJson['start_time'];
         $params['end_time'] = $paramsJson['end_time'];
-//        $productIdArr = ['12538','13420','10023','10271'];
-//        $productIdArr = [];
-//        $params['start_time'] = '2017-09-06 00:00:00';
-//        $params['end_time'] = '2017-09-20 23:59:59';
+
         if(empty($params['start_time']) || empty($params['end_time'])){
             $this->out_put_msg(BaseConst::OPER_STATUS_FAIL_TOAST,'礼包有限时间不能为空!','');
         }
@@ -266,7 +270,9 @@ class Gift_delivery extends MY_Admin_Iapi{
             $this->out_put_msg(BaseConst::OPER_STATUS_FAIL_TOAST,'开始时间不能大于结束时间!','');
         }
 
-        $this->db->db_select('iwide30soma');
+        $this->load->model('soma/Gift_detail_model', 'Gift_detail_model');
+        $Gift_detail_model = $this->Gift_detail_model;
+        $this->db = $Gift_detail_model->_shard_db_r($this->inter_id);
         $params['inter_id'] = $this->session->get_admin_inter_id();
         //商品校验是否属于inter_id 不属于则过滤
         $productWhere = ['inter_id'=>$params['inter_id']];
@@ -333,9 +339,10 @@ class Gift_delivery extends MY_Admin_Iapi{
         $paramsJson = $this->input->input_json();
         $params['product_id'] = $paramsJson['product_id'];
         $params['inter_id'] = $this->session->get_admin_inter_id();
-//        $params['product_id'] = 14211;
-//        $params['inter_id'] = 'a450089706';
-        $this->db->db_select('iwide30soma');
+
+        $this->load->model('soma/Gift_detail_model', 'Gift_detail_model');
+        $Gift_detail_model = $this->Gift_detail_model;
+        $this->db = $Gift_detail_model->_shard_db_r($this->inter_id);
         $productIdRes = $this->db->select(['product_id','inter_id'])->where($params)
             ->get('soma_catalog_product_package')->row_array();
         if(empty($productIdRes)){
@@ -348,6 +355,156 @@ class Gift_delivery extends MY_Admin_Iapi{
         $resultInfo = $this->gift_delivery_model->deleteProductGiftData($params);
         $this->out_put_msg($resultInfo['status'],$resultInfo['message'],'');
     }
+
+
+    /**
+     * @SWG\Get(
+     *     tags={"gift_delivery"},
+     *     path="/gift_delivery/giftReceiveDetail",
+     *     summary="礼包领取信息详情",
+     *     description="礼包领取信息详情",
+     *     operationId="giftReceiveDetail",
+     *     produces={"application/json"},
+     *     @SWG\Parameter(
+     *         description="分页",
+     *         in="query",
+     *         name="page",
+     *         required=true,
+     *         type="integer",
+     *         format="int32",
+     *     ),
+     *     @SWG\Parameter(
+     *         description="筛选开始时间",
+     *         in="query",
+     *         name="start_time",
+     *         required=true,
+     *         type="string",
+     *         format="int32",
+     *     ),
+     *     @SWG\Parameter(
+     *         description="筛选结束时间",
+     *         in="query",
+     *         name="end_time",
+     *         required=true,
+     *         type="string",
+     *         format="int32",
+     *     ),
+     *     @SWG\Parameter(
+     *         description="订单号",
+     *         in="query",
+     *         name="order_id",
+     *         required=true,
+     *         type="integer",
+     *         format="int32",
+     *     ),
+     *     @SWG\Parameter(
+     *         description="登记信息",
+     *         in="query",
+     *         name="record_info",
+     *         required=true,
+     *         type="string",
+     *         format="int32",
+     *     ),
+     *     @SWG\Parameter(
+     *         description="创建人",
+     *         in="query",
+     *         name="saler_name",
+     *         required=true,
+     *         type="string",
+     *         format="int32",
+     *     ),
+     *     @SWG\Response(
+     *         response="200",
+     *         description="successful operation",
+     *         @SWG\Schema(
+     *              type="object",
+     *              @SWG\Property(
+     *                  property="order_id",
+     *                  description="订单号",
+     *                  type = "integer"
+     *              ),
+     *              @SWG\Property(
+     *                  property="name",
+     *                  description="商品名称",
+     *                  type = "string",
+     *              ),
+     *              @SWG\Property(
+     *                  property="saler_name",
+     *                  description="创建人",
+     *                  type = "integer",
+     *              ),
+     *              @SWG\Property(
+     *                  property="nickname",
+     *                  description="购买人",
+     *                  type = "string",
+     *              ),
+     *              @SWG\Property(
+     *                  property="gift_num",
+     *                  description="领取数量",
+     *                  type = "integer",
+     *              ),
+     *              @SWG\Property(
+     *                  property="cat_name",
+     *                  description="分类名称",
+     *                  type = "string",
+     *              ),
+     *              @SWG\Property(
+     *                  property="consume_num",
+     *                  description="核销数量",
+     *                  type = "string",
+     *              ),
+     *              @SWG\Property(
+     *                  property="consume_price",
+     *                  description="核销金额",
+     *                  type = "string",
+     *              ),
+     *         )
+     *     ),
+     *     @SWG\Response(
+     *         response="400",
+     *         description="Invalid pid supplied"
+     *     ),
+     *     @SWG\Response(
+     *         response="404",
+     *         description="Package not found"
+     *     ),
+     * )
+     */
+    public function giftReceiveDetail(){
+
+        //接受筛选参数
+        $params = array();
+        $params['start_time'] = $this->input->get('start_time');
+        $params['end_time'] = $this->input->get('end_time');
+        $params['order_id'] = intval($this->input->get('order_id'));
+        $params['saler_name'] = $this->input->get('saler_name');
+        $params['record_info'] = $this->input->get('record_info');
+        $params['page'] = intval($this->input->get('page'));
+        $params['page'] = empty($params['page']) ? 0 : $params['page'] - 1;
+
+        $params['inter_id'] = $this->session->get_admin_inter_id();
+        $this->load->model('soma/Gift_detail_model', 'Gift_detail_model');
+        $Gift_detail_model = $this->Gift_detail_model;
+        $this->db = $Gift_detail_model->_shard_db_r($this->inter_id);
+        //加载gift_delivery_model
+        $this->load->model('soma/gift_delivery_model');
+        //获取礼包领取详情
+        $resultInfo = $this->gift_delivery_model->getGiftReceiveDetail($params);
+
+        $data = [
+            'items' => $resultInfo['message'],
+            'page_resource' => [
+                'page' => $resultInfo['pageCount'],
+                'count' => $resultInfo['count'],
+                'size'=> $resultInfo['page_size'],
+            ],
+            'csrf' => $this->common_data,
+        ];
+
+        $this->out_put_msg($resultInfo['status'],'',$data);
+    }
+
+
 
 
 

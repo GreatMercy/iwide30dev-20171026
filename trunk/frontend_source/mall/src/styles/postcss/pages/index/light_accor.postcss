@@ -17,14 +17,14 @@
   .accor-header {
     &__cont {
       @mixin clearfix;
-      padding-top: calc(5 / 24)em;
+      padding-top: calc(6 / 24)em;
     }
     a {
       color: #002b40;
       float: left;
       width: calc(88 / 690 * 100%);
       padding-top: calc(44 / 24)em;
-      @media screen and (max-width: 320px) {
+      @media screen and (max-width: 374px) {
         width: calc(110 / 690 * 100%);
       }
       .jfk-font {
@@ -114,6 +114,15 @@
         color: #231417;
         letter-spacing: calc(3 / 28)em;
         line-height: calc((18 + 18 + 28) / 28);
+      }
+    }
+  }
+  .page__header {
+    .jfk-banner {
+      &__item {
+        &.is-one-item {
+          margin-top: px2rem(30);
+        }
       }
     }
   }

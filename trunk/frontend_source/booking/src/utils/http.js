@@ -89,16 +89,6 @@ const formatUrl = function (url, data, contentType) {
   if (urlParamArr.length) {
     newUrl += '?' + urlParamArr.join('&')
   }
-  if (process.env.NODE_ENV) {
-  } else {
-    const salerParam = window.url_param + '&test=test'
-    if (urlParamArr.length) {
-      newUrl = '&' + salerParam
-    } else {
-      newUrl = '?' + salerParam
-    }
-    alert('调整后的参数' + newUrl)
-  }
   if (contentType === 'application/x-www-form-urlencoded') {
     let dataArr = []
     for (let key in data) {
@@ -111,12 +101,42 @@ const formatUrl = function (url, data, contentType) {
     data: data
   }
 }
+const dealSalerParam = function (url, data, config) {
+  let d = formatUrl(url, data, config && config.headers && config.headers['Content-Type'])
+  // 序列化d.url
+  let hostUrl = d.url.split('?')[0]
+  let urlObj = formatUrlParams(d.url)
+  let urlParamArr = []
+  // 分销的参数
+  const salerParam = window.url_param
+  if (salerParam.indexOf('id=') >= 0 && d.url.indexOf('id=') >= 0) {
+    delete urlObj.id
+  }
+  if (salerParam.indexOf('openid=') >= 0 && d.url.indexOf('openid=') >= 0) {
+    delete urlObj.openid
+  }
+  for (let key in urlObj) {
+    urlParamArr.push(key + '=' + encodeURIComponent(urlObj[key]))
+  }
+  if (urlParamArr.length !== 0) {
+    hostUrl = hostUrl + '?' + urlParamArr.join('&')
+    hostUrl = hostUrl + '&' + salerParam
+  } else {
+    hostUrl = hostUrl + '?' + salerParam
+  }
+  return {
+    url: hostUrl,
+    data: d.data
+  }
+}
 export default {
   post (url, data, config) {
     if (process.env.NODE_ENV === 'development') {
       let d = formatUrl(url, data, config && config.headers && config.headers['Content-Type'])
       url = d.url
       data = d.data
+    } else if (window.url_param) {
+      dealSalerParam(url, data, config)
     }
     let _config = Object.assign({}, {data: data, url: url, method: 'post'}, config)
     return axios(_config).then(checkStatus).then(checkCode)
@@ -126,6 +146,10 @@ export default {
       let d = formatUrl(url, data, config && config.headers && config.headers['Content-Type'])
       url = d.url
       data = d.data
+    } else if (window.url_param) {
+      let oreturn = dealSalerParam(url, data, config)
+      url = oreturn.url
+      data = oreturn.data
     }
     let _config = Object.assign({}, {params: data, method: 'get', url: url}, config)
     return axios(_config).then(checkStatus).then(checkCode)
@@ -135,6 +159,8 @@ export default {
       let d = formatUrl(url, data, config && config.headers && config.headers['Content-Type'])
       url = d.url
       data = d.data
+    } else if (window.url_param) {
+      dealSalerParam(url, data, config)
     }
     let _config = Object.assign({}, {data: data, url: url, method: 'put'}, config)
     return axios(_config).then(checkStatus).then(checkCode)
@@ -144,6 +170,8 @@ export default {
       let d = formatUrl(url, data, config && config.headers['Content-Type'])
       url = d.url
       data = d.data
+    } else if (window.url_param) {
+      dealSalerParam(url, data, config)
     }
     let _config = Object.assign({}, {data: data, url: url, method: 'delete'}, config)
     return axios(_config).then(checkStatus).then(checkCode)

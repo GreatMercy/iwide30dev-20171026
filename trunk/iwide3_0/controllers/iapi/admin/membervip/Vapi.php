@@ -80,7 +80,32 @@ class Vapi extends MY_Admin_Iapi{
         $this->_ajaxReturn($msg);
     }
 
-
+    /**
+     * @SWG\Get(
+     *     tags={"Vapi"},
+     *     path="vapi/hotels_list",
+     *     summary="酒店列表",
+     *     description="酒店列表",
+     *     operationId="hotels_list",
+     *     produces={"application/json"},
+     *     @SWG\Response(
+     *         response="200",
+     *         description="successful operation",
+     *         @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="hotel_id",
+     *                  description="酒店id",
+     *                  type = "integer"
+     *              ),
+     *              @SWG\Property(
+     *                  property="name",
+     *                  description="酒店名",
+     *                  type = "string"
+     *              )
+     *         )
+     *      )
+     * )
+     */
     public function hotels_list(){
         $msg = array(
             'status'=>1004,
@@ -93,17 +118,64 @@ class Vapi extends MY_Admin_Iapi{
 
             $select = "hotel_id,name";
             $tag_data = $this->statements->hotel_list($inter_id ,$select);
-            $this->_ajaxReturn($tag_data);
+            $returnData = $this->initReturnData($tag_data);
+            $this->_ajaxReturn($returnData);
         }
         $this->_ajaxReturn($msg);
     }
 
-    //注册分销报表
-    //sales_id
-    //hotel_id
-    //time_type  [update_time,createtime]
-    //start_time
-    //end_time
+    /**
+     * @SWG\Get(
+     *     tags={"Vapi"},
+     *     path="vapi/reg_distribution_statements",
+     *     summary="注册分销绩效列表",
+     *     description="会员注册分销绩效",
+     *     operationId="reg_distribution_statements",
+     *     produces={"application/json"},
+     *     @SWG\Parameter(
+     *         description="分销员ID（分销号)",
+     *         in="query",
+     *         name="sales_id",
+     *         required=false,
+     *         type="integer"
+     *     ),
+     *     @SWG\Parameter(
+     *         description="时间类型:createtime核定时间，update_time发放时间",
+     *         in="query",
+     *         name = "time_type",
+     *         required=true,
+     *         type="string"
+     *     ),
+     *     @SWG\Parameter(
+     *         description="开始日期,example:2017-09-04",
+     *         in="query",
+     *         name = "start_time",
+     *         required=true,
+     *         type="string"
+     *     ),
+     *     @SWG\Parameter(
+     *         description="结束日期",
+     *         in="query",
+     *         name = "end_time",
+     *         required=true,
+     *         type="string"
+     *     ),
+     *     @SWG\Parameter(
+     *         description="酒店ID",
+     *         in="query",
+     *         name = "hotel_id",
+     *         required=false,
+     *         type="integer"
+     *     ),
+     *     @SWG\Response(
+     *         response="200",
+     *         description="successful operation",
+     *         @SWG\Schema(
+     *              ref="#/definitions/RegDistributionStatements"
+     *         )
+     *     )
+     * )
+     */
     public function reg_distribution_statements(){
         $returnData = array(
             'status'=>1004,
@@ -133,6 +205,58 @@ class Vapi extends MY_Admin_Iapi{
     }
 
     //购卡分销
+    /**
+     * @SWG\Get(
+     *     tags={"Vapi"},
+     *     path="vapi/deposit_card_statements",
+     *     summary="购卡充值分销绩效列表",
+     *     description="购卡充值分销绩效",
+     *     operationId="deposit_card_statements",
+     *     produces={"application/json"},
+     *     @SWG\Parameter(
+     *         description="分销员ID（分销号)",
+     *         in="query",
+     *         name="sales_id",
+     *         required=false,
+     *         type="integer"
+     *     ),
+     *     @SWG\Parameter(
+     *         description="时间类型:send_time核定时间，update_time发放时间",
+     *         in="query",
+     *         name = "time_type",
+     *         required=true,
+     *         type="string"
+     *     ),
+     *     @SWG\Parameter(
+     *         description="开始日期,example:2017-09-04",
+     *         in="query",
+     *         name = "start_time",
+     *         required=true,
+     *         type="string"
+     *     ),
+     *     @SWG\Parameter(
+     *         description="结束日期",
+     *         in="query",
+     *         name = "end_time",
+     *         required=true,
+     *         type="string"
+     *     ),
+     *     @SWG\Parameter(
+     *         description="酒店ID",
+     *         in="query",
+     *         name = "hotel_id",
+     *         required=false,
+     *         type="integer"
+     *     ),
+     *     @SWG\Response(
+     *         response="200",
+     *         description="successful operation",
+     *         @SWG\Schema(
+     *              ref="#/definitions/DepositDistributionStatements"
+     *         )
+     *     )
+     * )
+     */
     public function deposit_card_statements(){
         $returnData = array(
             'status'=>1004,

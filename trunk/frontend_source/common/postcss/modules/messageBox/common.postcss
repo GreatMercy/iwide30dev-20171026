@@ -46,6 +46,9 @@
       }
     }
   }
+  &__title {
+    letter-spacing: 0.05em;
+  }
   &__content {
     line-height: calc(48 / 28);
     padding: {
@@ -53,11 +56,52 @@
       right: px2rem(82);
     }
   }
+  &.is-prompt {
+    .jfk-msgbox {
+      &__content {
+        padding: {
+          left: px2rem(24);
+          right: px2rem(24);
+          bottom: px2rem(12);
+        }
+      }
+    }
+  }
   &__header{
     line-height: 1;
     padding: {
       left: px2rem(52);
       right: px2rem(52);
+    }
+  }
+  &__input {
+    position: relative;
+    input {
+      background: transparent;
+      font-size: calc(30 / 28)em;
+      outline: 0 none;
+      line-height: px2rem(60);
+      padding: px2rem(18) px2rem(26);
+      box-sizing: border-box;
+      width: 100%;
+      border-radius: 0;
+    }
+    .jfk-msgbox__status {
+      text-align: left;
+      position: absolute;
+      top: 3px;
+      left: 1px;
+      right: 1px;
+      bottom: 3px;
+      overflow: hidden;
+      font-size: calc(24 / 30)em;
+      box-sizing: border-box;
+      padding-left: calc(26 / 24)em;
+      display: flex;
+      align-items: center;
+      &-tip {
+        padding-left: calc(10 / 24)em;
+      }
     }
   }
   &__btns {
@@ -97,11 +141,11 @@
     top: px2rem(30);
     right: px2rem(30);
   }
-  &-bounce-enter {
+  &__bounce-enter {
     opacity: 0;
     transform: translate3d(-50%, -50%, 0) scale(0.7);
   }
-  &-bounce-leave-active {
+  &__bounce-leave-active {
     opacity: 0;
     transform: translate3d(-50%, -50%, 0) scale(0.9);
   }

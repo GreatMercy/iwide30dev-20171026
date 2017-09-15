@@ -73,7 +73,10 @@
             <a :href="item.order_detail_link || 'javascript:void(0)'" class="order-list__disabled">
               <div class="jfk-flex is-align-middle order-list__order-info">
                 <div class="font-size--28 order-list__order-id" v-html="'订单号：' + item.order_id"></div>
-                <div class="font-size--30 jfk-ta-r order-list__status color-golden">已退款</div>
+                <div class="font-size--30 jfk-ta-r order-list__status color-golden" v-if="item.refund_info_status === 1 || item.refund_info_status === '1'">退款中</div>
+                <div class="font-size--30 jfk-ta-r order-list__status color-golden" v-else-if="item.refund_info_status === 2 || item.refund_info_status === '2'">退款中</div>
+                <div class="font-size--30 jfk-ta-r order-list__status color-golden" v-else-if="item.refund_info_status === 3 || item.refund_info_status === '3'">已退款</div>
+                <div class="font-size--30 jfk-ta-r order-list__status color-golden" v-else-if="item.refund_info_status === 6 || item.refund_info_status === '6'">退款中</div>
               </div>
 
               <div class="order-list__info jfk-flex">
@@ -222,7 +225,7 @@
             <button class="jfk-button jfk-button--primary  font-size--30 is-plain"
                     @click="locationHref(item.detail_url)">
                   <span>
-                    点击查看
+                    立即查看
                   </span>
             </button>
           </div>

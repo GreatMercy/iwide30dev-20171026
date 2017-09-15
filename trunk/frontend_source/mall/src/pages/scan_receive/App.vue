@@ -13,7 +13,7 @@
         </div>
 
         <div class="scan-receive__way font-size--24 jfk-ta-c">
-          <span>使用方式</span><i>（请在5分钟完成扫码，超时未领取请重新生成）</i>
+          <span>使用方式</span><i>（请在10分钟完成扫码，超时未领取请重新生成）</i>
         </div>
 
         <div class="scan-receive__btn">
@@ -29,9 +29,13 @@
       <clause :title="'注意事项'" :list="notice"></clause>
     </div>
 
+    <div class="scan-receive__notice" v-if="receiveInfo.length > 0">
+      <clause :title="'领取信息'" :list="receiveInfo"></clause>
+    </div>
+
     <div class="scan-receive__package">
       <clause :title="'礼包内容'"></clause>
-      <pack :status="status" @changeStatus="changeStatus" :info="info"></pack>
+      <pack :status="status" @changeStatus="changeStatus" :info="info" :number="giftNumber"></pack>
     </div>
 
   </div>
@@ -87,6 +91,26 @@
         'request_token': params['request_token']
       }).then((res) => {
         const content = res['web_data']
+        // 领取信息
+        if (content['gift_record_info']) {
+          let room = ''
+          let remark = ''
+          let number = ''
+          if (content['gift_record_info'] && content['gift_record_info']['record_info']) {
+            room = `登记信息：${content['gift_record_info']['record_info']}`
+          }
+          if (content['gift_record_info'] && content['gift_record_info']['orther_remark']) {
+            remark = `其他：${content['gift_record_info']['orther_remark']}`
+          } else {
+            remark = '其他：无'
+          }
+          if (content['gift_record_info'] && content['gift_record_info']['gift_num']) {
+            this.giftNumber = content['gift_record_info']['gift_num'] || 1
+            number = `数量：${content['gift_record_info']['gift_num']}`
+          }
+          this.receiveInfo = [room, remark, number]
+        }
+        // 注意事项
         // 有效期
         let validity = ''
         if (content['expiration_date']) {
@@ -111,7 +135,9 @@
         info: {}, // 礼包信息
         status: false, // 礼包展开状态
         notice: [],
-        qrcode: ''
+        qrcode: '',
+        giftNumber: 1,
+        receiveInfo: [] // 领取信息
       }
     }
   }

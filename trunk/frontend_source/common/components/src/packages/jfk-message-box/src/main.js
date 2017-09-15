@@ -172,16 +172,12 @@ MessageBox.confirm = function(message, title, options) {
   }, options));
 };
 
-MessageBox.prompt = function(message, title, options) {
-  if (typeof title === 'object') {
-    options = title;
-    title = '';
-  }
+MessageBox.prompt = function(title, options) {
   return MessageBox(merge({
     title: title,
-    message: message,
     showCancelButton: true,
     showInput: true,
+    showCloseButton: false,
     $type: 'prompt'
   }, options));
 };

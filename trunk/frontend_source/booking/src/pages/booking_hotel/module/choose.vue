@@ -52,7 +52,7 @@
                       </div>
                       <div class="count jfk-d-ib font-size--32 set_num">
                         <jfk-input-number v-model="value.countNum"
-                                          :min="0"
+                                          :min="1"
                                           :max="value.nums"
                                           @click.native.prevent="setAllPrice()">
                         </jfk-input-number>
@@ -153,6 +153,7 @@
         this.sendData.room_id = this.item.room_info.room_id
         this.sendData.startdate = this.item.startDate
         this.sendData.enddate = this.item.endDate
+        this.sendData.protrol_code = this.item.protrol_code
         this.datas = {}
         this.xprice_type = {}
         this.datas[this.sendData.room_id] = 1
@@ -253,10 +254,11 @@
           price_codes: JSON.stringify(this.xprice_code) || {},
           hotel_id: this.sendData.hotel_id || '',
           datas: JSON.stringify(this.datas) || {},
-          protrol_code: '',
           price_type: JSON.stringify(this.price_type) || '',
           select_package: this.sendData.select_package || [],
-          package_info: this.package_info || []
+          package_info: this.package_info || [],
+          // 商务协议码
+          protrol_code: this.sendData.protrol_code || ''
         }
         getBookroomDetail(setData).then((res) => {
           if (loading) {

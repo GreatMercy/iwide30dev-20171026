@@ -82,7 +82,7 @@
           </div>
         </div>
         </div>
-        <div class="tip font-color-light-gray font-size--30">免费可玩<i class="color-golden">{{remainFreeTimes}}</i>局，获得分享奖励<i class="color-golden">{{remainRewardTimes}}</i>局</div>
+        <div class="tip font-color-light-gray font-size--30">可玩<i class="color-golden">{{+remainFreeTimes + +remainRewardTimes}}</i>局（免费可玩<i class="color-golden">{{remainFreeTimes}}</i>局，获得奖励<i class="color-golden">{{remainRewardTimes}}</i>局）</div>
         <div class="btn">
           <a href="javascript:;" @click="handlePlayGame" class="jfk-button font-size--34 jfk-button--primary jfk-button--free" :class="{'is-disabled': gameNotRight}">
             <template v-if="!hasDeviceMotion">开始游戏</template>
@@ -102,9 +102,7 @@
       class="jfk-popup__pancake">
       <div class="popup-cont">
         <div class="title font-color-white font-size--30 jfk-ta-c">您已用完今日免费次数</div>
-        <div class="cont font-color-light-gray font-size--24">点击右上方<span class="share"><b class="share-cont jfk-flex is-align-middle is-justify-space-between">
-          <i class="dot"></i><i class="dot"></i><i class="dot"></i></b></span>分享到群，分享成功您将获得随机投掷奖励，单次最多可获5次机会
-        </div>
+        <div class="cont font-color-light-gray font-size--24">朋友一起来参与，随机可获得最多5次的奖励投掷机会</div>
       </div>
     </jfk-popup>
      <jfk-popup
@@ -180,7 +178,7 @@
       class="jfk-popup__pancake">
       <div class="popup-cont">
         <div class="title font-color-white font-size--30 jfk-ta-c">博饼秘籍</div>
-        <div class="cont font-color-light-gray font-size--24">由于每日的投掷次数有限，您若想获得更多投掷机会，赢取更多奖励，分享到群，随机获得奖励机会，单次最多可获5次投掷机会，分享多多，机会多多。</div>
+        <div class="cont font-color-light-gray font-size--24">朋友一起来参与，随机可获得最多5次的奖励投掷机会</div>
       </div>
     </jfk-popup>
   </div>
@@ -270,7 +268,7 @@
         isPrizeEnough: false,
         canReceive: false,
         prizeId: -1,
-        diceDuration: 1600,
+        diceDuration: 1440,
         timer: null,
         remainFreeTimes: 0,
         remainRewardTimes: 0,
@@ -393,6 +391,7 @@
         this.playStatus = 0
         if (!this.musicIsClosed) {
           this.$refs.audio.pause()
+          this.$refs.audio.currentTime = 0
         }
       },
       showDiceResult () {

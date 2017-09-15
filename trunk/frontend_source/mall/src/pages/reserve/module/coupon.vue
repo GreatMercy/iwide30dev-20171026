@@ -37,7 +37,7 @@
       </li>
     </ul>
     <div class="jfk-coupons__control">
-      <a href="javascript:;" class="jfk-button jfk-button--primary jfk-button--higher jfk-button--free" @click="handlePickedCoupon">{{buttonText}}</a>
+      <a href="javascript:;" class="jfk-button jfk-button--suspension jfk-button--higher jfk-button--free" @click="handlePickedCoupon">{{buttonText}}</a>
     </div>
   </div>
 </template>
@@ -45,7 +45,7 @@
   export default {
     name: 'jfk-coupons',
     beforeCreate () {
-      this.maxHeight = (window.innerHeight - 50) + 'px'
+      this.maxHeight = (window.innerHeight - 50 - 15) + 'px'
     },
     data () {
       return {

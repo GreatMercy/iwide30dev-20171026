@@ -10,19 +10,19 @@
     }
     &__status {
       &.is-error {
-        background: #faebeb;
-        border: solid 1px #ee3e3e;
-        color: #e32c2c;
+        background: var(--form-error-fill-color);
+        border: solid 1px var(--form-error-border);
+        color: var(--form-error-font-color);
         .form-item__status-icon {
-          color: #ee3e3e;
+          color: var(--form-error-icon-color);
         }
       }
       &.is-warn {
-        background: #e7ece6;
-        border: solid 1px #ef8549;
-        color: #ab6239;
+        background: var(--form-warn-fill-color);
+        border: solid 1px var(--form-warn-border);
+        color: var(--form-warn-font-color);
         .form-item__status-icon {
-          color: #ef8549;
+          color: var(--form-warn-icon-color);
         }
       }
     }

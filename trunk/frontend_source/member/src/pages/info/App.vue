@@ -42,7 +42,7 @@
           <a class="block width_85 center btn_height auto jfk-font entry_btn font_spacing_1 preservation" @click="submit" v-show="!view">{{saveText}}</a>
           <a class="block width_85 center btn_height auto jfk-font entry_btn font_spacing_1" @click="perfectinfoInfo" v-show="view">{{postText}}</a>
         </div>
-        <div class="center margin_top_30" v-if="centerInfo.value === 'login' && view === true">
+        <div class="center margin_top_30" v-if="centerInfo.value === 'login' && view === true && centerInfo.member_mode === '2'">
           <div class="font_14" @click="outLogin"><span class="main_color1">退出登录</span></div>
         </div>
       </form>

@@ -99,7 +99,7 @@
         <!--可切换的头部 两个tab-->
         <div class="hotel_info_title">
           <!--两者不为空-->
-          <span v-if="packagesInfo != ''">
+          <span v-if="packagesInfo">
           <span class="hotel_info_title_item item1"
                 @click="changeTabEvt(true)"
                 :class="[changeTab ? activeClass : '']">
@@ -112,7 +112,7 @@
           </span>
         </span>
           <!--有一个为空-->
-          <span v-if="packagesInfo == ''">
+          <span v-if="!packagesInfo">
           <span class="hotel_info_title_item justItem1 active">
             <span>预定酒店</span>
           </span>
@@ -368,6 +368,7 @@
         </div>
       </section>
     </div>
+    <JfkSupport v-once></JfkSupport>
   </div>
 </template>
 <script>
@@ -527,8 +528,6 @@
             _this.collectionId = _this.allData.collect_id
           }
           for (let key in _this.rooms) {
-//            _this.rooms[key] = Object.assign({}, _this.rooms[key], {showWord: '收起'})
-//            _this.rooms[key] = Object.assign({}, _this.rooms[key], {showStatus: true})
             _this.$set(_this.rooms[key], 'showWord', '收起')
             _this.$set(_this.rooms[key], 'showStatus', true)
           }
@@ -545,13 +544,9 @@
       // 预订酒店 收起 与更多的状态控制
       showroom (index) {
         if (!this.rooms[index].showStatus) {
-//          this.rooms[index] = Object.assign({}, this.rooms[index], {showWord: '收起'})
-//          this.rooms[index] = Object.assign({}, this.rooms[index], {showStatus: true})
           this.$set(this.rooms[index], 'showWord', '收起')
           this.$set(this.rooms[index], 'showStatus', true)
         } else {
-//          this.rooms[index] = Object.assign({}, this.rooms[index], {showWord: '更多'})
-//          this.rooms[index] = Object.assign({}, this.rooms[index], {showStatus: false})
           this.$set(this.rooms[index], 'showWord', '更多')
           this.$set(this.rooms[index], 'showStatus', false)
         }
@@ -576,7 +571,7 @@
         console.log('====================', _self.endDate)
         setTimeout(function () {
           _self.showCalendar = false
-          _self.getHotelIndex()
+          _self.getRetrunMoreRoom()
         }, 500)
       },
       // show room desc 显示房间预订弹窗
@@ -691,19 +686,20 @@
       goProductChoose (item) {
         item.startDate = this.startString
         item.endDate = this.endString
+        item.protrol_code = this.inputProtrol_code
         this.$store.commit('updateproductListData', item)
         this.$store.commit('updatebookingAllData', this.allData)
         this.$router.push('/choose')
       },
       // 预定按钮点击 1预定 2畅享
       collectItem (item, priceCode, priceType, type) {
-        this.logJSON(item, 'item====')
         this.packages = this.allData.packages
         this.sendData.hotel_id = params.h
         this.sendData.room_id = item.room_info.room_id
         this.sendData.startdate = this.startString
         this.sendData.enddate = this.endString
         this.sendData.price_codes = {}
+        this.sendData.protrol_code = this.inputProtrol_code
         if (type === 1) {
           // 如果是预定 （数据结构不同）
           this.sendData.price_codes = priceCode
@@ -753,7 +749,8 @@
           price_codes: JSON.stringify(this.xprice_code) || '',
           hotel_id: this.sendData.hotel_id || '',
           datas: JSON.stringify(this.datas) || '',
-          protrol_code: '',
+          // 商务协议码
+          protrol_code: this.inputProtrol_code,
           price_type: JSON.stringify(this.price_type) || '',
           select_package: this.sendData.select_package || [],
           package_info: this.package_info || ''
@@ -785,7 +782,6 @@
       // 商务码确认
       getPtyCode () {
         let _this = this
-        let loading
         if (!_this.inputProtrol_code) {
           this.$jfkToast({
             duration: 1000,
@@ -794,6 +790,12 @@
           })
           return
         }
+        _this.getRetrunMoreRoom()
+      },
+      // 选择日历 && 输入商务协议码需要调用的接口 ==> 减少数据库查询
+      getRetrunMoreRoom () {
+        let _this = this
+        let loading = null
         loading = _this.$jfkToast({
           iconClass: 'jfk-loading__snake ',
           duration: -1,
@@ -811,13 +813,13 @@
           _this.showPryCode = false
           _this.packagesInfo = res.web_data.packages
           _this.rooms = res.web_data.rooms
-//          _this.page_resource = res.web_data.page_resource.links
+          // _this.page_resource = res.web_data.page_resource.links
           if (loading) {
             loading.close()
           }
           for (let key in _this.rooms) {
-            _this.rooms[key] = Object.assign({}, _this.rooms[key], {showWord: '收起'})
-            _this.rooms[key] = Object.assign({}, _this.rooms[key], {showStatus: true})
+            _this.$set(_this.rooms[key], 'showWord', '收起')
+            _this.$set(_this.rooms[key], 'showStatus', true)
           }
         }).catch(function (e) {
           if (loading) {

@@ -1,25 +1,29 @@
 <template>
-  <transition name="jfk-msgbox-bounce">
-    <div class="jfk-msgbox__box">
-      <div class="jfk-msgbox" :class="msgboxClass" v-show="value">
-        <i class="jfk-msgbox__close font-size--30 jfk-font icon-icon_close" @click="handleAction('close')" v-show="showCloseButton"></i>
-        <span class="jfk-msgbox__icon" v-if="iconClasses !== ''">
-          <i class=" font-size--90 color-golden jfk-msgbox__icon-icon"  :class="iconClasses"></i>
-        </span>
-        <div class="jfk-msgbox__header" v-if="title !== ''">
-          <div class="jfk-msgbox__title font-color-white" :class="titleClass">{{ title }}</div>
-        </div>
-        <div class="jfk-msgbox__content font-size--28" :class="contentClass" v-if="message !== ''">
-          <div class="jfk-msgbox__message" v-html="message"></div>
-          <div class="jfk-msgbox__input" v-if="showInput">
-            <input v-model="inputValue" :placeholder="inputPlaceholder" ref="input">
-            <div class="jfk-msgbox__errormsg" :style="{ visibility: !!editorErrorMessage ? 'visible' : 'hidden' }">{{ editorErrorMessage }}</div>
+  <transition :name="popupTransition" @after-enter="afterEnter" @afterLeave="afterLeave">
+    <div class="jfk-msgbox" :class="msgboxClass" v-show="value">
+      <i class="jfk-msgbox__close font-size--30 jfk-font icon-icon_close" @click="handleAction('close')" v-show="showCloseButton"></i>
+      <span class="jfk-msgbox__icon" v-if="iconClasses !== ''">
+        <i class=" font-size--90 color-golden jfk-msgbox__icon-icon"  :class="iconClasses"></i>
+      </span>
+      <div class="jfk-msgbox__header" v-if="title !== ''">
+        <div class="jfk-msgbox__title font-color-white" :class="titleClass">{{ title }}</div>
+      </div>
+      <div class="jfk-msgbox__content font-size--28" :class="contentClass" v-if="message !== '' || $type === 'prompt'">
+        <div class="jfk-msgbox__message" v-html="message" v-if="message !== ''"></div>
+        <div class="jfk-msgbox__input" v-if="showInput">
+          <input v-model="inputValue" @change="validate" class="font-color-white" :placeholder="inputPlaceholder" ref="input">
+          <div class="jfk-msgbox__status is-error" v-show="editorErrorMessage" @click="handleHideError">
+            <i class="jfk-msgbox__status-icon jfk-font icon-msg_icon_error_norma"></i>
+            <span class="jfk-msgbox__status-tip">
+              <i class="jfk-msgbox__status-cont">{{ editorErrorMessage }}，</i>
+              <i class="jfk-msgbox__status-trigger">重新输入</i>
+            </span>
           </div>
         </div>
-        <div class="jfk-msgbox__btns" :class="{'is-full': showCancelButton && showConfirmButton}">
-          <button :class="[ cancelButtonClasses ]" v-if="showCancelButton" @click="handleAction('cancel')">{{ cancelButtonText }}</button>
-          <button :class="[ confirmButtonClasses ]" v-if="showConfirmButton" @click="handleAction('confirm')">{{ confirmButtonText }}</button>
-        </div>
+      </div>
+      <div class="jfk-msgbox__btns" :class="{'is-full': showCancelButton && showConfirmButton}">
+        <button :class="[ cancelButtonClasses ]" v-if="showCancelButton" @click="handleAction('cancel')">{{ cancelButtonText }}</button>
+        <button :class="[ confirmButtonClasses ]" v-if="showConfirmButton" @click="handleAction('confirm')">{{ confirmButtonText }}</button>
       </div>
     </div>
   </transition>
@@ -61,29 +65,33 @@
       iconType: {
         type: String,
         default: ''
+      },
+      popupTransition: {
+        type: String,
+        default: 'jfk-msgbox__bounce'
       }
     },
-
     computed: {
       msgboxClass () {
         return {
           'is-icon': this.iconClasses !== '',
           'no-icon': this.iconClasses === '',
           'is-title': this.title !== '',
-          'no-title': this.title === ''
+          'no-title': this.title === '',
+          'is-prompt': this.$type === 'prompt'
         }
       },
       iconClasses () {
         return (this.iconType && iconTypeMap[this.iconType] ? `jfk-font icon-${ iconTypeMap[this.iconType] }` : '') + (this.iconClass !== '' ? ' ' + this.iconClass : '')
       },
       titleClass () {
-        return {
-          'font-size--40': this.iconClasses === '',
-          'font-size--30': this.iconClasses !== ''
+        if (this.$type === 'prompt' || this.iconClasses !== '') {
+          return 'font-size--30'
+        } else {
+          return 'font-size--40'
         }
       },
       contentClass () {
-        console.log(this.title, this.iconClasses)
         return this.title !== '' && this.iconClasses !== '' ? 'font-color-light-gray' : 'font-color-extra-light-gray'
       },
       confirmButtonClasses() {
@@ -132,12 +140,17 @@
         this.value = false;
         callback(action);
       },
-
+      handleHideError () {
+        this.editorErrorMessage = ''
+        if (this.$refs.input) {
+          this.$refs.input.focus();
+        }
+      },
       validate() {
         if (this.$type === 'prompt') {
           var inputPattern = this.inputPattern;
           if (inputPattern && !inputPattern.test(this.inputValue || '')) {
-            this.editorErrorMessage = this.inputErrorMessage || '输入的数据不合法!';
+            this.editorErrorMessage = this.inputErrorMessage || '输入的数据不合法';
             this.$refs.input.classList.add('invalid');
             return false;
           }
@@ -145,7 +158,7 @@
           if (typeof inputValidator === 'function') {
             var validateResult = inputValidator(this.inputValue);
             if (validateResult === false) {
-              this.editorErrorMessage = this.inputErrorMessage || '输入的数据不合法!';
+              this.editorErrorMessage = this.inputErrorMessage || '输入的数据不合法';
               this.$refs.input.classList.add('invalid');
               return false;
             }
@@ -167,15 +180,10 @@
     },
 
     watch: {
-      inputValue() {
-        if (this.$type === 'prompt') {
-          this.validate();
-        }
-      },
-
       value(val) {
         this.handleInputType(this.inputType);
         if (val && this.$type === 'prompt') {
+          this.editorErrorMessage = ''
           setTimeout(() => {
             if (this.$refs.input) {
               this.$refs.input.focus();

@@ -2,4 +2,12 @@
   &__cancel {
     @mixin button default, true;
   }
+  &__input {
+    input {
+      border: 1px solid #474747;
+      &::placeholder {
+        color: var(--font-color-light-gray);
+      }
+    }
+  }
 }

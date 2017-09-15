@@ -17,7 +17,7 @@
   .darkBlack1a {
     color: var(--color-deep-yellow);
   }
-  .yellowColor{
+  .yellowColor {
     color: #dac576;
   }
   .info_place {
@@ -41,12 +41,10 @@
 
     & .order_btn {
       .order-text-item {
-        &.cancel-text {
-          color: var(--font-color-dark-white);
-        }
+        color: var(--color-deep-yellow);
       }
       .order-btn-item {
-        color: var(--font-color-dark-white);
+        color: var(--color-deep-yellow);
         border: 1px solid var(--color-deep-yellow);
         &.nowPay {
           color: var(--color-white);
@@ -101,6 +99,30 @@
     &_item:last-child {
       &::before {
         background-color: var(--line-color-light-silver);
+      }
+    }
+  }
+  .package_goods {
+    .package_ul{
+      li{
+        background-color: var(--color-white);
+      }
+    }
+    .packa_infor{
+      &:before{
+        background-color: var(--color-white);
+      }
+    }
+    .toUse {
+      .use_btn {
+        background-color: var(--color-golden);
+        color: var(--button-primary-color);
+      }
+    }
+    .hasUsed {
+      .use_btn {
+        background-color: var(--button-disabled-fill-color);
+        color: var(--button-disabled-color);
       }
     }
   }

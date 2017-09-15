@@ -74,6 +74,7 @@ class MY_Front_Soma extends MY_Front
     protected $oldThemePath = [
         'center',
         'default',
+        'en',
         'junting',
         'mooncake',
         'mooncake1',
@@ -140,7 +141,7 @@ class MY_Front_Soma extends MY_Front
     /**
      * @var array 新版皮肤控制器列表
      */
-    protected $idefaultControllers = ['gift_pack'];
+    protected $idefaultControllers = ['gift_pack','GiftDelivery'];
 
     /**
      * MY_Front_Soma constructor.
@@ -160,7 +161,7 @@ class MY_Front_Soma extends MY_Front
         //theme
         if(in_array($this->controller, $this->idefaultControllers)){
             // 专用idefault新版皮肤
-            $this->theme = 'idefault';
+            $this->theme = 'default';
         }else{
             $this->load->model('soma/Theme_config_model');
             $themeConfig = $this->Theme_config_model->get_using_theme($this->inter_id);
@@ -259,33 +260,41 @@ EOF;
         }
 
 
+        //渠道来源
+        $channel = $this->input->get_post('channel', null, 0);
+        if ($channel) {
+            $this->session->set_tempdata('channel', $channel, 24 * 3600);
+        }
+
         // 不是ajax请求的时候，才能进行静默授权
         // 泛分销静默授权，不是粉丝不跳转，是粉丝的话判断链接是否存在rel_res参数，
         // 存在说明已经跳转过，不管成功失败，不要再次跳转造成死循环，rel_res参数当次访问一直存在
-        // if(ENVIRONMENT != 'dev' && !$this->input->get('rel_res') && !$this->input->is_ajax_request())
-        // {
-        //     $this->load->library('Soma/Api_idistribute', null);
-        //     $saler_info = $this->api_idistribute->get_saler_info($this->inter_id, $this->openid);
-        //     if(empty($saler_info)) {
-        //         // 激活泛分销
-        //         $this->load->model('distribute/openid_rel_model', 'sc_openid_rel_model');
-        //         $deliver_infos = $this->Publics_model->get_public_by_id ( $this->sc_openid_rel_model->get_redis_key_status('__DISTRIBUTION_DELIER_ACCOUNT') );
-        //            $params = $this->input->get(null, true);
-        //            if (isset($params['fans_act'])) {
-        //                unset($params['fans_act']);
-        //            }
-        //         $url =  Soma_const_url::inst()->get_url('*/*/*', $params);
-        //         $act_url = prep_url($deliver_infos['domain']).'/distribute/dis_ext/auto_back/'.'?id='.$this->sc_openid_rel_model->get_redis_key_status('__DISTRIBUTION_DELIER_ACCOUNT').'&f='.base64_encode($this->inter_id.'***'.$this->openid.'***'.$url);
-        //         redirect($act_url);
-        //     }
-        // }
-
+        // 存在fans_act这个参数再进行静默授权
+         if(ENVIRONMENT != 'dev' && !$this->input->get('rel_res') && !$this->input->is_ajax_request() && (!in_array($this->inter_id, ['a421641095','a429262688']) || ($this->input->get('fans_act') && time() >= strtotime("2017-08-31 18:30:00")))) {
+             $this->load->library('Soma/Api_idistribute', null);
+             $saler_info = $this->api_idistribute->get_saler_info($this->inter_id, $this->openid);
+             if(empty($saler_info)) {
+                 // 激活泛分销
+                 $this->load->model('distribute/openid_rel_model', 'sc_openid_rel_model');
+                 $deliver_infos = $this->Publics_model->get_public_by_id ( $this->sc_openid_rel_model->get_redis_key_status('__DISTRIBUTION_DELIER_ACCOUNT') );
+                    $params = $this->input->get(null, true);
+                    if (isset($params['fans_act'])) {
+                        unset($params['fans_act']);
+                    }
+                 $url =  Soma_const_url::inst()->get_url('*/*/*', $params);
+                 $act_url = prep_url($deliver_infos['domain']).'/distribute/dis_ext/auto_back/'.'?id='.$this->sc_openid_rel_model->get_redis_key_status('__DISTRIBUTION_DELIER_ACCOUNT').'&f='.base64_encode($this->inter_id.'***'.$this->openid.'***'.$url);
+                 redirect($act_url);
+             }
+         }
 
         $this->datas['refund'] = true;
         if(in_array($this->inter_id, $this->cannotRefundInterId)){
             $this->datas['refund'] = false;
         }
 
+
+        // 分销保护期处理
+        $this->_salarProtection();
     }
 
     public function getTicketTheme(){
@@ -367,6 +376,21 @@ EOF;
             $this->session->set_tempdata('fans_saler');
         }
 
+        /* add by chencong 20170829 分销保护期 start */
+        if(!$saler_id && !$fans_saler_id){
+            $this->load->model('distribute/Idistribute_model');
+            $trueSaler = $this->Idistribute_model->get_protection_saler($this->openid, $this->inter_id);
+            if($trueSaler){
+                if($trueSaler >= 10000000){// 泛分销10000000起的
+                    $this->session->set_tempdata('fans_saler', $trueSaler, $ttl);
+                }else{
+                    $this->session->set_tempdata('saler', $trueSaler, $ttl);
+                }
+            }
+        }
+        /* add by chencong 20170829 分销保护期 end */
+
+        $ttl = 3600;
 
         //渠道来源
         $channel = $this->input->get('channel', null, 0);
@@ -400,21 +424,46 @@ EOF;
         //tkid
         $tkid = $this->input->get('tkid', null, '');
         //if($tkid){
-            $redis->set('tkid', $tkid, $ttl);
+            //$redis->set($this->inter_id.'_is_', $tkid, $ttl);
+        $this->session->set_tempdata('theme_tkid_', $tkid, $ttl);
         //}
 
         //brandname
         $brandname = $this->input->get('brandname', null, '');
         //if($brandname){
-            $redis->set('brandname', $brandname, $ttl);
-            //$this->session->set_tempdata('brandname', $brandname, $ttl);
+            //$redis->set('brandname', $brandname, $ttl);
+            //$redis->set($this->inter_id.'_is_'.$brandname, $brandname, $ttl);
+            $this->session->set_tempdata('theme_brandname', $brandname, $ttl);
         //}
 
         //layout
         $layout = $this->input->get('layout', null, '');
         if($layout){
-            $redis->set('layout', $layout, $ttl);
-            //$this->session->set_tempdata('layout', $layout, $ttl);
+            //$redis->set('layout', $layout, $ttl);
+            //$redis->set($this->inter_id.'_is_'.$layout, $layout, $ttl);
+            $this->session->set_tempdata('theme_layout', $layout, $ttl);
+
+        }
+
+    }
+
+    /**
+     * 分销保护期处理
+     * @author chencong <chencong@mofly.cn>
+     */
+    private function _salarProtection(){
+        $salerId = (int)$this->input->get('saler');
+        $fansSalerId = (int)$this->input->get('fans_saler');
+
+        if($salerId || $fansSalerId){
+            if (isset($_SERVER['SERVER_SOFTWARE']) && $_SERVER['SERVER_SOFTWARE'] == 'nginx') {
+                $source = 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+            } else {
+                $source = 'http://' . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
+            }
+            $trueSaler = $salerId ?: $fansSalerId;
+            $this->load->model('distribute/Idistribute_model');
+            $this->Idistribute_model->save_saler_protection_info($this->inter_id, $this->openid, $source, $trueSaler, '', 'soma');
         }
     }
 
@@ -425,8 +474,8 @@ EOF;
     {
         //load lang file
         $lang_cookie_key = 'lang_' . $this->inter_id;
-        $lang_cookie = $this->input->cookie($lang_cookie_key);
-        $lang_input = $this->input->get('lang');
+        $lang_cookie = $this->input->cookie($lang_cookie_key, true);
+        $lang_input = $this->input->get('lang', true);
         $lang = $lang_input && in_array($lang_input, array('english', 'chinese')) ? $lang_input : ($lang_cookie ? $lang_cookie : 'chinese');
         if (!$lang_cookie || ($lang_cookie !== $lang)) {
             $this->load->helper('cookie');
@@ -990,7 +1039,8 @@ var _hmt = _hmt || [];
      */
     protected function get_center_inter_id()
     {
-        if (ENVIRONMENT === 'production') {
+        if (isset($_SERVER['CI_ENV']) && $_SERVER['CI_ENV'] == 'production') {
+            // return 'a429262688';a476864535
             return 'a476864535';
         } else {
             // 测试环境中心平台公众号
@@ -1052,6 +1102,7 @@ var _hmt = _hmt || [];
     {
         $result = $this->input->get('res', true);
         $extra = $this->input->get('extra', true);
+        $this->write_log(var_export($result, true) . var_export($extra, true), 'soma' . DS . 'center');
 
         $this->session->set_userdata(array('bulid_openid_map_record' => 1));
         $request_url = base64_url_decode($extra['origin_url']);
@@ -1476,7 +1527,9 @@ var _hmt = _hmt || [];
 
         $cdn_url = $this->_match_url($this->module, $this->controller, $this->action);
         if ($cdn_url) {
-            $datas['statistics_js'] =  $this->statis_code."\n";
+            $datas['statistics_js'] = $this->statis_code;
+        }else{
+            $datas['statistics_js'] = $this->sign_update_code;
         }
 
         $datas['version'] = $this->version;

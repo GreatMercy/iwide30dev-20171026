@@ -5,10 +5,11 @@
       <div class="container">
         <p class="score">
           <i class="jfk-font-number jfk-price__number font-size--108">{{intNum}}</i>
-          <i class="jfk-font-number jfk-price__number font-size--88">.{{pointNum}}</i>
+          <i>.</i>
+          <i class="jfk-font-number jfk-price__number font-size--88">{{pointNum}}</i>
           <span class="jfk-font-number jfk-price__number font-size--36">分</span>
         </p>
-        <jfk-rater :disabled="true" :value="score.comment_score"></jfk-rater>
+        <jfk-rater :disabled="true" :value="score.comment_score" :margin="25" :fontSize="28"></jfk-rater>
         <pregress :allWidth="allWidth" :score="score" :comment_config="comment_config"/>
       </div>
     </div>

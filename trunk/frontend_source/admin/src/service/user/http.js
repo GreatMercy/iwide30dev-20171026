@@ -1,4 +1,4 @@
-import { coupon } from './api'
+import { user } from './api'
 import ajax from '@/utils/http'
 
 /**
@@ -9,7 +9,7 @@ import ajax from '@/utils/http'
  * @return {Promise} 返回一个promise
  */
 const getCouponCode = (data, config) => {
-  let url = coupon.GET_COUPON_CODE_INFO
+  let url = user.GET_COUPON_CODE_INFO
   return ajax.get(url, data)
 }
 /**
@@ -20,7 +20,7 @@ const getCouponCode = (data, config) => {
  * @return {Promise} 返回一个promise
  */
 const getCouponList = (data, config) => {
-  let url = coupon.GET_COUPON_LIST
+  let url = user.GET_COUPON_LIST
   return ajax.get(url, data)
 }
 /**
@@ -31,7 +31,7 @@ const getCouponList = (data, config) => {
  * @return {Promise} 返回一个promise
  */
 const getCouponDetail = (data, config) => {
-  let url = coupon.GET_COUPON_CONTENT_DETAIL
+  let url = user.GET_COUPON_CONTENT_DETAIL
   return ajax.get(url, data)
 }
 /**
@@ -42,7 +42,7 @@ const getCouponDetail = (data, config) => {
  * @return {Promise} 返回一个promise
  */
 const getRequestInfo = (data, config) => {
-  let url = coupon.GET_REQUEST_CONTENT_INFO
+  let url = user.GET_REQUEST_CONTENT_INFO
   return ajax.post(url, data, config)
 }
 /**
@@ -53,7 +53,7 @@ const getRequestInfo = (data, config) => {
  * @return {Promise} 返回一个promise
  */
 const getRequestContent = (data, config) => {
-  let url = coupon.GET_REQUEST_CONTENT_LIST
+  let url = user.GET_REQUEST_CONTENT_LIST
   return ajax.get(url, data)
 }
 /**
@@ -64,7 +64,7 @@ const getRequestContent = (data, config) => {
  * @return {Promise} 返回一个promise
  */
 const getRequestDetail = (data, config) => {
-  let url = coupon.GET_REQUEST_CONTENT_DETAIL
+  let url = user.GET_REQUEST_CONTENT_DETAIL
   return ajax.get(url, data)
 }
 /**
@@ -75,7 +75,39 @@ const getRequestDetail = (data, config) => {
  * @return {Promise} 返回一个promise
  */
 const getRequestDetele = (data, config) => {
-  let url = coupon.GET_REQUEST_CONTENT_DELETE
+  let url = user.GET_REQUEST_CONTENT_DELETE
   return ajax.post(url, data)
 }
-export { getCouponCode, getCouponList, getCouponDetail, getRequestInfo, getRequestContent, getRequestDetail, getRequestDetele }
+/**
+ * 注册分销
+ */
+const getRegStatements = (data, config) => {
+  let url = user.GET_REG_STATEMENTS
+  return ajax.get(url, data)
+}
+/**
+ * 充值与购卡接口地址
+ */
+const getDepostStatements = (data, config) => {
+  let url = user.GET_DEPOST_STATEMENTS
+  return ajax.get(url, data)
+}
+/**
+ * 酒店列表
+ */
+const getHotelList = (data, config) => {
+  let url = user.GET_HOTEL_LIST
+  return ajax.get(url, data)
+}
+export {
+  getCouponCode,
+  getCouponList,
+  getCouponDetail,
+  getRequestInfo,
+  getRequestContent,
+  getRequestDetail,
+  getRequestDetele,
+  getRegStatements,
+  getDepostStatements,
+  getHotelList
+}

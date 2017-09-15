@@ -5,7 +5,7 @@
       <el-form-item label="活动名称">
         <el-row>
           <el-col :span="24">
-            <span>礼包配送</span>
+            <span>礼包派送</span>
           </el-col>
         </el-row>
       </el-form-item>
@@ -44,7 +44,7 @@
       <el-form-item label="派送商品" required>
         <el-row>
           <el-col :span="24">
-            <el-button @click="delivery" size="small">派送商品</el-button>
+            <el-button @click="delivery" size="small">添加商品</el-button>
           </el-col>
         </el-row>
       </el-form-item>
@@ -52,7 +52,10 @@
     </el-form>
 
     <el-row class="gift-package__table">
-      <el-table :data="giftPackage.list" v-loading.body="giftListLoading">
+      <el-table
+        :class="{'jfk-table--no-border': giftTableClass['jfk-table--no-border']}"
+        :data="giftPackage.list"
+        v-loading.body="giftListLoading">
         <el-table-column prop="cat_name" label="所属分类" align="center"></el-table-column>
 
         <el-table-column prop="name" label="商品名称" align="center"></el-table-column>
@@ -77,11 +80,6 @@
 
     </el-row>
 
-    <el-row class="jfk-ta-c gift-package__btn">
-      <el-button type="primary" @click="save()">保存</el-button>
-    </el-row>
-
-
     <el-dialog title="添加商品" :visible.sync="dialogTableVisible" :size="'large'">
       <el-row class="gift-package__search">
         <el-col :span="18">
@@ -93,8 +91,12 @@
       </el-row>
 
       <el-row class="gift-package__products">
-        <el-table :data="giftProductList" ref="multipleTable" height="400" @selection-change="handleSelectionChange"
-                  v-loading.body="productLoading">
+        <el-table
+          :class="{'jfk-table--no-border': productTableClass['jfk-table--no-border']}"
+          :data="giftProductList" ref="multipleTable"
+          height="400"
+          @selection-change="handleSelectionChange"
+          v-loading.body="productLoading">
           <el-table-column type="selection" width="55" align="center"></el-table-column>
           <el-table-column prop="cat_name" label="分类" width="180" align="center"></el-table-column>
           <el-table-column prop="name" label="商品名称" align="center"></el-table-column>
@@ -114,7 +116,18 @@
   import moment from 'moment'
   export default {
     components: {},
-    computed: {},
+    computed: {
+      giftTableClass () {
+        return {
+          'jfk-table--no-border': this.giftPackage.list.length > 1
+        }
+      },
+      productTableClass () {
+        return {
+          'jfk-table--no-border': this.giftProductList.length > 1
+        }
+      }
+    },
     data () {
       const validateEndDate = (rule, value, callback) => {
         if (this.form.startTime !== '' && value !== '') {
@@ -161,8 +174,6 @@
         csrf: {},
         // 配送的商品列表
         giftProductList: [],
-        // 记录一进来时候选中的数据
-        giftResult: [],
         // 礼包列表
         giftPackage: {
           list: [], // 数据
@@ -177,12 +188,15 @@
       }
     },
     created () {
-      this.getGiftPackageList()
+      this.getGiftPackageList().then((res) => {
+        this.form.endTime = res['end_time']
+        this.form.startTime = res['start_time']
+      })
     },
     methods: {
       getGiftPackageList () {
         this.giftListLoading = true
-        getGiftPackagesList({
+        return getGiftPackagesList({
           page: this.giftPackage.page
         }).then((res) => {
           const content = res['web_data']
@@ -191,6 +205,7 @@
           this.giftPackage['page_size'] = content['page_resource']['size']
           this.csrf = content['csrf']
           this.giftListLoading = false
+          return res['web_data']
         }).catch(() => {
           this.giftListLoading = false
         })
@@ -278,14 +293,6 @@
           this.getGiftPackageList()
         }).catch(() => {
           this.loading = false
-        })
-      },
-      // 保存礼包
-      save () {
-        this.$alert(`保存成功`, '温馨提示', {
-          confirmButtonText: '确定',
-          callback: action => {
-          }
         })
       }
     }

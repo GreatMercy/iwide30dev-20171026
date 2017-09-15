@@ -51,21 +51,21 @@
       </div>
       <div class="hotel-pictures__pagination">
         <template v-if="direction === 'down' && selected <= cur_gallery.length -2">
-          <span class="current">{{selected + 2}}</span>
+          <span class="current font-size--48">{{selected + 2}}</span>
         </template>
         <template v-else-if="direction === 'down' && selected > cur_gallery.length -2">
-          <span class="current">{{cur_gallery.length}}</span>
+          <span class="current font-size--48">{{cur_gallery.length}}</span>
         </template>
         <template v-else-if="direction === 'up' && selected >= 1">
-          <span class="current">{{selected}}</span>
+          <span class="current font-size--48">{{selected}}</span>
         </template>
         <template v-else-if="direction === 'up' && selected == 0">
-          <span class="current">1</span>
+          <span class="current font-size--48">1</span>
         </template>
         <template v-else-if="direction ==='' ">
-          <span class="current">1</span>
+          <span class="current font-size--48">1</span>
         </template>
-        <span class="total"> /{{total_num}}</span>
+        <span class="total font-size--30"> /{{total_num}}</span>
       </div>
     </div>
   </div>

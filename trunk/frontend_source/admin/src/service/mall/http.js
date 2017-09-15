@@ -106,6 +106,19 @@ const postDeleteGiftProduct = (data, config, version = 'v1') => {
   let url = apiConfig[version] && apiConfig[version].DELETE_GIFT_DELIVERY_GIFT || apiConfig['v1'].DELETE_GIFT_DELIVERY_GIFT
   return ajax.post(url, data, config)
 }
+/**
+ * 礼包派送 列表（报表）
+ * @param {Number} data.page 页码
+ * @param {String} data.start_time 筛选开始时间
+ * @param {String} data.end_time 筛选结束时间
+ * @param {String} data.order_id 订单ID
+ * @param {String} data.record_info 登记信息
+ * @param {String} data.saler_name 创建人
+ */
+const getGiftDeliveryReceiveList = (data, config, version = 'v1') => {
+  let url = apiConfig[version] && apiConfig[version].GET_GIFT_DELIVERY_GIFT_RECEIVE_LIST || apiConfig['v1'].GET_GIFT_DELIVERY_GIFT_RECEIVE_LIST
+  return ajax.get(url, data, config)
+}
 export {
   getPackageListDatas,
   postExpressDelivery,
@@ -116,5 +129,6 @@ export {
   getGiftPackagesList,
   getGiftProductList,
   postGiftProduct,
-  postDeleteGiftProduct
+  postDeleteGiftProduct,
+  getGiftDeliveryReceiveList
 }

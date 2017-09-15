@@ -242,7 +242,8 @@ var room_night_use=0;
 var order_use=0;
 var paytype_counts=0;
 var use_flag='';
-var balance_code=<?php echo $banlance_code?>;
+var balance_code=<?php echo $banlance_code;?>;
+var point_pay_code=<?php echo $point_pay_code;?>;
 var part_bonus_set={};
 <?php if (isset($point_consum_set)){?>
 part_bonus_set=JSON.parse('<?php echo json_encode($point_consum_set);?>');
@@ -451,7 +452,7 @@ var timeOpt = {
                     $('#coupon_i').html('选择优惠券');
                 $('.usevote').removeClass('disable');
             }
-            if($(this).attr('pay_type')=='balance'&& balance_code==1){
+            if(($(this).attr('pay_type')=='balance'&& balance_code==1) || ($(this).attr('pay_type')=='point' && point_pay_code==1)){
                 $('#consume_code').show();
             }else{
                 $('#consume_code').hide();
@@ -783,6 +784,8 @@ var timeOpt = {
                 if(check_more_room==true){
                     $("#max_use_bonus").html('不可用');
                     $("#max_exchange_bonus").html('');
+                    $('#bonus').val('');
+                    $("#bonuspay2").attr('bonus','');
                 }
             });
         }

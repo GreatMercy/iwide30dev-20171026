@@ -21,7 +21,7 @@
                   <p class="validity font-size--24" v-text="'有效期至' + item.end_time"></p>
                   <p class="number font-size--24">剩余<span v-text="item.stock" class="color-golden"></span>份</p>
                   <button class="jfk-button jfk-button--primary is-plain font-size--30"
-                          @click="generateGiftPackage(item.gift_id)">
+                          @click="generateGiftPackage(item.gift_id, item.stock)">
                     <span>生成礼包</span>
                   </button>
                 </div>
@@ -146,6 +146,7 @@
       getCode () {
         let rules = this.rules
         let passed = true
+        console.log(rules)
         for (let i in rules) {
           let r = validator(this.getFormItemVal(i), rules[i])
           this.validResult = Object.assign({}, this.validResult, {
@@ -206,8 +207,9 @@
         })
       },
       // 点击生成礼包
-      generateGiftPackage (id) {
+      generateGiftPackage (id, stock) {
         // 重置数据
+        this.stock = parseInt(stock)
         this.form.reservationInfo = ''
         this.form.number = '1'
         this.form.other = ''
@@ -265,6 +267,14 @@
       this.getData()
     },
     data () {
+      const numberRequired = () => {
+        const num = parseInt(this.form.number)
+        const stock = this.stock
+        if (num > stock) {
+          return false
+        }
+        return true
+      }
       return {
         verificationVisible: false,
         packageList: [],
@@ -272,6 +282,7 @@
         disableLoadPackage: false,
         salerName: '',
         more: true,
+        stock: 0,
         page: 1,
         form: {
           reservationInfo: '',
@@ -286,6 +297,8 @@
             required: true, message: '请输入数量'
           }, {
             type: 'integer', message: '请输入正确的数量'
+          }, {
+            validator: numberRequired, message: '请输入正确的库存'
           }]
         },
         validResult: {

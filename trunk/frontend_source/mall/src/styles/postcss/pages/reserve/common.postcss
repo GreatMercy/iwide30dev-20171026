@@ -203,22 +203,8 @@
     .add {
       border-radius: px2rem(var(--border-radius-big));
       .icon {
-        display: inline-block;
-        height: calc(26 / 28)em;
-        width: calc(26 / 28)em;
-        overflow: hidden;
-        line-height: calc(24 / 28)em;
-        text-align: center;
-        border: solid 1px currentColor;
-        border-radius: 50%;
+        font-size: calc(26 / 28)em;
         margin-right: calc(22 / 28)em;
-        text-align: center;
-        i {
-          transform: scale(0.5);
-          display: inline-block;
-          margin-left: -0.08em;
-          padding-top: 0.08em;
-        }
       }
     }
     /*列表*/
@@ -264,6 +250,13 @@
     height: 100%;
     z-index: 99999;
   }
+  .page-coupons {
+    .jfk-coupons__box {
+      &:last-child {
+        margin-bottom: px2rem(30);
+      }
+    }
+  }
   .jfk-coupons {
     &__control {
       position: fixed;
@@ -283,7 +276,7 @@
   .jfk-popup__price-detail {
     line-height: px2rem(90);
     padding: px2rem(60) px2rem(40);
-    min-height: auto;
+    min-height: inherit;
     bottom: px2rem(130);
     .price-detail-item {
       i {

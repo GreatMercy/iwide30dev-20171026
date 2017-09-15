@@ -49,9 +49,31 @@
         default: function () {
           return {}
         }
+      },
+      number: {
+        type: [Number, String],
+        default: 1
       }
     },
+    watch: {
+      number () {
+        this.calcNumber()
+      }
+    },
+    mounted () {
+      this.calcNumber()
+    },
     methods: {
+      calcNumber () {
+        if (this.info && this.number) {
+          console.log(this.info)
+          if (this.info['products'] && this.info['products'].length > 0) {
+            this.info['products'].forEach((item) => {
+              item['num'] = this.number * parseInt(item['num'])
+            })
+          }
+        }
+      },
       changeStatus () {
         this.$emit('changeStatus')
       }

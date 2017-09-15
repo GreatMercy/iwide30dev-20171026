@@ -1,6 +1,9 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 class Distribute_model extends MY_Model {
+	
+	protected $_distribution_protection_key_prefix = 'DISTRIBUTION_PROTECTION_';
+	
 	public function get_resource_name(){
 		return '分销收入信息';
 	}
@@ -750,10 +753,29 @@ INNER JOIN (SELECT * FROM iwide_hotel_staff WHERE inter_id=?) h ON h.inter_id=s.
 			if($distribution_delier_account) $deliver_id = $distribution_delier_account;
 		}
 		foreach ($amount_query as $amount_item){
+		
 			$amount = $amount_item ['total'];
-			if ($amount < 0.01 || $amount > 2000) {
+			if ($amount < 0.01 || $amount > 20000) {
 				$err_count++;
 			} else {
+				if($amount < 1){//小于1块的直接update失败次数
+					//记录发放失败次数
+					$this->update_deliver_fails_by_saler($inter_id,$saler);
+					continue;
+				}
+				//添加余额不足公众号判断 situguanchen 2017-03-28
+				$notenough_data = $inter_id_arr = array();
+				if($this->get_redis_key_status('_NOTENOUGH_INTER_ID')){
+					$notenough_data = json_decode($this->get_redis_key_status('_NOTENOUGH_INTER_ID'),true);
+					if($notenough_data['date'] == date('Ymd')){
+						$inter_id_arr = $notenough_data['inter_id_arr'];
+					}
+				}
+				if(in_array($inter_id,$inter_id_arr)){//如果是余额不足，直接update失败次数
+					//记录发放失败次数
+					$this->update_deliver_fails_by_saler($inter_id,$saler);
+					continue;
+				}
 				$this->load->model('pay/company_pay_model');
 				// $up_param['last_update_time'] = date('Y-m-d H:i:s');
 				if(isset($amount_item['saler']) && $amount_item['saler'] > 0){
@@ -791,6 +813,35 @@ INNER JOIN (SELECT * FROM iwide_hotel_staff WHERE inter_id=?) h ON h.inter_id=s.
 						$err_count++;
 					}else if($flag['errmsg'] == 'duplicate'){
 						//加多一个重复的判断，不然都跑异常去了
+					}else if($flag['errmsg'] == 'notenough'){//余额不足 
+						//记录发放失败次数
+						$this->update_deliver_fails_by_saler($inter_id,$saler);
+						//发放系统消息
+						$msg .= '失败</p><p>亲，别着急，今天发放不成功，明天还会继续发放哦</p>';
+						$msg .= '<p>失败原因：'.$flag['return_msg'].'</p>';
+						$this->distribute_notice_model->create_deliver_notice_content($inter_id,$amount,date('Y-m-d 23:59:59',strtotime('-1 day',time())),$msg,$amount_item ['openid'],$batch_no);
+						$err_count++;
+						//余额不足的inter_id 放进redis 每天更新一次
+						$notenough_data = $inter_id_arr = array();
+						if($this->get_redis_key_status('_NOTENOUGH_INTER_ID')){
+							$notenough_data = json_decode($this->get_redis_key_status('_NOTENOUGH_INTER_ID'),true);
+							if($notenough_data['date'] == date('Ymd')){
+								$inter_id_arr = $notenough_data['inter_id_arr'];
+								$inter_id_arr[] = $inter_id;//如果是余额不足，新增进去
+								$notenough_data['inter_id_arr'] = $inter_id_arr;
+								$this->set_redis_key_status('_NOTENOUGH_INTER_ID',json_encode($notenough_data));
+							}else{
+								$inter_id_arr[] = $inter_id;//如果是余额不足，新增进去
+								$notenough_data['inter_id_arr'] = $inter_id_arr;
+								$notenough_data['date']   = date('Ymd');
+								$this->set_redis_key_status('_NOTENOUGH_INTER_ID',json_encode($notenough_data));
+							}
+						}else{
+							$inter_id_arr[] = $inter_id;//如果是余额不足，新增进去
+							$notenough_data['inter_id_arr'] = $inter_id_arr;
+							$notenough_data['date']   = date('Ymd');
+							$this->set_redis_key_status('_NOTENOUGH_INTER_ID',json_encode($notenough_data));
+						}
 					}else{
 						//发放异常
 						$up_param['status'] = 9;
@@ -945,22 +996,23 @@ INNER JOIN (SELECT * FROM iwide_hotel_staff WHERE inter_id=?) h ON h.inter_id=s.
 				LEFT JOIN iwide_distribute_grade_all ga ON ga.inter_id=dc.inter_id 
 				LEFT JOIN iwide_hotel_staff hs ON ga.inter_id=hs.inter_id AND ga.saler=hs.qrcode_id  
 				WHERE dc.`mode`=0 AND DATEDIFF(NOW(),dc.last_send_time) >= dc.`cycle` AND dc.send_time<=? AND DATE_FORMAT(dc.last_send_time,'%Y-%m-%d')<>? AND ga.grade_total>0 AND ga.`status`=1 AND ga.grade_time<? AND ga.grade_time>dc.send_after_time AND hs.openid<>'' AND hs.is_distributed=1 AND ga.deliver_fail=0 GROUP BY saler";
-		 return $this->_db('iwide_r1')->query($sql,array(date('H:i:s'),date('Y-m-d'),date('Y-m-d 00:00:00')))->result();
-// 		 return $this->_db('iwide_rw')->query($sql,array(date('H:i:s'),'1970-01-01',date('Y-m-d H:i:s')))->result();
+		return $this->_db('iwide_r1')->query($sql,array(date('H:i:s'),date('Y-m-d'),date('Y-m-d 00:00:00')))->result();
+		// return $this->_db('iwide_rw')->query($sql,array(date('H:i:s'),'1970-01-01',date('Y-m-d H:i:s')))->result();
 	}
 	
 	/**
 	 * 更新最后发放时间
 	 */
-	public function update_last_deliver_time(){
-		$sql = "UPDATE iwide_distribute_deliver_config dc,(SELECT count(*) counts,ga.inter_id FROM iwide_distribute_grade_all ga LEFT JOIN iwide_hotel_staff hs ON ga.inter_id=hs.inter_id AND ga.saler=hs.qrcode_id WHERE ga.grade_total>0 AND ga.`status`=1 AND hs.openid<>'' AND hs.is_distributed=1 GROUP BY ga.inter_id)a SET dc.last_send_time=NOW() WHERE a.inter_id=dc.inter_id AND a.counts = 0 AND date_format(dc.last_send_time,'%Y%m%d')<>?";
-		$this->_db('iwide_rw')->query($sql,array(date('Ymd')));
+	public function update_last_deliver_time() {
+		$sql = "UPDATE iwide_distribute_deliver_config dc,(SELECT count(*) counts,ga.inter_id FROM iwide_distribute_grade_all ga LEFT JOIN iwide_hotel_staff hs ON ga.inter_id=hs.inter_id AND ga.saler=hs.qrcode_id WHERE ga.inter_id in (select inter_id from iwide_distribute_deliver_config where mode = 0) and ga.saler >0 and ga.grade_total>0 AND ga.`status`=1 AND hs.openid<>'' AND hs.is_distributed=1 GROUP BY ga.inter_id)a SET dc.last_send_time=NOW() WHERE a.inter_id=dc.inter_id AND a.counts = 0 AND date_format(dc.last_send_time,'%Y%m%d')<>?";
+		$this->_db ( 'iwide_rw' )->query ( $sql, array (date ( 'Ymd' )) );
 	}
 	
 	/**
 	 * 更新发放失败次数
-	 * @param unknown $inter_id
-	 * @param unknown $saler
+	 * 
+	 * @param unknown $inter_id        	
+	 * @param unknown $saler        	
 	 */
 	public function update_deliver_fails_by_saler($inter_id, $saler) {
 		$sql = "UPDATE iwide_distribute_grade_all set deliver_fail=deliver_fail+1 WHERE grade_time<=? AND inter_id=? AND saler=?";

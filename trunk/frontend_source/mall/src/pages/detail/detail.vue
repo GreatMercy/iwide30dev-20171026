@@ -367,15 +367,14 @@
       },
       serviceItems () {
         let services = ['can_refund_3', 'can_mail', 'can_gift', 'can_pickup', 'can_refund']
-        let items = []
+        // 品质保证一直存在，无参数控制
+        let items = [serviceMaps.can_quality]
         services.forEach((item, index) => {
           if (item === 'can_refund_3' && this.productInfo['can_refund'] === '3' || this.productInfo[item] === '1') {
             items.push(serviceMaps[item])
           }
         })
-        if (items.length) {
-          this.serviceListMaxHeight = (this.maxHeight - 141) + 'px'
-        }
+        this.serviceListMaxHeight = (this.maxHeight - 141) + 'px'
         return items
       },
       buttonDisabled () {

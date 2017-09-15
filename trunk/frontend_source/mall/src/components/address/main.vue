@@ -73,11 +73,11 @@
       </div>
     </div>
     <div class="jfk-address__list jfk-pl-30 jfk-pr-30" v-show="!showAdd">
-      <ul class="jfk-address__list-box" :style="{'max-height': maxHeight}">
+      <ul class="jfk-address__list-box jfk-pt-30" :style="{'max-height': maxHeight}">
         <li
           v-for="item in addressItems"
           :key="item.address_id"
-          class="jfk-address__list-item jfk-pt-30">
+          class="jfk-address__list-item jfk-pb-30">
           <div class="jfk-radio jfk-radio--shape-rect color-golden">
             <label class="jfk-radio__label">
               <input type="radio"
@@ -109,7 +109,7 @@
       <div class="jfk-address__list-control">
         <a href="javascript:;" @click="handleAddAddress"
            class="jfk-button jfk-button--suspension jfk-button-higher jfk-button--free"><i
-          class="jfk-address__list-icon jfk-d-ib">+</i><i class="jfk-d-ib">新增收货地址</i></a>
+          class="jfk-address__list-icon jfk-font icon-mall_icon_address_add"></i>新增收货地址</a>
       </div>
     </div>
     <jfk-popup class="jfk-actionsheet jfk-actionsheet__address" :closeOnClickModal="false" position="bottom"
@@ -176,7 +176,7 @@
       }
     },
     beforeCreate () {
-      this.maxHeight = (window.innerHeight - 50 - 15) + 'px'
+      this.maxHeight = (window.innerHeight - 45 - 15) + 'px'
     },
     created () {
       this.aid = this.addressId

@@ -19,7 +19,7 @@
               <em class="shadow_b"></em>
           </span>
         </div>
-        <div class="flex_1 center relative balance_choose"  @click="balance = false, dataList = rechargeList" :class="{ active: !balance}">
+        <div class="flex_1 center relative balance_choose"  @click="change" :class="{ active: !balance}">
           <span class="relative padding_0_26 padding_bottom_5">
               消费记录
               <em class="shadow_b"></em>
@@ -69,21 +69,44 @@ export default {
   data () {
     return {
       dataList: [],
-      rechargeList: [],
+      rechargeList: {
+        bonuslist: []
+      },
       balanceList: [],
-      balance: true
+      balance: true,
+      getBol: false
     }
   },
   created () {
-    getBalanceInfo({'credit_type': 1}).then((res) => {
-      this.balanceList = res.web_data
+    this.toast = this.$jfkToast({
+      duration: -1,
+      iconClass: 'jfk-loading__snake',
+      isLoading: true
     })
-    getBalanceInfo({'credit_type': 2}).then((res) => {
-      this.rechargeList = res.web_data
-      this.dataList = this.rechargeList
+    getBalanceInfo({'credit_type': 1}).then((res) => {
+      this.toast.close()
+      this.balanceList = res.web_data
+      this.dataList = this.balanceList
     })
   },
   methods: {
+    change () {
+      this.balance = false
+      if (this.getBol) {
+        this.dataList = this.rechargeList
+      } else {
+        this.toast = this.$jfkToast({
+          duration: -1,
+          iconClass: 'jfk-loading__snake',
+          isLoading: true
+        })
+        getBalanceInfo({'credit_type': 2}).then((res) => {
+          this.toast.close()
+          this.rechargeList = res.web_data
+          this.getBol = true
+        })
+      }
+    }
   }
 }
 </script>

@@ -173,9 +173,6 @@ class ScopeDiscountService extends BaseService
     public function getUserScopeDiscount($interID, $openid)
     {
         $uri = $_SERVER['HTTP_HOST'] . "/index.php/api/ClubApi/getSomaClub?inter_id=$interID&openid=$openid";
-        if (ENVIRONMENT === 'dev') {
-            $uri =  "http://credit.iwide.cn/index.php/api/ClubApi/getSomaClub?inter_id=$interID&openid=$openid";
-        }
         $result = ScopeDiscountService::getInstance()->request($uri);
         $arr = isset($result['soma_club']) ? $result['soma_club'] : [];
 

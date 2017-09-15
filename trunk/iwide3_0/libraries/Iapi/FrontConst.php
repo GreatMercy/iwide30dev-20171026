@@ -301,7 +301,10 @@ class FrontConst extends BaseConst
         ),
         'hotel/hotel/return_more_room'     => array(
             'common'  => array(
-                'member',
+                'member'
+            ),
+            'keys' => array(
+                'packages'
             ),
             'mul_arr' => array(
                 'rooms' => array(

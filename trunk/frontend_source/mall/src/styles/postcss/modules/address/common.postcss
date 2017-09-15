@@ -64,21 +64,12 @@
       font-size: calc(34 / 28)em;
       letter-spacing: 1px;
       z-index: 9999;
-      i {
-        vertical-align: middle;
-      }
     }
     &-icon {
       font-size: calc(28 / 34)em;
-      display: inline-block;
-      width: calc(30 / 28)em;
-      height: calc(30 / 28)em;
-      border: solid 1px currentColor;
-      line-height: calc(27 / 28)em;
-      border-radius: 50%;
       margin-right: calc(14 / 28)em;
       text-align: center;
-      letter-spacing: normal;
+      vertical-align: 0.1em;
     }
   }
   /*添加*/
@@ -89,6 +80,9 @@
         left: px2rem(82);
         right: px2rem(82);
       }
+    }
+    textarea {
+      margin-top: px2rem(12);
     }
   }
 }

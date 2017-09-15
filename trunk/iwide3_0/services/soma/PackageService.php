@@ -1188,4 +1188,19 @@ class PackageService extends BaseService
     }
 
 
+    /**
+     * 放置一些全局参数
+     * @return array
+     * @author liguanglong  <liguanglong@mofly.cn>
+     */
+    public function getParams(){
+
+        return [
+            'tkid' => $this->getCI()->session->tempdata('theme_tkid'),
+            'layout' => $this->getCI()->session->tempdata('theme_layout'),
+            'brandname' => $this->getCI()->session->tempdata('theme_brandname'),
+        ];
+
+    }
+
 }

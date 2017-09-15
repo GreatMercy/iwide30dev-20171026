@@ -10,7 +10,8 @@
       <p v-if="states.status_tips" class="desc font-size--24 grayColor80">
         {{states.status_tips}}
       </p>
-      <p v-if="states.re_pay === 1" class="now_pay_price goldColor"><span class="jfk-font-number jfk-price__currency font-size--32">￥</span>
+      <p v-if="states.re_pay === 1" class="now_pay_price goldColor"><span
+        class="jfk-font-number jfk-price__currency font-size--32">￥</span>
         <span class="jfk-font-number jfk-price__number font-size--48">{{order.price}}</span></p>
       <p class="order_btn">
         <span v-if="states.re_pay === 1" @click="toLocationHref(states.repay_url)" class="order-btn-item nowPay">
@@ -28,7 +29,7 @@
            评论
         </span>
         <span v-if="states.self_checkout === 1" @click="toLocationHref(links.CHECK_OUT)"
-              class="order-text-item check_out grayColor80">
+              class="order-text-item check_out">
           退房
         </span>
       </p>
@@ -42,8 +43,8 @@
           {{hotel.address}}
         </p>
         <span class="icon_dh font-size--24">
-          <i class="booking_icon_font icon-booking_icon_navigation_normal  font-size--34"></i><br/>
-          导 航
+          <i class="booking_icon_font icon-booking_icon_navigation_normal  font-size--34"></i>
+          <span class="text">导 航</span>
         </span>
       </div>
       <div class="bottom_container">
@@ -66,6 +67,44 @@
         <p class="name font-size--28">
           {{order.name}} {{order.tel}}
         </p>
+      </div>
+      <div class="package_goods" v-if="packaGoods">
+        <div class="font-size--24 grayColor80 title">包含商品</div>
+        <ul class="package_ul">
+          <li class="toUse" v-for="item in packaGoods">
+            <!--<span>{{item.goods_info.external_info.intro_img}}</span>-->
+            <div class="packa_img" v-if="item.goods_info.external_info.intro_img">
+              <div class="jfk-image__lazy--background-image packa_background"
+                   v-lazy:background-image="item.goods_info.external_info.intro_img"></div>
+            </div>
+            <div class="packa_img" v-else>
+              <div class="jfk-image__lazy--background-image" style="background-image:
+              http://file.iwide.cn/public/media/club/201709131521583159.jpg"></div>
+            </div>
+            <div class="packa_infor">
+              <div class="right_box">
+                <h4 class="font-size--32">{{item.goods_name}}</h4>
+                <div class="price_num goldColor">
+                  <span class="jfk-font-number jfk-price__currency font-size--24">￥</span>
+                  <span class="jfk-font-number jfk-price__number font-size--40">{{item.oprice}}</span>
+                  <span class="font-size--24 grayColorbf">{{item.nums}}
+                  <template v-if="item.goods_info.unit">
+                    {{item.goods_info.unit}}
+                  </template>
+                  <template v-else>
+                    份
+                  </template>
+                </span>
+                </div>
+                <div class="control">
+                  <span class="font-size--24 grayColor80 detail">详情
+                  <i class="booking_icon_font font-size--24 icon-booking_icon_up_normal grayColor80"></i></span>
+                  <span class="use_btn">立即使用</span>
+                </div>
+              </div>
+            </div>
+          </li>
+        </ul>
       </div>
     </div>
     <!-- 订单信息 -->
@@ -124,7 +163,8 @@
         price_code_name: '',
         startdate: '',
         enddate: '',
-        pay_ways: ''
+        pay_ways: '',
+        packaGoods: []
       }
     },
     methods: {
@@ -143,6 +183,7 @@
           this.states = res.web_data.states
           this.links = res.web_data.page_resource.links
           this.hotel = res.web_data.hotel
+          this.packaGoods = res.web_data.order.goods_details
           this.startDateWeekday = res.web_data.startdate_weekday
           this.endDateWeekday = res.web_data.enddate_weekday
           this.roomname = this.order.first_detail.roomname

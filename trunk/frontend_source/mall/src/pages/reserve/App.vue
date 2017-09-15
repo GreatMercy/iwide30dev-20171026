@@ -7,7 +7,7 @@
         <div class="address card">
           <div class="add jfk-flex is-align-middle is-justify-center font-size--28 font-color-extra-light-gray" v-if="addressId === '-1'">
             <div class="cont">
-              <span class="icon color-golden"><i class="jfk-font icon-booking_icon_addpictures_normal"></i></span>新增收货地址
+              <i class="icon color-golden jfk-font icon-mall_icon_address_add"></i>新增收货地址
             </div>
           </div>
           <div class="list jfk-flex is-align-middle" v-else>
@@ -62,7 +62,7 @@
               <div class="add-box" v-if="addressId === '-1'">
                 <div class="add font-color-extra-light-gray font-size--28 jfk-flex is-align-middle is-justify-center">
                   <div class="cont">
-                    <span class="icon color-golden"><i class="jfk-font icon-booking_icon_addpictures_normal"></i></span>新增收货地址
+                    <i class="icon color-golden jfk-font icon-mall_icon_address_add"></i>新增收货地址
                   </div>
                 </div>
               </div>
@@ -191,7 +191,7 @@
         <div class="tip-title font-color-extra-light-gray-common"><i class="jfk-font icon-msg_icon_prompt_default font-size--28"></i>说明</div>
         <div class="tip-cont font-color-light-gray-common">商品超过有效期不能使用也不能退款</div>
       </div>
-      <footer class="footer jfk-footer jfk-clearfix">
+      <footer class="footer jfk-footer jfk-clearfix" :style="{'z-index': footZIndex}">
         <div class="order-detail jfk-fl-l" :class="{'is-open': priceOrderVisible}" @click="handleShowOrderDetail">
           <span class="price color-golden-price">
             <i class="price__currency font-size--24" v-if="!isIntegral">¥</i>
@@ -230,6 +230,7 @@
       class="jfk-popup__price-detail"
       position="bottom"
       modal-class="jfk-modal__price-detail"
+      do-after-close="doAfterClose"
       v-model="priceOrderVisible">
       <div class="price-detail-box">
         <div class="price-detail-item item-price jfk-flex is-justify-space-between">
@@ -425,7 +426,8 @@
             passed: false,
             message: ''
           }
-        }
+        },
+        footZIndex: 1000
       }
     },
     computed: {
@@ -575,6 +577,10 @@
       }
     },
     methods: {
+      // 恢复底部层级
+      doAfterClose () {
+        this.footZIndex = 1000
+      },
       // 切换使用方式
       handleChangeUseType (val) {
         this.useType = val
@@ -622,6 +628,9 @@
       // 显示价格明细
       handleShowOrderDetail () {
         if (this.priceDiscountItem.name) {
+          if (!this.priceOrderVisible) {
+            this.footZIndex = 99999
+          }
           this.priceOrderVisible = !this.priceOrderVisible
         }
       },
@@ -800,6 +809,7 @@
       handleSubmitOrder () {
         if (this.priceOrderVisible) {
           this.priceOrderVisible = false
+          this.footZIndex = 1000
         }
         if (this.killsecFinished) {
           this.$jfkAlert('已超过支付时间，请重新购买', '', {

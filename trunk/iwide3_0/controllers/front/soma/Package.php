@@ -114,6 +114,11 @@ class Package extends MY_Front_Soma
             $is_show_navigation = isset($this->themeConfig['is_show_navigation']) ? $this->themeConfig['is_show_navigation'] : Soma_base::STATUS_FALSE;
             $is_show_lang_btn = isset($this->themeConfig['is_show_lang_btn']) ? $this->themeConfig['is_show_lang_btn'] : Soma_base::STATUS_FALSE;
 
+        $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off'
+            || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
+        $url = "$protocol$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+
+
             $this->load->model('soma/Product_package_model', 'productModel');
             $productModel = $this->productModel;
 
@@ -2697,11 +2702,10 @@ class Package extends MY_Front_Soma
     public function pay_success_stay()
     {
 
-
-        $redis = $this->get_redis_instance();
-        $layout = $redis->get('layout');
-        $tkId = $redis->get('tkid');
-        $brandName = $redis->get('brandname');
+        $packageService = \App\services\soma\PackageService::getInstance();
+        $layout = $packageService->getParams()['layout'];
+        $tkId = $packageService->getParams()['tkid'];
+        $brandName = $packageService->getParams()['brandname'];
 
         $this->datas = [];
         if (!$this->isNewTheme()) {
@@ -2799,10 +2803,10 @@ class Package extends MY_Front_Soma
             'title' => '支付成功'
         );
 
-        $redis = $this->get_redis_instance();
-        $layout = $redis->get('layout');
-        $tkId = $redis->get('tkid');
-        $brandName = $redis->get('brandname');
+        $packageService = \App\services\soma\PackageService::getInstance();
+        $layout = $packageService->getParams()['layout'];
+        $tkId = $packageService->getParams()['tkid'];
+        $brandName = $packageService->getParams()['brandname'];
 
         $params = array(
             'id' => $this->inter_id,
@@ -3255,7 +3259,7 @@ class Package extends MY_Front_Soma
      */
     public function fans_saler_active()
     {
-        // $this->_get_wx_userinfo();
+        $this->_get_wx_userinfo();
         $header['title'] = '泛分销信息激活';
 
         // $rtn_url = Soma_const_url::inst()->get_url('*/*/index', array('id' => $this->inter_id));

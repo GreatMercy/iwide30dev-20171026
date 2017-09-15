@@ -318,10 +318,10 @@
 .button_use{width:47%;background-color: #1a1a1a;margin-left:2%;color: white!important}
 .erweima_img{text-align: center;margin-bottom: 20px;margin-top:30px;}
 .erweima_img div{display: inline-block;background-color: white;padding: 20px;width: 76%;}
-.index_button{width: 143px;height: 44px;line-height: 44px;display: inline-block;margin-right: 17px;background-color: white;color: #333333;}
+.index_button{width: 138px;height: 44px;line-height: 44px;display: inline-block;margin-right: 10px;background-color: white;color: #333333;}
 .index_button .margin_right_8{color: #7bc339}
 .index_button:after{border: 0px solid white;}
-.index_button2{width: 143px;height: 45px;line-height: 45px;display: inline-block;}
+.index_button2{width: 138px;height: 45px;line-height: 45px;display: inline-block;}
 .pad_420{padding-top: 46px; padding-bottom: 1.7rem;}
 .margin_bottom_30p{margin-bottom: 30%;}
 .cardword{height: 36px;overflow:hidden; text-overflow:ellipsis; display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:2; margin-bottom: 7px;}
@@ -364,3 +364,4 @@
 .couponType4{color: #b2945e;}
 .jfk-cardinfo-title{    padding-top: 0; padding-bottom: 19px; margin-top: 30px;}
 .index-wnum .txt_show1{text-shadow: 0 0 0px #b3945e;}
+.btn_white{color:white!important;}

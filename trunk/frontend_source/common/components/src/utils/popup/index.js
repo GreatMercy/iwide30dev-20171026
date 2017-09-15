@@ -3,38 +3,15 @@ import merge from '../merge';
 import PopupManager from './popup-manager';
 
 let idSeed = 1;
-const transitions = [];
-
-const hookTransition = (transition) => {
-  if (transitions.indexOf(transition) !== -1) return;
-
-  const getVueInstance = (element) => {
-    let instance = element.__vue__;
-    if (!instance) {
-      const textNode = element.previousSibling;
-      if (textNode.__vue__) {
-        instance = textNode.__vue__;
-      }
+const getVueInstance = (element) => {
+  let instance = element.__vue__;
+  if (!instance) {
+    const textNode = element.previousSibling;
+    if (textNode.__vue__) {
+      instance = textNode.__vue__;
     }
-    return instance;
-  };
-
-  Vue.transition(transition, {
-    afterEnter(el) {
-      const instance = getVueInstance(el);
-
-      if (instance) {
-        instance.doAfterOpen && instance.doAfterOpen();
-      }
-    },
-    afterLeave(el) {
-      const instance = getVueInstance(el);
-
-      if (instance) {
-        instance.doAfterClose && instance.doAfterClose();
-      }
-    }
-  });
+  }
+  return instance;
 };
 
 let scrollBarWidth;
@@ -107,12 +84,6 @@ export default {
     }
   },
 
-  created() {
-    if (this.transition) {
-      hookTransition(this.transition);
-    }
-  },
-
   beforeMount() {
     this._popupId = 'popup-' + idSeed++;
     PopupManager.register(this._popupId, this);
@@ -157,6 +128,22 @@ export default {
   },
 
   methods: {
+    afterEnter (el) {
+      if (this.popupTransition) {
+        const instance = getVueInstance(el);
+        if (instance) {
+          instance.doAfterOpen && instance.doAfterOpen();
+        }
+      }
+    },
+    afterLeave (el) {
+      if (this.popupTransition) {
+        const instance = getVueInstance(el);
+        if (instance) {
+          instance.doAfterClose && instance.doAfterClose();
+        }
+      }
+    },
     open(options) {
       if (!this.rendered) {
         this.rendered = true;

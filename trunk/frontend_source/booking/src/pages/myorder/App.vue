@@ -22,7 +22,7 @@
             </div>
             <div class="price goldColor">
               <i class="jfk-font-number jfk-price__currency font-size--32">￥</i>
-              <i class="jfk-font-number jfk-price__number font-size--48">{{item.price}}</i>
+              <i class="jfk-font-number jfk-price__number font-size--50">{{item.price}}</i>
             </div>
           </template>
           <template v-else>
@@ -37,8 +37,8 @@
               </p>
             </div>
             <div class="price grayColor">
-              <i class="jfk-font-number jfk-price__currency">￥</i>
-              <i class="jfk-font-number jfk-price__number font-size--38">{{item.price}}</i>
+              <i class="jfk-font-number jfk-price__currency font-size--32">￥</i>
+              <i class="jfk-font-number jfk-price__number font-size--50">{{item.price}}</i>
             </div>
           </template>
           <orderTime :item="item"/>
