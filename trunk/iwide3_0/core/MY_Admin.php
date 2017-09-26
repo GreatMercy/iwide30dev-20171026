@@ -191,7 +191,7 @@ class MY_Admin extends MY_Controller {
         $data['signature']= OauthLib::get_sign ( $data['data'], $result['granted_key'] );
         $admin = doCurlPostRequest($url, json_encode($data),'',30);
         $this->write_log('app_login','session_key',json_encode($data));
-        $this->write_log('app_login','user_info',json_encode($admin));
+        $this->write_log('app_login','user_info',$admin);
         if (!empty($admin))
         {
             $admin = json_decode($admin,true);

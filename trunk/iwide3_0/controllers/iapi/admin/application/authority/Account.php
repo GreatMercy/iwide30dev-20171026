@@ -24,7 +24,7 @@ class Account extends MY_Application_Admin_Iapi {
         $username = $this->user_session ('username');
         $this->write_log('app_login','admin_session',json_encode($data));
         $this->write_log('app_login','admin_session',json_encode($username));
-        if (empty($user_info))
+        if (empty($username))
         {
             return '无数据返回';
         }
@@ -78,7 +78,7 @@ class Account extends MY_Application_Admin_Iapi {
                 foreach ($entityIds as $item)
                 {
                     $entityId[] = $item['hotel_id'];
-                    $admin['shops'][$item['hotel_id']] = $item['shop_id'];
+                    $admin['shops'][$item['hotel_id']] = !empty($item['shop_id']) ? $item['shop_id'] : '';
                 }
             }
             $admin['entity_id'] = implode(',',$entityId);
