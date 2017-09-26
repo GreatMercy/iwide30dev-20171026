@@ -14,6 +14,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
 class Vapi extends MY_Admin_Iapi
 {
 
+    private $hotels = '';
+    private $hotel_ids = array();
+
     private $admin_profile = array();
     public function __construct()
     {
@@ -22,6 +25,11 @@ class Vapi extends MY_Admin_Iapi
         $this->load->model('membervip/common/Public_log_model', 'common_logm');
         $this->load->model('membervip/admin/Vapi_logic', 'vapi_logic');
         $this->admin_profile = $this->session->userdata['admin_profile'];
+
+        $this->hotels =  $this->session->get_admin_hotels();
+        if(!empty($this->hotels))
+            $this->hotel_ids  = explode(",",$this->hotels);
+
     }
 
     public function coupon_task()
@@ -285,7 +293,7 @@ class Vapi extends MY_Admin_Iapi
             $this->load->model('membervip/admin/Vapi_statements', 'statements');
 
             $select     = "hotel_id,name";
-            $tag_data   = $this->statements->hotel_list($inter_id, $select);
+            $tag_data   = $this->statements->hotel_list($inter_id, $select,$this->hotel_ids);
             $returnData = $this->initReturnData($tag_data);
             $this->_ajaxReturn($returnData);
         }
@@ -309,6 +317,20 @@ class Vapi extends MY_Admin_Iapi
         //        $request_params['end_time'] ='2017-09-22';
         //        $request_params['hotel_id'] ='180';
         //        $request_params['page'] = 2;
+
+        if (isset($request_params['hotel_id']) && !empty($request_params['hotel_id'])) {
+            $hotel_id = $request_params['hotel_id'];
+            if (!empty($this->hotel_ids) && is_array($this->hotel_ids)) {
+                if(!in_array($hotel_id,$this->hotel_ids)){
+                    $returnData['status'] = 1000;
+                    $returnData['err'] = 0;
+                    $returnData['msg'] = '权限不足，无法查看其它酒店数据';
+                    $this->_ajaxReturn($returnData);
+                }
+            }
+        }else if( !empty($this->hotel_ids) && is_array($this->hotel_ids)){
+            $request_params['hotel_id'] = $this->hotel_ids;
+        }
 
         $result                = StatementsService::getInstance()->reg_distribution($request_params);
         $result['export_link'] = base_url("index.php/membervip/memberexport/export_reg_distribution");
@@ -341,6 +363,21 @@ class Vapi extends MY_Admin_Iapi
         //        $request_params['end_time'] ='2017-09-25';
         //        $request_params['hotel_id'] ='180';
         //        $request_params['page'] = 1;
+
+        //酒店权限
+        if (isset($request_params['hotel_id']) && !empty($request_params['hotel_id'])) {
+            $hotel_id = $request_params['hotel_id'];
+            if (!empty($this->hotel_ids) && is_array($this->hotel_ids)) {
+                if(!in_array($hotel_id,$this->hotel_ids)){
+                    $returnData['status'] = 1000;
+                    $returnData['err'] = 0;
+                    $returnData['msg'] = '权限不足，无法查看其它酒店数据';
+                    $this->_ajaxReturn($returnData);
+                }
+            }
+        }else if( !empty($this->hotel_ids) && is_array($this->hotel_ids)){
+            $request_params['hotel_id'] = $this->hotel_ids;
+        }
 
         $result                = StatementsService::getInstance()->deposit_card($request_params);
         $result['export_link'] = base_url("index.php/membervip/memberexport/export_card_pay_distribution");

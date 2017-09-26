@@ -115,7 +115,7 @@ var webpackConfig = merge(baseWebpackConfig, {
       }
     ]),
     new ManifestPlugin({
-      fileName: `./soma/vue${process.env.npm_config_interid ? '_' + process.env.npm_config_interid : ''}/manifest${process.env.npm_config_cdn ? '-cdn' : ''}.json`
+      fileName: `./wx${process.env.npm_config_interid ? '_' + process.env.npm_config_interid : ''}/manifest${process.env.npm_config_cdn ? '-cdn' : ''}.json`
     })
   ]
 })

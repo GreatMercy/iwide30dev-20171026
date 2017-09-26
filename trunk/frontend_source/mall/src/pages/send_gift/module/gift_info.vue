@@ -128,7 +128,7 @@
     data () {
       return {
         // 祝福语
-        wish: '送您一份礼物',
+        wish: '礼物代表我的心，愿好运一直伴随你~',
         giftsPersonNumber: 1, // 收礼的人数
         giftsPersonMax: 1, // 收礼的人数最大数值
         giftsAverageNumber: 1, // 每人多少盒

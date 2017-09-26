@@ -30,8 +30,8 @@
       </template>
 
       <template v-else>
-        <p class="font-size--28 jfk-ta-c gift-list__text">礼物暂无人领取</p>
-        <p class="font-size--28 jfk-ta-c gift-list__text">超过24小时将自动退回</p>
+        <p class="font-size--28 jfk-ta-c gift-list__text">等待对方领取</p>
+        <p class="font-size--28 jfk-ta-c gift-list__text">超过24小时未领取将自动退回</p>
       </template>
 
     </div>

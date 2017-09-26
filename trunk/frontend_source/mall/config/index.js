@@ -2,12 +2,15 @@
 var path = require('path')
 var cdnSrc = path.resolve(__dirname, '../../cdn.json')
 var cdnConf = require(cdnSrc)
+var version = require('../build/version')
+var prefix = process.env.npm_config_interid ? 'soma/vue/soma_' + process.env.npm_config_interid : 'soma/vue/soma_com'
 module.exports = {
   build: {
     env: require('./prod.env'),
     index: path.resolve(__dirname, '../dist/index.html'),
     assetsRoot: path.resolve(__dirname, '../dist'),
-    assetsSubDirectory: process.env.npm_config_interid ? 'soma/vue_' + process.env.npm_config_interid : 'soma/vue',
+    // assetsSubDirectory: process.env.npm_config_interid ? 'soma/vue_' + process.env.npm_config_interid : 'soma/vue',
+    assetsSubDirectory: prefix + '/' + version,
     assetsPublicPath: (process.env.npm_config_cdn ? `${cdnConf.protocol}//${cdnConf.domain}` : '') + '/public/',
     productionSourceMap: false,
     // Gzip off by default as many popular static hosts such as

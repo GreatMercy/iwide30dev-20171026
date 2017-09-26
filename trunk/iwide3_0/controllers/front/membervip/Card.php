@@ -75,13 +75,9 @@ class Card extends MY_Front_Member
     public function pcard()
     {
         $data['data'] = array();
-        if (!$this->is_restful()) {
-            $data = CardService::getInstance()->pcard($this->inter_id, $this->openid, $this->url_group);
-        } else {
-            $data['data'] = $this->url_group;
-        }
+        $data = CardService::getInstance()->pcard($this->inter_id, $this->openid, $this->url_group);
         $data['data']['page_title'] = '我的优惠券';
-        $this->template_show('member', $this->_template, 'card', $data['data']);
+        $this->template_show('member', $this->_template, 'pcard', $data['data']);
     }
 
     public function pcardinfo()

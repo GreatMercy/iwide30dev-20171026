@@ -2,7 +2,7 @@
   <div>
     <div class="jfk-pages jfk-pages__price">
       <div class="jfk-fieldset__hd">
-        <div class="jfk-fieldset__title">粉丝分析报表</div>
+        <div class="jfk-fieldset__title">储值数据分析报表</div>
       </div>
       <template>
         <div id="conpon-wrapper">
@@ -38,13 +38,9 @@
             </el-row>
             <el-row :gutter="10" class="fansreport-wrap">
               <el-col :span="8" class="center">
-                <el-col :span="12">
+                <el-col :span="24">
                   <p>{{data.total.total}}</p>
                   <p>累计粉丝</p>
-                </el-col>
-                <el-col :span="12">
-                  <p>{{data.new_total}}</p>
-                  <p>新增粉丝</p>
                 </el-col>
               </el-col>
               <div class="jfk-ta-c el-col el-col-1"><div class="choice-line"></div></div>
@@ -61,19 +57,35 @@
                   <p>{{data.dis_total}}</p>
                   <p>分销关注</p>
                 </el-col>
+              </el-col>
+            </el-row>
+            <el-row :gutter="10" class="fansreport-wrap">
+              <el-col :span="8" class="center">
+                <el-col :span="24">
+                  <p>{{data.total.total}}</p>
+                  <p>累计粉丝</p>
+                </el-col>
+              </el-col>
+              <div class="jfk-ta-c el-col el-col-1"><div class="choice-line"></div></div>
+              <el-col :span="14" class="center">
                 <el-col :span="6">
-                  <p>{{data.cancel_total}}</p>
-                  <p>取消关注</p>
+                  <p>{{data.self_total}}</p>
+                  <p>自主关注</p>
+                </el-col>
+                <el-col :span="6">
+                  <p>{{data.scan_total}}</p>
+                  <p>扫码关注</p>
+                </el-col>
+                <el-col :span="6">
+                  <p>{{data.dis_total}}</p>
+                  <p>分销关注</p>
                 </el-col>
               </el-col>
             </el-row>
             <el-row class="center">
               <el-radio-group v-model="chartType" class="jfk-mb-20">
-                <el-radio-button name="new" label="new">新增粉丝</el-radio-button>
-                <el-radio-button name="self" label="self">自主关注</el-radio-button>
-                <el-radio-button name="scan" label="scan">扫码关注</el-radio-button>
-                <el-radio-button name="dis" label="dis">分销关注</el-radio-button>
-                <el-radio-button name="cancel" label="cancel">取消关注</el-radio-button>
+                <el-radio-button name="new" label="new">储值增加</el-radio-button>
+                <el-radio-button name="self" label="self">储值使用</el-radio-button>
               </el-radio-group>
             </el-row>
             <div class="charts">
@@ -154,10 +166,6 @@
                   prop="cancel"
                   label="取消关注">
                 </el-table-column>
-            <!--<el-table-column
-                  prop="distribution_num"
-                  label="每日各部门明细">
-                </el-table-column> -->
             </el-table>
         </div>
       </template>
@@ -165,7 +173,7 @@
   </div>
 </template>
 <script>
-  import { getFansReport } from '@/service/user/http'
+  import { getBalanceAnalysis } from '@/service/user/http'
   import IEcharts from 'vue-echarts-v3/src/lite'
   import 'echarts/lib/chart/line'
   import 'echarts/lib/component/tooltip'
@@ -192,39 +200,28 @@
         hotelId: '',
         chartsData: [],
         chartsTime: [],
-        cancelData: [],
-        disData: [],
-        newData: [],
-        scanData: [],
-        selfData: [],
         chartType: 'new',
-        chartInst: null,
-        dataLink: '',
-        hotelLink: ''
+        chartInst: null
       }
     },
     created () {
-      this.handleDate(3)
+      this.handleDate(15)
     },
     methods: {
       search () {
         let setData = {
           hotel_id: this.hotelId,
-          startdate: this.getTime[0],
-          enddate: this.getTime[1]
+          start_date: this.getTime[0],
+          end_date: this.getTime[1]
         }
         this.getData(setData)
       },
       getData (data) {
         this.loading = true
-        getFansReport(data).then((res) => {
+        getBalanceAnalysis(data).then((res) => {
           this.loading = false
           this.clearData()
           if (res.web_data) {
-            let str = '?hotel_id=' + data.hotel_id + '&startdate=' + data.startdate + '&enddate=' + data.enddate
-            this.data = res.web_data
-            this.dataLink = this.data.date_data_link + str
-            this.hotelLink = this.data.hotel_data_link + str
             this.loading = false
             this.csrf_token = this.data.csrf_token
             this.csrf_value = this.data.csrf_value
@@ -238,23 +235,6 @@
               hotel_id: '',
               hotel_name: '全部酒店'
             })
-            for (let day in this.data.date_data) {
-              this.dayList.push(this.data.date_data[day])
-              this.cancelData.push(this.data.date_data[day].cancel)
-              this.newData.push(this.data.date_data[day].new)
-              this.disData.push(this.data.date_data[day].dis)
-              this.scanData.push(this.data.date_data[day].scan)
-              this.selfData.push(this.data.date_data[day].self)
-              this.chartsTime.push(this.data.date_data[day].date)
-            }
-            this.dayList.push({
-              date: '总计',
-              new: this.data.new_total,
-              self: this.data.self_total,
-              scan: this.data.scan_total,
-              cancel: this.data.cancel_total,
-              dis: this.data.dis_total
-            })
           } else {
             this.data = {}
           }
@@ -262,10 +242,6 @@
       },
       setTime (value) {
         this.getTime = value.split(' 至 ')
-      },
-      handleCloseDialog () {
-      },
-      handleOpenDialog () {
       },
       handleDate (num) {
         let today = new Date()
@@ -292,17 +268,6 @@
       },
       chartReady (inst) {
         this.chartInst = inst
-      },
-      clearData () {
-        this.hotelList = []
-        this.hotelData = []
-        this.dayList = []
-        this.cancelData = []
-        this.newData = []
-        this.disData = []
-        this.scanData = []
-        this.selfData = []
-        this.chartsTime = []
       }
     },
     computed: {

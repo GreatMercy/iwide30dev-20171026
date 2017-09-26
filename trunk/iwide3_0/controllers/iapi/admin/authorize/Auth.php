@@ -143,7 +143,7 @@ class Auth extends MY_Admin_Iapi
                 }
 
                 $this->load->model('authority/Valify_tokens_model');
-                $oauth_code=$this->Valify_tokens_model->tokenAddAdapter(3,array('admin_id'=>$admin->m_get('admin_id'),'app_id'=>'a5cfb5d96b','valify_data'=>array('username'=>$admin->m_get('username'))));
+                $oauth_code=$this->Valify_tokens_model->tokenAddAdapter(3,array('admin_id'=> $admin['admin_id'],'app_id'=>'a5cfb5d96b','valify_data'=>array('username'=>$admin['username'])));
                 if($redirect_uri)
                 {
                     if (strpos ( $redirect_uri, '?' ))
@@ -256,7 +256,7 @@ class Auth extends MY_Admin_Iapi
             $this->setFlashData($result['inter_id']);
 
             $this->load->model('authority/Valify_tokens_model');
-            $oauth_code=$this->Valify_tokens_model->tokenAddAdapter(3,array('admin_id'=>$admin->m_get('admin_id'),'app_id'=>'a5cfb5d96b','valify_data'=>array('username'=>$admin->m_get('username'))));
+            $oauth_code=$this->Valify_tokens_model->tokenAddAdapter(3,array('admin_id'=>$admin['admin_id'],'app_id'=>'a5cfb5d96b','valify_data'=>array('username'=> $username)));
             if($redirect_uri)
             {
                 if (strpos ( $redirect_uri, '?' ))
@@ -326,7 +326,7 @@ class Auth extends MY_Admin_Iapi
                 foreach ($entityIds as $item)
                 {
                     $entityId[] = $item['hotel_id'];
-                    $admin['shops'][$item['hotel_id']] = $item['shop_id'];
+                    $admin['shops'][$item['hotel_id']] = !empty($item['shop_id']) ? $item['shop_id'] : '';
                 }
             }
             $admin['entity_id'] = implode(',',$entityId);

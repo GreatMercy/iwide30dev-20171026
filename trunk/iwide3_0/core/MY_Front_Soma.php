@@ -123,7 +123,7 @@ class MY_Front_Soma extends MY_Front
     public $statis_code = '';
     public $sign_update_code = '';
     //商城读取vue目录
-    public $path = 'SOMA';
+    public $path = 'soma_com';
 
     /**
      * 例如，雅斯特酒店不叫储值，叫雅币
@@ -210,11 +210,11 @@ class MY_Front_Soma extends MY_Front
                 foreach ($items as $val){
                     if($val['tkid'] == $this->input->get('tkid')){
                         $_GET['brandname'] = $val['brandname'];
+                        $this->version = 2;
+                        $this->path = 'soma_accor';
                         break;
                     }
                 }
-                $this->version = 2;
-                $this->path = 'SOMAACCOR';
             }
 
             $this->saveQueryParams();
@@ -1357,6 +1357,20 @@ var _hmt = _hmt || [];
     {
         $salerId        = $this->input->get('saler');
         $fansSalerId    = $this->input->get('fans_saler');
+
+        /* add by chencong 20170826 分销保护期 start */
+        if(!$salerId && !$fansSalerId){
+            $this->load->model('distribute/Idistribute_model');
+            $trueSaler = $this->Idistribute_model->get_protection_saler($this->openid, $this->inter_id);
+            if($trueSaler){
+                if($trueSaler >= 10000000){// 泛分销10000000起的
+                    $fansSalerId = $trueSaler;
+                }else{
+                    $salerId = $trueSaler;
+                }
+            }
+        }
+        /* add by chencong 20170826 分销保护期 end */
 
         //需要跳转
         $url = Url::current();

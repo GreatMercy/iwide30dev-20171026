@@ -41,7 +41,7 @@
            <i class="booking_icon_font font-size--24 icon-font_zh_hui_fzdbs"></i>
         </span> -->
         <p class="hotel_name font-size--30">
-          <span class="score font-size--24">{{item.comment_data.comment_score}}</span>
+          <span class="score font-size--24">{{item.comment_data.comment_score === 0 ? 5.0 : item.comment_data.comment_score}}</span>
           <span v-if="item.name" v-html="item.name.replace(keyword, highLightKeyword)"></span>
         </p>
         <p class="address font-size--24 grayColor80">

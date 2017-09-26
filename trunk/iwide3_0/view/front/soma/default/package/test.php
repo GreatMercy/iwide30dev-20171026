@@ -1,6 +1,6 @@
 <body>
 <script src="http://res.wx.qq.com/open/js/jweixin-1.1.0.js"></script>
-<!--<script src="--><?php //echo base_url('public/soma/scripts/alert.js');?><!--"></script>-->
+<!--<script src="--><?php //echo get_cdn_url('public/soma/scripts/alert.js');?><!--"></script>-->
 <!-- 腾讯地图加载异常<div class="page_loading"><p class="isload">正在加载</p></div> -->
 <script>
 <!--    wx.config({-->

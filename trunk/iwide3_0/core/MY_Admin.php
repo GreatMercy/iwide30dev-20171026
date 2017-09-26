@@ -1,5 +1,6 @@
 <?php
-
+use Application\libraries\OauthLib;
+require_once APPPATH . "/libraries/Application/OauthLib.php";
 class MY_Admin extends MY_Controller {
 
 	protected $sub_template= 'AdminLTE';   //当前所用皮肤
@@ -70,7 +71,13 @@ class MY_Admin extends MY_Controller {
 	    $controller= $this->controller;
 	    $action= $this->action;
 
+        //跳过权限同步回调地址 BY 沙沙
+        if( $this->module=='authorize' && $this->controller=='auth' ){
+            return true;
+        }
+
 	    $acl_array= $this->session->allow_actions;
+
         $acl_array= $acl_array[ADMINHTML];
 
 	    //add chenjunyu 2016-10-21 如果当前用户没有新订单首页权限，则跳到会员列表
@@ -96,6 +103,9 @@ class MY_Admin extends MY_Controller {
 	        if( isset($_SERVER['REQUEST_URI']) ){
 	            $redirect= urlencode( base_url($_SERVER['REQUEST_URI']) );
 	        }
+
+           //BY沙沙 2017-09-21 新版权限系统，统一登录接口
+            $this->app_login();
 		    $this->_redirect(EA_const_url::inst()->get_login_admin(). '?redirect='. $redirect);
 	    }
 		if ( $acl_array== FULL_ACCESS ) {
@@ -105,9 +115,7 @@ class MY_Admin extends MY_Controller {
 		if( isset($acl_array[$module][$controller]) && in_array($action, $acl_array[$module][$controller])){
 	        return true;
 	    }
-	    if( $this->action=='index' && $this->controller=='auth' ){
-	        return true;
-	    }
+
 		//临时放行
 		if( $this->action=='grid' && $this->controller=='memberlist' ){
     		return true;
@@ -120,7 +128,102 @@ class MY_Admin extends MY_Controller {
 		    $this->_redirect(EA_const_url::inst()->get_deny_admin());
 	}
 
-	/**
+    /**
+     * 新版权限系统 统一登录接口
+     * 2017-09-21
+     * V3.0
+     * 沙沙
+     */
+    public function app_login()
+    {
+        $state = $this->input->get('state');
+        $icode = $this->input->get('icode');
+        //$redirect_uri = $this->input->get('redirect_uri');
+
+        $this->config->load('authorize', TRUE);
+        $authorize = $this->config->item('authorize');
+
+        $app_id = $authorize['app_id'];
+        $app_secret = $authorize['app_secret'];
+
+        if ($this->session->userdata('authorize_state') == $state && !empty($icode))
+        {
+            $redirect_uri = 'http://'.$_SERVER ['HTTP_HOST'] . $_SERVER ['REQUEST_URI'];
+            $domain = 'http://' . $_SERVER['HTTP_HOST'];
+
+            //验证state
+            $this->load->helper('common');
+            $url =  $authorize['host_sys_auth'] . '/index.php/iapi/v1/application/authorize/login/login_session?app_id='
+                .$app_id.'&app_secret='.$app_secret.'&code='.$icode;
+
+            $result = doCurlGetRequest($url, array(),30);
+            $this->write_log('app_login','result',$result);
+
+            if ($result = json_decode($result,TRUE))
+            {
+                //写登录SESSION BY 沙沙 2017-09-21
+                $res = $this->accountAuth($authorize,$result);
+                if ($res != false)
+                {
+                    $this->write_log('app_login','redirect_uri',$redirect_uri);
+                    redirect($redirect_uri);
+                }
+            }
+        }
+
+        $rand=mt_rand(100,10000);
+        $this->session->set_userdata('authorize_state',$rand);
+        $redirect = $authorize['host_sys_auth'] . '/index.php/authorize/auth/login?redirect_uri='.base64_encode('http://'.$_SERVER ['HTTP_HOST'] . $_SERVER ['REQUEST_URI']).'&app_id='.$app_id.'&state='.$rand.'&scope=userlogin';
+        redirect($redirect);
+    }
+
+    /**
+     * 设置 请求权限系统 => session
+     * @param $authorize
+     * @param $result
+     * @return mixed
+     */
+    protected function accountAuth($authorize,$result)
+    {
+        $url = $authorize['host_sys_auth'] . '/index.php/iapi/v1/application/authority/account/admin_session?app_id='.$authorize['app_id'];
+        $data['data'] = array();
+        $data['session_key'] = $result['session_key'];
+        $data['signature']= OauthLib::get_sign ( $data['data'], $result['granted_key'] );
+        $admin = doCurlPostRequest($url, json_encode($data),'',30);
+        $this->write_log('app_login','session_key',json_encode($data));
+        $this->write_log('app_login','user_info',json_encode($admin));
+        if (!empty($admin))
+        {
+            $admin = json_decode($admin,true);
+            $this->session->account_login($admin['account'], $admin['auth']);
+        }
+
+        return $admin;
+    }
+
+    protected function write_log( $data,$re = '',$result = '',$file=NULL, $path=NULL )
+    {
+        if(!$file) $file= date('Y-m-d'). '.txt';
+        if(!$path) $path= APPPATH. 'logs'. DS. 'authority'. DS;
+
+        if( !file_exists($path) ) {
+            @mkdir($path, 0777, TRUE);
+        }
+
+        if(is_array($data)){
+            $data=json_encode($data);
+        }
+        if(is_array($result)){
+            $result=json_encode($result);
+        }
+        $fp = fopen($path.$file, "a");
+        $content = date("Y-m-d H:i:s")." | ".getmypid()." | ".$_SERVER['PHP_SELF']." | ".session_id()." | ".$data." | ".$re." | ".$result."\n";
+
+        fwrite($fp, $content);
+        fclose($fp);
+    }
+
+    /**
 	 * 后台key过滤
 	 * @return boolean
 	 */

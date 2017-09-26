@@ -966,6 +966,15 @@ class MY_Model_Soma extends MY_Model
     }
 
 
+    public function save($data = []){
+
+    }
+
+
+    public function delete($primaryKey = 0){
+
+    }
+
     /**
      * 根据主键给某个字段自增
      * @param $id

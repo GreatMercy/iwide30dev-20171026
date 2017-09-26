@@ -161,13 +161,9 @@ class Cardcenter extends MY_Front_Member
     public function pcard()
     {
         $data['data'] = array();
-        if (!$this->is_restful()) {
-            $data = CardcenterService::getInstance()->pcard($this->show_inter_id, $this->show_openid, $this->url_group);
-        } else {
-            $data['data'] = $this->url_group;
-        }
+        $data = CardcenterService::getInstance()->pcard($this->show_inter_id, $this->show_openid, $this->url_group);
         $data['data']['page_title'] = '我的优惠券';
-        $this->template_show('member', $this->_template, 'card', $data['data']);
+        $this->template_show('member', $this->_template, 'pcard', $data['data']);
     }
 
     public function cardinfo()

@@ -113,6 +113,34 @@ const getArticleTotal = (data, config) => {
   let url = user.GET_ARTICLE_TOTAL
   return ajax.get(url, data)
 }
+/**
+ * 储值数据分析
+ */
+const getBalanceAnalysis = (data, config) => {
+  let url = user.GET_BALANCE_ANALYSIS
+  return ajax.get(url, data)
+}
+/**
+ * 指定日期下的储值数据分析
+ */
+const getBalanceAnalysisBydate = (data, config) => {
+  let url = user.GET_BALANCE_ANALYSIS_BYDATE
+  return ajax.get(url, data)
+}
+/**
+ * 积分数据分析
+ */
+const getCreditAnalysis = (data, config) => {
+  let url = user.GET_CREDIT_ANALYSIS
+  return ajax.get(url, data)
+}
+/**
+ * 指定日期下的积分数据分析
+ */
+const getCreditAnalysisBydate = (data, config) => {
+  let url = user.GET_CREDIT_ANALYSIS_BYDATE
+  return ajax.get(url, data)
+}
 export {
   getCouponCode,
   getCouponList,
@@ -125,5 +153,9 @@ export {
   getDepostStatements,
   getHotelList,
   getFansReport,
-  getArticleTotal
+  getArticleTotal,
+  getBalanceAnalysis,
+  getBalanceAnalysisBydate,
+  getCreditAnalysis,
+  getCreditAnalysisBydate
 }

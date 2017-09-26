@@ -10,6 +10,7 @@ class MY_Admin_Iapi extends MY_Controller {
         $this->_init_router ();
         $debug = $this->input->get ( 'debug' );
         $inter_id = $this->input->get ( 'inter_id' );
+
         if($debug){
             $this->session->set_admin_profile(
                 array(
@@ -26,6 +27,8 @@ class MY_Admin_Iapi extends MY_Controller {
             );
             $this->session->allow_actions = array('adminhtml'=>FULL_ACCESS);
         }elseif($inter_id){
+
+
             $this->session->set_admin_profile(
                 array(
                     // 'admin_id'=> 5,
@@ -108,7 +111,11 @@ class MY_Admin_Iapi extends MY_Controller {
         // // 对于半开放的操作，如dashboard
         // return TRUE;
         // }
-        
+        //登录接口
+        if ($this->controller == 'auth') {//$this->action == 'index' &&
+            return true;
+        }
+
         if (empty ( $acl_array )) {
             // 会话超时
             if (isset ( $_SERVER ['REQUEST_URI'] )) {
@@ -124,9 +131,7 @@ class MY_Admin_Iapi extends MY_Controller {
         if (isset ( $acl_array [$module] [$controller] ) && in_array ( $action, $acl_array [$module] [$controller] )) {
             return true;
         }
-        if ($this->controller == 'auth') {//$this->action == 'index' &&
-            return true;
-        }
+
         // 临时放行
         if ($this->action == 'grid' && $this->controller == 'memberlist') {
             return true;

@@ -1,53 +1,54 @@
 <template>
   <div class="bind-wx-outer">
     <div class="sign">
-      <!--微信登陆computer图标-->
-      <!--<i class="jfkfont icon-backstage_icon_rights_login"></i>-->
-      <!--<i class="jfkfont icon-backstage_icon_rights_binding"></i>-->
-      <i class="jfkfont icon-btn_icon_selected_pressed"></i>
-      <!--<i class="jfkfont icon-font_zh_emark_qkbys"></i>-->
-      <p>已取消登录</p>
-      <!--<p>已确认登录后台</p>-->
-      <!--<p>-->
-      <!--<span>你确认成为</span><br>-->
-      <!--<span>后台账号的绑定者吗？</span>-->
-      <!--</p>-->
-      <!--<p>已允许绑定该微信账号</p>-->
-      <!--<p>你确认要登陆后台吗？</p>-->
+      <template v-if="!cancelStatus">
+        <i v-if="bindStatus" class="jfkfont wx-icon-backstage_icon_rights_binding"></i>
+        <i class="jfkfont wx-icon-btn_icon_selected_pressed" v-else></i>
+        <p v-if="bindStatus">
+          <span>你确认成为</span><br>
+          <span>后台账号的绑定者吗？</span>
+        </p>
+        <p v-else>已允许绑定该微信账号</p>
+      </template>
+      <template v-else>
+        <i class="jfkfont wx-icon-font_zh_emark_qkbys"></i>
+        <p>已取消绑定</p>
+      </template>
     </div>
-    <div class="account-list">
-      <div class="wx-account">
-        <img src="" alt="" class="user">
-        <span>iwide7777</span>
-      </div>
-      <ul class="jfk-account-list">
-        <li class="choosed"><span>group1</span><i class=" jfkfont icon-btn_icon_selected_pressed"></i>
-          <div class="split-line"></div>
-        </li>
-        <li><span>group2</span><i class="jfkfont icon-btn_icon_selected_normal"></i>
-          <div class="split-line"></div>
-        </li>
-        <li><span>group3</span><i class="jfkfont icon-btn_icon_selected_normal"></i>
-          <div class="split-line"></div>
-        </li>
-      </ul>
+    <div class="confirm" v-if="!cancelStatus || !bindStatus">
+      <button class="yes" @click="toBindAction()">确定</button>
+      <button class="no" @click="cancelAction()">取消</button>
     </div>
-    <div class="confirm">
-      <button class="yes">确定</button>
-      <button class="no">取消</button>
-    </div>
-
   </div>
 </template>
 <script>
-//  import {} from '@/service/system/http'
-//  import {showFullLayer, formatUrlParams} from '@/utils/utils'
+  import {putBindWx} from '@/service/http'
+  import {formatUrlParams} from '@/utils/utils'
+
   export default {
     name: 'login',
     data () {
-      return {}
+      return {
+        bindStatus: true,
+        cancelStatus: false,
+        urlParams: {}
+      }
     },
-    methods: {}
+    created () {
+      this.urlParams = formatUrlParams(window.location.href)
+    },
+    methods: {
+      cancelAction () {
+        this.cancelStatus = true
+      },
+      toBindAction () {
+        putBindWx({
+          token: this.urlParams.token
+        }).then((res) => {
+          this.bindStatus = false
+        })
+      }
+    }
   }
 </script>
 <style type="postcss">
@@ -61,9 +62,6 @@
     text-align: center;
     .sign {
       width: 100%;
-      /*background: radial-gradient(#ceb689 30%, #c5ad7f 10%,#bba67e 10%,#1d1c19 10%, #0e0d0c 30%);*/
-      /*opacity: 0.2;*/
-      /*height: 272px;*/
       margin-top: 85px;
       i {
         font-size: 90px;
@@ -100,54 +98,6 @@
       }
       .no {
         color: #808080;
-      }
-    }
-    .account-list {
-      padding: 0 40px;
-      .wx-account {
-        height: 49px;
-        border: 1px solid #808080;
-        border-radius: 4px;
-        color: #fff;
-        font-size: 15px;
-        line-height: 49px;
-        img {
-          width: 28px;
-          height: 28px;
-          border-radius: 28px;
-          margin: 10px 15px;
-        }
-      }
-      .jfk-account-list {
-        margin-bottom: 50px;
-        li {
-          list-style: none;
-          line-height: 50px;
-          height: 50px;
-          color: #fff;
-          opacity: 0.4;
-          text-align: left;
-          text-indent: 12px;
-          .split-line {
-            height: 1px;
-            background-color: #fff;
-            opacity: 0.4;
-          }
-          &.choosed {
-            opacity: 1;
-            i{
-              color: #ad9565;
-              opacity: 1;
-            }
-          }
-          i {
-            float: right;
-            margin-right: 12px;
-            color: #fff;
-            font-size: 15px;
-            opacity: 0.4;
-          }
-        }
       }
     }
   }

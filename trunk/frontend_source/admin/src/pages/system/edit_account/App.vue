@@ -10,9 +10,12 @@
             <el-step v-if="this.SuperTube === '1'" title="账号权限"></el-step>
           </el-steps>
           <div class="bind_wx" v-if="qrCode.toBindStatus">
+            <div class="cancel-btn" @click="cancelWxPopup()">
+              <i class="el-icon-close"></i>
+            </div>
             <img :src="qrCode.imgUrl" alt="二维码">
             <p>请打开微信扫描二维码进行登陆</p>
-            <span>{{qrCode.expireTime}}</span>
+            <span>过期时间：{{qrCode.expireDatetime}}</span>
           </div>
           <!--基础信息填写界面-->
           <el-form v-if="activeStep === 0" :model="accountInfor" :rules="accountRules" ref="accountInfor">
@@ -39,7 +42,7 @@
               </el-form-item>
             </template>
             <el-form-item label="绑定微信" v-if="accountInfor.bind_status === '1'">
-              <span class="bind_wx">{{accountInfor.wx_nickname}}</span>
+              <span>{{accountInfor.wx_nickname}}</span>
               <el-button type="primary" size="small" icon="plus">解除绑定</el-button>
             </el-form-item>
             <el-form-item label="绑定微信" v-else>
@@ -435,7 +438,9 @@
         qrCode: {
           bindStatus: 0,
           toBindStatus: false,
-          imgUrl: ''
+          imgUrl: '',
+          expireTime: '',
+          expireDatetime: ''
         }
       }
     },
@@ -502,11 +507,12 @@
       // 绑定微信
       bindAction () {
         // 获取绑定二维码
+        this.qrCode.toBindStatus = true
         if (!this.qrCode.imgUrl) {
           getBindCode({admin_id: this.urlParam.accountId}).then((res) => {
             this.qrCode.imgUrl = res.web_data.imgUrl
-            this.qrCode.expireTime = res.web_data.expire_time * 1000
-            this.qrCode.toBindStatus = true
+            this.qrCode.expireTime = res.web_data.expire_time
+            this.qrCode.expireDatetime = res.web_data.expire_datetime
           })
         }
       },
@@ -535,7 +541,7 @@
           this.accountInfor.status = temp ? '有效' : '无效'
           this.accountInfor.password = 'something'
           this.qrCode.bindStatus = res.web_data.accountInfo.bind_status
-          this.qrCode.toBindStatus = this.qrCode.bindStatus === '1'
+//          this.qrCode.toBindStatus = this.qrCode.bindStatus === '1'
           // 处理公众号数据
           this.relatedInforList = res.web_data.entities
           for (let j = 0; j < this.relatedInforList.length; j++) {
@@ -880,6 +886,10 @@
 //         新增成功 跳转 链接
           window.location.href = res.web_data.url
         })
+      },
+      // 绑定微信
+      cancelWxPopup () {
+        this.qrCode.toBindStatus = false
       }
     }
   }
@@ -891,6 +901,7 @@
     .bind_wx {
       width: 400px;
       height: 320px;
+      position: relative;
       text-align: center;
       background-color: #fff;
       border: 1px solid #eee;
@@ -900,6 +911,11 @@
       margin-left: -200px;
       margin-top: -150px;
       z-index: 10;
+      .cancel-btn {
+        position: absolute;
+        right: 10px;
+        top: 10px;
+      }
     }
     .el-form-item {
       width: 600px;

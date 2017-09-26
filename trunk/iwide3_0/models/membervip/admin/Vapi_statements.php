@@ -47,14 +47,21 @@ class Vapi_statements extends MY_Model_Member {
      * @return array
      * @author zhangyi  <zhangyi@mofly.cn>
      */
-    public function hotel_list( $inter_id ,$select = '*'){
+    public function hotel_list( $inter_id ,$select = '*',$hotel_ids = array()){
         $where = array(
             'inter_id'  => $inter_id
         );
 
         $this->db->from('hotels')->select( $select );
         $result = $this->db
-            ->where($where)->get()->result_array();
+            ->where($where);
+        if(!empty($hotel_ids) && is_array($hotel_ids)){
+            $result = $result->where_in('hotel_id',$hotel_ids);
+        }
+
+        $result = $result
+            ->get()
+            ->result_array();
         return $result;
 //        $this->tag_data_group['data']  = $result;
 //        $this->tag_data['web_data'] = $this->tag_data_group;
@@ -75,28 +82,31 @@ class Vapi_statements extends MY_Model_Member {
     public function distribution_list( $inter_id ,$limit = 100 ,$offset = 0 , $filter = array() ,$type = 'reg'){
         $filter['inter_id'] = $inter_id;
         $filter['type'] = $type;
-
         $order_by = "dr.last_update_time";
         $where = array();
         foreach($filter as $k => $v){
-            if(strpos($k,"send_time") === false){
+            if( $k == 'hotel_id' && is_array($v)){
+                $where_in = $v;
+            }else if(strpos($k,"send_time") === false){
                 $where["dr.".$k] = $v;
             }else{
                 $order_by = "dsr.send_time";
                 $where["dsr.".$k] = $v;
             }
         }
+
         $result = $this->_shard_db()->from('distribution_record dr')
             ->select("dsr.batch_no,dsr.send_time,dr.*,i.member_info_id,i.membership_number,i.telephone,i.name")
             ->join('member_info as i','dr.open_id = i.open_id and dr.sn = i.membership_number','left')
             ->join('distribution_send_record as dsr',' dsr.sn = dr.record_id AND dsr.inter_id = dr.inter_id','left')
-//            ->join('hotel_staff as s','s.inter_id = dr.inter_id and dr.saler_id = s.qrcode_id','left')
-            ->where($where)
             ->where("dr.sales_id is not null")
             ->where("dr.last_update_time >", 0)
-            ->where("dr.sn !=","");
-//            ->order_by("dr.createtime","desc")
-//            ->get();
+            ->where("dr.sn !=","")
+            ->where($where);
+
+        if(isset($where_in)){
+            $result = $result->where_in('dr.hotel_id',$where_in);
+        }
 
         $return = array();
 
@@ -104,14 +114,19 @@ class Vapi_statements extends MY_Model_Member {
         $total_page =  (int) ($return['total'] / $limit);
         $return['total_page'] =  ($total_page <= 0 ) ? 1 : $total_page;
         $return['per_page'] = $limit;
-        $return['data']  = $this->_shard_db()->from('distribution_record dr')
+        $data_db_obj = $this->_shard_db()->from('distribution_record dr')
             ->select("dsr.batch_no,dsr.send_time,dr.*,i.member_info_id,i.membership_number,i.telephone,i.name")
             ->join('member_info as i','dr.open_id = i.open_id and dr.sn = i.membership_number','left')
             ->join('distribution_send_record as dsr',' dsr.sn = dr.record_id AND dsr.inter_id = dr.inter_id','left')
-            ->where($where)
             ->where("dr.sales_id is not null")
             ->where("dr.last_update_time >", 0)
-            ->where("dr.sn !=","")
+            ->where("dr.sn !=","");
+
+        if(isset($where_in)){
+            $data_db_obj = $data_db_obj->where_in('dr.hotel_id',$where_in);
+        }
+        $return['data']  = $data_db_obj
+            ->where($where)
             ->limit($limit)
             ->offset($offset)
             ->order_by($order_by,"desc")
@@ -119,13 +134,6 @@ class Vapi_statements extends MY_Model_Member {
             ->result_array();   //数据
 
         return $return;
-//        $this->_shard_db()->from('distribution_record');
-//        $result = $this->_shard_db()->select('*')
-//            ->where($where)
-//            ->limit($limit)
-//            ->offset($offset)
-//            ->get()->result_array();
-//        return $result;
     }
 
     //注册分销列表(含会员信息)
@@ -139,21 +147,27 @@ class Vapi_statements extends MY_Model_Member {
         $order_by = "dr.last_update_time";
         $where = array();
         foreach($filter as $k => $v){
-            if(strpos($k,"send_time") === false){
+            if( $k == 'hotel_id' && is_array($v)){
+                $where_in = $v;
+            }else if(strpos($k,"send_time") === false){
                 $where["dr.".$k] = $v;
             }else{
                 $order_by = "dsr.send_time";
                 $where["dsr.".$k] = $v;
             }
         }
-        $result = $this->_shard_db()->from('distribution_record dr')
+        $data_db_obj = $this->_shard_db()->from('distribution_record dr')
             ->select("dsr.batch_no,dsr.send_time,dr.*,i.member_info_id,i.membership_number,i.telephone,i.name")
             ->join('member_info as i','dr.open_id = i.open_id and dr.sn = i.membership_number','left')
             ->join('distribution_send_record as dsr',' dsr.sn = dr.record_id AND dsr.inter_id = dr.inter_id','left')
-            ->where($where)
             ->where("dr.sales_id is not null")
             ->where("dr.last_update_time >", 0)
-            ->where("dr.sn !=","")
+            ->where("dr.sn !=","");
+        if(isset($where_in)){
+            $data_db_obj = $data_db_obj->where_in("dr.hotel_id",$where_in);
+        }
+        $result = $data_db_obj
+            ->where($where)
             ->order_by($order_by,"desc")
             ->get()->result_array();
 
@@ -179,7 +193,9 @@ class Vapi_statements extends MY_Model_Member {
         $order_by = "dcp.last_update_time";
         $where = array();
         foreach($filter as $k => $v){
-            if(strpos($k,"send_time") === false){
+            if( $k == 'hotel_id' && is_array($v)){
+                $where_in = $v;
+            }else if(strpos($k,"send_time") === false){
                 $where["dcp.".$k] = $v;
             }else{
                 $order_by = "dsr.send_time";
@@ -194,17 +210,26 @@ class Vapi_statements extends MY_Model_Member {
             ->join('distribution_send_record as dsr',' dsr.sn = dcp.deposit_card_id AND dsr.inter_id = dcp.inter_id','left')
             ->where("dcp.distribution_num !=","")
             ->where($where);
+
+        if(isset($where_in)){
+            $result = $result->where_in("dcp.hotel_id",$where_in);
+        }
+
         $return = array();
         $return['total'] = $result->get()->num_rows();              //总数
         $total_page =  (int) ($return['total'] / $limit);
         $return['total_page'] =  ($total_page <= 0 ) ? 1 : $total_page;
         $return['per_page'] = $limit;
-        $return['data']  = $this->_shard_db()->from('iwide_deposit_card_pay dcp')
+        $data_db_obj = $this->_shard_db()->from('iwide_deposit_card_pay dcp')
             ->select("dsr.batch_no,dsr.send_time,dcp.*, FROM_UNIXTIME( `dcp`.createtime) as createtime,dc.distribution_money,dc.deposit_type,dc.title,dc.money,i.member_info_id,i.membership_number,i.telephone,i.name")
             ->join('deposit_card as dc','dcp.deposit_card_id = dc.deposit_card_id','left')
             ->join('member_info as i','dcp.member_info_id = i.member_info_id ','left')
             ->join('distribution_send_record as dsr',' dsr.sn = dcp.deposit_card_pay_id AND dsr.inter_id = dcp.inter_id','left')
-            ->where("dcp.distribution_num !=","")
+            ->where("dcp.distribution_num !=","");
+        if(isset($where_in)){
+            $data_db_obj = $data_db_obj->where_in("dcp.hotel_id",$where_in);
+        }
+        $return['data']  = $data_db_obj
             ->where($where)
             ->limit($limit)
             ->offset($offset)
@@ -220,7 +245,9 @@ class Vapi_statements extends MY_Model_Member {
         $order_by = "dcp.last_update_time";
         $where = array();
         foreach($filter as $k => $v){
-            if(strpos($k,"send_time") === false){
+            if( $k == 'hotel_id' && is_array($v)){
+                $where_in = $v;
+            }else if(strpos($k,"send_time") === false){
                 $where["dcp.".$k] = $v;
             }else{
                 $order_by = "dsr.send_time";
@@ -228,12 +255,17 @@ class Vapi_statements extends MY_Model_Member {
             }
         }
         $where['dc.is_distribution'] = 't';
-        return $this->_shard_db()->from('iwide_deposit_card_pay dcp')
+        $result = $this->_shard_db()->from('iwide_deposit_card_pay dcp')
             ->select("dsr.batch_no,dsr.send_time,dcp.*, FROM_UNIXTIME( `dcp`.createtime) as createtime,dc.distribution_money,dc.deposit_type,dc.title,dc.money,i.member_info_id,i.membership_number,i.telephone,i.name")
             ->join('deposit_card as dc','dcp.deposit_card_id = dc.deposit_card_id','left')
             ->join('member_info as i','dcp.member_info_id = i.member_info_id ','left')
             ->join('distribution_send_record as dsr',' dsr.sn = dcp.deposit_card_pay_id AND dsr.inter_id = dcp.inter_id','left')
-            ->where("dcp.distribution_num !=","")
+            ->where("dcp.distribution_num !=","");
+        if(isset($where_in)){
+            $result = $result->where_in("dcp.hotel_id",$where_in);
+        }
+
+        return $result
             ->where($where)
             ->order_by($order_by,"desc")
             ->get()->result_array();   //数据

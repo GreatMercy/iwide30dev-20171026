@@ -5,8 +5,8 @@ module.exports = {
     secure: false
   },
   '/index.php/iapi/v1': {
-    // target: 'http://test008.iwide.cn',
-    target: 'http://30.iwide.cn',
+    target: 'http://test008.iwide.cn',
+    // target: 'http://30.iwide.cn',
     changeOrigin: true,
     secure: false
   },

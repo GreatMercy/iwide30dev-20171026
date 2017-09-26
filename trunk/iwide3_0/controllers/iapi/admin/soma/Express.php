@@ -41,7 +41,7 @@ class Express extends MY_Admin_Iapi
     }
 
     /**
-     * 其他物流发货
+     * 其他物流发货（除了顺丰对接，即手动发货后填运单）
      *
      * POST request format array('shipping_id' => '557', 'distributor' => '', 'tracking_no' => '')
      * @author daikanwu
@@ -51,16 +51,16 @@ class Express extends MY_Admin_Iapi
         $post = json_decode($this->input->raw_input_stream, true);
 
         if (empty($post['shipping_id'])) {
-            $this->out_put_msg(AdminConst::OPER_STATUS_FAIL_TOAST, 'shippingId不能为空', '', $this->route);
+            $this->out_put_msg(AdminConst::OPER_STATUS_FAIL_TOAST, 'shippingId不能为空');
         }
 
         //检查物流商
         if (empty($post['distributor'])) {
-            $this->out_put_msg(AdminConst::OPER_STATUS_FAIL_TOAST, '快递商不能为空', '', $this->route);
+            $this->out_put_msg(AdminConst::OPER_STATUS_FAIL_TOAST, '快递商不能为空');
         }
 
         if (empty($post['tracking_no'])) {
-            $this->out_put_msg(AdminConst::OPER_STATUS_FAIL_TOAST, '快递单号不能为空', '', $this->route);
+            $this->out_put_msg(AdminConst::OPER_STATUS_FAIL_TOAST, '快递单号不能为空');
         }
 
         $this->load->model('soma/Consumer_shipping_model', 'shipping_model');
@@ -69,9 +69,8 @@ class Express extends MY_Admin_Iapi
 
         //检查运单是否存在
         $model = $model->load($post[$pk]);
-
         if (!$model) {
-            $this->out_put_msg(AdminConst::OPER_STATUS_FAIL_TOAST, '该运单不存在', '', $this->route);
+            $this->out_put_msg(AdminConst::OPER_STATUS_FAIL_TOAST, '该运单不存在');
         }
 
         //检查订单是否存在
@@ -86,34 +85,39 @@ class Express extends MY_Admin_Iapi
             $this->out_put_msg(AdminConst::OPER_STATUS_FAIL_TOAST, '该订单已发货', '', $this->route);
         }
 
+        // 检查发货酒店是否配置
+        $product_id = $model->m_get('product_id');
+        $this->load->model('soma/Product_package_model', 'product_model');
+        $product_detail = $this->product_model->get_product_package_phone_by_product_id($product_id, $this->inter_id);
+        if (empty($product_detail)) {
+            $this->out_put_msg(AdminConst::OPER_STATUS_FAIL_TOAST, '商品信息不存在，不能发货');
+        }
+        if ($product_detail['send_hotel'] <= -1) {
+            $this->out_put_msg(AdminConst::OPER_STATUS_FAIL_TOAST, '发货酒店没配置，不能发货');
+        }
+
         //拉取分账表数据
         $separate_model = new SeparateBilling();
         $separate_info = $separate_model->getOrderBillingInfo($model->m_get('order_id'));
+        $post['status'] = $model::STATUS_SHIPPED;
+
         if (empty($separate_info)) {
-            //分帐表数据空的话只走发货流程
+
             //更新订单状态与发送模板消息
             $this->updateShippingStatusAndSendNotice($post, $model, $pk);
 
+            //分帐表数据空的话 新增一条分账记录
+            $this->addSeparateBill($model->m_get('order_id'), $product_detail['send_hotel']);
+
             $this->out_put_msg(AdminConst::OPER_STATUS_SUCCESS, '');
         } else {
-            $product_id = $model->m_get('product_id');
-            $this->load->model('soma/Product_package_model', 'product_model');
-            $product_detail = $this->product_model->get_product_package_phone_by_product_id($product_id, $this->inter_id);
-
-            if ($product_detail['send_hotel'] == -1) {
-                $this->out_put_msg(AdminConst::OPER_STATUS_FAIL_TOAST, '发货酒店没配置，不能发货');
-            }
-            if ($product_detail['send_hotel'] < 0) {
-                $this->out_put_msg(AdminConst::OPER_STATUS_FAIL_TOAST, 'send_hotel小于0, 不能发货');
-            }
 
             //更新订单状态与发送模板消息
             $this->updateShippingStatusAndSendNotice($post, $model, $pk);
 
             //分帐
-            $separate_model = new SeparateBilling();
             try {
-                $this->saveSeparateBill($separate_model, $model, $product_detail);
+                $this->saveSeparateBill($separate_model, $separate_info, $product_detail);
             } catch (\Exception $e) {
                 $this->out_put_msg(AdminConst::OPER_STATUS_FAIL_TOAST, $e->getMessage());
             }
@@ -178,138 +182,129 @@ class Express extends MY_Admin_Iapi
             $this->out_put_msg(AdminConst::OPER_STATUS_FAIL_ALERT, '订单不存在', '', $this->route);
         }
 
-        //记录校验不通过的order
+        //记录校验不通过的 order
         $check_fail = array();
+        $create_fail = $create_success = array();
+        $separate_model = new SeparateBilling();
+        $this->load->model('soma/Product_package_model', 'product_model');
         foreach ($shipping_info as $v) {
             if ($v['status'] == $model::STATUS_SHIPPED) {
-                $check_fail[$v['shipping_id']] = array(
+                $check_fail[$v[$pk]] = array(
                     'message' => '该订单已发货',
                     'order_id' => $v['order_id']
                 );
                 continue;
             }
             if (empty($v['order_id'])) {
-                $check_fail[$v['shipping_id']] = array(
+                $check_fail[$v[$pk]] = array(
                     'message' => '订单号为空',
                     'order_id' => $v['order_id']
                 );
                 continue;
             }
             if (empty($v['name'])) {
-                $check_fail[$v['shipping_id']] = array(
+                $check_fail[$v[$pk]] = array(
                     'message' => '货物名称为空',
                     'order_id' => $v['order_id']
                 );
                 continue;
             }
             if (empty($v['address'])) {
-                $check_fail[$v['shipping_id']] = array(
+                $check_fail[$v[$pk]] = array(
                     'message' => '收货地址为空',
                     'order_id' => $v['order_id']
                 );
                 continue;
             }
             if (empty($v['contacts'])) {
-                $check_fail[$v['shipping_id']] = array(
+                $check_fail[$v[$pk]] = array(
                     'message' => '收件人为空',
                     'order_id' => $v['order_id']
                 );
                 continue;
             }
             if (empty($v['phone'])) {
-                $check_fail[$v['shipping_id']] = array(
+                $check_fail[$v[$pk]] = array(
                     'message' => '收件人手机为空',
                     'order_id' => $v['order_id']
                 );
                 continue;
             }
-        }
+            $model = $model->load($v[$pk]);
+            if (!$model) {
+                $check_fail[$v[$pk]] = array(
+                    'message' => '运单信息不存在，不能发货',
+                    'order_id' => $v['order_id']
+                );
+                continue;
+            }
+            $product_id = $model->m_get('product_id');
+            $product_detail = $this->product_model->get_product_package_phone_by_product_id($product_id, $this->inter_id);
+            if (empty($product_detail)) {
+                $check_fail[$v[$pk]] = array(
+                    'message' => '商品信息不存在，不能发货',
+                    'order_id' => $v['order_id']
+                );
+                continue;
+            }
+            if ($product_detail['send_hotel'] <= -1) {
+                $check_fail[$v[$pk]] = array(
+                    'message' => '发货酒店没配置，不能发货',
+                    'order_id' => $v['order_id']
+                );
+                continue;
+            }
 
-        //调顺丰的下单接口
-        $create_fail = $create_success = array();
-        $provider = new ExpressProvider();
-        $express = $provider->resolve($provider::TYPE_SF);
-        foreach ($shipping_info as $v) {
-            if (!in_array($v['shipping_id'], array_keys($check_fail))) {
-                $res = $express->createShippingOrder($v);
-                if ($res->getStatus() == Result::STATUS_FAIL) {
-                    $create_fail[$v['shipping_id']] = array(
-                        'message' => $res->getMessage(),
-                        'order_id' => $v['order_id'],
-                        'tracking_no' => ''
-                    );
-                } else {
-                    $create_success[$v['shipping_id']] = array(
-                        'message' => '下单成功',
-                        'order_id' => $v['order_id'],
-                        'tracking_no' => $res->getData()
-                    );
-                }
+            //调用顺丰接口发货
+            $provider = new ExpressProvider();
+            $express = $provider->resolve($provider::TYPE_SF);
+            $res = $express->createShippingOrder($v);
+            if ($res->getStatus() == Result::STATUS_FAIL) {
+                $create_fail[$v['shipping_id']] = array(
+                    'message' => $res->getMessage(),
+                    'order_id' => $v['order_id'],
+                    'tracking_no' => ''
+                );
+                $update_data['status'] = Consumer_shipping_model::STATUS_SHIPPED_FAIL;
+                $update_data['post_time'] = date('Y-m-d H:i:s');
+                $update_data['shipping_id'] = $v[$pk];
+
+                //更新订单状态与发送模板消息
+                $this->updateShippingStatusAndSendNotice($update_data, $model, $pk, 0);
+            } else {
+                $create_success[$v['shipping_id']] = array(
+                    'message' => '下单成功',
+                    'order_id' => $v['order_id'],
+                    'tracking_no' => $res->getData()
+                );
+                $update_data['status'] = Consumer_shipping_model::STATUS_SHIPPED;
+                $update_data['tracking_no'] = $res->getData();
+                $update_data['post_time'] = date('Y-m-d H:i:s');
+                $update_data['shipping_id'] = $v[$pk];
+
+                //更新订单状态与发送模板消息
+                $this->updateShippingStatusAndSendNotice($update_data, $model, $pk);
+            }
+
+            //拉取分账表数据 重构
+            $separate_info = $separate_model->getOrderBillingInfo($model->m_get('order_id'));
+            $update_data['distributor'] = 'a_sf';
+
+            if (empty($separate_info)) {
+                //新增一条分账数据
+                $this->addSeparateBill($model->m_get('order_id'), $product_detail['send_hotel']);
+            } else {
+                //更新分帐
+                $this->saveSeparateBill($separate_model, $separate_info, $product_detail);
             }
         }
 
         //计算成功单数和失败单数
         $tmp = $check_fail + $create_fail;
-        $create = $create_fail + $create_success;
+//        $create = $create_fail+$create_success;
         $count = count($shipping_info);
         $success_count = count($create_success);
         $fail_count = count($tmp);
-
-        //更新状态（下单成功+下单失败）
-        $update_data = array();
-        $update_data['distributor'] = 'a_sf';
-        $update_data['post_admin'] = $this->session->get_admin_username();
-        $update_data['remote_ip'] = $this->input->ip_address();
-        foreach ($shipping_info as &$val) {
-            foreach ($create as $k => $v) {
-                if ($val[$pk] == $k) {
-                    if (empty($v['tracking_no'])) {
-                        $val['status'] = Consumer_shipping_model::STATUS_SHIPPED_FAIL;
-                    } else {
-                        $val['status'] = Consumer_shipping_model::STATUS_SHIPPED;
-                        $val['tracking_no'] = $v['tracking_no'];
-                    }
-                }
-            }
-        }
-        unset($val);
-
-        $openids = array();
-        foreach ($shipping_info as $v) {
-            $update_data['post_time'] = date('Y-m-d H:i:s');
-            $update_data['status'] = $v['status'];
-            $update_data['tracking_no'] = $v['tracking_no'];
-
-            //更新数据
-            $result = $model->load($v[$pk])->m_sets($update_data)->m_save();
-
-            //下单成功并且更新状态成功 组装需要发放消息的人员信息
-            if ($result && $v['status'] == Consumer_shipping_model::STATUS_SHIPPED) {
-                $openids[] = array(
-                    'openid' => $v['openid'],
-                    'inter_id' => $v['inter_id'],
-                    'shipping_id' => $v[$pk],
-                    'tracking_no' => $v['tracking_no'],
-                    'distributor' => 'a_sf',
-                    'consumer_id' => $v['consumer_id'],
-                );
-            }
-        }
-
-        //发送模版消息
-        if (count($openids) > 0) {
-            $this->load->model('soma/Message_wxtemp_template_model');
-            $business = 'package';
-            foreach ($openids as $k => $v) {
-                $model = $model->load($v[$pk]);
-                if ($model) {
-                    $model->consumer_id = $v['consumer_id'];
-                    $model->distributor = $v['distributor'];
-                    $model->tracking_no = $v['tracking_no'];
-                    $this->Message_wxtemp_template_model->send_template_by_shipping_success($model, $v['openid'], $v['inter_id'], $business);
-                }
-            }
-        }
 
         if ($fail_count == $count) {
             $this->out_put_msg(AdminConst::OPER_STATUS_FAIL_TOAST, '选择' . $count . '单,全部发货失败', $tmp, $this->route);
@@ -524,7 +519,7 @@ class Express extends MY_Admin_Iapi
 
 
     /**
-     * 批量导入订单
+     * 批量导入订单发货
      *
      * @example POST /index.php/iapi/v1/soma/express/batch_post
      * $_POST['distributor'] 快递商
@@ -593,6 +588,7 @@ class Express extends MY_Admin_Iapi
 
         $fail_data = $openids = array();
         $separate_model = new SeparateBilling();
+        $this->load->model('soma/Product_package_model', 'product_model');
         foreach ($list as $k => $v) {
             if (empty($v['address'])) {
                 $fail_data[$k]['message'] = '地址信息不能为空';
@@ -615,69 +611,43 @@ class Express extends MY_Admin_Iapi
                 continue;
             }
 
+            $model = $model->load($v[$pk]);
+            if (!$model) {
+                $fail_data[$k]['message'] = '运单信息不存在，不能发货';
+                $fail_data[$k][$pk] = $v[$pk];
+                continue;
+            }
+            $product_id = $model->m_get('product_id');
+            $product_detail = $this->product_model->get_product_package_phone_by_product_id($product_id, $this->inter_id);
+            if (empty($product_detail)) {
+                $fail_data[$k]['message'] = '商品信息不存在，不能发货';
+                $fail_data[$k][$pk] = $v[$pk];
+                continue;
+            }
+            if ($product_detail['send_hotel'] <= -1) {
+                $fail_data[$k]['message'] = '发货酒店没配置，不能发货';
+                $fail_data[$k][$pk] = $v[$pk];
+                continue;
+            }
+
             $update_data['tracking_no'] = $shippingIds[$v[$pk]];
             $update_data['post_time'] = date('Y-m-d H:i:s');
+            $update_data['shipping_id'] = $v[$pk];
 
-            $model = $model->load($v[$pk]);
+            //更新订单状态与发送模板消息
+            $this->updateShippingStatusAndSendNotice($update_data, $model, $pk);
 
-            //更新数据
-//            $result = $model->load($v[$pk])->m_sets($update_data)->m_save();
-//
-//            //更新状态成功 组装需要发放消息的人员信息
-//            if ($result) {
-//                $openids[] = array(
-//                    'openid' => $v['openid'],
-//                    'inter_id' => $v['inter_id'],
-//                    'shipping_id' => $v[$pk],
-//                    'tracking_no' => $update_data['tracking_no'],
-//                    'distributor' => $distributor,
-//                    'consumer_id' => $v['consumer_id'],
-//                );
-//            }
-            //拉取分账表数据
+            //拉取分账表数据 重构
             $separate_info = $separate_model->getOrderBillingInfo($model->m_get('order_id'));
             if (empty($separate_info)) {
-                //分帐表数据空的话只走发货流程
-                //更新订单状态与发送模板消息
-                $this->updateShippingStatusAndSendNotice($update_data, $model, $pk);
+                //新增分账数据
+                $this->addSeparateBill($model->m_get('order_id'), $product_detail['send_hotel']);
             } else {
-                $product_id = $model->m_get('product_id');
-
-                $product_detail = $this->product_model->get_product_package_phone_by_product_id($product_id, $this->inter_id);
-
-                if ($product_detail['send_hotel'] == -1) {
-//                    $this->out_put_msg(AdminConst::OPER_STATUS_FAIL_TOAST, '发货酒店没配置，不能发货');
-                    continue;
-                }
-                if ($product_detail['send_hotel'] < 0) {
-//                    $this->out_put_msg(AdminConst::OPER_STATUS_FAIL_TOAST, 'send_hotel小于0, 不能发货');
-                    continue;
-                }
-
-                //更新订单状态与发送模板消息
-                $this->updateShippingStatusAndSendNotice($post, $model, $pk);
-
                 //分帐
-                $this->saveSeparateBill($separate_model, $model, $product_detail);
+                $this->saveSeparateBill($separate_model, $separate_info, $product_detail);
             }
         }
 
-        //发送模版消息
-//        if (count($openids) > 0) {
-//            $this->load->model('soma/Message_wxtemp_template_model');
-//            $business = 'package';
-//            foreach ($openids as $k => $v) {
-//                $model = $model->load($v[$pk]);
-//                if ($model) {
-//                    $model->consumer_id = $v['consumer_id'];
-//                    $model->distributor = $v['distributor'];
-//                    $model->tracking_no = $v['tracking_no'];
-//                    $this->Message_wxtemp_template_model->send_template_by_shipping_success($model, $v['openid'], $v['inter_id'], $business);
-//                }
-//            }
-//        }
-
-        //
         $success_count = count($shippingIds) - count($fail_data);
         $notice = '成功' . $success_count . '单,' . '失败' . count($fail_data) . '单';
         if (count($fail_data) > 0) {
@@ -797,53 +767,90 @@ class Express extends MY_Admin_Iapi
      * @param $post
      * @param $model
      * @param $pk
+     * @param int $send_flag 是否发送模板消息 1 发送 0 不发送
      * @return bool
      * @author daikanwu <daikanwu@jperation.com>
      */
-    protected function updateShippingStatusAndSendNotice($post, $model, $pk)
+    protected function updateShippingStatusAndSendNotice($post, $model, $pk, $send_flag = 1)
     {
-//        $response = new Result();
-
         //更新运单状态
         $post['post_admin'] = $this->session->get_admin_username();
         $post['remote_ip'] = $this->input->ip_address();
-        $result = $model->load($post[$pk])->post_shipping($post);
-//        if (!$result) {
-//            $response->setMessage('更新订单状态失败');
-//            return $response;
-//        }
+
+        $model->load($post[$pk])->post_shipping($post);
 
         //发送模板消息
-        $this->load->model('soma/Message_wxtemp_template_model', 'MessageWxtempTemplateModel');
-        $MessageWxtempTemplateModel = $this->MessageWxtempTemplateModel;
-        $inter_id = $this->inter_id;
-        $business = 'package';
-        $model = $model->load($post[$pk]);
-        $openid = $model->m_get('openid');
-        $model->distributor = $post['distributor'];
-        $model->tracking_no = $post['tracking_no'];
-        $model->consumer_id = $model->m_get('consumer_id');
-        $MessageWxtempTemplateModel->send_template_by_shipping_success($model, $openid, $inter_id, $business);
-
-//        $response->setStatus(Result::STATUS_OK);
-//        return $response;
+        if ($send_flag == 1) {
+            $this->load->model('soma/Message_wxtemp_template_model', 'MessageWxtempTemplateModel');
+            $MessageWxtempTemplateModel = $this->MessageWxtempTemplateModel;
+            $inter_id = $this->inter_id;
+            $business = 'package';
+            $model = $model->load($post[$pk]);
+            $openid = $model->m_get('openid');
+            $model->distributor = $post['distributor'];
+            $model->tracking_no = $post['tracking_no'];
+            $model->consumer_id = $model->m_get('consumer_id');
+            $MessageWxtempTemplateModel->send_template_by_shipping_success($model, $openid, $inter_id, $business);
+        }
     }
 
     /**
      * 保存分帐信息
      * @param $separate_model 分账模型
-     * @param $model shippping模型
-     * @param $product_detail
+     * @param $separate_info 分账具体信息
+     * @param $product_detail 商品详情
      * @return bool
      * @author daikanwu <daikanwu@jperation.com>
      */
-    protected function saveSeparateBill($separate_model, $model, $product_detail)
+    protected function saveSeparateBill($separate_model, $separate_info, $product_detail)
     {
-        $separate_info = $separate_model->getOrderBillingInfo($model->m_get('order_id'));
+//        $separate_info = $separate_model->getOrderBillingInfo($model->m_get('order_id'));
         $save_data['bill_hotel'] = $product_detail['send_hotel'];
         $save_data['bill_id'] = $separate_info[0]['bill_id'];
         $save_data['status'] = SeparateBilling::STATUS_CAN_PAY_YES;
         $separate_model->saveBilling($save_data);
+    }
+
+
+    /**
+     * 通票商品新增邮寄分账
+     * @param $order_id
+     * @param $bill_hotel 发货酒店
+     * @return bool
+     * @author daikanwu <daikanwu@jperation.com>
+     */
+    protected function addSeparateBill($order_id, $bill_hotel)
+    {
+
+        $separate_model = new SeparateBilling();
+        $info = $separate_model->getOrderBillingInfo($order_id);
+
+        // 订单没有分账信息才写入，避免重复回调或重复重建写入错误信息
+        if (empty($info)) {
+            $this->load->model('soma/sales_order_model');
+            if ($order = $this->sales_order_model->load($order_id)) {
+                $inter_id = $order->m_get('inter_id');
+                $business = $order->m_get('business');
+                $items = $order->get_order_items($business, $inter_id);
+
+                // 只为通票商品时才插入数据（即多店铺商品）
+                if ($items[0]['hotel_id'] == SeparateBilling::MULITPLE_HOTEL_ID) {
+                    $data['order_id'] = $order_id;
+                    $data['inter_id'] = $inter_id;
+                    $data['hotel_id'] = $items[0]['hotel_id'];
+                    $data['order_qty'] = $items[0]['qty'];
+                    $data['bill_hotel'] = $bill_hotel;
+                    $data['bill_qty'] = $data['order_qty'];
+                    $data['can_auto_check'] = SeparateBilling::CAN_AUTO_CHECK_NO;
+                    $data['payment_time'] = $order->m_get('payment_time');
+                    $data['create_time'] = date('Y-m-d H:i:s');
+                    $data['bill_time'] = $data['create_time'];
+                    $data['status'] = SeparateBilling::STATUS_CAN_PAY_YES;
+
+                    return $separate_model->saveBilling($data);
+                }
+            }
+        }
     }
 
 }

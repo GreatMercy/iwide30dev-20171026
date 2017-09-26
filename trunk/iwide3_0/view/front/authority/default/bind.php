@@ -12,12 +12,13 @@
     <meta name=x5-page-mode content=app>
     <meta name=viewport content="width=device-width,minimum-scale=1,maximum-scale=1,user-scalable=no">
     <title>首页</title>
-    <link rel="stylesheet" href="<?php echo refer_res('app.css','public/wx/vue') ?>">
+    <link rel="stylesheet" href="<?php echo refer_res('app.css','public/wx') ?>">
 </head>
 <body>
 <div id=app></div>
 <div id=scriptArea data-page-id="bindWx"></div>
-<script type=text/javascript src="<?php echo refer_res('manifest.js','public/wx/vue') ?>"></script>
-<script type=text/javascript src="<?php echo refer_res('app.js','public/wx/vue') ?>"></script>
+<script type=text/javascript src="<?php echo refer_res('manifest.js','public/wx') ?>"></script>
+<script type=text/javascript src="<?php echo refer_res('vendor.js','public/wx') ?>"></script>
+<script type=text/javascript src="<?php echo refer_res('app.js','public/wx') ?>"></script>
 </body>
 </html>

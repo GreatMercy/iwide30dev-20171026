@@ -425,6 +425,8 @@
 
 .icon-font_zh_ci_qkbys:before { content: "\e681"; }
 
+.icon-font_zh_cha_qkbys:before { content: "\e686"; }
+
 .icon-font_zh_chu_2_qkbys:before { content: "\e682"; }
 
 .icon-font_zh_dai_qkbys:before { content: "\e683"; }
@@ -462,6 +464,8 @@
 .icon-font_zh_xiao_qkbys:before { content: "\e695"; }
 
 .icon-font_zh_xuan__qkbys:before { content: "\e696"; }
+
+.icon-font_zh_xun_qkbys:before { content: "\e697"; }
 
 .icon-font_zh_yue_qkbys:before { content: "\e69c"; }
 
@@ -600,6 +604,12 @@
 .icon-booking_icon_Bathcro:before { content: "\e6e0"; }
 
 /*.icon-icon_jump_normal:before { content: "\e6e1"; }*/
+
+/*.icon-user_icon_jump_normal:before { content: "\e60b"; }*/
+
+/*.icon-icon_jump_normal:before { content: "\e6e1"; }*/
+
+/*.icon-blankpage_icon_nohotel_bg:before { content: "\e67f"; }*/
 
 /*其他*/
 .icon-booking_icon_addpictures_normal:before { content: "\e69d"; }

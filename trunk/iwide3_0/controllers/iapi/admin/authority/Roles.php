@@ -495,7 +495,8 @@ $user['admin_profile']['type'] = 2;
         $post_data['func_name']=  isset($post['func_name'])?$post['func_name']:'';
         $post_data['func_des']=  isset($post['func_des'])?$post['func_des']:'';
         $post_data['func_state']=  isset($post['func_state'])?$post['func_state']:'';
-        $post_data['account_range']=  isset($post['account_range'])?$post['account_range']:'';
+        if(isset($post['account_range']) && !empty($post['account_range']))$post_data['account_range']= $post['account_range'];
+//        $post_data['account_range']=  isset($post['account_range'])?$post['account_range']:'';
 
         $info = array(
             'status'=>2,

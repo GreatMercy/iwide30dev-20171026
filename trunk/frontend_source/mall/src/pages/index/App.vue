@@ -170,7 +170,7 @@
             that.advs = advs
             that.categories = [{cat_id: '-1', cat_name: '全部商品'}].concat(categories)
             if (process.env.NODE_ENV === 'development') {
-              link.home = '/index'
+              link.home = '/'
               link.order = 'order_center'
             }
             that.tabbarItems = [{

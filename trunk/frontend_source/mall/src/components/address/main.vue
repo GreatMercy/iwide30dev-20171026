@@ -80,8 +80,11 @@
           class="jfk-address__list-item jfk-pb-30">
           <div class="jfk-radio jfk-radio--shape-rect color-golden">
             <label class="jfk-radio__label">
+              <!--<input type="radio"-->
+                     <!--:checked="item.address_id === aid"-->
+                     <!--v-model="aid"-->
+                     <!--:value="item.address_id"/>-->
               <input type="radio"
-                     :checked="item.address_id === aid"
                      v-model="aid"
                      :value="item.address_id"/>
               <div class="jfk-radio__text" @click="handlePickAddress(item.address_id)">

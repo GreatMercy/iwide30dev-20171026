@@ -90,7 +90,7 @@
             </li>
      
             <li class="jfk-express-area__list--item">
-                <img src="<?php echo base_url('public/soma/images/post.jpeg'); ?>"  class="jfk-express-area__list--img">
+                <img src="<?php echo get_cdn_url('public/soma/images/post.jpeg'); ?>"  class="jfk-express-area__list--img">
             </li>
         </ul>
         </div>

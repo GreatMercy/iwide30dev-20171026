@@ -549,7 +549,7 @@ line-height: 35px;
             <div class="flexgrow" style="min-height:40%"></div>
             <div class="bg_fff">
                 <div class="flex bd_bottom bg_fff pad10">
-                    <div class="specimg"><div class="squareimg"><img src="<?php  if( $package['face_img'] )echo $package['face_img'];else echo base_url('public/soma/images/default2.jpg');?>" /></div></div>
+                    <div class="specimg"><div class="squareimg"><img src="<?php  if( $package['face_img'] )echo $package['face_img'];else echo get_cdn_url('public/soma/images/default2.jpg');?>" /></div></div>
                     <div class="pad10 flexgrow">
         
                         <?php 

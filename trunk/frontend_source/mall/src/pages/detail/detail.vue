@@ -6,25 +6,34 @@
         <div class="cont font-color-light-gray-common font-size--24">
           <span class="jfk-font notice-icon font-size--24 icon-mall_icon_notice"></span>
           <span class="jfk-font notice-icon-1 font-size--24 icon-mall_icon_1_notice"></span>{{salerBanner[0]}}
-          <span v-if="salerBanner[1]" class="number jfk-font-number font-size--48 color-golden-price">{{salerBanner[1]}}</span>
-          <span v-if="salerBanner[2]" class="unit color-golden-price">{{salerBanner[2]}}</span>{{salerBanner[3]}}</div>
+          <span v-if="salerBanner[1]"
+                class="number jfk-font-number font-size--48 color-golden-price">{{salerBanner[1]}}</span>
+          <span v-if="salerBanner[2]" class="unit color-golden-price">{{salerBanner[2]}}</span>{{salerBanner[3]}}
+
+
+        </div>
       </div>
       <div class="detail-top" :class="{'is-default': productGalleryIsDefault}">
         <div class="banners">
           <swiper :options="bannerSwiperOptions" class="jfk-swiper">
-            <swiper-slide v-for="(item, index) in productInfo.gallery" :key="item.gry_id" class="jfk-swiper__item" :class="{'swiper-no-swiping': productInfo.gallery.length === 1}">
+            <swiper-slide v-for="(item, index) in productInfo.gallery" :key="item.gry_id" class="jfk-swiper__item"
+                          :class="{'swiper-no-swiping': productInfo.gallery.length === 1}">
               <div class="banners__item-box jfk-swiper__item-box">
-                <div :data-background="item.gry_url" class="banners__item jfk-swiper__item-bg swiper-lazy" v-if="item.gry_url">
-                  <div class="jfk-image__lazy--preload jfk-image__lazy jfk-image__lazy--3-3 jfk-image__lazy--background-image"></div>
+                <div :data-background="item.gry_url" class="banners__item jfk-swiper__item-bg swiper-lazy"
+                     v-if="item.gry_url">
+                  <div
+                    class="jfk-image__lazy--preload jfk-image__lazy jfk-image__lazy--3-3 jfk-image__lazy--background-image"></div>
                 </div>
                 <div class="banners__item jfk-swiper__item-bg" v-else>
-                  <div class="jfk-image__lazy--preload jfk-image__lazy jfk-image__lazy--3-3 jfk-image__lazy--background-image"></div>
+                  <div
+                    class="jfk-image__lazy--preload jfk-image__lazy jfk-image__lazy--3-3 jfk-image__lazy--background-image"></div>
                 </div>
               </div>
             </swiper-slide>
           </swiper>
           <div class="swiper-pagination font-size--24 swiper-pagination-fraction">
-            <span class="swiper-pagination-current">{{productGalleryIndex}}</span> / <span class="swiper-pagination-total">{{productInfo.gallery.length}}</span>
+            <span class="swiper-pagination-current">{{productGalleryIndex}}</span> / <span
+            class="swiper-pagination-total">{{productInfo.gallery.length}}</span>
           </div>
         </div>
         <div class="icons">
@@ -34,6 +43,9 @@
         <div class="info">
           <div class="name font-size--38 font-color-white">
             <span class="price-tag font-size--24" v-html="priceTag"></span>{{productInfo.name}}
+
+
+
           </div>
           <div class="sales font-color-light-gray-common font-size--24">
             <span class="suppier" v-if="publicInfo.name">{{publicInfo.name}}提供</span>
@@ -44,18 +56,22 @@
           <div class="others jfk-clearfix">
             <div class="prices jfk-fl-l font-size--24" :class="'prices--length-' + pricePackage.length">
               <span class="jfk-price product-price-package color-golden-price" v-html="pricePackage.html" v-once></span>
-              <span class="jfk-price__original product-price-market font-color-light-gray" v-once v-html="priceMarket.html"></span>
+              <span class="jfk-price__original product-price-market font-color-light-gray" v-once
+                    v-html="priceMarket.html"></span>
             </div>
-            <div class="date-norm jfk-fl-r font-color-extra-light-gray font-size--24" v-if="productInfo.spec_product" @click="handleSpecTicket">
+            <div class="date-norm jfk-fl-r font-color-extra-light-gray font-size--24" v-if="productInfo.spec_product"
+                 @click="handleSpecTicket">
               选择{{productInfo.isTicket ? '日期' : '规格'}}
               <i class="jfk-font icon-home_icon_Jump_norma color-golden triangle"></i>
             </div>
           </div>
         </div>
       </div>
-      <product-killsec v-if="productInfo.tag ===2 && showKillsecModule" @killsec-status="handleKillsecStatus" :killsec="productInfo.killsec"></product-killsec>
+      <product-killsec v-if="productInfo.tag ===2 && showKillsecModule" @killsec-status="handleKillsecStatus"
+                       :killsec="productInfo.killsec"></product-killsec>
       <div class="service jfk-pl-30 jfk-pr-30" v-if="serviceItems.length" v-once>
-        <ul class="service-list font-size--24" :class="'service-list--' + (serviceItems.length < 5 ? 'single' : 'multiple')" @click="handleService">
+        <ul class="service-list font-size--24"
+            :class="'service-list--' + (serviceItems.length < 5 ? 'single' : 'multiple')" @click="handleService">
           <li class="service-item" v-for="item in serviceItems" :key="item.key">
             <p class="icon">
               <i class="jfk-font font-color-light-gray-common" :class="item.icon"></i>
@@ -71,7 +87,8 @@
       </div>
       <div class="detail-box">
         <div v-if="productInfo.tag === 2" class="killsec-original">
-          <div class="killsec-original__cont jfk-flex is-align-middle is-justify-space-between" @click="handleSubmitOrderOriginal">
+          <div class="killsec-original__cont jfk-flex is-align-middle is-justify-space-between"
+               @click="handleSubmitOrderOriginal">
             <span class="font-size--30 font-color-extra-light-gray">原价去购买</span>
             <span class="font-size--28 color-golden">
               <i>{{priceMarket.html}}</i>
@@ -82,8 +99,10 @@
         <div v-if="productDetailInfo.labels.length" class="productinfo-detail">
           <div v-sticky="{'z-index': 100, 'stickyHeight': productDetailInfoContentHeight}">
             <div>
-              <div class="productinfo-detail-box jfk-pl-30 jfk-pr-30" :class="{'great-then-2': productDetailInfo.labels.length > 1}">
-                <ul class="productinfo-detail-label" :class="'productinfo-detail-label--' + productDetailInfo.labels.length">
+              <div class="productinfo-detail-box jfk-pl-30 jfk-pr-30"
+                   :class="{'great-then-2': productDetailInfo.labels.length > 1}">
+                <ul class="productinfo-detail-label"
+                    :class="'productinfo-detail-label--' + productDetailInfo.labels.length">
                   <li
                     v-for="item in productDetailInfo.labels"
                     :key="item.key"
@@ -93,7 +112,9 @@
                       'color-golden is-selected': currentLabel === item.key,
                       'font-color-light-gray-common': currentLabel !== item.key
                     }"
-                  ><div>{{item.label}}</div></li>
+                  >
+                    <div>{{item.label}}</div>
+                  </li>
                 </ul>
               </div>
             </div>
@@ -107,20 +128,22 @@
         <div class="cont" @click="handleShowMap">
           <i class="jfk-font font-size--40 font-color-extra-light-gray icon-icon_location"></i>
           <div class="name font-size--30 font-color-white">{{hotelInfo.name}}</div>
-          <div class="address font-size--28 font-color-extra-light-gray"><span><i>{{hotelInfo.address}}</i></span><i class="jfk-font icon-user_icon_jump_normal" v-show="hotelInfo.latitude && hotelInfo.longitude"></i></div>
+          <div class="address font-size--28 font-color-extra-light-gray"><span><i>{{hotelInfo.address}}</i></span><i
+            class="jfk-font icon-user_icon_jump_normal" v-show="hotelInfo.latitude && hotelInfo.longitude"></i></div>
         </div>
         <div class="order">
           <a :href="orderUrl" class="jfk-button jfk-button--free font-size--30 jfk-button--primary is-plain">我的订单</a>
         </div>
         <div class="qrcode color-golden-price jfk-flex is-align-middle" @click="handleQrcode">
           <div>
-          <i class="jfk-font icon-mall_icon_pay_focus"></i>
-          <p class="font-size--18">关注享优惠</p>
+            <i class="jfk-font icon-mall_icon_pay_focus"></i>
+            <p class="font-size--18">关注享优惠</p>
           </div>
         </div>
       </div>
     </div>
-    <div class="recommendation jfk-pl-30" v-if="recommendations.length" :class="{'jfk-pr-30': recommendations.length === 1}">
+    <div class="recommendation jfk-pl-30" v-if="recommendations.length"
+         :class="{'jfk-pr-30': recommendations.length === 1}">
       <p class="font-size--24 font-color-light-gray-common tip">其他用户还看了</p>
       <div class="recommendations-list">
         <jfk-recommendation :items="recommendations" :linkPrefix="detailUrl" :emptyLink="indexUrl"></jfk-recommendation>
@@ -141,12 +164,20 @@
         </div>
       </div>
       <div class="control jfk-fl-l">
-        <button href="javascript:;" @click="handleSubmitOrder" class="jfk-button font-size--34 jfk-button--higher jfk-button--suspension jfk-button--free">{{buttonText}}</button>
+        <button href="javascript:;" @click="handleSubmitOrder"
+                class="jfk-button font-size--34 jfk-button--higher jfk-button--suspension jfk-button--free">{{buttonText}}
+
+
+        </button>
       </div>
     </footer>
     <template v-if="productInfo.spec_product">
-      <product-ticket :productId="productInfo.product_id" :is-integral="productInfo.tag === 7" @submit-setting-id="getSettingId" :price="productInfo.price_package" :visible.sync="specTicketVisible" v-if="productInfo.isTicket"></product-ticket>
-      <product-spec :productId="productInfo.product_id" :is-integral="productInfo.tag === 7" @submit-setting-id="getSettingId" :price="productInfo.price_package" :visible.sync="specTicketVisible" v-else></product-spec>
+      <product-ticket :productId="productInfo.product_id" :is-integral="productInfo.tag === 7"
+                      @submit-setting-id="getSettingId" :price="productInfo.price_package"
+                      :visible.sync="specTicketVisible" v-if="productInfo.isTicket"></product-ticket>
+      <product-spec :productId="productInfo.product_id" :is-integral="productInfo.tag === 7"
+                    @submit-setting-id="getSettingId" :price="productInfo.price_package"
+                    :visible.sync="specTicketVisible" v-else></product-spec>
     </template>
     <template v-if="serviceItems.length">
       <jfk-popup v-model="serviceVisible" ref="popupService" class="jfk-popup__service" :showCloseButton="true">
@@ -162,16 +193,18 @@
         </div>
       </jfk-popup>
     </template>
-    <jfk-popup class="jfk-popup__qrcode jfk-ta-c" :showCloseButton="true" :closeOnClickModal="false" v-model="qrcodeVisible" v-if="hotelInfo.qrcode">
+    <jfk-popup class="jfk-popup__qrcode jfk-ta-c" :showCloseButton="true" :closeOnClickModal="false"
+               v-model="qrcodeVisible" v-if="hotelInfo.qrcode">
       <div class="qrcode">
-        <img :src="hotelInfo.qrcode" />
+        <img :src="hotelInfo.qrcode"/>
       </div>
       <div class="tip font-size--28 font-color-extra-light-gray">长按关注公众号</div>
       <div class="tip font-size--28 font-color-extra-light-gray">及时获取优惠信息</div>
     </jfk-popup>
-    <jfk-popup v-model="killsecQrcodeVisible" :showCloseButton="true" :closeOnClickModal="false" class="jfk-popup__qrcode jfk-ta-c">
+    <jfk-popup v-model="killsecQrcodeVisible" :showCloseButton="true" :closeOnClickModal="false"
+               class="jfk-popup__qrcode jfk-ta-c">
       <div class="qrcode">
-        <img :src="killsecQrcodeUrl" />
+        <img :src="killsecQrcodeUrl"/>
       </div>
       <div class="tip font-size--28 font-color-extra-light-gray jfk-pl-30 jfk-pr-30">{{killsecQrcodeTip}}</div>
     </jfk-popup>
@@ -231,7 +264,7 @@
       getPackageInfo({
         pid: this.productId
       }).then(function (res) {
-        const { product_info, page_resource, saler_banner: salerBanner, hotel_info, public_info, fans_info } = res.web_data
+        const {product_info, page_resource, saler_banner: salerBanner, hotel_info, public_info, fans_info} = res.web_data
         that.toast.close()
         if (!product_info.gallery || !product_info.gallery.length) {
           product_info.gallery = [defaultGallery]
@@ -250,7 +283,7 @@
           _salerBanner[3] = salerBanner[2]
           that.salerBanner = _salerBanner
         }
-        let { order, home, prepay } = page_resource.link
+        let {order, home, prepay} = page_resource.link
         if (process.env.NODE_ENV === 'development') {
           order = '/order_center'
           home = '/'
@@ -265,9 +298,9 @@
         page: 1,
         page_size: 100
       }).then(function (res) {
-        const { products, page_resource } = res.web_data
+        const {products, page_resource} = res.web_data
         that.recommendations = products
-        let { detail, home } = page_resource.link
+        let {detail, home} = page_resource.link
         if (process.env.NODE_ENV === 'development') {
           detail = '/detail?pid='
           home = '/'
@@ -386,14 +419,14 @@
         return items
       },
       buttonDisabled () {
-        const { productInfo, killsecButtonDisabled } = this
+        const {productInfo, killsecButtonDisabled} = this
         if (productInfo.tag === 2 && killsecButtonDisabled) {
           return true
         }
         return false
       },
       productDetail () {
-        const { compose } = this.productInfo
+        const {compose} = this.productInfo
         let html = ''
         if (compose) {
           for (let i in compose) {
@@ -486,8 +519,8 @@
         document.body.scrollTop = scrollHeight + clientTop - 66
       },
       handleSubmitOrder () {
-        const { tag } = this.productInfo
-        const { killsecStatus, killsecSubScribeStatus } = this
+        const {tag} = this.productInfo
+        const {killsecStatus, killsecSubScribeStatus} = this
         let that = this
         if (tag === 2) { // 秒杀
           // 区分订阅与提醒
@@ -534,7 +567,7 @@
               act_id: this.productInfo.killsec.act_id,
               inid: this.productInfo.killsec.instance.instance_id
             }).then(function (res) {
-              const { status, token } = res.web_data
+              const {status, token} = res.web_data
               if (status === 1) {
                 that.tokenId = token
               } else {

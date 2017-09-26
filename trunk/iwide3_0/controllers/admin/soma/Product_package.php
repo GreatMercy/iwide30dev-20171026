@@ -342,7 +342,8 @@ class Product_package extends MY_Admin_Soma {
                     ],
                     'send_hotel' => [
                         $product_detail['send_hotel'] => $post['send_hotel']
-                    ]
+                    ],
+                    'pid' => $post[$pk]
                 ];
                 MYLOG::w('update_product_diff_'.json_encode($setting_change_log), 'soma/product_setting');
             }

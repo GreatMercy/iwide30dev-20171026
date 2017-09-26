@@ -2,10 +2,12 @@
   <div class="jfk-pages jfk-pages__reserve">
     <div class="jfk-pages__theme"></div>
     <div class="reserve-box" v-if="productInfo.product_id">
-      <reverse-killsec-time @killsec-finish="handleKillsecFinish" :countdown="countdown" v-if="productInfo.tag === 2 && tokenId"></reverse-killsec-time>
+      <reverse-killsec-time @killsec-finish="handleKillsecFinish" :countdown="countdown"
+                            v-if="productInfo.tag === 2 && tokenId"></reverse-killsec-time>
       <div class="mail-only jfk-pt-30 jfk-pl-30 jfk-pr-30" v-if="addressPosition === 1" @click="handleChangeAddress">
         <div class="address card">
-          <div class="add jfk-flex is-align-middle is-justify-center font-size--28 font-color-extra-light-gray" v-if="addressId === '-1'">
+          <div class="add jfk-flex is-align-middle is-justify-center font-size--28 font-color-extra-light-gray"
+               v-if="addressId === '-1'">
             <div class="cont">
               <i class="icon color-golden jfk-font icon-mall_icon_address_add"></i>新增收货地址
             </div>
@@ -40,29 +42,39 @@
           </span>
         </div>
       </div>
+
+
       <div class="mail-gift jfk-ml-30 jfk-mr-30 font-size--28" v-if="addressPosition === 3">
         <p class="use-type-tip font-size--24 font-color-light-gray-common">使用方式</p>
-        <div class="item item-address card jfk-mb-30" :class="{'is-checked': useType === '1', 'font-color-light-gray-common no-checked': useType === '2'}">
-          <div :class="{'font-color-white': useType === '1'}" class="title jfk-flex is-align-middle" @click="handleChangeUseType('1')">
+
+        <div class="item item-address card jfk-mb-30"
+             :class="{'is-checked': useType === '1', 'font-color-light-gray-common no-checked': useType === '2'}">
+
+          <div :class="{'font-color-white': useType === '1'}" class="title jfk-flex is-align-middle"
+               @click="handleChangeUseType('1')">
             <div class="jfk-flex cont is-justify-space-between">
               <span>
                 <i class="jfk-font icon-mall_icon_orderDetail_post icon" :class="{'color-golden': useType === '1'}"></i>直接邮寄</span>
               <span class="jfk-radio jfk-radio--shape-circle color-golden">
                 <label class="jfk-radio__label">
-                  <input type="radio" name="type" :checked="useType === '1'" value="1" v-model="useType" />
+                  <!--<input type="radio" name="type" :checked="useType === '1'" value="1" v-model="useType"/>-->
+                   <input type="radio" name="type" value="1" v-model="useType"/>
                   <span class="jfk-radio__icon">
                     <i class="jfk-font icon-radio_icon_selected_default jfk-radio__icon-icon"></i>
                   </span>
                 </label>
               </span>
             </div>
+
           </div>
+
           <transition name="fade">
             <div v-show="useType === '1'" class="address body tip" @click="handleChangeAddress">
               <div class="add-box" v-if="addressId === '-1'">
                 <div class="add font-color-extra-light-gray font-size--28 jfk-flex is-align-middle is-justify-center">
                   <div class="cont">
                     <i class="icon color-golden jfk-font icon-mall_icon_address_add"></i>新增收货地址
+
                   </div>
                 </div>
               </div>
@@ -79,20 +91,24 @@
                     <span class="label font-size--24 font-color-extra-light-gray">收件地址</span>
                     <div class="item-cont font-size--28 font-color-white">{{addressPickedDetail}}</div>
                   </div>
-                  <i class="jfk-font icon-user_icon_jump_normal font-color-extra-light-gray font-size--24 list-icon"></i>
+                  <i
+                    class="jfk-font icon-user_icon_jump_normal font-color-extra-light-gray font-size--24 list-icon"></i>
                 </div>
               </div>
             </div>
           </transition>
         </div>
-        <div class="item item-gift card" :class="{'is-checked': useType === '2', 'font-color-light-gray-common  no-checked': useType === '1'}">
-          <div :class="{'font-color-white': useType === '2'}" class="title jfk-flex is-align-middle" @click="handleChangeUseType('2')">
+        <div class="item item-gift card"
+             :class="{'is-checked': useType === '2', 'font-color-light-gray-common  no-checked': useType === '1'}">
+          <div :class="{'font-color-white': useType === '2'}" class="title jfk-flex is-align-middle"
+               @click="handleChangeUseType('2')">
             <div class="jfk-flex cont is-justify-space-between">
               <span>
                 <i class="jfk-font icon-mall_icon_orderDetai_gift icon" :class="{'color-golden': useType === '2'}"></i>赠送他人</span>
               <span class="jfk-radio jfk-radio--shape-circle color-golden">
                 <label class="jfk-radio__label">
-                  <input type="radio" name="type" value="2" :checked="useType === '2'" v-model="useType" />
+                  <!--<input type="radio" name="type" value="2" :checked="useType === '2'" v-model="useType"/>-->
+                   <input type="radio" name="type" value="2" v-model="useType"/>
                   <span class="jfk-radio__icon">
                     <i class="jfk-font icon-radio_icon_selected_default jfk-radio__icon-icon"></i>
                   </span>
@@ -101,7 +117,8 @@
             </div>
           </div>
           <transition name="fade">
-            <div class="tip jfk-flex is-align-middle jfk-pr-30 font-color-light-gray-common body font-size--24" v-show="useType === '2'">
+            <div class="tip jfk-flex is-align-middle jfk-pr-30 font-color-light-gray-common body font-size--24"
+                 v-show="useType === '2'">
               <div class="box jfk-pos-r">
                 <i class="jfk-font font-size--28 tip-icon icon-msg_icon_prompt_1_default"></i>下单后，购买成功，将礼物打包赠转发给好友，好友点击即可成功领取
               </div>
@@ -109,6 +126,8 @@
           </transition>
         </div>
       </div>
+
+
       <div class="order-info jfk-pl-30 jfk-pr-30">
         <form class="jfk-form font-size--28">
           <!-- 只赠送他人不显示 <div class="form-item gift-only" v-if="addressPosition === 2">
@@ -132,8 +151,9 @@
             <label>
               <span class="form-item__label  font-color-extra-light-gray form-item__label--word-3">购买人</span>
               <div class="form-item__body">
-                <input type="text" class="font-color-white" v-model="customerInfo.name" placeholder="请输入购买人" />
-                <div class="form-item__status is-error" v-show="validResult.name.show" @click="handleHiddenError('name')">
+                <input type="text" class="font-color-white" v-model="customerInfo.name" placeholder="请输入购买人"/>
+                <div class="form-item__status is-error" v-show="validResult.name.show"
+                     @click="handleHiddenError('name')">
                   <i class="form-item__status-icon jfk-font icon-msg_icon_error_norma"></i>
                   <span class="form-item__status-tip">
                     <i class="form-item__status-cont">{{validResult.name.message}}</i>
@@ -146,8 +166,9 @@
           <div class="form-item">
             <span class="form-item__label  font-color-extra-light-gray">联系方式</span>
             <div class="form-item__body">
-              <input type="text" class="font-color-white" v-model="customerInfo.phone" placeholder="请输入购买人手机" />
-              <div class="form-item__status is-error" v-show="validResult.phone.show" @click="handleHiddenError('phone')">
+              <input type="text" class="font-color-white" v-model="customerInfo.phone" placeholder="请输入购买人手机"/>
+              <div class="form-item__status is-error" v-show="validResult.phone.show"
+                   @click="handleHiddenError('phone')">
                 <i class="form-item__status-icon jfk-font icon-msg_icon_error_norma"></i>
                 <span class="form-item__status-tip">
                     <i class="form-item__status-cont">{{validResult.phone.message}}</i>
@@ -162,7 +183,8 @@
               <div class="form-item__body">
                 <p class="tip" :class="couponsClass">{{couponsText}}</p>
               </div>
-              <span class="form-item__foot" v-show="coupons.length && !(this.orderRulePicked && this.orderRule.rule_type)">
+              <span class="form-item__foot"
+                    v-show="coupons.length && !(this.orderRulePicked && this.orderRule.rule_type)">
                 <i class="jfk-font icon-user_icon_jump_normal font-color-extra-light-gray"></i>
               </span>
             </div>
@@ -174,7 +196,7 @@
             </div>
             <div class="form-item__foot" v-show="packageActivityShowSwitch">
               <label class="jfk-switch color-golden font-size--30">
-                <input type="checkbox" v-model="packageActivityChecked" class="jfk-switch__input" />
+                <input type="checkbox" v-model="packageActivityChecked" class="jfk-switch__input"/>
                 <span class="jfk-switch__core"></span>
               </label>
             </div>
@@ -188,7 +210,9 @@
         </form>
       </div>
       <div class="reserve-tip font-size--24 jfk-pl-30 jfk-pr-30">
-        <div class="tip-title font-color-extra-light-gray-common"><i class="jfk-font icon-msg_icon_prompt_default font-size--28"></i>说明</div>
+        <div class="tip-title font-color-extra-light-gray-common"><i
+          class="jfk-font icon-msg_icon_prompt_default font-size--28"></i>说明
+        </div>
         <div class="tip-cont font-color-light-gray-common">商品超过有效期不能使用也不能退款</div>
       </div>
       <footer class="footer jfk-footer jfk-clearfix" :style="{'z-index': footZIndex}">
@@ -202,7 +226,8 @@
           </span>
         </div>
         <div class="control jfk-fl-l">
-          <button href="javascript:;" @click="handleSubmitOrder" class="jfk-button font-size--34 jfk-button--higher jfk-button--suspension jfk-button--free">
+          <button href="javascript:;" @click="handleSubmitOrder"
+                  class="jfk-button font-size--34 jfk-button--higher jfk-button--suspension jfk-button--free">
             <span class="jfk-button__text">
               <i class="jfk-font jfk-button__text-item icon-font_zh_li_qkbys"></i>
               <i class="jfk-font jfk-button__text-item icon-font_zh_ji_qkbys"></i>
@@ -217,11 +242,12 @@
     <template v-if="addressPosition === 1 || addressPosition === 3">
       <div class="page-address" v-show="addressLayerVisible">
         <div class="jfk-pages__theme"></div>
-        <jfk-address :address.sync="address" :show-address-list="showAddressList" :addressId="addressId" @pick-address="handlePickedAddress"></jfk-address>
+        <jfk-address :address.sync="address" :show-address-list="showAddressList" :addressId="addressId"
+                     @pick-address="handlePickedAddress"></jfk-address>
       </div>
     </template>
     <template>
-      <div class="page-coupons"  v-show="couponLayerVisible">
+      <div class="page-coupons" v-show="couponLayerVisible">
         <div class="jfk-pages__theme"></div>
         <jfk-coupons :items="coupons" :couponId="couponId" @coupon-picked="handlePickedCoupon"></jfk-coupons>
       </div>
@@ -257,7 +283,7 @@
   import JfkCoupons from './module/coupon.vue'
   /* eslint-disable no-new */
   const formatOrderRule = function (data) {
-    const { activity = {}, asset = {} } = data
+    const {activity = {}, asset = {}} = data
     if (activity.auto_rule.rule_type) {
       return activity.auto_rule
     } else if (asset.cal_rule.rule_type) {
@@ -272,6 +298,8 @@
     components: {
       'reverse-killsec-time': () => import('./module/killsec'),
       'jfk-address': () => import('../../components/address/main'),
+      // reverseKillsecTime,
+      // jfkAddress,
       JfkCoupons
     },
     beforeCreate () {
@@ -302,7 +330,7 @@
         common: this.common
       }).then(function (res) {
         vm.toast.close()
-        const { count, psp_setting, product, countdown, address, public_info, customer_info = {}, create_order_params = {}, point, balance } = res.web_data
+        const {count, psp_setting, product, countdown, address, public_info, customer_info = {}, create_order_params = {}, point, balance} = res.web_data
         vm.count = count.default
         vm.max = count.limit
         vm.pspSetting = psp_setting
@@ -443,7 +471,7 @@
       },
       // 已选择地址
       addressPicked () {
-        const { address, addressId } = this
+        const {address, addressId} = this
         let idx = findIndex(address, function (o) {
           return o.address_id === addressId
         })
@@ -451,7 +479,7 @@
       },
       // 已选择详情
       addressPickedDetail () {
-        const { provice_name = '', city_name = '', region_name = '', address = '' } = this.addressPicked
+        const {provice_name = '', city_name = '', region_name = '', address = ''} = this.addressPicked
         return provice_name + city_name + region_name + address
       },
       // 商品信息片段
@@ -499,7 +527,7 @@
       },
       // 选中的优惠券
       couponPicked () {
-        const { couponId, coupons } = this
+        const {couponId, coupons} = this
         if (couponId !== '-1') {
           let index = findIndex(coupons, function (o) {
             return o.member_card_id === couponId
@@ -854,7 +882,7 @@
     },
     watch: {
       productInfo (val) {
-        const { tag, can_gift, can_mail } = val
+        const {tag, can_gift, can_mail} = val
         // 专属 秒杀 积分 不使用优惠券，不参加优惠活动 储值不参加优惠活动，能使用优惠券
         if (tag === 1 || tag === 2 || tag === 7) {
           this.orderRuleDisabled = true
@@ -883,7 +911,7 @@
       },
       count (val) {
         if (val) {
-          const { orderRuleDisabled, couponDisabled } = this
+          const {orderRuleDisabled, couponDisabled} = this
           if (cancel) {
             cancel()
           }

@@ -10,6 +10,7 @@
       </div>
 
       <p class="gift-goods-name jfk-ta-c font-size--30 jfk-pl-30 jfk-pr-30" v-html="info.name"></p>
+
       <p class="gift-goods-number jfk-ta-c font-size--24 jfk-pl-30 jfk-pr-30"
          v-html="'已使用'+ info.used +'/' + info.qty_origin + '份'"></p>
 
@@ -24,7 +25,7 @@
       <div class="gift-detail-bottom">
         <div class="gift-detail-line"></div>
         <a class="jfk-ta-c gift-detail-put-order"
-           :href="info.link || 'javascript:void(0)'">
+           :href="info.link + '&order_type=4' || 'javascript:void(0)'">
           <i class="font-size--28">暂不使用，放至订单中心</i>
           <span class="jfk-d-ib jfk-font icon-user_icon_jump_normal"></span>
         </a>

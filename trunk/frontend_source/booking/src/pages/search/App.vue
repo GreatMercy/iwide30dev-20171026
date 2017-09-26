@@ -7,18 +7,18 @@
                     v-if="advs.length">
         </jfk-banner>
         <div class="search_place_container">
-          <div class="search_place">
+          <div class="search_place search1">
             <p class="search_title font-size--30" @click="goCityChoose(1)">
               <i class="booking_icon_font icon_search icon-icon_search font-size--24"></i>
               <span v-if="areaWord !== '搜索城市'">{{areaWord}} ({{clickCityWord}})</span>
               <span v-if="areaWord === '搜索城市'">{{clickCityWord}}</span>
             </p>
-            <i class="booking_icon_font icon_place font-size--46 icon-booking_icon_nearby_normal"
+            <i class="booking_icon_font icon_place font-size--44 icon-booking_icon_nearby_normal"
                @click="HrefToNearby()"></i>
           </div>
           <div class="search_place search_place2">
             <p class="search_title font-size--30 searchCity noLine" @click="goCityChoose(0)">
-              <i class="booking_icon_font icon_search icon-user_icon_myaddress_normal font-size--24"></i>
+              <i class="booking_icon_font icon_search icon-user_icon_myaddress_normal font-size--24 font-weight-600"></i>
               {{searchVal}}
             </p>
           </div>
@@ -26,37 +26,44 @@
         <div class="date_container">
           <div class="left_date" @click="goCalendar()">
             <span class="left_date_style">入住</span>
-            <span class="live_date jfk-font-number jfk-price__number"><i
-              class="booking_icon_font icon_arrow icon-booking_icon_dropdown_normal"></i>{{startDate}}</span>
-            <span class="live_year font-size--24">{{startMonth}}</span>
+            <span class="live_date jfk-font-number jfk-price__number">
+              <span class="date"><i class="booking_icon_font icon_arrow icon-booking_icon_dropdown_normal"></i>{{startDate}}</span>
+            </span>
+            <span class="live_year font-size--24"><span>{{startMonth}}</span></span>
           </div>
           <span class="center_line"></span>
           <div class="right_date" @click="goCalendar()">
-            <span class="left_date_style">离店</span>
-            <span class="live_date jfk-font-number jfk-price__number"><i
-              class="booking_icon_font icon_arrow icon-booking_icon_dropdown_normal"></i>
-            {{endDate}}</span>
-            <span class="live_year font-size--24">{{endMonth}}</span>
+            <span class="left_date_style addPadding">离店</span>
+            <span class="live_date jfk-font-number jfk-price__number">
+              <span class="dateer">
+              <i class="booking_icon_font icon_arrow icon-booking_icon_dropdown_normal"></i>{{endDate}}</span>
+            </span>
+            <span class="live_year font-size--24"><span>{{endMonth}}</span></span>
           </div>
         </div>
-        <div class="checkBtn">
-          <a :href="toLinks.SRESULT + '&startdate=' + handleStartDate + '&enddate=' + handleEndDate + '&area=' + this.areaWord + '&city=' + clickCityWord">查询酒店</a>
+        <div class="checkBtn" :class="searchCacheData.length !== 0 ? 'mrb82' : 'mrb109'">
+          <a :href="toLinks.SRESULT + '&startdate=' + handleStartDate + '&enddate=' + handleEndDate + '&area=' + this.areaWord + '&city=' + clickCityWord">
+              <i class="booking_icon_font icon_arrow icon-font_zh_cha_qkbys"></i>&nbsp;&nbsp;<i class="booking_icon_font icon_arrow icon-font_zh_xun_qkbys"></i>&nbsp;&nbsp;<i class="booking_icon_font icon_arrow icon-font_zh_jiu_1_qkbys"></i>&nbsp;&nbsp;<i class="booking_icon_font icon-font_zh_dian_qkbys"></i>
+          </a>
         </div>
         <div class="search_info" v-if="searchCacheData.length !== 0">
-          <p class="search_info_title">最近搜索</p>
-          <p class="search_info_item item_first"
+          <p class="search_info_title font-size--28">最近搜索</p>
+          <p class="search_info_item item_first font-size--26"
              v-for="item in searchCacheData">
             <a :href="item.link">
-              <span>{{item.city}}&nbsp&nbsp&nbsp</span>
-              <span>{{item.startdate}}</span>
-              <span>{{item.enddate}}</span>
-              <span>{{item.title}}</span>
+              <span class="city">{{item.city}}</span><span>{{item.startdate}} - </span><span>{{item.enddate}}</span>
+              <span>{{setWordLength(item.title)}}
+              <span class="arrow"><i class="jfk-font icon-user_icon_jump_normal font-size--14"></i></span>
+              </span>
             </a>
           </p>
         </div>
-        <div class="webkitbox others center boxflex pad_lr30 box_container">
+        <div class="jfk-pr-30 jfk-pl-30" v-if="searchCacheData.length !== 0">
+          <div class="addLine"></div>
+        </div>
+        <div class="webkitbox others center boxflex pad_lr30 box_container jfk-pr-30 jfk-pl-44">
           <template v-for="item in homepage_set_menu">
-            <a class="layer_bg color2 j_whole_show always" v-if="item.code === 'always'"
+            <a class="layer_bg color2 j_whole_show always secondB" v-if="item.code === 'always'"
                @click="showBottomTip(0)">
               <div class="img">
                 <i class="jfk-font icon_arrow icon-blankpage_icon_nohotel_bg font-size--42"></i>
@@ -64,8 +71,7 @@
               <div class="txtclip font-size--28 mar_b">{{item.menu_name}}</div>
               <div class="txtclip font-size--24 gray_color">{{item.desc}}</div>
             </a>
-            <a class="layer_bg color2 j_whole_show always" v-if="item.code === 'collect'"
-               @click="showBottomTip(1)">
+            <a class="layer_bg color2 j_whole_show always secondA" v-if="item.code === 'collect'" @click="showBottomTip(1)">
               <div class="img">
                 <i class="booking_icon_font icon_arrow icon-icon_recommend font-size--42"></i>
               </div>
@@ -93,6 +99,7 @@
                         :minDate="min"
                         :maxDate="max"
                         :range="true"
+                        :showOtherMonthDates="true"
                         :value="[new Date(handleStartDate), new Date(handleEndDate)]">
           </jfk-calendar>
         </div>
@@ -152,10 +159,13 @@
       this.loadPackages()
       // 使用日历
       this.setCalendar()
+      let searchArr = window.localStorage.getItem('searchcache')
       // 设置缓存
-      if (this.searchCacheData.length !== 0) {
+      if (searchArr && searchArr.length !== 0) {
         this.searchCacheData = JSON.parse(window.localStorage['searchcache'])
       }
+    },
+    computed: {
     },
     data () {
       return {
@@ -409,6 +419,12 @@
         if (tommorrow < 10) tommorrow = '0' + tommorrow
         month = (month < 10 ? '0' + month : month)
         return d.getFullYear() + '/' + month + '/' + tommorrow
+      },
+      setWordLength (title) {
+        if (title.length > 5) {
+          let str = title.substring(0, 5)
+          return str + '...'
+        }
       }
     }
   }

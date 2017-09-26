@@ -1,7 +1,7 @@
 <body>
-<link href="<?php echo base_url('public/soma/v1/v1.css'). config_item('css_debug');?>" rel="stylesheet">
-<script src="<?php echo base_url('public/soma/scripts/imgscroll.js');?>"></script>
-<script src="<?php echo base_url('public/soma/scripts/jquery.touchwipe.min.js');?>"></script>
+<link href="<?php echo get_cdn_url('public/soma/v1/v1.css'). config_item('css_debug');?>" rel="stylesheet">
+<script src="<?php echo get_cdn_url('public/soma/scripts/imgscroll.js');?>"></script>
+<script src="<?php echo get_cdn_url('public/soma/scripts/jquery.touchwipe.min.js');?>"></script>
 <script>
     wx.config({
         debug: false,
@@ -60,7 +60,7 @@
             <?php }?>
         <?php else: ?>
             <a class="slideson ui_img_auto_cut">
-                <img src="<?php echo base_url('public/soma/images/default.jpg'); ?>" />
+                <img src="<?php echo get_cdn_url('public/soma/images/default.jpg'); ?>" />
             </a>
         <?php endif; ?>
     </div>
@@ -119,7 +119,7 @@
 	<div class="flexgrow" style="min-height:40%"></div>
     <div class="bg_fff">
         <div class="flex bd_bottom bg_fff pad10">
-            <div class="specimg"><div class="squareimg"><img src="<?php  if( $package['face_img'] )echo $package['face_img'];else echo base_url('public/soma/images/default2.jpg');?>" /></div></div>
+            <div class="specimg"><div class="squareimg"><img src="<?php  if( $package['face_img'] )echo $package['face_img'];else echo get_cdn_url('public/soma/images/default2.jpg');?>" /></div></div>
             <div class="pad10 flexgrow">
 
                 <?php 
@@ -157,7 +157,7 @@
 <?php /**有秒杀**/ if( !empty($killsec) && isset($killsec['is_stock']) && $killsec['is_stock']==Soma_base::STATUS_TRUE ): ?>
 <div class="whiteblock" id="ks_stock_div" style="display: none;">
 	<div class="justify webkitbox">
-    	<div class="progress"><span class="bg_main fill1" style="width:0<?php //echo $ks_percent; ?>%">&nbsp;<img src="<?php echo base_url('public/soma/images/ruler.png'); ?>"></span></div>
+    	<div class="progress"><span class="bg_main fill1" style="width:0<?php //echo $ks_percent; ?>%">&nbsp;<img src="<?php echo get_cdn_url('public/soma/images/ruler.png'); ?>"></span></div>
         <div><span class="color_main">剩余名额：</span><span class="color_888 fill2">0<?php //echo $ks_stock; ?>/1<?php //echo $ks_count; ?></span></div>
     </div>
 </div>
@@ -318,8 +318,8 @@ if(!empty($content) && $flag){ ?>
 
 <div class="foot_fixed">
     <div class="bg_fff webkitbox bd_top">
-        <a href="<?php echo Soma_const_url::inst()->get_pacakge_home_page(array('id'=>$inter_id)); ?>" class="img_link color_999"><img src="<?php echo base_url('public/soma/images/img'); ?>/ico9_en.png"/><div style="font-size:8px; white-space:nowrap">main page</div></a>
-        <a href="<?php echo Soma_const_url::inst()->get_soma_ucenter(array('id'=>$inter_id)); ?>" class="img_link color_999"><img src="<?php echo base_url('public/soma/images/img'); ?>/ico10_en.png"/><div style="font-size:8px; white-space:nowrap">my orders</div></a>
+        <a href="<?php echo Soma_const_url::inst()->get_pacakge_home_page(array('id'=>$inter_id)); ?>" class="img_link color_999"><img src="<?php echo get_cdn_url('public/soma/images/img'); ?>/ico9_en.png"/><div style="font-size:8px; white-space:nowrap">main page</div></a>
+        <a href="<?php echo Soma_const_url::inst()->get_soma_ucenter(array('id'=>$inter_id)); ?>" class="img_link color_999"><img src="<?php echo get_cdn_url('public/soma/images/img'); ?>/ico10_en.png"/><div style="font-size:8px; white-space:nowrap">my orders</div></a>
 	
         <!-- <a class="h24 bg_main bdradius txtclip" style="border: 1px solid transparent" href=""><?php if( $this->inter_id == 'a472731996' ) echo '雅币'; else echo '储值';  ?>购买</a> -->
    <?php if( isset($finish_killsec) && $finish_killsec ): ?>

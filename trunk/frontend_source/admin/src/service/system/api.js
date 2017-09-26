@@ -12,6 +12,8 @@ let API_ROLE_V1 = `${API_URL_SUFFIX_V1}/authority/roles`
 // 账号相关
 let API_ACCOUNT_V1 = `${API_URL_SUFFIX_V1}/authority/accounts`
 let API_LOGIN_V1 = `${API_URL_SUFFIX_V1}/authority/auth`
+let API_CODE_V1 = `${API_URL_SUFFIX_V1}/authorize/auth`
+
 const v1 = {
   // 获取商品套餐列表
   GET_PACKAGE_LIST_DATAS: `${API_SOMA_V1}/package/index`,
@@ -64,13 +66,15 @@ const v1 = {
   // 权限 账户 -->获取角色
   GET_ACCOUNT_ROLE: (process.env.NODE_ENV === 'development') ? `${API_ACCOUNT_V1}/getRoles?debug=1` : `${API_ACCOUNT_V1}/getRoles`,
   // 权限 账户 -->生成登陆二维码
-  GET_LOGIN_QRCODE: (process.env.NODE_ENV === 'development') ? `${API_LOGIN_V1}/createQrCode?debug=1` : `${API_LOGIN_V1}/createQrCode`,
+  GET_LOGIN_QRCODE: (process.env.NODE_ENV === 'development') ? `${API_CODE_V1}/createQrCode?debug=1` : `${API_CODE_V1}/createQrCode`,
   // 权限 账户 -->获取扫码状态
   GET_CODE_SCAN: (process.env.NODE_ENV === 'development') ? `${API_LOGIN_V1}/checkCodeStatu?debug=1` : `${API_LOGIN_V1}/checkCodeStatu`,
   // 权限 账户 -->编辑账户
-  POST_EDIT_ACCOUNT: (process.env.NODE_ENV === 'development') ? `${API_ACCOUNT_V1}/editAccount?debug=1` : `${API_LOGIN_V1}/editAccount`,
+  POST_EDIT_ACCOUNT: (process.env.NODE_ENV === 'development') ? `${API_ACCOUNT_V1}/editAccount?debug=1` : `${API_ACCOUNT_V1}/editAccount`,
   // 权限 账户 -->生成绑定二维码
-  GET_BIND_QRCODE: (process.env.NODE_ENV === 'development') ? `${API_ACCOUNT_V1}/createQrCode?debug=1` : `${API_LOGIN_V1}/createQrCode`
+  GET_BIND_QRCODE: (process.env.NODE_ENV === 'development') ? `${API_ACCOUNT_V1}/createQrCode?debug=1` : `${API_ACCOUNT_V1}/createQrCode`,
+  // 权限 账户 -->账号密码登陆
+  POST_PASSWORD_LOGIN: (process.env.NODE_ENV === 'development') ? `${API_CODE_V1}/accountLogin?debug=1` : `${API_CODE_V1}/accountLogin`
 }
 
 export {

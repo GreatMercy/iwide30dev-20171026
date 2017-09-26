@@ -74,8 +74,9 @@ class Auth extends MY_Admin_Priv {
 	    $url.= '?'.http_build_query($oath_para);
 
         $post['form_action']= $url;
-        echo $this->_load_view($this->priv_dir. '/login', $post, TRUE);
+        echo $this->_load_view('authorize/login', $post, TRUE);
 
+        /*
 	    if( empty($post['username']) && empty($post['password']) ){
 	        $post['form_action']= $url;
 	        echo $this->_load_view($this->priv_dir. '/login', $post, TRUE);
@@ -120,7 +121,7 @@ class Auth extends MY_Admin_Priv {
                 $this->_redirect($url);
 	        }
 	    }
-
+        */
 
 	}
 	
@@ -270,57 +271,5 @@ class Auth extends MY_Admin_Priv {
         QRcode::png($text,false,6,6);
     }
 
-    /**
-     * 新版权限 统一登录同步回调地址 【弃用】
-     * 2017-09-21
-     * 沙沙
-     */
-    public function return_url()
-    {
-        $state = $this->input->get('state');
-        $icode = $this->input->get('icode');
-        $redirect_uri = $this->input->get('redirect_uri');
-        $this->config->load('authorize', TRUE);
-        $authorize = $this->config->item('authorize');
-
-        $app_id = $authorize['app_id'];
-        $app_secret = $authorize['app_secret'];
-
-        if ($this->session->userdata('authorize_state') == $state && !empty($icode))
-        {
-            //验证state
-            $this->load->helper('common');
-            $url = $authorize['host_auth'] . '/index.php/iapi/v1/application/authorize/login/login_session?app_id='
-                .$app_id.'&app_secret='.$app_secret.'&code='.$icode;
-            $result = doCurlGetRequest($url, array(),30);
-            $this->write_log('return_url','key',json_encode($result));
-            if ($result = json_decode($result,TRUE))
-            {
-                //跳转到过期页面地址
-                $redirect_uri = base64_decode($redirect_uri);
-                redirect($redirect_uri);
-
-                /**
-                require_once APPPATH . "/libraries/Application/OauthLib.php";
-                $url = $authorize['host_auth'] . '/index.php/iapi/v1/application/authority/account/test_session?app_id='.$app_id;
-                $data['data']=array(
-                'test'=>1
-                );
-                $data['session_key']=$result['session_key'];
-                $data['signature']= OauthLib::get_sign ( $data['data'], $result['granted_key'] );
-                echo '测试调用：'.doCurlPostRequest($url, json_encode($data),'',30);
-                 * */
-            }
-        }
-        else
-        {
-            $rand=mt_rand(100,10000);
-            $this->session->set_userdata('authorize_state',$rand);
-            $redirect = $authorize['host_auth'] . '/index.php/authorize/auth/login?redirect_uri='.base64_encode('http://'.$_SERVER ['HTTP_HOST'] . $_SERVER ['REQUEST_URI']).'&app_id='.$app_id.'&state='.$rand.'&scope=userlogin';
-            redirect($redirect);
-        }
-
-
-    }
 	
 }

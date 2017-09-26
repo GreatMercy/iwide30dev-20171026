@@ -283,6 +283,19 @@ const getBindCode = (data, config, version = 'v1') => {
   let url = apiConfig[version] && apiConfig[version].GET_BIND_QRCODE || apiConfig['v1'].GET_BIND_QRCODE
   return ajax.get(url, data, config)
 }
+/**
+ * 权限账户--密码登录
+ * @param {{String}} username
+ * @param {{String}} password
+ * @param {{String}} redirect_uri
+ * @param {{String}} app_id
+ * @param {{String}} state
+ * @param {{String}} scope
+ */
+const postPasswordLogin = (data, config, version = 'v1') => {
+  let url = apiConfig[version] && apiConfig[version].POST_PASSWORD_LOGIN || apiConfig['v1'].POST_PASSWORD_LOGIN
+  return ajax.post(url, data, config)
+}
 export {
   getPackageListDatas,
   postExpressDelivery,
@@ -310,5 +323,6 @@ export {
   getLoginQrcode,
   getScanStatus,
   postEditAccount,
-  getBindCode
+  getBindCode,
+  postPasswordLogin
 }

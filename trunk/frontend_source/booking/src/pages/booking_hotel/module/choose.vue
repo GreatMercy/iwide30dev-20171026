@@ -27,7 +27,7 @@
                       <input type="checkbox"
                              class="room_check"
                              @click="addRoom($event, value, key)" 
-                             v-if="value.countNum !== 0">
+                             v-if="value.book_status === 'available'">
                       <em></em>
                     </label>
                     <div class="product-info-cont">

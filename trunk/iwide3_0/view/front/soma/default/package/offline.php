@@ -1,6 +1,6 @@
 <body>
-<script src="<?php echo base_url('public/soma/scripts/imgscroll.js'); ?>"></script>
-<script src="<?php echo base_url('public/soma/scripts/jquery.touchwipe.min.js'); ?>"></script>
+<script src="<?php echo get_cdn_url('public/soma/scripts/imgscroll.js'); ?>"></script>
+<script src="<?php echo get_cdn_url('public/soma/scripts/jquery.touchwipe.min.js'); ?>"></script>
 <script>
     wx.config({
         debug: false,
@@ -53,7 +53,7 @@
                     <?php } ?>
                 <?php else: ?>
                     <a class="slideson ui_img_auto_cut">
-                        <img src="<?php echo base_url('public/soma/images/default.jpg'); ?>"/>
+                        <img src="<?php echo get_cdn_url('public/soma/images/default.jpg'); ?>"/>
                     </a>
                 <?php endif; ?>
             </div>
@@ -218,10 +218,10 @@
             <div class="foot_fixed foot_fixed__fsy">
                 <div class="bg_fff webkitbox bd_top">
                     <a href="<?php echo Soma_const_url::inst()->get_pacakge_home_page(array('id'=>$inter_id)); ?>" class="img_link">
-                        <img src="<?php echo base_url('public/soma/v1/images'); ?>/ico9.png"/>
+                        <img src="<?php echo get_cdn_url('public/soma/v1/images'); ?>/ico9.png"/>
                     </a>
                     <a href="<?php echo Soma_const_url::inst()->get_soma_ucenter(array('id'=>$inter_id)); ?>" class="img_link">
-                        <img src="<?php echo base_url('public/soma/v1/images'); ?>/ico10.png"/>
+                        <img src="<?php echo get_cdn_url('public/soma/v1/images'); ?>/ico10.png"/>
                     </a>
                     <div class="h24 bdradius bg_999" style="border: 1px solid transparent">
                         <?php echo $lang->line('goods_offline_tip'); ?>

@@ -113,6 +113,7 @@ class Auth extends MY_Front_Iapi
         {
             $ajaxData = array(
                 'list' => $account,
+                'user_info' => $this->user,
             );
             $this->out_put_msg(self::SUCCESS,'成功',$ajaxData);
         }
@@ -127,9 +128,16 @@ class Auth extends MY_Front_Iapi
      */
     public function qrLogin()
     {
-        $param = request();
+        $param = $this->get_source();
+        $request = request();
+        if (!empty($request))
+        {
+            $param = array_merge($param,$request);
+        }
+
         $adminId = !empty($param['admin_id']) ? intval($param['admin_id']) : '';
         $token = !empty($param['token']) ? addslashes($param['token']) : '';
+
         if (empty($adminId) || empty($token))
         {
             $this->out_put_msg(self::FAIL_AUTO,'参数错误');
@@ -146,7 +154,7 @@ class Auth extends MY_Front_Iapi
         $token = $this->valify_tokens_model->getOne('id,expire_time,token', $where);
         if (empty($token))
         {
-            $this->out_put_msg(self::FAIL_AUTO,'您已经登录成功');
+            $this->out_put_msg(self::SUCCESS,'您已经登录成功');
         }
 
         //判断二维码时效性

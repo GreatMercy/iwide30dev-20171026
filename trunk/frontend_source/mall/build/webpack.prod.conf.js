@@ -9,6 +9,7 @@ var HtmlWebpackPlugin = require('html-webpack-plugin')
 var ExtractTextPlugin = require('extract-text-webpack-plugin')
 var OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
 var ManifestPlugin = require('webpack-manifest-plugin')
+var version = require('../build/version')
 
 var env = process.env.NODE_ENV === 'testing'
   ? require('../config/test.env')
@@ -115,7 +116,8 @@ var webpackConfig = merge(baseWebpackConfig, {
       }
     ]),
     new ManifestPlugin({
-      fileName: `./soma/vue${process.env.npm_config_interid ? '_' + process.env.npm_config_interid : ''}/manifest${process.env.npm_config_cdn ? '-cdn' : ''}.json`
+      fileName: `./soma/vue/soma_${process.env.npm_config_interid ? process.env.npm_config_interid : 'com'}/${version}/manifest${process.env.npm_config_cdn ? '-cdn' : ''}.json`
+      // fileName: `./soma/vue${process.env.npm_config_interid ? '_' + process.env.npm_config_interid : ''}/manifest${process.env.npm_config_cdn ? '-cdn' : ''}.json`
     })
   ]
 })

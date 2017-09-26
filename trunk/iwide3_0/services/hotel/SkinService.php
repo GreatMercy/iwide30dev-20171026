@@ -98,16 +98,17 @@ class SkinService extends HotelBaseService
         //保存首页样式 页面logo 底部菜单
         $home_disp = $post['home_setting']['home_disp'];
         $disp_set = $this->getCI()->Skins_model->get_disp_set($this->inter_id, 'hotel/search');
+        $selected_skin = $this->Skins_model->get_skin_set($this->inter_id, $this->module);
         $set = array();
         if (!empty ($disp_set)) {
-            if ($home_disp == 'new') {
+            if ($home_disp == 'new' && $selected_skin['skin_name'] == 'default2') {
                 $set ['view_subfix'] = 'new';
             } else {
                 $set ['view_subfix'] = '';
             }
             $this->getCI()->Skins_model->update_disp_set($this->inter_id, $this->module, $disp_set ['id'], $set);
         } else {
-            if ($home_disp == 'new') {
+            if ($home_disp == 'new' && $selected_skin['skin_name'] == 'default2') {
                 $set ['view_subfix'] = 'new';
                 $set ['func'] = 'search';
                 $this->getCI()->Skins_model->add_skin_set($this->inter_id, $this->module, array(
@@ -125,11 +126,18 @@ class SkinService extends HotelBaseService
             $setting_data ['id'] = 0;
         }
 
+        // 描述过滤标签
+        $post_menu = $post['home_setting']['menu'];
+        foreach ($post_menu as &$val) {
+            $val['desc'] = strip_tags($val['desc']);
+        }
+        unset($val);
+
         $tmp = [
             'home_disp' => $home_disp,
             'img' => $post['home_setting']['logo'],
             'open' => 2,
-            'menu' => $post['home_setting']['menu']  //起始从1开始
+            'menu' => $post_menu  //起始从1开始
         ];
 
         $setting_data ['param_value'] = json_encode($tmp);
@@ -139,7 +147,6 @@ class SkinService extends HotelBaseService
         $setting_data ['hotel_id'] = 0;
         $this->getCI()->load->model('hotel/hotel_config_model');
         $this->getCI()->hotel_config_model->replace_config($setting_data);
-
 //
         //保存字体设置
         $skin_set = $this->getCI()->Skins_model->get_skin_set($this->getCI()->inter_id, $this->module);

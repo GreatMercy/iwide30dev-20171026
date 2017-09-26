@@ -10,6 +10,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 */
 class Memberexport extends MY_Admin
 {
+    private $hotels = '';
+    private $hotel_ids = array();
+
+    public function __construct(){
+        $this->hotels =  $this->session->get_admin_hotels();
+        $this->hotel_ids  = explode(",",$this->hotels);
+    }
+
+
     //导出会员资料
     public function member(){
         ini_set('memory_limit','512M');
@@ -536,6 +545,20 @@ class Memberexport extends MY_Admin
 //        $request_params['start_time'] ='2017-07-25';
 //        $request_params['end_time'] ='2017-09-25';
 
+        if (isset($request_params['hotel_id']) && !empty($request_params['hotel_id'])) {
+            $hotel_id = $request_params['hotel_id'];
+            if (!empty($this->hotel_ids) && is_array($this->hotel_ids)) {
+                if(!in_array($hotel_id,$this->hotel_ids)){
+                    $returnData['status'] = 1000;
+                    $returnData['err'] = 0;
+                    $returnData['msg'] = '权限不足，无法查看其它酒店数据';
+                    return ;
+                }
+            }
+        }else if( !empty($this->hotel_ids) && is_array($this->hotel_ids)){
+            $request_params['hotel_id'] = $this->hotel_ids;
+        }
+
         $this->load->model('membervip/admin/Vapi_statements','statements');
         $staffs = $this->statements->hotel_staffs( $inter_id );
 
@@ -624,6 +647,20 @@ class Memberexport extends MY_Admin
         ini_set('memory_limit','512M');
         $inter_id = $this->session->get_admin_inter_id();
         $request_params = $this->input->get();
+
+        if (isset($request_params['hotel_id']) && !empty($request_params['hotel_id'])) {
+            $hotel_id = $request_params['hotel_id'];
+            if (!empty($this->hotel_ids) && is_array($this->hotel_ids)) {
+                if(!in_array($hotel_id,$this->hotel_ids)){
+                    $returnData['status'] = 1000;
+                    $returnData['err'] = 0;
+                    $returnData['msg'] = '权限不足，无法查看其它酒店数据';
+                    return ;
+                }
+            }
+        }else if( !empty($this->hotel_ids) && is_array($this->hotel_ids)){
+            $request_params['hotel_id'] = $this->hotel_ids;
+        }
 
         $this->load->model('membervip/admin/Vapi_statements','statements');
         $staffs = $this->statements->hotel_staffs( $inter_id );

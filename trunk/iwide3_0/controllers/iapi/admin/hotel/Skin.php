@@ -75,7 +75,7 @@ class Skin extends MY_Admin_Iapi
         $this->load->model('hotel/Views_model');
         $views_model = $this->Views_model;
         if (!empty($logo)) {
-            if ($selected_skin['skin_name'] == $views_model::DEFAULT_SKIN ) {
+            if ($selected_skin['skin_name'] == $views_model::DEFAULT_SKIN) {
                 $logo['param_value'] = json_decode($logo['param_value'], true);
                 if ($logo['param_value']['home_disp'] == 'new') {
                     $sel_skin['intro_img'] = 'http://file.iwide.cn/public/uploads/201709/qf191931239392.png';
@@ -155,6 +155,38 @@ class Skin extends MY_Admin_Iapi
         ];
 
         $this->Skins_model->update_skin_set($this->inter_id, 'hotel', $post['id'], $set);
+
+        // 保存 display_set 表
+        $disp_set = $this->Skins_model->get_disp_set($this->inter_id, 'hotel/search');
+        $selected_skin = $this->Skins_model->get_skin_set($this->inter_id, $this->module);
+        $display_set = array();
+        if (!empty ($disp_set)) {
+            if ($selected_skin['skin_name'] != 'default2') {
+                $display_set['view_subfix'] = '';
+                $this->Skins_model->update_disp_set($this->inter_id, $this->module, $disp_set ['id'], $display_set);
+            } else {
+                $this->load->model('hotel/hotel_config_model');
+                $logo = $this->hotel_config_model->get_hotels_config_row(
+                    $this->inter_id, 'HOTEL', 0, 'HOME_SETTING'
+                );
+
+                //默认皮肤封面图 ori new
+                if (!empty($logo)) {
+                    $logo['param_value'] = json_decode($logo['param_value'], true);
+                    if ($logo['param_value']['home_disp'] == 'new') {
+                        $display_set['view_subfix'] = 'new';
+                    } else {
+                        $display_set['view_subfix'] = '';
+                    }
+                }
+                $this->Skins_model->update_disp_set($this->inter_id, $this->module, $disp_set ['id'], $display_set);
+            }
+        } else {
+            $display_set['view_subfix'] = '';
+            $display_set['func'] = 'search';
+            $this->Skins_model->add_disp_set($this->inter_id, $this->module, $display_set);
+        }
+
         $this->out_put_msg(BaseConst::OPER_STATUS_SUCCESS, '');
     }
 
@@ -227,7 +259,7 @@ class Skin extends MY_Admin_Iapi
         if (empty($roast)) {
             $this->out_put_msg(BaseConst::OPER_STATUS_FAIL_TOAST, '轮播图设置为空');
         }
-        $last_key = count($roast)-1;
+        $last_key = count($roast) - 1;
 
         //开启事务
         $this->db->trans_start();

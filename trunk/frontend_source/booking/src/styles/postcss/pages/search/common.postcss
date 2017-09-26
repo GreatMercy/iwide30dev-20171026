@@ -6,37 +6,50 @@
   .font-size--42{
     font-size: px2rem(42);
   }
+  .font-weight-600{
+    font-weight: 600;
+  }
+  .jfk-pl-44{
+    padding-left: px2rem(44);
+  }
+  .font-size--14{
+    font-size: px2rem(14);
+    vertical-align: top;
+  }
   .search_place_container{
-    margin-top: px2rem(22);
+    margin-top: px2rem(14);
     padding: 0 px2rem(82);
     padding-top: px2rem(44);
     font-size: px2rem(30);
     position: relative;
     .search_place{
-      height: px2rem(78);
+      height: px2rem(82);
       @mixin one-line horzin {};
       padding:0 px2rem(23);
-      padding-right: px2rem(40);
+      padding-right: px2rem(42);
       position:relative;
       &::before {
         bottom: 0;
         left: 0;
       }
       & .icon_search{
-        margin-right: px2rem(13);
+        margin-right: px2rem(6);
       }
       & .icon-booking_icon_nearby_normal{
         float: right;
       }
+    }
+    .search1{
+      height: px2rem(67);
     }
     .search_place2{
       height: px2rem(100);
     }
 
     .search_title{
-      width: 84%;
-      height: px2rem(32);
-      line-height: px2rem(32);
+      width: 85%;
+      height: px2rem(23);
+      line-height: px2rem(23);
       display: inline-block;
       @mixin one-line vertical {};
       position:relative;
@@ -51,12 +64,38 @@
       }
     }
     .searchCity{
-      line-height: 3rem;
+      /* line-height: 3rem; */
+      margin-top: px2rem(43);
     }
 
     .icon_place{
         margin-left: px2rem(20);
       }
+  @media only screen and (min-device-width: 375px) and (max-device-width: 667px) and (orientation : portrait) {
+      /*iPhone 6 Portrait*/
+      .icon_place{
+        margin-top: px2rem(-10);
+      }
+    }
+    @media only screen and (min-device-width: 375px) and (max-device-width: 667px) and (orientation : landscape) {
+    /*iPhone 6 landscape*/
+    .icon_place{
+        margin-top: px2rem(-10);
+      }
+    }
+    @media only screen and (min-device-width: 414px) and (max-device-width: 736px) and (orientation : portrait) {
+    /*iPhone 6+ Portrait*/
+    .icon_place{
+        margin-top: px2rem(-10);
+      }
+    }
+
+    @media only screen and (min-device-width: 414px) and (max-device-width: 736px) and (orientation : landscape) {
+    /*iPhone 6+ landscape*/
+    .icon_place{
+        margin-top: px2rem(-10);
+      }
+  }
   }
   .date_container{
      width: 100%;
@@ -65,7 +104,7 @@
      .left_date,.right_date{
       display: inline-block;
       overflow: hidden;
-      width: 40%;
+      width: 39%;
       float: left;
       text-align: right;
       position: relative;
@@ -79,24 +118,38 @@
         margin-top: px2rem(50);
         font-size: px2rem(22);
         letter-spacing: px2rem(20);
-        margin-bottom: px2rem(40);
+        margin-bottom: px2rem(10);
+      }
+      .addPadding{
+        padding-left: px2rem(16);
       }
       .live_date{
         width: 100%;
-        font-size: px2rem(114);
+        font-size: px2rem(122);
         height: px2rem(108);
         line-height: px2rem(108);
-        position: relative;
-        .icon_arrow{
-          position: absolute;
-          top: 13%;
+        /* position: relative; */
+        .date{
+          display: inline-block;
+          position: relative;
+          .icon_arrow{
+            position: absolute;
+            top: 13%;
+            left: px2rem(-63);
+          }
         }
       }
       .live_year{
         width: 100%;
         height: px2rem(42);
         line-height: px2rem(42);
-        margin-top: px2rem(10);
+        position: relative;
+        span{
+          margin-right: px2rem(20);
+          position: absolute;
+          top: 0;
+          right: 0;
+        }
       }
      }
 
@@ -106,14 +159,14 @@
         height:100%; */
         @mixin one-line  horzin {};
         /* position:relative; */
-        width: px2rem(100);
+        width: px2rem(88);
         display: inline-block;
         height: 100%;
         position: absolute;
         left: 50%;
         margin-left: px2rem(-50);
         &::before {
-        top: 73%;
+        top: 61%;
         left: 0;
          transform:rotate(125deg);
          -o-transform:rotate(125deg);
@@ -127,9 +180,28 @@
         float: right;
         width: 37%;
         .live_date{
-          .icon_arrow{
+          .dateer{
+            display: inline-block;
+            position: relative;
+            .icon_arrow{
+              position: absolute;
+              top: 13%;
+              right: px2rem(-63);
+              font-size: px2rem(12);
+            }
+          }
+  /*         .icon_arrow{
             left: px2rem(140);
             font-size: px2rem(16);
+          } */
+        }
+        .live_year{
+          position: relative;
+          span{
+            margin-right: px2rem(20);
+            position: absolute;
+            top: 0;
+            left: 0;
           }
         }
      }
@@ -138,46 +210,61 @@
         .live_date{
           .icon_arrow{
             right: px2rem(156);
-            font-size: px2rem(16);
+            font-size: px2rem(12);
           }
       }
      }
 
   }
   .checkBtn{
-    /* width: calc(100% - 82px * 2); */
-    /* height: px2rem(90); */
     padding: 0 px2rem(82);
     line-height: px2rem(90);
-    margin: px2rem(102) 0 px2rem(82) 0;
-    letter-spacing: px2rem(20);
+    margin: px2rem(48) 0 0 0;
     text-align: center;
     a{
       width: 100%;
-      /* height: 100%; */
       height: px2rem(90);
       display: inline-block;
+      border-radius: px2rem(3);
+      text-align: center;
     }
+  }
+  .mrb82{
+    margin-bottom: px2rem(82)
+  }
+  .mrb109{
+    margin-bottom: px2rem(109)
   }
   .search_info{
     font-size: px2rem(24);
     padding: 0 px2rem(25);
-    margin-bottom: px2rem(60);
      &_title{
-      font-size: px2rem(28);
       width: 100%;
       text-align:center;
-      margin-bottom: px2rem(32);
+      margin-bottom: px2rem(24);
     }
 
     .item_first{
-      margin-bottom: px2rem(32);
+      margin-bottom: px2rem(31);
+      position: relative;
+      .arrow{
+        position: absolute;
+        right: px2rem(60);
+        top: -4%;
+      }
     }
 
     .search_info_item{
        width: 100%;
        text-align: center;
        @mixin ellipsis 1;
+       & .city{
+        margin-right: px2rem(25);
+       }
+    }
+
+    .search_info_item:last-child{
+      margin-bottom: 0;
     }
 
     .item_second{
@@ -191,6 +278,16 @@
       }
     }
   }
+  .addLine{
+    padding: 0 px2rem(30);
+    height: px2rem(150);
+     @mixin one-line horzin {};
+      position:relative;
+      &::before {
+        top: px2rem(70);
+        right: 0;
+      }
+    }
   .foot_card{
     width: 100%;
     margin-bottom: px2rem(70);
@@ -229,6 +326,7 @@
     display:flex;
     align-items:center;
   }
+
   .flexwrap{
     flex-wrap:wrap;
   }
@@ -278,17 +376,19 @@
   }
   .others .img {
       width: 40px;
-      margin: 0 auto 0.75rem auto;
+      margin: 0 auto px2rem(6) auto;
   }
   .box_container{
     text-align:center;
+    /* margin-top: px2rem(160); */
     & .always,& .kill_sec{
       @mixin one-line vertical {};
       position:relative;
       &::before {
         position: absolute;
-        top: 0;
+        bottom: 0;
         right: 0;
+        height: px2rem(128);
       }
     }
     & .lastAlways.lastAlways.lastAlways.lastAlways{
@@ -296,6 +396,38 @@
         display: none;
       }
     }
+    @media only screen and (min-device-width: 375px) and (max-device-width: 667px) and (orientation : portrait) {
+      /*iPhone 6 Portrait*/
+      .secondA{
+        .img{
+          margin: 0 2.5125rem 0.1875rem auto;
+        }
+      }
+    }
+    @media only screen and (min-device-width: 375px) and (max-device-width: 667px) and (orientation : landscape) {
+    /*iPhone 6 landscape*/
+      .img{
+          margin: 0 2.5125rem 0.1875rem auto;
+      }
+    }
+    @media only screen and (min-device-width: 414px) and (max-device-width: 736px) and (orientation : portrait) {
+    /*iPhone 6+ Portrait*/
+    .secondA{
+     .img{
+          margin: 0 auto 0.1875rem auto;
+      }
+    }
+    }
+
+    @media only screen and (min-device-width: 414px) and (max-device-width: 736px) and (orientation : landscape) {
+    /*iPhone 6+ landscape*/
+    .secondA{
+    .img{
+          margin: 0 auto 0.1875rem auto;
+      }
+    }
+    }
+
   }
   .choose_date_calendar{
     position: fixed;
@@ -344,6 +476,24 @@
         text-align: center;
         margin-top: px2rem(40);
       }
+    }
+  }
+  /* iphone5 */
+  @media screen and (device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2){
+    .font-size--44{
+      font-size: px2rem(36);
+    }
+    .box_container{
+      padding: 0;
+    }
+    .secondA{
+      width: px2rem(106.6);
+    }
+    .secondB{
+      width: px2rem(106.6);
+    }
+    .lastAlways{
+      width: px2rem(106.6);
     }
   }
 }

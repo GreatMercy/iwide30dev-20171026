@@ -11,13 +11,13 @@
     <meta name=x5-fullscreen content=true>
     <meta name=x5-page-mode content=app>
     <meta name=viewport content="width=device-width,minimum-scale=1,maximum-scale=1,user-scalable=no">
-    <title>首页</title>
-    <link rel="stylesheet" href="<?php echo refer_res('app.css','public/ticket/revision') ?>">
+    <title>微信扫码登陆</title>
+    <link rel="stylesheet" href="<?php echo refer_res('app.css','public/wx') ?>">
 </head>
 <body>
 <div id=app></div>
-<div id=scriptArea data-page-id=index></div>
-<script type=text/javascript src="<?php echo refer_res('manifest.js','public/ticket/revision') ?>"></script>
-<script type=text/javascript src="<?php echo refer_res('app.js','public/ticket/revision') ?>"></script>
+<div id=scriptArea data-page-id="wxLogin"></div>
+<script type=text/javascript src="<?php echo refer_res('manifest.js','public/wx') ?>"></script>
+<script type=text/javascript src="<?php echo refer_res('app.js','public/wx') ?>"></script>
 </body>
 </html>

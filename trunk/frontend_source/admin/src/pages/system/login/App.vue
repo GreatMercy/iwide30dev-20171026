@@ -9,11 +9,11 @@
           :class="{'active': tabNavs.selected === item.login_type}">{{item.text}}</span></li>
       </ul>
       <div class="tabs-content">
-        <div class="ways" v-if="tabSeen">
+        <div class="ways" v-if="tabSeen === tabNavs.selected">
           <img :src="qrImg" alt="二维码">
           <!--未扫码前文字提示-->
           <p v-if="scanCodeStatus">请用微信扫描二维码登录后台~</p>
-          <span>{{expireTime}}</span>
+          <!--<span>{{expireTime}}</span>-->
           <!--扫码成功 文字提示-->
           <!--<p>-->
           <!--<span><i class="el-icon-circle-check"></i>扫描成功!</span><br>-->
@@ -26,10 +26,12 @@
               <el-input v-model="adminForm.account" placeholder="账号"></el-input>
             </el-form-item>
             <el-form-item label="" prop="password">
-              <el-input v-model="adminForm.password" placeholder="密码"></el-input>
+              <el-input v-model="adminForm.password" placeholder="密码" type="password"></el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-button class="login-btn" @click="loginAction('adminForm')">登陆</el-button>
             </el-form-item>
           </el-form>
-          <button class="login-btn">登陆</button>
           <a href="">金房卡</a>
           <span class="remember-account">
             <i class="el-icon-circle-check" v-if="rememberStatus" @click="rememberMe()"></i>
@@ -42,8 +44,9 @@
   </div>
 </template>
 <script>
-  import {getLoginQrcode, getScanStatus} from '@/service/system/http'
-  //  import {showFullLayer, formatUrlParams} from '@/utils/utils'
+  import {getLoginQrcode, getScanStatus, postPasswordLogin} from '@/service/system/http'
+  import {formatUrlParams} from '@/utils/utils'
+
   export default {
     name: 'login',
     created () {
@@ -52,7 +55,10 @@
         // 过期时间
         this.expireTime = res.web_data.expire_time
       })
+      // 获取请求登陆的页面的参数
+      this.urlParams = formatUrlParams(window.location.href)
       console.log(getScanStatus)
+      console.log(postPasswordLogin)
     },
     data () {
       var validatePass = (rule, value, callback) => {
@@ -82,7 +88,7 @@
             text: '账号密码登录'
           }]
         },
-        tabSeen: true,
+        tabSeen: 0,
         rememberStatus: false,
         scanCodeStatus: true,
         adminForm: {
@@ -101,10 +107,31 @@
     methods: {
       changeLoginWays (index) {
         this.tabNavs.selected = index
-        this.tabSeen = !this.tabSeen
+        this.tabSeen = index
       },
       rememberMe () {
         this.rememberStatus = !this.rememberStatus
+      },
+      // 登陆
+      loginAction (formName) {
+        let putData = {
+          username: this.adminForm.account,
+          password: this.adminForm.password,
+          redirect_uri: this.urlParams.redirect_uri || '',
+          app_id: this.urlParams.app_id || '123',
+          state: this.urlParams.state || '12',
+          scope: this.urlParams.scope || ''
+        }
+        console.log(putData)
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            console.log('哈哈哈 你已经填写了完整的信息')
+            postPasswordLogin(putData).then((res) => {
+            })
+          } else {
+            return false
+          }
+        })
       }
     }
   }
@@ -149,6 +176,7 @@
           width: 50%;
           list-style: none;
           margin-bottom: 45px;
+          cursor: pointer;
           span {
             text-align: center;
             display: block;
@@ -178,12 +206,12 @@
           }
           i {
             color: #b69b69;
-            padding-right: 3px;
+            margin-right: 3px;
             &.notRembered {
               display: inline-block;
-              width: 14px;
-              height: 14px;
-              border-radius: 14px;
+              width: 12px;
+              height: 12px;
+              border-radius: 12px;
               padding: 0;
               vertical-align: middle;
               border: 1px solid #b69b69;
