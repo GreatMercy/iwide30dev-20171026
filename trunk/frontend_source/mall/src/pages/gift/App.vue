@@ -4,13 +4,16 @@
       <div class="jfk-image__lazy--preload  jfk-image__lazy--3-3 jfk-image__lazy--background-image"></div>
     </div>
 
+
     <div class="jfk-pages__gift" v-if="theme" v-show="boxShow">
       <div class="gift-box">
         <div class="gift-box-envelope">
-          <div class="gift-box-wish jfk-ta-c font-size--36" v-html="name + '送你一份礼物'"></div>
-          <div class="gift-box-content"></div>
-          <div class="gift-box-bg"></div>
-          <div class="gift-box-btn jfk-ta-c font-size--34" @click="openGift">打开礼盒</div>
+          <div class="gift-animation">
+            <div class="gift-box-wish jfk-ta-c font-size--36" v-html="name + '送你一份礼物'"></div>
+            <div class="gift-box-content"></div>
+            <div class="gift-box-bg"></div>
+            <div class="gift-box-btn jfk-ta-c font-size--34" @click="openGift">打开礼盒</div>
+          </div>
         </div>
       </div>
     </div>
@@ -41,7 +44,8 @@
         // 礼盒显示
         boxShow: false,
         // 详情显示
-        detailShow: true
+        detailShow: true,
+        className: false
       }
     },
     created () {
@@ -69,8 +73,10 @@
         this.goodsDetail['goods_link'] = res['web_data']['redirect_url'] || ''
         // 判断之前是否曾经打开过礼物 （1 已领取  2 未领取）
         this.boxShow = parseInt(content['received']) === 1 ? 0 : 1
-        // this.boxShow = parseInt(content['received']) === 1
         this.toast.close()
+        this.$nextTick(() => {
+          this.className = true
+        })
       }).catch(() => {
         this.toast.close()
       })
@@ -113,3 +119,22 @@
     }
   }
 </script>
+<style lang="postcss" scoped>
+
+  @keyframes jfk-scale {
+    0% {
+      opacity: 0;
+      -webkit-transform: scale(.5);
+      transform: scale(.5)
+    }
+    100% {
+      opacity: 1;
+      -webkit-transform: scale(1);
+      transform: scale(1)
+    }
+  }
+
+  .gift-animation {
+    animation: jfk-scale 0.3s;
+  }
+</style>

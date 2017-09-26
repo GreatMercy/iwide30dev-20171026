@@ -16,7 +16,7 @@
 </head>
 <body>
 <div id=app></div>
-<div id=scriptArea data-page-id=index></div>
+<div id=scriptArea data-page-id="bindWx"></div>
 <script type=text/javascript src="<?php echo refer_res('manifest.js','public/ticket/revision') ?>"></script>
 <script type=text/javascript src="<?php echo refer_res('app.js','public/ticket/revision') ?>"></script>
 </body>

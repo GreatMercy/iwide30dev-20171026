@@ -28,6 +28,11 @@ const getPackageInfo = (data, config, version = 'v1') => {
   let url = apiConfig[version] && apiConfig[version].GET_PACKAGE_INFO || apiConfig.v1.GET_PACKAGE_INFO
   return ajax.get(url, data, config)
 }
+
+const getPackageAccorInfo = (data, config, version = 'v1') => {
+  let url = apiConfig[version] && apiConfig[version].GET_PACKAGE_ACCOR_INFO || apiConfig.v1.GET_PACKAGE_ACCOR_INFO
+  return ajax.get(url, data, config)
+}
 /**
  * 获取推荐商品
  * @param  {Object} data    请求参数
@@ -578,6 +583,7 @@ export {
   getPackageTickTime,
   getPackageCoupons,
   getPackageRule,
+  getPackageAccorInfo,
   postKillsecNotice,
   postOrderCreate,
   getKillsecStock,

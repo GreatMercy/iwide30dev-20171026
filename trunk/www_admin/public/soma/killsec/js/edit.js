@@ -525,7 +525,18 @@ function saveSeckill () {
 	});
 }
 
+function choiceActivityType () {
+    $('.homebuying-activity_name').on('click', function() {
+        if ($(this).hasClass('is--disabled')) {
+            return false;
+        } else {
+             window.location.href = $(this).attr('href');
+        }
+    });
+}
+
 $(function () {
+	choiceActivityType();
 	checkGoodsSelect();
 	startUpTime();
 	showTime();

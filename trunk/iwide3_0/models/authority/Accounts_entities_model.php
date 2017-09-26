@@ -47,10 +47,32 @@ class Accounts_entities_model extends MY_Model
         {
             $sql .= " WHERE {$where}";
         }
-
         $data = $this->db_read()->query($sql)->result_array();
         return $data;
     }
+
+
+    /**
+     * 获取公众号默认/第一个实例
+     * @param $filter
+     * @return
+     */
+    public function getDefaultEntity($filter)
+    {
+        $sql = "SELECT * FROM  ".self::TAB_AUTH_ACCOUNTS_ENT." AS entities ";
+
+        $where = $this->set_where_sql($filter);
+
+        if (!empty($where))
+        {
+            $sql .= " WHERE {$where}";
+        }
+        $sql .= " ORDER BY entities.is_default DESC";
+        $data = $this->db_read()->query($sql)->row_array();
+        return $data;
+    }
+
+
 
     /**
      * 查询酒店名称
@@ -122,16 +144,13 @@ class Accounts_entities_model extends MY_Model
      */
     public function getEntities($select = '*', $where = array(), $orderBy = '')
     {
-        $db = $this->db_read();
-        $db->select($select);
-        $db->from(self::TAB_AUTH_ACCOUNTS_ENT);
-        $db->where($where);
+        $admin_id = $where['admin_id'];
+        $sql = "SELECT {$select} FROM ".self::TAB_AUTH_ACCOUNTS_ENT." WHERE admin_id = {$admin_id} ";
         if (!empty($orderBy))
         {
-            $orderBy = explode(' ',$orderBy);
-            $db->order_by($orderBy[0],$orderBy[1]);
+            $sql .= "order by {$orderBy} desc";
         }
-        $query = $db->get()->reslut_array();
+        $query = $this->db_read()->query($sql)->result_array();
 
         return $query;
     }

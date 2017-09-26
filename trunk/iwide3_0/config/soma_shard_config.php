@@ -3528,6 +3528,12 @@ return array(
 			"table_suffix" => "_1001",
 		),
 	),
+	"a490350637" => array(
+		"*" => array(
+			"db_resource" => "iwide_soma",
+			"table_suffix" => "_1001",
+		),
+	),
 	"a491035214" => array(
 		"*" => array(
 			"db_resource" => "iwide_soma",
@@ -3655,6 +3661,42 @@ return array(
 		),
 	),
 	"a502268360" => array(
+		"*" => array(
+			"db_resource" => "iwide_soma",
+			"table_suffix" => "_1001",
+		),
+	),
+	"a504685390" => array(
+		"*" => array(
+			"db_resource" => "iwide_soma",
+			"table_suffix" => "_1001",
+		),
+	),
+	"a505130218" => array(
+		"*" => array(
+			"db_resource" => "iwide_soma",
+			"table_suffix" => "_1001",
+		),
+	),
+	"a505130389" => array(
+		"*" => array(
+			"db_resource" => "iwide_soma",
+			"table_suffix" => "_1001",
+		),
+	),
+	"a505289457" => array(
+		"*" => array(
+			"db_resource" => "iwide_soma",
+			"table_suffix" => "_1001",
+		),
+	),
+	"a505291364" => array(
+		"*" => array(
+			"db_resource" => "iwide_soma",
+			"table_suffix" => "_1001",
+		),
+	),
+	"a506048732" => array(
 		"*" => array(
 			"db_resource" => "iwide_soma",
 			"table_suffix" => "_1001",

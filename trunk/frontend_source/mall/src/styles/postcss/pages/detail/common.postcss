@@ -332,9 +332,6 @@
   /*图文详情 订购须知 商品内容*/
   .productinfo-detail {
     padding-top: px2rem(46);
-    .jfk-sticky {
-      z-index: 100;
-    }
     &-box {
       padding-bottom: px2rem(132 - 90);
     }
@@ -599,6 +596,29 @@
     .product-price-package,.product-price-market {
       display: inline-block;
     }
+    .product-price-package {
+      font-size: calc(68 / 24)em;
+    }
+    @media screen and (max-width: 320px) {
+      .prices--length {
+        &-6 {
+          .product-price-package {
+            font-size: calc(58 / 24)em;
+          }
+          .product-price-market {
+            margin-left: -.31em;
+          }
+        }
+        &-7 {
+          .product-price-package {
+            font-size: calc(48 / 24)em;
+          }
+          .product-price-market {
+            margin-left: -.31em;
+          }
+        }
+      }
+    }
     .product-price-market {
       vertical-align: .3em;
     }
@@ -608,7 +628,7 @@
       position: relative;
       .triangle{
         vertical-align: middle;
-        padding-left: calc(5 / 24)em;
+        margin-left: calc(-4 / 24)em;
       }
     }
   }

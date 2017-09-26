@@ -39,7 +39,7 @@
                     <div class="item__left">
                         <span class="title font-size--28">券码</span>
                         <span class="number fot-size--32">
-                          <jfk-text-split :text="item.code" :split="3" ></jfk-text-split>
+                          <jfk-text-split :text="item.code" :split="4" ></jfk-text-split>
                         </span>
                     </div>
                     <div class="item__right" v-if="item.status == '2'">
@@ -87,7 +87,7 @@
     </div>
     <jfk-popup :showCloseButton="true" class="coupon-qrcode jfk-ta-c" v-model="showQrcode">
       <p class="font-color-extra-light-gray font-size--32 content">
-        <jfk-text-split :text="popQrcodeNum" :split="3" ></jfk-text-split>
+        <jfk-text-split :text="popQrcodeNum" :split="4" ></jfk-text-split>
       </p>
       <img :src="popQrcodeUrl"></img>
       

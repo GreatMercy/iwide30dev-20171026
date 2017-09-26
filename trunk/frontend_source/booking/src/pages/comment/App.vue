@@ -5,37 +5,60 @@
       <p class="choose_prt_top_item1 font-size--30">{{postData.room_name}}</p>
       <p class="choose_prt_top_item2 font-size--24 grayColorbf">{{postData.hotel_name}}</p>
       <p class="choose_prt_top_item3 font-size--24 grayColorbf">
-        <span>入住{{startdate}}</span><span>离开{{enddate}}</span><span>共{{postData.room_night}}晚</span>
+        <span>入住<span class="grayColor80">{{startdate}}</span></span><span>离开<span class="grayColor80">{{enddate}}</span></span><span>共{{postData.room_night}}晚</span>
       </p>
     </div>
     <!-- 评分容器 -->
     <div class="star_container">
       <div class="star_title">酒店评分</div>
-      <div class="star_list">
+      <div class="star_list grayColor80">
         <p class="star_list_item">
-          <span class="star_list_item_name">{{comment_config.clean_score}}</span>
-          <jfk-rater v-model="star.value0" :font-size="24" :margin="20" :disabled="false" :value="star.value0"
-                     :max="5"></jfk-rater>
+          <span class="star_list_item_name font-size--28">{{comment_config.clean_score}}</span>
+          <jfk-rater v-model="star.value0" 
+                      :font-size="1" 
+                      :margin="1.25" 
+                      :disabled="false" 
+                      :value="star.value0" 
+                      :max="5">
+          </jfk-rater>
         </p>
         <p class="star_list_item">
-          <span class="star_list_item_name">{{comment_config.facilities_score}}</span>
-          <jfk-rater :margin="20" v-model="star.value1" :disabled="false" :value="star.value1"></jfk-rater>
+          <span class="star_list_item_name font-size--28">{{comment_config.facilities_score}}</span>
+          <jfk-rater 
+              :margin="1.25" 
+              v-model="star.value1" 
+              :disabled="false" 
+              :font-size="1" 
+              :value="star.value1">
+          </jfk-rater>
         </p>
         <p class="star_list_item">
-          <span class="star_list_item_name">{{comment_config.net_score}}</span>
-          <jfk-rater :margin="20" v-model="star.value2" :disabled="false" :value="star.value2"></jfk-rater>
+          <span class="star_list_item_name font-size--28">{{comment_config.net_score}}</span>
+          <jfk-rater 
+                :margin="1.25"
+                :font-size="1" 
+                v-model="star.value2" 
+                :disabled="false" 
+                :value="star.value2"> 
+          </jfk-rater>
         </p>
         <p class="star_list_item">
-          <span class="star_list_item_name">{{comment_config.service_score}}</span>
-          <jfk-rater :margin="20" v-model="star.value3" :disabled="false" :value="star.value3"></jfk-rater>
+          <span class="star_list_item_name font-size--28">{{comment_config.service_score}}</span>
+          <jfk-rater :font-size="1" 
+                     :margin="1.25" 
+                     v-model="star.value3" 
+                     :disabled="false" 
+                     :value="star.value3">    
+          </jfk-rater>
         </p>
       </div>
     </div>
     <div class="trip_type jfk-pl-30 jfk-pr-30 font-size--30" v-show="tourType !== null">
-      <p class="title">出游类型</p>
+      <p class="title font-size--24 grayColor80">出游类型</p>
       <ul class="tripType">
-        <li v-for="(item, index) in tourType" @click="chooseType(index)" :key="index"
-            :class="{'active':selectedTour === index}">
+        <li v-for="(item, index) in tourType" 
+            @click="chooseType(index)" :key="index"
+            :class="{'active':selectedTour === index}" class="font-size--30">
           {{item}}
         </li>
       </ul>
@@ -89,7 +112,6 @@
 </template>
 <script>
   import formatUrlParams from 'jfk-ui/lib/format-urlparams.js'
-  // submitComment
   import {getCommentOrderDetail, submitComment} from '@/service/http'
 //  import jfkRater from '../../../../common/components/src/packages/jfk-rater/src/main.vue'
   export default {
@@ -186,13 +208,18 @@
       // 删除图片
       deletePic (index) {
         this.images.splice(index, 1)
+        this.imgServerId.splice(index, 1)
       },
       // 微信选择图片
       chooseImage () {
         const wx = window.wx
         if (this.images.length >= this.limited_upload) {
-          alert('已超过最大图片数')
-          return false
+          this.$jfkToast({
+            duration: 1000,
+            iconType: 'error',
+            message: '已超过最大图片数'
+          })
+          return
         }
         this.upload_num = this.limited_upload - this.images.length
         let that = this
@@ -210,6 +237,7 @@
                 that.$set(that.images, length + j, res.localIds[j])
               }
               that.imageLength = 0
+              that.imgServerId = []
               that.upload()
             }
           })
@@ -245,6 +273,7 @@
         this.postData.facilities_score = this.star.value2
         this.postData.clean_score = this.star.value3
         this.postData.content = this.comment_input_value
+        this.postData.img_url = {}
         for (let key in this.imgServerId) {
           this.postData.img_url[key] = this.imgServerId[key]
         }
@@ -287,8 +316,7 @@
             iconType: 'success',
             message: '评论提交成功！'
           })
-          // window.location.href = this.jumpUrl
-          window.location.href = res.web_data.page_resource.HOTEL_COMMENT
+          window.location.href = res.web_data.page_resource.links.HOTEL_COMMENT
         }).catch(function (e) {
           if (loading) {
             loading.close()

@@ -25,7 +25,7 @@ class Package_model extends CI_Model {
 			}
 			$condit ['openid'] = $params ['openid'];
 		}
-		
+
 		$this->load->model ( 'hotel/Member_model' );
 		$member_privilege = $this->Member_model->level_privilege ( $inter_id );
 		if (! empty ( $member_privilege )) {
@@ -34,7 +34,7 @@ class Package_model extends CI_Model {
 		if (! empty ( $member_lv )) {
 			$condit ['member_level'] = $member_lv;
 		}
-		
+
 		$in_room = '';
 		$hotel_ids = '';
 		$hotel_price_codes = array ();
@@ -55,10 +55,11 @@ class Package_model extends CI_Model {
 		$hotels = $this->Hotel_model->get_hotel_by_ids ( $inter_id, substr ( $hotel_ids, 1 ) );
 		$hotels = array_column ( $hotels, NULL, 'hotel_id' );
 		$rooms = array ();
+		$db = $this->load->database('iwide_r1',true);
 		if (! empty ( $in_room )) {
-			$sql = "select room_id,name,room_img,hotel_id,nums,sort from iwide_hotel_rooms where inter_id='$inter_id' and ";
+			$sql = "select room_id,name,room_img,hotel_id,nums,sort,webser_id from iwide_hotel_rooms where inter_id='$inter_id' and ";
 			$sql .= " room_id in (" . substr ( $in_room, 1 ) . ") ";
-			$result = $this->db->query ( $sql )->result_array ();
+			$result = $db->query ( $sql )->result_array ();
 			if ($result) {
 				foreach ( $result as $r ) {
 					$rooms [$r ['hotel_id']] [$r ['room_id']] = $r;
@@ -73,13 +74,13 @@ class Package_model extends CI_Model {
 		foreach ( $hotel_rooms as $hotel_id => $room ) {
 			$data [$hotel_id] = array (
 					'hotel_info' => array (),
-					'room_state' => array () 
+					'room_state' => array ()
 			);
 			if (! empty ( $hotels [$hotel_id] )) {
 				$data [$hotel_id] ['hotel_info'] = array (
 						'name' => $hotels [$hotel_id] ['name'],
 						'address' => $hotels [$hotel_id] ['address'],
-						'hotel_id' => $hotel_id 
+						'hotel_id' => $hotel_id
 				);
 			}
 			if (! empty ( $rooms [$hotel_id] )) {
@@ -88,7 +89,7 @@ class Package_model extends CI_Model {
 					$condit ['price_codes'] = implode ( ',', $hotel_price_codes [$hotel_id] );
 					$data [$hotel_id] ['room_state'] = $adapter->get_rooms_change ( $rooms [$hotel_id], array (
 							'inter_id' => $inter_id,
-							'hotel_id' => $hotel_id 
+							'hotel_id' => $hotel_id
 					), $condit, true );
 				}
 			}
@@ -108,19 +109,19 @@ class Package_model extends CI_Model {
 				'price_code',
 				'name',
 				'tel',
-				'allprice' 
+				'allprice'
 		);
 		if ($diff = array_diff ( $ness, array_keys ( $params ) )) {
 			return $this->rtn_msg ( FALSE, '缺少 ' . current ( $diff ) . '' );
 		}
-		
+
 		$this->load->model ( 'hotel/Hotel_model' );
 		$this->load->model ( 'hotel/Order_model' );
 		$this->load->model ( 'hotel/Hotel_check_model' );
 		$hotel_id = $params ['hotel_id'];
 		$room_id = $params ['room_id'];
 		$openid = $params ['openid'];
-		
+
 		if (! strtotime ( $params ['startdate'] ) || ! strtotime ( $params ['enddate'] ) || $params ['startdate'] < date ( 'Ymd' ) || $params ['enddate'] <= $params ['startdate']) {
 			return $this->rtn_msg ( FALSE, '入离日期错误' );
 		}
@@ -136,10 +137,10 @@ class Package_model extends CI_Model {
 			return $this->rtn_msg ( FALSE, '价格不正确！' );
 		}
 		$price = array_sum ( $price );
-		
+
 		$condit = array (
 				'startdate' => $startdate,
-				'enddate' => $enddate 
+				'enddate' => $enddate
 		);
 		$condit ['openid'] = $openid;
 		$pub_pmsa = $this->Hotel_check_model->get_hotel_adapter ( $inter_id, 0, TRUE );
@@ -160,31 +161,31 @@ class Package_model extends CI_Model {
 			$condit ['member_level'] = $member_lv;
 		}
 		$room_list = $this->Hotel_model->get_rooms_detail ( $inter_id, $hotel_id, array (
-				$room_id 
+				$room_id
 		), array (
-				'data' => 'key' 
+				'data' => 'key'
 		) );
 		$adapter = $this->Hotel_check_model->get_hotel_adapter ( $inter_id, $hotel_id, TRUE );
 		$rooms = $adapter->get_rooms_change ( $room_list, array (
 				'inter_id' => $inter_id,
-				'hotel_id' => $hotel_id 
+				'hotel_id' => $hotel_id
 		), $condit, true );
 		if (empty ( $rooms )) {
 			return $this->rtn_msg ( FALSE, '无可订房间！' );
 		}
-		
+
 		$data_arr = array (
-				$room_id => $params ['roomnums'] 
+				$room_id => $params ['roomnums']
 		);
 		$order_data = array ();
 		$order_additions = array ();
 		$subs = array ();
 		$room_codes = array ();
 		$roomnos = array ();
-		
+
 		foreach ( $rooms as $k => $rm ) {
 			$code_price = $rm ['state_info'] [$params ['price_code']];
-			
+				
 			if ($code_price ['book_status'] != 'available') {
 				return $this->rtn_msg ( FALSE, '房间数不足！' );
 			}
@@ -193,7 +194,7 @@ class Package_model extends CI_Model {
 			$price_type = $code_price ['price_type'];
 			empty ( $code_price ['extra_info'] ) or $room_codes [$room_info ['room_id']] ['code'] ['extra_info'] = $code_price ['extra_info'];
 			$room_codes [$room_info ['room_id']] ['room'] ['webser_id'] = $rm ['room_info'] ['webser_id'];
-			
+				
 			$subs [$room_info ['room_id']] ['allprice'] = $params ['allprice'];
 			$subs [$room_info ['room_id']] ['roomname'] = $room_info ['name'];
 			$subs [$room_info ['room_id']] ['iprice'] = $price;
@@ -216,36 +217,37 @@ class Package_model extends CI_Model {
 		$order_data ['channel'] = 'package';
 		if (! empty ( $member_no ))
 			$order_data ['member_no'] = $member_no;
-		$order_additions ['room_codes'] = json_encode ( $room_codes );
-		$info = $this->Order_model->create_order ( $inter_id, array (
-				'main_order' => $order_data,
-				'order_additions' => $order_additions 
-		), $data_arr, $subs, array () );
-		if ($info ['s'] == 1) {
-			$msg = $adapter->order_submit ( $inter_id, $info ['orderid'], array (
-					'room_codes' => $room_codes 
-			) );
-			if ($msg ['s'] == 0) {
-				$this->Order_model->handle_order ( $inter_id, $info ['orderid'], 10, $openid ); // pms下单失败，退回
-				return $this->rtn_msg ( FALSE, $msg ['errmsg'] );
+			$order_additions ['room_codes'] = json_encode ( $room_codes );
+			$info = $this->Order_model->create_order ( $inter_id, array (
+					'main_order' => $order_data,
+					'order_additions' => $order_additions
+			), $data_arr, $subs, array () );
+			if ($info ['s'] == 1) {
+				$msg = $adapter->order_submit ( $inter_id, $info ['orderid'], array (
+						'room_codes' => $room_codes
+				) );
+				if ($msg ['s'] == 0) {
+					$this->Order_model->handle_order ( $inter_id, $info ['orderid'], 10, $openid ); // pms下单失败，退回
+					return $this->rtn_msg ( FALSE, $msg ['errmsg'] );
+				} else {
+					$this->Order_model->update_order_status ( $inter_id, $info ['orderid'], 1,$openid,TRUE,TRUE );
+					// 				$this->Order_model->handle_order ( $inter_id, $info ['orderid'], 'ss' );
+					// 				if ($order_data ['status'] == 1) {
+					// 					$this->Order_model->handle_order ( $inter_id, $info ['orderid'], $order_data ['status'], $openid );
+					// 				}
+				}
+				$db = $this->load->database('iwide_r1',true);
+				$addition=$db->get_where('hotel_order_additions',array(
+						'inter_id'=>$inter_id,
+						'orderid'=>$info['orderid']
+				))->row_array();
+				return $this->rtn_msg ( TRUE, '下单成功', array (
+						'orderid' => $info ['orderid'],
+						'show_orderid' => empty ( $addition ['web_orderid'] ) ? $info ['orderid'] : $addition ['web_orderid']
+				) );
 			} else {
-				$this->Order_model->update_order_status ( $inter_id, $info ['orderid'], 1,$openid,TRUE,TRUE );
-// 				$this->Order_model->handle_order ( $inter_id, $info ['orderid'], 'ss' );
-// 				if ($order_data ['status'] == 1) {
-// 					$this->Order_model->handle_order ( $inter_id, $info ['orderid'], $order_data ['status'], $openid );
-// 				}
+				return $this->rtn_msg ( FALSE, $info ['errmsg'] );
 			}
-			$addition=$this->db->get_where('hotel_order_additions',array(
-					'inter_id'=>$inter_id,
-					'orderid'=>$info['orderid']
-			))->row_array();
-			return $this->rtn_msg ( TRUE, '下单成功', array (
-					'orderid' => $info ['orderid'],
-					'show_orderid' => empty ( $addition ['web_orderid'] ) ? $info ['orderid'] : $addition ['web_orderid'] 
-			) );
-		} else {
-			return $this->rtn_msg ( FALSE, $info ['errmsg'] );
-		}
 	}
 	private function rtn_msg($s = TRUE, $errmsg = '', $data = array()) {
 		$info = array ();
@@ -267,17 +269,17 @@ class Package_model extends CI_Model {
 		$data = array (
 				's' => 1,
 				'errmsg' => '查询成功',
-				'data' => $state 
+				'data' => $state
 		);
 		$mode = array (
 				'ks' => array (
 						's',
-						'errmsg' 
+						'errmsg'
 				),
 				'fks' => array (
 						'data' => array (
 								'ks' => array (
-										'hotel_info' 
+										'hotel_info'
 								),
 								'fks' => array (
 										'room_state' => array (
@@ -286,9 +288,9 @@ class Package_model extends CI_Model {
 																'ks' => array (
 																		'room_id',
 																		'name',
-																		'room_img' 
-																) 
-														) 
+																		'room_img'
+																)
+														)
 												),
 												'fks' => array (
 														'state_info' => array (
@@ -305,43 +307,43 @@ class Package_model extends CI_Model {
 																		'date_detail' => array (
 																				'ks' => array (
 																						'price',
-																						'nums' 
-																				) 
-																		) 
-																) 
-														) 
-												) 
-										) 
-								) 
-						) 
-				) 
+																						'nums'
+																				)
+																		)
+																)
+														)
+												)
+										)
+								)
+						)
+				)
 		);
 		return $this->data_dehydrate ( $data, $mode );
 	}
 	public function data_dehydrate($data, $mode) {
 		if (empty ( $mode ))
 			return $data;
-		$tmp = array ();
-		if (! empty ( $mode ['ks'] )) {
-			$mode ['ks'] = array_flip ( $mode ['ks'] );
-			$tmp = array_intersect_key ( $data, $mode ['ks'] );
-		}
-		if (! empty ( $mode ['kas'] )) {
-			foreach ( $mode ['kas'] as $mk => $mod ) {
-				$tmp [$mk] = isset ( $data [$mk] ) ? $this->data_dehydrate ( $data [$mk], $mod ) : NULL;
+			$tmp = array ();
+			if (! empty ( $mode ['ks'] )) {
+				$mode ['ks'] = array_flip ( $mode ['ks'] );
+				$tmp = array_intersect_key ( $data, $mode ['ks'] );
 			}
-		}
-		if (! empty ( $mode ['fks'] )) {
-			foreach ( $mode ['fks'] as $mk => $mod ) {
-				if (isset ( $data [$mk] )) {
-					foreach ( $data [$mk] as $fk => $fm ) {
-						$tmp [$mk] [$fk] = $this->data_dehydrate ( $fm, $mod );
-					}
-				} else {
-					$tmp [$mk] = NULL;
+			if (! empty ( $mode ['kas'] )) {
+				foreach ( $mode ['kas'] as $mk => $mod ) {
+					$tmp [$mk] = isset ( $data [$mk] ) ? $this->data_dehydrate ( $data [$mk], $mod ) : NULL;
 				}
 			}
-		}
-		return $tmp;
+			if (! empty ( $mode ['fks'] )) {
+				foreach ( $mode ['fks'] as $mk => $mod ) {
+					if (isset ( $data [$mk] )) {
+						foreach ( $data [$mk] as $fk => $fm ) {
+							$tmp [$mk] [$fk] = $this->data_dehydrate ( $fm, $mod );
+						}
+					} else {
+						$tmp [$mk] = NULL;
+					}
+				}
+			}
+			return $tmp;
 	}
 }

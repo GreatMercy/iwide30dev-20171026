@@ -8,16 +8,20 @@
   }
   .product-info {
     .gap-line {
-      @mixin line-down {
-        transform: rotate(-90deg);
-        transform-origin: center;
-        width: calc(72 / 30)em;
-        top: px2rem(70);
-        bottom: auto;
-        left: -1em;
-      }
+      &:before{
+        content: '';
+        display: inline-block;
+        width: px2rem(6);
+        height: px2rem(80);
+        position: absolute;
+        left: 0;
+        top: 0;
+        border-radius: 0 50% 50%  0;
+        background-image: radial-gradient(ellipse at left center, currentColor 0%, color(#fff a(0%)) 70%);
+        opacity: 0.8;
+      } 
       position: absolute;
-      top: 0;
+      top: px2rem(36);
       left: 0;
     }
     .product-other {

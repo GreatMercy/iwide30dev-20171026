@@ -4,7 +4,7 @@
       <div class="jfk-image__lazy--preload  jfk-image__lazy--3-3 jfk-image__lazy--background-image"></div>
     </div>
 
-    <div class="gift-container" v-if="theme">
+    <div class="gift-container" v-if="theme" :style="containerHeight">
 
       <gift-bg :wish="wish" v-if="wish"></gift-bg>
 
@@ -51,7 +51,8 @@
         // 已领取
         received: '',
         // 状态
-        status: ''
+        status: '',
+        containerHeight: ''
       }
     },
     created () {
@@ -72,6 +73,18 @@
         this.received = parseInt(result['get_count'])
         this.status = parseInt(result['gift_status'])
         this.toast.close()
+        let height = window.innerHeight
+        if (this.giftList.length > 0) {
+          if (height <= 480) {
+            height = 500
+          }
+        }
+        this.containerHeight = {
+          'position': 'relative',
+          'height': height + 'px',
+          'min-height': height + 'px',
+          'overflow': 'hidden'
+        }
       }).catch(() => {
         this.toast.close()
       })

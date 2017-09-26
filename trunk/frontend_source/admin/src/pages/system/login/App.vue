@@ -5,39 +5,73 @@
     </div>
     <div class="login-box">
       <ul class="tab-navs">
-        <li v-for="item in tab_navs.navs" @click="changeLoginWays(item.login_type)"><span
-          :class="{'active':tab_navs.selected === item.login_type}">{{item.text}}</span></li>
+        <li v-for="item in tabNavs.navs" @click="changeLoginWays(item.login_type)"><span
+          :class="{'active': tabNavs.selected === item.login_type}">{{item.text}}</span></li>
       </ul>
       <div class="tabs-content">
-        <div class="ways" v-if="tab_seen">
-          <img src="https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=1565059807,4002951989&fm=26&gp=0.jpg"
-               alt="二维码">
+        <div class="ways" v-if="tabSeen">
+          <img :src="qrImg" alt="二维码">
           <!--未扫码前文字提示-->
-          <p>请用微信扫描二维码登录后台~</p>
+          <p v-if="scanCodeStatus">请用微信扫描二维码登录后台~</p>
+          <span>{{expireTime}}</span>
           <!--扫码成功 文字提示-->
-          <p>
-            <span><i class="el-icon-circle-check"></i>扫描成功!</span><br>
-            <span>请在微信上进行后续操作</span>
-          </p>
+          <!--<p>-->
+          <!--<span><i class="el-icon-circle-check"></i>扫描成功!</span><br>-->
+          <!--<span>请在微信上进行后续操作</span>-->
+          <!--</p>-->
         </div>
-        <div v-else class="ways account-box">
-          <input type="text" placeholder="账号"/>
-          <input type="text" placeholder="密码"/>
+        <div class="ways account-box" v-else>
+          <el-form :model="adminForm" :rules="adminRules" ref="adminForm">
+            <el-form-item label="" prop="account">
+              <el-input v-model="adminForm.account" placeholder="账号"></el-input>
+            </el-form-item>
+            <el-form-item label="" prop="password">
+              <el-input v-model="adminForm.password" placeholder="密码"></el-input>
+            </el-form-item>
+          </el-form>
           <button class="login-btn">登陆</button>
           <a href="">金房卡</a>
-          <span class="remember-account"><i class="el-icon-circle-check"></i>记住账号</span>
+          <span class="remember-account">
+            <i class="el-icon-circle-check" v-if="rememberStatus" @click="rememberMe()"></i>
+            <i class="notRembered" @click="rememberMe()" v-else></i>
+            <span>记住账号</span>
+          </span>
         </div>
       </div>
     </div>
   </div>
 </template>
 <script>
+  import {getLoginQrcode, getScanStatus} from '@/service/system/http'
+  //  import {showFullLayer, formatUrlParams} from '@/utils/utils'
   export default {
     name: 'login',
+    created () {
+      getLoginQrcode().then((res) => {
+        this.qrImg = res.web_data.imgUrl
+        // 过期时间
+        this.expireTime = res.web_data.expire_time
+      })
+      console.log(getScanStatus)
+    },
     data () {
+      var validatePass = (rule, value, callback) => {
+        let passReg = /^[a-zA-Z0-9]{6,16}$/
+        let numReg = /^[0-9]*$/
+        let wordReg = /^[a-zA-Z]*$/
+        if (value === '') {
+          callback(new Error('请输入密码！'))
+        } else if (numReg.test(value) || wordReg.test(value)) {
+          callback(new Error('请输入数字和英文的组合！'))
+        } else if (!passReg.test(value)) {
+          callback(new Error('请输入6-16位的密码!'))
+        } else {
+          callback()
+        }
+      }
       return {
         login_logo: require('../../../assets/image/jfk_login_logo.png'),
-        tab_navs: {
+        tabNavs: {
           // 登陆方式navs切换
           selected: 0,
           navs: [{
@@ -48,13 +82,29 @@
             text: '账号密码登录'
           }]
         },
-        tab_seen: true
+        tabSeen: true,
+        rememberStatus: false,
+        scanCodeStatus: true,
+        adminForm: {
+          account: '',
+          password: ''
+        },
+        expireTime: '',
+        qrImg: '',
+        adminRules: {
+          account: [{required: true, message: '请输入2-20位的账号', trigger: 'blur'},
+            {min: 2, max: 20, message: '长度在 2 到 20 个字符', trigger: 'blur'}],
+          password: [{required: true, validator: validatePass, trigger: 'blur'}]
+        }
       }
     },
     methods: {
       changeLoginWays (index) {
-        this.tab_navs.selected = index
-        this.tab_seen = !this.tab_seen
+        this.tabNavs.selected = index
+        this.tabSeen = !this.tabSeen
+      },
+      rememberMe () {
+        this.rememberStatus = !this.rememberStatus
       }
     }
   }
@@ -129,6 +179,15 @@
           i {
             color: #b69b69;
             padding-right: 3px;
+            &.notRembered {
+              display: inline-block;
+              width: 14px;
+              height: 14px;
+              border-radius: 14px;
+              padding: 0;
+              vertical-align: middle;
+              border: 1px solid #b69b69;
+            }
           }
           &.account-box {
             padding: 0 10px;
@@ -139,7 +198,6 @@
             border-radius: 4px;
             margin-bottom: 15px;
             height: 40px;
-            border: 1px solid #eee;
             color: #333;
             outline: none;
             &::-webkit-input-placeholder {
@@ -177,6 +235,9 @@
           }
         }
       }
+    }
+    .el-form-item__error {
+      margin-left: 20px;
     }
 
   }

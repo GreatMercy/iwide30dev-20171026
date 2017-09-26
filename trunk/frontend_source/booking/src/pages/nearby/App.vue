@@ -10,9 +10,13 @@
       </span>
       <span class="search_bar_item" @click="changeTab($event,'comment_score')">
         <span class="type">评价</span>
+         <i class="booking_icon_font font-size--24 icon-booking_icon_reverseorder_normal" v-show="comment_score_down"></i>
+        <i class="booking_icon_font font-size--24 icon-booking_icon_positiveorder_normal" v-show="comment_score_up"></i>
       </span>
       <span class="search_bar_item"
-            @click="changeTab($event,'distance')" :class="filterType === 'distance' ? 'active' : ''">
+            @click="changeTab($event,'distance')" 
+            :class="filterType === 'distance' ? 'active' : ''" 
+            id="place">
         <span class="type">距离</span>
       </span>
       <span class="search_bar_item" @click="showSearchEvt()">
@@ -21,12 +25,12 @@
       </span>
       <span class="search_bar_item dateContainer font-size--28" @click="showCalenDar()">
         <span class="type3">
-          <span class="grayColorbf">入住</span> {{startDate}}<br><span class="grayColorbf">离店</span> {{endDate}}
-        </span>
+          <span class="grayColorbf">入住</span><span class="Color333">{{startDate}}</span><br><span class="grayColorbf">离店</span><span class="Color333">{{endDate}}</span>
+        </span>&nbsp;
         <i class="booking_icon_font icon-booking_icon_dropdown_normal arrow_icon"></i>
       </span>
     </div>
-    <div class="img_container" v-show="showList">
+    <div class="img_container" v-show="showList" v-if="showImgContainer">
       <div class="img_container_item" v-for="(item, index) in listData" @click="toLocationHref(item.link)">
         <a :href="item.link + '&startdate=' + startString + '&enddate=' + endString + '&'">
           <img :src="item.intro_img" alt="" class="one_img">
@@ -38,20 +42,19 @@
         </span> -->
         <p class="hotel_name font-size--30">
           <span class="score font-size--24">{{item.comment_data.comment_score}}</span>
-          <span v-html="item.name.replace(keyword, highLightKeyword)"></span>
+          <span v-if="item.name" v-html="item.name.replace(keyword, highLightKeyword)"></span>
         </p>
         <p class="address font-size--24 grayColor80">
           <span class="distance" v-if="item.distance">
             距离
-            <span v-html="allData.web_data.landmark.replace(searchInputVal, replaceWord)"></span>
+            <span v-if="allData.web_data.landmark" v-html="allData.web_data.landmark.replace(searchInputVal, replaceWord)"></span>
             {{item.distance}}公里
           </span>
           {{item.address}}
         </p>
         <span class="jfk-price product-price-package font-size--24" v-if="item.lowest && item.lowest >= 0">
-          <i class="jfk-font-number jfk-price__currency font-size--30">￥</i>
-          <i class="jfk-font-number jfk-price__number font-size--54">{{item.lowest}}</i>
-          起
+          <i class="jfk-font-number jfk-price__currency font-size--42">￥</i>
+          <i class="jfk-font-number jfk-price__number font-size--78">{{item.lowest}}</i><i class="font-size--22">起</i>
         </span>
         <span class="jfk-price product-price-package font-size--24" v-else-if="item.lowest && item.lowest < 0">
           满房
@@ -82,7 +85,7 @@
           <!--v-on:input="searchHotelAction"-->
           <input type="text"
                  class="font-size--38"
-                 placeholder="城市/关键字/位置"
+                 placeholder="关键字/位置"
                  v-model="searchInputVal"
                  id="searchVal"
                  autocomplete="off">
@@ -125,6 +128,10 @@
           </p>
         </div>
       </div>
+    </div>
+    <div class="canNotGetPlace" v-show="showreset">
+      <p>暂时无法定位</p>
+      <span class="reset" @click="resetGetPlace()">重试</span>
     </div>
     <JfkSupport v-once></JfkSupport>
   </div>
@@ -184,7 +191,7 @@
         // 百度地图搜索data
         baiduApiData: [],
         asycSearchData: [],
-        firstCity: '全部',
+        firstCity: '搜索城市',
         defaultCity: '北京',
         searchedCity: '',
         localSearchData: '',
@@ -199,7 +206,11 @@
         city: '',
         area: '',
         tc_id: '',
-        filterContainerStatus: false
+        filterContainerStatus: false,
+        showreset: false,
+        comment_score_down: false,
+        comment_score_up: false,
+        showImgContainer: true
       }
     },
     methods: {
@@ -227,31 +238,50 @@
         _this.dealWithUrlData()
       },
       dealWithUrlData () {
+        let _this = this
         if (params.nearby === '1') {
-          this.filterType = 'distance'
+          _this.filterType = 'distance'
           const wx = window.wx
           if (wx) {
-            wx.getLocation({
-              type: 'wgs84',
-              // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
-              success: (res) => {
-                // 纬度
-                this.lat = res.latitude || ''
-                // 经度
-                this.lnt = res.longitude || ''
-              }
+            wx.ready(function () {
+              wx.getLocation({
+                type: 'wgs84',
+                // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
+                success: (res) => {
+                  // 纬度
+                  _this.lat = res.latitude || ''
+                  // 经度
+                  _this.lnt = res.longitude || ''
+                  _this.showreset = false
+                  _this.paramsJudge()
+                },
+                cancel: function (res) {
+                  alert('用户拒绝授权获取地理位置')
+                  _this.showreset = true
+                },
+                error: function (res) {
+                  alert('定位失败')
+                  _this.showreset = true
+                }
+              })
             })
           } else {
             // 纬度
-            this.lat = ''
+            _this.lat = ''
             // 经度
-            this.lnt = ''
+            _this.lnt = ''
+            _this.showreset = true
+            _this.showImgContainer = false
+            // _this.paramsJudge()
           }
         } else {
-          this.lat = params.lat || ''
-          this.lnt = params.lng || ''
-          this.filterType = ''
+          _this.lat = params.lat || ''
+          _this.lnt = params.lng || ''
+          _this.filterType = ''
+          _this.paramsJudge()
         }
+      },
+      paramsJudge () {
         // 百度搜索过来
         if (params.title) {
           this.ec['bdmap'] = this.lat + ',' + this.lnt + ',' + params.title
@@ -261,8 +291,8 @@
           this.keyword = params.keyword
           this.highLightKeyword = '<span style="color:#b2945e">' + params.keyword + '</span>'
         }
-        params.city === '全部' ? params.city = '' : params.city
-        params.area === '全部' ? params.area = '' : params.area
+        params.city === '搜索城市' ? params.city = '' : params.city
+        params.area === '搜索城市' ? params.area = '' : params.area
         this.city = params.city
         this.area = params.area
         params.tc_id ? this.tc_id = params.tc_id : ''
@@ -311,6 +341,8 @@
           if (loading) {
             loading.close()
           }
+          that.showreset = false
+          that.showImgContainer = true
           that.allData = res
           that.listData = res.web_data.result
           that.page_resource = res.web_data.index_url
@@ -364,7 +396,7 @@
         }
         this.localSearchData.push(saveData)
         window.localStorage['searchcache'] = JSON.stringify(this.localSearchData)
-        window.location.href = this.toLinks.SRESULT + '&lat=' + lat + '&lng=' + lng + '&title' + title
+        window.location.href = this.toLinks.SRESULT + '&nearby=1&lat=' + lat + '&lng=' + lng + '&title' + title
       },
       // input 是否为空
       checkSearchNull () {
@@ -382,8 +414,8 @@
         const BMap = window.BMap
         let myGeo = new BMap.Geocoder()
         let _this = this
-        // 如果不传首选城市(值为全部) 则默认为北京
-//        this.searchedCity = this.firstCity === '全部' ? this.defaultCity : this.firstCity
+        // 如果不传首选城市(值为城市) 则默认为北京
+//        this.searchedCity = this.firstCity === '城市' ? this.defaultCity : this.firstCity
         _this.searchedCity = _this.city === '' ? _this.defaultCity : _this.city
         let keyword = this.searchInputVal
         myGeo.getPoint(_this.searchedCity, (point) => {
@@ -411,6 +443,10 @@
         this.removeClass(searchbaritem, 'active')
         if (!this.hasClass($event.currentTarget, 'active')) $event.currentTarget.className += ' active'
         let _this = this
+        // 纬度
+        _this.lat = ''
+        // 经度
+        _this.lnt = ''
         if (tabType === 'price') {
           if (!_this.priceUp && !_this.priceDown) {
             _this.priceUp = true
@@ -424,12 +460,65 @@
             _this.priceUp = false
             tabType = 'price_down'
           }
+          _this.filterType = tabType
+          _this.loadPackages()
+        } else if (tabType === 'comment_score') {
+          if (!_this.comment_score_up && !_this.comment_score_down) {
+            _this.comment_score_up = true
+            tabType = 'comment_score_up'
+          } else if (!_this.comment_score_up) {
+            _this.comment_score_up = true
+            _this.comment_score_down = false
+            tabType = 'comment_score_up'
+          } else {
+            _this.comment_score_down = true
+            _this.comment_score_up = false
+            tabType = 'comment_score_down'
+          }
+          _this.filterType = tabType
+          _this.loadPackages()
+        } else if (tabType === 'distance') {
+          const wx = window.wx
+          if (wx) {
+            wx.ready(function () {
+              wx.getLocation({
+                type: 'wgs84',
+                // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
+                success: (res) => {
+                  // 纬度
+                  _this.lat = res.latitude || ''
+                  // 经度
+                  _this.lnt = res.longitude || ''
+                  _this.filterType = tabType
+                  _this.showreset = false
+                  _this.loadPackages()
+                },
+                cancel: function (res) {
+                  alert('用户拒绝授权获取地理位置')
+                  _this.showreset = true
+                },
+                error: function (res) {
+                  alert('定位失败')
+                  _this.showreset = true
+                }
+              })
+            })
+          } else {
+            // 纬度
+            _this.lat = ''
+            // 经度
+            _this.lnt = ''
+            _this.filterType = tabType
+            _this.showreset = true
+            _this.showImgContainer = false
+            // _this.loadPackages()
+          }
         } else {
           _this.priceDown = false
           _this.priceUp = false
+          _this.filterType = tabType
+          _this.loadPackages()
         }
-        _this.filterType = tabType
-        _this.loadPackages()
       },
       handleDateClick (result) {
         let _self = this
@@ -484,6 +573,7 @@
         let _this = this
         _this.showList = false
         _this.filterContainerStatus = true
+        _this.showreset = false
         const cb = () => {
           _this.showList = true
           _this.filterContainerStatus = false
@@ -557,6 +647,10 @@
         } else {
           return returnValue
         }
+      },
+      resetGetPlace () {
+        let place = document.querySelector('#place')
+        place.click()
       }
     }
   }

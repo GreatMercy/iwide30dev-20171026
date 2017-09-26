@@ -1,7 +1,11 @@
 .jfk-form {
   .form-item {
-    &:before {
-      background-color: #e0e0e0;
+    & + .form-item {
+      @mixin one-line horizontal {
+        top: 0;
+        left: 0;
+        background-color: #e0e0e0;
+      };
     }
     input[type="text"], input[type="tel"], textarea {
       &::placeholder {

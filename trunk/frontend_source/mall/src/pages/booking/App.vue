@@ -11,7 +11,7 @@
       </div>
       <div class="booking-information__hotel font-size--24" v-text="product.hotel_name"></div>
       <div class="jfk-price font-size--54 booking-information__price color-golden-price" v-if="product.price_package">
-        <i class="jfk-font-number jfk-price__currency">¥</i>
+        <i class="jfk-font-number jfk-price__currency">￥</i>
         <i class="jfk-font-number jfk-price__number" v-text="product.price_package"></i>
       </div>
     </div>

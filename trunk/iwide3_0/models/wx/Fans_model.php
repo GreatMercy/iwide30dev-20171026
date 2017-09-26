@@ -312,6 +312,7 @@ class Fans_model extends CI_Model {
         }
 
         $db->where('inter_id',$inter_id);
+        $db->where('cur_status',$cur_status);
 
         $db->order_by($order_by);
         $db->group_by($group_by);
@@ -357,11 +358,16 @@ class Fans_model extends CI_Model {
             $con = " AND t1.event_time > '{$params['startdate']}' AND t1.event_time < '{$params['enddate']}'";
         }
 
+        $cur_status = isset($params['cur_status'])?$params['cur_status']:1;
+        $con .= " AND t1.cur_status = {$cur_status}";
+
+
         if($distribute==1){
             $con .= " AND t2.is_distributed = 1";
         }else{
             $con .= " AND t2.is_distributed != 1";
         }
+
 
         $sql = $select."
             FROM
@@ -403,8 +409,8 @@ class Fans_model extends CI_Model {
 
         $db = $this->db;
 
-        $select = "SELECT count(t1.id) total,t1.master_adpt,DATE_FORMAT(t1.event_time,'%Y-%m-%d') date ";
-        $group = " GROUP BY date,t1.master_adpt";
+        $select = "SELECT count(t1.id) total,t2.master_dept,DATE_FORMAT(t1.event_time,'%Y-%m-%d') date ";
+        $group = " GROUP BY date,t2.master_dept";
         $order_by = " ORDER BY date ASC";
 
         if(isset($params['startdate']) && isset($params['enddate'])){
@@ -412,6 +418,10 @@ class Fans_model extends CI_Model {
         }
 
         $con .= " AND t1.cur_status = {$cur_status}";
+
+        if(isset($params['hotel_id'])){
+            $con .= " AND t1.hotel_id = {$params['hotel_id']}";
+        }
 
         $sql = $select."
             FROM
@@ -425,26 +435,59 @@ class Fans_model extends CI_Model {
                 t1.source > 0
             AND
                 t1.source = t2.qrcode_id
+            AND
+                t2.master_dept !=''
             ".$con.$group.$order_by;
 
         $res =  $db->query($sql)->result_array();
 
-        print_r($res);
+        return $res;
 
-        if(!empty($res)){
-            $result = array();
-            foreach($res as $temp){
-                    $result[$temp['date']]['total'] = $temp['total'];
-                    $result[$temp['date']]['date'] = $temp['date'];
-            }
-            $res = $result;
-        }
+    }
+
+
+    function getarticlesummary($inter_id){
+
+        $ci =& get_instance();
+        $ci->load->helper('common');
+        $ci->load->library('Cache/Redis_proxy',array(
+            'not_init'=>FALSE,
+            'module'=>'common',
+            'refresh'=>FALSE,
+            'environment'=>ENVIRONMENT
+        ),'redis_proxy');
+
+        $redis=$ci->redis_proxy;
+
+        $key = 'wx_article_'.$inter_id;
+
+        $res = $redis->hGetAll($key);
 
         return $res;
 
+    }
 
 
+    function setarticlesummary($inter_id,$date,$data){
 
+        $ci =& get_instance();
+        $ci->load->helper('common');
+        $ci->load->library('Cache/Redis_proxy',array(
+            'not_init'=>FALSE,
+            'module'=>'common',
+            'refresh'=>FALSE,
+            'environment'=>ENVIRONMENT
+        ),'redis_proxy');
+
+        $redis=$ci->redis_proxy;
+
+        $key = 'wx_article_'.$inter_id;
+
+        $data = json_encode($data);
+
+        $res = $redis->hSet($key, $date, $data);
+
+        return $res;
 
     }
 

@@ -29,6 +29,16 @@
         bottom: .5em;
       }
     }
+    .prices {
+      margin-top: calc(16 / 24)em;
+    }
+    .prices--length {
+      &-6,&-7 {
+        & + .date-norm {
+          padding-left: px2rem(50);
+        }
+      }
+    }
     .price-tag {
       text-shadow: 0px 0px 7px color(#74674e a(22%));
       .mask {
@@ -108,6 +118,7 @@
   }
   .productinfo-detail {
     margin-top: px2rem(20);
+    background-color: #fff;
     &-label {
       background-color: #fff;
       .label {
@@ -163,11 +174,10 @@
       color: #333;
     }
   }
-  .detail-box{
-    background-color: #fff;
-  }
   .killsec-original{
     margin-top: px2rem(50);
+    padding: 0 px2rem(30);
+    background: #fff;
     &:before {
       background-color: #ebebeb;
     }

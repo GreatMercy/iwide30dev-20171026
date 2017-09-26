@@ -25,7 +25,7 @@
             </div>
           </div>
         </div>
-        <div class="number font-color-light-gray font-size--24">
+        <div class="number font-color-light-gray font-size--24" v-show="killsec.is_stock === '1'">
           <span class="tip jfk-d-ib">剩余库存</span>
           <span class="stock jfk-d-ib">{{killsecStock}} /</span>
           <span class="total jfk-d-ib">{{killsecTotal}}</span>

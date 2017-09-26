@@ -22,7 +22,7 @@
               <el-col :span="11">
                 <el-select v-model="selectedPublic" placeholder="所有公众号" filterable @change="handleSelectPublic" >
                     <el-option
-                      v-for="item in pulbic"
+                      v-for="(item, idx) in pulbic"
                       :key="item.inter_id"
                       :label="item.name"
                       :value="item.inter_id">
@@ -33,7 +33,7 @@
               <el-col :span="11">
                 <el-select v-model="selectedHotel" placeholder="所有门店" filterable>
                     <el-option
-                      v-for="item in getHotels"
+                      v-for="(item, idx) in getHotels"
                       :key="item.status"
                       :label="item.hotel_name"
                       :value="item.hotel_id">
@@ -53,7 +53,7 @@
               <el-col :span="11">
                 <el-select v-model="selectedState" placeholder="所有" >
                     <el-option
-                      v-for="item in getStates"
+                      v-for="(item, idx) in getStates"
                       :label="item.name"
                       :value="item.value">
                     </el-option>

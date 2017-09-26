@@ -4,11 +4,12 @@
 
   .ht_del_top {
     margin-top: px2rem(38);
-    box-shadow: 0 0 4px 8px #eee;
+    box-shadow: -1px -1px 4px 4px #f1f1f1;
     &_info {
-      height: px2rem(246);
+      height: px2rem(254);
       background-image: background-image(/detail_map_white.png);
-      background-size: cover;
+      background-size: auto 100%;
+      background-position: center center;
       padding: 0 px2rem(43) 0 px2rem(43);
       position: relative;
       border-top-left-radius: px2rem(5);
@@ -24,8 +25,23 @@
         width: px2rem(420);
         line-height: px2rem(29);
         position: relative;
-        .map-sign{
+        letter-spacing: px2rem(2);
+       @mixin one-line vertical {
+       };
+        &:before{
+         width: px2rem(1);
+         height: px2rem(84);
+         bottom: 0;
+         opacity: 0.8;
+         right: px2rem(-30);
+        }
+        .map-sign {
           position: absolute;
+        }
+        .map_point {
+          display: inline-block;
+          transform: scale(0.7391, 1);
+          margin-right:px2rem(-7);
         }
       }
 
@@ -109,18 +125,19 @@
         position: absolute;
         bottom: 0;
         left: 0;
+        height: px2rem(1);
       }
       & li {
         text-align: left;
         float: left;
         width: 33%;
         margin-bottom: px2rem(44);
-        &:nth-child(3n-1){
+        &:nth-child(3n-1) {
           text-align: center;
         }
-        &:nth-child(3n){
-        text-align: right;
-      }
+        &:nth-child(3n) {
+          text-align: right;
+        }
         & i {
           margin-right: px2rem(15);
         }

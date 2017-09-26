@@ -49,19 +49,6 @@ const couponDetail = (r) => {
   }, showLoadError, 'user_coupon-detail')
 }
 
-const depositStatements = (r) => {
-  require.ensure([], function (require) {
-    let depositStatements = require('./user/depositstatements/index')
-    r(depositStatements.default)
-  }, showLoadError, 'user_deposit-statements')
-}
-
-const regStatements = (r) => {
-  require.ensure([], function (require) {
-    let regStatements = require('./user/regstatements/index')
-    r(regStatements.default)
-  }, showLoadError, 'user_reg-statements')
-}
 /* ---------------- 会员相关模块结束 ---------------- */
 /* ---------------- 分销相关模块开始 ---------------- */
 const account = (r) => {
@@ -215,6 +202,13 @@ const addAccount = (r) => {
     r(addAccount.default)
   }, showLoadError, 'add_account')
 }
+// 编辑账号
+const editSysAccount = (r) => {
+  require.ensure([], function (require) {
+    let editSysAccount = require('./system/edit_account/index')
+    r(editSysAccount.default)
+  }, showLoadError, 'edit_account')
+}
 // 权限清单
 const authorityList = (r) => {
   require.ensure([], function (require) {
@@ -244,12 +238,66 @@ const authorityModule = (r) => {
   }, showLoadError, 'authorityModule')
 }
 /* ---------------- 系统相关模块结束 ---------------- */
-/* ---------------- 统计示例相关模块开始 ---------------- */
+/* ---------------- 统计相关模块开始 ---------------- */
 const statisticsExample = (r) => {
   require.ensure([], function (require) {
     let statisticsExample = require('./statistics/example')
     r(statisticsExample.default)
   }, showLoadError, 'statistics_example')
+}
+const statisticsBookingOverview = (r) => {
+  require.ensure([], function (require) {
+    let statisticsBookingOverview = require('./statistics/booking_overview/index')
+    r(statisticsBookingOverview.default)
+  }, showLoadError, 'statistics_booking-overview')
+}
+const statisticsBookingOrderAnalysis = (r) => {
+  require.ensure([], function (require) {
+    let statisticsBookingOrderAnalysis = require('./statistics/booking_orderAnalysis/index')
+    r(statisticsBookingOrderAnalysis.default)
+  }, showLoadError, 'statistics_booking_orderAnalysis')
+}
+const statisticsBookingRepurchase = (r) => {
+  require.ensure([], function (require) {
+    let statisticsBookingRepurchase = require('./statistics/booking_repurchase/index')
+    r(statisticsBookingRepurchase.default)
+  }, showLoadError, 'statistics_booking-repurchase')
+}
+/* ---------------- 统计相关模块结束 ---------------- */
+
+const depositStatements = (r) => {
+  require.ensure([], function (require) {
+    let depositStatements = require('./statistics/user_depositStatements')
+    r(depositStatements.default)
+  }, showLoadError, 'user_deposit-statements')
+}
+
+const regStatements = (r) => {
+  require.ensure([], function (require) {
+    let regStatements = require('./statistics/user_regStatements')
+    r(regStatements.default)
+  }, showLoadError, 'user_reg-statements')
+}
+
+const fansReport = (r) => {
+  require.ensure([], function (require) {
+    let fansReport = require('./statistics/user_fansReport')
+    r(fansReport.default)
+  }, showLoadError, 'user_fans-report')
+}
+
+const massText = (r) => {
+  require.ensure([], function (require) {
+    let massText = require('./statistics/user_massText')
+    r(massText.default)
+  }, showLoadError, 'user_mass-text')
+}
+
+const balanceAnalysis = (r) => {
+  require.ensure([], function (require) {
+    let balanceAnalysis = require('./statistics/user_balanceAnalysis')
+    r(balanceAnalysis.default)
+  }, showLoadError, 'user_balance-analysis')
 }
 /* ---------------- 统计示例相关模块结束 ---------------- */
 /* ---------------- 分账相关模块开始 ---------------- */
@@ -277,7 +325,21 @@ const transferAudit = (r) => {
     r(statisticsExample.default)
   }, showLoadError, 'transferAudit')
 }
-/* ---------------- 统计示例相关模块结束 ---------------- */
+/* ---------------- 分账相关模块结束 ---------------- */
+/* ---------------- 基础模块开始 ---------------- */
+const basicMenu = (r) => {
+  require.ensure([], function (require) {
+    let statisticsExample = require('./basic/menu/index')
+    r(statisticsExample.default)
+  }, showLoadError, 'basicMenu')
+}
+const basicKeywords = (r) => {
+  require.ensure([], function (require) {
+    let statisticsExample = require('./basic/keywords/index')
+    r(statisticsExample.default)
+  }, showLoadError, 'fundOverview')
+}
+/* ---------------- 基础模块结束 ---------------- */
 export default {
   bookingPrices,
   bookingPackageProducts,
@@ -287,6 +349,9 @@ export default {
   couponDetail,
   depositStatements,
   regStatements,
+  fansReport,
+  massText,
+  balanceAnalysis,
   account,
   iwidePay,
   tradeRecord,
@@ -299,6 +364,7 @@ export default {
   logistics,
   delivery,
   editRule,
+  editSysAccount,
   mallPackage,
   addRule,
   refundRecord,
@@ -310,11 +376,16 @@ export default {
   login,
   bindWx,
   statisticsExample,
+  statisticsBookingOverview,
+  statisticsBookingOrderAnalysis,
+  statisticsBookingRepurchase,
   refund,
   authorityModule,
   fundOverview,
   accountVerification,
   transferAudit,
   giftPackage,
-  giftPackageList
+  giftPackageList,
+  basicMenu,
+  basicKeywords
 }

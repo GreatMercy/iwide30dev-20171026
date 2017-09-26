@@ -76,29 +76,56 @@ class Vapi_statements extends MY_Model_Member {
         $filter['inter_id'] = $inter_id;
         $filter['type'] = $type;
 
-        $where = $filter;
-
+        $order_by = "dr.last_update_time";
         $where = array();
         foreach($filter as $k => $v){
-            $where["dr.".$k] = $v;
+            if(strpos($k,"send_time") === false){
+                $where["dr.".$k] = $v;
+            }else{
+                $order_by = "dsr.send_time";
+                $where["dsr.".$k] = $v;
+            }
         }
         $result = $this->_shard_db()->from('distribution_record dr')
-            ->select("dr.*,i.member_info_id,i.membership_number,i.telephone,i.name")
+            ->select("dsr.batch_no,dsr.send_time,dr.*,i.member_info_id,i.membership_number,i.telephone,i.name")
             ->join('member_info as i','dr.open_id = i.open_id and dr.sn = i.membership_number','left')
+            ->join('distribution_send_record as dsr',' dsr.sn = dr.record_id AND dsr.inter_id = dr.inter_id','left')
 //            ->join('hotel_staff as s','s.inter_id = dr.inter_id and dr.saler_id = s.qrcode_id','left')
             ->where($where)
+            ->where("dr.sales_id is not null")
+            ->where("dr.last_update_time >", 0)
+            ->where("dr.sn !=","");
+//            ->order_by("dr.createtime","desc")
+//            ->get();
+
+        $return = array();
+
+        $return['total'] = $result->get()->num_rows();              //总数
+        $total_page =  (int) ($return['total'] / $limit);
+        $return['total_page'] =  ($total_page <= 0 ) ? 1 : $total_page;
+        $return['per_page'] = $limit;
+        $return['data']  = $this->_shard_db()->from('distribution_record dr')
+            ->select("dsr.batch_no,dsr.send_time,dr.*,i.member_info_id,i.membership_number,i.telephone,i.name")
+            ->join('member_info as i','dr.open_id = i.open_id and dr.sn = i.membership_number','left')
+            ->join('distribution_send_record as dsr',' dsr.sn = dr.record_id AND dsr.inter_id = dr.inter_id','left')
+            ->where($where)
+            ->where("dr.sales_id is not null")
+            ->where("dr.last_update_time >", 0)
             ->where("dr.sn !=","")
             ->limit($limit)
             ->offset($offset)
-            ->get()->result_array();
-//
+            ->order_by($order_by,"desc")
+            ->get()
+            ->result_array();   //数据
+
+        return $return;
 //        $this->_shard_db()->from('distribution_record');
 //        $result = $this->_shard_db()->select('*')
 //            ->where($where)
 //            ->limit($limit)
 //            ->offset($offset)
 //            ->get()->result_array();
-        return $result;
+//        return $result;
     }
 
     //注册分销列表(含会员信息)
@@ -109,16 +136,25 @@ class Vapi_statements extends MY_Model_Member {
         $filter['inter_id'] = $inter_id;
         $filter['type'] = $type;
 
+        $order_by = "dr.last_update_time";
         $where = array();
         foreach($filter as $k => $v){
-            $where["dr.".$k] = $v;
+            if(strpos($k,"send_time") === false){
+                $where["dr.".$k] = $v;
+            }else{
+                $order_by = "dsr.send_time";
+                $where["dsr.".$k] = $v;
+            }
         }
         $result = $this->_shard_db()->from('distribution_record dr')
-            ->select("dr.*,i.member_info_id,i.membership_number,i.telephone,i.name")
+            ->select("dsr.batch_no,dsr.send_time,dr.*,i.member_info_id,i.membership_number,i.telephone,i.name")
             ->join('member_info as i','dr.open_id = i.open_id and dr.sn = i.membership_number','left')
-//            ->join('hotel_staff as s','s.inter_id = dr.inter_id and dr.saler_id = s.qrcode_id','left')
+            ->join('distribution_send_record as dsr',' dsr.sn = dr.record_id AND dsr.inter_id = dr.inter_id','left')
             ->where($where)
+            ->where("dr.sales_id is not null")
+            ->where("dr.last_update_time >", 0)
             ->where("dr.sn !=","")
+            ->order_by($order_by,"desc")
             ->get()->result_array();
 
         return $result;
@@ -140,24 +176,69 @@ class Vapi_statements extends MY_Model_Member {
     public function deposit_card_list( $inter_id  ,$limit = 100 ,$offset = 0 , $filter = array() , $status = 't' ){
         $filter['inter_id'] = $inter_id;
         $filter['pay_status'] = $status;
+        $order_by = "dcp.last_update_time";
         $where = array();
         foreach($filter as $k => $v){
-            $where["dcp.".$k] = $v;
+            if(strpos($k,"send_time") === false){
+                $where["dcp.".$k] = $v;
+            }else{
+                $order_by = "dsr.send_time";
+                $where["dsr.".$k] = $v;
+            }
         }
         $where['dc.is_distribution'] = 't';
         $result = $this->_shard_db()->from('iwide_deposit_card_pay dcp')
-            ->select("dcp.*,dc.distribution_money,dc.title,dc.money,i.member_info_id,i.membership_number,i.telephone,i.name")
+            ->select("dsr.batch_no,dcp.*, FROM_UNIXTIME( `dcp`.createtime) as createtime,dc.distribution_money,dc.title,dc.money,i.member_info_id,i.membership_number,i.telephone,i.name")
             ->join('deposit_card as dc','dcp.deposit_card_id = dc.deposit_card_id','left')
             ->join('member_info as i','dcp.member_info_id = i.member_info_id ','left')
+            ->join('distribution_send_record as dsr',' dsr.sn = dcp.deposit_card_id AND dsr.inter_id = dcp.inter_id','left')
+            ->where("dcp.distribution_num !=","")
+            ->where($where);
+        $return = array();
+        $return['total'] = $result->get()->num_rows();              //总数
+        $total_page =  (int) ($return['total'] / $limit);
+        $return['total_page'] =  ($total_page <= 0 ) ? 1 : $total_page;
+        $return['per_page'] = $limit;
+        $return['data']  = $this->_shard_db()->from('iwide_deposit_card_pay dcp')
+            ->select("dsr.batch_no,dsr.send_time,dcp.*, FROM_UNIXTIME( `dcp`.createtime) as createtime,dc.distribution_money,dc.deposit_type,dc.title,dc.money,i.member_info_id,i.membership_number,i.telephone,i.name")
+            ->join('deposit_card as dc','dcp.deposit_card_id = dc.deposit_card_id','left')
+            ->join('member_info as i','dcp.member_info_id = i.member_info_id ','left')
+            ->join('distribution_send_record as dsr',' dsr.sn = dcp.deposit_card_pay_id AND dsr.inter_id = dcp.inter_id','left')
             ->where("dcp.distribution_num !=","")
             ->where($where)
             ->limit($limit)
             ->offset($offset)
-            ->get()->result_array();
-
-       return $result;
-
+            ->order_by($order_by,"desc")
+            ->get()->result_array();   //数据
+        return $return;
     }
+
+    //导出
+    public function deposit_card_list_for_exprot( $inter_id ,$filter = array() , $status = 't' ){
+        $filter['inter_id'] = $inter_id;
+        $filter['pay_status'] = $status;
+        $order_by = "dcp.last_update_time";
+        $where = array();
+        foreach($filter as $k => $v){
+            if(strpos($k,"send_time") === false){
+                $where["dcp.".$k] = $v;
+            }else{
+                $order_by = "dsr.send_time";
+                $where["dsr.".$k] = $v;
+            }
+        }
+        $where['dc.is_distribution'] = 't';
+        return $this->_shard_db()->from('iwide_deposit_card_pay dcp')
+            ->select("dsr.batch_no,dsr.send_time,dcp.*, FROM_UNIXTIME( `dcp`.createtime) as createtime,dc.distribution_money,dc.deposit_type,dc.title,dc.money,i.member_info_id,i.membership_number,i.telephone,i.name")
+            ->join('deposit_card as dc','dcp.deposit_card_id = dc.deposit_card_id','left')
+            ->join('member_info as i','dcp.member_info_id = i.member_info_id ','left')
+            ->join('distribution_send_record as dsr',' dsr.sn = dcp.deposit_card_pay_id AND dsr.inter_id = dcp.inter_id','left')
+            ->where("dcp.distribution_num !=","")
+            ->where($where)
+            ->order_by($order_by,"desc")
+            ->get()->result_array();   //数据
+    }
+
 
     //储值使用情况
     public function balance_statics_group_module( $inter_id , $filter = array() ,$log_type = 2 , $limit = 300 ,$offset = 0 ){
@@ -242,10 +323,8 @@ class Vapi_statements extends MY_Model_Member {
 //                $day_data[$single_day['date']][$hotel_id][$single_day['module']] =   $single_day['amount'];
 //            }
             foreach($source_data as $val){
-                $data[$val['date']][$val['module']] = $val['amount'];
+                isset($data[$val['date']][$val['module']]) ? $data[$val['date']][$val['module']]+= $val['amount'] : $data[$val['date']][$val['module']] = $val['amount'] ;
             }
-        }else{
-            return $data; //empty array
         }
 //        $data = array_merge($date_mapping,$day_data);
         $data = array_merge($date_mapping,$data);
@@ -514,9 +593,9 @@ class Vapi_statements extends MY_Model_Member {
             $filter['log_type'] = $log_type;
         $where = $filter;
         $result = $this->_shard_db()->from('credit_log')
-            ->select('DATE_FORMAT( last_update_time, "%Y-%m-%d") as date ,module, sum(amount) as amount  ,hotel_id')
+            ->select('FROM_UNIXTIME(createtime,"%Y-%m-%d") as date ,module, sum(amount) as amount  ,hotel_id')
             ->where($where)
-            ->group_by('DATE_FORMAT( last_update_time, "%Y-%m-%d"),module,hotel_id')
+            ->group_by('date,module,hotel_id')
             ->limit($limit)
             ->offset($offset)
             ->get()->result_array();
@@ -568,6 +647,7 @@ class Vapi_statements extends MY_Model_Member {
         }
 
     }
+
 
 
 }

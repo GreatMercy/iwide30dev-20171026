@@ -10,7 +10,7 @@
     </el-tabs>
     <el-row :gutter="20" class="jfk-mb-20">
       <el-col :span="6">
-        <el-select size="small" v-model="cat" class="jfk-select--width-auto">
+        <el-select size="small" filterable v-model="cat" class="jfk-select--width-auto">
           <el-option
             v-for="(val, key) in category"
             :key="key"

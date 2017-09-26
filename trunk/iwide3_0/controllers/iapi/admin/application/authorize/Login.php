@@ -50,7 +50,14 @@ class Login extends MY_Application_Admin_Iapi {
                 'session_key' => $session_key,
                 'granted_key' => $granted_key 
         );
+
+        $user_info['admin_id'] = $token_check['token']['admin_id'];
         $info ['userinfo'] = $user_info;
         echo json_encode ( $info );
     }
+
+
+
+
+
 }

@@ -22,7 +22,43 @@ class FrontConst extends BaseConst
                     }
                 }
             }
-
+            if (!empty ($dehydrate_samples ['key_samples'])) {
+                isset ( $path ) or $path = explode ( '/', $sample );
+                if (isset ( self::$common_dehydrate_keys [$path [0]] )) {
+                    foreach ( $dehydrate_samples ['key_samples'] as $key_path => $key_name ) {
+                        if (isset ( self::$common_dehydrate_keys [$path [0]] [$key_name] )) {
+                            $key_path = explode ( '/', $key_path );
+                            $path_length = count ( $key_path );
+                            unset($temp_sample);
+                            if ($path_length > 1 && isset ( $dehydrate_samples [$key_path [0]] )) {
+                                $temp_sample = &$dehydrate_samples [$key_path [0]];
+                                $break_tag = 0;
+                                for($i = 1; $i < $path_length; $i ++) {
+                                    if (isset ( $temp_sample [$key_path [$i]] )) {
+                                        if ($i == $path_length - 1) {
+                                            $break_tag = 1;
+                                            break;
+                                        }else{
+                                            $temp_sample = &$temp_sample [$key_path [$i]];
+                                        }
+                                    } else if ($i == $path_length - 1) {
+                                        $break_tag = 2;
+                                        break;
+                                    }
+                                }
+                                if ($break_tag == 1) {
+                                    $last_key=array_pop ( $key_path );
+                                    $temp_sample[$last_key] = array_merge_recursive ( $temp_sample[$last_key], self::$common_dehydrate_keys [$path [0]] [$key_name] );
+                                } else if ($break_tag == 2) {
+                                    $temp_sample [array_pop ( $key_path )] = self::$common_dehydrate_keys [$path [0]] [$key_name];
+                                }
+                            } else if ($path_length == 1 && isset ( self::$common_dehydrate_keys [$path [0]] [$key_name] )) {
+                                $dehydrate_samples [$key_path [0]] = self::$common_dehydrate_keys [$path [0]] [$key_name];
+                            }
+                        }
+                    }
+                }
+            }
             return $dehydrate_samples;
         }
 
@@ -161,6 +197,61 @@ class FrontConst extends BaseConst
             )
         )
     );
+    static $common_dehydrate_keys = array(
+            'hotel' => array (
+                    'room_info' =>array(
+                        'keys' => array(
+                            'room_id',
+                            'room_img',
+                            'name',
+                            'area',
+                            'sub_des',
+                            'oprice',
+                        ),
+                    ),
+                    'state_info' =>array(
+                        'keys' => array(
+                            'price_name',
+                            'des',
+                            'price_tags',
+                            'useable_coupon_favour',
+                            'wxpay_favour_sign',
+                            'bookpolicy_condition',
+                            'avg_price',
+                            'avg_oprice',
+                            'allprice',
+                            'condition',
+                            'price_code',
+                            'price_type',
+                            'book_status',
+                            'coupon_type',
+                        ),
+                    ),
+                    'show_info' =>array(
+                        'keys' => array(
+                            'price_name',
+                            'avg_price',
+                            'related_des',
+                        ),
+                    ),
+                    'imgs' =>array(
+                        'mul_arr' => array(
+                            'hotel_lightbox' => array(
+                                'keys' => array(
+                                    'image_url',
+                                    'info',
+                                ),
+                            ),
+                            'hotel_service' => array(
+                                'keys' => array(
+                                    'image_url',
+                                    'info',
+                                ),
+                            ),
+                        ),
+                    ),
+            )
+    );
     static $dehydrate_samples = array(
         'hotel/hotel/search'               => array(
             'common'  => array(
@@ -223,6 +314,13 @@ class FrontConst extends BaseConst
             'common'  => array(
                 'member',
             ),
+            'key_samples'=>array(
+                 'arr/hotel/arr/imgs'=>'imgs',
+                 'mul_arr/packages/arr/room_info'=>'room_info',
+                 'mul_arr/rooms/arr/room_info'=>'room_info',
+                 'mul_arr/rooms/mul_arr/show_info'=>'show_info',
+                 'mul_arr/rooms/mul_arr/state_info'=>'state_info',
+            ),
             'keys'    => array(
                 'inter_id',
                 'csrf_token',
@@ -232,52 +330,42 @@ class FrontConst extends BaseConst
                 'gallery_count',
                 'countday',
                 'collect_id',
-                'middle_ads',
+                // 'middle_ads',
                 'max_book_day',
                 'pre_sp_date',
                 'minSelect',
-                'foot_ads',
+                // 'foot_ads',
                 'icons_set',
-                'packages',
+                // 'packages',
             ),
             'mul_arr' => array(
-                'rooms' => array(
+                'packages' => array(
                     'keys' => array(
-                        'show_info',
-                        'lowest',
-                        'top_price',
-                        'state_info'
+                        'book_status',
+                        'show_price_name',
+                        'package_info',
                     ),
                     'arr' => array(
-                        'room_info' =>array(
+                        'room_info'=>array(),
+                        'state_info' => array(
                             'keys' => array(
-                                'room_id',
-                                'room_img',
-                                'name',
-                                'area',
-                                'sub_des',
-                                'oprice',
+                                'price_code',
+                                'price_type',
                             ),
                         ),
                     ),
+                ),
+                'rooms' => array(
+                    'keys' => array(
+                        'lowest',
+                        'top_price',
+                    ),
                     'mul_arr' => array(
-                        'state_info' =>array(
-                            'keys' => array(
-                                'price_name',
-                                'des',
-                                'price_tags',
-                                'useable_coupon_favour',
-                                'wxpay_favour_sign',
-                                'bookpolicy_condition',
-                                'avg_price',
-                                'avg_oprice',
-                                'allprice',
-                                'condition',
-                                'price_code',
-                                'price_type',
-                                'book_status',
-                            ),
-                        ),
+                        'state_info'=>array(),
+                        'show_info'=>array(),
+                    ),
+                    'arr' => array(
+                        'room_info'=>array(),
                     ),
                 ),
             ),
@@ -285,10 +373,12 @@ class FrontConst extends BaseConst
                 'hotel'      => array(
                     'keys' => array(
                         'hotel_id',
-                        'imgs',
                         'name',
                         'address',
                         'book_policy',
+                    ),
+                    'arr' => array(
+                        'imgs'=>array(),
                     ),
                 ),
                 't_t'      => array(
@@ -304,25 +394,96 @@ class FrontConst extends BaseConst
                 'member'
             ),
             'keys' => array(
-                'packages'
+                'packages',
+                'room_empty_alert',
+            ),
+            'key_samples'=>array(
+                'mul_arr/packages/arr/room_info'=>'room_info',
+                'mul_arr/rooms/arr/room_info'=>'room_info',
+                'mul_arr/rooms/mul_arr/show_info'=>'show_info',
+                'mul_arr/rooms/mul_arr/state_info'=>'state_info',
             ),
             'mul_arr' => array(
+                'packages' => array(
+                    'keys' => array(
+                        'book_status',
+                        'show_price_name',
+                        'package_info',
+                    ),
+                    'arr' => array(
+                        'room_info'=>array(),
+                        'state_info' => array(
+                            'keys' => array(
+                                'price_code',
+                                'price_type',
+                            ),
+                        ),
+                    ),
+                ),
                 'rooms' => array(
                     'keys' => array(
-                        'room_info',
-                        'state_info',
-                        'show_info',
                         'lowest',
-                        'highest',
-                        'all_full',
-                        'top_price',
+                    ),
+                    'mul_arr' => array(
+                        'state_info'=>array(),
+                        'show_info'=>array(),
+                    ),
+                    'arr' => array(
+                        'room_info'=>array(),
                     ),
                 ),
             ),
         ),
         'hotel/hotel/hotel_detail'         => array(
+            'key_samples'=>array(
+                 'arr/hotel/arr/imgs'=>'imgs',
+            ),
+            'arr' => array(
+                'hotel'=>array(
+                    'keys' => array(
+                        'name',
+                        'address',
+                        'latitude',
+                        'longitude',
+                        'tel',
+                        'intro',
+                    ),
+                    'arr' => array(
+                        'imgs'=>array(),
+                    ),
+                ),
+            ),
+        ),
+        'hotel/hotel/hotel_comment' => array(
             'keys' => array(
-                'hotel',
+                'comment_config',
+                'comments',
+                'hotel_id',
+                'index_url',
+                't_t',
+            ),
+            'arr' => array(
+                'member'=>array(
+                    'keys'=> array(
+                        'open_id',
+                    ),
+                ),
+            ),
+            'mul_arr' => array(
+                'comments' => array(
+                    'keys'=>array(
+                        'content',
+                        'type',
+                        'status',
+                        'openid',
+                        'headimgurl',
+                        'nickname',
+                        'comment_time',
+                        'score',
+                        'images',
+                        'feedback_content',
+                    ),
+                ),
             ),
         ),
         'hotel/hotel/add_hotel_collection' => array(
@@ -497,10 +658,9 @@ class FrontConst extends BaseConst
                 'startdate',
                 'enddate',
                 'hotel_id',
-                'hotel',
-                'room_list',
-                'first_room',
-                'first_state',
+                // 'hotel',
+                // 'first_room',
+                // 'first_state',
                 'first_pay_favour',
                 'bookpolicy_condition',
                 'customer_condition',
@@ -510,16 +670,14 @@ class FrontConst extends BaseConst
                 'packages_price',
                 'total_price',
                 'total_oprice',
-                'addit_service',
+                // 'addit_service',
                 'point_name',
                 'athour',
                 'room_count',
                 'point_pay_set',
                 'has_point_pay',
                 'extra_pointpay_para',
-                'pay_ways',
                 'source_data',
-                'last_order',
                 'point_consum_set',
                 'point_consum_rate',
                 'banlance_code',
@@ -534,16 +692,71 @@ class FrontConst extends BaseConst
                 'type',
                 'days',
             ),
+            'key_samples'=>array(
+                 'mul_arr/rooms/arr/room_info'=>'room_info',
+                 'mul_arr/rooms/mul_arr/show_info'=>'show_info',
+                 'mul_arr/rooms/mul_arr/state_info'=>'state_info',
+            ),
             'mul_arr' => array(
                 'rooms' => array(
                     'keys' => array(
-                        'room_info',
-                        'state_info',
-                        'show_info',
                         'lowest',
                         'highest',
                         'all_full',
                         'top_price',
+                    ),
+                    'mul_arr' => array(
+                        'state_info'=>array(),
+                        'show_info'=>array(),
+                    ),
+                    'arr' => array(
+                        'room_info'=>array(),
+                    ),
+                ),
+                'room_list' => array(
+                    'keys' => array(
+                        'name',
+                    ),
+                ),
+                'pay_ways'=>array(
+                    'keys'=>array(
+                        'cosume_code_need',    
+                        'des',    
+                        'favour',    
+                        'pay_name',    
+                        'pay_type',    
+                        'pay_name',    
+                    )
+                ),
+            ),
+            'arr' => array(
+                'last_order' => array(
+                    'keys' => array(
+                        'name',
+                        'tel',
+                    ),
+                ),
+                'hotel' => array(
+                    'keys' => array(
+                        'hotel_id',
+                        'name',
+                        'book_policy',
+                    ),
+                ),
+                'first_state' => array(
+                    'keys' => array(
+                        'price_name',
+                        'bonus_condition',
+                        'allprice',
+                    ),
+                ),
+                'first_room' => array(
+                    'arr' => array(
+                        'room_info'=>array(
+                            'keys'=>array(
+                                'room_id'
+                            ),
+                        ),
                     ),
                 ),
             ),

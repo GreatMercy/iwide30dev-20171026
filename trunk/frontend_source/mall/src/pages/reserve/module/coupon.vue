@@ -1,6 +1,6 @@
 <template>
   <div class="jfk-coupons jfk-pl-30 jfk-pr-30">
-    <ul class="jfk-coupons__list font-size--24 jfk-pt-30" :style="{'max-height': maxHeight}">
+    <ul class="jfk-coupons__list font-size--24 jfk-pt-30">
       <li
         class="jfk-coupons__box"
         v-for="item in items"
@@ -36,17 +36,11 @@
         </div>
       </li>
     </ul>
-    <div class="jfk-coupons__control">
-      <a href="javascript:;" class="jfk-button jfk-button--suspension jfk-button--higher jfk-button--free" @click="handlePickedCoupon">{{buttonText}}</a>
-    </div>
   </div>
 </template>
 <script>
   export default {
     name: 'jfk-coupons',
-    beforeCreate () {
-      this.maxHeight = (window.innerHeight - 50 - 15) + 'px'
-    },
     data () {
       return {
         cid: this.couponId
@@ -67,15 +61,6 @@
         this.cid = val
       }
     },
-    computed: {
-      buttonText () {
-        let text = '返回订单'
-        if (this.items.length && this.items[0].usable) {
-          text = '确认'
-        }
-        return text
-      }
-    },
     methods: {
       handlePickCoupon (cid, usable) {
         if (!usable) {
@@ -86,8 +71,6 @@
         } else {
           this.cid = cid
         }
-      },
-      handlePickedCoupon () {
         this.$emit('coupon-picked', this.cid)
       }
     }

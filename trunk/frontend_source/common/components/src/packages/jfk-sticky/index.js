@@ -1,8 +1,7 @@
-import JfkSticky from './src/main'
+import sticky from './src/main'
 
-/* istanbul ignore next */
-JfkSticky.install = function (Vue) {
-  Vue.component(JfkSticky.name, JfkSticky)
+sticky.name = 'sticky'
+sticky.install = function (Vue) {
+  Vue.directive(sticky.name, sticky)
 }
-
-export default JfkSticky
+export default sticky

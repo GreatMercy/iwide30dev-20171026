@@ -10,6 +10,7 @@ class Activity_model extends MY_Model_Soma {
     
     const ACT_TYPE_GROUPON = 1;
     const ACT_TYPE_KILLSEC = 2;
+    const ACT_TYPE_ASTBUY = 3;
 
     public function act_type_status()
     {

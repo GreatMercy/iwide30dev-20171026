@@ -16,6 +16,7 @@ class Skin extends MY_Admin_Iapi
         parent::__construct();
         $this->inter_id = $this->session->get_admin_inter_id();
         $this->module = 'hotel';
+        $this->allow_skins = ['default2', 'bigger', 'highclass'];
         $this->common_data ['csrf_token'] = $this->security->get_csrf_token_name();
         $this->common_data ['csrf_value'] = $this->security->get_csrf_hash();
     }
@@ -39,16 +40,48 @@ class Skin extends MY_Admin_Iapi
         $selected_skin = $this->Skins_model->get_skin_set($this->inter_id, $this->module);
         $hotel_skins = $this->Skins_model->get_skins($this->module, 'skin_id,intro_img,skin_name,skin_title');
 
+        if (empty($selected_skin['skin_name'])) {
+            $this->out_put_msg(BaseConst::OPER_STATUS_FAIL_TOAST, '皮肤设置为空');
+        }
+
+        if (!in_array($selected_skin['skin_name'], $this->allow_skins)) {
+            $this->out_put_msg(BaseConst::OPER_STATUS_FAIL_TOAST, '当前所用皮肤不支持配置首页');
+        }
+//        var_dump($this->allow_skins);exit;
+
         foreach ($hotel_skins as $k => $v) {
-            $skin_name = isset($selected_skin['skin_name']) ? $selected_skin['skin_name'] : 'default2';
+            $skin_name = $selected_skin['skin_name'];
             if ($v['skin_name'] == $skin_name) {
                 $sel_skin = [
                     'id' => isset($selected_skin['id']) ? $selected_skin['id'] : 0,
+                    'skin_id' => isset($selected_skin['skin_id']) ? $selected_skin['skin_id'] : 0,
                     'skin_name' => $skin_name,
                     'skin_title' => $v['skin_title'],
-                    'img_url' => $v['intro_img']
+                    'intro_img' => $v['intro_img']
                 ];
                 unset($hotel_skins[$k]);
+            }
+            if (!in_array($v['skin_name'], $this->allow_skins)) {
+                unset($hotel_skins[$k]);
+            }
+        }
+
+        $this->load->model('hotel/hotel_config_model');
+        $logo = $this->hotel_config_model->get_hotels_config_row(
+            $this->inter_id, 'HOTEL', 0, 'HOME_SETTING'
+        );
+
+        //默认皮肤封面图 ori new
+        $this->load->model('hotel/Views_model');
+        $views_model = $this->Views_model;
+        if (!empty($logo)) {
+            if ($selected_skin['skin_name'] == $views_model::DEFAULT_SKIN ) {
+                $logo['param_value'] = json_decode($logo['param_value'], true);
+                if ($logo['param_value']['home_disp'] == 'new') {
+                    $sel_skin['intro_img'] = 'http://file.iwide.cn/public/uploads/201709/qf191931239392.png';
+                } else {
+                    $sel_skin['intro_img'] = 'http://file.iwide.cn/public/uploads/201709/qf191929374502.png';
+                }
             }
         }
 
@@ -69,10 +102,15 @@ class Skin extends MY_Admin_Iapi
 //        $code = base64_encode(ob_get_contents());
 //        ob_end_clean();
 
+        $tmp = [];
+        foreach ($hotel_skins as $v) {
+            $tmp[] = $v;
+        }
         $res = [
             'selected_skin' => $sel_skin,
-            'hotel_skins' => $hotel_skins,
-            'code' => $file_path
+            'hotel_skins' => $tmp,
+            'code' => base_url($file_path),
+            'csrf_token' => $this->common_data ['csrf_value'],
         ];
 
         $this->out_put_msg(BaseConst::OPER_STATUS_SUCCESS, '', $res);
@@ -92,10 +130,13 @@ class Skin extends MY_Admin_Iapi
             $this->out_put_msg(BaseConst::OPER_STATUS_FAIL_TOAST, '皮肤必选');
         }
 
+        if (empty($post['id'])) {
+            $this->out_put_msg(BaseConst::OPER_STATUS_FAIL_TOAST, 'id必填');
+        }
+
         if (empty($post['skin_id'])) {
             $this->out_put_msg(BaseConst::OPER_STATUS_FAIL_TOAST, 'skin_id必填');
         }
-
 //        $post = [
 //            'id' => 17,
 //            'skin_id' => 3,
@@ -125,19 +166,28 @@ class Skin extends MY_Admin_Iapi
      */
     public function get_setting()
     {
-        //校验皮肤是不是默认皮肤
+        //校验皮肤是不是可以配置首页配置的皮肤
         $skin_name = $this->input->get('skin_name');
         if (empty($skin_name)) {
             $this->out_put_msg(BaseConst::OPER_STATUS_FAIL_TOAST, '皮肤名称必填');
         }
 
-        $this->load->model('hotel/Views_model');
-        $model = $this->Views_model;
-        if ($skin_name != $model::DEFAULT_SKIN) {
-            $this->out_put_msg(BaseConst::OPER_STATUS_FAIL_TOAST, '只有默认皮肤才支持首页设置');
+        if (!in_array($skin_name, $this->allow_skins)) {
+            $this->out_put_msg(BaseConst::OPER_STATUS_FAIL_TOAST, '只有默认皮肤、高端黑、高端白才支持首页设置');
+        }
+
+        $this->load->model('common/Skins_model');
+        $selected_skin = $this->Skins_model->get_skin_set($this->inter_id, $this->module);
+
+        if (empty($selected_skin['skin_name'])) {
+            $this->out_put_msg(BaseConst::OPER_STATUS_FAIL_TOAST, '皮肤设置为空');
+        }
+        if ($skin_name != $selected_skin['skin_name']) {
+            $this->out_put_msg(BaseConst::OPER_STATUS_FAIL_TOAST, 'skin_name跟数据库存储的不一致');
         }
 
         $res = SkinService::getInstance()->get_setting();
+        $res['csrf_token'] = $this->security->get_csrf_hash();
         $this->out_put_msg(BaseConst::OPER_STATUS_SUCCESS, '', $res);
     }
 
@@ -264,27 +314,27 @@ class Skin extends MY_Admin_Iapi
 //                ]
 //            ]
 //        ];
-        if (empty($post['share_setting']['page_title'])) {
-            $this->out_put_msg(BaseConst::OPER_STATUS_FAIL_TOAST, '页面标题必填');
-        }
-
-        if (empty($post['share_setting']['page_desc'])) {
-            $this->out_put_msg(BaseConst::OPER_STATUS_FAIL_TOAST, '页面描述必填');
-        }
-
-        if (empty($post['share_setting']['share_icon'])) {
-            $this->out_put_msg(BaseConst::OPER_STATUS_FAIL_TOAST, '分享图标必填');
-        }
-
-        if (empty($post['home_setting']['logo'])) {
-            $this->out_put_msg(BaseConst::OPER_STATUS_FAIL_TOAST, '页面logo必填');
-        }
-
-        foreach ($post['roasting_setting'] as $v) {
-            if (empty($v['image_url'])) {
-                $this->out_put_msg(BaseConst::OPER_STATUS_FAIL_TOAST, '轮播图图片必填');
-            }
-        }
+//        if (empty($post['share_setting']['page_title'])) {
+//            $this->out_put_msg(BaseConst::OPER_STATUS_FAIL_TOAST, '页面标题必填');
+//        }
+//
+//        if (empty($post['share_setting']['page_desc'])) {
+//            $this->out_put_msg(BaseConst::OPER_STATUS_FAIL_TOAST, '页面描述必填');
+//        }
+//
+//        if (empty($post['share_setting']['share_icon'])) {
+//            $this->out_put_msg(BaseConst::OPER_STATUS_FAIL_TOAST, '分享图标必填');
+//        }
+//
+//        if (empty($post['home_setting']['logo'])) {
+//            $this->out_put_msg(BaseConst::OPER_STATUS_FAIL_TOAST, '页面logo必填');
+//        }
+//
+//        foreach ($post['roasting_setting'] as $v) {
+//            if (empty($v['image_url'])) {
+//                $this->out_put_msg(BaseConst::OPER_STATUS_FAIL_TOAST, '轮播图图片必填');
+//            }
+//        }
 
         if (empty($post['font_setting']['font_color'])) {
             $this->out_put_msg(BaseConst::OPER_STATUS_FAIL_TOAST, '字体颜色必填');
@@ -297,14 +347,16 @@ class Skin extends MY_Admin_Iapi
         $this->load->model('common/Skins_model');
         $model = $this->_load_model('hotel/Views_model');
 
-        //校验皮肤是不是默认皮肤
+        //校验皮肤是不是可配置皮肤
         $skin_set = $this->Skins_model->get_skin_set($this->inter_id, $this->module);
         if (!empty ($skin_set)) {
-            if ($skin_set ['skin_name'] != $model::DEFAULT_SKIN) {
-                $this->out_put_msg(BaseConst::OPER_STATUS_FAIL_TOAST, '只有默认皮肤才支持首页设置');
+            if (!in_array($skin_set ['skin_name'], $this->allow_skins)) {
+                $this->out_put_msg(BaseConst::OPER_STATUS_FAIL_TOAST, '只有默认皮肤、高端黑、高端白才支持首页设置');
             }
+            $post['skin_name'] = $skin_set['skin_name'];
+        } else {
+            $post['skin_name'] = $model::DEFAULT_SKIN;
         }
-        $post['skin_name'] = $model::DEFAULT_SKIN;
 
         if (!SkinService::getInstance()->save_setting($post)) {
             $this->out_put_msg(BaseConst::OPER_STATUS_FAIL_TOAST, '保存失败');
@@ -329,6 +381,7 @@ class Skin extends MY_Admin_Iapi
         }
 
         //校验状态是不是删除
+        $this->load->model('wx/Publics_model');
         $focus = $this->Publics_model->get_pub_img_by_id($post['id']);
         if (empty($focus)) {
             $this->out_put_msg(BaseConst::OPER_STATUS_FAIL_TOAST, '该轮播图不存在');
@@ -336,7 +389,6 @@ class Skin extends MY_Admin_Iapi
         if ($focus['status'] == 2) {
             $this->out_put_msg(BaseConst::OPER_STATUS_FAIL_TOAST, '该轮播图不可编辑');
         }
-
 
         $this->load->model('wx/Publics_model');
         $this->Publics_model->del_focus_new($post);

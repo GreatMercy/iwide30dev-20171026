@@ -99,6 +99,20 @@ const getHotelList = (data, config) => {
   let url = user.GET_HOTEL_LIST
   return ajax.get(url, data)
 }
+/**
+ * 粉丝分析
+ */
+const getFansReport = (data, config) => {
+  let url = user.GET_FANS_REPORT
+  return ajax.get(url, data)
+}
+/**
+ * 群发图文统计
+ */
+const getArticleTotal = (data, config) => {
+  let url = user.GET_ARTICLE_TOTAL
+  return ajax.get(url, data)
+}
 export {
   getCouponCode,
   getCouponList,
@@ -109,5 +123,7 @@ export {
   getRequestDetele,
   getRegStatements,
   getDepostStatements,
-  getHotelList
+  getHotelList,
+  getFansReport,
+  getArticleTotal
 }

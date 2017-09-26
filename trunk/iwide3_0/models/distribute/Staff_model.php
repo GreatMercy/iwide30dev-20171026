@@ -642,13 +642,15 @@ class Staff_model extends MY_Model {
         $sql = 'SELECT COUNT(*) fans_count FROM iwide_fans_subs WHERE `event`=2 AND inter_id=? AND source=?';
 // 		$sql = "SELECT COUNT(*) fans_count FROM `iwide_distribute_grade_all` WHERE `saler` = ? AND `grade_table` LIKE 'iwide_fans_sub_log' AND inter_id=?";
         $saler_details = $this->saler_info($openid,$inter_id);
+        $saler_details['exts'] = unserialize($saler_details['exts']);
+            $join_gift = empty($saler_details['exts']) || $saler_details['exts']['join_gift'] == 1 ? 1 : 2;
         $fans_query = $this->_db('iwide_r1')->query($sql,array($inter_id,$saler_details['qrcode_id']))->row_array();
         $sql = "";
         $sql = "SELECT SUM(grade_total) total_fee FROM iwide_distribute_grade_all WHERE saler=? AND inter_id=? AND `status`=1";
         $fee_query = $this->_db('iwide_r1')->query($sql,array($saler_details['qrcode_id'],$inter_id))->row_array();
         $total_fee = 0;
         if(isset($fee_query['total_fee']))$total_fee = $fee_query['total_fee'];
-        return array('name'=>$saler_details['name'],'hotel_name'=>$saler_details['hotel_name'],'total_fee'=>$total_fee,'headimgurl'=>$saler_details['ext']['headimgurl'],'url'=>$saler_details['url'],'id'=>$saler_details['qrcode_id'],'fans_count'=>$fans_query['fans_count'],'master_dept'=>$saler_details['master_dept']);
+        return array('name'=>$saler_details['name'],'hotel_name'=>$saler_details['hotel_name'],'total_fee'=>$total_fee,'headimgurl'=>$saler_details['ext']['headimgurl'],'url'=>$saler_details['url'],'id'=>$saler_details['qrcode_id'],'fans_count'=>$fans_query['fans_count'],'master_dept'=>$saler_details['master_dept'],'join_gift'=>$join_gift);
     }
     /**
      * 粉丝产生收益

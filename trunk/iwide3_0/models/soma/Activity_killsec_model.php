@@ -50,6 +50,17 @@ class Activity_killsec_model extends Activity_model {
 	 */
 	const TYPE_STOCK = 2;
 
+    /**
+     * 是否多规格
+     */
+    const IS_SPECIFICATION_YES = 1;
+    const IS_SPECIFICATION_NO = 2;
+
+    /**
+     * 是否限购
+     */
+    const IS_ASTRICT_BUY_YES = 1;
+    const IS_ASTRICT_BUY_NO = 2;
 
 	/**
 	 * 秒杀订阅推送

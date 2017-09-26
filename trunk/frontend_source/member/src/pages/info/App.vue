@@ -25,7 +25,7 @@
               </div>
               <div v-else class="flex_1 color1 form-item">
                 <div class="form-item__body">
-                  <input class="font_14 color1"  :disabled="view" @keyup="setRemove($event)" :value="value.value" :type="value.type" :name="key" placeholder="-">
+                  <input class="font_14 color1"  :disabled="view" @keyup="setRemove($event)" :value="value.value" :type="value.type" :name="key" placeholder="-"  @focus="handleHiddenError(key)" @change="handlechange(key)">
                   <div class="form-item__status is-error" v-show="value.passed" @click="handleHiddenError(key)">
                     <i class="form-item__status-icon jfk-font icon-msg_icon_error_norma"></i>
                     <span class="form-item__status-tip">
@@ -82,7 +82,7 @@ export default {
         }
         if (result[[item]].value === '') {
           let thatMsg = this.configList[item]['name'] + '不能为空'
-          this.configList[item] = Object.assign({}, this.configList[item], {'passed': true, 'message': thatMsg})
+          this.configList[item] = Object.assign({}, this.configList[item], {'passed': true, 'message': thatMsg, 'value': result[[item]].value})
           setBol = false
           continue
         }
@@ -91,7 +91,7 @@ export default {
           /* eslint-disable */let reg = eval(str)
           if (!reg.test(result[[item]].value)) {
             let thatMsg = '请输入正确的' + this.configList[item]['name'] 
-            this.configList[item] = Object.assign({}, this.configList[item], {'passed': true, 'message': thatMsg})
+            this.configList[item] = Object.assign({}, this.configList[item], {'passed': true, 'message': thatMsg, 'value': result[[item]].value})
             setBol = false
             continue
           }
@@ -215,6 +215,10 @@ export default {
     handleHiddenError (item) {
       this.configList[[item]].passed = false
       this.configList[[item]].message = ''
+    },
+    handlechange (item) {
+      let result = this.$refs.form
+      this.configList[[item]].value = result[[item]].value
     }
   },
   computed: {

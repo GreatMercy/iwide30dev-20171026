@@ -18,16 +18,13 @@
   						<div class="margin_right_22 flex between" v-html="value.namehtml"></div>
   					</div>
           </div>
-			    <div v-if="key === 'sex'" class="flex_1 bg_arrow">
-            <select class="font_15 color1 position_x form-item" :value="value.value" :name="key" :disabled="view">
+			    <div v-if="key === 'sex'" class="flex_1 bg_arrow form-item">
+            <select class="font_15 color1 position_x form-item" :name="key">
               <option value="1" name="1">男</option>
               <option value="2" name="2">女</option>
               <option value="3" name="3">-</option>
             </select>
-          </div>
-          <div v-else-if="key === 'birthday'" class="flex_1 bg_arrow form-item">
-            <input class="font_14 color1" type="date" :name="key" :disabled="view"  :value="value.value" style="height: 20px;">
-              <div class="form-item__status is-error" v-show="value.passed" @click="handleHiddenError(key)">
+            <div class="form-item__status is-error" v-show="value.passed" @click="handleHiddenError(key)">
               <i class="form-item__status-icon jfk-font icon-msg_icon_error_norma"></i>
               <span class="form-item__status-tip">
                 <i class="form-item__status-cont">{{value.message}}</i>
@@ -35,9 +32,19 @@
               </span>
             </div>
           </div>
+          <div v-else-if="key === 'birthday'" class="flex_1 bg_arrow form-item">
+            <input class="font_14 color1" type="date" :name="key"  style="height: 20px;">
+              <div class="form-item__status is-error" v-show="value.passed" @click="handleHiddenError(key)">
+                <i class="form-item__status-icon jfk-font icon-msg_icon_error_norma"></i>
+                <span class="form-item__status-tip">
+                  <i class="form-item__status-cont">{{value.message}}</i>
+                  <i class="form-item__status-trigger">重新输入</i>
+                </span>
+              </div>
+          </div>
           <div v-else class="flex_1 color1 form-item">
             <div class="form-item__body">
-              <input class="font_14 color1"  :disabled="view" @keyup="setRemove($event)" :value="value.value" :type="value.type" :name="key" :placeholder="value.note">
+              <input class="font_14 color1" @keyup="setRemove($event)" :type="value.type" :name="key" :placeholder="value.note" @focus="handleHiddenError(key)">
               <div class="form-item__status is-error" v-show="value.passed" @click="handleHiddenError(key)">
                 <i class="form-item__status-icon jfk-font icon-msg_icon_error_norma"></i>
                 <span class="form-item__status-tip">
@@ -127,7 +134,13 @@ export default {
       }
 
       if (setBol) {
+        this.toast = this.$jfkToast({
+          duration: -1,
+          iconClass: 'jfk-loading__snake',
+          isLoading: true
+        })
         postReg(setDate).then((res) => {
+          this.toast.close()
           if (res.status === 1000) {
             JfkMessageBox.alert('注册成功', '', {
               iconType: 'success'

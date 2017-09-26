@@ -323,16 +323,16 @@ class Roles_model extends CI_Model {
 
         if(empty($role_auth) || empty($extra_auth)) return $role_auth;
 //        $role_auth = unserialize($role_auth);
-        $extra_auth = unserialize($extra_auth);
+        if(!empty($extra_auth)) $extra_auth = unserialize($extra_auth);
 
         if(isset($extra_auth['plus']) && !empty($extra_auth['plus'])){     //关联增加
             foreach($extra_auth['plus'] as $eap_key => $ea_plus){
                 if(!isset($role_auth[$eap_key]))$role_auth[$eap_key]=array();
-                if(!empty($ea_plus)){
-                    foreach($ea_plus as $ea_ctrl_key => $ea_ctrl){
+                if(!empty($ea_plus) && isset($ea_plus['controllers'])){
+                    foreach($ea_plus['controllers'] as $ea_ctrl_key => $ea_ctrl){
                         if(!isset($role_auth[$eap_key][$ea_ctrl_key]))$role_auth[$eap_key][$ea_ctrl_key]=array();
-                        if(!empty($ea_ctrl)){
-                            foreach($ea_ctrl as $ea_func_key => $ea_func){
+                        if(!empty($ea_ctrl) && isset($ea_ctrl['funcs'])){
+                            foreach($ea_ctrl['funcs'] as $ea_func_key => $ea_func){
                                 if(!isset($role_auth[$eap_key][$ea_ctrl_key][$ea_func_key]))$role_auth[$eap_key][$ea_ctrl_key][$ea_func_key]=array();
                                 if(!empty($ea_func)){
                                     foreach($ea_func as $ea_oper_key => $ea_oper){
@@ -350,11 +350,11 @@ class Roles_model extends CI_Model {
         if(isset($extra_auth['reduce']) && !empty($extra_auth['reduce'])){    //关联减少
             foreach($extra_auth['reduce'] as $ead_key => $ea_reduce){
                 if(!isset($role_auth[$ead_key]))continue;
-                if(!empty($ea_reduce)){
-                    foreach($ea_reduce as $ea_ctrl_key => $ea_ctrl){
+                if(!empty($ea_reduce) && isset($ea_reduce['controllers'])){
+                    foreach($ea_reduce['controllers'] as $ea_ctrl_key => $ea_ctrl){
                         if(!isset($role_auth[$ead_key][$ea_ctrl_key]))continue;
-                        if(!empty($ea_ctrl)){
-                            foreach($ea_ctrl as $ea_func_key => $ea_func){
+                        if(!empty($ea_ctrl) && isset($ea_ctrl['funcs'])){
+                            foreach($ea_ctrl['funcs'] as $ea_func_key => $ea_func){
                                 if(!isset($role_auth[$ead_key][$ea_ctrl_key][$ea_func_key]))continue;
                                 if(!empty($ea_func)){
                                     foreach($ea_func as $ea_oper_key => $ea_oper){
@@ -480,12 +480,12 @@ class Roles_model extends CI_Model {
     }
 
 
-    function login_authority($inter_id,$role_id,$extra_authorities=array()){   //账号登录时返回的权限
+    function login_authority($inter_id,$role_id,$account_type=3,$extra_authorities=array()){   //账号登录时返回的权限
 
         $this->load->model('authority/Module_func_model');
 
-        $account = $this->session->userdata();  //账号信息
-        $account_type = isset($account['admin_profile']['type'])?$account['admin_profile']['type']:3;
+//        $account = $this->session->userdata();  //账号信息
+//        $account_type = isset($account['admin_profile']['type'])?$account['admin_profile']['type']:3;
 
         $role = $this->getRoleById($inter_id,$role_id);
         $role_type = $role['role_type'];
@@ -506,29 +506,30 @@ class Roles_model extends CI_Model {
 
             if(!empty($authorities)){
                 foreach($authorities as $key=>$ctrl){
+                    $sys_code = isset($all_authorities[$key]['sys_code'])?$all_authorities[$key]['sys_code']:'adminhtml';
                     if($ctrl['all_private']==1){
-                        $res['adminhtml'][$key]=array();
+                        $res[$sys_code][$key]=array();
                         foreach($ctrl['controllers'] as $func){
-                            $res['adminhtml'][$key][$func['code']]=array();
+                            $res[$sys_code][$key][$func['code']]=array();
                             foreach($func['funcs'] as $arr){
-                                $res['adminhtml'][$key][$func['code']][] = $arr['code'];
+                                $res[$sys_code][$key][$func['code']][] = $arr['code'];
                             }
                         }
                     }else{
-                        if($ctrl['check']==1)$res['adminhtml'][$key]=array();
+                        if($ctrl['check']==1)$res[$sys_code][$key]=array();
                         foreach($ctrl['controllers'] as $func){
                             if($func['all_private']==1){
-                                $res['adminhtml'][$key][$func['code']]=array();
+                                $res[$sys_code][$key][$func['code']]=array();
                                 foreach($func['funcs'] as $arr){
-                                    $res['adminhtml'][$key][$func['code']][] = $arr['code'];
+                                    $res[$sys_code][$key][$func['code']][] = $arr['code'];
                                 }
                             }else{
-                                if($func['check']==1)$res['adminhtml'][$key][$func['code']]=array();
+                                if($func['check']==1)$res[$sys_code][$key][$func['code']]=array();
                                 foreach($func['funcs'] as $arr){
                                     if($arr['check']==1){
-                                        $res['adminhtml'][$key][$func['code']][] = $arr['code'];
+                                        $res[$sys_code][$key][$func['code']][] = $arr['code'];
                                     }elseif($arr['related_func']!=0){
-                                        if($authorities[$arr['related_module']]['controllers'][$arr['related_ctlr']]['funcs'][$arr['related_func']]['check']==1)$res['adminhtml'][$key][$func['code']][] = $arr['code'];else continue;
+                                        if($authorities[$arr['related_module']]['controllers'][$arr['related_ctlr']]['funcs'][$arr['related_func']]['check']==1)$res[$sys_code][$key][$func['code']][] = $arr['code'];else continue;
                                     } else{
                                         continue;
                                     }
@@ -544,18 +545,22 @@ class Roles_model extends CI_Model {
     }
 
 
-    function account_auth($inter_id,$role_id,$authorities=array()){     //超管账号编辑额外权限
+    function account_auth($inter_id,$role_id,$authorities=''){     //超管账号编辑额外权限
 
         $role = $this->getRoleById($inter_id,$role_id);
-        $role_auth = $this->check_relate_auth($inter_id,$role);
-
-        $edit_auth = $this->defined_authorities($role_auth,$authorities);
+        $edit_auth = array();
+        if(!empty($role)){
+            $role_auth = $this->check_relate_auth($inter_id,$role);
+            $edit_auth = $this->defined_authorities($role_auth,$authorities);
+        }
 
         $this->load->model('authority/Module_func_model');
 
         $account = $this->session->userdata();  //账号信息
-        $account_type = isset($account['admin_profile']['type'])?$account['admin_profile']['type']:3;
+        $account_type = isset($account['admin_profile']['type'])?$account['admin_profile']['type']:2;
+        $role_type = isset($role['role_type'])?$role['role_type']:2;
         $all_authorities=$this->Module_func_model->getAccountFuncList($account_type,$role['role_type'],'DISP');//1.系统管理员，2.公众号管理员，3.普通账号
+
 
         $res = $this->compare_authorities($all_authorities,$edit_auth);
 

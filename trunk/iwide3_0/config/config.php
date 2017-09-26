@@ -408,7 +408,7 @@ if( isset($_SERVER['CI_ENV']) && $_SERVER['CI_ENV']=='production' ){
 } else {
     if( WEB_AREA=='admin' ) {
         $session_db= 1; //后台统一用db1
-//        $config['cookie_domain'] = '.iwide.cn';
+       $config['cookie_domain'] = '';
         $config['sess_match_ip'] = FALSE;        /** @see CI_Session_redis_driver  **/
 
     } else {
@@ -448,7 +448,7 @@ $config['sess_regenerate_destroy'] = FALSE;
 |
 */
 $config['cookie_prefix']	= '';
-//$config['cookie_domain']	= '';
+$config['cookie_domain']	= '';
 $config['cookie_path']		= '/';
 $config['cookie_secure']	= FALSE;
 $config['cookie_httponly'] 	= FALSE;
@@ -523,7 +523,8 @@ if( defined('WEB_AREA') && WEB_AREA=='front'){
         'wxpayreturn/.*',
         'wftpayreturn/.*',
     	'lakalapayreturn/.*',
-    	'unionpayreturn/.*',
+        'unionpayreturn/.*',
+    	'hkwxpayreturn/.*',
     	'chat/.*',
     	'wxauth/.*',
     	'report/.*',

@@ -86,3 +86,13 @@ export const arrayFillWithArray = function (start, len, arr, fillArr) {
   arrSplice.apply(_arr, _fillArr)
   return _arr
 }
+// 对弹窗类的进行返回操作
+export function showFullLayer (options = {}, title = '', href = location.href, cb) {
+  let config = Object.assign({t: Date.now()}, options)
+  window.history.pushState(config, title, href)
+  window.addEventListener('popstate', function () {
+    setTimeout(function () {
+      cb && cb()
+    }, 100)
+  })
+}

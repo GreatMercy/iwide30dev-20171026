@@ -534,7 +534,7 @@ $('.jfk_express_btn').on('click', function(ev) {
     ev.preventDefault();
     var href = $('.jfk_express_btn').attr('href');
     if (productId) {
-        if (productId === '138236' || productId === '138215') {
+        if (productId === '138236' || productId === '138215' || "<?php echo ENVIRONMENT ?>" == 'development') {
             $('.jfk-express-area').show().off().on('click', function() {
                 $('.jfk-express-area').hide();
             });
@@ -557,8 +557,6 @@ var span = '<a class="btn_void h24 xs" href="<?php echo $group_url; ?>" style="m
 $("#operation").append(span);
 <?php endif; ?>
 if( $("#operation *").length<=0) $("#operation").parent().hide();
-</script>
-<script type="text/javascript">
 </script>
 
 </body>

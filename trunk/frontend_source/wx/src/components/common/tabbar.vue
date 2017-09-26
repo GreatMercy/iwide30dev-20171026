@@ -1,0 +1,27 @@
+<template>
+  <div class="jfk-tabbar jfk-footer">
+    <a v-for="(item, index) in tabbarItems" :key="index" :href="item.link" class="jfk-tabbar__item" :class="{'is-selected color-golden': index === selected, 'font-color-white': index !== selected}">
+      <div class="jfk-tabbar__cont">
+        <i class="jfk-font jfk-tabbar__icon" :class="item.icon"></i>
+        <span class="jfk-tabbar__label">{{item.text}}</span>
+      </div>
+    </a>
+  </div>
+</template>
+<script>
+  export default {
+    name: 'tabbar',
+    computed: {
+    },
+    props: {
+      selected: {
+        type: Number,
+        default: 0
+      },
+      tabbarItems: {
+        type: Array,
+        required: true
+      }
+    }
+  }
+</script>

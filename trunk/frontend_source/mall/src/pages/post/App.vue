@@ -64,7 +64,7 @@
       </div> -->
 
       <div class="post-btn">
-        <button class="jfk-button jfk-button--primary is-plain font-size--30 jfk-button--free"
+        <button class="jfk-button jfk-button--primary is-special font-size--30 jfk-button--free"
                 :class="{'is-disabled': !product.arid}"
                 @click="deliver">
           <span>立即发货</span>

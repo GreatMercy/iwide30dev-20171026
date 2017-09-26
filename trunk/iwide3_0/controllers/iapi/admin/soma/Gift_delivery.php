@@ -482,14 +482,17 @@ class Gift_delivery extends MY_Admin_Iapi{
         $params['page'] = intval($this->input->get('page'));
         $params['page'] = empty($params['page']) ? 0 : $params['page'] - 1;
 
+        if(!empty($params['end_time'])){
+            $params['end_time'] = $params['end_time'].' 23:59:59';
+        }
+
         $params['inter_id'] = $this->session->get_admin_inter_id();
-        $this->load->model('soma/Gift_detail_model', 'Gift_detail_model');
-        $Gift_detail_model = $this->Gift_detail_model;
-        $this->db = $Gift_detail_model->_shard_db_r($this->inter_id);
         //加载gift_delivery_model
         $this->load->model('soma/gift_delivery_model');
+        $this->load->model('soma/Gift_detail_model', 'Gift_detail_model');
+        $Gift_detail_model = $this->Gift_detail_model;
         //获取礼包领取详情
-        $resultInfo = $this->gift_delivery_model->getGiftReceiveDetail($params);
+        $resultInfo = $this->gift_delivery_model->getGiftReceiveDetail($params,$Gift_detail_model);
 
         $data = [
             'items' => $resultInfo['message'],
@@ -503,10 +506,6 @@ class Gift_delivery extends MY_Admin_Iapi{
 
         $this->out_put_msg($resultInfo['status'],'',$data);
     }
-
-
-
-
 
 
 }

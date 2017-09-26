@@ -55,12 +55,25 @@ static $common_dehydrate_samples = array (
                     ) 
             ) 
     );
+预定义模板配置：//'模块'=>array('模板1'=>array('a','b')) 模板结构与mode结构一致
+static $common_dehydrate_keys = array(
+    'hotel' => array (
+            'room_info' =>array(
+                'keys' => array(
+                    'sub_des222',
+                ),
+            ),
+    )
+);
 mode结构(递归)：
 array (
         'common'=>array(//通用模板，会将$common_dehydrate_samples中对应模板配置加入
             'member',
             'signPackage',
             'pagetitle' 
+        ),
+        'key_samples'=>array(//使用预定义模板，会将此模板下的对应路径 ['mul_arr']['orders'] 与 $common_dehydrate_keys['hotel']['room_info'] 合并，使用array_merge_recursive
+             'mul_arr/orders'=>'room_info'
         ),
         'keys' => array (//keys 为 需要原样输出的数据字段
                 'inter_id',//输出数据会包含 $data['inter_id'],$data['handled']

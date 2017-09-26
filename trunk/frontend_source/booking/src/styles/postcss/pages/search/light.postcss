@@ -1,4 +1,10 @@
 .jfk-pages__search{
+  .jfk-pages__theme{
+    background-color: var(--color-white);
+  }
+  .swiper-pagination-current{
+    color: var(--color-golden);
+  }
   .search_place_container{
     .search_place{
         &::before {
@@ -22,21 +28,23 @@
         color: var(--font-color-light-gray);
       }
       .live_year{
-        color: var(--font-color-extra-light-gray);
+        color: var(--font-color-light-silver);
       }
      }
 
      .center_line{
         &::before {
-         background-color: var(--line-color-light-silver);
+         //background-color: var(--line-color-light-silver);
+          background-color: #e0e0e0;
         }
      }
 
      .checkBtn{
-        background: black;
         color: var(--color-white);
+        border-radius: px2rem(var(--button-border-radius));
          a,a:active{
            color: var(--color-white);
+           background-color: var(--button-primary-plain-color);
          }
       }
 
@@ -70,19 +78,19 @@
       color: var(--font-color-light-gray);
     }
     & .always,& .kill_sec{
-      color: #333;
+      color: var(--font-color-dark-white);
       &::before {
         background-color: var(--font-color-light-gray);
       }
     }
   }
   .choose_date_calendar{
-    background: #fff;
+    background-color: var(--button-primary-color);
   }
   .collection_mask{
-    background: #fff;
+    background-color: var(--button-primary-color);
     a{
-      color: #808080;
+      color: var(--font-color-extra-light-gray);
     }
     .sure{
       border: 1px solid var(--color-golden);

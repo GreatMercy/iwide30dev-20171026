@@ -42,9 +42,9 @@
             </span>
           </div>
           <div class="others jfk-clearfix">
-            <div class="prices jfk-fl-l">
-              <span class="jfk-price product-price-package color-golden-price font-size--68" v-html="pricePackage" v-once></span>
-              <span class="jfk-price__original product-price-market font-size--24 font-color-light-gray" v-once v-html="priceMarket"></span>
+            <div class="prices jfk-fl-l font-size--24" :class="'prices--length-' + pricePackage.length">
+              <span class="jfk-price product-price-package color-golden-price" v-html="pricePackage.html" v-once></span>
+              <span class="jfk-price__original product-price-market font-color-light-gray" v-once v-html="priceMarket.html"></span>
             </div>
             <div class="date-norm jfk-fl-r font-color-extra-light-gray font-size--24" v-if="productInfo.spec_product" @click="handleSpecTicket">
               选择{{productInfo.isTicket ? '日期' : '规格'}}
@@ -70,33 +70,35 @@
         </ul>
       </div>
       <div class="detail-box">
-        <div v-if="productInfo.tag === 2" class="killsec-original jfk-ml-30 jfk-mr-30">
+        <div v-if="productInfo.tag === 2" class="killsec-original">
           <div class="killsec-original__cont jfk-flex is-align-middle is-justify-space-between" @click="handleSubmitOrderOriginal">
             <span class="font-size--30 font-color-extra-light-gray">原价去购买</span>
             <span class="font-size--28 color-golden">
-              <i>{{priceMarket}}</i>
+              <i>{{priceMarket.html}}</i>
               <i class="jfk-font triangle font-size--24 font-color-extra-light-gray icon-user_icon_jump_normal"></i>
             </span>
           </div>
         </div>
-        <div v-if="productDetailInfo.labels.length" class="productinfo-detail"  ref="productInfoDetail">
-          <jfk-sticky>
-            <div class="productinfo-detail-box jfk-pl-30 jfk-pr-30" :class="{'great-then-2': productDetailInfo.labels.length > 1}">
-              <ul class="productinfo-detail-label" :class="'productinfo-detail-label--' + productDetailInfo.labels.length">
-                <li
-                  v-for="item in productDetailInfo.labels"
-                  :key="item.key"
-                  class="font-size-32 label"
-                  @click="handleLabel(item.key)"
-                  :class="{
-                    'color-golden is-selected': currentLabel === item.key,
-                    'font-color-light-gray-common': currentLabel !== item.key
-                  }"
-                ><div>{{item.label}}</div></li>
-              </ul>
+        <div v-if="productDetailInfo.labels.length" class="productinfo-detail">
+          <div v-sticky="{'z-index': 100, 'stickyHeight': productDetailInfoContentHeight}">
+            <div>
+              <div class="productinfo-detail-box jfk-pl-30 jfk-pr-30" :class="{'great-then-2': productDetailInfo.labels.length > 1}">
+                <ul class="productinfo-detail-label" :class="'productinfo-detail-label--' + productDetailInfo.labels.length">
+                  <li
+                    v-for="item in productDetailInfo.labels"
+                    :key="item.key"
+                    class="font-size-32 label"
+                    @click="handleLabel(item.key)"
+                    :class="{
+                      'color-golden is-selected': currentLabel === item.key,
+                      'font-color-light-gray-common': currentLabel !== item.key
+                    }"
+                  ><div>{{item.label}}</div></li>
+                </ul>
+              </div>
             </div>
-          </jfk-sticky>
-          <div class="productinfo-detail-cont" v-html="productDetailInfo.html"></div>
+          </div>
+          <div class="productinfo-detail-cont" v-html="productDetailInfo.html" id="productInfoDetailCont"></div>
         </div>
       </div>
     </div>
@@ -274,6 +276,11 @@
         that.indexUrl = home
       })
     },
+    mounted () {
+      this.$nextTick(() => {
+        console.log(document.getElementById('productInfoDetailCont'))
+      })
+    },
     data () {
       let that = this
       return {
@@ -318,7 +325,8 @@
         tokenId: '',
         // 服务弹框最大高度
         serviceListMaxHeight: 0,
-        currentLabel: ''
+        currentLabel: '',
+        productDetailInfoContentHeight: 0
       }
     },
     watch: {
@@ -400,14 +408,14 @@
         let p = this.productInfo
         let html = ''
         let labels = []
+        if (p.order_notice) {
+          labels.push({label: '订购须知', key: 'notice'})
+          html += `<div class="notice productinfo-detail-item jfk-pl-30 jfk-pr-30"><div class="title font-color-white font-size--32"><span>订购须知</span></div><div id="notice" class="cont">${p.order_notice}</div></div>`
+        }
         // 图文详情
         if (p.img_detail) {
           labels.push({label: '图文详情', key: 'graphic'})
           html += `<div class="graphic productinfo-detail-item jfk-pl-30 jfk-pr-30"><div class="title font-color-white font-size--32"><span>图文详情</span></div><div class="cont"  id="graphic">${p.img_detail}</div></div>`
-        }
-        if (p.order_notice) {
-          labels.push({label: '订购须知', key: 'notice'})
-          html += `<div class="notice productinfo-detail-item jfk-pl-30 jfk-pr-30"><div class="title font-color-white font-size--32"><span>订购须知</span></div><div id="notice" class="cont">${p.order_notice}</div></div>`
         }
         if (this.productDetail) {
           labels.push({label: '商品内容', key: 'detail'})
@@ -415,6 +423,10 @@
         }
         if (labels.length) {
           this.currentLabel = labels[0].key
+          this.$nextTick(() => {
+            let $el = document.getElementById('productInfoDetailCont')
+            this.productDetailInfoContentHeight = $el.offsetHeight
+          })
         }
         return {
           labels,

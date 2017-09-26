@@ -1,13 +1,19 @@
 .jfk-pages__nearby{
+
+    .font-size--78{
+      font-size: px2rem(78);
+    }
+    .font-size--42{font-size: px2rem(42);}
     .search_bar{
+      margin-top: px2rem(-10);
       &_item{
         height: px2rem(120);
         line-height: px2rem(140);
-        width: 15%;
+        width: 15.5%;
         display: inline-block;
         text-align: center;
         & .arrow_icon{
-          font-size:px2rem(18);
+          font-size:px2rem(14);
         }
         @mixin one-line vertical {};
         position:relative;
@@ -46,8 +52,8 @@
     }
 
     .img_container{
-      margin-top: px2rem(40);
       z-index: 99;
+      margin-top: px2rem(30);
       &_item{
         position: relative;
         width: 100%;
@@ -78,13 +84,13 @@
         & .hotel_name{
           width: px2rem(480);
           position: absolute;
-          bottom: px2rem(70);
+          bottom: px2rem(60);
           left: px2rem(30);
           @mixin ellipsis 1;
           & .score{
             width: px2rem(60);
-            height: px2rem(40);
-            line-height: px2rem(40);
+            height: px2rem(34);
+            line-height: px2rem(34);
             display: inline-block;
             border-radius: px2rem(5);
             text-align: center;
@@ -96,7 +102,7 @@
         & .address{
           width: px2rem(480);
           position: absolute;
-          bottom: px2rem(30);
+          bottom: px2rem(20);
           left: px2rem(30);
           @mixin ellipsis 1;
           .distance{
@@ -108,14 +114,14 @@
               height: 50%;
               position: absolute;
               top: 25%;
-              right: 0;
+              right: 4px;
             }
           }
         }
         & .jfk-price{
           position: absolute;
-          right: px2rem(30);
-          bottom: px2rem(50);
+          right: px2rem(20);
+          bottom: px2rem(30);
           letter-spacing: 0;
         }
       }
@@ -246,6 +252,19 @@
     }
     &_item:first{
       font-size: px2rem(32);
+    }
+  }
+  .canNotGetPlace{
+    width: 100%;
+    text-align: center;
+    & .reset{
+      width: 4rem;
+      height: 1.8rem;
+      line-height: 1.8rem;
+      border: 1px solid #000;
+      display: inline-block;
+      border-radius: 2px;
+      margin-top: 2rem;
     }
   }
 

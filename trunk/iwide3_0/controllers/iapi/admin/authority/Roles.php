@@ -2,18 +2,18 @@
 defined ( 'BASEPATH' ) or exit ( 'No direct script access allowed' );
 class Roles extends MY_Admin_Iapi {
     protected $label_module = NAV_HOTEL;
-    protected $label_controller = '交易订单';
+    protected $label_controller = '角色权限';
     protected $label_action = '';
     function __construct() {
         parent::__construct ();
         $this->inter_id = $this->session->get_admin_inter_id ();
-        $this->module = 'hotel';
+        $this->module = 'authority';
         $this->common_data ['csrf_token'] = $this->security->get_csrf_token_name ();
         $this->common_data ['csrf_value'] = $this->security->get_csrf_hash ();
         // $this->output->enable_profiler ( true );
     }
     protected function main_model_name() {
-        return 'hotel/order_model';
+        return 'authority/Roles_model';
     }
 
 
@@ -96,7 +96,7 @@ $user['admin_profile']['type'] = 2;
                 );
             }
             //所有标准角色
-            $standard_roles = $this->Roles_model->standard_roles(1);
+            $standard_roles = $this->Roles_model->standard_roles(1);  //status
             $data['standard_roles'] = array();
             if(!empty($standard_roles)){
                 foreach($standard_roles as $temp_standard_roles){
@@ -386,6 +386,13 @@ $user['admin_profile']['type'] = 2;
 
             $info['status'] = 1;
             $info['message'] = '编辑成功';
+        }
+
+        if($role_id==96){
+            print_r($post_authorities);
+            print_r($authorities);
+            print_r($related_authorities);
+            print_r($extra_authorities);exit;
         }
 
         $data['return_info'] = $info;

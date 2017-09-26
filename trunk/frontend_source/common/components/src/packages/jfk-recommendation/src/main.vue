@@ -14,15 +14,15 @@
             <div class="jfk-swiper__item-mask"></div>
           </div>
         </div>
-        <div class="jfk-swiper__item-info">
+        <div class="jfk-swiper__item-info" :class="'jfk-swiper__item-info--length-' + item._pricePackage.length">
           <div class="info-box">
           <h5 class="title font-color-silver-common font-size--28" v-html="item._name"></h5>
-          <p class="price" :title="item.type" :class="{'is-integral': item._integral}">
-            <span class="jfk-price color-golden-price font-size--38">
+          <p class="price font-size--24" :title="item.type" :class="{'is-integral': item._integral}">
+            <span class="jfk-price color-golden-price">
               <i class="jfk-font-number jfk-price__currency" v-if="!item._integral">￥</i>
               <i class="jfk-font-number jfk-price__number">{{item._pricePackage}}</i>
             </span>
-            <span class="jfk-price__original font-color-extra-light-gray-common font-size--24"><i v-if="!item._integral">￥</i>{{item._priceMarket}}</span>
+            <span class="jfk-price__original font-color-extra-light-gray-common"><i v-if="!item._integral">￥</i>{{item._priceMarket}}</span>
           </p>
           </div>
         </div>

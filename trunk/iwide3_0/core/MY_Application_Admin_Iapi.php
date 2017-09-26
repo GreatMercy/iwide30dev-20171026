@@ -60,11 +60,11 @@ class MY_Application_Admin_Iapi extends MY_Controller {
         return ($xss_clean === TRUE) ? $this->security->xss_clean ( $value ) : $value;
     }
     /**获得对应session_key的session数据
-     * @param string $key 传入空字符串时，返回全部未过期session值
-     * @param boolean $all_real true且$key为''时，返回真实session值
+     * @param string $key 
+     * @param boolean $all_real
      * @return mixed|NULL|mixed|NULL
-     * 传入key为空时返回所有session数据，结构：array('key1'=>array('val'=>'session值','expt'=>'此值的有效时间戳'))
-     * 传入key不为空：返回key对应session值（需存在且在有效期内，否则返回NULL)
+     * $key为''时，$all_real为true则返回真实session值(结构：array('key1'=>array('val'=>'session值','expt'=>'NULL|此值的有效时间戳'))),
+     *                      为false则返回全部未过期session值(结构：array('key1'=>'val','key2'=>'va2'))
      */
     protected function user_session($key = '', $all_real = FALSE) {
         $now = time ();

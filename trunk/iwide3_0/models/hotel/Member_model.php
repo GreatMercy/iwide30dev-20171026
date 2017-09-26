@@ -38,8 +38,9 @@ class Member_model extends CI_Model {
             } else {
                 if (! isset ( $paras ['create'] ) || $paras ['create'] == true) {
                     $member = $this->Imember->initMember ( $openid, array (), $inter_id );
+                }else {
+                    $member = false;
                 }
-                $member = false;
             }
         }
         if (! empty($member->mem_id)){
@@ -467,13 +468,16 @@ class Member_model extends CI_Model {
     	}
     }
     function check_part_point($inter_id,$params=array()){
+    	$set=array('s'=>0,'part_set'=>array(),'errmsg'=>'不可使用积分');
+    	if (isset($params['paytype']) && ($params['paytype'] == 'point' || $params['paytype'] == 'bonus')){
+    	    return $set;
+    	}
     	$this->load->model('hotel/Bonus_rules_model');
     	$params['no_status']=1;
     	$rule=$this->Bonus_rules_model->check_userule($inter_id,$params);
     	if ($rule===FALSE){
     	    return array('s'=>1,'part_set'=>array());
     	}
-    	$set=array('s'=>0,'part_set'=>array(),'errmsg'=>'不可使用积分');
     	if (!empty($rule['rule'])){
     		$set['s']=1;
     		$set['errmsg']='';

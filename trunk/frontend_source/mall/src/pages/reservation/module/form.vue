@@ -152,6 +152,7 @@
       }).then((res) => {
         this.detail = res['web_data']
         const attach = res['web_data']['attach']
+        this.bookingDate = attach['booking_date']
         const allDate = attach['code_use_date']
         this.detail['validity'] = `${allDate['begin_date']} - ${allDate['end_date']}`
         this.order_params = attach['order_params']
@@ -167,6 +168,8 @@
         detail: '',
         checkInDateBol: false,
         currentDate: '',
+        canbook: true,
+        bookingDate: '',
         form: {
           name: '',
           phone: '',
@@ -273,7 +276,11 @@
       // 选择入住时间
       goCalendar () {
         if (this.checkInDateBol === true) {
-          this.$router.push('/calendar')
+          if (this.canbook) {
+            this.$router.push('/calendar')
+          } else {
+            this.$jfkToast('抱歉，房间已经被订完了~')
+          }
           return false
         }
         const current = moment(this.currentDate * 1000)
@@ -303,7 +310,26 @@
         axios.all([getHotelTime(currentParams), getHotelTime(nextParams), getHotelTime(afterParams)]).then((res) => {
           this.toast.close()
           this.checkInDateBol = true
-          this.$router.push('/calendar')
+          // 判断是否允许跳转日历
+          let canBooking = [false, false, false]
+          const checkCanBooking = (index) => {
+            for (let j in res[index]['web_data']['data']) {
+              const book = parseInt(res[index]['web_data']['data'][j]['can_booking'])
+              if (book === 1) {
+                canBooking[index] = true
+              }
+            }
+          }
+          for (let i = 0; i < canBooking.length; i++) {
+            checkCanBooking(i)
+          }
+          if (!canBooking[0] && !canBooking[1] && !canBooking[2]) {
+            this.$jfkToast('抱歉，房间已经被订完了~')
+            this.canbook = false
+            return false
+          } else {
+            this.$router.push('/calendar')
+          }
           let calendarDate = {
             min: null,
             max: null,
@@ -314,14 +340,12 @@
             'key': currentParams['year'] + '-' + currentParams['month'] + '-' + String(parseInt(current.format('Do'))),
             'all': currentParams['year'] + '-' + currentParams['month'] + '-' + stringLengthToTwo(String(parseInt(current.format('Do'))))
           }
-          calendarDate['min'] = new Date(currentParams['year'] + '/' + currentParams['month'])
-          calendarDate['max'] = new Date(afterParams['year'] + '/' + afterParams['month'])
+          calendarDate['min'] = new Date(this.bookingDate['begin_date'])
+          calendarDate['max'] = new Date(this.bookingDate['end_date'])
           calendarDate[currentParams['year'] + '-' + currentParams['month']] = res[0]['web_data']['data']
           calendarDate[nextParams['year'] + '-' + nextParams['month']] = res[1]['web_data']['data']
           calendarDate[afterParams['year'] + '-' + afterParams['month']] = res[2]['web_data']['data']
           this.$store.commit('updateReservationCalendarDate', calendarDate)
-        }).then(() => {
-          this.toast.close()
         }).catch(() => {
           this.toast.close()
         })

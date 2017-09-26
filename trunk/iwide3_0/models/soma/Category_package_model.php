@@ -373,5 +373,36 @@ class Category_package_model extends MY_Model_Soma {
 		return $this->_shard_db_r()->where('inter_id', $inter_id)->get($this->table_name())->result_array();
 	}
 
+    /**
+     * 根据cat_id获取套票分类信息
+     * @param $inter_id
+     * @param $cat_id
+     * @return array
+     * @author xuxianjia
+     */
+    public function get_category_package_by_cat_id($cat_id, $interId = NULL)
+    {
+        if (!$cat_id) {
+            return false;
+        }
+
+        if ($interId) {
+            $inter_id = $interId;
+        } else {
+            $inter_id = $this->session->get_admin_inter_id();
+        }
+
+        $where = array();
+        $where['inter_id'] = $inter_id;
+        $where['cat_id'] = intval($cat_id);
+
+        $table_name = $this->table_name_r($inter_id);
+        $rs = $this->_shard_db_r('iwide_soma_r')
+            ->where($where)
+            ->get($table_name)
+            ->row_array();
+        return $rs;
+    }
+
 
 }

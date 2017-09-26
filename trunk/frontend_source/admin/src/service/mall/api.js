@@ -36,7 +36,9 @@ const v1 = {
   // 删除商品
   DELETE_GIFT_DELIVERY_GIFT: `${API_GIFT_DELIVERY}/deleteProductGift`,
   // 礼物派送报表列表
-  GET_GIFT_DELIVERY_GIFT_RECEIVE_LIST: `${API_GIFT_DELIVERY}/giftReceiveDetail`
+  GET_GIFT_DELIVERY_GIFT_RECEIVE_LIST: `${API_GIFT_DELIVERY}/giftReceiveDetail`,
+  // 导出礼包派送详情
+  GET_GIFT_DELIVERY_EXPORT: `${API_GIFT_DELIVERY}/exportGiftExcel`
 }
 
 export {

@@ -4,20 +4,17 @@
   }
 
   .choose_prt_top{
-    padding-top: px2rem(70);
-    margin-bottom: px2rem(70);
-    padding-bottom: px2rem(60);
+    padding-top: px2rem(60);
+    margin-bottom: px2rem(82);
+    padding-bottom: px2rem(65);
     &_item1,&_item2,&_item3{
       @mixin ellipsis 1;
-      padding:0 px2rem(30);
+      padding:0 px2rem(38);
     }
 
-    &_item1{
-
-    }
     &_item2{
-      margin-top: px2rem(20);
-      margin-bottom: px2rem(10);
+      margin-top: px2rem(29);
+      margin-bottom: px2rem(26);
     }
     &_item3{
       span{
@@ -27,10 +24,10 @@
   }
 
   .star_container{
-    padding: 0 px2rem(30) px2rem(50) px2rem(30);
+    padding: 0 px2rem(30) px2rem(70) px2rem(30);
     & .star_title{
       height: px2rem(70);
-      margin-bottom: px2rem(70);
+      margin-bottom: px2rem(102);
       line-height: px2rem(70);
       text-align: center;
       @mixin one-line horzin {};
@@ -40,21 +37,23 @@
           position: absolute;
           bottom: 0;
           left: 46%;
+          height: px2rem(2);
         }
     }
 
     & .star_list{
-      text-align:center;
+      /* text-align:center; */
+      padding-left: px2rem(63);
       @mixin one-line horzin {};
         position:relative;
           &::before {
             width: 100%;
             position: absolute;
-            bottom: px2rem(-50);
+            bottom: px2rem(-70);
             left: 0;
           }
      &_item{
-        margin-bottom: px2rem(70);
+        margin-bottom: px2rem(76);
         & .star_list_item_name{
           margin-right: px2rem(40);
           letter-spacing: px2rem(10);
@@ -62,6 +61,9 @@
         .jfk-rater a{
           margin-right: px2rem(40);
         }
+     }
+     &_item:last-child{
+      margin-bottom: px2rem(0);
      }
     }
   }
@@ -78,11 +80,13 @@
       left: 0;
     }
     & .title{
-      height: px2rem(80);
-      line-height: px2rem(80);
+      /* height: px2rem(80); */
+      /* line-height: px2rem(80); */
+      margin-top: px2rem(100);
     }
     ul{
       overflow: hidden;
+      padding-top: px2rem(12);
       li{
         width: 30%;
         float: left;
@@ -93,6 +97,11 @@
         text-align:center;
         border-radius: px2rem(5);
         margin-top: px2rem(30);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        word-break: break-word;
+        word-wrap: break-word;
+        white-space: nowrap;
       }
       li.active {
         position: relative;

@@ -147,6 +147,7 @@ class Hotel_interface extends CI_Controller {
 	                            $dis_record['sales_id'] = $sales['qrcode_id'];
 	                            $dis_record['sales_name'] = $sales['name'];
 	                            $dis_record['hotel_name']  = $sales['hotel_name'];
+                                $dis_record['hotel_id'] = $sales['hotel_id'];
 	                            /*分销绩效记录写入*/
 	                            $record_id = $this->getCI()->Distribution_model->add_distribution_record($inter_id,$dis_record);
 	                            if(!$record_id){

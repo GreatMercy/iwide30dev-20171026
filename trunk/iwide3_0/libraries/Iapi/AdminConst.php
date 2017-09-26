@@ -21,7 +21,42 @@ class AdminConst extends BaseConst
                     }
                 }
             }
-
+            if (!empty ($dehydrate_samples ['key_samples'])) {
+                isset ( $path ) or $path = explode ( '/', $sample );
+                if (isset ( self::$common_dehydrate_keys [$path [0]] )) {
+                    foreach ( $dehydrate_samples ['key_samples'] as $key_path => $key_name ) {
+                        if (isset ( self::$common_dehydrate_keys [$path [0]] [$key_name] )) {
+                            $key_path = explode ( '/', $key_path );
+                            $path_length = count ( $key_path );
+                            if ($path_length > 1 && isset ( $dehydrate_samples [$key_path [0]] )) {
+                                $temp_sample = &$dehydrate_samples [$key_path [0]];
+                                $break_tag = 0;
+                                for($i = 1; $i < $path_length; $i ++) {
+                                    if (isset ( $temp_sample [$key_path [$i]] )) {
+                                        if ($i == $path_length - 1) {
+                                            $break_tag = 1;
+                                            break;
+                                        }else{
+                                            $temp_sample = &$temp_sample [$key_path [$i]];
+                                        }
+                                    } else if ($i == $path_length - 1) {
+                                        $break_tag = 2;
+                                        break;
+                                    }
+                                }
+                                if ($break_tag == 1) {
+                                    $last_key=array_pop ( $key_path );
+                                    $temp_sample[$last_key] = array_merge_recursive ( $temp_sample[$last_key], self::$common_dehydrate_keys [$path [0]] [$key_name] );
+                                } else if ($break_tag == 2) {
+                                    $temp_sample [array_pop ( $key_path )] = self::$common_dehydrate_keys [$path [0]] [$key_name];
+                                }
+                            } else if ($path_length == 1 && isset ( self::$common_dehydrate_keys [$path [0]] [$key_name] )) {
+                                $dehydrate_samples [$key_path [0]] = self::$common_dehydrate_keys [$path [0]] [$key_name];
+                            }
+                        }
+                    }
+                }
+            }
             return $dehydrate_samples;
         }
 
@@ -74,7 +109,15 @@ class AdminConst extends BaseConst
     );
 
     static $common_dehydrate_samples = array();
-
+    static $common_dehydrate_keys = array(
+            'hotel' => array (
+                    'room_info' =>array(
+                            'keys' => array(
+                                    'sub_des222',
+                            ),
+                    ),
+            )
+    );
     static $dehydrate_samples = array(
         'hotel/price/price_codes'       => array(
             'keys'    => array(
@@ -151,6 +194,16 @@ class AdminConst extends BaseConst
                         'hotel_id',
                         'name',
                         'room_ids',
+                    ),
+                ),
+            ),
+        ),
+        'hotel/hotel/get_hotels'         => array(
+            'mul_arr' => array(
+                'hotels' => array(
+                    'keys' => array(
+                        'hotel_id',
+                        'name',
                     ),
                 ),
             ),

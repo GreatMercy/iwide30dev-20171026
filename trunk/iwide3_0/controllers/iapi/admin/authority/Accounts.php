@@ -27,9 +27,10 @@ class Accounts extends MY_Admin_Iapi
 	public function __construct()
     {
 		parent::__construct ();
-        $this->admin_profile = $this->session->userdata('admin_profile');
 
-        $this->admin_profile['parent_id'] = 1;//调试接口
+        $this->admin_profile = $this->session->userdata('admin_profile');
+        //print_r($this->admin_profile);
+        //$this->admin_profile['parent_id'] = 1;//调试接口
 
 		$this->common_data['csrf_token'] = $this->security->get_csrf_token_name();
 		$this->common_data['csrf_value'] = $this->security->get_csrf_hash();
@@ -46,7 +47,7 @@ class Accounts extends MY_Admin_Iapi
         $param = request();
         $filter['keyword'] = !empty($param['keyword']) ? addslashes(trim($param['keyword'])) : '';
         //查询当前管理员下的账号
-        $filter['parent_id'] = !empty($this->admin_profile['parent_id']) ? $this->admin_profile['parent_id'] : '';
+        $filter['parent_id'] = !empty($this->admin_profile['admin_id']) ? $this->admin_profile['admin_id'] : '';
         $perPage = !empty($param['limit']) ? intval($param['limit']) : 20;//显示数量
         $curPage = !empty($param['offset']) ? intval($param['offset']) : 1;//页码
 
@@ -110,9 +111,24 @@ class Accounts extends MY_Admin_Iapi
         $insert['status'] = !empty($param['status']) ? intval($param['status']) : '1';
 
         $interInfo = !empty($param['interInfo']) ? $param['interInfo'] : '';//公众号信息
-        $interInfo = json_decode($interInfo,true);
+        //$interInfo = json_decode($interInfo,true);
+        $this->write_log('addAccount','key',json_encode($interInfo));
         //查询当前管理员下的账号
-        $insert['parent_id'] = !empty($this->admin_profile['parent_id']) ? $this->admin_profile['parent_id'] : '';
+        $insert['parent_id'] = !empty($this->admin_profile['admin_id']) ? $this->admin_profile['admin_id'] : '';
+        $insert['type'] = !empty($this->admin_profile['type']) ? $this->admin_profile['type'] : '1';
+
+        if ($insert['type'] == 1)
+        {
+            $insert['type'] = 2;
+        }
+        else if ($insert['type'] == 2)
+        {
+            $insert['type'] = 3;
+        }
+        else if ($insert['type'] == 3)
+        {
+            $insert['type'] = 3;
+        }
 
         if (empty($insert['parent_id']))
         {
@@ -153,15 +169,21 @@ class Accounts extends MY_Admin_Iapi
             {
                 $entities = $item;
                 $entities['entity_id'] = json_encode($entities['entity_id']);
-                $entities['authority'] = !empty($entities['authority']) ? json_encode($entities['authority']) : '';
+                $entities['authority'] = !empty($entities['authority']) ? $entities['authority'] : '';
                 $entities['admin_id'] = $adminId;
                 $entities['is_default'] = $key == 0 ? 1 : 0;
                 $entities['create_time'] = date('Y-m-d H:i:s');
                 $this->accounts_entities_model->addEntities($entities);
             }
+
+            $ajaxData = array(
+                'url' => site_url('authority/accounts/'),
+                'admin_id' => $adminId,
+            );
+            $this->out_put_msg(self::SUCCESS,'添加成功',$ajaxData);
         }
 
-        $this->out_put_msg(1,'添加成功');
+        $this->out_put_msg(self::FAIL_AUTO,'添加失败');
     }
 
 
@@ -181,7 +203,7 @@ class Accounts extends MY_Admin_Iapi
         $adminId= !empty($param['admin_id']) ? intval($param['admin_id']) : '';
         $parentId = !empty($this->admin_profile['parent_id']) ? $this->admin_profile['parent_id'] : '';
         $interInfo = !empty($param['interInfo']) ? $param['interInfo'] : '';//公众号信息
-        $interInfo = json_decode($interInfo,true);
+        //$interInfo = json_decode($interInfo,true);
 
         //清空空值
         if ($update['status'] === '')
@@ -202,7 +224,7 @@ class Accounts extends MY_Admin_Iapi
 
         $this->load->model('authority/authority_accounts_model');
         //校验用户名是否存在
-        $account = $this->authority_accounts_model->getOne('*',array('admin_id' => $adminId,'parent_id' => $parentId));
+        $account = $this->authority_accounts_model->getOne('*',array('admin_id' => $adminId));//,'parent_id' => $parentId
         if (empty($account))
         {
             $this->out_put_msg(self::PARAM_ERROR,'用户不存在');
@@ -226,7 +248,6 @@ class Accounts extends MY_Admin_Iapi
         $whereUpdate = array(
             'admin_id' => $adminId,
         );
-
 
         $resRow = $this->authority_accounts_model->saveAccount($whereUpdate,$update);
         //更改成功
@@ -255,10 +276,10 @@ class Accounts extends MY_Admin_Iapi
                             $temp['entity_id'] = json_encode($arr['entity_id']);//公众号酒店信息
 
                             //合并权限
-                            $authority = $this->merge_auth($val['authority'], $arr['authority']);
+                            //$authority = $this->merge_auth($val['authority'], $arr['authority']);
 
-                            $temp['authority'] = !empty($authority) ? json_encode($authority) : '';
-
+                            //$temp['authority'] = !empty($val['authority']) ? json_encode($val['authority']) : '';
+                            $temp['authority'] = !empty($val['authority']) ? $val['authority'] : '';
                             $this->accounts_entities_model->saveEntities(array('id' => $val['id']), $temp);
                         }
                         //删除实体
@@ -277,7 +298,7 @@ class Accounts extends MY_Admin_Iapi
                     {
                         $entities = $item;
                         $entities['entity_id'] = json_encode($entities['entity_id']);
-                        $entities['authority'] = !empty($entities['authority']) ? json_encode($entities['authority']) : '';
+                        $entities['authority'] = !empty($entities['authority']) ? $entities['authority'] : '';
                         $entities['admin_id'] = $adminId;
                         $entities['is_default'] = $key == 0 ? 1 : 0;
                         $entities['create_time'] = date('Y-m-d H:i:s');
@@ -290,10 +311,12 @@ class Accounts extends MY_Admin_Iapi
             {
                 $this->accounts_entities_model->deleteEntities($whereUpdate);
             }
-
+            $ajaxData = array(
+                'url' => site_url('authority/accounts/'),
+            );
+            $this->out_put_msg(self::SUCCESS,'编辑成功',$ajaxData);
         }
-
-        $this->out_put_msg(1,'编辑成功');
+        $this->out_put_msg(self::FAIL_AUTO,'编辑失败');
     }
 
 
@@ -346,7 +369,7 @@ class Accounts extends MY_Admin_Iapi
     public function getAccountAuth()
     {
         $param = request();
-        $filter['inter_id'] = !empty($param['inter_id']) ? addslashes($param['inter_id']) : '';
+        $filter['inter_id'] = !empty($param['interId']) ? addslashes($param['interId']) : '';
         $filter['role_id'] = !empty($param['role_id']) ? intval($param['role_id']) : '';
         $filter['admin_id'] = !empty($param['admin_id']) ? intval($param['admin_id']) : '';//编辑时传
 
@@ -356,18 +379,20 @@ class Accounts extends MY_Admin_Iapi
         }
 
         //获取账号权限，新增账号时为空
-        $authority = '';
+        $auth = '';
         if (!empty($filter['admin_id']) && !empty($filter['inter_id']))
         {
             $this->load->model('authority/accounts_entities_model');
             $authority = $this->accounts_entities_model->getOne('authority',$filter);
-            $authority = $authority['$authority'];
+            $auth = array();
+            $auth['plus'] = json_decode($authority['authority'],true);
+            $auth = serialize($auth);
         }
 
-        $this->load->model("authority/Roles_model");
-        $ajaxData = $this->Roles_model->account_auth($filter['inter_id'],$filter['role_id'],$authority);
 
-        $this->out_put_msg(1,'获取成功',$ajaxData);
+        $this->load->model("authority/Roles_model");
+        $ajaxData = $this->Roles_model->account_auth($filter['inter_id'],$filter['role_id'],$auth);
+        $this->out_put_msg(self::SUCCESS,'获取成功',$ajaxData);
     }
 
     /**
@@ -377,9 +402,15 @@ class Accounts extends MY_Admin_Iapi
     {
         $param = request();
         $filter['admin_id'] = !empty($param['admin_id']) ? intval($param['admin_id']) : '';
-        $filter['parent_id'] = !empty($this->admin_profile['parent_id']) ? $this->admin_profile['parent_id'] : '';
+        $filter['parent_id'] = !empty($this->admin_profile['admin_id']) ? $this->admin_profile['admin_id'] : '';
 
-        if (!empty($filter['admin_id']) && !empty($filter['parent_id']))
+        //自己编辑
+        if ($filter['admin_id'] == $filter['parent_id'])
+        {
+            $filter['parent_id'] = '';
+        }
+
+        if (!empty($filter['admin_id']) )
         {
             $this->load->model('authority/authority_accounts_model');
             $this->load->model('authority/accounts_entities_model');
@@ -403,7 +434,7 @@ class Accounts extends MY_Admin_Iapi
                 foreach ($entities as $key => $value)
                 {
                     //处理酒店&&店铺
-                    $shops = $hotels = array();
+                    $shops = $hotels = $shop = $shopData = array();
                     if (!empty($value['entity_id']))
                     {
                         $hotel_ids = array();
@@ -413,18 +444,26 @@ class Accounts extends MY_Admin_Iapi
                         {
                             $hotel_ids[] = $item['hotel_id'];
                             //查询店铺名称
-                            if ($item['shop_id'])
+                            if (!empty($item['shop_id']))
                             {
                                 $where = array(
-                                    'shop_id' => $item['shop_id'],
+                                    'shop_id' => '',
+                                    'inter_id' => $value['inter_id'],
+                                    'hotel_id' => $item['hotel_id'],
                                 );
-                                $shop = $this->accounts_entities_model->getShops('shop_id,shop_name',$where);
+                                $shop_h = $this->accounts_entities_model->getShops('shop_id,shop_name',$where);
                                 $tmp = '';
-                                if (!empty($shop))
+                                if (!empty($shop_h))
                                 {
-                                    foreach ($shop as $v)
+                                    foreach ($shop_h as $key_s=>$v)
                                     {
                                         $tmp[] = $v['shop_name'];
+                                        $v['selected'] = 0;
+                                        if (in_array($v['shop_id'],$item['shop_id']))
+                                        {
+                                            $v['selected'] = 1;
+                                        }
+                                        $shop[$item['hotel_id']][] = $v;
                                     }
 
                                     $tmp = implode(',',$tmp);
@@ -436,7 +475,7 @@ class Accounts extends MY_Admin_Iapi
 
                         //查询酒店名称
                         $where = array(
-                            'hotel_id' => $hotel_ids,
+                            'hotel_id' => '',
                             'inter_id' => $value['inter_id'],
                         );
 
@@ -445,21 +484,38 @@ class Accounts extends MY_Admin_Iapi
                         {
                             foreach ($hotels as $k => $val)
                             {
-                                $val['shopData'] = $shop;
+                                $shopData[$value['inter_id']][$val['hotel_id']][] = !empty($shop[$val['hotel_id']]) ? $shop[$val['hotel_id']] : array();
                                 $val['shopInfo'] = !empty($shops[$val['hotel_id']]) ? $shops[$val['hotel_id']] : '';
+
+                                $val['selected'] = 0;
+                                if (in_array($val['hotel_id'],$hotel_ids))
+                                {
+                                    $val['selected'] = 1;
+                                }
+                                $val['hotel_name'] = $val['name'];
+                                unset($val['name']);
                                 $hotels[$k] = $val;
                             }
                         }
                     }
 
+                    //获取角色信息
+                    $this->load->model('authority/authority_accounts_model');
+                    $roleData = $this->authority_accounts_model->getRoles('role_id,role_name',array('inter_id' => $value['inter_id']));
+                    $value['roles'] = !empty($roleData) ? $roleData : array();
+                    $value['publicInfo'] = array(
+                        'role_id' => $value['role_id'],
+                        'inter_id' => $value['inter_id'],
+                        'inter_name' => $value['inter_name'],
+                        'role_name' => !empty($roles[$value['role_id']]) ? $roles[$value['role_id']] : '--',
+                    );
                     $value['hotels'] = $hotels;
-                    $value['role_name'] = !empty($roles[$value['role_id']]) ? $roles[$value['role_id']] : '--';
-                    unset($value['entity_id']);
+                    $value['shops'] = array_values($shopData[$value['inter_id']]);
+                    unset($value['entity_id'],$value['role_id'],$value['inter_id'],$value['inter_name']);
                     $entities[$key] = $value;
                 }
             }
         }
-
 
         $status = array(
             0 => array('name' => '有效','value' => '1'),
@@ -475,7 +531,7 @@ class Accounts extends MY_Admin_Iapi
             'csrf'      => $this->common_data,
         );
 
-        $this->out_put_msg(1,'获取成功',$ajaxData);
+        $this->out_put_msg(self::SUCCESS,'获取成功',$ajaxData);
     }
 
     /**
@@ -484,7 +540,7 @@ class Accounts extends MY_Admin_Iapi
     public function setAccountEntities()
     {
         $param = request();
-        $interId = !empty($param['inter_id']) ? addslashes(trim($param['inter_id'])) : '';
+        $interId = !empty($param['interId']) ? addslashes(trim($param['interId'])) : '';
         $adminId = $this->admin_profile['admin_id'];
 
         $this->load->model('authority/accounts_entities_model');
@@ -503,11 +559,9 @@ class Accounts extends MY_Admin_Iapi
         $res_row = $this->accounts_entities_model->saveEntities($fitter,array('is_default' => 1));
         if ($res_row > 0)
         {
-
-
-            $this->out_put_msg(1,'设置成功');
+            $this->out_put_msg(self::SUCCESS,'设置成功');
         }
-        $this->out_put_msg(2,'设置失败');
+        $this->out_put_msg(self::FAIL_AUTO,'设置失败');
     }
 
 
@@ -516,26 +570,42 @@ class Accounts extends MY_Admin_Iapi
      */
     public function getInter()
     {
-        $this->load->model('authority/authority_accounts_model');
-
         //获取公众号
         $filter_public = array();
         if ($this->admin_profile['inter_id'] != 'ALL_PRIVILEGES')
         {
-            $filter_public['inter_id'] = $this->admin_profile['inter_id'];
+            //$filter_public['inter_id'] = $this->admin_profile['inter_id'];
         }
         $this->load->model('wx/publics_model');
         $public = $this->publics_model->get_public_hash($filter_public,array('inter_id','name'));
 
-        //获取角色信息
-        $roles = $this->authority_accounts_model->getRoles('role_id,role_name');
-
         $ajaxData = array(
             'public' => $public,
+        );
+
+        $this->out_put_msg(self::SUCCESS,'成功',$ajaxData);
+    }
+
+    /**
+     * 获取 公众号下的角色
+     */
+    public function getRoles()
+    {
+        $param = request();
+        $where_arr['inter_id'] = !empty($param['interId']) ? addslashes($param['interId']) : '';
+        if (empty($where_arr['inter_id']))
+        {
+            $this->out_put_msg(2,'参数错误');
+        }
+        //获取角色信息
+        $this->load->model('authority/authority_accounts_model');
+        $roles = $this->authority_accounts_model->getRoles('role_id,role_name',$where_arr);
+
+        $ajaxData = array(
             'role'  => $roles,
         );
 
-        $this->out_put_msg(1,'成功',$ajaxData);
+        $this->out_put_msg(self::SUCCESS,'成功',$ajaxData);
     }
 
     /**
@@ -544,7 +614,7 @@ class Accounts extends MY_Admin_Iapi
     public function loadInterData()
     {
         $param = request();
-        $filter['inter_id'] = !empty($param['inter_id']) ? addslashes($param['inter_id']) : '';
+        $filter['inter_id'] = !empty($param['interId']) ? addslashes($param['interId']) : '';
         $filter['inter_name'] = !empty($param['inter_name']) ? addslashes($param['inter_name']) : '';
         $filter['role_id'] = !empty($param['role_id']) ? intval($param['role_id']) : '';
         $filter['role_name'] = !empty($param['role_name']) ? addslashes($param['role_name']) : '';
@@ -604,7 +674,7 @@ class Accounts extends MY_Admin_Iapi
             'csrf'       => $this->common_data,
         );
 
-        $this->out_put_msg(1,'获取成功',$ajaxData);
+        $this->out_put_msg(self::SUCCESS,'获取成功',$ajaxData);
     }
 
 
@@ -633,22 +703,108 @@ class Accounts extends MY_Admin_Iapi
         //创建成功
         if ($row > 0)
         {
-            $host = $this->config->config['authority_show_url'];//获取配置前台URL
+            $this->config->load('authorize', TRUE);
+            $authorize = $this->config->item('authorize');
+            $host = $authorize['authority_show_url'];//获取配置前台URL
             $host = empty($host) ? 'http://zb.jinfangka.cn/' : $host;
 
             $text = $host . 'index.php/authority/auth/bind?id='.self::INTER_ID.'&token='.$add['token'];
             $ajaxData = array(
                 'imgUrl' => site_url('/authority/accounts/showAuthQr?url=').urlencode($text),
                 'expire_time' => $add['expire_time'],
+                'expire_datetime' => date('Y-m-d H:i:s',$add['expire_time']),
             );
-            $this->out_put_msg(1,'成功',$ajaxData);
+            $this->out_put_msg(self::SUCCESS,'成功',$ajaxData);
         }
         else
         {
-            $this->out_put_msg(2,'生成二维码失败');
+            $this->out_put_msg(self::FAIL_AUTO,'生成二维码失败');
         }
     }
 
+
+    /**
+     * 切换 公众号账户
+     */
+    public function tagAccount()
+    {
+        $param = request();
+        $interId = !empty($param['interId']) ? addslashes($param['interId']) : '';
+        if (empty($interId))
+        {
+            $this->out_put_msg(2,'参数错误');
+        }
+
+        $admin = $this->admin_profile;
+
+        //获取账号下的公众号
+        $this->load->model('authority/accounts_entities_model');
+        $entities = $this->accounts_entities_model->getDefaultEntity(array('admin_id' => $admin['admin_id'],'inter_id' => $interId));
+        if (!empty($entities))
+        {
+            $entityIds = $entities['entity_id'];
+            $roleId = $entities['role_id'];
+
+            //查询角色名称
+            $role = $this->authority_accounts_model->getRoles('role_id,role_name', array('role_id' => $roleId), false);
+            if (empty($role))
+            {
+                $this->out_put_msg(self::FAIL_AUTO,'登录的公众号未分配角色');
+            }
+
+            $role['role_label'] = $role['role_name'];
+            $admin['role'] = $role;
+            $entityId = array();
+            if (!empty($entityIds))
+            {
+                $entityIds = json_decode($entityIds,true);
+                foreach ($entityIds as $item)
+                {
+                    $entityId[] = $item['hotel_id'];
+                    $admin['shops'][$item['hotel_id']] = $item['shop_id'];
+                }
+            }
+            $admin['entity_id'] = implode(',',$entityId);
+
+            $admin['shops'] = !empty($admin['shops']) ? json_encode($admin['shops']) : '';
+
+            //当前登录账号角色权限
+            $this->load->model("authority/roles_model");
+            $authorities = $this->roles_model->login_authority($admin['inter_id'],$roleId);
+            //设置登录缓存
+            $this->session->account_login($admin, $authorities);
+
+            $this->out_put_msg(self::SUCCESS,'切换公众号成功');
+        }
+        else
+        {
+            $this->out_put_msg(self::FAIL_AUTO,'登录的公众号未分配角色');
+        }
+
+    }
+
+
+    private function write_log( $data,$re = '',$result = '',$file=NULL, $path=NULL )
+    {
+        if(!$file) $file= date('Y-m-d'). '.txt';
+        if(!$path) $path= APPPATH. 'logs'. DS. 'authority'. DS;
+
+        if( !file_exists($path) ) {
+            @mkdir($path, 0777, TRUE);
+        }
+
+        if(is_array($data)){
+            $data=json_encode($data);
+        }
+        if(is_array($result)){
+            $result=json_encode($result);
+        }
+        $fp = fopen($path.$file, "a");
+        $content = date("Y-m-d H:i:s")." | ".getmypid()." | ".$_SERVER['PHP_SELF']." | ".session_id()." | ".$data." | ".$re." | ".$result."\n";
+
+        fwrite($fp, $content);
+        fclose($fp);
+    }
 
     /**
      * 合并权限

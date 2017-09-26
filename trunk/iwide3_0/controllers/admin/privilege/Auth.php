@@ -104,14 +104,14 @@ class Auth extends MY_Admin_Priv {
 		            	}
 		            }
 		            $this->load->model('authority/Valify_tokens_model');
-		            $oauth_code=$this->Valify_tokens_model->tokenAddAdapter(3,array('admin_id'=>$admin->m_get('admin_id'),'app_id'=>'a5cfb5d96b','valify_data'=>array('username'=>$admin->m_get('username'))));
+// 		            $oauth_code=$this->Valify_tokens_model->tokenAddAdapter(3,array('admin_id'=>$admin->m_get('admin_id'),'app_id'=>'a5cfb5d96b','valify_data'=>array('username'=>$admin->m_get('username'))));
 					if($redirect){
 					    $redirect=urldecode($redirect);
-					    if (strpos ( $redirect, '?' )){
-					        $redirect.='&code='.$oauth_code;
-					    }else {
-					        $redirect.='?code='.$oauth_code;
-					    }
+// 					    if (strpos ( $redirect, '?' )){
+// 					        $redirect.='&code='.$oauth_code;
+// 					    }else {
+// 					        $redirect.='?code='.$oauth_code;
+// 					    }
 					    $this->_redirect($redirect);
 					} else {
 					    $this->_redirect(EA_const_url::inst()->get_default_admin());

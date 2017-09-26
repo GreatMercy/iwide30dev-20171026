@@ -25,7 +25,6 @@ const components = [
   JfkInputNumber,
   JfkNotification,
   JfkPicker,
-  JfkSticky,
   JfkRater,
   jfkTextSplit
 ]
@@ -37,6 +36,7 @@ const install = function (Vue) {
     Vue.component(component.name, component)
   })
   Vue.use(JfkInfiniteScroll)
+  Vue.use(JfkSticky)
   Vue.prototype.$jfkToast = JfkToast
   Vue.prototype.$jfkAlert = JfkMessageBox.alert
   Vue.prototype.$jfkConfirm = JfkMessageBox.confirm
@@ -55,6 +55,7 @@ export default {
   JfkBanner,
   JfkPopup,
   JfkInfiniteScroll,
+  JfkSticky,
   JfkLoadmore,
   JfkSupport,
   JfkToast,

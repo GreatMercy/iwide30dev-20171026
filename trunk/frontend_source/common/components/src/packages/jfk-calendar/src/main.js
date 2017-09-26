@@ -1,5 +1,5 @@
 import JfkDate from './date'
-import { getWeeksInMonth, getDatesInPrevMonth, getDatesInNextMonth, getDatesInMonth, parseDate, dateKeyFormat, formatDate } from './util'
+import { getWeeksInMonth, getDatesInPrevMonth, getDatesInNextMonth, getDatesInMonth, parseDate, dateKeyFormat, formatDate } from '../../../utils/time.js'
 const weekTitles = ['日', '一', '二', '三', '四', '五', '六']
 const dateClass = function (o, select) {
   let result = ['jfk-calendar__row']

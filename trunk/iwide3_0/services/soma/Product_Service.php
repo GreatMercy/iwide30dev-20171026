@@ -195,16 +195,17 @@ class Product_Service extends MY_Service
         $fmt_data = array();
 
         foreach($base_info as $product)
-        {   
-            $product['spec_info'] = array();
-            if(isset($fmt_spec_info[$product['product_id']]))
-            {
-                $product['spec_info'] = $fmt_spec_info[$product['product_id']];
+        {
+            if(!empty($product['cat_id'])){
+                $product['spec_info'] = array();
+                if(isset($fmt_spec_info[$product['product_id']]))
+                {
+                    $product['spec_info'] = $fmt_spec_info[$product['product_id']];
+                }
+                $fmt_data[$product['cat_id']]['cat_id'] = $product['cat_id'];
+                $fmt_data[$product['cat_id']]['cat_name'] = $product['cat_name'];
+                $fmt_data[$product['cat_id']]['product'][] = $product;
             }
-
-            $fmt_data[$product['cat_id']]['cat_id'] = $product['cat_id'];
-            $fmt_data[$product['cat_id']]['cat_name'] = $product['cat_name'];
-            $fmt_data[$product['cat_id']]['product'][] = $product;
         }
 
         return $fmt_data;

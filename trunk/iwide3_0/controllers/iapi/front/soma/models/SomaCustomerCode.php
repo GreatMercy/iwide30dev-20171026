@@ -65,4 +65,10 @@ class SomaCustomerCode
      * @SWG\Property(type="string", description="卷码总数量")
      */
     public $total_num;
+
+    /**
+     * @var $is_booking_hotel
+     * @SWG\Property(type="bool", description="是否已经订房")
+     */
+    public $is_booking_hotel;
 }

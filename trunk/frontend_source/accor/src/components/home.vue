@@ -16,7 +16,7 @@
     <div class="bestPlace">
       <swiper :options="swiperOption2" >
           <swiper-slide v-for="(item,idx) in bestPlace">
-            <router-link :to="'/list?city='+item.city">
+            <router-link :to="{path: 'list', query: {city: item.city}}">
               <img :src="'./static/img/hotplace/'+item.img" />
               <p class="tab"><i></i>{{item.cityname}}<span>{{item.city}}</span></p>
             </router-link>
@@ -37,45 +37,45 @@
     <div class="brand">
       <swiper :options="swiperOption3" >
           <swiper-slide >
-            <router-link to="/brand?brand=raffles">
+            <router-link :to="{path: 'brand', query: {brand: 'raffles'}}">
               <img src="../assets/raffles.png"></img>
             </router-link>
           </swiper-slide>         
           <swiper-slide >
-            <router-link to="/brand?brand=fairmont">
+            <router-link :to="{path: 'brand', query: {brand: 'fairmont'}}">
               <img src="../assets/fairmont.png"></img>
             </router-link>
           </swiper-slide>
           <swiper-slide >
-            <router-link to="/brand?brand=sofitel">
+            <router-link :to="{path: 'brand', query: {brand: 'sofitel'}}">
               <img src="../assets/sofitel.png"></img>
             </router-link>
           </swiper-slide>
           <swiper-slide >
-            <router-link to="/brand?brand=pullman">
+            <router-link :to="{path: 'brand', query: {brand: 'pullman'}}">
               <img src="../assets/pullman.png"></img>
             </router-link>
           </swiper-slide>
           <swiper-slide >
-            <router-link to="/brand?brand=swissotel">
+            <router-link :to="{path: 'brand', query: {brand: 'swissotel'}}">
               <img src="../assets/swisshotel.png"></img>
             </router-link>
           </swiper-slide>
           <swiper-slide >
-            <router-link to="/brand?brand=grand_mercure">
+            <router-link :to="{path: 'brand', query: {brand: 'grand_mercure'}}">
               <img src="../assets/mercure.png"></img>
             </router-link>
           </swiper-slide>
           <swiper-slide >
-            <router-link to="/brand?brand=novotel">
+            <router-link :to="{path: 'brand', query: {brand: 'novotel'}}">
               <img src="../assets/novotel.png"></img>
             </router-link>
           </swiper-slide>                                                      
           <swiper-slide >
-            <router-link to="/brand?brand=mercure">
+            <router-link :to="{path: 'brand', query: {brand: 'mercure'}}">
               <img src="../assets/meiju.png"></img>
             </router-link>
-          </swiper-slide>                         
+          </swiper-slide>
           <div class="swiper-button-prev " slot="button-prev"></div>
           <div class="swiper-button-next" slot="button-next"></div>                             
       </swiper>   

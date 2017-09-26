@@ -244,7 +244,8 @@ if ( ! function_exists('get_url_domain'))
 	 * @return string
 	 */
 	function get_url_domain($url){
-		$url = str_replace('http://','',$url);
+		$reg = '/(http)s{0,1}:\/\//i';
+		$url = preg_replace($reg,'',$url,1);
 		$pos = strpos($url,'/');
 		if($pos === false){
 		 	return $url;

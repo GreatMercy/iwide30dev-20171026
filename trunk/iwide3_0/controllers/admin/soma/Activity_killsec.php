@@ -129,7 +129,8 @@ class Activity_killsec extends MY_Admin_Soma
             'perPageNum'    => $perPageNum,
             'pageUrl'       => Soma_const_url::inst()->get_url('*/*/*',array('status'=>$status,'per_page_num'=>$perPageNum,'per_page'=>'')),
             'statusUrl'     => Soma_const_url::inst()->get_url('*/*/*',array('status'=>'')),
-            'editUrl'       => Soma_const_url::inst()->get_url('*/*/edit',array('ids'=>'')),
+            'killsec_editUrl'       => Soma_const_url::inst()->get_url('*/activity_killsec/edit',array('ids'=>'')),
+            'flashsale_editUrl'       => Soma_const_url::inst()->get_url('*/activity_flashsale/edit',array('ids'=>'')),
             'pagination'    => $this->pagination->create_links(),
         );
 //var_dump( $result );
@@ -412,6 +413,7 @@ EOF;
         $this->load->model( 'soma/product_package_model', 'product_package' );
         $products_arr = $this->product_package->get_product_package_list( '', $inter_id , NULL, 1000);
 
+        $productsInfo = [];
         foreach($products_arr as $product){
             $productsInfo[$product['product_id']]['stock'] = $product['stock'];
             $productsInfo[$product['product_id']]['price_package'] = $product['price_package'];

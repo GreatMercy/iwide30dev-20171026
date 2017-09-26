@@ -1694,6 +1694,8 @@ class Package extends MY_Front_Soma
             $this->_view("header", $header);
         }
         else{
+            $this->headerDatas['title'] = '商品详情';
+
             //商品下架
             $isOff = $this->productPackageModel->isOff($productDetail);
             if (is_null($isOff) || $isOff === true) {

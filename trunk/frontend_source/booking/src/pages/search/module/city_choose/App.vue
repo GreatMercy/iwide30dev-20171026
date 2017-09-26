@@ -1,7 +1,7 @@
 <template>
   <div class="jfk-pages jfk-pages__cityChoose">
     <p class="float_word font-size--22" v-show="searchCityList">
-        <span v-for="(item, index) in allCitys" :key="index">
+        <span v-for="(item, index) in allCitys" :key="index" class="float_span">
           <a @click.stop.prevent="href(index)">{{index}}</a><br/>
         </span>
     </p>
@@ -12,8 +12,9 @@
                class="font-size--38"
                autocomplete="off"
                v-model="searchInputVal"
+               v-on:input="DeleteIconStatus"
                id="searchVal">
-        <i class="booking_icon_font font-size--24 icon-icon_search"></i>
+        <i class="booking_icon_font font-size--26 icon-icon_search"></i>
       </form>
       <i class="jfk-font jfk-button__text-item icon-icon_close icon-icon_delete"
          v-show="showDeleteIcon"
@@ -34,8 +35,12 @@
       <p class="history_search_title font-size--24 grayColor">
         热门搜索
       </p>
-      <span class="hot_item" v-for="(item, index) in hotCitys" :key="index"
-            @click="toLocationHref(toLinks.SRESULT+'&keyword='+item + '&startdate=' + handleStartDate + '&enddate=' + handleEndDate + '&city=' + item)">{{item}}</span>
+      <span class="hot_item font-size--28"
+            v-for="(item, index) in hotCitys"
+            :key="index"
+            @click="toLocationHref(toLinks.SRESULT+'&keyword='+item + '&startdate=' + handleStartDate + '&enddate=' + handleEndDate + '&city=' + item)">
+        {{item}}
+      </span>
     </div>
     <!-- 所有城市 -->
     <div class="all_city font-size--28 jfk-pl-30 jfk-pr-30" v-show="searchCityList">
@@ -43,7 +48,8 @@
            v-for="(item,value) in allCitys">
         <p class="all_city_item_word" :id="value">{{value}}</p>
         <ul v-for="(item1, index1) in item"
-            :key="index1">
+            :key="index1"
+            class="font-size--26">
           <li @click="getChooseCityVal(0, item1.city)" v-if="!item1.area">{{item1.city}}</li>
           <li @click="getChooseCityVal(item1.area, item1.city)" v-if="item1.area">{{item1.area}} ({{item1.city}})</li>
         </ul>
@@ -53,7 +59,7 @@
     <div class="search_city_list jfk-pl-30 jfk-pr-30" v-show="searchResult">
       <div v-for="(item, index) in asycSearchData" :key="index" class="search_city_list_item">
         <p>
-          <i class="booking_icon_font font-size--24 icon-booking_icon_businessdistrict_norma grayColor"></i>
+          <i class="booking_icon_font font-size--24 icon-booking_icon_hotel_normal grayColor"></i>
           <span v-html="item.name.replace(searchInputVal, highLightKeyword)"></span>
         </p>
       </div>
@@ -64,7 +70,7 @@
       <div v-for="item in baiduApiData" class="search_city_list_item"
            @click="toBaiduSearch(item.point.lat,item.point.lng,item.title)">
         <p>
-          <i class="booking_icon_font font-size--24 icon-booking_icon_businessdistrict_norma grayColor"></i>
+          <i class="booking_icon_font font-size--24 icon-booking_icon_hotel_normal grayColor"></i>
           <span v-html="item.title.replace(searchInputVal, highLightKeyword)"></span>
         </p>
       </div>
@@ -143,7 +149,7 @@
       // 异步查询酒店列表
       searchHotelAction () {
         if (!this.searchInputVal) return
-        this.currentCity === '全部' ? this.currentCity = '' : this.currentCity
+        this.currentCity === '搜索城市' ? this.currentCity = '' : this.currentCity
         let postData = {
           keyword: this.searchInputVal,
           city: this.currentCity
@@ -196,8 +202,8 @@
         // 使用百度地图进行模糊查询
         const BMap = window.BMap
         let myGeo = new BMap.Geocoder()
-        // 如果不传首选城市(值为全部) 则默认为北京
-        // this.searchedCity = this.firstCity === '全部' ? this.defaultCity : this.firstCity
+        // 如果不传首选城市(值为搜索城市) 则默认为北京
+        // this.searchedCity = this.firstCity === '城市' ? this.defaultCity : this.firstCity
         this.searchedCity = this.currentCity === '' ? this.defaultCity : this.currentCity
         let keyword = this.searchInputVal
         this.highLightKeyword = '<span style="color:#b2945e">' + this.searchInputVal + '</span>'
@@ -229,20 +235,12 @@
           this.hasNoResult = false
         }
       },
-      // 获取 url 参数
-      getUrlParams (urlName) {
-        let url = location.href
-        let paraString = url.substring(url.indexOf('?') + 1, url.length).split('&')
-        let returnValue
-        for (let i = 0; i < paraString.length; i++) {
-          let tempParas = paraString[i].split('=')[0]
-          let parasValue = paraString[i].split('=')[1]
-          if (tempParas === urlName) returnValue = parasValue
-        }
-        if (typeof (returnValue) === 'undefined') {
-          return ''
+      // 是否显示删除按钮
+      DeleteIconStatus () {
+        if (this.searchInputVal) {
+          this.showDeleteIcon = true
         } else {
-          return returnValue
+          this.showDeleteIcon = false
         }
       },
       // 滚动 伪锚点链接

@@ -6,7 +6,7 @@
     </div>
 
     <div class="gift-wrap">
-      <div class="gift-container" v-if="theme">
+      <div class="gift-container" v-if="theme" :style="containerHeight">
 
         <gift-bg :wish="wish" v-if="wish"></gift-bg>
         <gift-list :list="giftList" :status="status"></gift-list>
@@ -21,7 +21,7 @@
               <i class="font-size--28">继续赠送</i>
               <span class="jfk-d-ib jfk-font icon-user_icon_jump_normal"></span>
             </a>
-            <p class="font-size--24 gift-state-number" v-html="'已领取' +'' + received + '/' + total">已领取 4/10</p>
+            <p class="font-size--24 gift-state-number" v-html="'已领取' +'' + received + '/' + total"></p>
           </template>
 
           <!-- 不可以继续赠送 -->
@@ -46,7 +46,7 @@
 
               <!-- 尚未领取完成 -->
               <template v-else>
-                <p class="font-size--24 gift-state-number" v-html="'已领取' +'' + received + '/' + total">已领取 4/10</p>
+                <p class="font-size--24 gift-state-number" v-html="'已领取' +'' + received + '/' + total"></p>
               </template>
 
             </template>
@@ -84,7 +84,8 @@
         status: '',
         // 是否允许继续赠送
         continueGive: '',
-        scroll: ''
+        scroll: '',
+        containerHeight: ''
       }
     },
     methods: {
@@ -136,6 +137,18 @@
         this.total = parseInt(result['total'])
         this.received = parseInt(result['get_count'])
         this.wish = result['message']
+        let height = window.innerHeight
+        if (this.giftList.length > 0) {
+          if (height <= 480) {
+            height = 500
+          }
+        }
+        this.containerHeight = {
+          'position': 'relative',
+          'height': height + 'px',
+          'min-height': height + 'px',
+          'overflow': 'hidden'
+        }
         this.toast.close()
       }).catch(() => {
         this.toast.close()

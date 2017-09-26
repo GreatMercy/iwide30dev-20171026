@@ -1,6 +1,5 @@
 .jfk-pages__gift {
   .gift-box {
-
     position: fixed;
     left: 0;
     top: 0;
@@ -18,12 +17,21 @@
       letter-spacing: 2px;
     }
 
+    .gift-animation {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      left: 0;
+      top: 0;
+      background-image: background-image(/gift/envelope.png);
+      background-size: cover;
+    }
+
     &-envelope {
       width: 92%;
       max-width: px2rem(690);
       height: px2rem(708);
-      background-image: background-image(/gift/envelope.png);
-      background-size: cover;
+
       overflow: hidden;
       position: absolute;
       left: 50%;
@@ -69,6 +77,8 @@
   }
 }
 
+
+
 // 礼物详情
 .jfk-pages__gift-detail {
   .gift-theme-wish__content {
@@ -80,6 +90,11 @@
     &-img {
       margin-bottom: px2rem(30);
       margin-top: px2rem(20);
+
+      @media screen and (min-height: 672px) {
+        margin-bottom: px2rem(45);
+      }
+
       &__content {
         background-size: cover;
         background-position: center center;
@@ -88,6 +103,10 @@
         height: px2rem(388);
         margin: 0 auto;
         overflow: hidden;
+        @media screen and (max-height: 506px) {
+          width: px2rem(320);
+          height: px2rem(320);
+        }
       }
     }
 
@@ -96,11 +115,22 @@
       }
       line-height: 1;
       margin-bottom: px2rem(40);
+
+      @media screen and (min-height: 672px) {
+        margin-bottom: px2rem(60);
+      }
+
+      @media screen and (max-height: 506px) {
+        margin-bottom: px2rem(30);
+      }
     }
 
     &-number {
       line-height: 1;
       margin-bottom: px2rem(28);
+      @media screen and (min-height: 672px) {
+        margin-bottom: px2rem(42);
+      }
     }
 
     &-btn {
@@ -118,11 +148,19 @@
 
   .gift-detail {
     &-bottom {
+      position: absolute;
       width: 86%;
+      bottom: 0;
+      left: 7%;
       margin-left: auto;
       margin-right: auto;
       margin-top: px2rem(40);
       margin-bottom: px2rem(40);
+      @media screen and (max-height: 506px) {
+        margin-top: px2rem(37);
+        position: relative;
+        left: 0;
+      }
     }
 
     &-line {
@@ -133,12 +171,16 @@
         left: 0;
         top: 0;
       }
+      @media screen and (max-height: 506px) {
+        display: none;
+      }
     }
 
     &-put-order {
       position: relative;
       margin: 0 auto;
       font-size: 0;
+      display: block;
       line-height: 1;
       i {
         vertical-align: middle;

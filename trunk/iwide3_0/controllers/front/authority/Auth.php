@@ -55,7 +55,6 @@ class Auth extends MY_Front
     /**
      * 登录账户
      */
-
     public function login()
     {
         $param = request();

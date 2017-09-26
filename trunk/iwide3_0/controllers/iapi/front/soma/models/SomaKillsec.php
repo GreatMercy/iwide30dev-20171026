@@ -85,4 +85,10 @@ class SomaKillsec
      */
     public $stock_reflesh_rate;
 
+    /**
+     * @SWG\Property(type="string", description="是否显示库存。0：不显示，1：显示")
+     * @var string $is_stock
+     */
+    public $is_stock;
+
 }

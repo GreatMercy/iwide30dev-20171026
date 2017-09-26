@@ -9,6 +9,7 @@
     left: 50%;
     transform: translate(-50%, 0);
     background-size: contain;
+    background-position: center center;
     background-repeat: no-repeat;
   }
 
@@ -20,6 +21,12 @@
       padding-right: px2rem(100);
       font-size: 15px;
       @mixin ellipsis 2 {
+      }
+      @media screen and (min-height: 672px) {
+        padding-top: px2rem(340);
+      }
+      @media screen and (max-height: 506px) {
+        padding-top: px2rem(242);
       }
     }
   }
@@ -33,6 +40,11 @@
     height: px2rem(272);
     background-image: background-image(/gift_themes/selected/title.png);
     top: px2rem(20);
+    @media screen and (max-height: 506px) {
+      width: px2rem(525);
+      height: px2rem(234);
+      top: px2rem(16);
+    }
   }
 
   /* 主题的背景图 */
@@ -117,7 +129,7 @@
 
   /*商品详请 放置订单中心*/
   .gift-detail-put-order {
-    color: #412f21;
+    color: #b57943;
   }
 
   .gift-state__finish {
@@ -133,6 +145,11 @@
     height: px2rem(245);
     background-image: background-image(/gift_themes/relatives/title.png);
     top: px2rem(20);
+    @media screen and (max-height: 506px) {
+      width: px2rem(525);
+      height: px2rem(234);
+      top: px2rem(16);
+    }
   }
 
   /* 主题的背景图 */

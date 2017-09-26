@@ -6,6 +6,39 @@ class Test extends MY_Controller {
 		parent::__construct ();
 		set_time_limit ( 0 );
 	}
+
+
+    function app_login(){
+
+        $this->config->load('authorize', TRUE);
+        $authorize = $this->config->item('authorize');
+
+        $app_id = $authorize['app_id'];
+        $app_secret = $authorize['app_secret'];
+        if (!$this->input->get('icode')){
+            $rand=mt_rand(100,10000);
+            $this->session->set_userdata('authorize_state',$rand);
+            $redirect = $authorize['host_auth'] . '/index.php/authorize/auth/login?redirect_uri='.base64_encode('http://'.$_SERVER ['HTTP_HOST'] . $_SERVER ['REQUEST_URI']).'&app_id='.$app_id.'&state='.$rand.'&scope=userlogin';
+            redirect($redirect);
+        }else if ($this->session->userdata('authorize_state')==$this->input->get('state')){//验证state
+            $this->load->helper('common');
+            $url = $authorize['host_auth'] . '/index.php/iapi/v1/application/authorize/login/login_session?app_id='.$app_id.'&app_secret='.$app_secret.'&code='.$this->input->get('icode');
+            $result = doCurlGetRequest($url, array(),30);
+            echo '登录结果：'.$result.'<br />';
+            if ($result = json_decode($result,TRUE)){
+                require_once APPPATH . "/libraries/Application/OauthLib.php";
+                $url = $authorize['host_auth'] . '/index.php/iapi/v1/application/authority/account/test_session?app_id='.$app_id;
+                $data['data']=array(
+                    'test'=>1
+                );
+                $data['session_key']=$result['session_key'];
+                $data['signature']= OauthLib::get_sign ( $data['data'], $result['granted_key'] );
+                echo '测试调用：'.doCurlPostRequest($url, json_encode($data),'',30);
+            }
+        }
+    }
+
+
 	function db_test() {
 		// var_dump ( $this->db->get ( 'enum_desc' )->result () );
 		$result = $this->db->get ( 'hotel_lowest_price' )->result ();

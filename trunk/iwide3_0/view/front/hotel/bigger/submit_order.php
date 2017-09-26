@@ -103,7 +103,7 @@
                 </div>
                 <div class="main_shadow_wrap"  style="margin:0px 0.7rem"></div>
                 <div class="color3 h24 flexgrow pad10 clearfix mar_l10" style="max-width:50%;" bonus="<?php echo $exchange_max_point;?>" id="bonuspay2">
-                    <div class="main_color1 h32 mar_b20" id="bonus_title">积分抵用</div>
+                    <div class="main_color1 h32 mar_b20" id="bonus_title"><?php echo empty($point_name)?'积分':$point_name;?>抵用</div>
                     <div class="float" style="width: calc(100% - 70px);">
                         <div class="martop multiclip" id='max_use_bonus' style="-webkit-line-clamp: 1;">可用<?php echo $exchange_max_point;?><?php echo $point_name;?></div>
                         <div id="max_exchange_bonus">¥<?php echo $exchange_max_point*$point_consum_rate;?></div>
@@ -538,7 +538,7 @@ var timeOpt = {
         <?php }}?>
 
 
-        str +='<div class="mar_t60"><p class="clearfix mar_t40"><span class="float h28">使用积分</span><span id="list_total_bonus_price" class="floatr h32 main_color1"></span></p></div>';
+        str +='<div class="mar_t60"><p class="clearfix mar_t40"><span class="float h28">使用'+point_name+'</span><span id="list_total_bonus_price" class="floatr h32 main_color1"></span></p></div>';
 
         str +='<div class="mar_t60"><p class="clearfix mar_t40"><span class="float h28">支付优惠</span><span id="list_pay_favour" class="floatr h32 main_color1">0</span><span class="floatr h18 main_color1 order_money_ico">¥ </span><span class="floatr h32 main_color1">-</span></p></div>';
 
@@ -788,6 +788,11 @@ var timeOpt = {
                     $("#bonuspay2").attr('bonus','');
                 }
             });
+        }else{
+            $("#max_use_bonus").html('不可用');
+            $("#max_exchange_bonus").html('');
+            $('#bonus').val('');
+            $("#bonuspay2").attr('bonus','');
         }
     }
     function getPointpaySet(){

@@ -3,6 +3,9 @@ class Hotel_check_model extends CI_Model {
 	function __construct() {
 		parent::__construct ();
 	}
+	public $confict_cities=array(
+	        '鞍山'
+	);
 	const TAB_H = 'hotels';
 	function get_near_hotel($inter_id, $longitude, $latitude, $nums = null) {
 		$this->load->model ( 'hotel/Hotel_model' );
@@ -209,7 +212,11 @@ class Hotel_check_model extends CI_Model {
 		$s .= ' where inter_id = "' . $inter_id . '" and status=1 ';
 		if (isset ( $paras ['city'] ) || isset ( $paras ['keyword'] )) {
 			if (isset ( $paras ['city'] )) {
-				$s .= ' and (city like "%' . $paras ['city'] . '%" or CONCAT(city,"市") like "%' . $paras ['city'] . '%")';
+			    if(in_array($paras ['city'], $this->confict_cities)){
+    				$s .= ' and (city like "' . $paras ['city'] .'市'. '" or CONCAT(city,"市") like "' . $paras ['city'] . '")';
+			    }else{
+    				$s .= ' and (city like "%' . $paras ['city'] . '%" or CONCAT(city,"市") like "%' . $paras ['city'] . '%")';
+			    }
 			}
 			if (isset ( $paras ['keyword'] )) {
 				$s .= 'and ( name like "%' . $paras ['keyword'] . '%" or address like "%' . $paras ['keyword'] . '%" or tel like "%' . $paras ['keyword'] . '%" )';
@@ -228,9 +235,6 @@ class Hotel_check_model extends CI_Model {
 		if (! empty ( $paras ['nums'] ) && empty ( $paras ['check_distance'] ) && empty ( $paras ['sort_type'] )) {
 			$s .= ' limit ' . $paras ['offset'] . ',' . $paras ['nums'];
 		}
-//        if (! empty ( $paras ['nums'] ) &&  isset( $paras ['offset'] )) {
-//            $s .= ' limit ' . $paras ['offset'] . ',' . $paras ['nums'];
-//        }
 		$hotels = $db_read->query ( $s )->result ();
 		$hotel_ids=array();
 		if (!empty($hotels)){

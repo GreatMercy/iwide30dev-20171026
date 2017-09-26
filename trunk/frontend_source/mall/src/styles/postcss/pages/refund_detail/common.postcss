@@ -61,6 +61,10 @@
         }
       }
 
+      &__name {
+        height: px2rem(40);
+        line-height: px2rem(40);
+      }
 
       &__item {
         flex: 1;
@@ -78,7 +82,7 @@
 
     &__info {
       position: relative;
-      padding-bottom: px2rem(70);
+      padding-bottom: px2rem(50);
 
       @mixin one-line horizontal {
       }
@@ -90,6 +94,9 @@
 
       li {
         margin-bottom: px2rem(44);
+        &:last-child {
+          margin-bottom: 0;
+        }
       }
     }
 

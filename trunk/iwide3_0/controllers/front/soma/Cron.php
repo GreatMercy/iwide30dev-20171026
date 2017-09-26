@@ -43,9 +43,8 @@ class Cron extends MY_Controller
 
         $this->current_ab = isset($_SERVER['CI_AB']) ? $_SERVER['CI_AB'] : 100;
 
-        $this->controllerLogHandler(__CLASS__);
-
         $this->load->model('soma/shard_config_model', 'model_shard_config');
+        $this->controllerLogHandler(__CLASS__);
     }
 
     /**
@@ -97,15 +96,17 @@ class Cron extends MY_Controller
 
         $this->_write_log(__FUNCTION__);
 
-        $db = $this->soma_db_conn_read;
 
-        $interIdArr = $db->select('inter_id')->group_by('inter_id')->get($db->dbprefix('soma_shard_link'))->result_array();
+        $this->load->library('Redis_selector');
+        $redis = $this->redis_selector->get_soma_redis('soma_redis');
 
-        foreach ($interIdArr as $v) {
-            if ($this->_is_executable($v['inter_id'])) {
-                $this->_write_log('inter id is ' . $v['inter_id'], true, 'debug');
-            }
-        }
+        $key = 'soma_killsec2_2923';
+        $redis->watch($key);
+        $redis->multi();
+        $redis->set($key, 4);
+
+        $redis->exec();
+
     }
 
     /**
@@ -167,6 +168,7 @@ class Cron extends MY_Controller
                 '10.46.74.165', //crontab
                 '10.24.254.116', //灰度发布机器
                 '10.25.1.106', //crontab_soma
+                '127.0.0.1'
             );
             $client_ip = $this->input->ip_address();
             if (in_array($client_ip, $ip_whitelist)) {
@@ -271,7 +273,7 @@ class Cron extends MY_Controller
                     }
 
 
-                }//else 
+                }//else
                 //    die('Can not find gift #'. $v['gift_id']. ' in idx.');
             }
         }
@@ -802,7 +804,8 @@ class Cron extends MY_Controller
 
     /**
      *
-     * @deprecated
+     *
+     * todo 和公众号有关
      */
     public function killsec_instance_init()
     {
@@ -851,7 +854,7 @@ class Cron extends MY_Controller
 
     /**
      *
-     * @deprecated
+     * todo 和公众号无关
      */
     public function killsec_user_order_cleaning()
     {
@@ -899,7 +902,7 @@ class Cron extends MY_Controller
     }
 
     /**
-     * @deprecated
+     * todo 和公众号无关
      */
     public function killsec_user_payment_cleaning()
     {
@@ -914,7 +917,7 @@ class Cron extends MY_Controller
         $skip_inter_id = $this->skipKillsecCronTaskInterId();
         if(!empty($skip_inter_id)) {
             foreach ($instance as $k => $v) {
-                if (isset($v['inter_id']) && $v['inter_id']) {  
+                if (isset($v['inter_id']) && $v['inter_id']) {
                     if(in_array($v['inter_id'], $skip_inter_id)) {
                         continue;
                     }
@@ -924,7 +927,7 @@ class Cron extends MY_Controller
                         $this->current_inter_id = $v['inter_id'];
                         $this->db_shard_config = $this->model_shard_config->build_shard_config($v['inter_id']);
                         //print_r($this->db_shard_config);
-                    }   
+                    }
 
                     $result = $this->Activity_killsec_model->instance_payment_clean($v['inter_id'], $v);
                 }
@@ -1317,7 +1320,7 @@ class Cron extends MY_Controller
     public function update_product_statis()
     {
         $this->_check_access();    //拒绝非法IP执行任务
-
+        ini_set('memory_limit','1024M');
         // $cache= $this->_load_cache();
         // $redis= $cache->redis->redis_instance();
         $redis = $this->get_redis_instance();
@@ -1669,18 +1672,15 @@ class Cron extends MY_Controller
                             $log_txt .= '公众号：' . $inter_id . ', 订单号：' . $v['order_id'] . ', 产品号：' . $v['product_id'] . ', 回滚价格配置库存：' . $return_result . "\r\n";
                         }
                     }
-                    if( ENVIRONMENT != 'production' ){
-                        // 暂时不在生产环境执行 by fengzhongcheng 2017年7月4日15:02:20
-                        //分账支付，改为调分账主动关闭订单 add by yu 20170607
-                        $wx_total = $SalesOrderModel->load($v['order_id'])->m_get('wx_total');
-                        $pay_status = $SalesOrderModel->load($v['order_id'])->m_get('status');
-                        $log_txt .= 'wx_total：'.$wx_total.', pay_status：'.$pay_status;
-                        if($wx_total>0&&$pay_status==11){
-                            $log_txt .= ', order_id：'.$v['order_id'];
-                            $this->load->model('iwidepay/Iwidepay_model');
-                            $rclose = $this->Iwidepay_model->close_order($v['order_id'],'mall');
-                            $log_txt .= ', 分账关闭订单结果：'.json_encode($rclose)."\r\n";
-                        }
+                    //分账支付，改为调分账主动关闭订单 add by yu 20170607
+                    $wx_total = $SalesOrderModel->load($v['order_id'])->m_get('wx_total');
+                    $pay_status = $SalesOrderModel->load($v['order_id'])->m_get('status');
+                    $log_txt .= 'wx_total：'.$wx_total.', pay_status：'.$pay_status;
+                    if($wx_total>0&&$pay_status==11){
+                        $log_txt .= ', order_id：'.$v['order_id'];
+                        $this->load->model('iwidepay/Iwidepay_model');
+                        $rclose = $this->Iwidepay_model->close_order($v['order_id']);
+                        $log_txt .= ', 分账关闭订单结果：'.json_encode($rclose)."\r\n";
                     }
 
                     //把订单状态改为无效订单
@@ -1959,12 +1959,12 @@ class Cron extends MY_Controller
                 $table = $somaSalesOrderModel->table_name($inter_id);
                 $select = 'order_id,conn_devices_status,status';
                 $orderList = $db->where( 'inter_id', $inter_id )
-                                ->where( 'status', $somaSalesOrderModel::STATUS_PAYMENT )
-                                ->where( 'conn_devices_status', $somaSalesOrderModel::CONN_DEVICES_DEFAULT )
-                                ->select( $select )
-                                ->limit( $limit )
-                                ->get( $table )
-                                ->result_array();
+                    ->where( 'status', $somaSalesOrderModel::STATUS_PAYMENT )
+                    ->where( 'conn_devices_status', $somaSalesOrderModel::CONN_DEVICES_DEFAULT )
+                    ->select( $select )
+                    ->limit( $limit )
+                    ->get( $table )
+                    ->result_array();
                 if( $orderList )
                 {
                     //对接智游宝
@@ -2023,7 +2023,7 @@ class Cron extends MY_Controller
         $this->sms_model->send_sms();
         // $service = SmsService::getInstance();
         // $service->send_sms();
-        echo 'SUCCESS';                    
+        echo 'SUCCESS';
     }
 
 
@@ -2043,7 +2043,8 @@ class Cron extends MY_Controller
 
 //          $list = '[{"inter_id":"a497858474","orderid":"1000371484","transaction_id":"4002892001201708309066807965","state":"SUCCESS"},{"inter_id":"a496803399","orderid":"1000371551","transaction_id":"4004442001201708309070786809","state":"SUCCESS"},{"inter_id":"a495012935","orderid":"1000371585","transaction_id":"4008182001201708309067843837","state":"SUCCESS"},{"inter_id":"a496803399","orderid":"1000371587","transaction_id":"4000252001201708309067790373","state":"SUCCESS"},{"inter_id":"a497858474","orderid":"1000371600","transaction_id":"4002402001201708309072373868","state":"SUCCESS"},{"inter_id":"a495782075","orderid":"1000371618","transaction_id":"4002132001201708309069636151","state":"SUCCESS"},{"inter_id":"a495782075","orderid":"1000371624","transaction_id":"4001222001201708309071471740","state":"SUCCESS"},{"inter_id":"a496803399","orderid":"1000371635","transaction_id":"4007512001201708309071591994","state":"SUCCESS"},{"inter_id":"a496803399","orderid":"1000371649","transaction_id":"4007512001201708309074586804","state":"SUCCESS"},{"inter_id":"a496803399","orderid":"1000371657","transaction_id":"4004492001201708309073255367","state":"SUCCESS"},{"inter_id":"a496803399","orderid":"1000371663","transaction_id":"4006342001201708309076411353","state":"SUCCESS"},{"inter_id":"a496803399","orderid":"1000371664","transaction_id":"4004492001201708309074871514","state":"SUCCESS"},{"inter_id":"a493195389","orderid":"1000371691","transaction_id":"4007372001201708309075145736","state":"SUCCESS"},{"inter_id":"a494902849","orderid":"1000371723","transaction_id":"4001412001201708309074256452","state":"SUCCESS"},{"inter_id":"a494902849","orderid":"1000371724","transaction_id":"4004802001201708309077262580","state":"SUCCESS"},{"inter_id":"a494902849","orderid":"1000371725","transaction_id":"4008562001201708309075763920","state":"SUCCESS"},{"inter_id":"a494902849","orderid":"1000371726","transaction_id":"4006562001201708309075281885","state":"SUCCESS"},{"inter_id":"a494902849","orderid":"1000371727","transaction_id":"4004592001201708309079033782","state":"SUCCESS"},{"inter_id":"a494902849","orderid":"1000371728","transaction_id":"4009602001201708309077338424","state":"SUCCESS"},{"inter_id":"a494902849","orderid":"1000371729","transaction_id":"4000222001201708309079097819","state":"SUCCESS"},{"inter_id":"a490321436","orderid":"1000371732","transaction_id":"4008482001201708309079111839","state":"SUCCESS"},{"inter_id":"a494902849","orderid":"1000371737","transaction_id":"4000282001201708309075871094","state":"SUCCESS"},{"inter_id":"a494902849","orderid":"1000371741","transaction_id":"4008492001201708309075916067","state":"SUCCESS"},{"inter_id":"a494902849","orderid":"1000371757","transaction_id":"4000972001201708309077639046","state":"SUCCESS"},{"inter_id":"a493195389","orderid":"1000371763","transaction_id":"4004942001201708309077748297","state":"SUCCESS"},{"inter_id":"a494902849","orderid":"1000371766","transaction_id":"4008572001201708309077774837","state":"SUCCESS"},{"inter_id":"a494902849","orderid":"1000371768","transaction_id":"4004552001201708309082390711","state":"SUCCESS"},{"inter_id":"a495012935","orderid":"1000371773","transaction_id":"4001962001201708309079658292","state":"SUCCESS"},{"inter_id":"a494902849","orderid":"1000371776","transaction_id":"4005312001201708309080866314","state":"SUCCESS"},{"inter_id":"a494902849","orderid":"1000371780","transaction_id":"4001892001201708309079787808","state":"SUCCESS"},{"inter_id":"a494902849","orderid":"1000371786","transaction_id":"4000082001201708309078112226","state":"SUCCESS"},{"inter_id":"a494902849","orderid":"1000371803","transaction_id":"4008122001201708309081359579","state":"SUCCESS"},{"inter_id":"a493717254","orderid":"1000371814","transaction_id":"4004812001201708309084513967","state":"SUCCESS"},{"inter_id":"a483687344","orderid":"1000371820","transaction_id":"4009332001201708309084661605","state":"SUCCESS"},{"inter_id":"a494902849","orderid":"1000371822","transaction_id":"4006712001201708309083178000","state":"SUCCESS"},{"inter_id":"a494902849","orderid":"1000371825","transaction_id":"4008942001201708309081524296","state":"SUCCESS"},{"inter_id":"a493717254","orderid":"1000371827","transaction_id":"4004772001201708309081546744","state":"SUCCESS"},{"inter_id":"a494902849","orderid":"1000371828","transaction_id":"4008912001201708309083219240","state":"SUCCESS"},{"inter_id":"a497339744","orderid":"1000371839","transaction_id":"4009672001201708309084869785","state":"SUCCESS"},{"inter_id":"a494902849","orderid":"1000371861","transaction_id":"4002552001201708309085179208","state":"SUCCESS"},{"inter_id":"a494902849","orderid":"1000371874","transaction_id":"4009282001201708309087055300","state":"SUCCESS"},{"inter_id":"a494902849","orderid":"1000371884","transaction_id":"4007552001201708309085481388","state":"SUCCESS"},{"inter_id":"a488187132","orderid":"1000371897","transaction_id":"4009562001201708309088458611","state":"SUCCESS"},{"inter_id":"a488187132","orderid":"1000371906","transaction_id":"4003872001201708309085726342","state":"SUCCESS"},{"inter_id":"a493717254","orderid":"1000371936","transaction_id":"4001702001201708309087822274","state":"SUCCESS"},{"inter_id":"a483687344","orderid":"1000371944","transaction_id":"4000932001201708309087964728","state":"SUCCESS"},{"inter_id":"a494902849","orderid":"1000371948","transaction_id":"4006562001201708309089094102","state":"SUCCESS"},{"inter_id":"a491466008","orderid":"1000371949","transaction_id":"4005602001201708309090783964","state":"SUCCESS"},{"inter_id":"a483687344","orderid":"1000371954","transaction_id":"4006722001201708309090891139","state":"SUCCESS"},{"inter_id":"a493195389","orderid":"1000371966","transaction_id":"4001692001201708309089347399","state":"SUCCESS"},{"inter_id":"a493195389","orderid":"1000371970","transaction_id":"4001332001201708309089416896","state":"SUCCESS"},{"inter_id":"a483687344","orderid":"1000372007","transaction_id":"4001862001201708309091796957","state":"SUCCESS"},{"inter_id":"a494902849","orderid":"1000372015","transaction_id":"4001322001201708309090112975","state":"SUCCESS"},{"inter_id":"a493195389","orderid":"1000372016","transaction_id":"4007372001201708309090127917","state":"SUCCESS"},{"inter_id":"a494902849","orderid":"1000372020","transaction_id":"4001482001201708309090190123","state":"SUCCESS"},{"inter_id":"a493195389","orderid":"1000372029","transaction_id":"4007372001201708309093617018","state":"SUCCESS"},{"inter_id":"a483687344","orderid":"1000372032","transaction_id":"4002522001201708309093676510","state":"SUCCESS"},{"inter_id":"a498529802","orderid":"1000372042","transaction_id":"4009562001201708309096569235","state":"SUCCESS"},{"inter_id":"a493195389","orderid":"1000372043","transaction_id":"4005092001201708309093867630","state":"SUCCESS"},{"inter_id":"a494902849","orderid":"1000372067","transaction_id":"4007852001201708309096877998","state":"SUCCESS"},{"inter_id":"a493195389","orderid":"1000372070","transaction_id":"4004532001201708309096973668","state":"SUCCESS"},{"inter_id":"a483687344","orderid":"1000372084","transaction_id":"4005642001201708309096196811","state":"SUCCESS"},{"inter_id":"a493195389","orderid":"1000372085","transaction_id":"4007342001201708309100537424","state":"SUCCESS"},{"inter_id":"a483687344","orderid":"1000372095","transaction_id":"4008212001201708309102599123","state":"SUCCESS"},{"inter_id":"a499321368","orderid":"1000372135","transaction_id":"4009202001201708309099851876","state":"SUCCESS"},{"inter_id":"a499321368","orderid":"1000372135","transaction_id":"4009202001201708309099851876","state":"SUCCESS"}]';
 
-        $list = [];
+        //2017-08-31 15:22:00
+        $list = '[{"inter_id":"a494688060","orderid":"1000371378","transaction_id":"4004252001201708309048301003","state":"SUCCESS"}, {"inter_id":"a495708609","orderid":"so","transaction_id":"4009632001201708309048041265","state":"SUCCESS"}]';
 
         $list = json_decode($list, true);
 
@@ -2057,9 +2058,9 @@ class Cron extends MY_Controller
         $db = $this->load->database('iwide_soma_r', TRUE);
         $table = $db->dbprefix('soma_shard_link');
         $interIdArr = $db->select('inter_id')
-                         ->group_by('inter_id')
-                         ->get($table)
-                         ->result_array();
+            ->group_by('inter_id')
+            ->get($table)
+            ->result_array();
 
         //遍历订单
         foreach ($combineList as $items => $values){
@@ -2087,9 +2088,9 @@ class Cron extends MY_Controller
                 $orderList = [];
                 foreach ($combineList as $val){
                     $orderList = $db->where( 'order_id', $items )
-                                    ->select( '*' )
-                                    ->get( $table )
-                                    ->result_array();
+                        ->select( '*' )
+                        ->get( $table )
+                        ->result_array();
                 }
 
                 if(!empty($orderList)){
@@ -2176,5 +2177,71 @@ class Cron extends MY_Controller
 
     }
 
+
+    /**
+     * 手动任务
+     * 获取泛分销员自己下单自己获取绩效名单
+     * @author liguanglong  <liguanglong@mofly.cn>
+     */
+    public function fansalerorders(){
+
+        $db = $this->load->database('iwide_soma_r', TRUE);
+        $table = $db->dbprefix('soma_shard_link');
+        $interIdArr = $db->select('inter_id')
+                         ->group_by('inter_id')
+                         ->get($table)
+                         ->result_array();
+
+        //获取某一时间段内所有订单
+        $problemOrders = [];
+        foreach($interIdArr as $v){
+            $inter_id = $v['inter_id'];
+            if( $inter_id )
+            {
+                //初始化数据库分片配置，微信接口关闭订单需要初始化shard_id
+                $this->load->model('soma/shard_config_model', 'model_shard_config');
+                $this->current_inter_id= $v['inter_id'];
+                $this->db_shard_config= $this->model_shard_config->build_shard_config( $v['inter_id'] );
+            }
+            $this->load->model('soma/Sales_order_model','somaSalesOrderModel');
+            $somaSalesOrderModel = $this->somaSalesOrderModel;
+
+            /**
+             * @var Sales_order_model $somaSalesOrderModel
+             */
+            $db = $somaSalesOrderModel->_shard_db_r('iwide_soma_r');
+            $table = $somaSalesOrderModel->table_name($inter_id);
+
+            $orderList = $db->where( 'create_time >= ', '2017-09-15 00:00:00' )
+                            ->where( 'create_time <= ', '2017-09-15 23:59:59' )
+                            ->where('inter_id', $inter_id)
+                            ->select( '*' )
+                            ->get( $table )
+                            ->result_array();
+            if(!empty($orderList)){
+                foreach ($orderList as $val){
+                    $this->load->library('Soma/Api_idistribute');
+                    $staff = $this->api_idistribute->get_saler_info($val['inter_id'], $val['openid']);
+                    if(!empty($staff)){
+                        $saler_type = isset($staff['typ']) && ! empty($staff['typ']) ? $staff['typ'] : '';
+                        $saler_id = isset($staff['info']['saler']) && ! empty($staff['info']['saler']) ? $staff['info']['saler'] : 0;
+                        if($saler_type == 'FANS' && $val['fans_saler_id'] == $saler_id){
+                            $problemOrders[] = [
+                                'inter_id' => $val['inter_id'],
+                                'order_id' => $val['order_id'],
+                                'openid' => $val['openid'],
+                                'fans_saler_id' => $val['fans_saler_id'],
+                            ];
+                        }
+                    }
+                }
+            }
+        }
+
+        $content = json_encode($problemOrders);
+        $handler = new StreamHandler(APPPATH . 'logs/soma/cron/fansalerorders.log', \Monolog\Logger::DEBUG);
+        $this->monoLog->setHandlers(array($handler));
+        $this->monoLog->info($content);
+    }
 
 }

@@ -56,12 +56,38 @@ echo $block_left;
 <?php
 echo form_open( Soma_const_url::inst()->get_url('*/*/edit_post2'), array('class'=>'form-horizontal','enctype'=>'multipart/form-data'), array($pk=>$model->m_get($pk) ) ); ?>
 <div class="main-title">
-    <h1 class="f28"><?php echo ( $this->input->post($pk) ) ? '编辑': '新增'; ?>秒杀</h1>
+    <h1 class="f28"><?php echo ( $this->input->get('ids') ) ? '编辑': '新增'; ?>秒杀</h1>
     <div class="line"></div>
 </div>
 
 <div class="kill-content">
 <ul>
+
+<li class="clearfix">
+     <div class="fl part">
+        <div class="fl sub-title f24"><span class="required">*</span>秒杀类型</div>
+        <div class="fl item f24 clearfix">
+            <div class="radio-wrap">
+                <input type="radio" value="1" name="activity_name" checked href="<?php echo Soma_const_url::inst()->get_url("*/*/add"); ?>" class="homebuying-activity_name <?php echo ( $this->input->get('ids') ) ? 'is--disabled': ''; ?>">
+                <span>限流模式</span>
+            </div>
+
+            <div class="radio-wrap">
+                <input type="radio" value="2" name="activity_name" href="<?php echo Soma_const_url::inst()->get_url("*/activity_flashsale/add"); ?>" class="homebuying-activity_name <?php echo ( $this->input->get('ids') ) ? 'is--disabled': ''; ?>">
+                <span>不限制流模式</span>
+            </div>
+        </div>
+    </div>
+</li>    
+
+<li class="clearfix">
+     <div class="fl part">
+        <div class="fl sub-title f24">类型说明</div>
+        <div class="fl item f24 clearfix">
+            这是类型说明
+        </div>
+    </div>
+</li>  
 
 <li class="clearfix">
     <div class="fl part">
@@ -251,27 +277,6 @@ echo form_open( Soma_const_url::inst()->get_url('*/*/edit_post2'), array('class'
 </li>
 
 
-
-<li class="clearfix">
-    <div class="fl part">
-        <div class="fl sub-title f24"><span class="required">*</span>其他</div>
-        <div class="fl item f24 clearfix">
-
-            <div class="radio-wrap">
-                <input type="checkbox" value="1" class="kill-other" <?php if(( !isset($killSecInfo) ||  $killSecInfo['is_stock'] == 1)) { ?> checked  <?php } ?> name="is_stock">
-               <!--  <span>显示库存／名额</span> -->
-                <span>显示库存</span>
-            </div>
-
-            <div class="radio-wrap" style="display: none">
-                <input type="checkbox" value="1" class="kill-other"checked name="is_subscribe">
-                <span>订阅通知</span>
-            </div>
-
-        </div>
-    </div>
-</li>
-
 <li class="clearfix">
     <div class="fl part">
         <div class="fl sub-title f24"><span class="required">*</span>选择商品</div>
@@ -299,6 +304,26 @@ echo form_open( Soma_const_url::inst()->get_url('*/*/edit_post2'), array('class'
             <div class="fl f24 mr-60" id="weChatPrice"><?php if( isset($killSecInfo) &&!empty($killSecInfo['product_id'])  && isset($product_info[$killSecInfo['product_id']])) echo $product_info[$killSecInfo['product_id']]['price_package'];?></div>
             <div class="fl f24 mr-30">秒杀价</div>
             <div class="fl f24"><input type="text" class="input f24 w200" id="killPrice" <?php if(( isset($killSecInfo) && !empty($killSecInfo))) { ?> value="<?php echo $killSecInfo['killsec_price']; ?>"  <?php } ?> name="killsec_price"></div>
+        </div>
+    </div>
+</li>
+
+<li class="clearfix">
+    <div class="fl part">
+        <div class="fl sub-title f24"><span class="required">*</span>其他</div>
+        <div class="fl item f24 clearfix">
+
+            <div class="radio-wrap">
+                <input type="checkbox" value="1" class="kill-other" <?php if(( !isset($killSecInfo) ||  $killSecInfo['is_stock'] == 1)) { ?> checked  <?php } ?> name="is_stock">
+                <!--  <span>显示库存／名额</span> -->
+                <span>显示库存</span>
+            </div>
+
+            <div class="radio-wrap" style="display: none">
+                <input type="checkbox" value="1" class="kill-other"checked name="is_subscribe">
+                <span>订阅通知</span>
+            </div>
+
         </div>
     </div>
 </li>

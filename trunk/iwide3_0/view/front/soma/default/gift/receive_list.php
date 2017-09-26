@@ -4,6 +4,11 @@
     .receive_list {
         margin-bottom: 37px;
     }
+    .receive_list_tips {
+        left: 0px;
+        bottom: 0;
+        z-index: 9999;
+    }
 </style>
 <script>
 var redirectUrl = '<?php 

@@ -157,10 +157,12 @@ $inter_id_tmp_array = array(
 		<em class="ui_ico ui_ico13"></em>
 		<tt>商城奖励商品列表</tt>
 	</a>
+    <?php if($saler_details['join_gift'] == 2): ?>
 	<a href="<?php echo site_url('soma/GiftDelivery/gift_list')?>?id=<?php echo $inter_id.'&saler_id='.$saler_details['id'].'&saler_name='.$saler_details['name'].'&inter_id='.$inter_id; ?> " class="item">
-		<em class="ui_ico ui_ico13"></em>
+		<em class="ui_ico ui_ico14"></em>
 		<tt>礼包派送</tt>
 	</a>
+    <?php endif; ?>
 </div>
 
 <?php  /*会员部分*/ ?>

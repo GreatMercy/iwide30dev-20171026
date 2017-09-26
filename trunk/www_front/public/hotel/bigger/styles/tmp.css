@@ -24,11 +24,12 @@
 .histroy_bottom{margin-bottom: 1.406rem;}
 .searchLayer .button{font-size: 1.05rem;letter-spacing: 6px;padding-left: 12px;}
 .searchLayer .main_tab_line{height: 0.909rem;}
-.search_bg .search_top_img{margin-right: 0.609rem;border-radius: 4px;overflow: hidden;position: relative;width: 319px;height: 159.5px;}
+.search_bg .search_top_img{border-radius: 4px;overflow: hidden;position: relative;width: 319px;height: 159.5px;}
 .search_top_img:after{content: "";background-color: black;opacity: 0.1;position: absolute;top: 0px;left: 0px;width: 100%;height: 100%;}
 .search_top_img .squareimg{padding-bottom: 159.5px;}
 .search_img_wrapper{padding: 0.875rem 0 0 0.875rem;padding-right: 30px;}
-.search_top_word{position: absolute;bottom: 3px;right: 8px;z-index: 2;}
+.search_top_word{position: absolute;bottom: 3px;right: 8px;z-index: 2;display: none;}
+.swiper-slide-active .search_top_word{display: block;}
 .search_discount_word{margin-bottom: 0.168rem;}
 .search_bg .others>*{padding: 0rem 2px .827rem 2px;}
 #old_search a{margin-bottom: 1.406rem;}

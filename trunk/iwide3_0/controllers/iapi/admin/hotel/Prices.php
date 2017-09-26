@@ -216,7 +216,7 @@ class Prices extends MY_Admin_Iapi {
 		} else {
 			$data ['hotel_id'] = empty ( $data ['hotels'] [0] ) ? 0 : $data ['hotels'] [0] ['hotel_id'];
 		}
-		$this->out_put_msg(1,'',$data,'hotel/price/price_codes',200,array('edit'=>site_url('hotel/prices/edit')));
+		$this->out_put_msg('success','',$data,'hotel/price/price_codes',200,array('edit'=>site_url('hotel/prices/edit')));
 	}
 	public function room_types() {
 		$hotel_id = $this->input->get ( 'hid' );

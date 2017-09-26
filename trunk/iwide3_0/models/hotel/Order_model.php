@@ -3633,7 +3633,7 @@ class Order_model extends MY_Model {
 				//主单完结
 				$days = get_room_night($main_order ['startdate'],$main_order ['enddate'],'ceil',$main_order);//至少有一个间夜
 				$this->Idistribution_model->leave_recount_by_orders($inter_id,$orderid,$real_price,$orderdays,$updata['istatus'],$days*$main_order['roomnums'],array('hotel_id'=>$main_order['hotel_id']));
-				$this->write_log($order,$orderdays,'主单完结');//调试
+				$this->write_log($main_order,$orderdays,'主单完结');//调试
 			}
 
 

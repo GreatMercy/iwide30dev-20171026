@@ -1,9 +1,15 @@
   .jfk-pages__bookingHotel{
     .jfk-pages__theme{
-      background: var(--color-white);
+      background-color: var(--color-white);
     }
     .goldColor{
       color: var(--color-golden);
+    }
+    .grayColor333{
+      color: var(--font-color-white);
+    }
+    .grayColor80{
+      color: var(--font-color-extra-light-gray);
     }
     .banners__item-box div{
       &::before {
@@ -19,7 +25,7 @@
         color: var(--font-color-extra-light-gray);
       }
        &::before {
-         background-color: var(--font-color-light-gray);
+         background-color: #e0e0e0;
        }
         &_ht_place{
            color: var(--font-color-light-gray);
@@ -51,10 +57,13 @@
         }
 
         &::before {
-          background-color: var(--font-color-light-gray);
+          background-color: #e0e0e0;
         }
       }
       .live_date{
+        & .live{
+          color: var(--font-color-light-gray);
+        }
         &::before{
           background-color: var(--font-color-light-gray);
         }
@@ -79,6 +88,11 @@
           color: var(--color-golden);
           &::before {
            background-color: var(--color-golden);
+          }
+        }
+        & .boderWhite.active{
+          &::before{
+            background-color: var(--color-white);
           }
         }
 
@@ -118,6 +132,7 @@
         }
       }
     }
+
     .room_price_ul_container{
       color: var(--font-color-extra-light-gray);
       background-color: var(--color-light-black);
@@ -125,6 +140,7 @@
         color: var(--color-light-black);
       }
       .room_price_ul{
+        padding:px2rem(36) 0;
         li{
             &::before {
               background-color: var(--font-color-light-gray);
@@ -165,9 +181,6 @@
         &::before{
           background-color: var(--font-color-light-gray);
         }
-      }
-      &_item{
-        color: var(--font-color-light-gray);
       }
     }
     .choose_date_calendar{

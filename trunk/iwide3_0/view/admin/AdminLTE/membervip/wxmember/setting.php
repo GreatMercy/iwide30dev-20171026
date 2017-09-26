@@ -87,7 +87,7 @@ echo $block_left; ?>
 </div>
 <div class="bd_left list_layout">
     <div>
-        <div><label class="check"><input class="activate_type" name="activate_type"  type="radio" value="pms_activate"  <?php  if(isset($base_info['brand_name'])) echo 'disabled ';?> <?php if( (!isset($wx_activate) && !isset($auto_activate)) || (!$wx_activate && !$auto_activate))  echo ' checked';?> /><span class="diyradio"><tt></tt></span>对接PMS</label></div>
+        <div><label class="check"><input class="activate_type" name="activate_type"  type="radio" value="pms_activate"  <?php  if(isset($base_info['brand_name'])) echo 'disabled ';?> <?php if( (!isset($wx_activate) && !isset($auto_activate)) || (!$wx_activate && !$auto_activate))  echo 'checked';?> /><span class="diyradio"><tt></tt></span>对接PMS</label></div>
         <div><label class="check"><input class="activate_type" name="activate_type"  type="radio" value="wx_activate" <?php  if(isset($wx_activate) && $wx_activate) echo 'checked '; if(isset($base_info['brand_name'])) echo 'disabled';?> /><span class="diyradio"><tt></tt></span>一键激活</label></div>
 <!--        <div><label class="check"><input class="activate_type" name="activate_type"  type="radio" value="auto_activate"  --><?php // if(isset($base_info['brand_name']))echo 'disabled';?><!-- /><span class="diyradio"><tt></tt></span>自动激活</label></div>-->
     </div>

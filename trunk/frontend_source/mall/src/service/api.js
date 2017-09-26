@@ -31,6 +31,8 @@ const v1 = {
   GET_PACKAGE_COUPONS: `${API_PACKAGE_V1}/coupons`,
   // 获取活动
   GET_PACKAGE_RULE: `${API_PACKAGE_V1}/rule`,
+  // 获取首页雅高首页信息
+  GET_PACKAGE_ACCOR_INFO: `${API_PACKAGE_V1}/accor_info`,
   // 订阅秒杀提醒
   POST_KILLSEC_NOTICE: `${API_KILLSEC_V1}/notice`,
   // 秒杀库存

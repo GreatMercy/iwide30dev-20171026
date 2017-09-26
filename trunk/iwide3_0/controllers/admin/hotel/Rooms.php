@@ -121,6 +121,7 @@ class Rooms extends MY_Admin {
 				redirect(site_url('hotel/rooms/index'));
 			}
 			$fields_config = $model->get_field_config ( 'form' );
+			$hotel_name=isset($fields_config['hotel_id']['select'][$model->m_get('hotel_id')])?$fields_config['hotel_id']['select'][$model->m_get('hotel_id')]:'';
 			unset($fields_config['hotel_id']);
 			unset($fields_config['inter_id']);
 			// $sql= "select a.* from {$this->db->dbprefix}shp_goods_attr as a left join {$this->db->dbprefix}shp_attrbutes as b on a.attr_id=b.attr_id where a.gs_id=". $id;
@@ -166,7 +167,8 @@ class Rooms extends MY_Admin {
 				'check_data' => FALSE,
 				'detail_field' => $detail_field,
 				'services' => $services,
-				'room_ser' => $room_ser 
+				'room_ser' => $room_ser,
+		        'hotel_name' => $hotel_name
 		);
 		if($this->ticket){
 			$html = $this->_render_content ( $this->_load_view_file ( 'edit_ticket' ), $view_params, TRUE );

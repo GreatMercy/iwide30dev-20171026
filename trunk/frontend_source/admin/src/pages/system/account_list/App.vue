@@ -18,7 +18,7 @@
       <el-col :span="20">
         <div class="grid-content">
           <el-button type="primary" class="add-new-btn" size="small" icon="plus"
-                     @click="locationHref('/system/add_account')">新增账号
+            @click="locationHref(addUrl)">新增账号
           </el-button>
         </div>
       </el-col>
@@ -37,7 +37,11 @@
             <el-table-column prop="status" label="状态"></el-table-column>
             <el-table-column label="操作">
               <template scope="scope">
-                <el-button @click.native.prevent="editRow(scope.$index, tableData)" type="text" size="small">
+                <!--前端路径-->
+                <!--<el-button @click.native.prevent="locationHref('/system/edit_account?account_id='+scope.row.admin_id)" type="text"-->
+                <!--size="small">-->
+                <el-button @click.native.prevent="locationHref(scope.row.edit_url)" type="text"
+                           size="small">
                   编辑
                 </el-button>
               </template>
@@ -56,12 +60,12 @@
         <span v-else>{{current.searchTotal}}</span>
         条
       </div>
-      <el-pagination v-if="isSearch" :page-size="current.size" :total=current.total
+      <el-pagination v-if="!isSearch" :page-size="current.size" :total=current.total
                      layout="prev, pager, next"
                      @current-change="changePage">
       </el-pagination>
-      <el-pagination v-else :page-size="current.size" :total="current.searchTotal" layout="prev, pager, next"
-                     @current-change="changePage">
+      <el-pagination :page-size="current.size" :total="current.searchTotal" layout="prev, pager, next"
+                     @current-change="changePage" v-else>
       </el-pagination>
     </div>
   </div>
@@ -78,6 +82,7 @@
     data () {
       return {
         loading: true,
+        addUrl: '',
         current: {
           page: 1,
           size: 20,
@@ -103,6 +108,7 @@
         getAccountList({offset: this.current.page, limit: this.current.size, keyword: this.keyword}).then((res) => {
           this.loading = false
           this.accountList = res.web_data.list
+          this.addUrl = res.web_data.add_url
           let accountLength = this.accountList.length
           if (this.isSearch) {
             this.current.searchTotal = parseInt(res.web_data.page.total)

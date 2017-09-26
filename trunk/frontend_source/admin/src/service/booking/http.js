@@ -86,11 +86,79 @@ const postHotelPricesCode = (data, config, version = 'v1') => {
   let url = apiConfig[version] && apiConfig[version].POST_HOTEL_PRICES_CODE_INFO || apiConfig['v1'].POST_HOTEL_PRICES_CODE_INFO
   return ajax.post(url, data, config)
 }
+/**
+ * 获取皮肤信息
+ * @param {Object} data 请求参数
+ * @param {string} data.id inter_id
+ * @param {object} config axios配置
+ * @param {string} version api版本
+ */
+const getSkinIndex = (data, config, version = '') => {
+  let url = apiConfig[version] && apiConfig[version].GET_SKIN_INDEX || apiConfig['v1'].GET_SKIN_INDEX
+  return ajax.get(url, data, config)
+}
+
+/**
+ * 选择皮肤
+ * @param {Object} data 请求参数
+ * @param {string} data.skin_name 皮肤名
+ * @param {object} config axios配置
+ * @param {string} version api版本
+ */
+const postSaveSkin = (data, config, version = 'v1') => {
+  let url = apiConfig[version] && apiConfig[version].POST_SAVE_SKIN || apiConfig['v1'].POST_SAVE_SKIN
+  return ajax.post(url, data, config)
+}
+
+/**
+ * 获取皮肤设置
+ * @param {Object} data 请求参数
+ * @param {string} data.skin_name 皮肤名
+ * @param {string} data.id 公众号
+ * @param {object} config axios配置
+ * @param {string} version api版本
+ */
+const getSkinSetting = (data, config, version = 'v1') => {
+  let url = apiConfig[version] && apiConfig[version].GET_SKIN_SETTING || apiConfig['v1'].GET_SKIN_SETTING
+  return ajax.get(url, data, config)
+}
+
+/**
+ * 删除轮播图
+ * @param {Object} data 请求参数
+ * @param {string} data.id 轮播图id
+ * @param {object} config axios配置
+ * @param {string} version api版本
+ */
+const postSkinDelFocus = (data, config, version = 'v1') => {
+  let url = apiConfig[version] && apiConfig[version].POST_SKIN_DEL_FOCUS || apiConfig['v1'].POST_SKIN_DEL_FOCUS
+  return ajax.post(url, data, config)
+}
+
+/**
+ * 保存皮肤详情配置
+ * @param {Object} data 请求参数
+ * @param {string} data.share_setting 分享设置
+ * @param {string} data.roasting_setting 轮播图设置
+ * @param {string} data.font_setting 字体设置
+ * @param {string} data.home_setting 首页设置
+ * @param {object} config axios配置
+ * @param {string} version api版本
+ */
+const postSkinSaveSetting = (data, config, version = 'v1') => {
+  let url = apiConfig[version] && apiConfig[version].POST_SKIN_SAVE_SETTING || apiConfig['v1'].POST_SKIN_SAVE_SETTING
+  return ajax.post(url, data, config)
+}
 export {
   getHotelPriceCode,
   getHotelRooms,
   getHotelGoodsList,
   postHotelGoodsInfo,
   getHotelRoomsByCode,
-  postHotelPricesCode
+  postHotelPricesCode,
+  getSkinIndex,
+  postSaveSkin,
+  getSkinSetting,
+  postSkinDelFocus,
+  postSkinSaveSetting
 }

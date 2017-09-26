@@ -861,4 +861,196 @@ class Hotel_report_model extends MY_Model {
 			return false;
 		return $row;
     }
+
+    //复购率统计
+	public function get_re_purchase($params)
+	{
+		// $inter_id = 'a429262687';
+		$inter_id = $params ['inter_id'];
+		
+		$this->load->library('calendar');
+		$date = $params['month_start'];
+		$data = array();//返回数组
+		$fans_arr = array();
+		$fenxiao = 0;//分销人员
+		$changjing = 0;//场景
+		$gonggong = 0;//公共
+		$qita = 0;//其他
+		while ( $date <= $params['month_end']) {
+			//初始化
+			$where = '';
+			$para = array ();
+			$mydata = array(
+				'date'=>$date,
+				'order_count'=>0,
+				'user_count'=>0,
+				'user_fenxiao_count'=>0,
+				'user_changjing_count'=>0,
+				'user_gonggong_count'=>0,
+				'user_qita_count'=>0,
+				'count2'=> 0,
+				'count3'=> 0,
+				'count5'=> 0,
+				'count10'=> 0,
+				'allcount2'=> 0,
+				'allcount3'=> 0,
+				'allcount5'=> 0,
+				'allcount10'=> 0,
+				'o2'=> 0,
+				'o3'=> 0,
+				'o5'=> 0,
+				'o10'=> 0,
+				'u2'=> 0,
+				'u3'=> 0,
+				'u5'=> 0,
+				'u10'=> 0,
+			);
+			$where .= ' and istatus = ? ';
+			$para [] = 3;
+			if (! empty ( $params ['hotel_id'] )) {
+				$where .= ' and o.hotel_id = ? ';
+				$para [] = $params ['hotel_id'];
+			}
+			if (! empty ( $params ['hotel_ids'] ) && is_array($params ['hotel_ids'])) {
+				$where .= ' and o.hotel_id in (?) ';
+				$para [] = implode(',',$params ['hotel_ids']);
+			}
+			//下单时间
+			$where .= " and FROM_UNIXTIME(`order_time`,'%Y%m')<= ? ";
+			$para [] = $date;
+			$sql = "SELECT count(distinct(i.orderid)) as order_count
+					FROM  `iwide_hotel_order_items` i
+					LEFT JOIN `iwide_hotel_orders` o ON i.orderid=o.orderid AND i.inter_id=o.inter_id
+					WHERE i.inter_id = '$inter_id' $where ";//总订单数
+			$order_count = $this->_db ( 'iwide_r1' )->query ( $sql, $para )->row();
+			if($order_count->order_count == 0){
+				goto end;
+			}
+			$mydata['order_count'] = $order_count->order_count;
+			// $data[$date]['sql1'] = $this->_db ( 'iwide_r1' )->last_query();
+			$sql = "SELECT distinct(o.openid) as openid
+					FROM  `iwide_hotel_order_items` i
+					LEFT JOIN `iwide_hotel_orders` o ON i.orderid=o.orderid AND i.inter_id=o.inter_id
+					WHERE i.inter_id = '$inter_id' $where ";//总用户数
+			$user_count = $this->_db ( 'iwide_r1' )->query ( $sql, $para )->result_array();
+			$mydata['user_count'] = count($user_count);
+			// $data[$date]['sql2'] = $this->_db ( 'iwide_r1' )->last_query();
+			//查询粉丝占比
+			$now_fans = array();
+			foreach ($user_count as  $user) {
+				if(!in_array($user['openid'],$fans_arr)){
+					$now_fans[] = $user['openid'];
+					$fans_arr[] = $user['openid'];
+				}
+			}
+			if(!empty($now_fans)){
+				$sql = "SELECT count(if(source>1 and source<=100000 and openid!='',true,null)) as fenxiao,count(if(source>1 and source<=100000 and openid='',true,null)) as changjing,count(if(source<0,true,null)) as gonggong FROM (
+						SELECT f.source,h.openid
+						FROM  `iwide_fans_subs` f
+						LEFT JOIN `iwide_hotel_staff` h ON f.source=h.qrcode_id AND h.inter_id=f.inter_id
+						WHERE f.inter_id = '$inter_id' AND f.event=2 AND f.openid in('".implode("','",$now_fans)."') ) a";//用户来源分类
+				$user_type = $this->_db ( 'iwide_r1' )->query ( $sql )->row_array();
+				$fenxiao += $user_type['fenxiao'];//分销人员
+				$changjing += $user_type['changjing'];//场景
+				$gonggong += $user_type['gonggong'];//公共
+				$qita += count($now_fans) - $user_type['fenxiao']-$user_type['changjing']-$user_type['gonggong'];//其他
+			}
+
+			$mydata['user_fenxiao_count'] = $fenxiao;
+			$mydata['user_changjing_count'] = $changjing;
+			$mydata['user_gonggong_count'] = $gonggong;
+			$mydata['user_qita_count'] = $qita;
+
+			$sql = "SELECT count(if(ordercount>=2,true,null)) as count2,count(if(ordercount>=3,true,null)) as count3,count(if(ordercount>=5,true,null)) as count5,count(if(ordercount>=10,true,null)) as count10,sum(if(ordercount>=2,ordercount,0)) as allcount2,sum(if(ordercount>=3,ordercount,0)) as allcount3,sum(if(ordercount>=5,ordercount,0)) as allcount5,sum(if(ordercount>=10,ordercount,0)) as allcount10 FROM (
+					SELECT count(distinct(i.orderid)) as ordercount
+					FROM  `iwide_hotel_order_items` i
+					LEFT JOIN `iwide_hotel_orders` o ON i.orderid=o.orderid AND i.inter_id=o.inter_id
+					WHERE i.inter_id = '$inter_id' $where GROUP BY o.openid ) a";//总用户数
+			$count = $this->_db ( 'iwide_r1' )->query ( $sql, $para )->row_array();
+			$mycount  = array(2,3,5,10);//统计的次数
+			foreach ($mycount as $i) { 
+				$mydata['count'.$i] = $count['count'.$i];
+				$mydata['u'.$i] = round(($mydata['count'.$i]/$mydata['user_count'])*100,2);//用户复购率
+				$allcount = $count['allcount'.$i]- ($i - 1)*$count['count'.$i];//订单复购分子
+
+				$mydata['allcount'.$i] = $allcount;
+				$mydata['o'.$i] = round(($mydata['allcount'.$i]/$mydata['order_count'])*100,2);//订单复购率
+				// $data[$date]['sql3'][] = $this->_db ( 'iwide_r1' )->last_query();
+			}
+			end:
+			$data[] = $mydata;
+			$year = substr($date,0,4);
+			$month = substr($date,4,2);
+			$datearr = $this->calendar->adjust_date($month+1, $year);
+			$date = $datearr['year'].$datearr['month'];
+		}
+		return $data;
+	}
+
+	//交易数据统计(预定)
+	public function get_general_situation_in($params,$key=true)
+	{
+		$inter_id = $params ['inter_id'];
+		
+		$where = ' and o.order_time >= ? ';
+		$para [] = $params ['time_start'];
+		$where .= ' and o.order_time <= ? ';
+		$para [] = $params ['time_end'];
+
+		if (! empty ( $params ['hotel_id'] )) {
+			$where .= ' and o.hotel_id = ? ';
+			$para [] = $params ['hotel_id'];
+		}
+		if (! empty ( $params ['hotel_ids'] ) && is_array($params ['hotel_ids'])) {
+			$where .= ' and o.hotel_id in (?) ';
+			$para [] = implode(',',$params ['hotel_ids']);
+		}
+		$sql = "SELECT o.hotel_id,count(DISTINCT(i.orderid)) ocount,count(i.id) icount,sum(if((to_days(i.enddate) - to_days(i.startdate))>0,(to_days(i.enddate) - to_days(i.startdate)),1 )) roomnight,SUM(i.iprice) allprice
+				FROM iwide_hotel_order_items i 
+				LEFT JOIN iwide_hotel_orders o ON i.orderid=o.orderid AND i.inter_id=o.inter_id 
+				WHERE i.inter_id='$inter_id' $where GROUP BY o.hotel_id";
+		$data = $this->_db ( 'iwide_r1' )->query ( $sql, $para )->result_array();
+		if($key){
+			$datas = array();
+			foreach ($data as $k => $value) {
+				$datas[$value['hotel_id']] = $value;
+			}
+			$data = $datas;
+		}
+		return $data;
+	}
+
+	//交易数据统计(离店)
+	public function get_general_situation_out($params,$key=true)
+	{
+		$inter_id = $params ['inter_id'];
+		
+		$where = ' and i.leavetime >= ? ';
+		$para [] = date('Y-m-d H:i:s',$params ['time_start']);
+		$where .= ' and i.leavetime <= ? ';
+		$para [] = date('Y-m-d H:i:s',$params ['time_end']);
+		$where .= ' and i.istatus = ? ';
+		$para [] = 3;
+		if (! empty ( $params ['hotel_id'] )) {
+			$where .= ' and o.hotel_id = ? ';
+			$para [] = $params ['hotel_id'];
+		}
+		if (! empty ( $params ['hotel_ids'] ) && is_array($params ['hotel_ids'])) {
+			$where .= ' and o.hotel_id in (?) ';
+			$para [] = implode(',',$params ['hotel_ids']);
+		}
+		$sql = "SELECT o.hotel_id,count(i.id) icount,sum(if((to_days(i.enddate) - to_days(i.startdate))>0,(to_days(i.enddate) - to_days(i.startdate)),1 )) roomnight,SUM(i.iprice) allprice
+				FROM iwide_hotel_order_items i 
+				LEFT JOIN iwide_hotel_orders o ON i.orderid=o.orderid AND i.inter_id=o.inter_id 
+				WHERE i.inter_id='$inter_id' $where GROUP BY o.hotel_id";
+		$data = $this->_db ( 'iwide_r1' )->query ( $sql, $para )->result_array();
+		$datas = array();
+		foreach ($data as $k => $value) {
+			$data[$k]['avg'] = bcdiv($value['allprice'],$value['roomnight'],2);
+			if($key){
+				$datas[$value['hotel_id']] = $data[$k];
+			}
+		}
+		return $datas;
+	}
 }

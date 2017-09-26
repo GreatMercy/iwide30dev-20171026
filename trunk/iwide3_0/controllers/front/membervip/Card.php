@@ -419,7 +419,7 @@ class Card extends MY_Front_Member
 
             $member_card = $this->common_model->get_info($where, 'member_card', 'is_use,is_useoff');
             if (!empty($member_card) && $member_card['is_use'] == 't' && $member_card['is_useoff'] == 't') {
-                $this->_ajaxReturn('使用核销成功!', $this->assign_data['cardcenter_url'], 1);
+                $this->_ajaxReturn('使用核销成功!', $this->url_group['cardcenter_url'], 1);
             }
             $this->_ajaxReturn('使用核销失败!');
         }

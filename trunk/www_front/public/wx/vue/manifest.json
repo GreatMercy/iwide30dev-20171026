@@ -1,0 +1,18 @@
+{
+  "app.css": "wx/vue/css/app.1495e6579e425d5ec878f184b33a6fb7.css",
+  "app.js": "wx/vue/js/app.1640d5c9cf938dad5c06.js",
+  "bindWx.js": "wx/vue/js/bindWx.923da759005c598be222.js",
+  "dark.css": "wx/vue/css/dark.d41d8cd98f00b204e9800998ecf8427e.css",
+  "dark.js": "wx/vue/js/dark.05542ee2f702a61ede52.js",
+  "light.css": "wx/vue/css/light.d41d8cd98f00b204e9800998ecf8427e.css",
+  "light.js": "wx/vue/js/light.30bbd0d341b957d2d266.js",
+  "manifest.js": "wx/vue/js/manifest.0108e4780136632b042c.js",
+  "vendor.js": "wx/vue/js/vendor.4688c10648365cda6736.js",
+  "wx\\vue\\fonts\\iconfont.eot?t=1505895111002": "wx/vue/fonts/iconfont.b260ab6.eot",
+  "wx\\vue\\fonts\\iconfont.eot?t=1505895404772": "wx/vue/fonts/iconfont.ca41aea.eot",
+  "wx\\vue\\fonts\\iconfont.svg?t=1505895111002": "wx/vue/fonts/iconfont.b7f9379.svg",
+  "wx\\vue\\fonts\\iconfont.svg?t=1505895404772": "wx/vue/fonts/iconfont.3800e57.svg",
+  "wx\\vue\\fonts\\iconfont.ttf?t=1505895111002": "wx/vue/fonts/iconfont.950b6c6.ttf",
+  "wx\\vue\\fonts\\iconfont.ttf?t=1505895404772": "wx/vue/fonts/iconfont.7d6ddf9.ttf",
+  "wx\\vue\\fonts\\jfkFontNumber.svg?ix32gu": "wx/vue/fonts/jfkFontNumber.42e25c0.svg"
+}

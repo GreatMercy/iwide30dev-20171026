@@ -11,6 +11,7 @@ let API_EXPRESS_V1 = `${API_URL_SUFFIX_V1}/soma/express`
 let API_ROLE_V1 = `${API_URL_SUFFIX_V1}/authority/roles`
 // 账号相关
 let API_ACCOUNT_V1 = `${API_URL_SUFFIX_V1}/authority/accounts`
+let API_LOGIN_V1 = `${API_URL_SUFFIX_V1}/authority/auth`
 const v1 = {
   // 获取商品套餐列表
   GET_PACKAGE_LIST_DATAS: `${API_SOMA_V1}/package/index`,
@@ -55,7 +56,21 @@ const v1 = {
   // 权限 账户 -->获取角色权限
   GET_ACCOUNT_AUTHORITY: (process.env.NODE_ENV === 'development') ? `${API_ACCOUNT_V1}/getAccountAuth?debug=1` : `${API_ACCOUNT_V1}/getAccountAuth`,
   // 权限 账户 -->获取账户信息
-  GET_ACCOUNT_INFOR: (process.env.NODE_ENV === 'development') ? `${API_ACCOUNT_V1}/getAccountInfo?debug=1` : `${API_ACCOUNT_V1}/getAccountInfo`
+  GET_ACCOUNT_INFOR: (process.env.NODE_ENV === 'development') ? `${API_ACCOUNT_V1}/getAccountInfo?debug=1` : `${API_ACCOUNT_V1}/getAccountInfo`,
+  // 权限 账户 -->提交新增账户数据
+  POST_NEW_ACCOUNT: (process.env.NODE_ENV === 'development') ? `${API_ACCOUNT_V1}/addAccount?debug=1` : `${API_ACCOUNT_V1}/addAccount`,
+  // 权限 账户 --> 搜索账户数据
+  GET_SEARCH_PUBLIC: (process.env.NODE_ENV === 'development') ? `${API_ACCOUNT_V1}/accountsList?debug=1` : `${API_ACCOUNT_V1}/accountsList`,
+  // 权限 账户 -->获取角色
+  GET_ACCOUNT_ROLE: (process.env.NODE_ENV === 'development') ? `${API_ACCOUNT_V1}/getRoles?debug=1` : `${API_ACCOUNT_V1}/getRoles`,
+  // 权限 账户 -->生成登陆二维码
+  GET_LOGIN_QRCODE: (process.env.NODE_ENV === 'development') ? `${API_LOGIN_V1}/createQrCode?debug=1` : `${API_LOGIN_V1}/createQrCode`,
+  // 权限 账户 -->获取扫码状态
+  GET_CODE_SCAN: (process.env.NODE_ENV === 'development') ? `${API_LOGIN_V1}/checkCodeStatu?debug=1` : `${API_LOGIN_V1}/checkCodeStatu`,
+  // 权限 账户 -->编辑账户
+  POST_EDIT_ACCOUNT: (process.env.NODE_ENV === 'development') ? `${API_ACCOUNT_V1}/editAccount?debug=1` : `${API_LOGIN_V1}/editAccount`,
+  // 权限 账户 -->生成绑定二维码
+  GET_BIND_QRCODE: (process.env.NODE_ENV === 'development') ? `${API_ACCOUNT_V1}/createQrCode?debug=1` : `${API_LOGIN_V1}/createQrCode`
 }
 
 export {

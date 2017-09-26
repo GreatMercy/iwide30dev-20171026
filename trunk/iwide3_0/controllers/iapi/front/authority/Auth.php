@@ -3,6 +3,15 @@ if (! defined ( 'BASEPATH' ))
 	exit ( 'No direct script access allowed' );
 class Auth extends MY_Front_Iapi
 {
+    const SUCCESS = 1;//成功
+    const FAIL_AUTO = 2;//失败自动消失
+    const FAIL_ALTER = 3;//失败 需要点击确认
+    const UN_LOGIN = 4;//未登录
+    const UN_KNOWN = 5;//未知错误
+    const INTER_STOP = 6;//公众号已停止服务
+    const PARAM_ERROR = 10;//参数错误
+    const UN_OP = 11;//参数错误
+
 	public $common_data;
 	public $openid;
 	public $module;
@@ -27,7 +36,7 @@ class Auth extends MY_Front_Iapi
         $token = !empty($param['token']) ? addslashes($param['token']) : '';
         if (empty($token))
         {
-            $this->out_put_msg(2,'参数错误');
+            $this->out_put_msg(self::FAIL_AUTO,'参数错误');
         }
 
         //获取token
@@ -41,13 +50,13 @@ class Auth extends MY_Front_Iapi
         $token = $this->valify_tokens_model->getOne('id,admin_id,expire_time', $where);
         if (empty($token))
         {
-            $this->out_put_msg(2,'非法操作');
+            $this->out_put_msg(self::FAIL_AUTO,'非法操作');
         }
 
         //判断二维码时效性
         if ($token['expire_time'] < time())
         {
-            $this->out_put_msg(2,'绑定时间已过期，请重新扫码绑定');
+            $this->out_put_msg(self::FAIL_AUTO,'绑定时间已过期，请重新扫码绑定');
         }
 
         //获取账户信息
@@ -55,11 +64,11 @@ class Auth extends MY_Front_Iapi
         $account = $this->authority_accounts_model->getOne('admin_id,bind_status',array('admin_id' => $token['admin_id']));
         if (empty($account))
         {
-            $this->out_put_msg(2,'绑定失败，绑定账号不存在');
+            $this->out_put_msg(self::FAIL_AUTO,'绑定失败，绑定账号不存在');
         }
         else if($account['bind_status'] == 1)
         {
-            $this->out_put_msg(2,'绑定失败,账号已被绑定');
+            $this->out_put_msg(self::FAIL_AUTO,'绑定失败,账号已被绑定');
         }
 
         //绑定微信
@@ -80,10 +89,10 @@ class Auth extends MY_Front_Iapi
         {
             //设置绑定状态和时间
             $this->valify_tokens_model->updateToken(array('id' => $token['id']), array('status' => 2,'success_time' => date('Y-m-d H:i:s')));
-            $this->out_put_msg(1,'绑定成功');
+            $this->out_put_msg(self::SUCCESS,'绑定成功');
         }
 
-        $this->out_put_msg(2,'绑定失败,账号已被绑定');
+        $this->out_put_msg(self::FAIL_AUTO,'绑定失败,账号已被绑定');
     }
 
     /**
@@ -95,7 +104,7 @@ class Auth extends MY_Front_Iapi
         $token = !empty($param['token']) ? addslashes($param['token']) : '';
         if (empty($token))
         {
-            $this->out_put_msg(2,'参数错误');
+            $this->out_put_msg(self::FAIL_AUTO,'参数错误');
         }
         $this->load->model('authority/authority_accounts_model');
 
@@ -105,11 +114,11 @@ class Auth extends MY_Front_Iapi
             $ajaxData = array(
                 'list' => $account,
             );
-            $this->out_put_msg(1,'成功',$ajaxData);
+            $this->out_put_msg(self::SUCCESS,'成功',$ajaxData);
         }
         else
         {
-            $this->out_put_msg(2,'暂无数据');
+            $this->out_put_msg(self::FAIL_AUTO,'暂无数据');
         }
     }
 
@@ -123,7 +132,7 @@ class Auth extends MY_Front_Iapi
         $token = !empty($param['token']) ? addslashes($param['token']) : '';
         if (empty($adminId) || empty($token))
         {
-            $this->out_put_msg(2,'参数错误');
+            $this->out_put_msg(self::FAIL_AUTO,'参数错误');
         }
 
         //获取token
@@ -137,13 +146,13 @@ class Auth extends MY_Front_Iapi
         $token = $this->valify_tokens_model->getOne('id,expire_time,token', $where);
         if (empty($token))
         {
-            $this->out_put_msg(2,'您已经登录成功');
+            $this->out_put_msg(self::FAIL_AUTO,'您已经登录成功');
         }
 
         //判断二维码时效性
         if ($token['expire_time'] < time())
         {
-            $this->out_put_msg(2,'二维码已失效');
+            $this->out_put_msg(self::FAIL_AUTO,'二维码已失效');
         }
 
         $this->load->model('authority/authority_accounts_model');
@@ -151,7 +160,7 @@ class Auth extends MY_Front_Iapi
         $admin = $this->authority_accounts_model->getOne('*',array('admin_id' => $adminId,'openid' => $this->openid,'status' => 1,'bind_status' => 1),false);
         if (empty($admin))
         {
-            $this->out_put_msg(2,'用户不存在');
+            $this->out_put_msg(self::FAIL_AUTO,'用户不存在');
         }
 
         //设置绑定状态和时间
@@ -168,7 +177,7 @@ class Auth extends MY_Front_Iapi
         );
         $redis->set('authorityQrCode_1_'.$token['token'],json_encode($update),300);//设置缓存
 
-        $this->out_put_msg(1,'登录成功');
+        $this->out_put_msg(self::SUCCESS,'登录成功');
     }
 
     /**

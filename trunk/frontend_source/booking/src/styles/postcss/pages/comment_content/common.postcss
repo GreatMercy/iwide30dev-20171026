@@ -9,13 +9,13 @@
     margin: 0 px2rem(30);
     &::before {
       width: 100%;
-      height: 1px;
+      height: px2rem(1);
       position: absolute;
       bottom: 0;
       left: 0;
     }
     & .container {
-      padding-bottom: px2rem(69);
+      padding-bottom: px2rem(39);
       padding-left: px2rem(100);
       @mixin one-line horzin {
       };
@@ -32,6 +32,7 @@
       margin-top: px2rem(42);
       i:nth-child(2){
         font-weight: bold;
+        font-size: px2rem(42);
       }
       .font-size--108 {
         font-size: px2rem(108);
@@ -44,9 +45,10 @@
       }
     }
     .jfk-rater {
-      margin-top: px2rem(18);
+      margin-top: px2rem(27);
       & a {
         margin-right: px2rem(38) !important;
+        transform: scaleY(0.9047) !important;
         &:last-child {
           margin-right: 0 !important;
         }
@@ -54,7 +56,7 @@
     }
 
     .pregress_list {
-      margin-top: px2rem(66);
+      margin-top: px2rem(75);
       & .pregress_item {
         position: relative;
         line-height: 1;
@@ -102,6 +104,7 @@
         position: absolute;
         bottom: 0;
         left: 0;
+        height: px2rem(1);
       }
       li {
         padding: px2rem(12) px2rem(20);
@@ -121,6 +124,7 @@
       };
       &::before {
         bottom: 0;
+        height: px2rem(1);
       }
       & .contitle_info {
         position: relative;
@@ -224,22 +228,19 @@
       .check_repeat {
         margin-top: px2rem(50);
         .show_icon, .hide_icon {
-          font-size: px2rem(20);
+          font-size: px2rem(16);
+          transform: scaleY(0.5625);
           display: inline-block;
           margin-left: px2rem(10);
         }
         .show_icon {
-          transform: rotate(180deg);
-          -ms-transform: rotate(180deg);
-          -moz-transform: rotate(180deg);
-          -webkit-transform: rotate(180deg);
-          -o-transform: rotate(180deg);
+          transform: rotate(180deg) scaleY(0.5625);
         }
       }
 
       .repeat_content {
-        margin: px2rem(27) 0 0 0;
-        padding: px2rem(28) px2rem(50);
+        margin: px2rem(32) 0 0 0;
+        padding: px2rem(33) px2rem(50);
         border-radius: px2rem(6);
         line-height: px2rem(46);
       }

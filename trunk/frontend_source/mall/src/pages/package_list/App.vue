@@ -298,7 +298,7 @@
           }, {
             type: 'integer', message: '请输入正确的数量'
           }, {
-            validator: numberRequired, message: '请输入正确的库存'
+            validator: numberRequired, message: '库存不足'
           }]
         },
         validResult: {

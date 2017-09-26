@@ -150,12 +150,22 @@ export default {
           this.menulist.push(this.data.menu[item][inItem])
         }
       }
+      this.menulist = this.getArray(this.menulist)
       if (this.data.member_status !== 1 && this.data.centerinfo.value === 'login') {
         this.data.page_resource.links.perfectinfo = 'javascript:;'
       }
     })
   },
   methods: {
+    getArray (arr) {
+      let result = []
+      for (let i = 0; i < arr.length; i++) {
+        if (result.indexOf(arr[i]) === -1) {
+          result.push(arr[i])
+        }
+      }
+      return result
+    }
   }
 }
 </script>

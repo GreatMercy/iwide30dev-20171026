@@ -8,16 +8,10 @@
         height: 100%;
         display: none;
       }
-      &.is-one-item {
-        .jfk-swiper__item-box {
-          border-radius: 0;
-        }
-      }
     }
     .jfk-swiper__item-box {
       padding-bottom: 50%;
       display: block;
-      border-radius: px2rem(var(--border-radius-big));
       overflow: hidden;
     }
     .swiper-lazy-loaded,.jfk-image__lazy[lazy="loaded"]{
@@ -36,6 +30,18 @@
         text-align: right;
         &-current{
           font-size: calc(32 / 24)em;
+        }
+      }
+    }
+    &.not-full {
+      .jfk-swiper__item-box {
+        border-radius: px2rem(var(--border-radius-big));
+      }
+      .jfk-banner__item {
+        &.is-one-item {
+          .jfk-swiper__item-box {
+            border-radius: 0;
+          }
         }
       }
     }

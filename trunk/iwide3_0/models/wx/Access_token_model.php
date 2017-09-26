@@ -403,6 +403,20 @@ class Access_token_model extends CI_Model {
 		}
 		return $str;
 	}
+
+    public function get_ticket_db($inter_id, $type, $return_expire_time = FALSE) {
+        $db_read = $this->load->database('iwide_r1',true);
+        $db_read->where ( array ( 'inter_id' => $inter_id, 'type' => $type ) );
+        $db_read->limit ( 1 );
+        $access_token_query = $db_read->get ( 'access_tokens' )->row ();
+        log_message('debug', 'GET_ACCESS_TOKEN_DB | '.$inter_id .' | '.$type.' | '.json_encode($access_token_query));
+        if (isset ( $access_token_query->access_token ) && ( $access_token_query->expire - time () > 0 || $type == self::COMPONENT_VERIFY_TICKET || $type == self::AUTHORIZER_REFRESH_TOKEN)){
+            log_message('debug', 'RETURN FROM DB | '.$inter_id .' | '.$type.' | ');
+            return $return_expire_time ? array ( 'ticket' => $access_token_query->access_token, 'expire_in' => $access_token_query->expire ) : $access_token_query->access_token;
+        }else
+            return $this->__reflush_ticket ( $inter_id, $type, $return_expire_time );
+        return FALSE;
+    }
 	
 	function get_wxa_access_token($inter_id,$return_expire_time = FALSE) {
 		$token_type=22;

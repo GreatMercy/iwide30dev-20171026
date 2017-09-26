@@ -19,7 +19,7 @@
       </swiper>
     </div>
 
-    <div class="button-box gift-theme-btn">
+    <div class="button-wrap gift-theme-btn">
       <a href="javascript:void(0);" class="jfk-button jfk-button--default jfk-button--primary is-special" @click="choiceTheme">确&nbsp;定</a>
     </div>
 

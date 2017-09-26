@@ -70,7 +70,8 @@
 
           <!--已退款 开始-->
           <template v-else-if="item.refund_status === '33'">
-            <a :href="item.order_detail_link || 'javascript:void(0)'" class="order-list__disabled">
+            <a :href="item.order_detail_link || 'javascript:void(0)'"
+               :class="{'order-list__disabled': item.refund_info_status === 3 || item.refund_info_status === '3'}">
               <div class="jfk-flex is-align-middle order-list__order-info">
                 <div class="font-size--28 order-list__order-id" v-html="'订单号：' + item.order_id"></div>
                 <div class="font-size--30 jfk-ta-r order-list__status color-golden" v-if="item.refund_info_status === 1 || item.refund_info_status === '1'">退款中</div>

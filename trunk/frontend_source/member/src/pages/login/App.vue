@@ -11,7 +11,7 @@
   				</div>
   				<div class="flex_1 font_14 form-item">
             <div class="form-item__body">
-              <input @keyup="setRemove($event)" :type="value.type" :name="key" :placeholder="value.note" maxlength="20">
+              <input @keyup="setRemove($event)" :type="value.type" :name="key" :placeholder="value.note" maxlength="20"  @focus="handleHiddenError(key)">
               <div class="form-item__status is-error" v-show="value.passed" @click="handleHiddenError(key)">
                 <i class="form-item__status-icon jfk-font icon-msg_icon_error_norma"></i>
                 <span class="form-item__status-tip">
@@ -111,7 +111,13 @@ export default {
       }
 
       if (setBol) {
+        this.toast = this.$jfkToast({
+          duration: -1,
+          iconClass: 'jfk-loading__snake',
+          isLoading: true
+        })
         postLogin(setDate).then((res) => {
+          this.toast.close()
           if (res.status === 1000) {
             window.location.href = res.web_data.page_resource.links.next
           } else {

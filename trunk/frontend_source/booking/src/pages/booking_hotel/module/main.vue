@@ -55,9 +55,9 @@
           </p>
           <p class="title_info_ht_place font-size--24">
             <a :href="page_resource.HOTEL_DETAIL">
-              <i class="booking_icon_font icon-booking_icon_businessdistrict_norma font-size--24"></i>
+              <i class="booking_icon_font icon-booking_icon_businessdistrict_norma font-size--26"></i>
               {{allData.hotel.address}}
-              <i class="booking_icon_font icon-booking_icon_right_normal font-size--24"></i>
+              <i class="booking_icon_font icon-booking_icon_right_normal font-size--20"></i>
             </a>
           </p>
           <!--<p class="btn_group">-->
@@ -72,14 +72,15 @@
         <div class="score_info">
           <a :href="page_resource.HOTEL_COMMENT">
           <span class="score_info_score" v-if="allData != ''">
-            <span class="font">{{allData.t_t.comment_score}}</span>分
+            <span class="font">{{allData.t_t.comment_score}}</span><span class="font-size--28">分</span>
           </span>
             <span class="star_info">
             <span class="star_info_5">
             <jfk-rater
               :disabled="true"
               :value="allData.t_t.comment_score"
-              :fontSize="16"
+              :margin=".5" 
+              :fontSize="1"
               v-if="allData != ''">
             </jfk-rater>
             </span>
@@ -90,7 +91,7 @@
           </a>
           <span class="center_line"></span>
           <span class="live_date" @click="showCalenDar()">
-          <span class="live">入住</span>{{startDate}}<br/><span class="live">离店</span>{{endDate}}
+          <span class="live">入住</span><span class="grayColor333">{{startDate}}</span><br/><span class="live">离店</span><span class="grayColor333">{{endDate}}</span>
           <i class="booking_icon_font icon_arrow icon-booking_icon_dropdown_normal"></i>
         </span>
         </div>
@@ -99,7 +100,7 @@
         <!--可切换的头部 两个tab-->
         <div class="hotel_info_title">
           <!--两者不为空-->
-          <span v-if="packagesInfo">
+          <span v-if="packagesInfo != '' && packagesInfo.length !== 0">
           <span class="hotel_info_title_item item1"
                 @click="changeTabEvt(true)"
                 :class="[changeTab ? activeClass : '']">
@@ -112,13 +113,13 @@
           </span>
         </span>
           <!--有一个为空-->
-          <span v-if="!packagesInfo">
-          <span class="hotel_info_title_item justItem1 active">
+          <span v-if="!packagesInfo || packagesInfo.length === 0">
+          <span class="hotel_info_title_item justItem1 active boderWhite">
             <span>预定酒店</span>
           </span>
         </span>
           <span class="hotel_info_title_item font-size--24 item3" @click="showPryCode=true">商务入口
-        <i class="booking_icon_font icon-booking_icon_right_normal font-size--24"></i>
+        <i class="booking_icon_font icon-booking_icon_right_normal font-size--20"></i>
         </span>
         </div>
         <!--预定酒店-->
@@ -137,38 +138,41 @@
               </span>
             </span>
                 <ul class="room_type_ul">
-                  <li v-if="item.room_info.area">{{item.room_info.area}}m²</li>
+                  <li class="font-size--24" v-if="item.room_info.area">{{item.room_info.area}}m²</li>
                   <li v-if="item.room_info.sub_des">{{item.room_info.sub_des}}</li>
                 </ul>
               </div>
             </div>
             <div class="hotel_info_room_price">
           <span class="price" v-if="item.showStatus">
-            <span class="font-size--42 sFont">¥{{item.room_info.oprice}}</span> 门市价
+            <span class="font-size--32 sFont"><i class="font-size--30">¥</i>{{item.room_info.oprice}}</span> 门市价
           </span>
               <span class="price" v-if="!item.showStatus">
             <span class="jfk-price product-price-package color-golden font-size--54">
               <i class="jfk-font-number jfk-price__currency">￥</i>
-              <i class="jfk-font-number jfk-price__number">{{item.lowest}}</i></span> 起
+              <i class="jfk-font-number jfk-price__number font-size--54">{{item.lowest}}</i></span> <span class="font-size--24">起</span>
           </span>
-
-              <span class="shBtn" @click="showroom(index)">
-            <span :class="item.showStatus ? '' : showIcon">
-              <i class="booking_icon_font icon-booking_icon_up_normal font-size--24"></i>
-            </span><span class="font-size--24">{{item.showWord}}</span>
+            <span class="shBtn" @click="showroom(index)">
+              <span :class="item.showStatus ? '' : showIcon">
+                <i class="booking_icon_font icon-booking_icon_up_normal font-size--24 grayColor80"></i>
+              </span><span class="font-size--24 grayColor80">{{item.showWord}}</span>
             </span>
             </div>
             <div class="room_price_ul_container">
-          <span class="price_icon">
+          <span class="price_icon" v-show="item.showStatus">
             <i class="booking_icon_font icon-booking_icon_dropdown_normal"></i>
           </span>
               <ul class="room_price_ul" v-show="item.showStatus">
                 <li v-for="(value, object) in item.state_info" :key="object">
                 <span class="price_type font-size--30">
                 {{value.price_name}}
-                  <i class="booking_icon_font icon-booking_icon_question_normal font-size--24" @click="showPriceTip(item)"></i><br/>
-                <span class="belong blueColor" v-if="value.useable_coupon_favour">
+                  <i class="booking_icon_font icon-booking_icon_question_normal font-size--24" @click="showPriceTip(item, value)"></i><br/>
+                <span class="belong blueColor" v-if="value.useable_coupon_favour && value.coupon_type !== 'discount'">
                   券可减{{value.useable_coupon_favour}}元
+                  <br>
+                </span>
+                <span class="belong blueColor" v-if="value.useable_coupon_favour && value.coupon_type === 'discount'">
+                  可用 {{Number(value.useable_coupon_favour) * 10}}折券
                   <br>
                 </span>
                 <span class="belong blueColor" v-if="value.wxpay_favour_sign === 1">
@@ -179,29 +183,27 @@
                   {{value.bookpolicy_condition.breakfast_nums}}
                   </span>
                   <span class="price_num font-size--32">
-                ¥{{value.avg_price}}
+                <span class="font-size--24 mr">¥</span>{{value.avg_price}}
                 </span>
                   <span v-if="value.book_status === 'available'">
                     <span class="pay_btn hasline"
                           v-if="value.condition.pre_pay === 1"
                           @click="collectItem(item, value.price_code, value.price_type, 1)">
                       <span class="topWord">
-                        <i class="booking_icon_font icon-font_zh_yv_qkbys ft-18"></i>
-                        <i class="booking_icon_font icon-font_zh_ding__qkbys ft-18"></i>
+                        <i class="booking_icon_font icon-font_zh_yv_qkbys ft-18"></i><i class="booking_icon_font icon-font_zh_ding__qkbys ft-18"></i>
                       </span>
                       <span class="needpaybefore ft-18">
                         需预付
                       </span>
                      </span>
                     <span class="pay_btn" @click="collectItem(item, value.price_code, value.price_type, 1)" v-else>
-                      <i class="booking_icon_font icon-font_zh_yv_qkbys font-size--24"></i>
-                      <i class="booking_icon_font icon-font_zh_ding__qkbys font-size--24"></i>
+                      <i class="booking_icon_font icon-font_zh_yv_qkbys font-size--32"></i><i class="booking_icon_font icon-font_zh_ding__qkbys font-size--32"></i>
                     </span>
                 </span>
                   <span v-if="value.book_status !== 'available'">
                   <span class="pay_btn">
-                    <i class="booking_icon_font icon-font_zh_man_qkbys font-size--24"></i><i
-                    class="booking_icon_font icon-font_zh_fang_qkbys font-size--24"></i>
+                    <i class="booking_icon_font icon-font_zh_man_qkbys font-size--32"></i>
+                    <i class="booking_icon_font icon-font_zh_fang_qkbys font-size--32"></i>
                   </span>
                 </span>
                 </li>
@@ -226,7 +228,7 @@
               </span>
             </span>
                 <ul class="room_type_ul">
-                  <li v-if="item.room_info.area">{{item.room_info.area}}m²</li>
+                  <li class="font-size--24" v-if="item.room_info.area">{{item.room_info.area}}m²</li>
                   <li v-if="item.room_info.sub_des">{{item.room_info.sub_des}}</li>
                 </ul>
               </div>
@@ -247,8 +249,8 @@
                <span class="chooseBtn"
                      v-else
                      @click="goProductChoose(item)">
-                <i class="booking_icon_font icon-font_zh_xuan__qkbys ft-18"></i><i
-                 class="booking_icon_font icon-font_zh_ze_qkbys ft-18"></i>
+                <i class="booking_icon_font icon-font_zh_xuan__qkbys ft-18"></i> 
+                <i class="booking_icon_font icon-font_zh_ze_qkbys ft-18"></i>
               </span>
             </span>
             <span v-else="item.book_status !== 'available'">
@@ -262,7 +264,7 @@
       <!--酒店政策-->
       <div class="ht_int">
         <p class="title font-size--32">酒店政策</p>
-        <p class="ht_int_item" v-show="allData.hotel.book_policy" v-html="allData.hotel.book_policy"
+        <p class="ht_int_item font-size--24 grayColor80" v-show="allData.hotel.book_policy" v-html="allData.hotel.book_policy"
            v-if="allData != ''"></p>
         <p class="ht_int_item" v-else>无</p>
       </div>
@@ -322,13 +324,12 @@
               <p v-if="allData !== ''" v-html="packageDescData.book_policy"></p>
             </div>
             <div class="packageDescDetail font-size--28"
-                 v-show="!isRoomStatus"
-                 v-for="(value, key) in packageDescDetail.items">
+                 v-show="!isRoomStatus">
               <p>订购须知</p>
               <p>{{packageDescDetail.sale_notice}}</p>
               <p>套餐明细</p>
-              <p>{{value.goods_name}}</p>
-              <div class="del" v-html="value.details"></div>
+              <p v-for="(value, key) in packageDescDetail.items">{{value.goods_name}}</p>
+              <div class="del" v-for="(value, key) in packageDescDetail.items" v-html="value.details"></div>
             </div>
           </div>
         </div>
@@ -348,20 +349,18 @@
         </div>
       </section>
       <!--价格解释弹窗-->
-      <section class="whole_eject" v-show="showInfoStatus">
+      <section class="whole_eject" v-show="showInfoStatus" v-if="showInfo.currentItem">
         <div class="jfk-pl-30 jfk-pr-30">
           <div class="whole_eject_small bg_282828 pad_lr60 pad_b60">
-            <i class="jfk-font close iconfont color6 icon-user_icon_jump_normal icon-icon_close"
+            <i class="jfk-font close iconfont color6 icon-icon_close"
                @click="showInfoStatus=false"></i>
             <div>
-              <p class="color1 font-size--32 center">金房卡会员价</p>
+              <p class="color1 font-size--32 center">{{showInfo.currentItem.price_name}}</p>
               <p class="priceWord"
-                 v-for="(item, index) in showInfo.show_info" v-if="JSON.stringify(showInfo.show_info) !== '{}'">
+                 v-for="(item, index) in showInfo.show_info" v-if="JSON.stringify(showInfo.show_info) !== '{}' && showInfo.currentItem.price_type === 'member'">
                 {{item.price_name}}{{item.avg_price}}{{item.related_des}}
               </p>
-              <p class="priceWord" v-else v-for="(value, key) in item.state_info">
-                {{value.price_name}}{{value.des}}
-              </p>
+              <p class="priceWord" v-else v-html="showInfo.currentItem.des"></p>
               <div class="iconfont button spacing font-size--32 mar_t80" @click="showInfoStatus=false">确定</div>
             </div>
           </div>
@@ -531,6 +530,12 @@
             _this.$set(_this.rooms[key], 'showWord', '收起')
             _this.$set(_this.rooms[key], 'showStatus', true)
           }
+          if (_this.allData.startdate && _this.allData.enddate) {
+            _this.startString = _this.dealDate(_this.allData.startdate)
+            _this.endString = _this.dealDate(_this.allData.enddate)
+            _this.startDate = _this.startString.substring(5, 10)
+            _this.endDate = _this.endString.substring(5, 10)
+          }
           if (loading) {
             loading.close()
           }
@@ -540,6 +545,13 @@
           }
           console.log(e)
         })
+      },
+      dealDate (date) {
+        let year = date.substring(0, 4)
+        let month = date.substring(4, 6)
+        let day = date.substring(6, 8)
+        let returnDate = year + '/' + month + '/' + day
+        return returnDate
       },
       // 预订酒店 收起 与更多的状态控制
       showroom (index) {
@@ -650,13 +662,13 @@
       },
       // 显示日历
       showCalenDar () {
-        let _self = this
+        let _this = this
         let today = new Date()
-        _self.min = today
-        _self.max = _self.setDateMonth()
+        _this.min = today
+        _this.max = _this.setDateMonth()
         this.showCalendar = true
         const cb = () => {
-          _self.showCalendar = false
+          _this.showCalendar = false
         }
         // 调用日期插件
         showFullLayer(null, '选择日期', location.href, cb)
@@ -855,11 +867,10 @@
         })
       },
       // 显示价格弹窗
-      showPriceTip (item) {
-        this.logJSON(item)
+      showPriceTip (item, value) {
         this.showInfoStatus = true
         this.showInfo = item
-        this.logJSON(this.showInfo)
+        this.showInfo.currentItem = value
       },
       // 取消收藏
       cancelCollectionHotel () {

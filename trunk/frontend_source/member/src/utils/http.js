@@ -69,11 +69,25 @@ const OENIDREG = /(|&|\?)open_id=([^&]+)?/
 
 export default {
   post (url, data, config) {
-    let _config = Object.assign({}, {data: data, url: url, method: 'post'}, config)
+    let _data = {}
+    if (process.env.NODE_ENV !== 'development' && window.jfkParam) {
+      let paramData = window.jfkParam
+      _data = Object.assign({}, paramData, data)
+    } else {
+      _data = data
+    }
+    let _config = Object.assign({}, {data: _data, url: url, method: 'post'}, config)
     return axios(_config).then(checkStatus).then(checkCode)
   },
   get (url, data, config) {
-    let _config = Object.assign({}, {params: data, method: 'get', url: url}, config)
+    let _data = {}
+    if (process.env.NODE_ENV !== 'development' && window.jfkParam) {
+      let paramData = window.jfkParam
+      _data = Object.assign({}, paramData, data)
+    } else {
+      _data = data
+    }
+    let _config = Object.assign({}, {params: _data, method: 'get', url: url}, config)
     return axios(_config).then(checkStatus).then(checkCode)
   },
   put (url, data, config) {

@@ -50,7 +50,7 @@ class MY_Front_Soma extends MY_Front
         'a489326393',//都江堰紫坪铺滑翔伞飞行营地
         'a494820079',//成都群光君悦酒店
         'a496652649',//株洲万豪
-        'a497580480',// 苏州吴宫泛太平洋酒店
+        //'a497580480',// 苏州吴宫泛太平洋酒店
         'a499046681',
         'a492763532',
         //'a498545803',
@@ -201,11 +201,22 @@ class MY_Front_Soma extends MY_Front
         if ($this->isNewTheme()) {
             $this->load->model('soma/shard_config_model', 'model_shard_config');
             $this->db_shard_config = $this->model_shard_config->build_shard_config($this->inter_id);
-            //雅高定制版本商城
-            if($this->inter_id == 'a502245149'){
+
+            //定制版本商城
+            $this->load->config('soma_theme_config.php');
+            $configInterIds = $this->config->item('inter_id');
+            $items = empty($configInterIds[$this->inter_id]) ? [] : $configInterIds[$this->inter_id];
+            if(!empty($items)){
+                foreach ($items as $val){
+                    if($val['tkid'] == $this->input->get('tkid')){
+                        $_GET['brandname'] = $val['brandname'];
+                        break;
+                    }
+                }
                 $this->version = 2;
                 $this->path = 'SOMAACCOR';
             }
+
             $this->saveQueryParams();
             $this->initViewData();
 
@@ -423,24 +434,15 @@ EOF;
 
         //tkid
         $tkid = $this->input->get('tkid', null, '');
-        //if($tkid){
-            //$redis->set($this->inter_id.'_is_', $tkid, $ttl);
-        $this->session->set_tempdata('theme_tkid_', $tkid, $ttl);
-        //}
+        $this->session->set_tempdata('theme_tkid', $tkid, $ttl);
 
         //brandname
         $brandname = $this->input->get('brandname', null, '');
-        //if($brandname){
-            //$redis->set('brandname', $brandname, $ttl);
-            //$redis->set($this->inter_id.'_is_'.$brandname, $brandname, $ttl);
-            $this->session->set_tempdata('theme_brandname', $brandname, $ttl);
-        //}
+        $this->session->set_tempdata('theme_brandname', $brandname, $ttl);
 
         //layout
         $layout = $this->input->get('layout', null, '');
         if($layout){
-            //$redis->set('layout', $layout, $ttl);
-            //$redis->set($this->inter_id.'_is_'.$layout, $layout, $ttl);
             $this->session->set_tempdata('theme_layout', $layout, $ttl);
 
         }
@@ -844,15 +846,15 @@ var _hmt = _hmt || [];
     protected function _get_sign_package($inter_id, $url = '')
     {
         $this->load->helper('common');
-        $this->load->model('wx/access_token_model');
-        $jsapiTicket = $this->access_token_model->get_api_ticket($inter_id);
-
+        $this->load->model('wx/Access_token_model', 'access_token_model');
+        //$jsapiTicket = $this->access_token_model->get_api_ticket($inter_id);
+        $jsapiTicket = $this->access_token_model->get_ticket_db($inter_id, 1);
         if (!$url) {
             $url = Url::current();
         }
 
         $timestamp = time();
-        $nonceStr = createNonceStr();
+        $nonceStr = $this->access_token_model->createNonceStr();
         $public = $this->public_info;
 
         // 这里参数的顺序要按照 key 值 ASCII 码升序排序

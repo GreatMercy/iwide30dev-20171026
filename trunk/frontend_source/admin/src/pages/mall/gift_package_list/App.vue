@@ -54,6 +54,7 @@
         <el-table-column prop="nickname" label="领取人" align="center"></el-table-column>
         <el-table-column prop="add_time" label="领取时间" align="center"></el-table-column>
         <el-table-column prop="gift_num" label="领取份数" align="center"></el-table-column>
+        <el-table-column prop="order_code_num" label="券码数量" align="center"></el-table-column>
         <el-table-column prop="consume_num" label="已核销券码数量" align="center"></el-table-column>
       </el-table>
       <el-pagination
@@ -140,6 +141,14 @@
         this.form.endTime = value
       },
       exportTable () {
+        const data = {
+          order_id: this.orderId || '',
+          startTime: this.form.startTime || '',
+          endTime: this.form.endTime || '',
+          recordInfo: this.info || '',
+          salerName: this.name || ''
+        }
+        window.open(`/index.php/soma/gift_delivery/exportGiftExcel?order_id=${data.order_id}&start_time=${data.startTime}&end_time=${data.endTime}&record_info=${data.recordInfo}&saler_name=${data.salerName}`)
       },
       // 搜索
       search () {
@@ -166,7 +175,6 @@
         })
       },
       handleCurrentChange () {
-        this.page = 1
         this.getResult()
       }
     }

@@ -28,7 +28,7 @@
               <p class="font_12 margin_top_18 color3">{{value.last_update_time}}</p>  
             </div>
             <div class="jfk-font main_color1">
-              <span class="jj-ico" v-if="value.log_type === '1'">+</span><span class="jj-ico" v-else>-</span> <em class="iconfonts font_25"> {{value.amount}}</em>
+              <span class="jj-ico">+</span><em class="iconfonts font_25"> {{value.amount}}</em>
             </div>
           </div>
           <div v-show="bounsList.bonuslist.length === 0" class="center margin_top_18">
@@ -43,7 +43,7 @@
               <p class="font_12 margin_top_18 color3">{{value.last_update_time}}</p> 
             </div>
             <div class="jfk-font main_color1">
-              <span class="jj-ico" v-if="value.log_type === '1'">+</span><span class="jj-ico" v-else>-</span> <em class="iconfonts font_25"> {{value.amount}}</em>
+              <span class="jj-ico">-</span><em class="iconfonts font_25"> {{value.amount}}</em>
             </div>
           </div>
           <div v-show="rechargeList.bonuslist.length === 0" class="center margin_top_18">

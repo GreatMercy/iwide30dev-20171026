@@ -9,7 +9,7 @@
           <i class="jfk-font-number jfk-price__number font-size--88">{{pointNum}}</i>
           <span class="jfk-font-number jfk-price__number font-size--36">分</span>
         </p>
-        <jfk-rater :disabled="true" :value="score.comment_score" :margin="25" :fontSize="28"></jfk-rater>
+        <jfk-rater :disabled="true" :value="score.comment_score" :margin="1.5625" :fontSize="1.8125"></jfk-rater>
         <pregress :allWidth="allWidth" :score="score" :comment_config="comment_config"/>
       </div>
     </div>
@@ -38,7 +38,7 @@
           <span class="score grayColor33">
             <span class="font-size--32">{{item.intNum}}.</span>
             <span class="font-size--28">{{item.pointNum}}</span>
-            <span class="font-size--12">分</span>
+            <span class="font-size--18">分</span>
           </span>
         </div>
         <p :style="{height : setHeight[index]}" class="comment font-size--28" ref="commentHeight">{{item.content}}</p>
@@ -53,7 +53,7 @@
           <p v-if="item.hotelReplyStatus === '1'" class="check_repeat font-size--28 grayColor80"
              @click="changeHotelReply(index,'2')">
             <span>查看酒店回复</span>
-            <i class="booking_icon_font font-size--24 icon-booking_icon_up_normal grayColorbf show_icon"></i>
+            <i class="booking_icon_font font-size--16 icon-booking_icon_up_normal grayColorbf show_icon"></i>
           </p>
           <p class="check_repeat font-size--28 grayColor80" @click="changeHotelReply(index,'1')" v-else>
             <span>收起酒店回复</span>

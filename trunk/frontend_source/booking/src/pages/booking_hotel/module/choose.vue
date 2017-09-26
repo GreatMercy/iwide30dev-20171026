@@ -2,7 +2,6 @@
   <div class="jfk-pages jfk-pages__productChoose">
     <div v-show="!showSubmitOrder">
       <div class="jfk-pages__theme"></div>
-      <!--  <good-list class="jfk-tab__body-item" :products="products" :detailUrlPrefix="detailUrlPrefix" :layout="layout" v-infinite-scroll="loadMore" infinite-scroll-disabled="disableLoadProduct" infinite-scroll-distance="60"></good-list> -->
       <div class="choose_prt_top">
         <p class="choose_prt_top_item1 font-size--32">
           请勾选你需要的商品
@@ -27,12 +26,12 @@
                     <label class="check main_color1">
                       <input type="checkbox"
                              class="room_check"
-                             @click="addRoom($event, value, key)">
-                      <!--:checked="value.checked"-->
+                             @click="addRoom($event, value, key)" 
+                             v-if="value.countNum !== 0">
                       <em></em>
                     </label>
                     <div class="product-info-cont">
-                      <h3 class="product-title font-size--32 font-color-dark-white">{{value.goods_name}}</h3>
+                      <h3 class="product-title font-size--32 font-color-dark-white" :class="value.countNum !== 0 ? '' : 'noLabel'">{{value.goods_name}}</h3>
                       <div class="product-price">
                       <span class="jfk-price product-price-package color-golden font-size--54">
                       <i class="jfk-font-number jfk-price__currency">￥</i>
@@ -48,13 +47,15 @@
                           <i class="booking_icon_font icon-booking_icon_right_normal font-size--24">
                           </i>
                         </span>
+                        <span v-if="value.countNum === 0" class="font-size--28 clear">售罄</span>
                       </span>
                       </div>
                       <div class="count jfk-d-ib font-size--32 set_num">
                         <jfk-input-number v-model="value.countNum"
                                           :min="1"
                                           :max="value.nums"
-                                          @click.native.prevent="setAllPrice()">
+                                          @click.native.prevent="setAllPrice()" 
+                                          v-if="value.countNum !== 0">
                         </jfk-input-number>
                       </div>
                     </div>
@@ -126,7 +127,8 @@
         xprice_code: {},
         datas: {},
         price_type: {},
-        package_info: ''
+        package_info: '',
+        inputCheckArr: []
       }
     },
     methods: {
@@ -139,11 +141,11 @@
         }
         for (let key in this.item.package_info.items) {
           // 设置默认选中数量
-          this.item.package_info.items[key].countNum = this.item.package_info.items[key].selectnum
+          this.item.package_info.items[key].countNum = Number(this.item.package_info.items[key].selectnum)
+          this.item.package_info.items[key].nums = Number(this.item.package_info.items[key].nums)
           // 设置显示状态
           this.item.package_info.items[key] = Object.assign({}, this.item.package_info.items[key], {product_show_status: true})
         }
-        // nums datas protrol_code(商务协议码)
         // more_room（接口RETURN_MORE_ROOM）
         this.packages = this.alldata.packages
         this.sendData.hotel_id = this.alldata.hotel.hotel_id
@@ -153,6 +155,7 @@
         this.sendData.room_id = this.item.room_info.room_id
         this.sendData.startdate = this.item.startDate
         this.sendData.enddate = this.item.endDate
+        // nums datas protrol_code(商务协议码)
         this.sendData.protrol_code = this.item.protrol_code
         this.datas = {}
         this.xprice_type = {}
@@ -160,23 +163,27 @@
         this.xprice_code[this.sendData.room_id] = this.sendData.price_code
         this.sendData.select_package = []
         // 设置选中状态
-        this.setProductChoose()
+        let _this = this
+        setTimeout(function () {
+          _this.setProductChoose()
+        }, 200)
       },
       // 商品设置默认选中
       setProductChoose () {
-        console.log(this.item, ' ============== item')
 //        for (let key in this.item.package_info.items) {
 //           // 设置默认选中数量
 //          if (this.item.package_info.items[key].selectnum > 0) {
-//            this.item.package_info.items[key].checked = true
-//            this.sendData.select_package.push(this.item.package_info.items[key])
-//            this.item.package_info.items[key].indexVal = key
+//            this.$set(this.item.package_info.items[key], 'checked', true)
 //          } else {
-//            this.item.package_info.items[key].checked = false
+//            this.$set(this.item.package_info.items[key], 'checked', false)
 //          }
 //        }
         // 计算总价
-        this.setAllPrice()
+//        this.setAllPrice()
+        let roomCheck = document.querySelectorAll('.room_check')
+        if (!roomCheck[0].checked) {
+          roomCheck[0].click()
+        }
       },
       setDetailStatus (key) {
         if (this.item.package_info.items[key].product_show_status === false) {
@@ -205,7 +212,7 @@
       },
       setAllPrice () {
         let num = 0
-        for (var keyIndex in this.sendData.select_package) {
+        for (let keyIndex in this.sendData.select_package) {
           num += Number(this.sendData.select_package[keyIndex].price) * Number(this.sendData.select_package[keyIndex].countNum)
         }
         this.allPrice = Number(num) + Number(this.item.state_info.avg_price)

@@ -85,7 +85,8 @@
         <button class="jfk-button jfk-button--default jfk-button--primary is-special" @click="give">确定赠送</button>
       </div>
 
-      <a :href="giftInfo.order_list_url || 'javascript:void(0)'" class="jfk-ta-c font-size--28 gift-put-order" v-if="giftInfo.order_list_url">
+      <a :href="giftInfo.order_list_url || 'javascript:void(0)'" class="jfk-ta-c font-size--28 gift-put-order"
+         v-if="giftInfo.order_list_url">
         暂不处理，放至订单中心<i class="jfk-d-ib jfk-font icon-user_icon_jump_normal"></i>
       </a>
 
@@ -131,6 +132,7 @@
         giftsPersonNumber: 1, // 收礼的人数
         giftsPersonMax: 1, // 收礼的人数最大数值
         giftsAverageNumber: 1, // 每人多少盒
+        loading: false, // 判断是否加载过
         giftsAverageMax: 1 // 每人多少盒的最大值
       }
     },
@@ -156,7 +158,32 @@
       },
       // 选择主题
       choiceTheme () {
-        this.$router.push({path: '/themes'})
+        if (this.giftInfo && this.giftInfo['gift_theme'] && this.giftInfo['gift_theme'].length > 0) {
+          if (this.giftInfo['gift_theme'][0] && this.giftInfo['gift_theme'][0]['theme']) {
+            if (this.loading === true) {
+              this.$router.push({path: '/themes'})
+              return false
+            }
+            this.toast = this.$jfkToast({
+              duration: -1,
+              iconClass: 'jfk-loading__snake',
+              isLoading: true
+            })
+            let img = new Image()
+            img.src = this.giftInfo['gift_theme'][0]['theme']
+            img.onload = () => {
+              this.loading = true
+              this.toast.close()
+              this.$router.push({path: '/themes'})
+            }
+            img.onerror = () => {
+              this.$jfkToast('网络异常，请稍后重试!')
+              this.toast.close()
+            }
+          }
+        } else {
+          this.$jfkToast('暂无主题')
+        }
       },
       // 确定赠送
       give () {

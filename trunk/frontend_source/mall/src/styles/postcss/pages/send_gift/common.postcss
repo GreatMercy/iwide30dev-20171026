@@ -1,10 +1,29 @@
 /* 转赠 */
 .jfk-pages__send-gift {
+
+  .button-wrap {
+    margin-top: px2rem(44);
+    margin-left: auto;
+    margin-right: auto;
+    width: px2rem(590);
+
+    .jfk-button {
+      width: 100%;
+      height: px2rem(84);
+      line-height: px2rem(84);
+      font-size: px2rem(34);
+      box-sizing: content-box;
+    }
+  }
+
   .button-box {
     margin-top: px2rem(44);
     margin-left: auto;
     margin-right: auto;
     width: px2rem(590);
+    @media screen and (min-width: 414px) {
+      padding-top: px2rem(80);
+    }
 
     @media screen and (max-width: 320px) {
       width: px2rem(506);
@@ -182,6 +201,10 @@
   .gift-theme-list {
     padding-top: px2rem(70);
 
+    @media screen and (min-width: 414px) {
+      padding-top: px2rem(90);
+    }
+
     &__box {
       position: relative;
       overflow: hidden;
@@ -204,8 +227,17 @@
       position: relative;
       overflow: hidden;
 
+      @media screen and (min-width: 414px) {
+        width: px2rem(642);
+        height: px2rem(956);
+      }
+
       .gift-theme-list__imgbox {
         height: px2rem(746);
+
+        @media screen and (min-width: 414px) {
+          height: px2rem(826);
+        }
 
         @media screen and (max-width: 320px) {
           height: px2rem(638);

@@ -78,20 +78,22 @@ class SkinService extends HotelBaseService
         $this->getCI()->db->trans_start();
 
         //保存分享设置
-        $data['id'] = $post['share_setting']['id'] ? $post['share_setting']['id'] : 0;
-        $data ['param_value'] = json_encode(
-            [
-                'page_title' => $post['share_setting']['page_title'],
-                'page_desc' => $post['share_setting']['page_desc'],
-                'share_icon' => $post['share_setting']['share_icon'],
-            ]
-        );
-        $data ['param_name'] = 'SHARE_SETTING';
-        $data ['module'] = 'HOTEL';
-        $data ['inter_id'] = $this->getCI()->inter_id;
-        $data ['hotel_id'] = 0;
-        $this->getCI()->load->model('hotel/hotel_config_model');
-        $this->getCI()->hotel_config_model->replace_config($data);
+        if (!empty($post['share_setting'])) {
+            $data['id'] = $post['share_setting']['id'] ? $post['share_setting']['id'] : 0;
+            $data ['param_value'] = json_encode(
+                [
+                    'page_title' => $post['share_setting']['page_title'],
+                    'page_desc' => $post['share_setting']['page_desc'],
+                    'share_icon' => $post['share_setting']['share_icon'],
+                ]
+            );
+            $data ['param_name'] = 'SHARE_SETTING';
+            $data ['module'] = 'HOTEL';
+            $data ['inter_id'] = $this->getCI()->inter_id;
+            $data ['hotel_id'] = 0;
+            $this->getCI()->load->model('hotel/hotel_config_model');
+            $this->getCI()->hotel_config_model->replace_config($data);
+        }
 
         //保存首页样式 页面logo 底部菜单
         $home_disp = $post['home_setting']['home_disp'];
@@ -115,29 +117,29 @@ class SkinService extends HotelBaseService
             }
         }
 
-        if ($home_disp == 'new') {
-            $id = $post['home_setting']['id'];
-            if ($id > 0) {
-                $setting_data ['id'] = $id;
-            } else {
-                $setting_data ['id'] = 0;
-            }
 
-            $tmp = [
-                'home_disp' => $home_disp,
-                'img' => $post['home_setting']['logo'],
-                'open' => 2,
-                'menu' => $post['home_setting']['menu']  //起始从1开始
-            ];
-
-            $setting_data ['param_value'] = json_encode($tmp);
-            $setting_data ['param_name'] = 'HOME_SETTING';
-            $setting_data ['module'] = 'HOTEL';
-            $setting_data ['inter_id'] = $this->getCI()->inter_id;
-            $setting_data ['hotel_id'] = 0;
-            $this->getCI()->load->model('hotel/hotel_config_model');
-            $this->getCI()->hotel_config_model->replace_config($setting_data);
+        $id = $post['home_setting']['id'];
+        if ($id > 0) {
+            $setting_data ['id'] = $id;
+        } else {
+            $setting_data ['id'] = 0;
         }
+
+        $tmp = [
+            'home_disp' => $home_disp,
+            'img' => $post['home_setting']['logo'],
+            'open' => 2,
+            'menu' => $post['home_setting']['menu']  //起始从1开始
+        ];
+
+        $setting_data ['param_value'] = json_encode($tmp);
+        $setting_data ['param_name'] = 'HOME_SETTING';
+        $setting_data ['module'] = 'HOTEL';
+        $setting_data ['inter_id'] = $this->getCI()->inter_id;
+        $setting_data ['hotel_id'] = 0;
+        $this->getCI()->load->model('hotel/hotel_config_model');
+        $this->getCI()->hotel_config_model->replace_config($setting_data);
+
 //
         //保存字体设置
         $skin_set = $this->getCI()->Skins_model->get_skin_set($this->getCI()->inter_id, $this->module);
@@ -149,7 +151,7 @@ class SkinService extends HotelBaseService
             ]
         );
 
-        //已有的话更新 没有则新增
+        // 已有的话更新 没有则新增
         if (!empty($skin_set)) {
             $this->getCI()->Skins_model->update_skin_set($this->getCI()->inter_id, 'hotel', $skin_set ['id'], $font_set);
         } else {
@@ -157,20 +159,14 @@ class SkinService extends HotelBaseService
             $this->getCI()->Skins_model->add_skin_set($this->getCI()->inter_id, $this->module, $font_set);
         }
 
-//        //保存轮播图
-        $this->getCI()->load->model('wx/Publics_model');
-//        $roast = $this->getCI()->Publics_model->get_pub_imgs($this->getCI()->inter_id, 'hotelslide');
-//        $roast_ids = array_column($roast, 'id');
+        // 保存轮播图
+        if (!empty($post['roasting_setting'])) {
+            $this->getCI()->load->model('wx/Publics_model');
 
-        foreach ($post['roasting_setting'] as $v) {
-//            if (in_array($v['id'], $roast_ids)) {
+            foreach ($post['roasting_setting'] as $v) {
                 $v['inter_id'] = $this->getCI()->inter_id;
                 $this->getCI()->Publics_model->update_focus_new($v);
-//            } else {
-//                unset($v['id']);
-//                $v['inter_id'] = $this->getCI()->inter_id;
-//                $this->getCI()->Publics_model->create_lightbox($v);
-//            }
+            }
         }
 
         $this->getCI()->db->trans_complete();
@@ -186,6 +182,7 @@ class SkinService extends HotelBaseService
      * 获取皮肤的配置
      * 分享设置从hotel_config表取 首页样式从enum_desc表取  轮播图从public_images表取 view_skin_set取字体设置
      * 标准版  logo和底部菜单从hotel_config表取
+     * @return array
      * @author daikanwu <daikanwu@jperation.com>
      */
     public function get_setting()
@@ -219,7 +216,7 @@ class SkinService extends HotelBaseService
 
         //字体设置
         $this->getCI()->load->model('common/Skins_model');
-        $skin_set = $this->getCI()->Skins_model->get_skin_set($this->inter_id, $this->module);
+        $skin_set = $this->getCI()->Skins_model->get_skin_set($this->getCI()->inter_id, $this->module);
 
         //logo 和底部菜单
         $logo = $this->getCI()->hotel_config_model->get_hotels_config_row(
@@ -230,14 +227,30 @@ class SkinService extends HotelBaseService
         }
 
         $res = [
-            'share' => empty($share) ? '' : $share,
+            'share' => empty($share) ? [] : $share,
             'page_type' => $tmp,
-            'roast' => empty($roast) ? '' : $roast,
-            'font' => empty($skin_set['overall_style']) ? '' : json_decode($skin_set['overall_style'], true),
-            'home_setting' => empty($logo) ? '' : $logo
+            'roast' => empty($roast) ? [] : $roast,
+            'font' => empty($skin_set['overall_style']) ? ['theme_color' => '#FF9900', 'fontx' => '14px'] : json_decode($skin_set['overall_style'], true),
+            'home_setting' => empty($logo) ? [] : $logo,
+
+            //前端要返回的图片
+            'demonamemap' => [
+                'share' => 'http://7n.cdn.iwide.cn/public/uploads/201709/qf211936056283.jpg',
+                'roast' => [
+                    'ori' => 'http://7n.cdn.iwide.cn/public/uploads/201709/qf211936462095.jpg',
+                    'new' => 'http://7n.cdn.iwide.cn/public/uploads/201709/qf211938244896.jpg',
+                    'bigger' => 'http://7n.cdn.iwide.cn/public/uploads/201709/qf211938496093.jpg',
+                    'highclass' => 'http://7n.cdn.iwide.cn/public/uploads/201709/qf211939156479.jpg'
+                ],
+                'color' => 'http://7n.cdn.iwide.cn/public/uploads/201709/qf211939398173.jpg',
+                'menu' => [
+                    'new' => 'http://7n.cdn.iwide.cn/public/uploads/201709/qf211940045285.jpg',
+                    'bigger' => 'http://7n.cdn.iwide.cn/public/uploads/201709/qf211940232033.jpg',
+                    'highclass' => 'http://7n.cdn.iwide.cn/public/uploads/201709/qf211940397294.jpg'
+                ]
+            ]
         ];
 
         return $res;
-
     }
 }

@@ -1,22 +1,27 @@
 <?php
-if (! defined ( 'BASEPATH' ))
-    exit ( 'No direct script access allowed' );
+defined('BASEPATH') OR exit('No direct script access allowed');
+/**
+ * Class Account
+ * 管理员登录 模板路由
+ * 沙沙
+ * 2017-9-19
+ */
 
 class Auth extends MY_Admin
 {
-    public  $theme = 'default';//皮肤
+    protected $admin_profile;
+
     public function __construct()
     {
-        parent::__construct ();
-        $this->inter_id = $this->session->userdata ( 'inter_id' );
-        $this->openid = $this->session->userdata ( $this->inter_id . 'openid' );
-        $this->load->helper('appointment');//加载所需函数
+        parent::__construct();
+        $this->admin_profile = $this->session->userdata('admin_profile');
+        $this->load->helper('appointment');
     }
 
     /**
      * 显示二维码
      */
-    public function showQr()
+    public function showAuthQr()
     {
         $param = request();
         $text = !empty($param['url']) ? addslashes($param['url']) : '';
@@ -25,78 +30,7 @@ class Auth extends MY_Admin
         QRcode::png($text,false,6,6);
     }
 
-    /**
-     * 绑定账户
-     */
-    public function bind()
-    {
-        $param = request();
-        $token = !empty($param['token']) ? addslashes($param['token']) : '';
-        if (!empty($token))
-        {
-            $this->load->model('authority/valify_tokens_model');
-            //扫码时间
-            $fitter = array(
-                'token'     => $token,
-                'status'    => 0,
-                'type'      => 2,
-            );
-            $update = array(
-                'openid' => $this->openid,
-                'status' => 1,
-                'operate_time' => date('Y-m-d H:i:s'),
-            );
-            $this->valify_tokens_model->updateToken($fitter,$update);
-        }
 
-        $this->display('authority/bind',$param,$this->theme);
-    }
 
-    /**
-     * 登录账户
-     */
-
-    public function login()
-    {
-        $param = request();
-        $token = !empty($param['token']) ? addslashes($param['token']) : '';
-        if (!empty($token))
-        {
-            $this->load->model('authority/valify_tokens_model');
-            //扫码时间
-            $fitter = array(
-                'token'     => $token,
-                'status'    => 0,
-                'type'      => 1,
-            );
-            $update = array(
-                'openid' => $this->openid,
-                'status' => 1,
-                'operate_time' => date('Y-m-d H:i:s'),
-            );
-            $row = $this->valify_tokens_model->updateToken($fitter,$update);
-            if ($row > 0)
-            {
-                $cache = $this->_load_cache();
-                $redis = $cache->redis->redis_instance();
-                $redis->select(10);
-                $redis->set('authorityQrCode_1_'.$token,json_encode(array('status' => 1)),900);//设置缓存
-            }
-        }
-        $this->display('authority/bind',$param,$this->theme);
-    }
-
-    /**
-     * 加载缓存
-     * @param string $name
-     * @return mixed
-     */
-    protected function _load_cache($name='Cache')
-    {
-        if(!$name || $name=='cache')
-            $name='Cache';
-        $this->load->driver('cache', array('adapter' => 'redis', 'backup' => 'file', 'key_prefix' => 'dis_ato_'), $name );
-        return $this->$name;
-    }
 
 }

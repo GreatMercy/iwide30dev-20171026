@@ -74,8 +74,11 @@
                   </a>
                 </div>
                 <div class="item__right" v-else-if="item.status=='3'&&item.shipping_id=='0'">
-                  <a
-                    :href="pageResource.package_review+'&ciid='+item.consumer_item_id+'&aiid='+item.asset_item_id+'&code_id='+item.code_id">
+                  <a :href="pageResource.hotel_order_info" v-if="item.is_booking_hotel">
+                    <span class="coupon__state font-size--24">已使用</span>
+                    <i class="jfk-font icon-user_icon_jump_normal arrow"></i>
+                  </a>
+                  <a :href="pageResource.package_review+'&ciid='+item.consumer_item_id+'&aiid='+item.asset_item_id+'&code_id='+item.code_id" v-else>
                     <span class="coupon__state font-size--24">已使用</span>
                     <i class="jfk-font icon-user_icon_jump_normal arrow"></i>
                   </a>
@@ -136,7 +139,7 @@
     </div>
     <jfk-popup v-model="showQrcode" :showCloseButton="true" class="coupon-qrcode jfk-ta-c">
       <p class="font-color-extra-light-gray font-size--32 content">
-        <jfk-text-split :text="popQrcodeNum" :split="3"></jfk-text-split>
+        <jfk-text-split :text="popQrcodeNum" :split="4"></jfk-text-split>
       </p>
       <img :src="popQrcodeUrl">
     </jfk-popup>

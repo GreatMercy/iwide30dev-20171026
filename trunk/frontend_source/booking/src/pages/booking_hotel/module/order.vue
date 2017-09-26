@@ -16,7 +16,7 @@
       </p>
       <div>
         <span v-for="(value,key) in roomList" class="room_del font-size--24">{{value.name}} - {{firstState.price_name}}</span>
-        <span class="font-size--24"><i>1</i>间</span>
+        <span class="font-size--24"><i>{{count}}</i>间</span>
       </div>
       <div v-for="(value,key) in packages">
         <span class="room_del font-size--24">{{value.goods_name}}</span>
@@ -77,7 +77,7 @@
         </div>
         <div class="pay_for_item font-size--24">
           <div>
-            <span class="counp goldColor font-size--34">积分抵用</span>
+            <span class="counp goldColor font-size--34">{{submitResdata.web_data.point_name}}抵用</span>
             <br>
             <div>
               <span class="counpon">
@@ -101,14 +101,41 @@
     </div>
     <!-- 支付方式 -->
     <div class="pay_type">
+      <p class="font-size--24">支付方式</p>
       <div class="pay_type_item" v-for="(value, key) in payWays" :key="key" :class="{'acitve' : key === 0 }">
-        <input v-if="value.disable" type="radio" v-model="payType" @click="handleOrder(value.pay_type, value.favour)" name="pay"  :value="value.pay_type">
-        <input v-else type="radio" v-model="payType" @click="handleOrder(value.pay_type, value.favour)" name="pay" :value="value.pay_type">
+        <input v-if="value.disable" type="radio" v-model="payType" @click="handleOrder(value.pay_type, value.fvour, value.cosume_code_need)" name="pay"  :value="value.pay_type">
+        <input v-else type="radio" v-model="payType" @click="handleOrder(value.pay_type, value.favour, value.cosume_code_need)" name="pay" :value="value.pay_type">
         <p class="font-size--28">
-          <i class="booking_icon_font font-size--40 icon-user_icon_wxpay_n-"></i><br>
+          <i class="booking_icon_font font-size--40 icon-laqiala" v-if="value.pay_type === 'lakala' || value.pay_type === 'lakala_y'"></i>
+          <i class="booking_icon_font font-size--40 icon-yinlianzhifu" v-else-if="value.pay_type === 'unionpay'"></i>
+          <i class="booking_icon_font font-size--40 icon-jifenzhifu" v-else-if="value.pay_type === 'point'"></i>
+          <i class="booking_icon_font font-size--40 icon-user_icon_pay_n" v-else-if="value.pay_type === 'balance'"></i>
+          <i class="booking_icon_font font-size--40 icon-user_icon_wxpay_n-" v-else></i><br>
           {{value.pay_name}}
+          <span class="font-size--24">{{value.des}}</span>
         </p>
+        
       </div>
+    </div>
+    <!-- 支付密码 -->
+    <div class="order-info jfk-pl-30 jfk-pr-30 passwordContainer" v-show="showPayPassWord">
+      <form class="jfk-form font-size--28">
+        <div class="form-item">
+          <label>
+            <span class="form-item__label  font-color-extra-light-gray form-item__label--word-3">支付密码</span>
+            <div class="form-item__body">
+              <input type="password" class="font-color-white" v-model="payPassWord" placeholder="请输入支付密码" />
+              <div class="form-item__status is-error" v-show="false" @click="handleHiddenError('name')">
+                <i class="form-item__status-icon jfk-font icon-msg_icon_error_norma"></i>
+                <span class="form-item__status-tip">
+                  <i class="form-item__status-cont">{{validResult.name.message}}</i>
+                  <i class="form-item__status-trigger">重新输入</i>
+                </span>
+              </div>
+            </div>
+          </label>
+        </div>
+      </form>
     </div>
     <div class="booking_desc font-size--24 jfk-pl-30 jfk-pr-30">
       <p class="title">
@@ -210,7 +237,12 @@
       <div class="coupon_list jfk-pl-30 jfk-pr-30">
         <div class="coupon_list_item" v-for="(value,key) in couponCards" @click="handleChoose(key)" >
           <div class="price">
-            <span class="jfk-price product-price-package color-golden">
+            <span class="jfk-price product-price-package color-golden" v-if = "value.coupon_type === 'discount'">
+              <i class="jfk-font-number icon_num jfk-price__number">{{value.newReduce_cost * 10}}</i>
+              <i class="jfk-font icon-font_zh_zhe_qkbys"></i>
+
+            </span>
+            <span class="jfk-price product-price-package color-golden" v-else>
               <i class="jfk-font-number jfk-price__currency font-size--28 icon_money">￥</i>
               <i class="jfk-font-number icon_num jfk-price__number">{{value.reduce_cost}}</i>
             </span>
@@ -240,11 +272,6 @@
   let params = formatUrlParams(location.search)
   export default {
     watch: {
-      submitOrderConfig (val) {
-        // this.sendData = Object.assign({}, this.sendData, val)
-        // this.sendData = val
-        // this.submitOrderConfig()
-      }
     },
     computed: {
       submitOrderConfig () {
@@ -343,11 +370,16 @@
         datas: {},
         price_type: {},
         package_info: '',
-        sendData: {}
+        sendData: {},
+        // 支付密码
+        payPassWord: '',
+        // 显示 / 隐藏 支付密码状态
+        showPayPassWord: false
       }
     },
     methods: {
       beforePage () {
+        window.scrollTo(0, 0)
         this.sendData = this.submitOrderConfig
         if (JSON.stringify(this.sendData) === '{}') {
           window.history.back()
@@ -390,6 +422,7 @@
           this.days = resData.days
           this.firstState = resData.first_state
           this.packages = resData.packages
+          // 判断是否存在 lastorder 字段
           if (resData.last_order) {
             this.customerInfo.name = resData.last_order.name
             this.customerInfo.tel = resData.last_order.tel
@@ -406,6 +439,10 @@
           this.unitPrice = resData.total_price
           this.allPrice = resData.first_state.allprice.split(',')
           this.packages = resData.packages
+          // 在 this.packages 中赋予一个额外的 nums 值 ，用来计算当 count_way 值为1的时候的商品数量
+          for (let key in this.packages) {
+            this.packages[key] = Object.assign({}, this.packages[key], {productNums: this.packages[key].nums})
+          }
           this.packagesPrice = Number(resData.packages_price)
           this.couponAmount = resData.select_coupon_favour
           this.selectCoupons = resData.select_coupons
@@ -426,6 +463,10 @@
           this.couponTips = resData.couponTips ? resData.couponTips : ''
           if (resData.point_consum_set) {
             this.partBonusSet = resData.point_consum_set
+          }
+          // 判断第一个支付的 cosume_code_need （1）是否需要支付密码 如果需要 显示支付密码框
+          if (this.payWays[0].cosume_code_need === 1) {
+            this.showPayPassWord = true
           }
           let dateTime = this.handleStrDate(resData.startdate)
           for (let i = 0; i < this.allPrice.length; i++) {
@@ -481,6 +522,16 @@
           let _this = this
           // 优惠券数据
           const coupon = res.web_data
+          // xm 获取优惠券的数据预处理
+          for (let key in coupon.cards) {
+            // 如果是折扣券，获取真正的reduce_cost 总价 && 设置新字段用于显示在界面， 这样下面不用做太多更改
+            if (coupon.cards[key].coupon_type === 'discount') {
+              let addNum = coupon.cards[key].reduce_cost * this.realPrice
+              coupon.cards[key] = Object.assign({}, coupon.cards[key], {newReduce_cost: coupon.cards[key].reduce_cost})
+              coupon.cards[key] = Object.assign({}, coupon.cards[key], {reduce_cost: addNum})
+            }
+          }
+          console.log(coupon.cards, '-----------')
           if (coupon.cards !== '') {
             let bool = false
             if (!coupon.vid || coupon.vid === 0) {
@@ -520,7 +571,6 @@
                 coupon.cards[index].max_use_num = ''
                 coupon.cards[index].use_num_type = ''
               }
-
               if (this.coupons[[coupon.cards[index].code]]) {
                 coupon.cards[index].check = true
               } else {
@@ -532,8 +582,6 @@
             _this.totalFavour = _this.couponAmount + _this.payFavour
             if (_this.couponAmount > 0) {
               _this.couponText = '已选￥' + _this.couponAmount.toFixed(2)
-              console.log(_this.couponText)
-              console.log(_this.couponAmount)
             } else {
               _this.couponText = '选择优惠券'
             }
@@ -615,6 +663,15 @@
                   this.bonus = this.pointMaxUse
                   this.exchangeMaxPoint = this.pointMaxUse
                   this.pointBonus = exMoney.toFixed(2)
+                  // if 积分抵扣可以使用 减去积分抵扣的价钱 xm
+                  if (this.bonusCheck) {
+                    this.totalPrice -= this.pointBonus
+                  }
+                  // xm 积分为0 按钮置灰
+                  if (this.exchangeMaxPoint === 0) {
+                    // 按钮置灰 xm
+                    this.bonusCheck = false
+                  }
                 } else {
                   if (this.partBonusSet['max_use']) {
                     this.pointMaxUse = this.partBonusSet['max_use']
@@ -631,6 +688,9 @@
               this.bonus = 0
               this.exchangeMaxPoint = 0
               this.pointBonus = 0
+              // 按钮置灰 xm
+              this.bonusCheck = false
+              console.log(this.totalPrice, '+++++')
             }
           }).catch(function (e) {
             if (loading) {
@@ -674,14 +734,25 @@
       handleCoupon () {
         if (this.couponAmount > 0) {
           this.couponText = '已选￥' + this.couponAmount.toFixed(2)
-          this.getBonusSet()
         } else {
           this.couponText = '选择优惠券'
         }
+        this.getBonusSet()
         this.couponShow = false
       },
       handleChoose (key) {
         const thatCoupon = this.couponCards[key]
+        if (Number(this.couponCards[key].reduce_cost) >= Number(this.totalPrice)) {
+          console.log(this.couponCards[key].check)
+          if (this.couponCards[key].check === false) {
+            this.$jfkToast({
+              duration: 1000,
+              iconType: 'error',
+              message: '无法选择小于总金额的优惠券'
+            })
+            return
+          }
+        }
         if (this.couponCards[key].check) {
           this.couponCards[key].check = false
           if (this.coupons[[thatCoupon['code']]]) {
@@ -801,6 +872,14 @@
         this.totalPrice = (parseFloat((this.unitPrice * tmpval).toFixed(2)) + parseFloat(this.packagesPrice)).toFixed(2)
         let roomnos = {}
         roomnos[[this.rid]] = tmpval
+        // 包价、按房晚赠送，一晚送1份；在提交订单页面，当增加房间数时，应该赠送的商品数量也相应增加
+        for (let key in this.packages) {
+          if (this.packages[key].count_way === 1) {
+            let countNums = 0
+            countNums = this.packages[key].productNums * this.count
+            this.packages[key] = Object.assign({}, this.packages[key], {nums: countNums})
+          }
+        }
         let loading = this.$jfkToast({
           iconClass: 'jfk-loading__snake ',
           duration: -1,
@@ -822,7 +901,12 @@
           showFullLayer(null, '选择优惠券', location.href, cb)
         }
       },
-      handleOrder (type, favour) {
+      handleOrder (type, favour, cosumeCodeNeed) {
+        if (cosumeCodeNeed === 1) {
+          this.showPayPassWord = true
+        } else {
+          this.showPayPassWord = false
+        }
         if (type === 'bonus') {
           this.couponText = '不可用'
           this.couponDis = false
@@ -871,7 +955,21 @@
           this.validResult.tel.message = '请输入正确的手机号'
           saveBol = false
         }
+        if (this.showPayPassWord && !this.payPassWord) {
+          this.$jfkToast({
+            duration: 1000,
+            iconType: 'error',
+            message: '请输入支付密码'
+          })
+          saveBol = false
+          return
+        }
         if (saveBol) {
+          let loading = this.$jfkToast({
+            iconClass: 'jfk-loading__snake ',
+            duration: -1,
+            isLoading: true
+          })
           let saveData = {
             // url id
             id: params.id,
@@ -890,17 +988,12 @@
             price_codes: JSON.stringify(this.xprice_code) || {},
             price_type: JSON.stringify(this.price_type) || '',
             bonus: this.toalBonus,
-            consume_code: '',
+            consume_code: this.payPassWord || '',
             intime: '',
             invoice: '',
             package_info: this.package_info
           }
           this.prevend = 1
-          let loading = this.$jfkToast({
-            iconClass: 'jfk-loading__snake ',
-            duration: -1,
-            isLoading: true
-          })
           postSaveOrder(saveData).then((res) => {
             if (loading) {
               loading.close()
@@ -908,6 +1001,12 @@
             }
             if (res.status === 1000) {
               window.location.href = res.web_data.link
+            } else {
+              this.$jfkToast({
+                duration: 1000,
+                iconType: 'error',
+                message: res.msg
+              })
             }
           }).catch(function (e) {
             if (loading) {

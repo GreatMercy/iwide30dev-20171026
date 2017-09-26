@@ -573,6 +573,14 @@ div[required]>div:first-child:before{content:'*'; color:#f00}
                         <?php endif;?>
                     </div>
                 </div>
+                <div required class="el_can_mail" style="display:none" id="sendHotelWrap">
+                    <div>发货酒店</div>
+                    <div class="input flexgrow">
+                        <select id="sendHotel">
+                        </select>
+                    </div>
+                     <input type="hidden" required name="send_hotel" id="sendHotelValue" style="position:absolute;" value = "<?php echo $model->m_get('send_hotel');?>">
+                </div>
                 <div class="el_can_mail" style="display:none">
                 	<div>邮费说明</div>
                     <div class="input flexgrow"><input name="shipping_instruction" value="<?php echo $model->m_get('shipping_instruction');?>"></div>
@@ -853,8 +861,10 @@ $('#selecter').on('change', function() {
     var _this = $(this);
     if (_this.val()) {
         $('#hotel_id').val(_this.val());
-        console.log($('#hotel_id').val());
+    } else {
+        $('#hotel_id').val('');
     }
+     changeSendHotel();
 });
 
 
@@ -1384,7 +1394,18 @@ $('#save').click(function(e){
 	}
 	if(bool){
 		if($('input[name=can_wx_booking]:checked').val()==<?php echo $model::STATUS_CAN_YES;?>){
-			if($('.add_hotel input:checked').length<=0){ alert('请先添加适用门店');return;}
+            console.log($('.add_hotel'));
+            console.log($('.add_hotel input:checked').length);
+
+            if(_initial){
+                //默认拿第一页数据
+                _page = 1;
+                $("#hotel_content").html("");
+                initHtml(_page, false);
+                _initial = false;//只有第一次点击才加载
+             }
+
+			if($('#coupons_table input:checked').length<=0){ alert('请先添加适用门店');return;}
 		}
 		if(DateSet.startdate==''||jQuery.isEmptyObject(DateSet.data)){
 			if($('input[name="type"]:checked').val()!=2){
@@ -1436,12 +1457,69 @@ $params_img_detail= array(
 );
 ?>
 var editor1 ,editor2,editor3,editor4;
+
+// 修改发货酒店的数值
+function changeSendHotel () {
+     var list = [];
+        for (var i = 0; i < $('#selecter').find('option').length; i++) {
+            var val = $('#selecter').find('option').eq(i).attr('value');
+            var text = $('#selecter').find('option').eq(i).text();
+            list.push({
+                value: val,
+                text: text
+            })
+        }
+        var selecterValue = $('#selecter').val();
+        var resultList = [];
+        var str = '<option value="empty">请选择一家酒店</option>';
+
+        if (selecterValue && selecterValue.length > 1) {
+            for (var i = 0; i < list.length; i++) {
+                for (var j = 0; j < selecterValue.length; j++) {
+                    if (selecterValue[j] === list[i].value) {
+                        str+= '<option value="'+ list[i].value +'">'+list[i].text+'</option>'
+                    }
+                };
+            }
+             $('#sendHotelWrap').show();
+        } else {
+            $('#sendHotelWrap').hide();
+        }
+
+        if (selecterValue && selecterValue.length === 1) {
+            $('#sendHotelValue').val(selecterValue[0]);
+            $('#sendHotelWrap').hide();
+        }
+
+        $('#sendHotel').html(str);
+        $('#sendHotel').off().on('change', function () {
+            $('#sendHotelValue').val($('#sendHotel').val());
+        });
+
+         // 判断如果选中的值 列表中都不存在
+         var exit = false;
+         for (var i = 0; i < list.length; i++) {
+             if (list[i].value === $('#sendHotelValue').val()) {
+                exit = true;
+             }
+         }
+         if (exit === true) {
+            $('#sendHotel').val($('#sendHotelValue').val());
+         } else {
+            $('#sendHotelValue').val('');
+            $('#sendHotel').val('empty');
+         }
+}
+
 var show_can_mail = function(){
 	var val = $('input[name="can_mail"]:checked').val()
 	if(val == <?php echo $model::STATUS_CAN_YES;?>){
-		$('.el_can_mail').show()
+        $('#sendHotelValue').attr('required', true);   // 添加邮寄酒店必填
+		$('.el_can_mail').show();
+        changeSendHotel();
 		$('input[name="is_hide_reserve_date"]').parent().show();
 	}else{
+        $('#sendHotelValue').removeAttr('required');   // 删除邮寄酒店必填
 		$('.el_can_mail').hide();
 		$('input[name="is_hide_reserve_date"]').parent().hide();
 	}
@@ -2449,13 +2527,17 @@ $('#showBookingConfig').click(function(){
         _initial = false;//只有第一次点击才加载
     }
 });
-function initHtml(num){
+function initHtml(num, async){
+    if (async) {
+        async = true
+    }
     var id          = '<?php echo $model->m_get('product_id');?>';
     var tokenVal    = '<?php echo $this->security->get_csrf_hash();?>';
     is_ajax = false;
     $.ajax({
         url: '<?php echo Soma_const_url::inst()->get_url('*/*/ajax_get_booking_config');?>',/**/
         method: 'post',
+        async: async,
         data: {id:id,<?php echo $this->security->get_csrf_token_name();?>:tokenVal,page:num,search:str_search},
         dataType:'json',
         success: function(sresult){
@@ -2510,6 +2592,7 @@ function initHtml(num){
                 _html += '</td></tr>'  
             }
             $("#hotel_content").append(_html);
+
             ajaxevent_bind();
             is_ajax = true;
         },
@@ -2537,7 +2620,6 @@ $(".add_hotel_content").scroll(function() {
         initHtml(_page)
       }
  });
-
 
  //不能退款
 destroyRefund();

@@ -1,46 +1,47 @@
 <template>
   <div class="jfk-pages jfk-pages__search">
+    <div class="jfk-pages__theme"></div>
     <div class="search_container" v-show="!showCityChoose">
       <div class="pageContainer" v-show="true">
-        <div class="jfk-pages__theme"></div>
-        <jfk-banner :items="advs" v-if="advs.length" :swiperOptions="swiperOptions"></jfk-banner>
+        <jfk-banner :items="advs"
+                    v-if="advs.length">
+        </jfk-banner>
         <div class="search_place_container">
           <div class="search_place">
-            <p class="search_title font-size--28" @click="goCityChoose(1)">
-              <i class="booking_icon_font icon_search icon-icon_search"></i>
-              {{clickCityWord}}
+            <p class="search_title font-size--30" @click="goCityChoose(1)">
+              <i class="booking_icon_font icon_search icon-icon_search font-size--24"></i>
+              <span v-if="areaWord !== '搜索城市'">{{areaWord}} ({{clickCityWord}})</span>
+              <span v-if="areaWord === '搜索城市'">{{clickCityWord}}</span>
             </p>
+            <i class="booking_icon_font icon_place font-size--46 icon-booking_icon_nearby_normal"
+               @click="HrefToNearby()"></i>
           </div>
-          <div class="search_place">
-            <p class="search_title font-size--28 searchCity" @click="goCityChoose(0)">
-              <i class="booking_icon_font icon_search icon-icon_search"></i>
+          <div class="search_place search_place2">
+            <p class="search_title font-size--30 searchCity noLine" @click="goCityChoose(0)">
+              <i class="booking_icon_font icon_search icon-user_icon_myaddress_normal font-size--24"></i>
               {{searchVal}}
             </p>
-            <i class="booking_icon_font icon_place icon-booking_icon_nearby_normal"
-               @click="HrefToNearby()"></i>
           </div>
         </div>
         <div class="date_container">
           <div class="left_date" @click="goCalendar()">
-            <span class="left_date_style">入 住</span>
+            <span class="left_date_style">入住</span>
             <span class="live_date jfk-font-number jfk-price__number"><i
               class="booking_icon_font icon_arrow icon-booking_icon_dropdown_normal"></i>{{startDate}}</span>
-            <span class="live_year">{{startMonth}}</span>
+            <span class="live_year font-size--24">{{startMonth}}</span>
           </div>
           <span class="center_line"></span>
           <div class="right_date" @click="goCalendar()">
-            <span class="left_date_style">离 店</span>
+            <span class="left_date_style">离店</span>
             <span class="live_date jfk-font-number jfk-price__number"><i
               class="booking_icon_font icon_arrow icon-booking_icon_dropdown_normal"></i>
             {{endDate}}</span>
-            <span class="live_year">{{endMonth}}</span>
+            <span class="live_year font-size--24">{{endMonth}}</span>
           </div>
         </div>
         <div class="checkBtn">
-          <a :href="toLinks.SRESULT + '&startdate=' + handleStartDate + '&enddate=' + handleEndDate + '&area=' + this.areaWord + '&city=' + clickCityWord">查 询 酒 店</a>
-          <!--<a href="http://ihotels.iwide.cn/index.php/hotel/hotel/to_comment?oid=1048686">查 询 酒 店</a>-->
+          <a :href="toLinks.SRESULT + '&startdate=' + handleStartDate + '&enddate=' + handleEndDate + '&area=' + this.areaWord + '&city=' + clickCityWord">查询酒店</a>
         </div>
-        <!-- <p class="color-golden" v-show="isLoadProduct">loading</p> -->
         <div class="search_info" v-if="searchCacheData.length !== 0">
           <p class="search_info_title">最近搜索</p>
           <p class="search_info_item item_first"
@@ -58,7 +59,7 @@
             <a class="layer_bg color2 j_whole_show always" v-if="item.code === 'always'"
                @click="showBottomTip(0)">
               <div class="img">
-                <i class="jfk-font icon_arrow icon-blankpage_icon_nohotel_bg font-size--40"></i>
+                <i class="jfk-font icon_arrow icon-blankpage_icon_nohotel_bg font-size--42"></i>
               </div>
               <div class="txtclip font-size--28 mar_b">{{item.menu_name}}</div>
               <div class="txtclip font-size--24 gray_color">{{item.desc}}</div>
@@ -66,15 +67,15 @@
             <a class="layer_bg color2 j_whole_show always" v-if="item.code === 'collect'"
                @click="showBottomTip(1)">
               <div class="img">
-                <i class="booking_icon_font icon_arrow icon-icon_recommend font-size--40"></i>
+                <i class="booking_icon_font icon_arrow icon-icon_recommend font-size--42"></i>
               </div>
               <div class="txtclip font-size--28 mar_b">{{item.menu_name}}</div>
               <div class="txtclip font-size--24 gray_color">{{item.desc}}</div>
             </a>
-            <a class="layer_bg color2 j_whole_show always" v-if="item.code === 'order'"
+            <a class="layer_bg color2 j_whole_show always lastAlways" v-if="item.code === 'order'"
                :href="item.link">
               <div class="img">
-                <i class="jfk-font icon-blankpage_icon_noorder_bg font-size--40"></i>
+                <i class="jfk-font icon-blankpage_icon_noorder_bg font-size--42"></i>
               </div>
               <div class="txtclip font-size--28 mar_b">{{item.menu_name}}</div>
               <div class="txtclip font-size--24 gray_color">{{item.desc}}</div>
@@ -132,7 +133,6 @@
                  :firstCity="firstCity"
                  :clicktype="cityChooseType"
                  :currentCity="clickCityWord">
-
     </city-choose>
   </div>
 </template>
@@ -140,7 +140,6 @@
   import {getBannerList} from '@/service/http'
   import cityChoose from './module/city_choose/App.vue'
   import {showFullLayer} from '@/utils/utils'
-
   export default {
     name: 'index',
     components: {
@@ -194,7 +193,7 @@
         startMonth: '',
         endMonth: '',
         // 搜索框显示的字
-        searchVal: '搜索城市 / 关键字 / 位置',
+        searchVal: '关键字 / 位置',
         showCityChoose: false,
         // 显示热搜
         showHotSearch: false,
@@ -203,7 +202,7 @@
         // 日历最大日期
         max: null,
         page_resource: {
-          'SRESULT': 'nearby?theme=1&id=a429262687'
+          'SRESULT': ''
         },
         toLinks: {},
         handleStartDate: '',
@@ -219,8 +218,8 @@
         // 用来判断是选择城市还是搜索 0 1 因为使用watch 要给0 ，1 以外的数字
         cityChooseType: 3,
         // 入住城市
-        clickCityWord: '全部',
-        areaWord: '全部'
+        clickCityWord: '搜索城市',
+        areaWord: '搜索城市'
       }
     },
     methods: {
@@ -238,11 +237,10 @@
         if (area !== 0) {
           this.areaWord = area
         } else {
-          // 设置 全部 过去 nearby 会被忽略
-          this.areaWord = '全部'
+          // 设置 城市 过去 nearby 会被忽略
+          this.areaWord = '搜索城市'
         }
         this.showCityChoose = false
-//        this.setJumpUrls()
       },
       getDate () {
         // 获取现在的时间

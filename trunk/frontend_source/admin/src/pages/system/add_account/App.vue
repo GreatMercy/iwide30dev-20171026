@@ -2,12 +2,12 @@
   <div class="jfk-pages add-account-outer">
     <el-row>
       <el-col :span="24">
-        <div class="grid-content bg-purple">
+        <div class="grid-content">
           <!--步骤-->
           <el-steps :space="400" :active="activeStep" finish-status="success" class="jfk-steps--bg-gray jfk-steps">
             <el-step title="基础信息"></el-step>
             <el-step title="关联公众号"></el-step>
-            <el-step v-if="this.SuperTube === '0'" title="账号权限"></el-step>
+            <el-step v-if="this.SuperTube === '1'" title="账号权限"></el-step>
           </el-steps>
           <!--基础信息填写界面-->
           <el-form v-if="activeStep === 0" :model="accountInfor" :rules="accountRules" ref="accountInfor">
@@ -23,9 +23,6 @@
             <el-form-item label="确认密码" prop="repassword">
               <el-input v-model="accountInfor.repassword" type="password" placeholder="请再次输入密码"></el-input>
             </el-form-item>
-            <el-form-item label="绑定微信">
-              <el-button type="primary" size="small" icon="plus">绑定</el-button>
-            </el-form-item>
             <el-form-item label="状态" prop="status">
               <el-select v-model="accountInfor.status" placeholder="状态">
                 <el-option label="有效" value="有效"></el-option>
@@ -33,7 +30,7 @@
               </el-select>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" size="small" style="margin-left: 70px" @click="nextStepBtn('accountInfor')">
+              <el-button type="primary" size="small" style="margin-left: 70px" @click="oneNextBtn('accountInfor')">
                 下一步
               </el-button>
             </el-form-item>
@@ -55,7 +52,7 @@
               <!--列表-->
               <!--全选按钮-->
               <div class="choose-all">
-                <el-checkbox v-model="chooseAll" @change="chooseAllBtn">全选</el-checkbox>
+                <el-checkbox v-model="chooseAll" @change="chooseAllAction">全选</el-checkbox>
               </div>
               <table class="public-account-table">
                 <tr>
@@ -64,20 +61,36 @@
                   <th width="28%">门店</th>
                   <th width="28%">店铺</th>
                 </tr>
-                <tr v-for="item in current.renderList">
+                <tr v-for="(item,index) in current.renderList">
+                  <!--公众号信息-->
                   <td>
-                    <el-checkbox v-model="item.publicInfo.status">{{item.publicInfo.inter_name}}</el-checkbox>
+                    <el-checkbox v-model="item.publicInfo.status" @change="choosePublic(index)" class="ml-15">
+                      {{item.publicInfo.inter_name}}
+                    </el-checkbox>
                   </td>
-                  <td>{{item.publicInfo.role_name}}</td>
+                  <!--关联角色-->
+                  <td><span class="ml-15">{{item.publicInfo.role_name}}</span></td>
                   <td colspan="2">
                     <ul class="combine-ul">
                       <li v-for="(item1,index1) in item.hotels">
                         <div class="left-list">
-                          <el-checkbox v-model="item1.status">{{item1.hotel_name}}</el-checkbox>
+                          <!--启用-->
+                          <!--门店-->
+                          <el-checkbox v-if="item.publicInfo.status" v-model="item1.status">{{item1.hotel_name}}
+                          </el-checkbox>
+                          <!--禁用-->
+                          <el-checkbox v-else disabled v-model="item1.status">{{item1.hotel_name}}</el-checkbox>
                         </div>
                         <div class="right-list">
-                          <el-checkbox v-model="item2.status" v-for="item2 in item.shops[index1]">{{item2.shop_name}}
-                          </el-checkbox>
+                          <template v-for="item2 in item.shops[index1]">
+                            <!--启用-->
+                            <!--店铺-->
+                            <el-checkbox v-if="item.publicInfo.status && item1.status" v-model="item2.status">
+                              {{item2.shop_name}}
+                            </el-checkbox>
+                            <!--禁用-->
+                            <el-checkbox v-else disabled>{{item2.shop_name}}</el-checkbox>
+                          </template>
                         </div>
                       </li>
                     </ul>
@@ -104,13 +117,12 @@
               </div>
               <div style="text-align: center">
                 <el-button type="primary" size="small" icon="plus" @click="addAccount()">新增</el-button>
-              </div>
-              <div class="finish-btn" v-if="this.SuperTube ==='1'">
-                <el-button type="primary" size="small">完成</el-button>
-              </div>
-              <div class="next-btn">
-                <el-button type="primary" size="small" v-if="this.SuperTube ==='0'" @click="nextStepTwo()">下一步
+                <el-button type="primary" size="small" @click="twoPrevStep()">上一步</el-button>
+                <el-button type="primary" size="small" v-if="this.SuperTube ==='1'" @click="twoNextStep()">下一步
                 </el-button>
+              </div>
+              <div class="finish-btn" v-if="this.SuperTube ==='0'">
+                <el-button type="primary" @click="postNewAccount()" size="small">完成</el-button>
               </div>
               <el-alert v-if="nextAlert" title="请至少输入一个公众号！" type="error">
               </el-alert>
@@ -124,7 +136,7 @@
                 <el-form-item prop="choosedPublicAccount" label="选择公众号">
                   <el-select v-model="relatedForm.choosedPublicAccount" @change="changeAccount" placeholder="请选择公众号">
                     <el-option v-for="item in relatedForm.publicAccount" :value="item.inter_id"
-                               :label="item.name"></el-option>
+                               :label="item.name" :key="item.inter_id"></el-option>
                   </el-select>
                 </el-form-item>
                 <el-form-item prop="choosedRole" label="选择角色">
@@ -139,7 +151,7 @@
                   </el-tooltip>
                   <el-select v-model="relatedForm.choosedRole" @change="changeRole" placeholder="请选择角色">
                     <el-option v-for="item in relatedForm.role" :value="item.role_id"
-                               :label="item.role_name"></el-option>
+                               :label="item.role_name" :key="item.role_id"></el-option>
                   </el-select>
                 </el-form-item>
                 <el-form-item style="text-align: center;margin-top: 30px;">
@@ -149,22 +161,21 @@
             </div>
           </div>
           <!--账号权限-->
-          <el-form v-else-if="activeStep === 2" :model="authorityForm" ref="authorityForm"
-                   :rules="authorityRules"
+          <el-form v-else-if="activeStep === 2" :model="authorityForm" ref="authorityForm" :rules="authorityRules"
                    class="account-authority" label-width="">
             <el-form-item prop="account" label="选择公众号">
               <el-select v-model="authorityForm.account" placeholder="请选择公众号" @change="getAuthorityData">
-                <el-option v-for="item in relatedInforList" :label="item.publicInfo.inter_name"
-                           :value="item.publicInfo.inter_id"></el-option>
+                <el-option v-for="item in selectedAccountRole" :label="item.publicInfo.inter_name"
+                           :value="item.publicInfo.inter_id" :key="item.index"></el-option>
               </el-select>
             </el-form-item>
             <div>
               <span>已选角色&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</span>
               <span>{{authorityForm.role_name}}</span>
             </div>
-            <template v-if="false">
+            <template v-if="authorityList">
               <div class="choose-all">
-                <el-checkbox>全选</el-checkbox>
+                <el-checkbox @change="chooseAllAuthority" v-model="chooseAllAuth">全选</el-checkbox>
               </div>
               <!--账号权限表格-->
               <table>
@@ -173,43 +184,33 @@
                   <th>权限</th>
                   <th>权限子项</th>
                 </tr>
-                <tr>
-                  <td>
-                    <el-checkbox>订房</el-checkbox>
+                <tr v-for="key in authorityList">
+                  <td class="module_name">
+                    <el-checkbox v-model="key.status" @change="chooseModuleAction(key)">{{key.name}}</el-checkbox>
                   </td>
                   <td colspan="2">
                     <ul class="combine-ul">
-                      <li>
+                      <li v-for="key1 in key.controllers">
                         <div class="left-list">
-                          <el-checkbox>订单管理</el-checkbox>
+                          <!--启用-->
+                          <el-checkbox v-if="key.status" v-model="key1.status"
+                                       @change="chooseAuthorityAction(key,key1)">{{key1.name}}
+                          </el-checkbox>
+                          <!--禁用-->
+                          <el-checkbox v-else disabled>{{key1.name}}</el-checkbox>
                         </div>
                         <div class="right-list">
-                          <el-checkbox>查看列表</el-checkbox>
-                          <el-checkbox>查看列表</el-checkbox>
-                          <el-checkbox>查看列表</el-checkbox>
-                          <el-checkbox>查看列表</el-checkbox>
-                        </div>
-                      </li>
-                      <li>
-                        <div class="left-list">
-                          <el-checkbox>订单管理</el-checkbox>
-                        </div>
-                        <div class="right-list">
-                          <el-checkbox>查看列表</el-checkbox>
-                          <el-checkbox>查看列表</el-checkbox>
-                          <el-checkbox>查看列表</el-checkbox>
-                          <el-checkbox>查看列表</el-checkbox>
-                        </div>
-                      </li>
-                      <li>
-                        <div class="left-list">
-                          <el-checkbox>订单管理</el-checkbox>
-                        </div>
-                        <div class="right-list">
-                          <el-checkbox>查看列表</el-checkbox>
-                          <el-checkbox>查看列表</el-checkbox>
-                          <el-checkbox>查看列表</el-checkbox>
-                          <el-checkbox>查看列表</el-checkbox>
+                          <!--启用-->
+                          <!--<span>{{key1.status}}</span>-->
+                          <template v-for="key2 in key1.funcs">
+                            <el-checkbox v-if="key1.status" v-model="key2.status">
+                              {{key2.name}}
+                            </el-checkbox>
+                            <!--禁用-->
+                            <el-checkbox v-else disabled>
+                              {{key2.name}}
+                            </el-checkbox>
+                          </template>
                         </div>
                       </li>
                     </ul>
@@ -217,23 +218,38 @@
                 </tr>
               </table>
             </template>
+            <div class="prev-btn">
+              <el-button type="primary" size="small" @click="threePrevStep()">上一步</el-button>
+            </div>
+            <div class="finish-btn" v-if="!loading">
+              <el-button type="primary" @click="postNewAccount()" size="small">完成</el-button>
+            </div>
           </el-form>
         </div>
       </el-col>
     </el-row>
-    <!--<div class="finish-btn">-->
-    <!--<el-button type="primary" size="small">完成</el-button>-->
-    <!--</div>-->
   </div>
 </template>
 
 <script>
-  import {getAccountRelated, getRelatedHotel, getAccountAuthority, getAccountInfor} from '@/service/system/http'
+  import {
+    getAccountRelated,
+    getRelatedHotel,
+    getAccountInfor,
+    getAccountAuthority,
+    postAccountData,
+    getAccountRole
+  } from '@/service/system/http'
+  import {showFullLayer, formatUrlParams} from '@/utils/utils'
 
   export default {
-    name: 'addrole',
+    name: 'addAccount',
     created () {
+      // 获取账号id
+      this.urlParam = formatUrlParams(window.location.href)
+//      console.log(this.urlParam)
       this.getEssentialInfor()
+      this.getAccountData()
     },
     data () {
       var validatePass = (rule, value, callback) => {
@@ -260,6 +276,7 @@
         }
       }
       return {
+        urlParam: {},
         loading: true,
         // 被编辑角色的id
         account_id: null,
@@ -286,9 +303,13 @@
           repassword: '',
           status: ''
         },
+        bindWXpopup: null,
+        // 新增关联公众号时 弹窗内的公众号列表
         relatedForm: {
+          // 获取的公众号列表
           publicAccount: [],
           role: [],
+          // 选中的公众号
           choosedPublicAccount: '',
           choosedRole: '',
           inter_name: '',
@@ -298,9 +319,10 @@
           choosedPublicAccount: [{required: true, message: '请选择公众号', trigger: 'change'}],
           choosedRole: [{required: true, message: '请选择角色', trigger: 'change'}]
         },
-        // 关联的公众号 门店 店铺列表
+        // 关联的所有公众号 门店 店铺列表 包含所有（勾选，非勾选）
         relatedInforList: [],
         current: {
+          // 因为有分页 本列表显示的当前页面的项
           renderList: [],
           page: 1,
           size: 2,
@@ -320,41 +342,83 @@
         authorityRules: {
           account: [{required: true, message: '请选择公众号'}]
         },
-        chooseAll: false
+        chooseAll: false,
+        choosedAccountId: [],
+        authorityList: [],
+        totalAuthority: [],
+        chooseAllAuth: false,
+        selectedAccountRole: []
       }
     },
     methods: {
-      // 点击下一步
-      nextStepBtn (formName) {
+      // 基础信息点击下一步
+      oneNextBtn (formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
             this.getAccountData()
-            this.nextStep()
+            this.addStep()
           } else {
             return false
           }
         })
+        // 浏览器返回
+        const cb = () => {
+          // 建议写死 因为多次返回 会使step值一直减少
+          this.activeStep = 0
+        }
+        showFullLayer(null, '填写基础信息', location.href, cb)
       },
-      nextStep () {
+      addStep () {
         this.activeStep += 1
       },
-
+      // 上一步
+      twoPrevStep () {
+        this.activeStep = 0
+      },
+      // 关联公众号点击下一步
+      twoNextStep () {
+        let choosedItem = this.relatedInforList.find((item) => {
+          return item.publicInfo.status === true
+        })
+        this.selectedAccountRole.length = 0
+        for (let j = 0; j < this.relatedInforList.length; j++) {
+          if (this.relatedInforList[j].publicInfo.status === true) {
+            this.selectedAccountRole.push({'index': j, 'publicInfo': this.relatedInforList[j].publicInfo})
+          }
+        }
+        if (choosedItem === undefined) {
+          alert('请至少选择一个公众号！')
+        } else {
+          this.addStep()
+          const cb = () => {
+            // 建议写死 因为多次返回 会使step值一直减少
+            this.activeStep = 1
+          }
+          showFullLayer(null, '关联公众号', location.href, cb)
+        }
+      },
+      // 账号权限上一步
+      threePrevStep () {
+        this.activeStep = 1
+      },
+      // 获取可以关联的公众号列表
       getAccountData () {
         getAccountRelated().then((res) => {
           this.relatedForm.publicAccount = res.web_data.public
-          this.relatedForm.role = res.web_data.role
         })
       },
       // 获取账户信息
       getEssentialInfor () {
         getAccountInfor().then((res) => {
+          // SuperTube 为1的时候 为超管 为0的时候 为普通管理员
           this.SuperTube = res.web_data.SuperTube
+//          console.log(this.SuperTube)
         })
       },
-      // 获取酒店，店铺数据
+      // 新增关联公众号 获取酒店，店铺数据
       getHotelData () {
         let getData = {
-          inter_id: this.relatedForm.choosedPublicAccount,
+          interId: this.relatedForm.choosedPublicAccount,
           inter_name: this.relatedForm.inter_name,
           role_id: this.relatedForm.choosedRole,
           role_name: this.relatedForm.role_name
@@ -364,28 +428,64 @@
             this.addAccountShow = false
             this.relatedInforList.push(res.web_data)
             this.removeRepeat()
-            this.current.total = this.relatedInforList.length
+            let length = this.relatedInforList.length
+            this.current.total = length
             this.toRenderList()
-            this.setStatus(this.chooseAll)
+            // 将最后添加的公众号默认状态设为未勾选
+            this.$set(this.relatedInforList[length - 1].publicInfo, 'status', false)
+            // 将店铺等勾选信息也设为false x12测试新增公众号是否被勾选
+//            this.setStatus(this.relatedInforList[length - 1].publicInfo.status)
             this.listShow = true
           }
         })
       },
       // 获取权限列表
       getAuthorityData (value) {
-        let obj = this.relatedInforList.find((item) => {
+        let obj = this.selectedAccountRole.find((item) => {
+          // 返回公众id等于value 的项
           return item.publicInfo.inter_id === value
         })
-        console.log(obj.role_id)
-        getAccountAuthority({}).then((res) => {
-
-        })
+//        console.log('绑定的index是')
+//        console.log(obj.index)
+        this.authorityForm.role_name = obj.publicInfo.role_name
+        let getData = {
+          role_id: obj.publicInfo.role_id,
+          interId: value
+        }
+        // 获取权限
+        if (obj.hasRequest) {
+          this.authorityList = this.relatedInforList[obj.index].authority
+          console.log(this.authorityList)
+        } else {
+          getAccountAuthority(getData).then((res) => {
+            this.$set(obj, 'hasRequest', true)
+            this.loading = false
+            this.authorityList = res.web_data
+            for (let key in this.authorityList) {
+              let moduleName = this.authorityList[key]
+              this.$set(moduleName, 'status', moduleName.check === 1)
+              let controllers = moduleName.controllers
+              for (let key1 in controllers) {
+                this.$set(controllers[key1], 'status', controllers[key1].check === 1)
+                let funcs = controllers[key1].funcs
+                for (let key2 in funcs) {
+                  this.$set(funcs[key2], 'status', funcs[key2].check === 1)
+                }
+              }
+            }
+            this.relatedInforList[obj.index].authority = this.authorityList
+            this.authorityList.length = 0
+//          console.log('权限集合')
+//          console.log(this.relatedInforList[obj.index].authority)
+//          console.log(this.authorityList)
+          })
+        }
       },
+      // 渲染关联的公众号列表
       toRenderList () {
         let renderFrom = (this.current.page - 1) * this.current.size
         let renderTo = this.current.page * this.current.size
         this.current.renderList = this.relatedInforList.slice(renderFrom, renderTo)
-
         let renderLength = this.current.renderList.length
         if (this.keyword === '') {
           this.current.total = this.relatedInforList.length
@@ -408,7 +508,12 @@
         obj = this.relatedForm.publicAccount.find((item) => {
           return item.inter_id === value
         })
+        getAccountRole({interId: value}).then((res) => {
+          this.relatedForm.role = res.web_data.role
+        })
         this.relatedForm.inter_name = obj.name
+        // x8 测试权限集合是否生效
+//        console.log(this.totalAuthority)
       },
       changeRole (value) {
         let obj = {}
@@ -418,6 +523,7 @@
         this.relatedForm.role_name = obj.role_name
       },
       addAccount () {
+        this.relatedForm.choosedPublicAccount = ''
         this.addAccountShow = true
       },
       confirmAccount (formName) {
@@ -439,18 +545,44 @@
           }
         }
       },
-      // 关联角色点击下一步
-      nextStepTwo () {
-//        for (let i = 0; i < this.relatedInforList.length; i++) {
-//          this.relatedInforList[i].publicInfo.status === true
-//        }
-        let choosedItem = this.relatedInforList.find((item) => {
-          return item.publicInfo.status === true
-        })
-        if (choosedItem === undefined) {
-          alert('请至少选择一个公众号！')
-        } else {
-          this.nextStep()
+      // 设置状态
+      setStatus (value) {
+        for (let i = 0; i < this.relatedInforList.length; i++) {
+          if (this.relatedInforList[i].publicInfo) {
+            this.$set(this.relatedInforList[i].publicInfo, 'status', value)
+          }
+          let tempHotels = this.relatedInforList[i].hotels
+          if (tempHotels) {
+            for (let j = 0; j < tempHotels.length; j++) {
+              let tempShops = this.relatedInforList[i].shops[j]
+              if (tempShops) {
+                this.$set(this.relatedInforList[i].hotels[j], 'status', value)
+                for (let m = 0; m < tempShops.length; m++) {
+                  this.$set(this.relatedInforList[i].shops[j][m], 'status', value)
+                }
+              }
+            }
+          }
+        }
+      },
+      // 选择公众号
+      choosePublic (index) {
+        // 某公众号下的信息 每次获取一个公众号信息 x16 下标问题
+        let realIndex = (this.current.page - 1) * this.current.size + index
+        let ob = this.relatedInforList[realIndex].publicInfo.status
+        let shops = this.relatedInforList[realIndex].shops
+        let hotels = this.relatedInforList[realIndex].hotels
+        for (let i = 0; i < hotels.length; i++) {
+          if (hotels[i]) {
+            this.$set(hotels[i], 'status', ob)
+          }
+          if (shops[i]) {
+            for (let j = 0; j < shops[i].length; j++) {
+              if (shops[i][j]) {
+                this.$set(shops[i][j], 'status', ob)
+              }
+            }
+          }
         }
       },
       // 切换页码
@@ -459,26 +591,137 @@
         this.toRenderList()
       },
       // 全选按钮
-      chooseAllBtn () {
+      chooseAllAction () {
         this.setStatus(this.chooseAll)
       },
-      // 设置状态
-      setStatus (value) {
-        for (let i = 0; i < this.relatedInforList.length; i++) {
-          this.$set(this.relatedInforList[i].publicInfo, 'status', value)
-          let tempHotels = this.relatedInforList[i].hotels
-          for (let j = 0; j < tempHotels.length; j++) {
-            let tempShops = this.relatedInforList[i].shops[j]
-            this.$set(this.relatedInforList[i].hotels[j], 'status', value)
-            for (let m = 0; m < tempShops.length; m++) {
-              this.$set(this.relatedInforList[i].shops[j][m], 'status', value)
+      // 全选权限
+      chooseAllAuthority () {
+        for (let key in this.authorityList) {
+          let moduleName = this.authorityList[key]
+          if (moduleName) {
+            this.$set(moduleName, 'status', this.chooseAllAuth)
+            let controllers = moduleName.controllers
+            if (moduleName.controllers) {
+              for (let key1 in controllers) {
+                if (key1) {
+                  this.$set(controllers[key1], 'status', this.chooseAllAuth)
+                  let funcs = controllers[key1].funcs
+                  if (funcs) {
+                    for (let key2 in funcs) {
+                      this.$set(funcs[key2], 'status', this.chooseAllAuth)
+                    }
+                  }
+                }
+              }
             }
           }
+        }
+      },
+      // 权限配置 选择模块
+      chooseModuleAction (key) {
+        let moduleName = key
+        let controllers = moduleName.controllers
+        for (let key1 in controllers) {
+          this.$set(controllers[key1], 'status', key.status)
+          let funcs = controllers[key1].funcs
+          for (let key2 in funcs) {
+            this.$set(funcs[key2], 'status', key.status)
+          }
+        }
+      },
+      // 权限配置 选择权限
+      chooseAuthorityAction (key, key1) {
+        let funcs = key1.funcs
+        for (let key2 in funcs) {
+          this.$set(funcs[key2], 'status', key1.status)
         }
       },
       // 取消新建
       cancelPopup () {
         this.addAccountShow = false
+      },
+      // 提交数据
+      postNewAccount () {
+        let ids = {}
+        // 关联的公众号及酒店数据
+        for (let i = 0; i < this.relatedInforList.length; i++) {
+          let publicInfo = this.relatedInforList[i].publicInfo
+          let hotels = this.relatedInforList[i].hotels
+          let shops = this.relatedInforList[i].shops
+          if (publicInfo.status === true) {
+            ids.inter_id = publicInfo.inter_id
+            ids.role_id = publicInfo.role_id
+          }
+          let entityId = []
+          for (let j = 0; j < hotels.length; j++) {
+            if (hotels[j].status === true) {
+              let shopIds = []
+              if (shops[j]) {
+                for (let m = 0; m < shops[j].length; m++) {
+                  shopIds.push(shops[j][m].shop_id)
+                }
+              }
+              entityId.push({'shop_id': shopIds, 'hotel_id': hotels[j].hotel_id})
+            }
+          }
+          ids.entity_id = entityId
+          // 权限数据 写法问题
+          let itemAuthor = this.relatedInforList[i].authority
+//          console.log('获取数组里面绑定的权限')
+//          console.log(itemAuthor)
+          let moduleArr = {}
+          if (itemAuthor) {
+            for (let h in itemAuthor) {
+              // 获取每一个模块
+              let module = itemAuthor[h]
+              let controllersArr = {}
+              let funcsArr = {}
+              if (module.status === true) {
+                // 若模块为选中状态
+                for (let h1 in module.controllers) {
+                  // 模块下面的权限
+                  let contorllers = module.controllers[h1]
+                  // 若模块为选中状态
+                  if (contorllers.status === true) {
+                    for (let h2 in contorllers.funcs) {
+                      let funcs = contorllers.funcs[h2]
+                      if (funcs.status === true) {
+                        console.log('选中的key是:')
+                        console.log(h2)
+                        funcsArr[h2] = []
+                      }
+                    }
+                    controllersArr[h1] = funcsArr
+                    funcsArr = {}
+                  }
+                }
+                moduleArr[h] = controllersArr
+              }
+            }
+          }
+          ids.authority = JSON.stringify(moduleArr)
+//          console.log('权限的数据')
+//          console.log(moduleArr)
+//           所有id是
+          this.choosedAccountId[i] = ids
+        }
+//        console.log('总数据')
+//        console.log(this.choosedAccountId)
+        this.choosedAccountId = this.choosedAccountId
+        let postData = {
+          username: this.accountInfor.username,
+          nickname: this.accountInfor.nickname,
+          password: this.accountInfor.password,
+          confirmPwd: this.accountInfor.repassword,
+          status: this.accountInfor.status === '有效' ? 1 : 0,
+          interInfo: this.choosedAccountId
+        }
+        console.log('参数:')
+        console.log(postData)
+        postAccountData(postData).then((res) => {
+//         新增成功 跳转 链接
+          window.location.href = res.web_data.url
+        })
       }
     }
   }
@@ -508,9 +751,9 @@
       }
     }
     .el-steps {
-      width: 830px;
-      margin: 0 auto;
+      text-align: center;
       margin-bottom: 20px;
+      margin-left: 400px;
     }
     .paging-block {
       width: 60%;
@@ -529,12 +772,8 @@
     .all-outer {
       padding: 15px 0;
     }
-    .next-btn {
-      position: fixed;
-      left: 50%;
-      margin-left: 372px;
-      bottom: 20px;
-      z-index: 10;
+    .prev-btn {
+      margin-left: 260px;
     }
     .create-account-box {
       width: 644px;
@@ -579,30 +818,55 @@
       border-collapse: collapse;
       margin-bottom: 20px;
       th {
-        padding: 10px 30px;
+        padding: 15px 0;
+        text-align: center;
         border: 1px solid #d8cece;
       }
       td {
-        padding: 10px 30px;
+        text-align: left;
         border: 1px solid #d8cece;
+        .ml-15 {
+          margin-left: 15px;
+        }
+      }
+      .module_name {
+        .el-checkbox {
+          margin-left: 15px;
+        }
       }
     }
+    .el-popover {
+      text-align: center;
+    }
     .combine-ul {
+      margin-bottom: -2px;
+      min-height: 50px;
       li {
         list-style: none;
-        &:after {
+        border-bottom: 1px solid #d8cece;
+        position: relative;
+        &::after {
           clear: both;
           height: 0;
           content: "";
           display: block;
         }
+        &::before {
+          content: "";
+          position: absolute;
+          height: 100%;
+          width: 1px;
+          background-color: #d8cece;
+          right: 50%;
+        }
       }
       .left-list, .right-list {
         width: 50%;
         float: left;
-        margin: 10px 0 20px 0;
+        padding: 15px 0 5px 0;
         .el-checkbox {
           margin-left: 15px;
+          margin-bottom: 10px;
         }
       }
     }

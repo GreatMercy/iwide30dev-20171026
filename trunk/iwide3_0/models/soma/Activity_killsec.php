@@ -246,7 +246,7 @@ class Activity_killsec extends \MY_Model_Soma
     {
         $table_name = $this->soma_db_conn_read->dbprefix($this->table_name());
         $current_time = date('Y-m-d H:i:s');
-        $sql = "SELECT $select FROM $table_name WHERE  status = ? AND  date_sub(killsec_time, interval 55 minute) < ?  AND ? < date_sub(killsec_time, interval 1 minute) limit $limit";
+        $sql = "SELECT $select FROM $table_name WHERE status = ? AND  date_sub(killsec_time, interval 55 minute) < ?  AND ? < date_sub(killsec_time, interval 1 minute) limit $limit";
         $query = $this->soma_db_conn->query($sql, [
             self::STATUS_TRUE,
             $current_time,

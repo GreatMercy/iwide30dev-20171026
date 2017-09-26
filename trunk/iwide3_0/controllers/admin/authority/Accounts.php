@@ -29,7 +29,7 @@ class Accounts extends MY_Admin
             'param'      => $param,
         );
 
-        echo $this->_render_content($this->_load_view_file('index'), $return, TRUE);
+        echo $this->_render_content($this->_load_view_file('account_list'), $return, TRUE);
     }
 
     /**
@@ -42,7 +42,7 @@ class Accounts extends MY_Admin
             'param' => $param,
         );
 
-        echo $this->_render_content($this->_load_view_file('edit'), $return, TRUE);
+        echo $this->_render_content($this->_load_view_file('edit_account'), $return, TRUE);
     }
 
     /**
@@ -55,7 +55,7 @@ class Accounts extends MY_Admin
             'param' => $param,
         );
 
-        echo $this->_render_content($this->_load_view_file('edit'), $return, TRUE);
+        echo $this->_render_content($this->_load_view_file('add_account'), $return, TRUE);
     }
 
     /**
@@ -69,7 +69,6 @@ class Accounts extends MY_Admin
         $text = urldecode($text);
         QRcode::png($text,false,6,6);
     }
-
 
     /**
      * 登录
@@ -109,6 +108,5 @@ class Accounts extends MY_Admin
 
         print_r($arr);
     }
-
 
 }

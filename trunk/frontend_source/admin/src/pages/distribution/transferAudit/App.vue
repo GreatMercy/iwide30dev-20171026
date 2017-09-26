@@ -22,7 +22,7 @@
               <el-col :span="11">
                 <el-select v-model="selectedState" placeholder="所有状态" >
                     <el-option
-                      v-for="item in getStates"
+                      v-for="(item, idx) in getStates"
                       :key="item.value"
                       :label="item.name"
                       :value="item.value">

@@ -8,7 +8,6 @@ let API_HOTEL_V1 = `${API_URL_SUFFIX_V1}/hotel`
 // express(快递)相关部分
 let API_EXPRESS_V1 = `${API_URL_SUFFIX_V1}/some/express`
 // http://dev.iwide30.admin.com/index.php/iapi/v1/soma/express/createShippingOrder
-
 const v1 = {
   // 价格码
   GET_HOTEL_PRICES_CODE_INFO: `${API_HOTEL_V1}/prices/code_edit`,
@@ -23,7 +22,17 @@ const v1 = {
   // 提交价格代码配置
   POST_HOTEL_PRICES_CODE_INFO: `${API_HOTEL_V1}/prices/edit_code_post`,
   // 邮寄发货
-  POST_EXPRESS_DELIVERY: `${API_EXPRESS_V1}/create_shipping_order`
+  POST_EXPRESS_DELIVERY: `${API_EXPRESS_V1}/create_shipping_order`,
+  // 皮肤管理首页
+  GET_SKIN_INDEX: `${API_HOTEL_V1}/skin/index`,
+  // 选择皮肤
+  POST_SAVE_SKIN: `${API_HOTEL_V1}/skin/save_skin`,
+  // 获取皮肤详情
+  GET_SKIN_SETTING: `${API_HOTEL_V1}/skin/get_setting`,
+  // 删除轮播图
+  POST_SKIN_DEL_FOCUS: `${API_HOTEL_V1}/skin/del_focus`,
+  // 保存皮肤详情配置
+  POST_SKIN_SAVE_SETTING: `${API_HOTEL_V1}/skin/save_setting`
 }
 
 export {

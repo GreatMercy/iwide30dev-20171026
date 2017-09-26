@@ -5,11 +5,11 @@
       <div class="ht_del_top_info" @click="getLocationData()">
         <p class="info_title font-size--34">{{hotel.name}}</p>
         <p class="info_place font-size--24">
-          <i class="booking_icon_font icon-booking_icon_businessdistrict_norma font-size--34"></i>
+          <i class="booking_icon_font icon-booking_icon_businessdistrict_norma font-size--24 map_point"></i>
           {{hotel.address}}
         </p>
         <span class="icon_dh font-size--24">
-          <i class="booking_icon_font icon-booking_icon_navigation_normal  font-size--34 map-sign"></i>
+          <i class="booking_icon_font icon-booking_icon_navigation_normal  font-size--40 map-sign"></i>
           <span>导 航</span>
         </span>
       </div>

@@ -43,7 +43,7 @@
           {{hotel.address}}
         </p>
         <span class="icon_dh font-size--24">
-          <i class="booking_icon_font icon-booking_icon_navigation_normal  font-size--34"></i>
+          <i class="booking_icon_font icon-booking_icon_navigation_normal  font-size--40"></i>
           <span class="text">导 航</span>
         </span>
       </div>

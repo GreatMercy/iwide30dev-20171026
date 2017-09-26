@@ -12,7 +12,7 @@
         <div class="refund-information__hotel font-size--24" v-if="detail.hotel_name"
              v-text="detail.hotel_name + '提供'"></div>
         <div class="jfk-price font-size--54 refund-information__price color-golden-price" v-if="detail.real_grand_total">
-          <i class="jfk-font-number jfk-price__currency">¥</i>
+          <i class="jfk-font-number jfk-price__currency">￥</i>
           <i class="jfk-font-number jfk-price__number" v-text="detail.real_grand_total"></i>
         </div>
       </div>
@@ -36,7 +36,7 @@
             <div class="refund-order__title font-size--28">订单总价</div>
             <div class="refund-order__content font-size--30">
             <span class="jfk-price font-size--38">
-              <i class="jfk-font-number jfk-price__currency">¥</i>
+              <i class="jfk-font-number jfk-price__currency">￥</i>
               <i class="jfk-font-number jfk-price__number" v-text="detail.real_grand_total"></i>
             </span>
             </div>

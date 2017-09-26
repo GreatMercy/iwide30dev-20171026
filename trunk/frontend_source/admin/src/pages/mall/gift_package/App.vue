@@ -60,6 +60,13 @@
 
         <el-table-column prop="name" label="商品名称" align="center"></el-table-column>
 
+        <el-table-column  label="状态" align="center">
+          <template scope="scope">
+            <p v-if="scope.row.status === '1'">上架</p>
+            <p v-else>下架</p>
+          </template>
+        </el-table-column>
+
         <el-table-column prop="stock" label="库存" align="center"></el-table-column>
 
         <el-table-column label="操作" show-overflow-tooltip align="center" width="130px">

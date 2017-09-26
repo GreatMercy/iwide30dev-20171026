@@ -1,5 +1,6 @@
 import * as apiConfig from './api'
 import ajax from '@/utils/http'
+import ajax1 from '@/utils/form_data.js'
 
 /**
  * 获取套餐产品列表
@@ -204,11 +205,82 @@ const getAccountAuthority = (data, config, version = 'v1') => {
   return ajax.get(url, data, config)
 }
 /**
+ * 权限账户--获取账户角色列表
+ * @param {string} data.inter_id
+ */
+const getAccountRole = (data, config, version = 'v1') => {
+  let url = apiConfig[version] && apiConfig[version].GET_ACCOUNT_ROLE || apiConfig['v1'].GET_ACCOUNT_ROLE
+  return ajax.get(url, data, config)
+}
+/**
  * 权限账户--获取账户信息
  * @param {string} data.admin_id
  */
 const getAccountInfor = (data, config, version = 'v1') => {
   let url = apiConfig[version] && apiConfig[version].GET_ACCOUNT_INFOR || apiConfig['v1'].GET_ACCOUNT_INFOR
+  return ajax.get(url, data, config)
+}
+/**
+ * 权限账户--提交账户信息
+ * @param {FORM_DATA} data.username
+ * @param {FORM_DATA} data.nickname
+ * @param {FORM_DATA} data.password
+ * @param {FORM_DATA} data.confirmPwd
+ * @param {FORM_DATA} data.status
+ * @param {FORM_DATA} data.interInfo
+ */
+const postAccountData = (data, config, version = 'v1') => {
+  let url = apiConfig[version] && apiConfig[version].POST_NEW_ACCOUNT || apiConfig['v1'].POST_NEW_ACCOUNT
+  return ajax1.postFormData(url, data, config)
+}
+/**
+ * 权限账户--获取账户管理列表
+ * @param {string} data.keyword
+ * @param {string} data.offset
+ * @param {string} data.limit
+ */
+const getSearchAccount = (data, config, version = 'v1') => {
+  let url = apiConfig[version] && apiConfig[version].GET_SEARCH_PUBLIC || apiConfig['v1'].GET_SEARCH_PUBLIC
+  return ajax.get(url, data, config)
+}
+/**
+ * 权限账户--获取登陆二维码
+ * @param 无
+ */
+const getLoginQrcode = (data, config, version = 'v1') => {
+  let url = apiConfig[version] && apiConfig[version].GET_LOGIN_QRCODE || apiConfig['v1'].GET_LOGIN_QRCODE
+  return ajax.get(url, data, config)
+}
+/**
+ * 权限账户--获取二维码扫描状态
+ * @param {{String}} token
+ */
+const getScanStatus = (data, config, version = 'v1') => {
+  let url = apiConfig[version] && apiConfig[version].GET_CODE_SCAN || apiConfig['v1'].GET_CODE_SCAN
+  return ajax.get(url, data, config)
+}
+/**
+ * 权限账户--编辑账户
+ * @param {{String}} admin_id
+ * @param {{String}} username
+ *  @param {{String}} nickname
+ * @param {{String}} password
+ * @param {{String}} confirmPwd
+ * @param {{String}} oldPassword
+ * @param {{String}} status
+ * @param {{String}} bind_status
+ * @param {{String}} interInfo
+ */
+const postEditAccount = (data, config, version = 'v1') => {
+  let url = apiConfig[version] && apiConfig[version].POST_EDIT_ACCOUNT || apiConfig['v1'].POST_EDIT_ACCOUNT
+  return ajax1.postFormData(url, data, config)
+}
+/**
+ * 权限账户--获取绑定账户的二维码
+ * @param {{String}} admin_id
+ */
+const getBindCode = (data, config, version = 'v1') => {
+  let url = apiConfig[version] && apiConfig[version].GET_BIND_QRCODE || apiConfig['v1'].GET_BIND_QRCODE
   return ajax.get(url, data, config)
 }
 export {
@@ -221,6 +293,7 @@ export {
   getRoleList,
   getRoleInfor,
   getRoleAuthority,
+  getAccountRole,
   postRoleData,
   getAuthorityModule,
   getAuthorityList,
@@ -231,5 +304,11 @@ export {
   getAccountRelated,
   getRelatedHotel,
   getAccountAuthority,
-  getAccountInfor
+  getAccountInfor,
+  postAccountData,
+  getSearchAccount,
+  getLoginQrcode,
+  getScanStatus,
+  postEditAccount,
+  getBindCode
 }

@@ -4,8 +4,9 @@
     <a class="jfk-rater-box jfk-rater__default" v-for="(i, index) in max" :key="index"
        @click="handleClick(i-1)"
        :class="{ 'jfk-rater__active' : currentValue > 0 && currentValue > i-1 && cutIndex !== i-1 }"
-       :style="{marginRight:margin+'px',fontSize: fontSize + 'px', width: fontSize + 'px', height: fontSize + 'px', lineHeight: fontSize + 'px'}">
-      <span class="jfk-rater-inner">{{star}}<span class="jfk-rater-outer jfk-rater__active" :style="{width: cutPercent + '%'}"
+       :style="{marginRight:margin+'rem',fontSize: fontSize + 'rem', width: fontSize + 'rem', height: fontSize + 'rem', lineHeight: fontSize + 'rem'}">
+      <span class="jfk-rater-inner">{{star}}<span class="jfk-rater-outer jfk-rater__active"
+                                                  :style="{width: cutPercent + '%'}"
                                                   v-if="cutPercent > 0 && cutIndex === i-1">{{star}}</span></span>
     </a>
   </div>
@@ -52,6 +53,10 @@
         return this.sliceValue[0] * 1
       },
       cutPercent () {
+        // 当前小数位
+        if (this.sliceValue[1] > 0 && this.sliceValue[1] <= 90) {
+          this.sliceValue[1] = 50
+        }
         return this.sliceValue[1] * 1
       }
     },

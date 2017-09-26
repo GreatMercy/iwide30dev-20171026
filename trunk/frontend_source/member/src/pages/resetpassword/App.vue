@@ -10,7 +10,7 @@
         </div>
         <div class="flex_1 font_15 form-item">
            <div class="form-item__body">
-             <input @keyup="setRemove($event)" :type="value.type" :name="key" :placeholder="value.note">
+             <input @keyup="setRemove($event)" :type="value.type" :name="key" :placeholder="value.note"  @focus="handleHiddenError(key)">
              <div class="form-item__status is-error" v-show="value.passed" @click="handleHiddenError(key)">
                 <i class="form-item__status-icon jfk-font icon-msg_icon_error_norma"></i>
                 <span class="form-item__status-tip">

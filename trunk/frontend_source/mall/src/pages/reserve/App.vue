@@ -485,7 +485,7 @@
         if (this.couponDisabled) {
           return '暂无可用优惠券'
         } else if (this.orderRulePicked && this.orderRule.rule_type) {
-          return '优惠活动与优惠券不能同时使用'
+          return '不与优惠活动同享'
         } else if (this.coupons.length) {
           if (this.couponId !== '-1') {
             return this.couponPicked.title
@@ -623,7 +623,9 @@
       // 选择完成优惠券
       handlePickedCoupon (val) {
         this.couponId = val
-        history.back(-1)
+        if (val !== '-1') {
+          history.back(-1)
+        }
       },
       // 显示价格明细
       handleShowOrderDetail () {

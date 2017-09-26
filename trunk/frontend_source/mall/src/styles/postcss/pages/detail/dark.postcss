@@ -45,6 +45,13 @@
         transform-origin: bottom left;
       }
     }
+    .prices--length {
+      &-6,&-7 {
+        & + .date-norm {
+          padding-left: px2rem(50);
+        }
+      }
+    }
     .price-tag {
       .mask {
         background-image: linear-gradient(-139deg, #9c8151, #bda372);
@@ -101,7 +108,7 @@
     }
   }
   .killsec-original {
-    margin-top: px2rem(80);
+    margin: px2rem(80) px2rem(30) 0;
     &:before,&:after {
       background-color: #363636;
     }
@@ -135,6 +142,12 @@
       right: px2rem(30);
       width: auto;
       background-color: #363636;
+    }
+  }
+  /* 原价购买与图文详情同时存在 */
+  .killsec-original + .productinfo-detail {
+    &:before {
+      background-color: transparent;
     }
   }
   .productinfo-detail-label {

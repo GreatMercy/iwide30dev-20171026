@@ -47,7 +47,7 @@
                     <a href="<?php echo $statusUrl,$instanceModel::STATUS_PREVIEW;?>" class="c333 fl f28 <?php if($status==$instanceModel::STATUS_PREVIEW):?>active<?php endif;?>">未开始</a>
                     <a href="<?php echo $statusUrl,$instanceModel::STATUS_GOING;?>" class="c333 fl f28 <?php if($status==$instanceModel::STATUS_GOING):?>active<?php endif;?>">进行中</a>
                     <a href="<?php echo $statusUrl,$instanceModel::STATUS_FINISH;?>" class="c333 fl f28 <?php if($status==$instanceModel::STATUS_FINISH):?>active<?php endif;?>">已结束</a>
-                    <a href="<?php echo Soma_const_url::inst()->get_url("*/*/add"); ?>" class="add fr">
+                    <a href="<?php echo Soma_const_url::inst()->get_url("*/activity_flashsale/add"); ?>" class="add fr">
                         <span>＋新增秒杀活动</span>
                     </a>
                 </div>
@@ -89,6 +89,7 @@
                                 <th>活动id</th>
                                 <th>活动名</th>
                                 <th>商品名称</th>
+                                <th>秒杀类型</th>
                                 <th>秒杀价</th>
                                 <th>库存</th>
                                 <th>启动秒杀时间</th>
@@ -102,12 +103,23 @@
                                         <td><?php echo $v['act_id'];?></td>
                                         <td><?php echo $v['act_name'];?></td>
                                         <td><?php echo $v['product_name'];?></td>
+                                        <td><?php echo $v['act_type'];?></td>
                                         <td>￥<?php echo $v['killsec_price'];?></td>
                                         <td><?php echo $v['killsec_count'];?></td>
                                         <td><?php echo $v['killsec_time'];?></td>
                                         <td><?php echo $v['end_time'];?></td>
                                         <td class="operation">
-                                            <a href="<?php echo $editUrl,$v['act_id'];?>" class="btn edit-list">编辑</a>
+                                            <a href="
+                                            <?php
+                                                if ($v['limit_type'] == 1)
+                                                {
+                                                    echo $killsec_editUrl,$v['act_id'];
+                                                }else
+                                                {
+                                                    echo $flashsale_editUrl,$v['act_id'];
+                                                }
+
+                                            ?>" class="btn edit-list">编辑</a>
                                             <?php
                                                 $statusArr = array();
                                                 if( isset( $v['notice_status'] ) && !empty( $v['notice_status'] ) )

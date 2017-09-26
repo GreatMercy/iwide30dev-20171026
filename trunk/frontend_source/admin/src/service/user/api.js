@@ -1,6 +1,7 @@
 // COUPON主路径
 let URL_SUFFIX = '/index.php/iapi/v1/membervip/vapi'
 let URL_REQUEST = '/index.php/iapi/v1/membervip/tasklogic'
+let URL_REPORT = '/index.php/iapi/v1/report/fans'
 
 const user = {
   // 发送任务配置
@@ -18,7 +19,11 @@ const user = {
   // 购卡充值分销绩效
   GET_DEPOST_STATEMENTS: `${URL_SUFFIX}/deposit_card_statements`,
   // 酒店列表
-  GET_HOTEL_LIST: `${URL_SUFFIX}/hotels_list`
+  GET_HOTEL_LIST: `${URL_SUFFIX}/hotels_list`,
+  // 粉丝统计
+  GET_FANS_REPORT: `${URL_REPORT}/fans_report`,
+  // 群发图文统计
+  GET_ARTICLE_TOTAL: `${URL_REPORT}/wx_article_total`
 }
 export {
   user

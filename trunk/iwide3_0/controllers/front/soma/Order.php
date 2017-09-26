@@ -248,6 +248,7 @@ class Order extends MY_Front_Soma {
                     $consumer_ids[] = $consumer['consumer_id'];
 
                     $isBookingHotel = FALSE;
+
                     $consumerMethod = $ConsumerOrderModel->load( $consumer['consumer_id'] )->m_get('consumer_method');
                     if( $consumerMethod == $ConsumerOrderModel::CONSUME_HOTEL_SELF ){
                         $isBookingHotel = TRUE;
@@ -361,7 +362,7 @@ class Order extends MY_Front_Soma {
         $this->datas['gift_model'] = $GiftOrderModel;
 
         $this->datas['consumer_status'] = $this->ConsumerItemModel->get_item_status_label();
-
+//exit(json_encode($consumerOrderDetail));
         $ConsumerItemModel = $this->ConsumerItemModel;
         $this->datas['can_mail_status'] = $ConsumerItemModel::STATUS_ITEM_SHIPPING;
 // var_dump( $this->datas['can_mail_status'] );

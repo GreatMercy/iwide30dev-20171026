@@ -28,7 +28,8 @@ module.exports = {
     'jfk-sticky': './src/packages/jfk-sticky/index.js',
     'jfk-rater': './src/packages/jfk-rater/index.js',
     'validator': './src/utils/validator.js',
-    'arithmetic': './src/utils/arithmetic.js'
+    'arithmetic': './src/utils/arithmetic.js',
+    'time': './src/utils/time.js'
   },
   output: {
     path: config.build.assetsRoot,

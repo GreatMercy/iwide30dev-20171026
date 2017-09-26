@@ -6,8 +6,8 @@ class Module_func_model extends MY_Model {
         parent::__construct ();
     }
     public $funcInfoField = array (
-            'LOGIN' => ' m.module_code,c.ctlr_id,c.ctlr_code,f.func_id,f.func_code,f.related_func_id,o.oper_id,o.oper_code,o.oper_config',
-            'DISP' => ' m.module_code,m.module_name,m.module_des,c.ctlr_id,c.ctlr_code,c.ctlr_name,c.ctlr_des,f.func_id,f.func_code,f.func_name,f.func_des,f.auto_log,f.related_func_id,o.oper_id,o.oper_code,o.oper_name,o.oper_des,o.oper_config' 
+            'LOGIN' => ' m.module_code,m.sys_code,c.ctlr_id,c.ctlr_code,f.func_id,f.func_code,f.related_func_id,o.oper_id,o.oper_code,o.oper_config',
+            'DISP' => ' m.module_code,m.sys_code,m.module_name,m.module_des,c.ctlr_id,c.ctlr_code,c.ctlr_name,c.ctlr_des,f.func_id,f.func_code,f.func_name,f.func_des,f.auto_log,f.related_func_id,o.oper_id,o.oper_code,o.oper_name,o.oper_des,o.oper_config' 
     );
     /**获取帐号类型可开通的权限
      * @param int $accountType 
@@ -48,6 +48,7 @@ class Module_func_model extends MY_Model {
                     $data [$r ['module_code']] ['name'] = $r ['module_name'];
                     $data [$r ['module_code']] ['des'] = $r ['module_des'];
                 }
+                $data [$r ['module_code']] ['sys_code'] = $r ['sys_code'];
             }
             if (! empty ( $r ['ctlr_id'] )) {
                 if (empty ( $data [$r ['module_code']] ['controllers'] [$r ['ctlr_id']] )) {
